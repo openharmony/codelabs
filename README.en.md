@@ -1,3 +1,3 @@
 # codelabs
 
-This Codelabs aims to let show the sample codes to use HarmonyOS ablities.
+This Codelabs aims to show developers the sample applications to use HarmonyOS ablities in interesting scenarios.
