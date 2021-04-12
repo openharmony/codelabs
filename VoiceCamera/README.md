@@ -1,10 +1,10 @@
-# Distributed Voice Camera
+# 分布式语音照相机
 
-What is it?
-In this article, Codelab uses the HarmonyOS distributed file system and AI voice recognition function to develop a distributed voice camera.
-Using this camera application, different devices under the same distributed network can see the photos taken by the main device in real time.
-This effectively solves the pain point of the need to run back and forth to pass the mobile phone when taking pictures of each other.
-In addition, the main device also supports a voice-controlled camera function, allowing you to control the camera from a distance.
+简介
+在本Codelab中，使用了HarmonyOS分布式文件系统和AI语音识别功能来开发分布式语音照相机。
+使用此相机应用程序，同一分布式网络下的不同设备可以实时查看主设备拍摄的照片。
+这有效地解决了彼此拍照时需要来回传递手机的麻烦。
+此外，主设备还支持语音控制​​摄像头功能，可让您从远处控制摄像头。
 
-Licensing
-Please see LICENSE for more info.
+许可
+请参阅LICENSE文件以获得更多信息。

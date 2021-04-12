@@ -1,29 +1,29 @@
 DistributedVideoCodelab
 
-What is it?
-The DistributedVideoCodelab application is to show the cross-device migration video capability.
-You can easily play a video from local or the network through the application.
-You can start to play,pause,forward,backward and so on.
-More than that ,you can transfer the video to other devices on the local area network (LAN) .
-You can control the transferred video through the control dialog.
-This example code is complete and you can learn from the beginning with us.
+简介
+此应用程序展示了视频跨设备迁移的功能。
+您可以通过该应用程序轻松播放来自本地或网络的视频。
+您可以开始播放，暂停，前进，后退等。
+不仅如此，您还可以将视频迁移到局域网（LAN）上的其他设备。
+您可以通过控制对话框控制迁移的视频。
+该示例代码是一个完整的示例，您可以从头开始学习。
 
-Installation requirements
-• Install DevEco Studio and Node.js
-• Set up the DevEco Studio development environment. The DevEco Studio development environment needs to depend on the network environment. It needs to be connected to the network to ensure the normal use of the tool. The development environment can be configured according to the following two situations
-1. If you can directly access the Internet, just download the HarmonyOS SDK
-2. If the network cannot access the Internet directly, it can be accessed through a proxy server
-• Generate secret key and apply for certificate
+安装要求
+• 安装DevEco Studio和Node.js
+• 设置DevEco Studio开发环境。 DevEco Studio开发环境需要连接到网络，以确保该正常使用。可以根据以下两种情况配置开发环境：
+    1.如果您可以直接访问Internet，则只需下载HarmonyOS SDK
+    2.如果网络无法直接访问Internet，则可以通过代理服务器进行访问
+• 生成密钥并申请证书
 
-User guide
-• Download this project
-• Open DevEco Studio, click File> Open> Then select and open this Project
-• Click Build> Build App(s)/Hap(s)>Build Debug Hap(s) to compile the hap package
-• Click Run> Run 'entry' to run the hap package
+用户指南
+• 下载此项目
+• 打开HUAWEI DevEco Studio，单击File> Open选择此ComponentCodelab
+• 单击Build> Build App(s)/Hap(s)>Build Debug Hap(s)以编译hap软件包
+• 单击Run> Run 'entry'以运行hap包
 
-Note
-• You can choose to run the hap package on the simulator or the phone. 
-• If you run it on the phone, you need to configure the signature and certificate information in the project's File> Project Structure> Modules> Signing Configs.
-
-Licensing
-Please see LICENSE for more info.
+注意
+• 您可以选择在模拟器或真机上运行hap软件包。 
+• 如果在真机上运行它，则需要在项目的File> Project Structure> Modules> Signing Configs中配置签名和证书信息。
+ 
+许可
+请参阅LICENSE文件以获得更多信息。
