@@ -17,3 +17,5 @@ DistributedMail：展示了一个可以跨设备迁移和分布式文件调用�
 ShoppingJs：展示了一个使用JS UI组件开发的购物应用，链接：https://gitee.com/openharmony/codelabs/tree/master/ShoppingJs
 
 VoiceCamera：展示了一个基于分布式文件系统和AI语音识别功能开发的分布式语音照相机，链接：https://gitee.com/openharmony/codelabs/tree/master/VoiceCamera
+
+JSPlaygroundDemo：利用HarmonyOS“一次开发、多端部署”特性，开发一个能同时运行在手机、大屏、运动表的“To-Do List”Demo，链接：https://gitee.com/openharmony/codelabs/tree/master/JSPlaygroundDemo
