@@ -42,8 +42,8 @@ import java.util.List;
  * @since 2020-12-04
  */
 public class NewsListAbilitySlice extends AbilitySlice {
-    private static final float FOURCE_TEXT_SIZE = 1.2f;
-    private static final float UNFOURCE_TEXT_SIZE = 1.0f;
+    private static final float FORCUS_TEXT_SIZE = 1.2f;
+    private static final float UNFORCUS_TEXT_SIZE = 1.0f;
     private Text selectText;
 
     private ListContainer newsListContainer;
@@ -131,13 +131,13 @@ public class NewsListAbilitySlice extends AbilitySlice {
         if (isFocus) {
             selectText.setTextColor(
                     new Color(CommonUtils.getColor(NewsListAbilitySlice.this, ResourceTable.Color_news_type_text_on)));
-            selectText.setScaleX(FOURCE_TEXT_SIZE);
-            selectText.setScaleY(FOURCE_TEXT_SIZE);
+            selectText.setScaleX(FORCUS_TEXT_SIZE);
+            selectText.setScaleY(FORCUS_TEXT_SIZE);
         } else {
             selectText.setTextColor(
                     new Color(CommonUtils.getColor(NewsListAbilitySlice.this, ResourceTable.Color_news_type_text_off)));
-            selectText.setScaleX(UNFOURCE_TEXT_SIZE);
-            selectText.setScaleY(UNFOURCE_TEXT_SIZE);
+            selectText.setScaleX(UNFORCUS_TEXT_SIZE);
+            selectText.setScaleY(UNFORCUS_TEXT_SIZE);
         }
     }
 

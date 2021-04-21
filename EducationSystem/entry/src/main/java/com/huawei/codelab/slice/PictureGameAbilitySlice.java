@@ -181,7 +181,7 @@ public class PictureGameAbilitySlice extends AbilitySlice {
                 }
             }
             // Refresh the page display
-            setImageAndDecodeBounds(imageIndex);
+            setImages(imageIndex);
             // send data
             senDataToRemoteFun();
         }
@@ -205,7 +205,7 @@ public class PictureGameAbilitySlice extends AbilitySlice {
                 clickImage.setVisibility(Component.INVISIBLE);
             }
             Image blankButton = (Image) findComponentById(blankResId);
-            blankButton.setImageAndDecodeBounds(imageList[imageIndex[position]]);
+            blankButton.setPixelMap(imageList[imageIndex[position]]);
             blankButton.setVisibility(Component.VISIBLE);
 
             int imageTemp = imageIndex[position];
@@ -278,7 +278,7 @@ public class PictureGameAbilitySlice extends AbilitySlice {
         if (loop) {
             LogUtil.info(TAG, "game is over");
             setImageClickable(false);
-            imagePosition[imageCount - 1].setImageAndDecodeBounds(ResourceTable.Media_picture_09);
+            imagePosition[imageCount - 1].setPixelMap(ResourceTable.Media_picture_09);
             imagePosition[imageCount - 1].setVisibility(Component.VISIBLE);
         }
     }
@@ -438,15 +438,15 @@ public class PictureGameAbilitySlice extends AbilitySlice {
         movePosition = intent.getIntParam(CommonData.KEY_MOVE_POSITION, -1);
         LogUtil.info(TAG, "receive moveImageId:" + moveImageId);
         LogUtil.info(TAG, "receive movePosition:" + movePosition);
-        getUITaskDispatcher().delayDispatch(() -> setImageAndDecodeBounds(imageIndex), DELAY_TIME);
+        getUITaskDispatcher().delayDispatch(() -> setImages(imageIndex), DELAY_TIME);
     }
 
 
-    private void setImageAndDecodeBounds(int[] imageIndex) {
-        LogUtil.info(TAG, "setImageAndDecodeBounds");
+    private void setImages(int[] imageIndex) {
+        LogUtil.info(TAG, "setImages");
         if (imageIndex != null && imageIndex.length > 0) {
             for (int index = 0; index < imageIndex.length; index++) {
-                imagePosition[index].setImageAndDecodeBounds(imageList[imageIndex[index]]);
+                imagePosition[index].setPixelMap(imageList[imageIndex[index]]);
 
                 if (imageIndex[index] == 8) {
                     imagePosition[index].setVisibility(Component.INVISIBLE);
@@ -499,7 +499,7 @@ public class PictureGameAbilitySlice extends AbilitySlice {
             imageIndex[rand2] = imageTemp;
         }
         for (int i = 0; i < imageCount; i++) {
-            imagePosition[i].setImageAndDecodeBounds(imageList[imageIndex[i]]);
+            imagePosition[i].setPixelMap(imageList[imageIndex[i]]);
         }
         LogUtil.info(TAG, "pictureRandom end");
     }
