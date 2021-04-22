@@ -19,3 +19,7 @@ ShoppingJs：展示了一个使用JS UI组件开发的购物应用，链接：ht
 VoiceCamera：展示了一个基于分布式文件系统和AI语音识别功能开发的分布式语音照相机，链接：https://gitee.com/openharmony/codelabs/tree/master/VoiceCamera
 
 JSPlaygroundDemo：利用HarmonyOS“一次开发、多端部署”特性，开发一个能同时运行在手机、大屏、运动表的“To-Do List”Demo，链接：https://gitee.com/openharmony/codelabs/tree/master/JSPlaygroundDemo
+
+RemoteInputDemo：展示了通过手机输入文字到电视的跨设备输入能力，链接：https://gitee.com/h00358227/codelabs/tree/master/RemoteInputDemo-master
+
+DistributionGamePad：分布式游戏手柄，可以通过手机端跨设备控制电视上的飞机游戏，链接：https://gitee.com/h00358227/codelabs/tree/master/DistributionGamePad-master
