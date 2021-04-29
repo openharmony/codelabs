@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,19 @@
 
 package com.huawei.codelab.player.api;
 
-import com.huawei.codelab.player.constant.PlayerStatus;
+import com.huawei.codelab.player.constant.PlayerStatu;
 
 /**
- * StatusChangeListener interface
+ * StatuChangeListener interface
  *
- * @since 2020-12-04
+ * @since 2021-04-04
  *
  */
-public interface StatusChangeListener {
+public interface StatuChangeListener {
     /**
      * statuCallback
      *
-     * @param status status
+     * @param statu statu
      */
-    void statusCallback(PlayerStatus status);
+    void statuCallback(PlayerStatu statu);
 }

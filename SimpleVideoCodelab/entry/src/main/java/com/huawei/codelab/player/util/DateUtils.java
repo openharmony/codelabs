@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.huawei.codelab.util;
+package com.huawei.codelab.player.util;
 
 import java.util.Locale;
 
 /**
  * Date util
  *
- * @since 2020-12-04
- *
+ * @since 2021-04-04
  */
 public class DateUtils {
     private static final int ONE_SECONDS_MS = 1000;
@@ -35,7 +34,7 @@ public class DateUtils {
     }
 
     /**
-     *  conversion of msToString
+     * conversion of msToString
      *
      * @param ms ms
      * @return string

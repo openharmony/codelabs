@@ -29,7 +29,7 @@ import ohos.rpc.IRemoteObject;
  * @since 2020-12-04
  */
 public class SharedService extends Ability {
-    private static final String DESCRIPTOR = "com.huawei.codelab.idl.ITencentNewsAIDL";
+    private static final String DESCRIPTOR = "com.huawei.codelab.INewsDemoIDL";
 
     @Override
     protected void onStart(Intent intent) {

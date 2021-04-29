@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
+ * Copyright (c) Huawei Technologies Co., Ltd. 2021-2021. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,73 +17,55 @@
 package com.huawei.codelab.player.constant;
 
 /**
- * PlayerStatus enum
+ * PlayerStatu enum
  *
- * @since 2020-12-04
+ * @since 2021-04-04
  *
  */
-public enum PlayerStatus {
+public enum PlayerStatu {
     /**
-     * the video is released
+     * idel
      *
      */
-    IDEL("idel"),
-
+    IDEL,
     /**
-     * video is preparing
+     * preparing
      *
      */
-    PREPARING("preparing"),
-
+    PREPARING,
     /**
-     * when the video become prepared will be ready to play
+     * prepared
      *
      */
-    PREPARED("prepared"),
-
+    PREPARED,
     /**
-     * start the video or resume to play
+     * play
      *
      */
-    PLAY("play"),
-
+    PLAY,
     /**
-     * pause the playing
+     * pause
      *
      */
-    PAUSE("pause"),
-
+    PAUSE,
     /**
-     * stop the playing
+     * stop
      *
      */
-    STOP("stop"),
-
+    STOP,
     /**
-     * the video play completed
+     * complete
      *
      */
-    COMPLETE("complete"),
-
+    COMPLETE,
     /**
-     * the wrong status of video
+     * error
      *
      */
-    ERROR("error"),
-
+    ERROR,
     /**
-     * before the status of play
+     * buffering
      *
      */
-    BUFFERING("buffering");
-
-    private String status;
-
-    PlayerStatus(String value) {
-        this.status = value;
-    }
-
-    public String getStatus() {
-        return status;
-    }
+    BUFFERING
 }

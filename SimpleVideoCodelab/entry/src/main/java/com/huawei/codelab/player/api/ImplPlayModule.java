@@ -17,17 +17,22 @@
 package com.huawei.codelab.player.api;
 
 /**
- * ScreenChangeListener interface
+ * IPlayModuler
  *
- * @since 2021-04-04
+ * @since 2021-04-09
  *
  */
-public interface ScreenChangeListener {
+public interface ImplPlayModule {
     /**
-     * screenCallback
+     * bind
      *
-     * @param width width
-     * @param height height
+     * @param player player
      */
-    void screenCallback(int width, int height);
+    void bind(ImplPlayer player);
+
+    /**
+     * unbind
+     *
+     */
+    void unbind();
 }

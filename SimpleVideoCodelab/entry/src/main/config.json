@@ -38,7 +38,10 @@
             ]
           }
         ],
-        "orientation": "portrait",
+        "orientation": "unspecified",
+        "configChanges": [
+          "orientation"
+        ],
         "formEnabled": false,
         "name": "com.huawei.codelab.MainAbility",
         "icon": "$media:icon",
