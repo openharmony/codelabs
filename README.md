@@ -23,3 +23,7 @@ JSPlaygroundDemo：利用HarmonyOS“一次开发、多端部署”特性，开�
 RemoteInputDemo：展示了通过手机输入文字到电视的跨设备输入能力，链接：https://gitee.com/openharmony/codelabs/tree/master/RemoteInputDemo-master
 
 DistributionGamePad：分布式游戏手柄，可以通过手机端跨设备控制电视上的飞机游戏，链接：https://gitee.com/openharmony/codelabs/tree/master/DistributionGamePad-master
+
+AudioDemo：音频播放相关管理应用包括音频播放、声音采集和音频相关管理（快进、快退、暂停、播放、音量控制）等功能，链接：https://gitee.com/openharmony/codelabs/tree/master/AudioDemo
+
+DistributedMapDemo：展示简单的HarmonyOS分布式功能，可以通过应用程序模拟导航，在手机、智能穿戴和平板电脑之间进行导航数据流转，链接：https://gitee.com/openharmony/codelabs/tree/master/DistributedMapDemo
