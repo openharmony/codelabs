@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -34,44 +33,44 @@ public class RouteResult {
 
     private String info;
 
-    public void setRoute(RouteEntity route) {
-        this.route = route;
-    }
-
-    public void setCount(String count) {
-        this.count = count;
-    }
-
-    public void setInfocode(String infocode) {
-        this.infocode = infocode;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public void setInfo(String info) {
-        this.info = info;
-    }
-
     public RouteEntity getRoute() {
         return route;
+    }
+
+    public void setRoute(RouteEntity route) {
+        this.route = route;
     }
 
     public String getCount() {
         return count;
     }
 
+    public void setCount(String count) {
+        this.count = count;
+    }
+
     public String getInfocode() {
         return infocode;
+    }
+
+    public void setInfocode(String infocode) {
+        this.infocode = infocode;
     }
 
     public String getStatus() {
         return status;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getInfo() {
         return info;
+    }
+
+    public void setInfo(String info) {
+        this.info = info;
     }
 
     /**
@@ -88,36 +87,36 @@ public class RouteResult {
 
         private String taxiCost;
 
-        public void setPaths(List<PathsEntity> paths) {
-            this.paths = paths;
-        }
-
-        public void setOrigin(String origin) {
-            this.origin = origin;
-        }
-
-        public void setDestination(String destination) {
-            this.destination = destination;
-        }
-
-        public void setTaxiCost(String taxiCost) {
-            this.taxiCost = taxiCost;
-        }
-
         public List<PathsEntity> getPaths() {
             return paths;
+        }
+
+        public void setPaths(List<PathsEntity> paths) {
+            this.paths = paths;
         }
 
         public String getOrigin() {
             return origin;
         }
 
+        public void setOrigin(String origin) {
+            this.origin = origin;
+        }
+
         public String getDestination() {
             return destination;
         }
 
+        public void setDestination(String destination) {
+            this.destination = destination;
+        }
+
         public String getTaxiCost() {
             return taxiCost;
+        }
+
+        public void setTaxiCost(String taxiCost) {
+            this.taxiCost = taxiCost;
         }
 
         /**
@@ -142,68 +141,68 @@ public class RouteResult {
 
             private String tolls;
 
-            public void setDuration(String duration) {
-                this.duration = duration;
-            }
-
-            public void setDistance(String distance) {
-                this.distance = distance;
-            }
-
-            public void setRestriction(String restriction) {
-                this.restriction = restriction;
-            }
-
-            public void setTollDistance(String tollDistance) {
-                this.tollDistance = tollDistance;
-            }
-
-            public void setStrategy(String strategy) {
-                this.strategy = strategy;
-            }
-
-            public void setTrafficLights(String trafficLights) {
-                this.trafficLights = trafficLights;
-            }
-
-            public void setSteps(List<StepsEntity> steps) {
-                this.steps = steps;
-            }
-
-            public void setTolls(String tolls) {
-                this.tolls = tolls;
-            }
-
             public String getDuration() {
                 return duration;
+            }
+
+            public void setDuration(String duration) {
+                this.duration = duration;
             }
 
             public String getDistance() {
                 return distance;
             }
 
+            public void setDistance(String distance) {
+                this.distance = distance;
+            }
+
             public String getRestriction() {
                 return restriction;
+            }
+
+            public void setRestriction(String restriction) {
+                this.restriction = restriction;
             }
 
             public String getTollDistance() {
                 return tollDistance;
             }
 
+            public void setTollDistance(String tollDistance) {
+                this.tollDistance = tollDistance;
+            }
+
             public String getStrategy() {
                 return strategy;
+            }
+
+            public void setStrategy(String strategy) {
+                this.strategy = strategy;
             }
 
             public String getTrafficLights() {
                 return trafficLights;
             }
 
+            public void setTrafficLights(String trafficLights) {
+                this.trafficLights = trafficLights;
+            }
+
             public List<StepsEntity> getSteps() {
                 return steps;
             }
 
+            public void setSteps(List<StepsEntity> steps) {
+                this.steps = steps;
+            }
+
             public String getTolls() {
                 return tolls;
+            }
+
+            public void setTolls(String tolls) {
+                this.tolls = tolls;
             }
 
             /**
@@ -239,108 +238,108 @@ public class RouteResult {
 
                 private List<TmcsEntity> tmcs;
 
-                public void setOrientation(String orientation) {
-                    this.orientation = orientation;
-                }
-
-                public void setDistance(String distance) {
-                    this.distance = distance;
-                }
-
-                public void setCities(List<CitiesEntity> cities) {
-                    this.cities = cities;
-                }
-
-                public void setTollRoad(E tollRoad) {
-                    this.tollRoad = tollRoad;
-                }
-
-                public void setTollDistance(String tollDistance) {
-                    this.tollDistance = tollDistance;
-                }
-
-                public void setTolls(String tolls) {
-                    this.tolls = tolls;
-                }
-
-                public void setDuration(String duration) {
-                    this.duration = duration;
-                }
-
-                public void setAssistantAction(E assistantAction) {
-                    this.assistantAction = assistantAction;
-                }
-
-                public void setRoad(String road) {
-                    this.road = road;
-                }
-
-                public void setInstruction(String instruction) {
-                    this.instruction = instruction;
-                }
-
-                public void setAction(E action) {
-                    this.action = action;
-                }
-
-                public void setPolyline(String polyline) {
-                    this.polyline = polyline;
-                }
-
-                public void setTmcs(List<TmcsEntity> tmcs) {
-                    this.tmcs = tmcs;
-                }
-
                 public String getOrientation() {
                     return orientation;
+                }
+
+                public void setOrientation(String orientation) {
+                    this.orientation = orientation;
                 }
 
                 public String getDistance() {
                     return distance;
                 }
 
+                public void setDistance(String distance) {
+                    this.distance = distance;
+                }
+
                 public List<CitiesEntity> getCities() {
                     return cities;
+                }
+
+                public void setCities(List<CitiesEntity> cities) {
+                    this.cities = cities;
                 }
 
                 public E getTollRoad() {
                     return tollRoad;
                 }
 
+                public void setTollRoad(E tollRoad) {
+                    this.tollRoad = tollRoad;
+                }
+
                 public String getTollDistance() {
                     return tollDistance;
+                }
+
+                public void setTollDistance(String tollDistance) {
+                    this.tollDistance = tollDistance;
                 }
 
                 public String getTolls() {
                     return tolls;
                 }
 
+                public void setTolls(String tolls) {
+                    this.tolls = tolls;
+                }
+
                 public String getDuration() {
                     return duration;
+                }
+
+                public void setDuration(String duration) {
+                    this.duration = duration;
                 }
 
                 public E getAssistantAction() {
                     return assistantAction;
                 }
 
+                public void setAssistantAction(E assistantAction) {
+                    this.assistantAction = assistantAction;
+                }
+
                 public String getRoad() {
                     return road;
+                }
+
+                public void setRoad(String road) {
+                    this.road = road;
                 }
 
                 public String getInstruction() {
                     return instruction;
                 }
 
+                public void setInstruction(String instruction) {
+                    this.instruction = instruction;
+                }
+
                 public E getAction() {
                     return action;
+                }
+
+                public void setAction(E action) {
+                    this.action = action;
                 }
 
                 public String getPolyline() {
                     return polyline;
                 }
 
+                public void setPolyline(String polyline) {
+                    this.polyline = polyline;
+                }
+
                 public List<TmcsEntity> getTmcs() {
                     return tmcs;
+                }
+
+                public void setTmcs(List<TmcsEntity> tmcs) {
+                    this.tmcs = tmcs;
                 }
 
                 /**
@@ -357,36 +356,36 @@ public class RouteResult {
 
                     private List<DistrictsEntity> districts;
 
-                    public void setCitycode(String citycode) {
-                        this.citycode = citycode;
-                    }
-
-                    public void setAdcode(String adcode) {
-                        this.adcode = adcode;
-                    }
-
-                    public void setName(String name) {
-                        this.name = name;
-                    }
-
-                    public void setDistricts(List<DistrictsEntity> districts) {
-                        this.districts = districts;
-                    }
-
                     public String getCitycode() {
                         return citycode;
+                    }
+
+                    public void setCitycode(String citycode) {
+                        this.citycode = citycode;
                     }
 
                     public String getAdcode() {
                         return adcode;
                     }
 
+                    public void setAdcode(String adcode) {
+                        this.adcode = adcode;
+                    }
+
                     public String getName() {
                         return name;
                     }
 
+                    public void setName(String name) {
+                        this.name = name;
+                    }
+
                     public List<DistrictsEntity> getDistricts() {
                         return districts;
+                    }
+
+                    public void setDistricts(List<DistrictsEntity> districts) {
+                        this.districts = districts;
                     }
 
                     /**
@@ -399,20 +398,20 @@ public class RouteResult {
 
                         private String name;
 
-                        public void setAdcode(String adcode) {
-                            this.adcode = adcode;
-                        }
-
-                        public void setName(String name) {
-                            this.name = name;
-                        }
-
                         public String getAdcode() {
                             return adcode;
                         }
 
+                        public void setAdcode(String adcode) {
+                            this.adcode = adcode;
+                        }
+
                         public String getName() {
                             return name;
+                        }
+
+                        public void setName(String name) {
+                            this.name = name;
                         }
                     }
                 }
@@ -431,36 +430,36 @@ public class RouteResult {
 
                     private String status;
 
-                    public void setDistance(String distance) {
-                        this.distance = distance;
-                    }
-
-                    public void setLcode(E lcode) {
-                        this.lcode = lcode;
-                    }
-
-                    public void setPolyline(String polyline) {
-                        this.polyline = polyline;
-                    }
-
-                    public void setStatus(String status) {
-                        this.status = status;
-                    }
-
                     public String getDistance() {
                         return distance;
+                    }
+
+                    public void setDistance(String distance) {
+                        this.distance = distance;
                     }
 
                     public E getLcode() {
                         return lcode;
                     }
 
+                    public void setLcode(E lcode) {
+                        this.lcode = lcode;
+                    }
+
                     public String getPolyline() {
                         return polyline;
                     }
 
+                    public void setPolyline(String polyline) {
+                        this.polyline = polyline;
+                    }
+
                     public String getStatus() {
                         return status;
+                    }
+
+                    public void setStatus(String status) {
+                        this.status = status;
                     }
                 }
             }

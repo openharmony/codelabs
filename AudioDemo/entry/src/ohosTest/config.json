@@ -1,6 +1,6 @@
 {
     "app": {
-        "bundleName": "com.huawei.harmonyaudiodemo",
+        "bundleName": "com.huawei.cookbook",
         "vendor": "huawei",
         "version": {
             "code": 1,
@@ -8,8 +8,7 @@
         },
 		"apiVersion": {
             "compatible": 4,
-            "target": 4,
-			"releaseType": "Beta1"
+            "target": 4
         }
     },
     "deviceConfig": {},

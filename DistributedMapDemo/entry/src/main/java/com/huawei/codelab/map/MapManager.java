@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -89,14 +88,21 @@ public class MapManager {
     private Runnable task = new Runnable() {
         @Override
         public void run() {
+            // 将定位图标的下一个坐标点的坐标，赋值给当前定位图标
             MapElement peopleElement = navMap.getMapElements().get(0);
             nextElement = navMap.getMapElements().get(stepPoint + 1);
             peopleElement.setMercatorPoint(nextElement.getMercatorPoint());
             peopleElement.setNowPoint(nextElement.getNowPoint());
             peopleElement.setOriginPoint(nextElement.getOriginPoint());
+
+            // 调用sendEvent方法，发送更新UI事件消息
             mapEventHandler.sendEvent(1, EventHandler.Priority.IMMEDIATE);
+
+            // 再次调用postTask发送延时任务，让任务持续进行，从而实现坐标的持续移动
             mapEventHandler.postTask(task, STEP_DELAY_TIME, EventHandler.Priority.IMMEDIATE);
             stepPoint++;
+
+            // 将stepPoint传递给NavMap，绘制已经过的路径时也会用到stepPoint
             navMap.setStepPoint(stepPoint);
             LogUtils.info(TAG, "run......" + stepPoint);
             if (stepPoint >= navMap.getMapElements().size() - 1) {

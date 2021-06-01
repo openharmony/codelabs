@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -25,7 +24,7 @@ public class Const {
     /**
      * 接口的调用凭证，需要开发者自己申请
      */
-    public static final String MAP_KAY = "";
+    public static final String MAP_KEY = "fdec31f36248c7aa50dd2d252cc773e2";
 
     /**
      * 高德地图导航瓦片url

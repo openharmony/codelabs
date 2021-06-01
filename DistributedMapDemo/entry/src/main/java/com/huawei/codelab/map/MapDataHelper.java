@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -90,7 +89,7 @@ public class MapDataHelper {
      * 调用高德地图逆地理编码api，获取城市编码
      */
     private void getRegionDetail() {
-        String url = String.format(Const.REGION_DETAIL_URL, location, Const.MAP_KAY);
+        String url = String.format(Const.REGION_DETAIL_URL, location, Const.MAP_KEY);
         HttpUtils.getInstance(context).get(url, result -> {
             RegionDetailResult regionDetailResult = GsonUtils.jsonToBean(result, RegionDetailResult.class);
             localCityCode = regionDetailResult.getRegeocode().getAddressComponent().getCitycode();
@@ -103,7 +102,7 @@ public class MapDataHelper {
      * @param keyWords input content
      */
     public void getInputTips(String keyWords) {
-        String url = String.format(Const.INPUT_TIPS_URL, keyWords, Const.MAP_KAY, location, localCityCode);
+        String url = String.format(Const.INPUT_TIPS_URL, keyWords, Const.MAP_KEY, location, localCityCode);
         HttpUtils.getInstance(context).get(url, result -> {
             InputTipsResult inputTipsResult = GsonUtils.jsonToBean(result, InputTipsResult.class);
             if (inputTipsResult == null) {
@@ -120,7 +119,7 @@ public class MapDataHelper {
      * @param endLocation 终点路径
      */
     public void getRouteResult(String endLocation) {
-        String url = String.format(Const.ROUTE_URL, location, endLocation, Const.MAP_KAY);
+        String url = String.format(Const.ROUTE_URL, location, endLocation, Const.MAP_KEY);
         HttpUtils.getInstance(context).get(url, result -> dataCallBack.setRouteView(result));
     }
 

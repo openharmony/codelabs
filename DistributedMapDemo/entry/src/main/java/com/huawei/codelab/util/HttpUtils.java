@@ -1,7 +1,6 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd. All rights reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -28,9 +27,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+
+import javax.net.ssl.HttpsURLConnection;
 
 /**
  * 网络请求管理类
@@ -39,8 +40,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class HttpUtils {
     private static final String TAG = HttpUtils.class.getName();
-
-    private static final int TIME_OUT = 5 * 1000;
 
     private static HttpUtils instance;
 
@@ -78,7 +77,7 @@ public class HttpUtils {
      * @param callback callback
      */
     public void get(String url, ResponseCallback callback) {
-        if (Const.MAP_KAY.isEmpty()) {
+        if (Const.MAP_KEY.isEmpty()) {
             showError("MAP_KAY cannot be empty");
         } else {
             globalTaskDispatcher.asyncDispatch(() -> {
@@ -99,14 +98,21 @@ public class HttpUtils {
      * @throws IOException
      */
     private void doGet(String address, ResponseCallback callback) throws IOException {
+        LogUtils.info(TAG, "doGet:");
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader bufferedReader = null;
         try {
             URL url = new URL(address);
-            URLConnection connection = url.openConnection();
-            connection.setConnectTimeout(TIME_OUT);
-            inputStream = connection.getInputStream();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpsURLConnection.HTTP_OK) {
+                inputStream = connection.getInputStream();
+            } else {
+                doGet(address, callback);
+                return;
+            }
             inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             bufferedReader = new BufferedReader(inputStreamReader);
             String line;
