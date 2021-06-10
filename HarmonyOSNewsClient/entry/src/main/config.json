@@ -3,7 +3,7 @@
     "bundleName": "com.huawei.codelab",
     "vendor": "huawei",
     "version": {
-      "code": 1,
+      "code": 1000000,
       "name": "1.0"
     },
     "apiVersion": {
@@ -20,7 +20,7 @@
       "video_support"
     ],
     "deviceType": [
-      "default",
+      "phone",
       "tv"
     ],
     "distro": {
@@ -42,7 +42,7 @@
           }
         ],
         "orientation": "portrait",
-        "formEnabled": false,
+        "formsEnabled": false,
         "name": "com.huawei.codelab.NewsAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
