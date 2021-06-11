@@ -67,7 +67,7 @@
       {
         "reason": "",
         "name": "ohos.permission.servicebus.ACCESS_SERVICE",
-        "used-scene": {
+        "usedScene": {
           "ability": [
             "MainAbility"
           ],
@@ -77,7 +77,7 @@
       {
         "reason": "多设备协同",
         "name": "ohos.permission.DISTRIBUTED_DATASYNC",
-        "used-scene": {
+        "usedScene": {
           "ability": [
             "MainAbility"
           ],
