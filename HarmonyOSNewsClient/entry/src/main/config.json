@@ -4,12 +4,7 @@
     "vendor": "huawei",
     "version": {
       "code": 1000000,
-      "name": "1.0"
-    },
-    "apiVersion": {
-      "compatible": 4,
-      "target": 5,
-      "releaseType": "Release"
+      "name": "1.0.0"
     }
   },
   "deviceConfig": {},
@@ -26,7 +21,8 @@
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "entry",
-      "moduleType": "entry"
+      "moduleType": "entry",
+      "installationFree": false
     },
     "abilities": [
       {
