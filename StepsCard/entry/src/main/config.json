@@ -4,11 +4,7 @@
     "vendor": "huawei",
     "version": {
       "code": 1000000,
-      "name": "1.0"
-    },
-    "apiVersion": {
-      "compatible": 5,
-      "target": 5
+      "name": "1.0.0"
     }
   },
   "deviceConfig": {
@@ -19,13 +15,15 @@
   "module": {
     "package": "com.huawei.cookbook",
     "name": ".MyApplication",
+    "mainAbility": "com.huawei.cookbook.MainAbility",
     "deviceType": [
       "phone"
     ],
     "distro": {
       "deliveryWithInstall": true,
       "moduleName": "entry",
-      "moduleType": "entry"
+      "moduleType": "entry",
+      "installationFree": false
     },
     "reqPermissions": [
       {
@@ -37,7 +35,7 @@
           ],
           "when": "inuse"
         }
-      },
+      }
     ],
     "abilities": [
       {
@@ -78,7 +76,6 @@
         "launchType": "standard",
         "visible": false,
         "formsEnabled": true,
-
         "forms": [
           {
             "jsComponentName": "card2X2",
@@ -86,7 +83,7 @@
             "scheduledUpdateTime": "10:30",
             "defaultDimension": "2*2",
             "name": "card2X2",
-            "description": "This is a step form card",
+            "description": "This is a step service widget",
             "colorMode": "auto",
             "type": "JS",
             "supportDimensions": [
@@ -101,7 +98,7 @@
             "scheduledUpdateTime": "10:30",
             "defaultDimension": "2*4",
             "name": "card2X4",
-            "description": "This is a step form card",
+            "description": "This is a step service widget",
             "colorMode": "auto",
             "type": "JS",
             "supportDimensions": [
