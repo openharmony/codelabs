@@ -40,11 +40,11 @@ Links: https://gitee.com/openharmony/codelabs/tree/master/JSPlaygroundDemo
 
 RemoteInputDemo: Demonstrated the cross-device input capability of text input from a mobile phone to a TV.
 
-Links: https://gitee.com/openharmony/codelabs/tree/master/RemoteInputDemo-master
+Links: https://gitee.com/openharmony/codelabs/tree/master/RemoteInputDemo
 
 DistributionGamePad: Control the plane game on the TV through the mobile phone.
 
-Links: https://gitee.com/openharmony/codelabs/tree/master/DistributionGamePad-master
+Links: https://gitee.com/openharmony/codelabs/tree/master/DistributionGamePad
 
 AudioDemo: Audio playback management applications, including audio playback, audio capture, and audio management (fast forward, fast rewind, pause, play, volume control), etc.
 
