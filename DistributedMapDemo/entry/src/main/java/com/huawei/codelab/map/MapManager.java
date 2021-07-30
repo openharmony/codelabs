@@ -38,8 +38,8 @@ import ohos.eventhandler.InnerEvent;
 import ohos.rpc.IRemoteObject;
 import ohos.rpc.RemoteException;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 地图控制类
@@ -92,6 +92,9 @@ public class MapManager {
     private Runnable task = new Runnable() {
         @Override
         public void run() {
+            if (tinyMap.getMapElements() == null || tinyMap.getMapElements().size() <= 1) {
+                return;
+            }
             // 将定位图标的下一个坐标点的坐标，赋值给当前定位图标
             Element peopleElement = tinyMap.getMapElements().get(0);
             nextElement = tinyMap.getMapElements().get(stepPoint + 1);
@@ -119,7 +122,7 @@ public class MapManager {
      * 构造方法
      *
      * @param tinyMap navMap
-     * @param slice slice
+     * @param slice   slice
      */
     public MapManager(TinyMap tinyMap, AbilitySlice slice) {
         this.tinyMap = tinyMap;
@@ -133,7 +136,8 @@ public class MapManager {
      * @param tips tips
      */
     public static void clearEmptyLocation(List<InputTipsResult.TipsEntity> tips) {
-       List<InputTipsResult.TipsEntity> newList = new ArrayList<>();
+
+        List<InputTipsResult.TipsEntity> newList = new ArrayList<>();
 
         for (int i = 0; i < tips.size(); i++) {
             InputTipsResult.TipsEntity tipsEntity = tips.get(i);
@@ -179,10 +183,10 @@ public class MapManager {
     private void connectWatchService(String deviceId) {
         Intent intent = new Intent();
         Operation operation = new Intent.OperationBuilder().withDeviceId(deviceId)
-            .withBundleName(slice.getBundleName())
-            .withAbilityName(WatchService.class.getName())
-            .withFlags(Intent.FLAG_ABILITYSLICE_MULTI_DEVICE)
-            .build();
+                .withBundleName(slice.getBundleName())
+                .withAbilityName(WatchService.class.getName())
+                .withFlags(Intent.FLAG_ABILITYSLICE_MULTI_DEVICE)
+                .build();
         intent.setOperation(operation);
         slice.connectAbility(intent, conn);
     }
@@ -248,9 +252,14 @@ public class MapManager {
      * @param deviceId selected deviceId
      */
     public void translate(String deviceId) {
-        slice.continueAbility(deviceId);
-        // 关闭WatchAbility
-        requestRemote(Const.STOP_WATCH_ABILITY, "");
+        try {
+            slice.continueAbility(deviceId);
+            // 关闭WatchAbility
+            requestRemote(Const.STOP_WATCH_ABILITY, "");
+        } catch (Exception exception) {
+            LogUtils.info(TAG, "translate exception");
+        }
+
     }
 
     /**
