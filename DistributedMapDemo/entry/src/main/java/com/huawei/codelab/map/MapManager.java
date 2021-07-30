@@ -39,6 +39,7 @@ import ohos.rpc.IRemoteObject;
 import ohos.rpc.RemoteException;
 
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * 地图控制类
@@ -132,12 +133,17 @@ public class MapManager {
      * @param tips tips
      */
     public static void clearEmptyLocation(List<InputTipsResult.TipsEntity> tips) {
+       List<InputTipsResult.TipsEntity> newList = new ArrayList<>();
+
         for (int i = 0; i < tips.size(); i++) {
             InputTipsResult.TipsEntity tipsEntity = tips.get(i);
-            if ((tipsEntity.getLocation()).isEmpty()) {
-                tips.remove(tipsEntity);
+            if (tipsEntity.getLocation() != null && !(tipsEntity.getLocation()).isEmpty()) {
+                newList.add(tipsEntity);
             }
         }
+
+        tips.clear();
+        tips.addAll(newList);
     }
 
     public int getStepPoint() {
