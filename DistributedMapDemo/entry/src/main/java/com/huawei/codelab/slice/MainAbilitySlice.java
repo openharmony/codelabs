@@ -45,7 +45,9 @@ import ohos.agp.components.Image;
 import ohos.agp.components.ListContainer;
 import ohos.agp.components.Text;
 import ohos.agp.components.TextField;
+import ohos.agp.utils.LayoutAlignment;
 import ohos.agp.utils.Point;
+import ohos.agp.window.dialog.ToastDialog;
 import ohos.bundle.IBundleManager;
 import ohos.security.SystemPermission;
 
@@ -321,6 +323,19 @@ public class MainAbilitySlice extends AbilitySlice
         switch (component.getId()) {
             // 迁移
             case ResourceTable.Id_nav_translate:
+                if (tinyMap.getMapElements() != null && !tinyMap.getMapElements().isEmpty()) {
+                    String elementStr = GsonUtils.objectToString(tinyMap.getMapElements());
+                    // 跨端迁移的数据大小限制200KB以内，即onSaveData只能传递200KB以内的数据。
+                    if (elementStr.length() >= 200 * 1024 / 2) {
+                        ToastDialog toastDialog = new ToastDialog(MainAbilitySlice.this);
+                        toastDialog.setAutoClosable(false);
+                        toastDialog.setContentText("您输入的距离太远，请重新输入");
+                        toastDialog.setAlignment(LayoutAlignment.CENTER);
+                        toastDialog.show();
+                        return;
+                    }
+                }
+
                 // 设置过滤设备类型
                 ExtraParams params = new ExtraParams();
                 String[] devTypes = new String[]{ExtraParams.DEVICETYPE_SMART_PAD, ExtraParams.DEVICETYPE_SMART_PHONE,
