@@ -58,7 +58,7 @@ import java.util.List;
  * @since 2021-03-12
  */
 public class MainAbilitySlice extends AbilitySlice
-    implements Component.ClickedListener, IAbilityContinuation, MapDataHelper.DataCallBack {
+        implements Component.ClickedListener, IAbilityContinuation, MapDataHelper.DataCallBack {
     private static final String TAG = MainAbilitySlice.class.getSimpleName();
 
     private static final String ELEMENT_STRING = "elementsString";
@@ -291,25 +291,29 @@ public class MainAbilitySlice extends AbilitySlice
         continuationRegisterManager = getContinuationRegisterManager();
         // 增加过滤条件
         ExtraParams params = new ExtraParams();
-        String[] devTypes = new String[] {ExtraParams.DEVICETYPE_SMART_PAD, ExtraParams.DEVICETYPE_SMART_PHONE,
-            ExtraParams.DEVICETYPE_SMART_WATCH};
+        String[] devTypes = new String[]{ExtraParams.DEVICETYPE_SMART_PAD, ExtraParams.DEVICETYPE_SMART_PHONE,
+                ExtraParams.DEVICETYPE_SMART_WATCH};
         params.setDevType(devTypes);
         // 注册流转任务管理服务
         continuationRegisterManager.register(getBundleName(), params, callback, requestCallback);
     }
 
     private void translate() {
-        getUITaskDispatcher().asyncDispatch(() -> {
-            if (continuationRegisterManager != null) {
-                continuationRegisterManager.updateConnectStatus(abilityToken, selectDeviceId,
-                    DeviceConnectState.IDLE.getState(), null);
-                if (selectDeviceId != null) {
-                    LogUtils.info(TAG, "translate:" + abilityToken);
-                    // 用户点击后发起迁移流程
-                    mapManager.translate(selectDeviceId);
-                }
-            }
-        });
+      try {
+          getUITaskDispatcher().asyncDispatch(() -> {
+              if (continuationRegisterManager != null) {
+                  continuationRegisterManager.updateConnectStatus(abilityToken, selectDeviceId,
+                          DeviceConnectState.IDLE.getState(), null);
+                  if (selectDeviceId != null) {
+                      LogUtils.info(TAG, "translate:" + abilityToken);
+                      // 用户点击后发起迁移流程
+                      mapManager.translate(selectDeviceId);
+                  }
+              }
+          });
+      }catch (Exception exception){
+          LogUtils.info(TAG, "translate exception");
+      }
     }
 
     @Override
@@ -319,8 +323,8 @@ public class MainAbilitySlice extends AbilitySlice
             case ResourceTable.Id_nav_translate:
                 // 设置过滤设备类型
                 ExtraParams params = new ExtraParams();
-                String[] devTypes = new String[] {ExtraParams.DEVICETYPE_SMART_PAD, ExtraParams.DEVICETYPE_SMART_PHONE,
-                    ExtraParams.DEVICETYPE_SMART_WATCH};
+                String[] devTypes = new String[]{ExtraParams.DEVICETYPE_SMART_PAD, ExtraParams.DEVICETYPE_SMART_PHONE,
+                        ExtraParams.DEVICETYPE_SMART_WATCH};
                 params.setDevType(devTypes);
 
                 // 显示选择设备列表
