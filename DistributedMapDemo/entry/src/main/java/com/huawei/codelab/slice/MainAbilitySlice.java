@@ -426,8 +426,7 @@ public class MainAbilitySlice extends AbilitySlice
     @Override
     public void onCompleteContinuation(int result) {
         mapManager.translateComplete();
-        navTranslate.setVisibility(Component.HIDE);
-        routeTipsLayout.setVisibility(Component.HIDE);
+        terminateAbility();
         LogUtils.info(TAG, "onCompleteContinuation result:" + result);
     }
 }
