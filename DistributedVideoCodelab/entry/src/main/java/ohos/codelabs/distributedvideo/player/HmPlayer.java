@@ -160,15 +160,18 @@ public class HmPlayer implements ImplPlayer {
         @Override
         public void onMediaTimeIncontinuity(Player.MediaTimeInfo mediaTimeInfo) {
             LogUtil.info(TAG, "onMediaTimeIncontinuity is called");
-            for (Player.StreamInfo streanInfo : mPlayer.getStreamInfo()) {
-                int streamType = streanInfo.getStreamType();
-                if (streamType == Player.StreamInfo.MEDIA_STREAM_TYPE_AUDIO && mStatu == PlayerStatu.PREPARED) {
-                    for (StatuChangeListener callback : statuChangeCallbacks) {
-                        mStatu = PlayerStatu.PLAY;
-                        callback.statuCallback(PlayerStatu.PLAY);
-                    }
-                    if (mBuilder.isPause) {
-                        pause();
+            Player.StreamInfo[] streamInfos = mPlayer.getStreamInfo();
+            if (streamInfos != null) {
+                for (Player.StreamInfo streamInfo : streamInfos) {
+                    int streamType = streamInfo.getStreamType();
+                    if (streamType == Player.StreamInfo.MEDIA_STREAM_TYPE_AUDIO && mStatu == PlayerStatu.PREPARED) {
+                        for (StatuChangeListener callback : statuChangeCallbacks) {
+                            mStatu = PlayerStatu.PLAY;
+                            callback.statuCallback(PlayerStatu.PLAY);
+                        }
+                        if (mBuilder.isPause) {
+                            pause();
+                        }
                     }
                 }
             }
