@@ -1,9 +1,9 @@
 apply plugin: 'com.huawei.ohos.hap'
-apply plugin: 'com.huawei.ohos.decctest'
+//For instructions on signature configuration, see https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ide_debug_device-0000001053822404#section1112183053510
 ohos {
-    compileSdkVersion 5
+    compileSdkVersion 6
     defaultConfig {
-        compatibleSdkVersion 5
+        compatibleSdkVersion 6
     }
     buildTypes {
         release {
@@ -13,16 +13,11 @@ ohos {
             }
         }
     }
-    compileOptions { annotationEnabled true }
+
+    supportSystem "standard"
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
-    implementation 'android.arch.persistence.room:runtime:1.1.1'
-    testCompile 'junit:junit:4.12'
-
-
-}
-decc {
-    supportType = ['html', 'xml']
+    testImplementation 'junit:junit:4.13'
 }

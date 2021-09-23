@@ -1,8 +1,8 @@
 export default {
     onCreate() {
-        console.info('AceApplication onCreate');
+        console.info("Application onCreate");
     },
     onDestroy() {
-        console.info('AceApplication onDestroy');
+        console.info("Application onDestroy");
     }
 };

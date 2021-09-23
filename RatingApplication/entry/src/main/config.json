@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.huawei.cookbook",
+    "bundleName": "com.huawei.ratingapplication",
     "vendor": "huawei",
     "version": {
       "code": 1000000,
@@ -9,9 +9,9 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.cookbook",
+    "package": "com.huawei.ratingapplication",
     "name": ".MyApplication",
-    "mainAbility": "com.huawei.cookbook.MainAbility",
+    "mainAbility": "com.huawei.ratingapplication.MainAbility",
     "deviceType": [
       "phone"
     ],
@@ -33,9 +33,11 @@
             ]
           }
         ],
-        "name": "com.huawei.cookbook.MainAbility",
+        "orientation": "unspecified",
+        "name": "com.huawei.ratingapplication.MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
+        "formsEnabled": false,
         "label": "$string:entry_MainAbility",
         "type": "page",
         "launchType": "standard"
@@ -49,7 +51,7 @@
         "name": "default",
         "window": {
           "designWidth": 720,
-          "autoDesignWidth": true
+          "autoDesignWidth": false
         }
       }
     ]

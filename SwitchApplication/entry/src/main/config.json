@@ -9,9 +9,9 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.cookbook",
+    "package": "com.huawei.switchapplication",
     "name": ".MyApplication",
-    "mainAbility": "com.huawei.cookbook.MainAbility",
+    "mainAbility": "com.huawei.switchapplication.MainAbility",
     "deviceType": [
       "phone"
     ],
@@ -33,9 +33,11 @@
             ]
           }
         ],
-        "name": "com.huawei.cookbook.MainAbility",
+        "orientation": "unspecified",
+        "name": "com.huawei.switchapplication.MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
+        "formsEnabled": false,
         "label": "$string:entry_MainAbility",
         "type": "page",
         "launchType": "standard"
@@ -49,7 +51,7 @@
         "name": "default",
         "window": {
           "designWidth": 720,
-          "autoDesignWidth": true
+          "autoDesignWidth": false
         }
       }
     ]

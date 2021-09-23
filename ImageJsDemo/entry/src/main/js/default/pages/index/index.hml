@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="title-div"  >
+        <text class="title">
+            {{title}}
+        </text>
+    </div>
+    <div class="button-div" >
+        <button class="button" onclick="imageRotate">旋转</button>
+        <button class="button" onclick="imageCut">剪裁</button>
+        <button class="button" onclick="imageScale">缩放</button>
+        <button class="button" onclick="imageMirror">镜像</button>
+    </div>
+    <div class="image-div">
+        <image if="{{isRevolve}}" ref="image1" src="{{imageUrl}}" class="image" style="transform: rotate({{degrees}});"></image>
+        <image if="{{isCut}}" ref="image2" src="{{imageUrl}}" class="image" style="clip-path:inset({{clipArray[0]}}, {{clipArray[1]}}, {{clipArray[2]}}, {{clipArray[3]}});"></image>
+        <image if="{{isScale}}" ref="image3" src="{{imageUrl}}" style="width:{{width}}px;height:{{height}}px;"></image>
+        <image if="{{isMirror}}" ref="image4" src="{{imageUrl}}" class="image" style="transform: rotateY({{yDegrees}})"></image>
+    </div>
+</div>

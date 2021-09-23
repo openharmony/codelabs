@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.huawei.codelab",
+    "bundleName": "com.huawei.cookbook",
     "vendor": "huawei",
     "version": {
       "code": 1000000,
@@ -9,9 +9,9 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.codelab",
+    "package": "com.huawei.animationdemo",
     "name": ".MyApplication",
-    "mainAbility": "com.huawei.codelab.MainAbility",
+    "mainAbility": "com.huawei.animationdemo.MainAbility",
     "deviceType": [
       "phone"
     ],
@@ -19,7 +19,7 @@
       "deliveryWithInstall": true,
       "moduleName": "entry",
       "moduleType": "entry",
-      "installationFree": true
+      "installationFree": false
     },
     "abilities": [
       {
@@ -33,9 +33,11 @@
             ]
           }
         ],
-        "name": "com.huawei.codelab.MainAbility",
+        "orientation": "unspecified",
+        "name": "com.huawei.animationdemo.MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
+        "formsEnabled": false,
         "label": "$string:entry_MainAbility",
         "type": "page",
         "launchType": "standard"
@@ -44,12 +46,13 @@
     "js": [
       {
         "pages": [
-          "pages/index/index"
+          "pages/index/index",
+          "pages/second/second"
         ],
         "name": "default",
         "window": {
           "designWidth": 720,
-          "autoDesignWidth": true
+          "autoDesignWidth": false
         }
       }
     ]

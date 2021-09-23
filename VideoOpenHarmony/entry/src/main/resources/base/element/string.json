@@ -1,0 +1,12 @@
+{
+  "string": [
+    {
+      "name": "VideoDemo",
+      "value": "视频播放"
+    },
+    {
+      "name": "mainability_description",
+      "value": "JS_Empty Ability"
+    }
+  ]
+}
