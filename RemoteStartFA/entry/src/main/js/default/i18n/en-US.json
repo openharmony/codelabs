@@ -1,0 +1,12 @@
+{
+  "strings": {
+    "hello": "Hello",
+    "world": "World",
+    "page": "Second Page",
+    "next": "Start Remote FA",
+    "back": "Back",
+    "localhost": "This device"
+  },
+  "Files": {
+  }
+}

@@ -1,0 +1,109 @@
+.container {
+    padding: 20px;
+    margin-bottom: 160px;
+    flex-direction: column;
+}
+
+.text-title {
+    margin: 20px;
+    font-size: 50px;
+}
+
+.text-reads {
+    font-size: 32px;
+    text-color: #666666;
+    margin: 20px;
+}
+
+.image {
+    margin: 20px;
+}
+
+.text-content {
+    margin: 30px;
+    font-size: 36px;
+    text-color: #666666;
+}
+
+.bottom {
+    padding-left: 24px;
+    padding-right: 24px;
+    justify-content: center;
+    align-items: center;
+    border-top-width: 1px;
+    border-color: #cccccc;
+    background-color: #eeeeee;
+    height: 120px;
+    width: 100%;
+    background-color: white;
+    position: fixed;
+    bottom: 0px;
+}
+
+.textarea {
+    height: 80px;
+}
+
+.image-bottom {
+    object-fit: contain;
+    margin-left: 20px;
+    height: 80px;
+    width: 80px;
+}
+
+
+.select-device-dialog {
+    width: 90%;
+    height: 33%;
+}
+
+.select-device-wrapper {
+    margin: 5%;
+    width: 90%;
+    height: 90%;
+    flex-direction: column;
+}
+
+.select-device-title {
+    width: 100%;
+    height: 20%;
+    text-align: left;
+    font-size: 40px;
+}
+
+.select-device-list {
+    width: 100%;
+    height: 60%;
+    text-align: left;
+    font-size: 30px;
+}
+
+.select-device-item {
+    width: 100%;
+    height: 33%;
+}
+
+.select-device-item-left {
+    width: 90%;
+    height: 100%;
+    text-align: left;
+    font-size: 32px;
+}
+
+.select-device-item-right {
+    width: 10%;
+    height: 100%;
+}
+
+.choose-ok-or-not {
+    height: 20%;
+    width: 100%;
+}
+
+.select-device-btn {
+    text-align: center;
+    color: #0000ff;
+    font-size: 32px;
+    width: 100%;
+}
+

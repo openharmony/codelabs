@@ -1,0 +1,21 @@
+<div class="container" onswipe="touchMove">
+    <input class="btn" type="button" value="{{ $t('strings.next') }}" onclick="onContinueAbilityClick"></input>
+
+    <dialog id="continueAbilityDialog" class="dialog-main" oncancel="cancelDialog">
+        <div class="dialog-div">
+            <text class="dialog_title_text">选择设备</text>
+            <list class="dialog_device_list" divider="true">
+                <list-item for="{{ deviceList }}" class="device_list_item">
+                    <label class="device_item_title" target="{{ $item.id }}">{{ $item.name }}</label>
+                    <input class="device_item_radio" type="radio" checked="{{ $item.id === 'localhost' }}"
+                           id="{{ $item.id }}"
+                           name="radioSample" value="{{ $item.id }}"
+                           onchange="onRadioChange({{ $item.id }})"></input>
+                </list-item>
+            </list>
+            <div class="inner-btn">
+                <button class="dialog_cancel_button" type="text" value="取消" onclick="onDismissDialogClicked"></button>
+            </div>
+        </div>
+    </dialog>
+</div>

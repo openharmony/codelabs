@@ -1,0 +1,30 @@
+<div class="container">
+    <tabs index="0" vertical="false" onchange="changeNewsType">
+        <tab-bar class="tab-bar" mode="scrollable">
+            <text class="tab-text" for="{{ title in titleList }}">{{ title.name }} </text>
+        </tab-bar>
+
+        <tab-content class="tab-content" scrollable="true">
+            <div class="item-content" for="{{ title in titleList }}">
+                <list class="list">
+                    <list-item for="{{ news in newsList }}" onclick="itemClick(news)">
+                        <div style="flex-direction : column">
+
+                            <div style="flex-direction : row">
+                                <text class="text">
+                                    {{ news.title }}
+                                </text>
+                                <image class="image" src="{{ news.imgUrl }}">
+                                </image>
+                            </div>
+
+                            <div style="height : 2px; width : 100%; background-color : #97d2d4d4;">
+                            </div>
+                        </div>
+                    </list-item>
+                </list>
+            </div>
+        </tab-content>
+    </tabs>
+
+</div>

@@ -1,0 +1,44 @@
+.container {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.tab-bar {
+    height: 80px;
+}
+
+.tab-text {
+    font-size: 46px;
+    text-align: center;
+}
+
+.tab-content {
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+}
+
+.item-content {
+    height: 100%;
+    justify-content: center;
+}
+
+.list {
+    width: 100%;
+    padding: 20px
+}
+
+.text {
+    font-size: 36px;
+    margin: 10px;
+    height: 180px;
+    max-lines: 4;
+    flex-weight: 3
+}
+
+.image {
+    margin: 10px;
+    height: 180px;
+    flex-weight: 2
+}
