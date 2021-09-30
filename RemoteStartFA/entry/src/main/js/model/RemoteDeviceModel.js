@@ -29,48 +29,48 @@ export default class RemoteDeviceModel {
 
     registerDeviceListCallback(callback) {
         if (typeof (this.#deviceManager) === 'undefined') {
-            console.log('MusicPlayer[RemoteDeviceModel] deviceManager.createDeviceManager begin');
+            console.log('CookBook[RemoteDeviceModel] deviceManager.createDeviceManager begin');
             let self = this;
-            deviceManager.createDeviceManager('com.ohos.distributedmusicplayer', (error, value) => {
+            deviceManager.createDeviceManager('com.ohos.distributedRemoteStartFA', (error, value) => {
                 if (error) {
                     console.error('createDeviceManager failed.');
                     return;
                 }
                 self.#deviceManager = value;
                 self.registerDeviceListCallback_(callback);
-                console.log('MusicPlayer[RemoteDeviceModel] createDeviceManager callback returned, error=' + error + ' value=' + value);
+                console.log('CookBook[RemoteDeviceModel] createDeviceManager callback returned, error=' + error + ' value=' + value);
             });
-            console.log('MusicPlayer[RemoteDeviceModel] deviceManager.createDeviceManager end');
+            console.log('CookBook[RemoteDeviceModel] deviceManager.createDeviceManager end');
         } else {
             this.registerDeviceListCallback_(callback);
         }
     }
 
     registerDeviceListCallback_(callback) {
-        console.info('MusicPlayer[RemoteDeviceModel] registerDeviceListCallback');
+        console.info('CookBook[RemoteDeviceModel] registerDeviceListCallback');
         this.callback = callback;
         if (this.#deviceManager == undefined) {
-            console.error('MusicPlayer[RemoteDeviceModel] deviceManager has not initialized');
+            console.error('CookBook[RemoteDeviceModel] deviceManager has not initialized');
             this.callback();
             return;
         }
 
-        console.info('MusicPlayer[RemoteDeviceModel] getTrustedDeviceListSync begin');
+        console.info('CookBook[RemoteDeviceModel] getTrustedDeviceListSync begin');
         var list = this.#deviceManager.getTrustedDeviceListSync();
-        console.info('MusicPlayer[RemoteDeviceModel] getTrustedDeviceListSync end, deviceList=' + JSON.stringify(list));
+        console.info('CookBook[RemoteDeviceModel] getTrustedDeviceListSync end, deviceList=' + JSON.stringify(list));
         if (typeof (list) != 'undefined' && typeof (list.length) != 'undefined') {
             this.deviceList = list;
         }
         this.callback();
-        console.info('MusicPlayer[RemoteDeviceModel] callback finished');
+        console.info('CookBook[RemoteDeviceModel] callback finished');
 
         let self = this;
         this.#deviceManager.on('deviceStateChange', (data) => {
-            console.info('MusicPlayer[RemoteDeviceModel] deviceStateChange data=' + JSON.stringify(data));
+            console.info('CookBook[RemoteDeviceModel] deviceStateChange data=' + JSON.stringify(data));
             switch (data.action) {
                 case 0:
                 self.deviceList[self.deviceList.length] = data.device;
-                console.info('MusicPlayer[RemoteDeviceModel] online, updated device list=' + JSON.stringify(self.deviceList));
+                console.info('CookBook[RemoteDeviceModel] online, updated device list=' + JSON.stringify(self.deviceList));
                 self.callback();
                 if (self.authCallback != null) {
                     self.authCallback();
@@ -86,7 +86,7 @@ export default class RemoteDeviceModel {
                         }
                     }
                 }
-                console.info('MusicPlayer[RemoteDeviceModel] change, updated device list=' + JSON.stringify(self.deviceList));
+                console.info('CookBook[RemoteDeviceModel] change, updated device list=' + JSON.stringify(self.deviceList));
                 self.callback();
                 break;
                 case 1:
@@ -99,7 +99,7 @@ export default class RemoteDeviceModel {
                     }
                     self.deviceList = list;
                 }
-                console.info('MusicPlayer[RemoteDeviceModel] offline, updated device list=' + JSON.stringify(data.device));
+                console.info('CookBook[RemoteDeviceModel] offline, updated device list=' + JSON.stringify(data.device));
                 self.callback();
                 break;
                 default:
@@ -107,12 +107,12 @@ export default class RemoteDeviceModel {
             }
         });
         this.#deviceManager.on('deviceFound', (data) => {
-            console.info('MusicPlayer[RemoteDeviceModel] deviceFound data=' + JSON.stringify(data));
-            console.info('MusicPlayer[RemoteDeviceModel] deviceFound self.deviceList=' + self.deviceList);
-            console.info('MusicPlayer[RemoteDeviceModel] deviceFound self.deviceList.length=' + self.deviceList.length);
+            console.info('CookBook[RemoteDeviceModel] deviceFound data=' + JSON.stringify(data));
+            console.info('CookBook[RemoteDeviceModel] deviceFound self.deviceList=' + self.deviceList);
+            console.info('CookBook[RemoteDeviceModel] deviceFound self.deviceList.length=' + self.deviceList.length);
             for (var i = 0; i < self.discoverList.length; i++) {
                 if (self.discoverList[i].deviceId === data.device.deviceId) {
-                    console.info('MusicPlayer[RemoteDeviceModel] device founded, ignored');
+                    console.info('CookBook[RemoteDeviceModel] device founded, ignored');
                     return;
                 }
             }
@@ -120,10 +120,10 @@ export default class RemoteDeviceModel {
             self.callback();
         });
         this.#deviceManager.on('discoverFail', (data) => {
-            console.info('MusicPlayer[RemoteDeviceModel] discoverFail data=' + JSON.stringify(data));
+            console.info('CookBook[RemoteDeviceModel] discoverFail data=' + JSON.stringify(data));
         });
         this.#deviceManager.on('serviceDie', () => {
-            console.error('MusicPlayer[RemoteDeviceModel] serviceDie');
+            console.error('CookBook[RemoteDeviceModel] serviceDie');
         });
 
         SUBSCRIBE_ID = Math.floor(65536 * Math.random());
@@ -136,19 +136,19 @@ export default class RemoteDeviceModel {
             isWakeRemote: true,
             capability: 0
         };
-        console.info('MusicPlayer[RemoteDeviceModel] startDeviceDiscovery ' + SUBSCRIBE_ID);
+        console.info('CookBook[RemoteDeviceModel] startDeviceDiscovery ' + SUBSCRIBE_ID);
         this.#deviceManager.startDeviceDiscovery(info);
     }
 
     authDevice(deviceId, callback) {
-        console.info('MusicPlayer[RemoteDeviceModel] authDevice ' + deviceId);
+        console.info('CookBook[RemoteDeviceModel] authDevice ' + deviceId);
         for (var i = 0; i < this.discoverList.length; i++) {
             if (this.discoverList[i].deviceId === deviceId) {
-                console.info('MusicPlayer[RemoteDeviceModel] device founded, ignored');
+                console.info('CookBook[RemoteDeviceModel] device founded, ignored');
                 let extraInfo = {
-                    "targetPkgName": 'com.ohos.distributedmusicplayer',
-                    "appName": 'Music',
-                    "appDescription": 'Music player application',
+                    "targetPkgName": 'com.ohos.distributedRemoteStartFA',
+                    "appName": 'demo',
+                    "appDescription": 'demo application',
                     "business": '0'
                 };
                 let authParam = {
@@ -157,14 +157,14 @@ export default class RemoteDeviceModel {
                     "appThumbnail": '',
                     "extraInfo": extraInfo
                 };
-                console.info('MusicPlayer[RemoteDeviceModel] authenticateDevice ' + JSON.stringify(this.discoverList[i]));
+                console.info('CookBook[RemoteDeviceModel] authenticateDevice ' + JSON.stringify(this.discoverList[i]));
                 let self = this;
                 this.#deviceManager.authenticateDevice(this.discoverList[i], authParam, (err, data) => {
                     if (err) {
-                        console.info('MusicPlayer[RemoteDeviceModel] authenticateDevice failed, err=' + JSON.stringify(err));
+                        console.info('CookBook[RemoteDeviceModel] authenticateDevice failed, err=' + JSON.stringify(err));
                         self.authCallback = null;
                     } else {
-                        console.info('MusicPlayer[RemoteDeviceModel] authenticateDevice succeed, data=' + JSON.stringify(data));
+                        console.info('CookBook[RemoteDeviceModel] authenticateDevice succeed, data=' + JSON.stringify(data));
                         self.authCallback = callback;
                     }
                 });
@@ -173,7 +173,7 @@ export default class RemoteDeviceModel {
     }
 
     unregisterDeviceListCallback() {
-        console.info('MusicPlayer[RemoteDeviceModel] stopDeviceDiscovery ' + SUBSCRIBE_ID);
+        console.info('CookBook[RemoteDeviceModel] stopDeviceDiscovery ' + SUBSCRIBE_ID);
         this.#deviceManager.stopDeviceDiscovery(SUBSCRIBE_ID);
         this.#deviceManager.off('deviceStateChange');
         this.#deviceManager.off('deviceFound');

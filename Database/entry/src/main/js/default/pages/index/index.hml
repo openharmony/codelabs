@@ -1,0 +1,79 @@
+<!--
+ Copyright (c) 2021 Huawei Device Co., Ltd.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+     http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+<div class="container">
+    <div class="div_title">
+        <text class="text_title" >DataBase</text>
+    </div>
+    <list scrollbar="on" style="height: 200px;width: 80%;">
+        <list-item>
+            <div id="table" style="height: 100%">
+                <list id="table-row" style="flex-direction: column;">
+                    <list-item style="width: 30%;">
+                        <div class="row1">
+                            <div class="col1">
+                                <div class="col1">
+                                    <text style="width: 100%;text-align: center;">
+                                        <span style="font-weight:800">KEY</span>
+                                    </text>
+                                </div>
+                                <div class="col1">
+                                    <text style="width: 100%;text-align: center;">
+                                        <span style="font-weight:800">VALUE</span>
+                                    </text>
+                                </div>
+                            </div>
+                        </div>
+                    </list-item>
+
+                    <list-item for="obj in tableData" id="{{obj.KEY}}" style="width: 30%;">
+                        <div class="row1">
+                            <div class="col-content">
+                                <div class="col1">
+                                    <text style="width: 100%;text-align: center;">
+                                        <span style="font-size: 26px;">{{ obj.KEY}}</span>
+                                    </text>
+                                </div>
+                                <div class="col1">
+                                    <text style="width: 100%;text-align: center;">
+                                        <span style="font-size: 26px;">{{ obj.VALUE}}</span>
+                                    </text>
+                                </div>
+                            </div>
+                        </div>
+                    </list-item>
+                </list>
+            </div>
+        </list-item>
+    </list>
+
+    <div class="row">
+        <label class="label">KEY： </label>
+        <div class="input-block">
+            <input id="key" class="input" type="text" maxlength="80" placeholder="请输入Key，类型为string" headericon="{{require}}" onchange="change" ontranslate="translate"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <label class="label">VALUE： </label>
+        <div class="input-block">
+            <input id="value" class="input" type="text" maxlength="80" placeholder="请输入Value，类型为string，Number，bool" headericon="{{require}}" onchange="change" ontranslate="translate"/>
+        </div>
+    </div>
+
+    <div class="div_row">
+        <input class="button" type="button" value="Add" onclick="buttonClickAdd" />
+        <input class="button" type="button" value="Query" onclick="buttonClickQuery" />
+        <input class="button" type="button" value="Del" onclick="buttonClickDel" />
+        <input class="button-delete" type="button" value="Del Database" onclick="buttonClickDelDatabase" />
+    </div>
+</div>

@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 .container {
     padding: 20px;
     margin-bottom: 160px;
@@ -52,58 +67,51 @@
 }
 
 
-.select-device-dialog {
-    width: 90%;
-    height: 33%;
+.dialog-main {
+    width: 500px;
 }
 
-.select-device-wrapper {
-    margin: 5%;
-    width: 90%;
-    height: 90%;
+.dialog-div {
     flex-direction: column;
+    align-items: center;
 }
 
-.select-device-title {
+.dialog_title_text {
+    width: 434px;
+    height: 80px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.inner-btn {
+    width: 400px;
+    height: 120px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.dialog_cancel_button {
     width: 100%;
-    height: 20%;
-    text-align: left;
-    font-size: 40px;
-}
-
-.select-device-list {
-    width: 100%;
-    height: 60%;
-    text-align: left;
-    font-size: 30px;
-}
-
-.select-device-item {
-    width: 100%;
-    height: 33%;
-}
-
-.select-device-item-left {
-    width: 90%;
-    height: 100%;
-    text-align: left;
     font-size: 32px;
 }
 
-.select-device-item-right {
-    width: 10%;
-    height: 100%;
+.dialog_device_list {
+    width: 434px;
+    max-height: 150px;
 }
 
-.choose-ok-or-not {
-    height: 20%;
-    width: 100%;
+.device_list_item {
+    width: 434px;
+    height: 80px;
+    flex-direction: row;
+    align-items: center;
 }
 
-.select-device-btn {
-    text-align: center;
-    color: #0000ff;
-    font-size: 32px;
-    width: 100%;
+.device_item_radio {
 }
 
+.device_item_title {
+    width: 80%;
+    height: 80px;
+    text-align: start;
+}

@@ -1,0 +1,225 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.container {
+    flex-direction: column;
+    align-items: center;
+}
+
+.div_row {
+    width: 100%;
+    flex-direction: row;
+}
+
+.div_title {
+    width: 100%;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.text_title {
+    font-size: 30px;
+    color: #000000;
+}
+
+.row {
+    width: 98%;
+    margin-top: 5px;
+    flex-direction: row;
+}
+
+.input-block {
+    width: 100%;
+}
+
+.label {
+    font-size: 20px;
+    width: 120px;
+    text-align: right;
+}
+
+.input {
+    width: 90%;
+    font-size: 15px;
+}
+
+.button {
+    margin-top: 70px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 150px;
+    background-color: #17A98E;
+}
+
+
+.button-delete {
+    margin-top: 70px;
+    margin-left: 10px;
+    margin-right: 10px;
+    width: 150px;
+    background-color: #DE1A33;
+}
+
+.title {
+    font-size: 40px;
+    color: #000000;
+    opacity: 0.9;
+}
+
+.tag-list {
+    width: 100%;
+}
+.todo-list-item {
+    width: 100%;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.todo-item {
+    height: 120px;
+    width: 100%;
+    border-radius: 5px;
+    align-items: center;
+    flex-direction: row;
+}
+
+.flex-row {
+    flex-direction: row;
+    align-item: center;
+}
+
+.todo-name {
+    font-size: 32px;
+    color: white;
+    height: 100px;
+    margin-right: 5px;
+    max-lines: 1;
+    text-overflow: ellipsis;
+}
+
+.div_list_title {
+    width: 100%;
+    flex-direction: row;
+}
+
+.div_list_title_ROW {
+    width: 50%;
+    align-items: center;
+}
+
+.text_list_title {
+    width: 100%;
+    text-align: center;
+}
+
+.list-item-block {
+    width: 98%;
+    margin-top: 2px;
+    border-radius: 5px;
+    background-color: white;
+    flex-direction: row; /* 子元素横向排列 */
+    display: flex;
+}
+
+.describe {
+    flex-direction: column;
+    align-items: flex-start; /* 元素位于容器开头 */
+    margin-left: 5px;
+    width: 210px;
+}
+.describe-text {
+    margin-top: 5px;
+    font-size: 20px;}
+
+.text-default {
+    color: white;
+}
+
+.text-gray {
+    color: gray;
+}
+
+.todo-mark {
+    width: 18px;
+    height: 30%;
+    margin-left: 16px;
+    border-radius: 50px;
+    background-color: lightslategrey;
+}
+.todo-text-wrapper {
+    height: 100%;
+    flex-grow: 1;
+    margin: 0px 32px;
+    flex-direction: column;
+}
+.todo-name-mark {
+    width: 100%;
+    height: 100%;
+    align-items: center;
+}
+@media screen and (device-type: tablet) and (orientation: landscape) {
+    .title {
+        font-size: 100px;
+    }
+}
+
+@media screen and (device-type: wearable) {
+    .title {
+        font-size: 28px;
+        color: #FFFFFF;
+    }
+}
+
+@media screen and (device-type: tv) {
+    .container {
+        background-image: url("../../common/images/Wallpaper.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .title {
+        font-size: 100px;
+        color: #FFFFFF;
+    }
+}
+
+@media screen and (device-type: phone) and (orientation: landscape) {
+    .title {
+        font-size: 60px;
+    }
+}
+
+#table {
+    width: 100%;
+    height: 500px;
+/*    border: 1px solid #000;*/
+}
+.row1 {
+    display: flex ;
+    flex-direction:row;
+}
+.col1 {
+    width: 100%;
+    height: 40px;
+    border: 0.5px solid #000;
+}
+.col-content {
+    width: 100%;
+    height: 40px;
+    border-left: 0.5px solid #000;
+    border-right: 0.5px solid #000;
+    border-bottom: 0.5px solid #000;
+}

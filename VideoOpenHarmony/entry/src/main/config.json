@@ -56,6 +56,12 @@
           "autoDesignWidth": true
         }
       }
-    ]
+    ],
+    "distroFilter": {
+      "apiVersion": {
+        "policy": "include",
+        "value": []
+      }
+    }
   }
 }

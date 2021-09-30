@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.example.myapplication",
+    "bundleName": "com.huawei.cookbook",
     "vendor": "example",
     "version": {
       "code": 1000000,
@@ -9,9 +9,9 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.example.myapplication",
+    "package": "com.huawei.cookbook",
     "name": ".MyApplication",
-    "mainAbility": "com.example.myapplication.MainAbility",
+    "mainAbility": "com.huawei.cookbook.MainAbility",
     "deviceType": [
       "phone"
     ],
@@ -35,7 +35,7 @@
         ],
         "orientation": "unspecified",
         "visible": true,
-        "name": "com.example.myapplication.MainAbility",
+        "name": "com.huawei.cookbook.MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,

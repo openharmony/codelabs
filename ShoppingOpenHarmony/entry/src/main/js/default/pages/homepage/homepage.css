@@ -16,6 +16,7 @@
 .container {
     flex-direction: column;
     align-items: center;
+    width: 100%;
 }
 
 .title {
@@ -41,6 +42,7 @@
 }
 
 .item-content {
+    width: 100%;
     height: 100%;
     justify-content: center;
 }
@@ -50,6 +52,7 @@
 }
 
 .tab-bar {
+    width: 100%;
     height: 60px;
     border-color: #30a9e4f0;
     background-color: #007DFF;
@@ -231,6 +234,7 @@
 }
 
 .container-my-top {
+    width : 100%;
     height: 150px;
 }
 
@@ -275,6 +279,7 @@
 .container-my-title {
     flex-direction: row;
     height: 70px;
+    width : 100%;
     justify-content: space-around;
 }
 
@@ -289,6 +294,7 @@
 
 .container-my-deals {
     flex-direction: column;
+    width : 100%;
     height: 140px;
 }
 
@@ -302,12 +308,14 @@
 .container-my-deals-div {
     justify-content: space-around;
     font-weight: 700;
+    width : 100%;
     height: 100px;
 }
 
 .container-my-deals-div-div {
     flex-direction: column;
     justify-content: center;
+    width : 100%;
     align-items: center;
 }
 
@@ -322,6 +330,7 @@
 }
 
 .container-my-more {
+    width : 100%;
     flex-direction: column;
     margin-bottom: 65px;
 }
@@ -338,6 +347,7 @@
 }
 
 .container-my-more-divs {
+    width : 100%;
     justify-content: space-around;
 }
 
@@ -345,6 +355,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    width : 100%;
     height: 110px;
 }
 

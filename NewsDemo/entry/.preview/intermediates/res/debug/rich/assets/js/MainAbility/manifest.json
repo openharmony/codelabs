@@ -1,0 +1,18 @@
+{
+    "appID": "com.huawei.newsdemo",
+    "appName": "$string:entry_MainAbility",
+    "versionName": "1.0.0",
+    "versionCode": 1000000,
+    "minPlatformVersion": 7,
+    "pages": [
+        "pages/index/index",
+        "pages/second/second"
+    ],
+    "deviceType": [
+        "phone"
+    ],
+    "window": {
+        "autoDesignWidth": false,
+        "designWidth": 720
+    }
+}

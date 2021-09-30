@@ -14,10 +14,6 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div>
-        <text class="title">视频准备播放中，如未自动播放，请点击下侧播放按键</text>
-    </div>
-
     <video id='videoId' src='/common/TestVideo.mp4' muted='false' autoplay='true'
            poster='/common/images/video_list1.png' controls="true" onprepared='preparedCallback'
            onstart='startCallback' onpause='pauseCallback' onfinish='finishCallback'

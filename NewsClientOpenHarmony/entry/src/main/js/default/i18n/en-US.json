@@ -4,7 +4,8 @@
     "world": "Hello",
     "page": "Second Page",
     "next": "Next Page",
-    "back": "Back"
+    "back": "Back",
+    "localhost": "This device"
   },
   "Files": {
   }
