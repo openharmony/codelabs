@@ -1,0 +1,14 @@
+root {
+    wlan_config {
+        hi3881 :& chipList {
+            chipHi3881 :: chipInst {
+                match_attr = "hdf_wlan_chips_hi3881";
+                driverName = "hisi";
+                sdio {
+                    vendorId = ;
+                    deviceId = ;
+                }
+            }
+        }
+    }
+}

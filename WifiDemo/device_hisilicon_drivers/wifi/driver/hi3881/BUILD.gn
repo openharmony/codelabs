@@ -1,0 +1,438 @@
+# Copyright (c) 2021 HiSilicon (Shanghai) Technologies CO., LIMITED.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//drivers/adapter/khdf/liteos/hdf.gni")
+
+module_switch =
+    defined(LOSCFG_DRIVERS_HDF_WIFI) && defined(LOSCFG_DRIVERS_HI3881)
+module_name = "hi3881"
+
+HDM_WIFI_ROOT = "//drivers/framework/model/network/wifi"
+
+n = false
+y = true
+
+##################path of compile file :start###############
+#####wifi#####
+OAL_PATH = "oal"
+OAM_PATH = "oam"
+FRW_PATH = "frw"
+MAC_PATH = "mac/common"
+HMAC_PATH = "mac/hmac"
+HCC_PATH = "hcc"
+WAL_PATH = "wal"
+ADPATER_PATH = "hdfadapt"
+
+CFG_ANTI_INTERF = y
+CFG_CCA_OPT = y
+CFG_DBAC = y
+CFG_EDCA_OPT = y
+CFG_EDCA_OPT_AP = y
+CFG_SCHEDULE = y
+CFG_TRAFFIC_CTL = n
+CFG_TPC = y
+CFG_RF_1102CALI = y
+CFG_RF_110X_CALI_DPD = n
+CFG_NEW_IQ = y
+CFG_ALG_CFG = n
+CFG_HCC_TASK = y
+
+########################flash cut begin########################
+######## CFG_XXX_ROM can't be set to n ########
+CFG_P2P = y
+CFG_P2P_ROM = y
+CFG_WAPI = n
+CFG_WAPI_ROM = y
+CFG_WOW = y
+CFG_WOW_ROM = y
+CFG_REKEY_OFFLOAD = n
+CFG_REKEY_OFFLOAD_ROM = y
+CFG_PROMIS = y
+CFG_PROMIS_ROM = y
+CFG_MFG_TEST = y
+CFG_CE_MODE = y
+CFG_FCC_MODE = n
+CFG_MFG_FW = n
+
+########################flash cut end##########################
+CFG_BTCOEX_ROM = y
+CFG_ANY = n
+CFG_STA_PM = y
+CFG_MESH = n
+CFG_TCP_OPT = n
+CFG_TX_CLASSIFY_LAN_TO_WLAN = n
+CFG_UAPSD = y
+CFG_ARP_OFFLOAD = y
+CFG_DHCP_OFFLOAD = y
+CFG_LITEOS = y
+CFG_SIGMA = y
+CFG_HIPRIV = y
+LOSCFG_COMPILER_HI3861_FLASH = n
+LOSCFG_COMPILER_HI3861_ASIC = n
+
+hdf_driver(module_name) {
+  sources = [
+    "$OAL_PATH/exception_rst.c",
+    "$OAL_PATH/oal_cfg80211.c",
+    "$OAL_PATH/oal_chr.c",
+    "$OAL_PATH/oal_kernel_file.c",
+    "$OAL_PATH/oal_main.c",
+    "$OAL_PATH/oal_mem.c",
+    "$OAL_PATH/oal_net.c",
+    "$OAL_PATH/oal_sdio_host.c",
+    "$OAL_PATH/oal_shellcmd.c",
+    "$OAL_PATH/oal_util.c",
+    "$OAL_PATH/plat_board_common_sdio.c",
+    "$OAL_PATH/plat_firmware.c",
+    "$OAL_PATH/plat_pm.c",
+    "$OAL_PATH/plat_pm_wlan.c",
+    "$OAL_PATH/plat_sdio.c",
+  ]
+  if (CFG_LITEOS) {
+    sources += [
+      "$OAL_PATH/hi_event.c",
+      "$OAL_PATH/hi_task.c",
+      "$OAL_PATH/hi_time.c",
+      "$OAL_PATH/os_sys.c",
+    ]
+  }
+  sources += [
+    "$ADPATER_PATH/hdf_driver_register.c",
+    "$ADPATER_PATH/hdfinit_3881.c",
+    "$ADPATER_PATH/net_adpater.c",
+  ]
+  sources += [
+    "$OAM_PATH/oam_log.c",
+    "$OAM_PATH/oam_main.c",
+  ]
+  sources += [
+    "$FRW_PATH/frw_event.c",
+    "$FRW_PATH/frw_event_sched.c",
+    "$FRW_PATH/frw_main.c",
+    "$FRW_PATH/frw_task.c",
+    "$FRW_PATH/frw_timer.c",
+  ]
+  sources += [
+    "$HMAC_PATH/hmac_11i.c",
+    "$HMAC_PATH/hmac_blockack.c",
+    "$HMAC_PATH/hmac_chan_mgmt.c",
+    "$HMAC_PATH/hmac_config.c",
+    "$HMAC_PATH/hmac_crypto_tkip.c",
+    "$HMAC_PATH/hmac_device.c",
+    "$HMAC_PATH/hmac_encap_frame.c",
+    "$HMAC_PATH/hmac_encap_frame_ap.c",
+    "$HMAC_PATH/hmac_encap_frame_sta.c",
+    "$HMAC_PATH/hmac_event.c",
+    "$HMAC_PATH/hmac_frag.c",
+    "$HMAC_PATH/hmac_fsm.c",
+    "$HMAC_PATH/hmac_main.c",
+    "$HMAC_PATH/hmac_mgmt_ap.c",
+    "$HMAC_PATH/hmac_mgmt_bss_comm.c",
+    "$HMAC_PATH/hmac_mgmt_classifier.c",
+    "$HMAC_PATH/hmac_mgmt_sta.c",
+    "$HMAC_PATH/hmac_protection.c",
+    "$HMAC_PATH/hmac_rx_data.c",
+    "$HMAC_PATH/hmac_rx_filter.c",
+    "$HMAC_PATH/hmac_scan.c",
+    "$HMAC_PATH/hmac_sme_sta.c",
+    "$HMAC_PATH/hmac_tx_data.c",
+    "$HMAC_PATH/hmac_uapsd.c",
+    "$HMAC_PATH/hmac_user.c",
+    "$HMAC_PATH/hmac_vap.c",
+  ]
+  if (CFG_EDCA_OPT_AP) {
+    sources += [ "$HMAC_PATH/hmac_edca_opt.c" ]
+  }
+  if (CFG_P2P) {
+    sources += [ "$HMAC_PATH/hmac_p2p.c" ]
+  }
+  if (CFG_TCP_OPT) {
+    sources += [ "$HMAC_PATH/hmac_tcp_opt.c" ]
+  }
+  if (CFG_TX_CLASSIFY_LAN_TO_WLAN) {
+    sources += [ "$HMAC_PATH/hmac_traffic_classify.c" ]
+  }
+  if (CFG_WOW) {
+    sources += [ "$HMAC_PATH/hmac_wow.c" ]
+  }
+  if (CFG_ANY) {
+    sources += [ "$HMAC_PATH/hmac_any.c" ]
+  }
+  if (CFG_WAPI) {
+    sources += [
+      "$HMAC_PATH/hmac_wapi.c",
+      "$HMAC_PATH/hmac_wapi_sms4.c",
+      "$HMAC_PATH/hmac_wapi_wpi.c",
+    ]
+  }
+  sources += [
+    "$WAL_PATH/hi_wifi_driver_api.c",
+    "$WAL_PATH/wal_11d.c",
+    "$WAL_PATH/wal_cfg80211.c",
+    "$WAL_PATH/wal_customize.c",
+    "$WAL_PATH/wal_event.c",
+    "$WAL_PATH/wal_event_msg.c",
+    "$WAL_PATH/wal_hipriv.c",
+    "$WAL_PATH/wal_ioctl.c",
+    "$WAL_PATH/wal_linux_flowctl.c",
+    "$WAL_PATH/wal_mac80211.c",
+    "$WAL_PATH/wal_main.c",
+    "$WAL_PATH/wal_regdb.c",
+    "$WAL_PATH/wal_scan.c",
+  ]
+  if (CFG_LITEOS) {
+    sources += [ "$WAL_PATH/wal_cfg80211_apt.c" ]
+  }
+  sources += [
+    "$MAC_PATH/mac_data.c",
+    "$MAC_PATH/mac_device.c",
+    "$MAC_PATH/mac_frame.c",
+    "$MAC_PATH/mac_ie.c",
+    "$MAC_PATH/mac_mib.c",
+    "$MAC_PATH/mac_pm_driver.c",
+    "$MAC_PATH/mac_regdomain.c",
+    "$MAC_PATH/mac_resource.c",
+    "$MAC_PATH/mac_user.c",
+    "$MAC_PATH/mac_vap.c",
+  ]
+  sources += [
+    "$HCC_PATH/hcc_comm.c",
+    "$HCC_PATH/hcc_hmac.c",
+    "$HCC_PATH/hcc_host.c",
+    "$HCC_PATH/hcc_task.c",
+    "$HCC_PATH/hmac_hcc_adapt.c",
+  ]
+
+  include_dirs = [
+    "$HDM_WIFI_ROOT/include",
+    "$HDM_WIFI_ROOT/core",
+    "$HDM_WIFI_ROOT/core/components/softap",
+    "$HDM_WIFI_ROOT/core/components/sta",
+    "$HDM_WIFI_ROOT/core/components/eapol",
+    "$HDM_WIFI_ROOT/platform/include",
+    "$HDM_WIFI_ROOT/core/module",
+    "$HDM_WIFI_ROOT/platform/include/qos",
+    "linuxkpi/include",
+    "wal",
+    "oam",
+    "mac/hmac",
+    "mac/common",
+    "hcc",
+    "frw",
+    "oal",
+    "include",
+    "hdfadapt",
+  ]
+
+  defines = [
+    "_PRE_OS_VERSION_LINUX=1",
+    "_PRE_OS_VERSION_LITEOS=2",
+    "_PRE_FRW_FEATURE_PROCESS_ENTITY_THREAD=0",
+    "_PRE_FRW_FEATURE_PROCESS_ENTITY_TASKLET=1",
+    "_PRE_FRW_FEATURE_PROCESS_ENTITY_TYPE=_PRE_FRW_FEATURE_PROCESS_ENTITY_THREAD",
+    "_PRE_MULTI_CORE_MODE_SMP=1",
+    "_PRE_MULTI_CORE_MODE_OFFLOAD_HMAC=2",
+    "_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC=3",
+    "_PRE_BIG_CPU_ENDIAN=0",
+    "_PRE_LITTLE_CPU_ENDIAN=1",
+    "_PRE_CPU_ENDIAN=_PRE_LITTLE_CPU_ENDIAN",
+    "_HI_BOARD_FPGA=1",
+    "_HI_BOARD_ASIC=2",
+    "_PRE_WLAN_FEATURE_PMF",
+    "_PRE_WLAN_FEATURE_AUTORATE",
+    "_PRE_WLAN_PERFORM_TPC",
+    "_PRE_DBAC_DYNAMIC_POLICY",
+    "_PRE_WLAN_FEATURE_AGGR_OPTIMIZE",
+    "_PRE_WLAN_FEATURE_ALG_CFG_ROM",
+    "_PRE_WLAN_FEATURE_FLOWCTRL",
+    "_PRE_WLAN_FEATURE_CLASSIFY",
+    "_PRE_WLAN_FEATURE_ALWAYS_TX",
+    "_PRE_WLAN_FEATURE_WPA",
+    "_PRE_WLAN_FEATURE_WPA2",
+    "_PRE_WLAN_FEATURE_AMPDU",
+    "_PRE_WLAN_FEATURE_DHCP_OFFLOAD_ROM",
+    "_PRE_WLAN_FEATURE_PKT_MEM_OPT",
+    "_PRE_WLAN_PM_FEATURE_FORCESLP_RESUME",
+    "__BITS_PER_OAL_LONG=32",
+    "_PRE_WLAN_FEATURE_11D",
+    "_PRE_WLAN_FEATURE_ANY_ROM",
+    "_PRE_WLAN_FEATURE_CSI",
+    "_PRE_WLAN_FEATURE_STA_UAPSD",
+    "_PRE_WLAN_FEATURE_MESH_ROM",
+    "_PRE_WLAN_FEATURE_BW_HIEX",
+    "_PRE_XTAL_FREQUENCY_COMPESATION_ENABLE",
+    "CONFIG_MMC",
+    "CONFIG_PRINTK",
+    "_PRE_FEATURE_NO_GPIO",
+    "_PRE_WLAN_FEATURE_HILINK",
+    "_PRE_WLAN_FEATURE_SMARTCONFIG_APP",
+    "_PRE_WLAN_FEATURE_TEMP_PROTECT",
+    "_PRE_WLAN_FEATURE_SINGLE_DEVICE",
+    "_PRE_FEATURE_SDIO=1",
+    "_PRE_FEATURE_USB=2",
+    "_PRE_FEATURE_CHANNEL_TYPE=_PRE_FEATURE_SDIO",
+    "CONFIG_HI110X_SDIO_STD_CARD_SUPPORT",
+  ]
+  if (CFG_LITEOS) {
+    defines += [ "_PRE_OS_VERSION = _PRE_OS_VERSION_LITEOS" ]
+  } else {
+    defines += [ "_PRE_OS_VERSION = _PRE_OS_VERSION_LINUX" ]
+  }
+  if (LOSCFG_COMPILER_HI3861_FLASH) {
+    defines += [ "_PRE_MULTI_CORE_MODE=_PRE_MULTI_CORE_MODE_SMP" ]
+  } else {
+    defines += [ "_PRE_MULTI_CORE_MODE=_PRE_MULTI_CORE_MODE_OFFLOAD_DMAC" ]
+  }
+  if (LOSCFG_COMPILER_HI3861_ASIC) {
+    defines += [ "_PRE_WLAN_CHIP_VERSION=_HI_BOARD_ASIC" ]
+  } else {
+    defines += [ "_PRE_WLAN_CHIP_VERSION=_HI_BOARD_FPGA" ]
+  }
+  if (defined(QUICK_START)) {
+    defines += [ "_PRE_WLAN_FEATURE_QUICK_START" ]
+  }
+  if (defined(NO_32K)) {
+    defines += [ "_PRE_WLAN_FEATURE_NO_32K" ]
+  }
+  if (defined(BOARD_FUNC)) {
+    defines += [ "_PRE_WLAN_FPGA_DIGITAL" ]
+  }
+  if (CFG_SCHEDULE) {
+    defines += [ "_PRE_WLAN_FEATURE_SCHEDULE" ]
+  }
+  if (CFG_TPC) {
+    defines += [ "_PRE_WLAN_FEATURE_TPC" ]
+  }
+  if (CFG_DBAC) {
+    defines += [ "_PRE_WLAN_FEATURE_DBAC" ]
+  }
+  if (CFG_CCA_OPT) {
+    defines += [ "_PRE_WLAN_FEATURE_CCA_OPT" ]
+  }
+  if (CFG_EDCA_OPT) {
+    defines += [ "_PRE_WLAN_FEATURE_EDCA_OPT" ]
+  }
+  if (CFG_EDCA_OPT_AP) {
+    defines += [ "_PRE_WLAN_FEATURE_EDCA_OPT_AP" ]
+  }
+  if (CFG_ANTI_INTERF) {
+    defines += [ "_PRE_WLAN_FEATURE_ANTI_INTERF" ]
+  }
+  if (CFG_TRAFFIC_CTL) {
+    defines += [ "_PRE_WLAN_FEATURE_TRAFFIC_CTL" ]
+  }
+  if (CFG_ALG_CFG) {
+    defines += [ "_PRE_WLAN_FEATURE_ALG_CFG" ]
+  }
+  if (defined(CFG_ALG_INTRF_MODE)) {
+    defines += [ "_PRE_WLAN_FEATURE_INTRF_MODE" ]
+  }
+  if (CFG_TX_CLASSIFY_LAN_TO_WLAN) {
+    defines += [ "_PRE_WLAN_FEATURE_TX_CLASSIFY_LAN_TO_WLAN" ]
+  }
+  if (CFG_ARP_OFFLOAD) {
+    defines += [ "_PRE_WLAN_FEATURE_ARP_OFFLOAD" ]
+  }
+  if (CFG_DHCP_OFFLOAD) {
+    defines += [ "_PRE_WLAN_FEATURE_DHCP_OFFLOAD" ]
+  }
+  if (CFG_NEW_IQ) {
+    defines += [ "_PRE_WLAN_NEW_IQ" ]
+  }
+  if (CFG_P2P) {
+    defines += [ "_PRE_WLAN_FEATURE_P2P" ]
+  }
+  if (CFG_P2P_ROM) {
+    defines += [ "_PRE_WLAN_FEATURE_P2P_ROM" ]
+  }
+  if (CFG_ANY) {
+    defines += [ "_PRE_WLAN_FEATURE_ANY" ]
+  }
+  if (CFG_STA_PM) {
+    defines += [ "_PRE_WLAN_FEATURE_STA_PM" ]
+  }
+  if (CFG_MESH) {
+    defines += [ "_PRE_WLAN_FEATURE_MESH" ]
+  }
+  if (defined(CFG_BTCOEX)) {
+    defines += [ "_PRE_WLAN_FEATURE_BTCOEX" ]
+  }
+  if (CFG_BTCOEX_ROM) {
+    defines += [ "_PRE_WLAN_FEATURE_BTCOEX_ROM" ]
+  }
+  if (CFG_RF_110X_CALI_DPD) {
+    defines += [ "_PRE_WLAN_RF_110X_CALI_DPD" ]
+  }
+  if (CFG_RF_1102CALI) {
+    defines += [ "_PRE_WLAN_RF_1102CALI" ]
+  }
+  if (CFG_UAPSD) {
+    defines += [ "_PRE_WLAN_FEATURE_UAPSD" ]
+  }
+  if (CFG_WAPI) {
+    defines += [ "_PRE_WLAN_FEATURE_WAPI" ]
+  }
+  if (CFG_WAPI_ROM) {
+    defines += [ "_PRE_WLAN_FEATURE_WAPI_ROM" ]
+  }
+  if (CFG_TCP_OPT) {
+    defines += [ "_PRE_WLAN_TCP_OPT" ]
+  }
+  if (CFG_REKEY_OFFLOAD) {
+    defines += [ "_PRE_WLAN_FEATURE_REKEY_OFFLOAD" ]
+  }
+  if (CFG_REKEY_OFFLOAD_ROM) {
+    defines += [ "_PRE_WLAN_FEATURE_REKEY_OFFLOAD_ROM" ]
+  }
+  if (CFG_WOW) {
+    defines += [ "_PRE_WLAN_FEATURE_WOW" ]
+  }
+  if (CFG_WOW_ROM) {
+    defines += [ "_PRE_WLAN_FEATURE_WOW_ROM" ]
+  }
+  if (CFG_PROMIS) {
+    defines += [ "_PRE_WLAN_FEATURE_PROMIS" ]
+  }
+  if (CFG_PROMIS_ROM) {
+    defines += [ "_PRE_WLAN_FEATURE_PROMIS_ROM" ]
+  }
+  if (CFG_SIGMA) {
+    defines += [ "_PRE_WLAN_FEATURE_SIGMA" ]
+  }
+  if (CFG_MFG_TEST) {
+    defines += [ "_PRE_WLAN_FEATURE_MFG_TEST" ]
+  }
+  if (CFG_MFG_FW) {
+    defines += [ "_PRE_WLAN_FEATURE_MFG_FW" ]
+  }
+  if (CFG_CE_MODE) {
+    defines += [ "_PRE_CE_INITIAL_PARAMS_MODE" ]
+  }
+  if (CFG_FCC_MODE) {
+    defines += [ "_PRE_FCC_INITIAL_PARAMS_MODE" ]
+  }
+  if (CFG_HIPRIV) {
+    defines += [ "_PRE_WLAN_FEATURE_HIPRIV" ]
+    if (CFG_LITEOS) {
+      defines += [ "AT_DEBUG_CMD_SUPPORT" ]
+    } else {
+      defines += [ "_PRE_CONFIG_CONN_HISI_SYSFS_SUPPORT" ]
+    }
+  }
+  if (CFG_HCC_TASK) {
+    defines += [ "_PRE_FEATURE_HCC_TASK" ]
+  }
+  if (defined(LOSCFG_PLATFORM_HI3516EV300)) {
+    defines += [ "HISI_WIFI_PLATFORM_HI3516EV300" ]
+  }
+}

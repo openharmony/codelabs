@@ -1,0 +1,8 @@
+#src file(.c) root dir
+PRIM_XML_SRC_ROOT_DIR:=$(PRJ_ROOT)/code/wifi
+#src file(.c) sub dir
+PRIM_XML_SRC_SUB_DIR:=alg frw hal/hi1131hv100 hcc mac/common mac/hmac mac/dmac oal oam wal
+PRIM_XML_FILE_ID_FILE:= $(PRIM_XML_SRC_ROOT_DIR)/file_id.cfg
+PRIM_XML_MOD_ID_FILE:= $(PRIM_XML_SRC_ROOT_DIR)/mod_id.cfg
+#key_word for avoid file(folder) name collision with other module
+PRIM_XML_KEY_WORD:=wifi_drv

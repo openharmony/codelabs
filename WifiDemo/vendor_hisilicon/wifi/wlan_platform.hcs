@@ -1,0 +1,112 @@
+root {
+    module = "wlan";
+    wlan_config {
+        match_attr = "hdf_wlan_driver";
+        hostChipName = "hi3516dv300";
+        moduleConfig {
+            featureMap = 0xFFFF;
+            msgName = "WalService";
+            Station {
+                name = "sta";
+                mode = true;
+           }
+
+            HostAp {
+                name = "ap";
+                mode = 0; /* 0-- notsupported; 1--softap-host; 2--soft AP DMAC HOST; 3-IOT 1:DMAC OFFLOAD: IPC */
+                vapResNum = 1; /*virtual ap*/
+                userResNum = 8; /*max users support each ap*/
+           }
+
+            P2P {
+                name = "p2p";
+                mode = false;
+            }
+
+            Mac80211 {
+                mode = true;
+            }
+
+            Phy {
+                mode = true;
+            }
+        }
+        deviceList {
+            template deviceInst {
+                deviceInstId = 0;
+                powers {
+                    power0 {
+                        powerSeqDelay = 0;
+                        powerType = 1; /* AlwaysON(0);GPIO(1) */
+                        gpioId = 1;
+                        activeLevel=1; /* High(1); Low(0) */
+                    }
+                    power1 {
+                        /* to support two-stage power supply */
+                        powerSeqDelay = 0;
+                        powerType = 0;
+                        gpioId = 1;
+                        activeLevel=1; /* High(1); Low(0) */
+                    }
+                }
+                reset {
+                    resetType = 1; /* NotManaged(0);GPIO(1) */
+                    gpioId = 2;
+                    activeLevel = 1; /* High(1); Low(0) */
+                    resetHoldTime = 30; /*In ms*/
+                }
+                bootUpTimeOut = 30;
+                bus {
+                    busType = 0; /* 0-sdio 1-usb 2-spi etc. */
+                    busIdx = 2;
+                    funcNum = [1,2];
+                    timeout = 1000;
+                    blockSize = 512;
+               }
+            }
+        }
+        hisi :& deviceList {
+            device0 :: deviceInst {
+                deviceInstId = 0;
+                powers {
+                    power0 {
+                        powerSeqDelay = 0;
+                        powerType = 0; /* AlwaysON(0);GPIO(1) */
+                        gpioId = 91;
+                        activeLevel=1; /* High(1); Low(0) */
+                    }
+                    power1 {
+                        powerSeqDelay = 0;
+                        powerType = 0;
+                        gpioId = 1;
+                        activeLevel = 1; /* High(1); Low(0) */
+                    }
+                }
+                reset {
+                    resetType = ; /* NotManaged(0);GPIO(1) */
+                    gpioId = ;
+                    activeLevel = ; /* High(1); Low(0) */
+                    resetHoldTime = ; /*In ms*/
+                }
+                bootUpTimeOut = 32;
+                bus {
+                    busType = 0; /* 0-sdio 1-usb 2-spi etc. */
+                    busIdx = 2;
+                    funcNum = [1];
+                    timeout = 1000;
+                    blockSize = 512;
+               }
+            }
+        }
+        chipList {
+            template chipInst {
+                match_attr = "hdf_wlan_chips_hi3881";
+                driverName = "hi3881";
+                sdio {
+                    vendorId = 0x0296;
+                    deviceId = [0x5347];
+                }
+            }
+        }
+    }
+}
