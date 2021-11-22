@@ -36,6 +36,8 @@
         "orientation": "unspecified",
         "name": "com.huawei.imagejsdemo.MainAbility",
         "icon": "$media:icon",
+        "srcPath": "default",
+        "srcLanguage": "js",
         "description": "$string:mainability_description",
         "formsEnabled": false,
         "label": "$string:entry_MainAbility",

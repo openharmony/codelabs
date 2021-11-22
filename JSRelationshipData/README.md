@@ -1,0 +1,6 @@
+JSRelationshipData
+本篇Codelab是在HarmonyOS 关系型数据库（JAVA）的设计基础上，用JS编程语言重写了一个布局一模一样的关系型数据库，并对OpenHarmony开发板进行了适配。
+
+Java版本的分布式数据库教会了大家使用关系型数据库，实现增删改查基本功能。
+
+本篇Codelab将使用JS语言进行开发，做一个功能、布局和Java版本完全一样的关系型数据库，大家可以通过这两篇Codelab学习两种编程语言的编码风格和实现区别。

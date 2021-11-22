@@ -1,0 +1,115 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *s
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+<div class="container">
+
+
+    <!--最上部分标题栏-->
+    <div class="title">
+         <div class="title-right">
+         </div>
+        <div class="title-center">
+            <text>关系型数据库管理</text>
+        </div>
+        <div class="title-right">
+            <text @click="addContact">添加</text>
+         </div>
+    </div>
+
+    <!--分割线-->
+    <divider class="divider" vertical="false"></divider>
+
+    <!--list列表的标题栏-->
+    <div class="list-title">
+        <div class="list-title-left">
+            <text>姓名</text>
+        </div>
+        <div class="list-title-center">
+            <text>年龄</text>
+        </div>
+         <div class="list-title-center">
+            <text>性别</text>
+        </div>
+        <div class="list-title-right">
+            <text></text>
+        </div>
+    </div>
+        <!--分割线-->
+    <divider class="divider" vertical="false"></divider>
+
+    <!--list列表-->
+    <list class="contact">
+        <list-item for="{{contactList}}" class="list-item" clickeffect="false">
+            <div class="list-item-data">
+                <div class="list-title-center">
+                    <text>{{$item.name}}</text>
+                </div>
+                <div class="list-title-center">
+                    <text>{{$item.age}}</text>
+                </div>
+                 <div class="list-title-center">
+                    <text>{{$item.gender}}</text>
+                </div>
+                <div class="list-title-right">
+                    <text class="edit" onclick="editContact($item, $idx)">编辑</text>
+                    <text class="delete" onclick="deleteContact($item, $idx)">删除</text>
+                </div>
+            </div>
+            <divider class="list-item-divider" vertical="false"></divider>
+        </list-item>
+    </list>
+
+    <!--添加和编辑弹窗-->
+    <dialog id="addDialog" class="dialog-main" oncancel="cancelDialog">
+        <div class="dialog-div">
+            <div class="inner-txt">
+                <text class="txt">{{dialogTitle}}</text>
+            </div>
+            <div class="dialog-input">
+                <text>姓名:</text>
+                <input id="name" class="input" type="text" maxlength="20" placeholder="输入姓名" value="{{name}}" onchange="changeName"></input>
+            </div>
+
+            <div class="dialog-input">
+                <text>性别:</text>
+                <input id="gender" class="input" type="text" maxlength="11" placeholder="性别" value="{{gender}}" onchange="changeGender"></input>
+            </div>
+
+              <div class="dialog-input">
+                <text>年龄:</text>
+                <input id="age" class="input" type="number" maxlength="20" placeholder="输入年龄" value="{{nameAge}}" onchange="changeAge"></input>
+            </div>
+
+
+            <div class="inner-btn">
+                <input type="button" value="确认" onclick="confirmClick" class="btn-txt"></input>
+            </div>
+        </div>
+    </dialog>
+
+    <!--删除确认弹窗-->
+    <dialog id="deleteDialog" class="delete-dialog-main">
+        <div class="dialog-div">
+            <div class="inner-txt">
+                <text class="txt">确定要删除吗？</text>
+            </div>
+            <div class="inner-btn" >
+                <input type="button" value="取消" onclick="cancelDeleteDialog" class="btn-txt" ></input>
+                <input type="button" value="确认" onclick="confirmDeleteClick" class="btn-txt" ></input>
+            </div>
+        </div>
+    </dialog>
+
+</div>

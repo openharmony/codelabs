@@ -41,8 +41,6 @@ export default {
       return;
     }
     this.ctx = this.$element(this.id).getContext('2d');
-    //        this.ctx.fillStyle = 'rgb(255,255,255)';
-    //        this.ctx.fillRect(0,0,1000,1500);
     this.avgAngle = this.circle / this.count;
     this.draw();
   },
@@ -163,7 +161,8 @@ export default {
     this.ctx.font = this.padding + 'px sans-serif';
     const textArrays = ['恭喜发财', '华为耳机', '华为手机', '恭喜发财', '华为平板', '华为手表'];
     for (let i = 0; i < this.count; i++) {
-      this.drawCircularText(textArrays[i], (this.startAngle + this.avgAngle * 3 / 4) * Math.PI / 180, (this.startAngle + this.avgAngle / 4) * Math.PI / 180);
+      this.drawCircularText(textArrays[i], (this.startAngle + this.avgAngle * 3 / 4) * Math.PI / 180,
+        (this.startAngle + this.avgAngle / 4) * Math.PI / 180);
       this.startAngle += this.avgAngle;
     }
   },
