@@ -9,6 +9,22 @@ ohos {
 buildscript {
     repositories {
         maven {
+<<<<<<< HEAD
+<<<<<<< HEAD
+            url 'http://repo.ark.tools.huawei.com/artifactory/maven-public/'
+=======
+            url 'https://repo.huaweicloud.com/repository/maven/'
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
+        }
+        maven {
+            url 'https://developer.huawei.com/repo/'
+        }
+    }
+    dependencies {
+<<<<<<< HEAD
+        classpath 'com.huawei.ohos:hap:3.0.3.2'
+        classpath 'com.huawei.ohos:decctest:3.0.1.0'
+=======
             url 'https://repo.huaweicloud.com/repository/maven/'
         }
         maven {
@@ -18,16 +34,35 @@ buildscript {
     dependencies {
         classpath 'com.huawei.ohos:hap:2.4.5.5'
         classpath 'com.huawei.ohos:decctest:1.2.5.1'
+>>>>>>> 0e50d605db36ff6e317e21b849a5220bed711ca3
+=======
+        classpath 'com.huawei.ohos:hap:2.4.5.5'
+        classpath 'com.huawei.ohos:decctest:1.2.5.1'
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
     }
 }
 
 allprojects {
     repositories {
         maven {
+<<<<<<< HEAD
+<<<<<<< HEAD
+            url 'http://repo.ark.tools.huawei.com/artifactory/maven-public/'
+        }
+        maven {
+            url 'http://mirrors.tools.huawei.com/maven/'
+=======
             url 'https://repo.huaweicloud.com/repository/maven/'
         }
         maven {
             url 'https://developer.huawei.com/repo/'
+>>>>>>> 0e50d605db36ff6e317e21b849a5220bed711ca3
+=======
+            url 'https://repo.huaweicloud.com/repository/maven/'
+        }
+        maven {
+            url 'https://developer.huawei.com/repo/'
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
         }
     }
 }

@@ -1,9 +1,25 @@
 apply plugin: 'com.huawei.ohos.hap'
+<<<<<<< HEAD
+<<<<<<< HEAD
+apply plugin: 'com.huawei.ohos.decctest'
+=======
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
+//For instructions on signature configuration, see https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ide_debug_device-0000001053822404#section1112183053510
+ohos {
+    compileSdkVersion 7
+    defaultConfig {
+<<<<<<< HEAD
+        compatibleSdkVersion 6
+=======
 //For instructions on signature configuration, see https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ide_debug_device-0000001053822404#section1112183053510
 ohos {
     compileSdkVersion 7
     defaultConfig {
         compatibleSdkVersion 7
+>>>>>>> 0e50d605db36ff6e317e21b849a5220bed711ca3
+=======
+        compatibleSdkVersion 7
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
     }
     buildTypes {
         release {
@@ -13,11 +29,29 @@ ohos {
             }
         }
     }
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
 
     supportSystem "standard"
+>>>>>>> 0e50d605db36ff6e317e21b849a5220bed711ca3
+=======
+
+    supportSystem "standard"
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
     testImplementation 'junit:junit:4.13'
+<<<<<<< HEAD
+<<<<<<< HEAD
+    ohosTestImplementation 'com.huawei.ohos.testkit:runner:2.0.0.100'
+}
+decc {
+    supportType = ['html','xml']
+=======
+>>>>>>> 0e50d605db36ff6e317e21b849a5220bed711ca3
+=======
+>>>>>>> a7fd881db71f93f9ba2923fc2ed13ab77577dd33
 }
