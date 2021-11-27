@@ -1,6 +1,7 @@
 # OpenHarmony Codelabs<a name="ZH-CN_TOPIC_0000001228194435"></a>
 
 -   [概要简介](#section117915431558)
+-   [目录](#sectionMenu)
 -   [使用说明](#section1954919258619)
 -   [约束与限制](#section682025019613)
 -   [相关仓](#section01752910717)
@@ -8,6 +9,31 @@
 ## 概要简介<a name="section117915431558"></a>
 
 为帮助开发者快速熟悉HarmonyOS和OpenHarmony的能力以及相关的应用开发流程，我们提供了一系列的基于趣味场景的应用示例，即Codelabs，开发者可以根据我们的文档一步步的学习和完成简单项目的开发。
+
+## 目录<a name="sectionMenu"></a>
+- [分布式调度启动远程FA ](https://gitee.com/openharmony/codelabs/tree/master/RemoteStartFA)
+- [分布式新闻客户端](https://gitee.com/openharmony/codelabs/tree/master/NewsDemo)
+- [分布式亲子早教系统](https://gitee.com/openharmony/codelabs/tree/master/PictureGameOpenHarmony)
+- [自定义组件](https://gitee.com/openharmony/codelabs/tree/master/JSCanvasComponet)
+- [JS组件购物应用演示](https://gitee.com/openharmony/codelabs/tree/master/ShoppingOpenHarmony)
+- [分布式数据库](https://gitee.com/openharmony/codelabs/tree/master/JsDistributedData)
+- [关系型数据库](https://gitee.com/openharmony/codelabs/tree/master/JSRelationshipData)
+- [轻量级偏好数据库](https://gitee.com/openharmony/codelabs/tree/master/Database)
+- [图片编辑模板](https://gitee.com/openharmony/codelabs/tree/master/ImageEditorTemplate)
+- [图片常见操作](https://gitee.com/openharmony/codelabs/tree/master/ImageJsDemo)
+- [简易视频播放器](https://gitee.com/openharmony/codelabs/tree/master/VideoOpenHarmony)
+- [eTs流式布局](https://gitee.com/openharmony/codelabs/tree/master/FlowLayoutEts)
+- [eTS转场动画的使用](https://gitee.com/openharmony/codelabs/tree/master/TransitionAnimtaionEts)
+- [eTS弹窗](https://gitee.com/openharmony/codelabs/tree/master/CustomDialogEts)
+- 常用组件和布局
+   - [RatingApplication](https://gitee.com/openharmony/codelabs/tree/master/RatingApplication)
+   - [AnimationDemo](https://gitee.com/openharmony/codelabs/tree/master/AnimationDemo)
+   - [ClickableJsDemo](https://gitee.com/openharmony/codelabs/tree/master/ClickableJsDemo)
+   - [InputApplication](https://gitee.com/openharmony/codelabs/tree/master/InputApplication)
+   - [SliderApplication](https://gitee.com/openharmony/codelabs/tree/master/SliderApplication)
+   - [SwitchApplication](https://gitee.com/openharmony/codelabs/tree/master/SwitchApplication)
+   - [DialogDemo](https://gitee.com/openharmony/codelabs/tree/master/DialogDemo)
+
 
 ## 使用说明<a name="section1954919258619"></a>
 
