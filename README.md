@@ -31,9 +31,9 @@
 | 16   | [OpenHarmony最小系统移植](https://gitee.com/openharmony/codelabs/tree/master/Device/PortingOpenHarmony) | 介绍如何移植一个最小操作系统，包括开发板配置、产品配置等等。 |
 | 17   | [HDF驱动模型Wi-Fi驱动](https://gitee.com/openharmony/codelabs/tree/master/Device/WifiDemo) | 基于HDF Wi-Fi模型，进行Wi-Fi的适配开发，实现了连接和交互功能。 |
 | 18   | [转场动画的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TransitionAnimtaionEts) | 基于OpenHarmony eTS UI转场动画，实现了页面间转场、组件内转场以及共享元素转场。 |
-| 19   | [基础组件Slider的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SliderApplictionEts) | 基于OpenHarmony eTS UI，使用slider组件，实现了可调节风车大小和转速的动画效果。 |
+| 19   | [基础组件Slider的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SliderApplictionEts) | 基于OpenHarmony eTS UI，使用slider组件，实现可调节风车大小和转速的动画效果。 |
 | 20   | [image、image-animator（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ClickableJsDemo) | 基于OpenHarmony JS UI，使用Image、image-animator，实现图片展示与界面交互的动态效果。 |
-| 21   | [动画样式（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/AnimationDemo) | 基于OpenHarmony JS UI，使用Image、image-animator，实现图片展示与界面交互的动态效果。 |
+| 21   | [动画样式（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/AnimationDemo) | 基于OpenHarmony JS UI，使用动画样式实现平移、旋转、缩放以及透明度变化的效果。 |
 | 22   | [dialog（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/DialogDemo) | 基于OpenHarmony JS UI，使用dialog组件实现几种常用的弹窗效果。 |
 | 23   | [input、label（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/InputApplication) | 基于OpenHarmony JS UI，使用input组件，实现form表单的输入以及表单验证效果。 |
 | 24   | [rating（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/RatingApplication) | 基于OpenHarmony JS UI，使用rating组件，实现星级打分的效果。  |
