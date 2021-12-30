@@ -15,7 +15,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001231763361"></a>
 
-**[input组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-input.md)：**交互式组件，包括单选框、多选框、按钮和单行文本输入框。
+**[input组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-input.md)**：交互式组件，包括单选框、多选框、按钮和单行文本输入框。
 
 # 搭建OpenHarmony环境<a name="ZH-CN_TOPIC_0000001238774623"></a>
 
@@ -67,7 +67,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 开发者可以删除index.hml文件中的默认代码，根据下述步骤一起进行开发，整个布局文件使用div组件将页面进行划分，页面从上到下包括：text、password、email、date、number、radio、checkbox、button类型，页面如下：
 
-![](figures\IMG_20211213_141801-0.jpg)
+![](figures/IMG_20211213_141801-0.jpg)
 
 上图的页面hml示例代码如下：
 

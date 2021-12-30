@@ -10,7 +10,7 @@
 
 本篇Codelab使用声明式UI范式开发实现一次开发多端部署，效果预览如下:
 
-![](figures/VID_20211222_162936-00_00_00-00_00_30-1.gif)
+ <img src="figures/VID_20211222_162936-00_00_00-00_00_30-1.gif" style="width:400px;height:712px" />
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001236839003"></a>
 
@@ -22,7 +22,7 @@
 
    以3.0版本为例：
 
-   ![](figures\取版本.png)
+   ![](figures/取版本.png)
 
 2. 搭建烧录环境
 
@@ -40,13 +40,13 @@
    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
    -   工程示例：
 
-   ![](figures\截图.png)
+   ![](figures/截图.png)
 
 # 代码结构解读<a name="ZH-CN_TOPIC_0000001192359002"></a>
 
 本篇Codelab只对核心代码进行讲解，以下介绍整个工程的代码结构。
 
-![](figures\036C0734-B95E-4D50-98E1-BEEC33160D0E.png)
+![](figures/036C0734-B95E-4D50-98E1-BEEC33160D0E.png)
 
 -   common：自定义组件。
     -   bottomTabs.ets：底部页签容器。
