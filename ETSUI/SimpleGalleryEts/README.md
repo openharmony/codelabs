@@ -27,7 +27,7 @@
 
    以3.0版本为例：
 
-   ![](figures\取版本.png)
+   ![](figures/取版本.png)
 
 2. 搭建烧录环境
 
@@ -45,13 +45,13 @@
    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
    -   工程示例：
 
-   ![](figures\截图.png)
+   ![](figures/截图.png)
 
 # 代码结构解读<a name="ZH-CN_TOPIC_0000001237577529"></a>
 
 本篇Codelab只对核心代码进行讲解，以下介绍整个工程的代码结构。
 
-![](figures\036C0734-B95E-4D50-98E1-BEEC33160D0E.png)
+![](figures/036C0734-B95E-4D50-98E1-BEEC33160D0E.png)
 
 -   common：自定义组件。
     -   bottomTabs.ets：底部页签容器。
@@ -85,7 +85,7 @@
 
 1. 在common中创建文件bottomTabs.ets，自定义底部页签容器BottomTabs。使用ForEach语句，显示四个相同的页签，每个页签使用Column组件，使用justifyContent: FlexAlign.SpaceEvenly来使页签均分布局。
 
-   ![](figures\zh-cn_image_0000001237578411.png)
+   ![](figures/zh-cn_image_0000001237578411.png)
 
    ```
    import prompt from '@system.prompt'
@@ -113,7 +113,7 @@
 
 2. Tabs组件中TabContent中的内容使用自定义组件完成，新建homeTabContent.ets文件，实现HomeTabComponent 组件。
 
-   ![](figures\zh-cn_image_0000001237778483.png)
+   ![](figures/zh-cn_image_0000001237778483.png)
 
    ```
    import { TopTabs } from '../common/topTabs'
@@ -369,23 +369,50 @@ export struct HomeTabComponent {
     自定义组件作为子组件，父组件引用时直接传递参数，子组件中定义参数即可。
 
     ```
-    //在homeTabContent.ets中引用自定义组件时直接传参数ForEach(this.recommends, item => {   ListItem() {     HomeListItem({ titleIndex: this.recommends.indexOf(item) })   }}, item => this.recommends.indexOf(item).toString())
+    //在homeTabContent.ets中引用自定义组件时直接传参数
+    ForEach(this.recommends, item => {
+          ListItem() {
+            HomeListItem({ titleIndex: this.recommends.indexOf(item) })
+          }
+        }, item => this.recommends.indexOf(item).toString())
     ```
-
+  
     ```
-    //在homeListItem.ets中定义的子组件中定义参数@Componentexport struct HomeListItem {  private titleIndex: number = 0  ......}
+    //在homeListItem.ets中定义的子组件中定义参数
+    @Component
+    export struct HomeListItem{  
+      private titleIndex: number = 0
+      ......
+    }
     ```
-
+  
   - 父组件和子组件之间双向传递。
-
+  
     父组件和子组件之间的双向传递使用状态数据管理，状态数据管理作为声明式UI的特色，通过功能不同的装饰器给开发者提供了清晰的页面更新渲染的流程和管道。状态管理包括UI组件状态和应用程序状态，两者协作可以使开发者完整地架构整个应用的数据更新和UI渲染。本篇Codelab中首页中的bottomTabIndex代表当前Tabs在第几页。双向传递父组件使用@State修饰的变量，子组件使用@Link修饰，且父组件需要使用$引用。
-
+  
     ```
-    @Entry@Componentstruct HomeComponent {  @State bottomTabIndex: number = 0 // 父组件需要时@State修饰  build() {    Stack({ alignContent: Alignment.BottomStart }) {      ......      BottomTabs({ controller: this.controller, bottomTabIndex: $bottomTabIndex }) // 使用$引用传递数据    }    .width('100%')    .height('100%')  }}
+    @Entry
+    @Component
+    struct HomeComponent {
+      @State bottomTabIndex: number = 0 // 父组件需要时@State修饰
+      build() {
+        Stack({ alignContent: Alignment.BottomStart }) {
+          ......
+          BottomTabs({ controller: this.controller, bottomTabIndex: $bottomTabIndex }) // 使用$引用传递数据
+        }.width('100%').height('100%')
+      }
+    }
     ```
-
+    
     ```
-    @Componentexport struct BottomTabs {  private tabSrc: number[] = [0, 1, 2, 3]  private backgroundColor: string = '#F1F3F5'  private controller: TabsController = new TabsController()  @Link bottomTabIndex: number // 子组件中使用@Link修饰  ......}
+    @Component
+    export struct BottomTabs {
+      private tabSrc: number[] = [0, 1, 2, 3]
+      private backgroundColor: string = '#F1F3F5'
+      private controller: TabsController = new TabsController()
+      @Link bottomTabIndex: number // 子组件中使用@Link修饰
+      ......
+    }
     ```
 
 
