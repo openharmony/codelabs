@@ -14,9 +14,9 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001185679748"></a>
 
-**[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：**图片组件，用于图片资源的展示。
+**[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)**：图片组件，用于图片资源的展示。
 
-**[image-animitor组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image-animator.md)：**帧动画播放器，用以播放一组图片，可以设置播放时间、次数等参数。
+**[image-animitor组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image-animator.md)**：帧动画播放器，用以播放一组图片，可以设置播放时间、次数等参数。
 
 **[通用事件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-common-events.md)**：事件绑定在组件上，当组件达到事件触发条件时，会执行JS中对应的事件回调函数，实现页面UI视图和页面JS逻辑层的交互。
 
@@ -46,7 +46,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
    -   工程示例：
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/【OpenH JS基础组件】image、image-animator_1640682897276/【OpenH JS基础组件】image、image-animator/figures/截图.png)
+   ![](figures/截图.png)
 
 # 任务一：完成页面布局<a name="ZH-CN_TOPIC_0000001185998280"></a>
 
@@ -61,7 +61,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 
    图片与样式文件放置位置
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】image、image-animator_1640682897276\【OpenH JS基础组件】image、image-animator\figures\截图1.png)
+   ![](figures\截图1.png)
 
 2. 在default/pages/index/index.css中引入公共样式style.css并编写需要用到的样式，样式代码如下：
 
@@ -216,7 +216,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 
    image组件
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】image、image-animator_1640682897276\【OpenH JS基础组件】image、image-animator\figures\第一张图.png)
+   ![](figures\第一张图.png)
 
    ```
    <div class="line-div">
@@ -229,7 +229,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
    </div>
    ```
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】image、image-animator_1640682897276\【OpenH JS基础组件】image、image-animator\figures\第二张图.png)
+   ![](figures\第二张图.png)
 
    ```
    <div class="line-div">
@@ -244,22 +244,67 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 
    image-animator组件
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】image、image-animator_1640682897276\【OpenH JS基础组件】image、image-animator\figures\第三张.jpg)
+   ![](figures\第三张.jpg)
 
    ```
-   <div class="line-div">    <div class="line-div-son margin-top-20" >        <image-animator class="animator" ref="frameContainerPhone" images="{{frameContainerPhone.frames}}" iteration="1" duration="{{frameContainerPhone.durationTime}}" onclick="handleStartFrameContainerPhone" />    </div>    <div class="line-div-son text-div">        <text class="font-size-20" >{{frameContainerPhone.title}}</text>    </div></div>
+   <div class="line-div">
+       <div class="line-div-son margin-top-20">
+           <image-animator class="animator" ref="frameContainerPhone" images="{{frameContainerPhone.frames}}" iteration="1"
+               duration="{{frameContainerPhone.durationTime}}" onclick="handleStartFrameContainerPhone" />
+       </div>
+    	<div class="line-div-son text-div"> <text class="font-size-20">{{frameContainerPhone.title}}</text> </div>
+   </div>
    ```
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】image、image-animator_1640682897276\【OpenH JS基础组件】image、image-animator\figures\第四张.jpg)
+   ![](figures\第四张.jpg)
 
    ```
-   <div class="line-div">    <div class="line-div-son margin-top-20">        <image-animator ref="frameContainerState" class="animator" images="{{frameContainerState.frames}}" iteration="1" duration="{{frameContainerState.durationTime}}" onclick="handleStartFrameContainerState" />    </div>    <div class="line-div-son text-div">        <text class="font-size-20" >{{frameContainerState.title}}</text>    </div></div>
+   <div class="line-div">
+       <div class="line-div-son margin-top-20">
+           <image-animator ref="frameContainerState" class="animator" images="{{frameContainerState.frames}}" iteration="1"
+               duration="{{frameContainerState.durationTime}}" onclick="handleStartFrameContainerState" />
+       </div>
+       <div class="line-div-son text-div"> <text class="font-size-20">{{frameContainerState.title}}</text> </div>
+    </div>
    ```
 
    index.hml全文如下：
 
    ```
-   <div class="container">    <div class="first-div">        <div class="line-div">            <div class="line-div-son margin-top-20" >                <image ref="imageNormal" class="{{imageNormal.classType}}"  src="{{imageNormal.src}}"  ontouchstart="changeShadow(true)"  ontouchend="changeShadow(false)"  />            </div>            <div class="line-div-son text-div">                <text class="font-size-20" >{{imageNormal.title}}</text>            </div>        </div>        <div class="line-div">            <div class="line-div-son margin-top-30">                <image ref="imageSelect" class="img-normal" src="{{imageSelect.src}}"  onclick="changeHookState" />            </div>            <div class="line-div-son text-div">                <text class="font-size-20" >{{imageSelect.title}}</text>            </div>        </div>    </div>    <div class="first-div">        <div class="line-div">            <div class="line-div-son margin-top-20" >                <image-animator class="animator" ref="frameContainerPhone" images="{{frameContainerPhone.frames}}" iteration="1" duration="5800ms" onclick="handleStartFrameContainerPhone" />            </div>            <div class="line-div-son text-div">                <text class="font-size-20" >{{frameContainerPhone.title}}</text>            </div>        </div>        <div class="line-div">            <div class="line-div-son margin-top-20">                <image-animator class="animator" ref="frameContainerState" images="{{frameContainerState.frames}}" iteration="1" duration="{{frameContainerState.durationTime}}" onclick="handleStartFrameContainerState" />            </div>            <div class="line-div-son text-div">                <text class="font-size-20" >{{frameContainerState.title}}</text>            </div>        </div>    </div></div>
+   <div class="container">
+       <div class="first-div">
+           <div class="line-div">
+               <div class="line-div-son margin-top-20">
+                   <image ref="imageNormal" class="{{imageNormal.classType}}" src="{{imageNormal.src}}"
+                       ontouchstart="changeShadow(true)" ontouchend="changeShadow(false)" />
+               </div>
+               <div class="line-div-son text-div"> <text class="font-size-20">{{imageNormal.title}}</text> </div>
+           </div>
+           <div class="line-div">
+               <div class="line-div-son margin-top-30">
+                   <image ref="imageSelect" class="img-normal" src="{{imageSelect.src}}" onclick="changeHookState" />
+               </div>
+               <div class="line-div-son text-div"> <text class="font-size-20">{{imageSelect.title}}</text> </div>
+           </div>
+       </div>
+       <div class="first-div">
+           <div class="line-div">
+               <div class="line-div-son margin-top-20">
+                   <image-animator class="animator" ref="frameContainerPhone" images="{{frameContainerPhone.frames}}"
+                       iteration="1" duration="5800ms" onclick="handleStartFrameContainerPhone" />
+               </div>
+               <div class="line-div-son text-div"> <text class="font-size-20">{{frameContainerPhone.title}}</text> </div>
+           </div>
+           <div class="line-div">
+               <div class="line-div-son margin-top-20">
+                   <image-animator class="animator" ref="frameContainerState" images="{{frameContainerState.frames}}"
+                       iteration="1" duration="{{frameContainerState.durationTime}}"
+                       onclick="handleStartFrameContainerState" />
+               </div>
+               <div class="line-div-son text-div"> <text class="font-size-20">{{frameContainerState.title}}</text> </div>
+           </div>
+       </div>
+   </div>
    ```
 
 # 任务二：添加交互事件<a name="ZH-CN_TOPIC_0000001231637897"></a>
@@ -343,7 +388,99 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 5. index.js全文如下：
 
    ```
-   export default {  data: {    imageNormal: {      classType: 'main-img-unTouch',      src: '/common/images/sky_blue.png',      title: '点击阴影'    },    imageSelect: {      src: '/common/images/hook.png',      title: '点击切换状态',      hook: true    },    frameContainerPhone: {      frames: [        {src: '/common/images/frames/phone/phone_0.png'},        {src: '/common/images/frames/phone/phone_1.png'},        {src: '/common/images/frames/phone/phone_2.png'},        ...        {src: '/common/images/frames/phone/phone_35.png'}      ],      title: '点击动画效果',      durationTime: 3600    },    frameContainerState: {      frames: [],      title: '点击切换状态动效',      durationTime: 0,      flag: true    },    durationTimeArray: [1400, 1400],    back: [      {src: '/common/images/frames/arrowheadBack/arrowhead_back_0.png'},      {src: '/common/images/frames/arrowheadBack/arrowhead_back_1.png'},      ...      {src: '/common/images/frames/arrowheadBack/arrowhead_back_13.png'}    ],    collapse: [      {src: '/common/images/frames/arrowheadCollapse/arrowhead_collapse_0.png'},      {src: '/common/images/frames/arrowheadCollapse/arrowhead_collapse_1.png'},      ...      {src: '/common/images/frames/arrowheadCollapse/arrowhead_collapse_13.png'}    ]  },  // 初始化  onInit() {    this.frameContainerState.frames = this.back;    this.frameContainerState.durationTime = 0;    this.frameContainerPhone.durationTime = 0;  },  // 触碰阴影方法  changeHookState() {    if (this.imageSelect.hook) {      this.imageSelect.src = '/common/images/fork.png';      this.imageSelect.hook = false;    } else {      this.imageSelect.src = '/common/images/hook.png';      this.imageSelect.hook = true;    }  },  // 点击切换状态  changeShadow(flag) {    if (flag) {      this.imageNormal.classType = 'main-img-touch';    } else {      this.imageNormal.classType = 'main-img-unTouch';    }  },  // 点击动画效果方法  handleStartFrameContainerPhone() {    this.frameContainerPhone.durationTime = 3600;    this.$refs.frameContainerPhone.start();  },  // 点击切换状态动效方法  handleStartFrameContainerState() {    if (this.frameContainerState.flag) {      this.frameContainerState.frames = this.collapse;      this.frameContainerState.durationTime = this.durationTimeArray[0];      this.$refs.frameContainerState.start();      this.frameContainerState.flag = false;      this.$refs.frameContainerState.stop();    } else {      this.frameContainerState.frames = this.back;      this.frameContainerState.durationTime = this.durationTimeArray[1];      this.$refs.frameContainerState.start();      this.frameContainerState.flag = true;      this.$refs.frameContainerState.stop();    }  }};
+   export default {
+       data: {
+           imageNormal: {
+               classType: 'main-img-unTouch',
+               src: '/common/images/sky_blue.png',
+               title: '点击阴影'
+           },
+           imageSelect: {
+               src: '/common/images/hook.png',
+               title: '点击切换状态',
+               hook: true
+           },
+           frameContainerPhone: {
+               frames: [{
+                   src: '/common/images/frames/phone/phone_0.png'
+               }, {
+                   src: '/common/images/frames/phone/phone_1.png'
+               }, {
+                   src: '/common/images/frames/phone/phone_2.png'
+               }, ...{
+                   src: '/common/images/frames/phone/phone_35.png'
+               }],
+               title: '点击动画效果',
+               durationTime: 3600
+           },
+           frameContainerState: {
+               frames: [],
+               title: '点击切换状态动效',
+               durationTime: 0,
+               flag: true
+           },
+           durationTimeArray: [1400, 1400],
+           back: [{
+               src: '/common/images/frames/arrowheadBack/arrowhead_back_0.png'
+           }, {
+               src: '/common/images/frames/arrowheadBack/arrowhead_back_1.png'
+           }, ...{
+               src: '/common/images/frames/arrowheadBack/arrowhead_back_13.png'
+           }],
+           collapse: [{
+               src: '/common/images/frames/arrowheadCollapse/arrowhead_collapse_0.png'
+           }, {
+               src: '/common/images/frames/arrowheadCollapse/arrowhead_collapse_1.png'
+           }, ...{
+               src: '/common/images/frames/arrowheadCollapse/arrowhead_collapse_13.png'
+           }]
+       },
+       // 初始化 
+       onInit() {
+           this.frameContainerState.frames = this.back;
+           this.frameContainerState.durationTime = 0;
+           this.frameContainerPhone.durationTime = 0;
+       },
+       // 触碰阴影方法 
+       changeHookState() {
+           if (this.imageSelect.hook) {
+               this.imageSelect.src = '/common/images/fork.png';
+               this.imageSelect.hook = false;
+           } else {
+               this.imageSelect.src = '/common/images/hook.png';
+               this.imageSelect.hook = true;
+           }
+       },
+       // 点击切换状态 
+       changeShadow(flag) {
+           if (flag) {
+               this.imageNormal.classType = 'main-img-touch';
+           } else {
+               this.imageNormal.classType = 'main-img-unTouch';
+           }
+       },
+       // 点击动画效果方法 
+       handleStartFrameContainerPhone() {
+           this.frameContainerPhone.durationTime = 3600;
+           this.$refs.frameContainerPhone.start();
+       },
+       // 点击切换状态动效方法 
+       handleStartFrameContainerState() {
+           if (this.frameContainerState.flag) {
+               this.frameContainerState.frames = this.collapse;
+               this.frameContainerState.durationTime = this.durationTimeArray[0];
+               this.$refs.frameContainerState.start();
+               this.frameContainerState.flag = false;
+               this.$refs.frameContainerState.stop();
+           } else {
+               this.frameContainerState.frames = this.back;
+               this.frameContainerState.durationTime = this.durationTimeArray[1];
+               this.$refs.frameContainerState.start();
+               this.frameContainerState.flag = true;
+               this.$refs.frameContainerState.stop();
+           }
+       }
+   };
    ```
 
 # 恭喜你<a name="ZH-CN_TOPIC_0000001231397833"></a>

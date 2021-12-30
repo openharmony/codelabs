@@ -7,7 +7,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 在本教程中，我们将会通过一个简单的样例，使用input的text、email、date、number、password、button、checkbox、radio等类型实现一个form表单的提交效果。效果如下图所示，开发者还可以根据自己的需求添加不同的效果。
 
-![](D:/openHarmonyAdapt/OpenHarmonyMD-File/【OpenH JS基础组件】input、label_1640683032456/【OpenH JS基础组件】input、label/figures/IMG_20211213_141801.jpg)
+![](figures/IMG_20211213_141801.jpg)
 
 ## 应用场景<a name="section225718574575"></a>
 
@@ -25,7 +25,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
    以3.0版本为例：
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/【OpenH JS基础组件】input、label_1640683032456/【OpenH JS基础组件】input、label/figures/取版本.png)
+   ![](figures/取版本.png)
 
 2. 搭建烧录环境
 
@@ -43,7 +43,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
    -   工程示例：
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/【OpenH JS基础组件】input、label_1640683032456/【OpenH JS基础组件】input、label/figures/截图.png)
+   ![](figures/截图.png)
 
 # 将组件添加到布局文件中<a name="ZH-CN_TOPIC_0000001186403694"></a>
 
@@ -67,7 +67,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 开发者可以删除index.hml文件中的默认代码，根据下述步骤一起进行开发，整个布局文件使用div组件将页面进行划分，页面从上到下包括：text、password、email、date、number、radio、checkbox、button类型，页面如下：
 
-![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】input、label_1640683032456\【OpenH JS基础组件】input、label\figures\IMG_20211213_141801-0.jpg)
+![](figures\IMG_20211213_141801-0.jpg)
 
 上图的页面hml示例代码如下：
 
@@ -360,7 +360,7 @@ optionselect(e) {
 
 到此我们已经完成了所有的任务和代码的编写。
 
->![](D:/openHarmonyAdapt/OpenHarmonyMD-File/【OpenH JS基础组件】input、label_1640683032456/【OpenH JS基础组件】input、label/public_sys-resources/icon-note.gif) **说明：** 
+>![](public_sys-resources/icon-note.gif) **说明：** 
 >样例中我们使用了一张input输入框必填标识图片，它放在js/default/common.images目录下，命名为require.png
 
 # 恭喜你<a name="ZH-CN_TOPIC_0000001186722184"></a>

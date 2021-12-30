@@ -1,4 +1,4 @@
-# SliderApplicationEtsOpenH
+# SliderApplicationEts
 # 介绍<a name="ZH-CN_TOPIC_0000001237044819"></a>
 
 -   [应用场景](#section225718574575)
@@ -9,43 +9,42 @@ OpenHarmony eTS提供了丰富的动画组件和接口，开发者可以根据�
 
 在本教程中，我们将会通过一个简单的样例，学习如何使用eTS开发框架的转场动画。其中包含页面间转场、组件内转场以及共享元素转场，完成效果如下图所示：
 
-![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/figures/VID_20211221_194349-00_00_00-00_00_30-2.gif)
+![](figures/VID_20211221_194349-00_00_00-00_00_30-2.gif)
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001189884870"></a>
 
 -   [eTS工程目录](#section116501561575)
 
-**页面间转场：**在两个页面之间切换时执行过渡动效。
+**页面间转场**：在两个页面之间切换时执行过渡动效。
 
-**组件内转场：**在组件添加和移除时执行过渡动效，主要用于容器组件子组件添加和移除时提升用户体验。
+**组件内转场**：在组件添加和移除时执行过渡动效，主要用于容器组件子组件添加和移除时提升用户体验。
 
-**共享元素转场：**元素在不同页面之间过渡动效。例如，如果两个页面使用相同的图片（但位置和大小不同），图片就会在这两个页面之间流畅地平移和缩放。
+**共享元素转场**：元素在不同页面之间过渡动效。例如，如果两个页面使用相同的图片（但位置和大小不同），图片就会在这两个页面之间流畅地平移和缩放。
 
 ## eTS工程目录<a name="section116501561575"></a>
 
 新建工程的eTS目录如下图所示。
 
-![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/figures/zh-cn_image_0000001236728127.png)
+![](figures/zh-cn_image_0000001236728127.png)
 
 **各个文件夹和文件的作用：**
 
--   **index.ets：**用于描述UI布局、样式、事件交互和页面逻辑。
-
+-   **index.ets**：用于描述UI布局、样式、事件交互和页面逻辑。
 -   **app.ets**：用于全局应用逻辑和应用生命周期管理。
 -   **pages**：用于存放所有组件页面。
--   **resources：**用于存放资源配置文件。
+-   **resources**：用于存放资源配置文件。
 
 # 任务一：构建主界面<a name="ZH-CN_TOPIC_0000001189644904"></a>
 
 在这个任务中，我们将完成示例主界面的设计，效果图如下：
 
-![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/figures/zh-cn_other_0000001191964634.jpeg)
+![](figures/zh-cn_other_0000001191964634.jpeg)
 
 从上面效果图可以看出，主界面主要由5个相同样式的功能菜单组成，我们可以将这些菜单抽取成一个子组件Item。
 
 1. 将所需要的图片添加到resources -\> base -\> media 目录下。
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/figures/zh-cn_image_0000001237187351.png)
+   ![](figures/zh-cn_image_0000001237187351.png)
 
 2. 在index.ets中新建名为Item的子组件，声明子组件Item的UI布局并添加样式。创建Stack组件，包含图片和文本，并在已创建的Item组件中添加文本信息和页面跳转事件，定义变量text和uri。其中text用于给Text组件设置文本信息，uri用于设置页面路由的地址。示例代码如下：
 
@@ -114,9 +113,9 @@ OpenHarmony eTS提供了丰富的动画组件和接口，开发者可以根据�
 
 1. 首先在pages目录下新建名为page的package，然后在page目录下，点击鼠标右键分别新建名为BottomTransition、CustomTransition和FullCustomTransition的三个ets文件。其中BottomTransition用于实现“页面间转场：底部滑入”动效；CustomTransition用于实现“页面间转场：自定义1”动效；FullCustomTransition用于实现“页面间转场：自定义2”动效
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/figures/zh-cn_image_0000001192120584.png)
+   ![](figures/zh-cn_image_0000001192120584.png)
 
-   >![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/public_sys-resources/icon-note.gif) **说明：** 
+   >![](public_sys-resources/icon-note.gif) **说明：** 
    >
    >-   页面文件名不能使用组件名称，比如：Text.ets、Button.ets等。
    >-   每个页面文件中必须包含入口组件。
@@ -132,7 +131,7 @@ OpenHarmony eTS提供了丰富的动画组件和接口，开发者可以根据�
    ]
    ```
 
-   >![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/public_sys-resources/icon-note.gif) **说明：** 
+   >![](public_sys-resources/icon-note.gif) **说明：** 
    >pages列表中第一个页面为应用的首页入口。
 
 3. 在主界面index.ets的Index组件中，将BottomTransition、CustomTransition和FullCustomTransition的路由地址赋值给对应Item的uri。
@@ -290,7 +289,7 @@ struct BottomTransition{
 
 1. 首先在pages目录下新建名为share的包，然后在share目录下分别新建名为ShareItem和SharePage的ets文件。其中ShareItem.ets用于展示小图，SharePage.ets用于展示大图。
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/figures/zh-cn_image_0000001192441454.png)
+   ![](figures/zh-cn_image_0000001192441454.png)
 
 2. 在config.json文件下的pages标签下分别添加ShareItem和SharePage的路由地址。
 
@@ -343,7 +342,7 @@ struct BottomTransition{
    }
    ```
 
-   >![](D:/openHarmonyAdapt/OpenHarmonyMD-File/eTS转场动画的使用_1640595367382/eTS转场动画的使用/public_sys-resources/icon-note.gif) **说明：** 
+   >![](public_sys-resources/icon-note.gif) **说明：** 
    >两个页面的组件配置为同一个id，则转场过程中会执行共享元素转场，配置为空字符串时不会有共享元素转场效果。
 
 4. 在SharePage.ets中给Image组件设置sharedTransition属性，组件转场id设置为“imageId”。

@@ -842,4 +842,4 @@ Path组件所在的Flex容器组件添加点击事件，并实现记录触控点
 
 # 13.参考
 
-gitee地址
+[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)

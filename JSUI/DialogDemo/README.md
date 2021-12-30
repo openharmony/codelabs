@@ -1,13 +1,12 @@
-# DialogDemo
-# 介绍<a name="ZH-CN_TOPIC_0000001186523840"></a>
+# 1.介绍
 
 OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的接口和组件，开发者可以根据实际场景和开发需求，选用不同的组件和接口。本篇Codelab，我们将一起开启ArkUI（基于JS扩展的类Web开发范式）容器组件的学习之路。本教程给大家分享的内容是容器组件dialog的使用。
 
 本篇Codelab通过一个简单的样例，实现了dialog的几种常用的效果，点击不同的button呈现不同的样式的dialog。效果如下图所示，开发者还可以根据自己的需求添加不同的效果。
 
-![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】dialog_1640682809659\【OpenH JS基础组件】dialog\figures\成品2-00_00_00-00_00_30.gif)
+![](figures/成品2-00_00_00-00_00_30.gif)
 
-# 相关概念<a name="ZH-CN_TOPIC_0000001186365952"></a>
+# 2.相关概念
 
 **[dialog组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-dialog.md)：**自定义弹窗容器组件。
 
@@ -17,7 +16,7 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 
 **[text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-text.md)：**文本组件，用于呈现一段信息。
 
-# 搭建OpenHarmony环境<a name="ZH-CN_TOPIC_0000001238655161"></a>
+# 3.搭建OpenHarmony环境
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**Hi3516DV300**开发板为例，参照以下步骤进行：
 
@@ -25,7 +24,7 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 
    以3.0版本为例：
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】dialog_1640682809659\【OpenH JS基础组件】dialog\figures\取版本.png)
+   ![](figures/取版本.png)
 
 2. 搭建烧录环境
 
@@ -43,12 +42,9 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
    -   工程示例：
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】dialog_1640682809659\【OpenH JS基础组件】dialog\figures\截图.png)
+   ![](figures/截图.png)
 
-# 将组件添加到布局中<a name="ZH-CN_TOPIC_0000001186524512"></a>
-
--   [button组件](#section1648574312326)
--   [dialog组件](#section1393961711172)
+# 4.将组件添加到布局中
 
 我们需要完成程序页面的新建和设计，并将程序使用到的input组件添加到布局文件index.hml中。在完成新建项目后，我们看到系统自动创建了pages.index目录，打开index.hml文件，开始进行页面设计。
 
@@ -62,11 +58,11 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 </div>
 ```
 
-## button组件<a name="section1648574312326"></a>
+## button组件
 
 开发者可以删除默认代码跟着接下来的步骤一起开发，实现如下界面效果。
 
-![](D:\openHarmonyAdapt\OpenHarmonyMD-File\【OpenH JS基础组件】dialog_1640682809659\【OpenH JS基础组件】dialog\figures\1.png)
+![](figures/1.png)
 
 从上面布局效果图可以看到，界面主要由button组成，我们先在index.hml中添加button组件，并添加onclick事件，代码如下：
 
@@ -82,7 +78,7 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 </div>
 ```
 
-## dialog组件<a name="section1393961711172"></a>
+## dialog组件
 
 因为上面添加了5个button，根据效果图点击不同的button会呈现不同的dialog，所以我们接下来将在index.hml中添加5个dialog，代码如下所示：
 
@@ -164,7 +160,7 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 </div>
 ```
 
-# 为页面设计样式<a name="ZH-CN_TOPIC_0000001186684428"></a>
+# 5.为页面设计样式
 
 在这此步骤中，我们将一起为写好的页面添加样式，上面所有的组件都定义了class属性，它对应的样式都定义在index.css中，有关css更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-framework-syntax-css.md)。
 
@@ -241,15 +237,13 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 }
 ```
 
-# 为组件添加相应事件<a name="ZH-CN_TOPIC_0000001231844063"></a>
+# 6.为组件添加相应事件
 
 我们已经为样例定义好了布局和样式，接下来，我们一起来完成整个样例的最后一步：实现点击不同的button呈现不同dialog效果的功能。
 
 首先我们了解一下dialog主要有哪些API，如下所示：
 
 dialog支持如下事件：
-
-<a name="table2177181910559"></a>
 
 <table><thead align="left"><tr id="row817771918558"><th class="cellrowborder" valign="top" width="11.581158115811581%" id="mcps1.1.4.1.1"><p id="p81771119155518"><a name="p81771119155518"></a><a name="p81771119155518"></a>名称</p>
 </th>
@@ -270,10 +264,7 @@ dialog支持如下事件：
 </table>
 
 
-
 dialog支持如下方法：
-
-<a name="table2034519228154"></a>
 
 <table><thead align="left"><tr id="row6345202231515"><th class="cellrowborder" valign="top" width="11.271127112711271%" id="mcps1.1.4.1.1"><p id="p1345622131510"><a name="p1345622131510"></a><a name="p1345622131510"></a>名称</p>
 </th>
@@ -299,7 +290,6 @@ dialog支持如下方法：
 </tr>
 </tbody>
 </table>
-
 
 
 我们已经在之前的步骤中给button分别绑定了click事件，下面我们将实现这些事件调用的方法，在index.js中添加如下代码：
@@ -372,7 +362,7 @@ export default {
 };
 ```
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001231725625"></a>
+# 7.恭喜你
 
 在本篇Codelab中，我们主要为大家讲解了如下JS组件
 
@@ -380,6 +370,6 @@ export default {
 
 通过一个代码示例，实现dialog的不同呈现效果，从布局、样式、响应事件三个层面，逐步为大家进行代码讲解。希望通过本教程，各位开发者可以对以上组件具有更深刻的认识。
 
-# 参考<a name="ZH-CN_TOPIC_0000001231525575"></a>
+# 8.参考
 
 [gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/DialogDemo)

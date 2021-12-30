@@ -15,7 +15,7 @@
 
 为了让您快速了解本篇Codelab所实现的功能，我们先对极简声明式UI范式开发进行展示，效果如下：
 
-![](D:/openHarmonyAdapt/OpenHarmonyMD-File/极简声明式UI范式_1640677876081/极简声明式UI范式/figures/VID_20211222_162936-00_00_00-00_00_30-1.gif)
+![](figures/VID_20211222_162936-00_00_00-00_00_30-1.gif)
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001192285406"></a>
 
@@ -27,7 +27,7 @@
 
    以3.0版本为例：
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\极简声明式UI范式_1640677876081\极简声明式UI范式\figures\取版本.png)
+   ![](figures\取版本.png)
 
 2. 搭建烧录环境
 
@@ -45,13 +45,13 @@
    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
    -   工程示例：
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\极简声明式UI范式_1640677876081\极简声明式UI范式\figures\截图.png)
+   ![](figures\截图.png)
 
 # 代码结构解读<a name="ZH-CN_TOPIC_0000001237577529"></a>
 
 本篇Codelab只对核心代码进行讲解，以下介绍整个工程的代码结构。
 
-![](D:\openHarmonyAdapt\OpenHarmonyMD-File\极简声明式UI范式_1640677876081\极简声明式UI范式\figures\036C0734-B95E-4D50-98E1-BEEC33160D0E.png)
+![](figures\036C0734-B95E-4D50-98E1-BEEC33160D0E.png)
 
 -   common：自定义组件。
     -   bottomTabs.ets：底部页签容器。
@@ -85,7 +85,7 @@
 
 1. 在common中创建文件bottomTabs.ets，自定义底部页签容器BottomTabs。使用ForEach语句，显示四个相同的页签，每个页签使用Column组件，使用justifyContent: FlexAlign.SpaceEvenly来使页签均分布局。
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\极简声明式UI范式_1640677876081\极简声明式UI范式\figures\zh-cn_image_0000001237578411.png)
+   ![](figures\zh-cn_image_0000001237578411.png)
 
    ```
    import prompt from '@system.prompt'
@@ -113,7 +113,7 @@
 
 2. Tabs组件中TabContent中的内容使用自定义组件完成，新建homeTabContent.ets文件，实现HomeTabComponent 组件。
 
-   ![](D:\openHarmonyAdapt\OpenHarmonyMD-File\极简声明式UI范式_1640677876081\极简声明式UI范式\figures\zh-cn_image_0000001237778483.png)
+   ![](figures\zh-cn_image_0000001237778483.png)
 
    ```
    import { TopTabs } from '../common/topTabs'
@@ -169,7 +169,7 @@
 
 首先，在首页中有今日推荐、精选推荐等推荐栏，在HomeTabComponent组件中，推荐栏放在List中作为List的ListItem组件显示。推荐列表使用ForEach语句，LisItem中使用自定义组件HomeListItem，在HomeListItem组件中会判断是否是今日推荐来获取不同的数据。
 
-![](D:/openHarmonyAdapt/OpenHarmonyMD-File/极简声明式UI范式_1640677876081/极简声明式UI范式/figures/zh-cn_image_0000001192938616.png)
+![](figures/zh-cn_image_0000001192938616.png)
 
 ```
 import {TopTabs} from '../common/topTabs'
@@ -202,7 +202,7 @@ export struct HomeTabComponent {
 
 1. 在common中创建homeListItem.ets作为自定义组件。
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/极简声明式UI范式_1640677876081/极简声明式UI范式/figures/zh-cn_image_0000001237898779.png)
+   ![](figures/zh-cn_image_0000001237898779.png)
 
 2. HomeListItem中包括上面的title和下面图片列表两部分，使用ForEach语句显示图片列表。
 
@@ -248,7 +248,7 @@ export struct HomeTabComponent {
    }
    ```
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/极简声明式UI范式_1640677876081/极简声明式UI范式/figures/IMG_20211222_162835.jpg)
+   ![](figures/IMG_20211222_162835.jpg)
 
 # 大图浏览界面布局<a name="ZH-CN_TOPIC_0000001237738181"></a>
 
@@ -256,7 +256,7 @@ export struct HomeTabComponent {
 
 1. 首先在pages文件夹中,单击右键，然后新建eTS Page，命名为 image.ets。
 
-   ![](D:/openHarmonyAdapt/OpenHarmonyMD-File/极简声明式UI范式_1640677876081/极简声明式UI范式/figures/zh-cn_image_0000001237738855.png)
+   ![](figures/zh-cn_image_0000001237738855.png)
 
 2. 大图浏览界面从界面上分为顶部titleBar，底部toolBar，中间图片铺满屏幕。由于图片需要左右滑动切换，此处使用Swiper组件，Swiper中子组件使用Image。
 
@@ -442,8 +442,6 @@ export struct HomeTabComponent {
 -   如何通过极简声明式UI范式完成动画添加。
 
 # 参考<a name="ZH-CN_TOPIC_0000001192445396"></a>
-
-
 
 [gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleGalleryEts)
 
