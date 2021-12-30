@@ -10,7 +10,7 @@
 
 本篇Codelab使用声明式UI范式开发实现一次开发多端部署，效果预览如下:
 
- <img src="figures/VID_20211222_162936-00_00_00-00_00_30-1.gif" style="width:400px;height:712px" />
+![](figures/VID_20211222_162936-00_00_00-00_00_30-1.gif)
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001236839003"></a>
 
