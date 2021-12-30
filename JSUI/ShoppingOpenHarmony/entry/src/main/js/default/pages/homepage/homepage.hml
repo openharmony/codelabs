@@ -20,12 +20,12 @@
         </search>
         <tabs class="tabs" index="0" vertical="false" onchange="change">
             <tab-bar class="tab-bar" mode="fixed">
-                <text class="tab-text" for="{{ item in titileList }}">{{ item }}
+                <text class="tab-text" for="{{ item in titleList }}">{{ item }}
                 </text>
             </tab-bar>
-            <tab-content class="tabcontent" scrollable="true">
+            <tab-content class="tab-content" scrollable="true">
                 <div class="item-content" for="{{ item in contentList }}">
-                    <list class="todo-wraper">
+                    <list class="todo-wrapper">
                         <list-item for="{{ allList }}">
                             <div class="margin-comm" @click="detailPage">
                                 <div class="todo-total">
@@ -56,12 +56,12 @@
         </tabs>
     </div>
     <div class="container-home-pinned" show="{{ flag === oneFlag }}">
-        <image src="/common/computer/icon-pinn.png" @click="stickFloat">
+        <image src="/common/computer/icon-to-top.png" @click="stickFloat">
         </image>
     </div>
     <div class="container-shopping-title" show="{{ flag === threeFlag }}">
         <text>
-            {{ pageWord.shopingCart }}
+            {{ pageWord.shoppingCart }}
         </text>
     </div>
     <div class="container" show="{{ flag === threeFlag }}">
@@ -125,8 +125,8 @@
                     {{ pageWord.memberName }}{{ pageWord.nickname }}
                 </text>
             </div>
-            <div class="container-my-top-divss">
-                <image src="/common/computer/icon-return1.png" class="container-my-top-divss-image">
+            <div class="container-my-top-div2">
+                <image src="/common/computer/icon-return1.png" class="container-my-top-div2-image">
                 </image>
             </div>
         </div>

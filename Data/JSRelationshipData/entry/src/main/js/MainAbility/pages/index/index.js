@@ -43,7 +43,6 @@ export default {
                 this.contactList = contactList;
             }
         });
-        //this.showDialog();
     },
     // 展示添加或编辑信息弹窗
     showDialog() {
@@ -57,24 +56,43 @@ export default {
         this.$element('addDialog').close();
     },
     confirmClick() {
-        if (this.dialogTitle === '添加信息') {
-            const obj = {
-                name: this.name,age:this.nameAge,gender:this.gender
-            };
-            this.contactList.push(obj);
-            this.kvStoreModel.insertValue(obj);
-        } else {
-            this.contactList[this.listIndex].name = this.name;
-            this.contactList[this.listIndex].age = this.nameAge;
-            this.contactList[this.listIndex].gender = this.gender;
-            const obj = {
-                name: this.name,age:this.nameAge,gender:this.gender
-            };
-            this.kvStoreModel.updateValue(obj,this.id);
-        }
-        this.queryContact();
-        this.cancelDialog();
+      if (!this.checkInput()) {
+         return;
+      }
+      if (this.dialogTitle === '添加信息') {
+        const obj = {
+            name: this.name,age:this.nameAge,gender:this.gender
+        };
+        this.contactList.push(obj);
+        this.kvStoreModel.insertValue(obj);
+      } else {
+        this.contactList[this.listIndex].name = this.name;
+        this.contactList[this.listIndex].age = this.nameAge;
+        this.contactList[this.listIndex].gender = this.gender;
+        const obj = {
+            name: this.name,age:this.nameAge,gender:this.gender
+        };
+        this.kvStoreModel.updateValue(obj,this.id);
+      }
+      this.cancelDialog();
+      this.queryContact();
     },
+
+    checkInput() {
+        if (this.name === '' || this.name.trim() === '') {
+            this.showErrorMessage('name', '姓名不能为空');
+            return false;
+        } else if (this.nameAge === '' || this.nameAge.trim() === '') {
+            this.showErrorMessage('nameAge', '年龄不能为空');
+            return false;
+        } else if (this.gender === '' || this.gender.trim() === '') {
+            this.showErrorMessage('gender', '性别不能为空');
+            return false;
+        } else {
+            return true;
+        }
+    },
+
     changeName(e) {
         this.name = e.value;
     },

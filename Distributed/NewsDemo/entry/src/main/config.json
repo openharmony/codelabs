@@ -41,20 +41,7 @@
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,
-        "label": "$string:entry_MainAbility",
-        "type": "page",
-        "launchType": "standard"
-      },
-      {
-        "orientation": "unspecified",
-        "visible": true,
-        "srcPath": "MainAbility2",
-        "name": ".MainAbility2",
-        "srcLanguage": "js",
-        "icon": "$media:icon",
-        "description": "$string:mainability2_description",
-        "formsEnabled": false,
-        "label": "$string:entry_MainAbility",
+        "label": "$string:NewsClient",
         "type": "page",
         "launchType": "standard"
       }
@@ -62,19 +49,10 @@
     "js": [
       {
         "pages": [
-          "pages/index/index"
+          "pages/index/index",
+          "pages/detail/detail"
         ],
         "name": ".MainAbility",
-        "window": {
-          "designWidth": 720,
-          "autoDesignWidth": false
-        }
-      },
-      {
-        "pages": [
-          "pages/index/index"
-        ],
-        "name": ".MainAbility2",
         "window": {
           "designWidth": 720,
           "autoDesignWidth": false

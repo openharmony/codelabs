@@ -11,7 +11,7 @@
   "module": {
     "package": "com.huawei.video",
     "name": ".MyApplication",
-    "mainAbility": "com.huawei.video.MainAbility",
+    "mainAbility": ".MainAbility",
     "deviceType": [
       "phone"
     ],
@@ -35,13 +35,15 @@
         ],
         "orientation": "unspecified",
         "visible": true,
-        "name": "com.huawei.video.MainAbility",
+        "name": ".MainAbility",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,
         "label": "$string:VideoDemo",
         "type": "page",
-        "launchType": "standard"
+        "launchType": "standard",
+        "srcPath": "mainAbility",
+        "srcLanguage": "js"
       }
     ],
     "js": [
@@ -50,7 +52,7 @@
           "pages/index/index",
           "pages/videopage/videopage"
         ],
-        "name": "default",
+        "name": "mainAbility",
         "window": {
           "designWidth": 720,
           "autoDesignWidth": true

@@ -34,7 +34,10 @@
           }
         ],
         "orientation": "unspecified",
+        "visible": true,
+        "srcPath": "default",
         "name": "com.huawei.inputapplication.MainAbility",
+        "srcLanguage": "js",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,

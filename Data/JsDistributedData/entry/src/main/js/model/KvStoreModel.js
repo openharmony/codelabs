@@ -42,7 +42,6 @@ export default class KvStoreModel {
             backup: false,
             autoSync: true,
             kvStoreType: 1,
-            schema: '',
             securityLevel: 3,
           };
           self.kvManager.getKVStore(STORE_ID, options).then((store) => {
@@ -55,10 +54,10 @@ export default class KvStoreModel {
       }
     }
 
-    broadcastMessage(key, value) {
+    broadcastMessage(key,value) {
       let self = this;
       this.createKvStore(() => {
-        self.put(key, value);
+        self.put(key,value+";");
       });
     }
 
@@ -69,9 +68,12 @@ export default class KvStoreModel {
       });
     }
 
-    put(key, value) {
-      this.kvStore.put(key, value).then((data) => {
+    put(key,value) {
+        console.info('dataChange:' + key+"-------"+value+"----------"+value.length);
+      this.kvStore.put(key,value).then((data) => {
+          console.info('dataChange:' + JSON.stringify(data));
         this.kvStore.get(key).then((data) => {
+            console.info('dataChange:' + JSON.stringify(data));
         });
       }).catch((err) => {
       });
@@ -87,12 +89,17 @@ export default class KvStoreModel {
       let self = this;
       this.createKvStore(() => {
         self.kvStore.on('dataChange', 1, (data) => {
+            console.info('dataChange:' + JSON.stringify(data));
           for (var i = 0; i < data.insertEntries.length; i++) {
-            callback(data.insertEntries[0].key, data.insertEntries[0].value.value, 0);
+              var str = data.insertEntries[0].value.value.toString();
+              var strs = str.split(';');
+            callback(data.insertEntries[0].key,strs[0], 0);
             return;
           }
           for (i = 0; i < data.updateEntries.length; i++) {
-            callback(data.updateEntries[0].key, data.updateEntries[0].value.value, 1);
+              var str = data.updateEntries[0].value.value.toString();
+              var strs = str.split(';');
+            callback(data.updateEntries[0].key,strs[0], 1);
             return;
           }
           for (i = 0; i < data.deleteEntries.length; i++) {

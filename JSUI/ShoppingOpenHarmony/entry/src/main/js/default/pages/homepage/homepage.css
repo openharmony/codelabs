@@ -35,7 +35,7 @@
     margin-bottom: 65px;
 }
 
-.tabcontent {
+.tab-content {
     width: 100%;
     height: 85%;
     justify-content: center;
@@ -68,7 +68,7 @@
     color: red;
 }
 
-.todo-wraper {
+.todo-wrapper {
     width: 100%;
     height: 100%;
 }
@@ -265,13 +265,13 @@
     font-size: 24px;
 }
 
-.container-my-top-divss {
+.container-my-top-div2 {
     position: absolute;
     top: 50px;
     right: 45px;
 }
 
-.container-my-top-divss-image {
+.container-my-top-div2-image {
     width: 22px;
     height: 22px;
 }
