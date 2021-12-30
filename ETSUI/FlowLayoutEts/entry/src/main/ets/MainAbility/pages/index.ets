@@ -24,7 +24,7 @@ struct Search_Input {
       TextInput({ placeholder: '请输入...', text: this.historyInput })
         .type(InputType.Normal)
         .placeholderColor(Color.Red)
-        .placeholderFont({ size: 50, weight: 2 })
+        .placeholderFont({ size: 30, weight: 2 })
         .enterKeyType(EnterKeyType.Search)
         .caretColor(Color.Green)
         .layoutWeight(8)
@@ -49,7 +49,6 @@ struct Search_Input {
     }
     .height(60)
     .width('100%')
-    .borderStyle(BorderStyle.Dashed).borderWidth(5).borderColor(0xAFEEEE).borderRadius(10)
     .padding({ left: 10 })
     .backgroundColor('#FFedf2f5')
   }

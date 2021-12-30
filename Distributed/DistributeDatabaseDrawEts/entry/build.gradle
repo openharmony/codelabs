@@ -1,0 +1,32 @@
+apply plugin: 'com.huawei.ohos.hap'
+//For instructions on signature configuration, see https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ide_debug_device-0000001053822404#section1112183053510
+ohos {
+    signingConfigs {
+        debug {
+            storeFile file('D:\\openHos\\openhos.p12')
+            storePassword '00000018EAE05FDE239C72555D7E3A75AAAE8D5C8473E899062886CC5B1C5806824D76E04A3FDCFE'
+            keyAlias = 'hw'
+            keyPassword '000000188A095D85008CC89636DE77E8A1622CF14921FF9894B254F7CD41BBF6A0C1E51A641EA3B6'
+            signAlg = 'SHA256withECDSA'
+            profile file('D:\\openHos\\openHos.p7b')
+            certpath file('D:\\openHos\\openHos.cer')
+        }
+    }
+    compileSdkVersion 7
+    defaultConfig {
+        compatibleSdkVersion 7
+    }
+    buildTypes {
+        release {
+            proguardOpt {
+                proguardEnabled false
+                rulesFiles 'proguard-rules.pro'
+            }
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.har'])
+    testImplementation 'junit:junit:4.13.1'
+}

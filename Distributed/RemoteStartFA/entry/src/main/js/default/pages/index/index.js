@@ -21,7 +21,6 @@ let DEVICE_LIST_LOCALHOST;
 
 export default {
   data: {
-    title: '',
     deviceList: [],
     remoteDeviceModel: new RemoteDeviceModel()
   },

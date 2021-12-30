@@ -14,20 +14,22 @@
  */
 
 import prompt from '@system.prompt';
-import data_storage from '@ohos.data.storage';
+import dataStorage from '@ohos.data.storage';
+import featureAbility from '@ohos.ability.featureAbility'
 
 export default {
   data: {
-    title: '',
     key: '',
     value: '',
     tableData: [
     ],
     defaultResult: 'Not found',
-    path: '/data/accounts/account_0/appdata/com.huawei.cookbook/pdb'
+    path: ''
   },
-  onInit() {
-    data_storage.deleteStorageSync(this.path);
+  async onInit() {
+    var context = featureAbility.getContext()
+    this.path = await context.getFilesDir() + '/mystore'
+    dataStorage.deleteStorageSync(this.path);
   },
 
   // 文本框内容发生变化
@@ -43,7 +45,7 @@ export default {
   // 提交
   buttonClickAdd() {
     if (this.key !== '' && this.value !== '') {
-      const store = data_storage.getStorageSync(this.path);
+      const store = dataStorage.getStorageSync(this.path);
       const ret = store.getSync(this.key, this.defaultResult);
       const data = store.putSync(this.key, this.value);
       store.flushSync();
@@ -62,7 +64,7 @@ export default {
 
   buttonClickQuery() {
     if (this.key !== '') {
-      const store = data_storage.getStorageSync(this.path);
+      const store = dataStorage.getStorageSync(this.path);
       const ret = store.getSync(this.key, this.defaultResult);
       this.showPrompt(ret);
     } else {
@@ -72,7 +74,7 @@ export default {
 
   buttonClickDel() {
     if (this.key !== '') {
-      const store = data_storage.getStorageSync(this.path);
+      const store = dataStorage.getStorageSync(this.path);
       const ret = store.hasSync(this.key);
       if (ret) {
         store.deleteSync(this.key);
@@ -86,7 +88,7 @@ export default {
     }
   },
   buttonClickDelDatabase() {
-    data_storage.deleteStorageSync(this.path);
+    dataStorage.deleteStorageSync(this.path);
     this.tableData = [];
     this.showPrompt('database is delete!');
   },

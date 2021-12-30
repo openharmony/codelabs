@@ -19,11 +19,13 @@
             <text class="dialog_title_text">选择设备</text>
             <list class="dialog_device_list" divider="true">
                 <list-item for="{{ deviceList }}" class="device_list_item">
-                    <label class="device_item_title" target="{{ $item.id }}">{{ $item.name }}</label>
-                    <input class="device_item_radio" type="radio" checked="{{ $item.id === 'localhost' }}"
-                           id="{{ $item.id }}"
-                           name="radioSample" value="{{ $item.id }}"
-                           onchange="onRadioChange({{ $item.id }})"></input>
+                    <div>
+                        <label class="device_item_title" target="{{ $item.id }}">{{ $item.name }}</label>
+                        <input class="device_item_radio" type="radio" checked="{{ $item.id === 'localhost' }}"
+                               id="{{ $item.id }}"
+                               name="radioSample" value="{{ $item.id }}"
+                               onchange="onRadioChange({{ $item.id }})"></input>
+                    </div>
                 </list-item>
             </list>
             <div class="inner-btn">

@@ -22,7 +22,7 @@ limitations under the License.
         <tab-content class="tab-content" scrollable="true">
             <div class="item-content" for="{{ title in titleList }}">
                 <list class="list">
-                    <list-item for="{{ news in newsList }}" onclick="startAbilityContinuation(news)">
+                    <list-item for="{{ news in newsList }}" onclick="itemClick(news)">
                         <div style="flex-direction : column">
 
                             <div style="flex-direction : row">

@@ -1,7 +1,7 @@
 # OpenHarmony Codelabs<a name="ZH-CN_TOPIC_0000001228194435"></a>
 
 -   [概要简介](#section117915431558)
--   [目录](#sectionMenu)
+-   [项目列表](#sectionMenu)
 -   [使用说明](#section1954919258619)
 -   [约束与限制](#section682025019613)
 -   [相关仓](#section01752910717)

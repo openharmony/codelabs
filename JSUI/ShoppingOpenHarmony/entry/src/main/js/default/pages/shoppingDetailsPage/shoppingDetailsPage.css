@@ -127,8 +127,8 @@
 }
 
 .icon-style {
-    width: 30px;
-    height: 30px;
+    width: 60px;
+    height: 60px;
 }
 
 .content-annualPrice-div {
@@ -208,7 +208,10 @@
 }
 
 .container-top-div {
-    height: 65px;
+    padding-top: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    height: 90px;
     background-color: skyblue;
     position: fixed;
     top: 0px;
@@ -268,7 +271,7 @@
     font-size: 30px;
 }
 
-.dialog-div-titleimage {
+.dialog-div-title-image {
     width: 320px;
     height: 320px;
 }
@@ -362,7 +365,7 @@
     margin: 0px 10px;
 }
 
-.pinn {
+.to-top {
     width: 80px;
     height: 80px;
     position: fixed;
