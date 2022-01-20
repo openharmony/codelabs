@@ -345,7 +345,7 @@ draw() {
 
 # 参考
 
-等待代码开源
+[gitee](https://gitee.com/openharmony/codelabs/tree/master/JSUI/JSCanvasComponet)
 
 
 
