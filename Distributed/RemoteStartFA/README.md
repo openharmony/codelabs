@@ -8,11 +8,11 @@ OpenHarmony提供了分布式能力，能够实现在同一网络下对远程设
 
 # 2.相关概念
 
-**[dialog组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-dialog.md)：**自定义弹窗容器组件。
+[dialog组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-dialog.md)：自定义弹窗容器组件。
 
-**[button组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-button.md)：**按钮组件。
+[button组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-button.md)：按钮组件。
 
-**[通用事件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-common-events.md)**：事件绑定在组件上，当组件达到事件触发条件时，会执行JS中对应的事件回调函数，实现页面UI视图和页面JS逻辑层的交互。
+[通用事件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-common-events.md)：事件绑定在组件上，当组件达到事件触发条件时，会执行JS中对应的事件回调函数，实现页面UI视图和页面JS逻辑层的交互。
 
 
 
@@ -28,9 +28,9 @@ OpenHarmony提供了分布式能力，能够实现在同一网络下对远程设
 
 2. 搭建烧录环境
 
-   1.  [完成DevEco Device Tool的安装](https://device.harmonyos.com/cn/docs/documentation/guide/install_windows-0000001050164976)
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
 
-   2.  [完成Hi3516开发板的烧录](https://device.harmonyos.com/cn/docs/documentation/guide/hi3516_upload-0000001052148681)
+   2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
 
 3. 搭建开发环境
 
@@ -115,7 +115,7 @@ OpenHarmony提供了分布式能力，能够实现在同一网络下对远程设
 
 # 6.为页面设计样式
 
-这部分定义了整个页面中各个组件的样式，有关CSS更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-framework-syntax-css.md)，在index.css中先添加如下代码：
+这部分定义了整个页面中各个组件的样式，有关CSS更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/js-framework-syntax-css.md)，在index.css中先添加如下代码：
 
 ```
 .container {
