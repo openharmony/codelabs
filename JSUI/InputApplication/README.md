@@ -29,9 +29,9 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 2. 搭建烧录环境
 
-   1.  [完成DevEco Device Tool的安装](https://device.harmonyos.com/cn/docs/documentation/guide/install_windows-0000001050164976)
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
 
-   2.  [完成Hi3516开发板的烧录](https://device.harmonyos.com/cn/docs/documentation/guide/hi3516_upload-0000001052148681)
+   2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
 
 3. 搭建开发环境
 
@@ -144,7 +144,8 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 -   [input组件部分样式](#section165281839182814)
 
-在这个任务中，我们将一起为写好的页面添加样式，上面所有的组件，我们都定义了class属性，它对应的样式都定义在index.css中，有关css更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-framework-syntax-css.md)。
+在这个任务中，我们将一起为写好的页面添加样式，上面所有的组件，我们都定义了class属性，它对应的样式都定义在index.css中，有关css更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/js-framework-syntax-css.md
+https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/js-framework-syntax-css.md)。
 
 ## input组件部分样式<a name="section165281839182814"></a>
 
