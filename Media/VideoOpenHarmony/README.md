@@ -24,9 +24,9 @@
 
 2. 搭建烧录环境
 
-   1.  [完成DevEco Device Tool的安装](https://device.harmonyos.com/cn/docs/documentation/guide/install_windows-0000001050164976)
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
 
-   2.  [完成Hi3516开发板的烧录](https://device.harmonyos.com/cn/docs/documentation/guide/hi3516_upload-0000001052148681)
+   2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
 
 3. 搭建开发环境：
 
@@ -91,7 +91,7 @@ export default {
 
 # 视频播放器播放页面
 
-JS视频播放器video组件的使用大家可以参考[【JS媒体组件】video的使用](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-media-video.md)进行学习，其中详细的给大家介绍了如何将video组件添加到布局中，如何为页面添加样式、如何为组件添加响应事件等操作。
+JS视频播放器video组件的使用大家可以参考[【JS媒体组件】video的使用](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-media-video.md)进行学习，其中详细的给大家介绍了如何将video组件添加到布局中，如何为页面添加样式、如何为组件添加响应事件等操作。
 
 要实现一个视频播放器的功能，首先需要在config.json添加配置，代码如下所示：
 
