@@ -14,15 +14,15 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 
 # 2.相关概念
 
-**[slider组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-slider.md)：**滑动条组件，用来快速调节设置值，如音量、亮度等。
+[slider组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-slider.md)：滑动条组件，用来快速调节设置值，如音量、亮度等。
 
-**[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：**图片组件，用来渲染展示图片。
+[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：图片组件，用来渲染展示图片。
 
-**[div组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-div.md)**：基础容器组件，用作页面结构的根节点或将内容进行分组。
+[div组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-div.md)：基础容器组件，用作页面结构的根节点或将内容进行分组。
 
-**[text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-text.md)：**文本组件，用于呈现一段信息。
+[text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-text.md)：**文本组件，用于呈现一段信息。
 
-**[animation-duration](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-common-animation.md)：**动画样式。
+[animation-duration](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-common-animation.md)：动画样式。
 
 # 3.搭建OpenHarmony环境
 
@@ -36,9 +36,9 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 
 2. 搭建烧录环境
 
-   1.  [完成DevEco Device Tool的安装](https://device.harmonyos.com/cn/docs/documentation/guide/install_windows-0000001050164976)
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
 
-   2.  [完成Hi3516开发板的烧录](https://device.harmonyos.com/cn/docs/documentation/guide/hi3516_upload-0000001052148681)
+   2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
 
 3. 搭建开发环境
 
@@ -164,7 +164,8 @@ onchange事件在滑动slider组件时候执行，具体的属性值以及相应
 
 # 5.为页面设计样式
 
-在这个任务中，我们将一起为写好页面添加样式，上面所有的组件，我们都定义了class属性，它对应的样式都定义在index.css中，有关css更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-framework-syntax-css.md)。
+在这个任务中，我们将一起为写好页面添加样式，上面所有的组件，我们都定义了class属性，它对应的样式都定义在index.css中，有关css更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/js-framework-syntax-css.md
+https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/js-framework-syntax-css.md)。
 
 ## image组件部分样式
 
