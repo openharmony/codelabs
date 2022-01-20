@@ -7,11 +7,10 @@
 ![](figures/555.png)
 # 相关概念
 
--   [JS FA工程目录](#section245862185518)
 
-**[canvas组件](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-components-canvas-canvas-0000000000621808)**：画布组件，用于自定义绘制图形。
+**[canvas组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-canvas-canvas.md)**：画布组件，用于自定义绘制图形。
 
-**[slider组件](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-components-basic-slider-0000000000611724)**：滑动条组件，用来快速调节设置值，如音量、亮度等。
+**[slider组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-slider.md)**：滑动条组件，用来快速调节设置值，如音量、亮度等。
 
 ## JS FA工程目录
 新建工程的JS目录如下图所示：
@@ -246,7 +245,7 @@ zh-CN.json文件定义：
 
 # 图片编辑之裁剪
 
-图片裁剪功能提供了原图、1：1、16：9、9：16等固定裁剪比例，结合画布组件canvas进行裁剪图片。本任务将以9：16裁剪比例为例，为大家讲解JS图片裁剪功能的实现。其他比例裁剪功能的实现，请参考[完整代码](完整代码.md)。
+图片裁剪功能提供了原图、1：1、16：9、9：16等固定裁剪比例，结合画布组件canvas进行裁剪图片。本任务将以9：16裁剪比例为例，为大家讲解JS图片裁剪功能的实现。
 
 使用canvas组件绘制一张原图，尺寸大小为宽300，高224。绘制完成后，调整裁剪框的位置。
 
@@ -367,7 +366,7 @@ cropFour() {
 
 # 图片编辑之调节
 
-图片调节功能使用slider组件和canvas组件，实现对图片亮度、对比度和饱和度的调节。本任务将以亮度调节为例，为大家讲解JS图片调节功能的实现。其他调节功能的实，请参考[完整代码](完整代码.md)。
+图片调节功能使用slider组件和canvas组件，实现对图片亮度、对比度和饱和度的调节。本任务将以亮度调节为例，为大家讲解JS图片调节功能的实现。
 
 在图片调节中，亮度调节的实现是将所有像素点亮度值乘一个增强系数，改变图片HSV和RGB，使得图像整体变亮或者变暗。
 
