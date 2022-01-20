@@ -1,6 +1,6 @@
 # 1.介绍
 
-OpenHarmony ArkUI支持图片业务的开发，本Codelab以图片操作的旋转、剪裁、缩放、镜像四种常见操作为例，给大家介绍图像编辑操作。ArkUI是一种跨设备的高性能UI开发框架，支持声明式编程和跨设备多态UI。
+OpenHarmony 基于JS扩展的类Web开发范式支持图片业务的开发，本Codelab以图片操作的旋转、剪裁、缩放、镜像四种常见操作为例，给大家介绍图像编辑操作。基于JS扩展的类Web开发范式是一种跨设备的高性能UI开发框架，支持声明式编程和跨设备多态UI。
 
 本案例部署到Hi3516DV300开发板上的效果如下图所示：
 
@@ -8,13 +8,13 @@ OpenHarmony ArkUI支持图片业务的开发，本Codelab以图片操作的旋�
 
 # 2.相关概念
 
-**[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：**图片组件，用来渲染展示图片。
+[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：图片组件，用来渲染展示图片。
 
-**[button组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-button.md)**：按钮组件，用于实现点击效果并实现点击触发事件。
+[button组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-button.md)：按钮组件，用于实现点击效果并实现点击触发事件。
 
-**[div组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-div.md)**：基础容器组件，用作页面结构的根节点或将内容进行分组。
+[div组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-div.md)：基础容器组件，用作页面结构的根节点或将内容进行分组。
 
-**[text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-text.md)：**文本组件，用于呈现一段信息。
+[text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-text.md)：文本组件，用于呈现一段信息。
 
 # 3.搭建OpenHarmony环境
 
@@ -28,9 +28,9 @@ OpenHarmony ArkUI支持图片业务的开发，本Codelab以图片操作的旋�
 
 2. 搭建烧录环境
 
-   1.  [完成DevEco Device Tool的安装](https://device.harmonyos.com/cn/docs/documentation/guide/install_windows-0000001050164976)
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
 
-   2.  [完成Hi3516开发板的烧录](https://device.harmonyos.com/cn/docs/documentation/guide/hi3516_upload-0000001052148681)
+   2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
 
 3. 搭建开发环境
 
