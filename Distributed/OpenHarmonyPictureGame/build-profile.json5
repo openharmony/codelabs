@@ -1,48 +1,14 @@
 {
   "app": {
     "signingConfigs": [
-      {
-        "name": "debug",
-
-        "material": {
-
-          storeFile: 'D:\\keys\\ACGSign\\openhos.p12',
-
-          //本地keystore
-
-          storePassword: "000000180DB6282CD8E733F3C3262063271AA9A59C88D805975312AA5109E13FA8F83BD76EA471AB",
-
-          //生成本地keystore时的-storepass参数
-
-          keyAlias: 'hw',
-
-          //生成本地keystore时的-alias参数
-
-          keyPassword: '000000180DB6282CD8E733F3C3262063271AA9A59C88D805975312AA5109E13FA8F83BD76EA471AB',
-
-          //keyPassword参数,pkcs12格式的keystore采用生成本地keystore时的-storepass参数
-
-          signAlg: 'SHA256withECDSA',
-
-          //生成本地keystore时的-sigalg参数
-
-          profile: 'D:\\keys\\ACGSign\\openHos.p7b',
-
-          //导入调试profile
-
-          certpath: 'D:\\keys\\ACGSign\\openHos.cer'
-
-          //导入调试证书
-
-        }
-      }
+     
     ],
     "compileSdkVersion": 8,
     "compatibleSdkVersion": 8,
     "products": [
       {
-        "name": "default",
-        "signingConfig": "debug",
+        "name": "default"
+    
       },
     ],
   },
