@@ -1,0 +1,58 @@
+.container {
+    flex-direction: column;
+    align-items: center;
+    padding-left: 12px;
+    padding-right: 12px;
+    background-color: #F1F3F5;
+}
+
+.device-info {
+    flex-direction: column;
+    align-items: center;
+}
+
+.device-image {
+    width: 262px;
+    height: 262px;
+}
+
+.device-logo {
+    height: 10px;
+    width: 80px;
+    margin-top: 4px;
+    margin-bottom: 20px;
+}
+
+.center-container {
+    align-items: center;
+    flex-direction: column;
+}
+.high-reverse-bar {
+    flex-direction: row;
+    border-radius: 16px;
+    margin: 4px;
+    height: 88px;
+    width: 100%;
+}
+
+.high-left-item {
+    margin-left: 16px;
+    margin-right: 16px;
+    height: 100%;
+    left: 0px;
+    position: absolute;
+}
+
+.power-text {
+    height: 100%;
+    text-align: center;
+}
+
+.high-icon {
+    right: 4px;
+    width: 72px;
+    height: 72px;
+    margin-top: 8px;
+    padding: 0px;
+    position: absolute;
+}

@@ -1,0 +1,49 @@
+.container {
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(247, 247, 247, 1);
+}
+
+.device-image {
+    width: 152px;
+    height: 152px;
+    margin-top: 24px;
+}
+
+.device-name {
+    width: 100%;
+    font-size: 18px;
+    text-align: center;
+    margin-top: 16px;
+    text-color: #FF000000;
+}
+
+.button-container {
+    flex-direction: row;
+    margin-left: 16px;
+    margin-right: 16px;
+    margin-top: 24px;
+    margin-bottom: 16px;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.base-button {
+    height: 40px;
+    width: 144px;
+    text-color: #007DFF;
+    border-radius: 40px;
+    font-size: 16px;
+    background-color: transparent;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.vertical-divider {
+    height: 24px;
+    width: 1px;
+    background-color: rgba(0, 0, 0, 0.2);
+}

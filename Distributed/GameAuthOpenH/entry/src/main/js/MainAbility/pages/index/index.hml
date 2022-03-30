@@ -1,0 +1,58 @@
+<div class="container">
+
+    <div class="div-permit" if="{{!isGame}}" >
+        <text class="text-title">来自远程合成设备小游戏权限请求，是否允许?</text>
+        <div class="div-button"  >
+            <text class="text-allow" onclick="responds(true)">允许</text>
+            <text class="text-reject" onclick="responds(false)">不允许</text>
+        </div>
+    </div>
+
+    <div class="div-permit" if="{{isGame}}">
+        <div class="div-text" if="{{!isStart}}" >
+            <div class="div-text" if="{{!isEnd}}" >
+                <text class="text-button" onclick="startFA" if="{{showStart}}">开始游戏</text>
+            </div>
+            <div class="div-text" if="{{isEnd}}" >
+                <div class="div-center" >
+                    <text class="text-end0" >拒绝玩游戏，</text>
+                    <text class="text-end1" >{{countdown}}</text>
+                    <text class="text-end2" >后退出应用</text>
+                </div>
+                <text class="text-button" >拒绝玩游戏，{{countdown}}后退出应用</text>
+            </div>
+        </div>
+
+        <dialog id="continueAbilityDialog" class="dialog-main" oncancel="cancelDialog">
+            <div class="dialog-div">
+                <text class="dialog_title_text">选择设备</text>
+                <list class="dialog_device_list" divider="true">
+                    <list-item for="{{ deviceList }}" class="device_list_item">
+                        <div>
+                            <label class="device_item_title" target="{{ $item.id }}">{{ $item.name }}</label>
+                            <input class="device_item_radio" type="radio" checked="{{ $item.id === 'localhost' }}"
+                                   id="{{ $item.id }}"
+                                   name="radioSample" value="{{ $item.id }}"
+                                   onchange="onRadioChange({{ $item.id }})"></input>
+                        </div>
+                    </list-item>
+                </list>
+                <div class="inner-btn">
+                    <button class="dialog_cancel_button" type="text" value="取消" onclick="onDismissDialogClicked"></button>
+                </div>
+            </div>
+        </dialog>
+
+        <div class="div-image" if="{{isStart}}"
+             @touchstart="touchStart"
+             @touchmove="touchMove"
+             @touchcancel="touchCancel"
+             @touchend="touchEnd"
+
+                >
+            <image for="{{ (index, item) in modes }}"
+                   class="product{{ item.lever }}"
+                   style="top : {{ item.top }}; left : {{ item.left }}" src="{{ item.src }} "/>
+        </div>
+    </div>
+</div>

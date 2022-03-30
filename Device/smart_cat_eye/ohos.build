@@ -1,0 +1,15 @@
+{
+  "subsystem": "demo",
+  "parts": {
+    "smart_cat_eye": {
+      "variants": [
+        "phone"
+      ],
+      "module_list": [
+        "//demo/smart_cat_eye:smart_cat_eye_service"
+      ],
+      "test_list": [
+      ]
+    }
+  }
+}

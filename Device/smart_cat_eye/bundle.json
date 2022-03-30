@@ -1,0 +1,46 @@
+{
+    "name": "@ohos/smart_cat_eye",
+    "description": "demo",
+    "version": "3.1",
+    "license": "Apache License 2.0",
+    "publishAs": "code-segment",
+    "segment": {
+        "destPath": "demo/smart_cat_eye"
+    },
+    "dirs": {},
+    "scripts": {},
+    "component": {
+        "name": "smart_cat_eye",
+        "subsystem": "demo",
+        "syscap": [],
+        "features": [],
+        "adapted_system_type": [
+            "smart_cat_eye"
+        ],
+        "rom": "",
+        "ram": "",
+        "deps": {
+          "components": [
+              "libhilog",
+              "ipc_core",
+              "media_client",
+              "system_ability_fwk",
+              "samgr_proxy",
+              "libaccesstoken_sdk",
+              "ipc_single"
+            ],
+            "third_party": [
+              ""
+            ]
+        },
+        "build": {
+          "sub_component": [
+            "//demo/smart_cat_eye:smart_cat_eye_service"
+          ],
+          "inner_kits": [
+          ],
+          "test": [
+          ]
+        }
+    }
+}
