@@ -1,0 +1,24 @@
+{
+  "strings": {
+    "cancel": "Cancel",
+    "net-config": "Net Config",
+    "progress-0": "0%",
+    "progress-20": "20%",
+    "progress-40": "40%",
+    "progress-60": "60%",
+    "progress-80": "80%",
+    "progress-100": "100%",
+    "desc-20": "Scanning devices.",
+    "desc-40": "Device scanning completed, establishing connection...",
+    "desc-60": "Connection established. Obtaining current network information...",
+    "desc-80": "The current network information has been obtained, and the device is being connected...",
+    "desc-100": "Device networking is complete.",
+    "fail-desc-0": "The current phone does not support network distribution.",
+    "fail-desc-20": "Device scanning failed.",
+    "fail-desc-40": "Device connection failure.",
+    "fail-desc-60": "Failed to obtain the current network information.",
+    "fail-desc-80": "Failed to connect to the network.",
+    "fail-desc-100": "Device Disconnected",
+    "device-name": "Intelligent fan"
+  }
+}

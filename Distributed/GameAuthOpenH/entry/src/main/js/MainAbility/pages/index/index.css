@@ -1,0 +1,198 @@
+.container {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: aquamarine;
+}
+.div-permit{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.div-text{
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+.div-center{
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.div-button{
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+.text-button{
+    background-color: #5959f1;
+    color: #FFFFFF;
+    text-align: center;
+    font-size: 24px;
+    width: 240px;
+    height: 120px;
+    border-radius: 8px;
+}
+.text-end0{
+    color: #212121;
+    text-align: center;
+    font-size: 20px;
+}
+.text-end1{
+    color: #333840;
+    text-align: center;
+    font-size: 20px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.text-end2{
+    color: #212121;
+    text-align: center;
+    font-size: 20px;
+}
+.text-title{
+    color: #222222;
+    font-size: 26px;
+    align-items: center;
+    align-content: center;
+    margin: 20px;
+}
+.text-allow{
+    color: #3E7BDE;
+    font-size: 22px;
+    margin-right: 10px;
+}
+.text-reject{
+    color: #212121;
+    font-size: 22px;
+    margin-left: 10px;
+}
+.div-image{
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+}
+.product0{
+    width: 50px;
+    height: 50px;
+    position: absolute;
+}
+.product1{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+}
+.product2{
+    width: 70px;
+    height: 70px;
+    position: absolute;
+}
+.product3{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+}
+.product4{
+    width: 90px;
+    height: 90px;
+    position: absolute;
+}
+.product5{
+    width: 100px;
+    height: 100px;
+    position: absolute;
+}
+.product6{
+    width: 110px;
+    height: 110px;
+    position: absolute;
+}
+
+.canvas{
+    width: 100%;
+    height: 100%;
+    background-color: #ffff00;
+}
+
+.inner-btn {
+    width: 400px;
+    height: 120px;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.dialog-main {
+    width: 500px;
+}
+
+.dialog-div {
+    flex-direction: column;
+    align-items: center;
+}
+
+.dialog_title_text {
+    width: 434px;
+    height: 80px;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.device_list_item {
+    width: 434px;
+    height: 80px;
+    flex-direction: row;
+    align-items: center;
+}
+
+.device_item_radio {
+}
+
+.device_item_title {
+    width: 80%;
+    height: 80px;
+    text-align: start;
+}
+
+.dialog_cancel_button {
+    width: 100%;
+    font-size: 32px;
+}
+
+@media screen and (device-type: tablet) and (orientation: landscape) {
+    .title {
+        font-size: 100px;
+    }
+}
+
+@media screen and (device-type: wearable) {
+    .title {
+        font-size: 28px;
+        color: #FFFFFF;
+    }
+}
+
+@media screen and (device-type: tv) {
+    .container {
+        background-image: url("/common/images/Wallpaper.png");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .title {
+        font-size: 100px;
+        color: #FFFFFF;
+    }
+}
+
+@media screen and (device-type: phone) and (orientation: landscape) {
+    .title {
+        font-size: 60px;
+    }
+}

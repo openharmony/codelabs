@@ -1,0 +1,105 @@
+{
+  "app": {
+    "vendor": "example",
+    "bundleName": "com.example.helloworld0218",
+    "version": {
+      "code": 1000000,
+      "name": "1.0.0"
+    }
+  },
+  "deviceConfig": {},
+  "module": {
+    "mainAbility": ".MainAbility",
+    "deviceType": [
+      "phone"
+    ],
+    "abilities": [
+      {
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "action.system.home"
+            ]
+          }
+        ],
+        "orientation": "landscape",
+        "visible": true,
+        "srcPath": "MainAbility",
+        "name": ".MainAbility",
+        "srcLanguage": "ets",
+        "icon": "$media:icon",
+        "description": "$string:MainAbility_desc",
+        "formsEnabled": false,
+        "label": "$string:MainAbility_label",
+        "type": "page",
+        "launchType": "standard",
+        "configChanges": ["orientation"]
+      },
+      {
+        "orientation": "portrait",
+        "visible": true,
+        "srcPath": "PhoneAbility",
+        "name": ".PhoneAbility",
+        "srcLanguage": "ets",
+        "icon": "$media:icon",
+        "description": "$string:PhoneAbility_desc",
+        "formsEnabled": false,
+        "label": "$string:PhoneAbility_label",
+        "type": "page",
+        "launchType": "standard"
+      },
+      {
+        "srcPath": "ServiceAbility",
+        "name": ".ServiceAbility",
+        "srcLanguage": "ets",
+        "icon": "$media:icon",
+        "visible": true,
+        "description": "$string:ServiceAbility_desc",
+        "type": "service"
+      }
+    ],
+    "distro": {
+      "moduleType": "entry",
+      "installationFree": false,
+      "deliveryWithInstall": true,
+      "moduleName": "entry"
+    },
+    "package": "com.example.helloworld0218",
+    "srcPath": "",
+    "name": ".entry",
+    "js": [
+      {
+        "mode": {
+          "syntax": "ets",
+          "type": "pageAbility"
+        },
+        "pages": [
+          "pages/TVIndex",
+          "pages/VideoPlay"
+        ],
+        "name": ".MainAbility",
+        "window": {
+          "designWidth": 720,
+          "autoDesignWidth": false
+        }
+      },
+      {
+        "mode": {
+          "syntax": "ets",
+          "type": "pageAbility"
+        },
+        "pages": [
+          "pages/PhoneIndex"
+        ],
+        "name": ".PhoneAbility",
+        "window": {
+          "designWidth": 720,
+          "autoDesignWidth": false
+        }
+      }
+    ]
+  }
+}
