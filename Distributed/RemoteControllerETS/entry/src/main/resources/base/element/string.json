@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "entry_desc",
+      "value": "description"
+    },
+    {
+      "name": "MainAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "MainAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "PhoneAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "PhoneAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "ServiceAbility_desc",
+      "value": "hap sample empty service"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "data": {
+    "title": "Title",
+    "detail": "Text",
+    "iconTitle": "Picture"
+  },
+  "actions": {
+    "routerEvent": {
+      "action": "router",
+      "bundleName": "com.huawei.smartlamp.hmservice",
+      "abilityName": "com.huawei.smartlamp.MainAbility",
+      "params": {
+        "message": "add detail"
+      }
+    }
+  }
+}

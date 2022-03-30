@@ -1,0 +1,64 @@
+.container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-img {
+    flex-shrink: 0;
+    height: 100%;
+}
+
+.container-inner {
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-start;
+    height: 100%;
+    width: 100%;
+    padding: 12px;
+}
+
+.title {
+    font-size: 19px;
+    font-weight: bold;
+    color: white;
+    text-overflow: ellipsis;
+    max-lines: 1;
+}
+
+.detail_text {
+    font-size: 16px;
+    color: white;
+    opacity: 0.66;
+    text-overflow: ellipsis;
+    max-lines: 1;
+    margin-top: 6px;
+}
+
+@media (device-type: wearable) {
+    .container-inner {
+        justify-content: center;
+        align-items: center;
+        margin: 40px 26px;
+        padding: 0;
+    }
+
+    .title {
+        text-align: center;
+    }
+
+    .detail_text {
+        max-lines: 2;
+        text-align: center;
+    }
+}
+
+@media (device-type: tv) {
+    .title {
+        font-size: 16px;
+    }
+
+    .detail_text {
+        font-size: 12px;
+    }
+}
