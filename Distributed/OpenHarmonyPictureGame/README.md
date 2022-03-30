@@ -665,9 +665,8 @@ onRemoteRequest(code, data, reply, option) {
 
 # 完整代码<a name="ZH-CN_TOPIC_0000001249204215"></a>
 
-gitee源码
+[gitee源码](https://gitee.com/openharmony/codelabs/edit/master/Distributed/OpenHarmonyPictureGame)
 
-gitHub源码
 
 # 相关概念与参考<a name="ZH-CN_TOPIC_0000001204484232"></a>
 
