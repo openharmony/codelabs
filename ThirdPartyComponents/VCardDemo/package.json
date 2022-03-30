@@ -1,0 +1,15 @@
+{
+  "name": "myapplication",
+  "version": "1.0.0",
+  "ohos": {
+    "org": "huawei",
+    "buildTool": "hvigor",
+    "directoryLevel": "project"
+  },
+  "description": "example description",
+  "repository": {},
+  "license": "ISC",
+  "dependencies": {
+    "@ohos/vcard": "^2.0.2"
+  }
+}

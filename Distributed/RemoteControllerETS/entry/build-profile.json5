@@ -1,0 +1,19 @@
+{
+  "apiType": 'faMode',
+  "buildOption": {
+  },
+  "targets": [
+    {
+      "name": "default",
+    },
+    {
+      "name": "ohosTest",
+    }
+  ],
+  "products": [
+    {
+      "name": "default",
+      "signingConfig": "debug"
+    },
+  ]
+}
