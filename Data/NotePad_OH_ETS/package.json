@@ -1,17 +1,17 @@
 {
-	"name": "notepadopenharmony",
+	"name": "notepad_oh_ets",
 	"version": "1.0.0",
 	"ohos": {
 		"org": "huawei",
 		"buildTool": "hvigor",
 		"directoryLevel": "project"
 	},
+	"description": "example description",
+	"repository": {},
+	"license": "ISC",
 	"dependencies": {
-		"@ohos/hvigor-base": "1.0.2-rc",
-		"@ohos/hvigor-ohos-plugin": "1.0.2-rc",
-		"@ohos/hvigor": "1.0.2-rc",
-		"@ohos/hvigor-log": "1.0.2-rc",
-		"@ohos/sdkmanager-common": "1.0.0"
-	},
-	"devDependencies": { }
+		"hypium": "^1.0.0",
+		"@ohos/hvigor": "1.0.6",
+		"@ohos/hvigor-ohos-plugin": "1.0.6"
+	}
 }
