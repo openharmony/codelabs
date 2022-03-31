@@ -180,7 +180,7 @@ demo/
 
     HiTool工具开发者可以在网上自行下载使用。
 
-    ![](figures/f28c7d177a793f422ccdf4ae97f65ed6_2103x1128.png)
+    ![](figures/zh-cn_image_0000001215883972.png)
 
     ![](figures/zh-cn_image_0000001221057618.png)
 
