@@ -29,15 +29,9 @@
 
 3.  搭建开发环境。
 
-    1.  开始前请参考[下载与安装软件](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/software_install-0000001053582415)、[配置开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-sdk.md)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/use-wizard-to-create-project.md)创建工程，选择JS或者eTS语言开发、“Application”为例，模板选择“\[Standard\]Empty Ability”。
-    3.  工程创建完成后，可参考下面章节进行代码编写，使用真机进行调测：
-
-    -   [配置OpenHarmony应用签名信息](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md)
-    -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
-    -   工程示例：
-
-    ![](figures/截图.png)
+    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
 
 # 添加依赖
 
@@ -58,7 +52,7 @@
     import {VCardConfig} from "@ohos/vcard";
     ```
 
-2.  Vcard三方库可添加个个人信息，比如姓名、手机、邮箱、备注等等。根据个人信息生成规范定义电子名片，在此介绍下添加姓名，添加其他信息可参考[源码](源码.md)。
+2.  Vcard三方库可添加个人信息，比如姓名、手机、邮箱、备注等等。根据个人信息生成电子名片，在此介绍添加姓名，添加其他信息可参考[源码](三方库源码.md)。
 
     ```
     let myCard= new  contact.Contact()
@@ -70,12 +64,13 @@
     let result = builder.toString()
     ```
 
-3.  生成结果
+3.  生成结果。
 
     ```
     BEGIN:VCARD VERSION:2.1 X-ANDROID-CUSTOM;CHARSET=UTF-8;
     ENCODING=QUOTED-PRINTABLE:vnd.android.cursor.item/nickname;
     =e6=98=b5=e7=a7=b0=e5=b0=8f=e5=bc=a0;;;;;;;;;;;;;; END:VCAR
+    ```
     ```
 
 # 恭喜你
@@ -86,4 +81,4 @@ openHarmony三方库使用。
 
 # 参考
 
-gitee地址
+[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)
