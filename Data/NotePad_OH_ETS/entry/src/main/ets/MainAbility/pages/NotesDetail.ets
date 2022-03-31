@@ -217,7 +217,6 @@ struct NotesDetail {
       }
       .height('10%')
       .margin({ bottom: 20 })
-      .position({ x: '0', y: '90%' })
     }
     .width('100%')
     .height('100%')
@@ -315,7 +314,9 @@ struct NotesDetail {
             let promise2 = storage.delete(this.notesInfo.noteId)
             storage.flush()
             promise2.then(() => {
-              router.back()
+              router.push({
+                uri: 'pages/NotesList',
+              })
               console.info(this.logTag + "delete value successfully." + this.notesInfo.noteId)
             }).catch((err) => {
               console.info(this.logTag + "deleteNotesVal failed with err: " + err)
