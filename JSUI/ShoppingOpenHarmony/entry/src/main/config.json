@@ -1,7 +1,7 @@
 {
   "app": {
+    "vendor": "example",
     "bundleName": "com.huawei.shopping",
-    "vendor": "huawei",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -9,18 +9,11 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.shopping",
-    "name": ".MyApplication",
-    "mainAbility": "com.huawei.shopping.MainAbility",
+    "mainAbility": ".MainAbility",
     "deviceType": [
-      "phone"
+      "phone",
+      "tablet"
     ],
-    "distro": {
-      "deliveryWithInstall": true,
-      "moduleName": "entry",
-      "moduleType": "entry",
-      "installationFree": false
-    },
     "abilities": [
       {
         "skills": [
@@ -35,17 +28,26 @@
         ],
         "orientation": "unspecified",
         "visible": true,
-        "srcPath": "default",
-        "name": "com.huawei.shopping.MainAbility",
+        "srcPath": "MainAbility",
+        "name": ".MainAbility",
         "srcLanguage": "js",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,
-        "label": "$string:shoppingDemo",
+        "label": "$string:MainAbility_label",
         "type": "page",
         "launchType": "standard"
       }
     ],
+    "distro": {
+      "moduleType": "entry",
+      "installationFree": false,
+      "deliveryWithInstall": true,
+      "moduleName": "entry"
+    },
+    "package": "com.example.entry",
+    "srcPath": "",
+    "name": ".entry",
     "js": [
       {
         "pages": [
@@ -53,7 +55,7 @@
           "pages/shoppingDetailsPage/shoppingDetailsPage",
           "pages/viewsChart/viewsChart"
         ],
-        "name": "default",
+        "name": ".MainAbility",
         "window": {
           "designWidth": 720,
           "autoDesignWidth": false
