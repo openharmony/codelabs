@@ -27,7 +27,7 @@
 .titles {
     font-size: 30px;
     text-align: left;
-    color: red;
+    color: #FF0000;
 }
 
 .tabs {
@@ -65,7 +65,7 @@
 }
 
 .tab-text:active {
-    color: red;
+    color: #FF0000;
 }
 
 .todo-wrapper {
@@ -91,13 +91,13 @@
 .todo-content {
     width: 100%;
     font-size: 26px;
-    color: gray;
+    color: #808080;
 }
 
 .todo-price {
     width: 100%;
     font-size: 26px;
-    color: red;
+    color: #FF0000;
 }
 
 .margin-comm {
@@ -118,7 +118,7 @@
 
 .container-bottom-div {
     border-top: .1px solid #9D9D9D;
-    background-color: #FFF;
+    background-color: #FFFFFF;
     height: 80px;
     position: fixed;
     bottom: 0px;
@@ -128,12 +128,11 @@
 }
 
 .container-bottom-div-text {
-    color: #FFF;
+    color: #FFFFFF;
     font-size: 22px;
 }
 
 .container-more-div {
-    display: flex;
     justify-content: space-around;
     font-weight: 700;
 }
@@ -157,7 +156,7 @@
 
 .container-shopping-title {
     position: fixed;
-    background-color: deepskyblue;
+    background-color: #00BFFF;
     height: 60px;
     width: 100%;
     justify-content: center;
@@ -188,20 +187,20 @@
 
 .container-shopping-list-div-texts {
     font-size: 24px;
-    color: red;
+    color: #FF0000;
     font-weight: 700;
     margin-top: 10px;
 }
 
 .container-shopping-list-divider {
     margin: 2px 0px;
-    color: grey;
+    color: #808080;
     stroke-width: 1px;
     line-cap: round;
 }
 
 .container-shopping-bottom {
-    background-color: aquamarine;
+    background-color: #7FFFD4;
     height: 70px;
     width: 100%;
     position: fixed;
@@ -216,7 +215,7 @@
 }
 
 .container-shopping-bottom-div-text {
-    color: red;
+    color: #FF0000;
     font-size: 24px;
     font-weight: 600;
 }
@@ -261,7 +260,7 @@
 }
 
 .container-my-top-divs-texts {
-    color: dimgray;
+    color: #696969;
     font-size: 24px;
 }
 
@@ -277,7 +276,7 @@
 }
 
 .container-my-title {
-    flex-direction: row;
+  /*  flex-direction: row;*/
     height: 70px;
     width : 100%;
     justify-content: space-around;
@@ -288,7 +287,7 @@
 }
 
 .container-my-title-texts {
-    color: dimgray;
+    color: #696969;
     font-size: 24px;
 }
 
@@ -325,7 +324,7 @@
 }
 
 .container-my-text {
-    color: dimgray;
+    color: #696969;
     font-size: 24px;
 }
 

@@ -14,7 +14,7 @@
  */
 
 .container {
-    display: flex;
+   /* display: flex;*/
     flex-direction: column;
     align-items: center;
     left: 0px;
@@ -31,11 +31,11 @@
     align-items: center;
     width: 100%;
     height: 720px;
-    indicator-color: lavender;
+    indicator-color: #E6E6FA;
     indicator-size: 6px;
     indicator-bottom: 20px;
     indicator-left: 35%;
-    indicator-selected-color: red;
+    indicator-selected-color: #FF0000;
 }
 
 .swiperContent {
@@ -67,7 +67,7 @@
 }
 
 .dialog-main {
-    display: flex;
+    /*display: flex;*/
     flex-direction: column;
     align-items: center;
     width: 100%;
@@ -121,7 +121,7 @@
     height: 80px;
     border-radius: 20px;
     font-size: 22px;
-    color: red;
+    color: #FF0000;
     font-weight: bolder;
     font-family: serif;
 }
@@ -133,7 +133,7 @@
 
 .content-annualPrice-div {
     height: 120px;
-    background-color: red;
+    background-color: #FF0000;
     align-items: center;
 }
 
@@ -145,7 +145,7 @@
 }
 
 .content-annualPrice-text {
-    color: #FFF;
+    color: #FFFFFF;
     font-size: 32px;
     margin-left: 10px;
 }
@@ -163,7 +163,7 @@
 
 .content-title-div-content {
     margin: 0px 3px;
-    color: dimgray;
+    color: #696969;
     font-size: 22px;
 }
 
@@ -212,7 +212,7 @@
     padding-left: 20px;
     padding-right: 20px;
     height: 90px;
-    background-color: skyblue;
+    background-color: #87CEEB;
     position: fixed;
     top: 0px;
 }
@@ -257,7 +257,7 @@
 }
 
 .container-bottom-div {
-    background-color: red;
+    background-color: #FF0000;
     height: 100px;
     position: fixed;
     bottom: 0px;
@@ -267,7 +267,7 @@
 }
 
 .container-bottom-div-text {
-    color: #FFF;
+    color: #FFFFFF;
     font-size: 30px;
 }
 
@@ -282,7 +282,7 @@
 }
 
 .dialog-divs-text1 {
-    color: red;
+    color: #FF0000;
     margin: 6px 15px;
     font-size: 28px;
 }
@@ -321,7 +321,7 @@
 }
 
 .dialog-div-bottom {
-    background-color: red;
+    background-color: #FF0000;
     height: 100px;
     width: 100%;
     justify-content: center;
@@ -330,7 +330,7 @@
 }
 
 .dialog-div-bottom-text {
-    color: #FFF;
+    color: #FFFFFF;
     font-size: 30px;
 }
 
@@ -356,11 +356,11 @@
 }
 
 .color-comm {
-    color: deepskyblue;
+    color: #00BFFF;
 }
 
 .dialog-divider {
-    stroke-width: 3;
+    stroke-width: 3px;
     height: 25px;
     margin: 0px 10px;
 }
