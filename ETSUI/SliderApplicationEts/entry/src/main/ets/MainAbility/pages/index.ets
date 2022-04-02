@@ -36,7 +36,7 @@ struct Index {
         min: 1,
         max: 10,
         step: 1,
-        style: SliderStyle.OUTSET
+        style: SliderStyle.OutSet
       })
         .showTips(true)
         .blockColor(Color.Blue)
@@ -54,7 +54,7 @@ struct Index {
         min: 0.5,
         max: 2.5,
         step: 0.1,
-        style: SliderStyle.OUTSET
+        style: SliderStyle.OutSet
       })
         .showTips(true)
         .blockColor(Color.Blue)
