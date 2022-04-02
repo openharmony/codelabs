@@ -1,4 +1,4 @@
-/*
+<!--
  * Copyright (c) 2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11,7 +11,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ -->
 
 <div class="container">
 
@@ -52,22 +52,24 @@
     <!--list列表-->
     <list class="contact">
         <list-item for="{{contactList}}" class="list-item" clickeffect="false">
-            <div class="list-item-data">
-                <div class="list-title-center">
-                    <text>{{$item.name}}</text>
+            <div style="width: 100%;height: 100%;">
+                <div class="list-item-data">
+                    <div class="list-title-center">
+                        <text>{{$item.name}}</text>
+                    </div>
+                    <div class="list-title-center">
+                        <text>{{$item.age}}</text>
+                    </div>
+                    <div class="list-title-center">
+                        <text>{{$item.gender}}</text>
+                    </div>
+                    <div class="list-title-right">
+                        <text class="edit" onclick="editContact($item, $idx)">编辑</text>
+                        <text class="delete" onclick="deleteContact($item, $idx)">删除</text>
+                    </div>
                 </div>
-                <div class="list-title-center">
-                    <text>{{$item.age}}</text>
-                </div>
-                 <div class="list-title-center">
-                    <text>{{$item.gender}}</text>
-                </div>
-                <div class="list-title-right">
-                    <text class="edit" onclick="editContact($item, $idx)">编辑</text>
-                    <text class="delete" onclick="deleteContact($item, $idx)">删除</text>
-                </div>
+                <divider class="list-item-divider" vertical="false"></divider>
             </div>
-            <divider class="list-item-divider" vertical="false"></divider>
         </list-item>
     </list>
 
