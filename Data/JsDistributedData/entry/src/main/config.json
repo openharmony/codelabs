@@ -1,7 +1,7 @@
 {
   "app": {
-    "bundleName": "com.huawei.cookbook",
-    "vendor": "huawei",
+    "vendor": "example",
+    "bundleName": "com.example.myapplication",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -9,18 +9,10 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.myapplication",
-    "name": ".MyApplication",
     "mainAbility": ".MainAbility",
     "deviceType": [
       "phone"
     ],
-    "distro": {
-      "deliveryWithInstall": true,
-      "moduleName": "entry",
-      "moduleType": "entry",
-      "installationFree": true
-    },
     "abilities": [
       {
         "skills": [
@@ -46,6 +38,15 @@
         "launchType": "standard"
       }
     ],
+    "distro": {
+      "moduleType": "entry",
+      "installationFree": false,
+      "deliveryWithInstall": true,
+      "moduleName": "entry"
+    },
+    "package": "com.example.myapplication",
+    "srcPath": "",
+    "name": ".entry",
     "js": [
       {
         "pages": [
