@@ -6,6 +6,5 @@
     "buildTool": "hvigor",
     "directoryLevel": "module"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
