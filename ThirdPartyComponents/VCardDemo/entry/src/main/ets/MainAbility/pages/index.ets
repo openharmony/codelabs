@@ -106,7 +106,7 @@ struct FlexExample {
           .width('100%')
           //姓名填写
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) { //1
-            Image($rawfile('ic_public_contacts.png')) //图片
+            Image($r('app.media.ic_public_contacts')) //图片
               .objectFit(ImageFit.Contain)
               .height(30)
               .width(30)
@@ -131,7 +131,7 @@ struct FlexExample {
 
           //单位
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
-            Image($rawfile('ic_edit_company.png'))
+            Image($r('app.media.ic_edit_company'))
               .objectFit(ImageFit.Contain)
               .height(30)
               .width(30)
@@ -157,7 +157,7 @@ struct FlexExample {
           //手机
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}) {
-              Image($rawfile('ic_public_phone.png'))
+              Image($r('app.media.ic_public_phone'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -189,7 +189,7 @@ struct FlexExample {
           //電子郵件
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_public_email.png'))
+              Image($r('app.media.ic_public_email'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -220,7 +220,7 @@ struct FlexExample {
           //备注
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_public_drawer.png'))
+              Image($r('app.media.ic_public_drawer'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -249,7 +249,7 @@ struct FlexExample {
           //住宅
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_public_phone.png'))
+              Image($r('app.media.ic_public_phone'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -280,7 +280,7 @@ struct FlexExample {
           //网址
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}) {
-              Image($rawfile('ic_public_worldclock.png'))
+              Image($r('app.media.ic_public_worldclock'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -310,7 +310,7 @@ struct FlexExample {
           //生日
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_Edit_Birthday.png'))
+              Image($r('app.media.ic_Edit_Birthday'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
