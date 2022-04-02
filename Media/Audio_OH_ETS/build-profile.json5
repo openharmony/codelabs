@@ -1,41 +1,6 @@
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "debug",
-
-        "material": {
-          storeFile: 'D:\\Harmony\\openHarmony\\sign\\openHos\\openhos.p12',
-
-          //本地keystore
-
-          storePassword: "0000001815EE6158E56D4802F51B86223E4CCDC85FBAC269F04D329D43AC9AB5739D68248EE1AA44",
-
-          //生成本地keystore时的-storepass参数
-
-          keyAlias: 'hw',
-
-          //生成本地keystore时的-alias参数
-
-          keyPassword: '00000018C02B975FB9B04EC6667768B507F398DF2978D28C0CC8DFEB9D761CF49A161A0A36FAFCCE',
-
-          //keyPassword参数,pkcs12格式的keystore采用生成本地keystore时的-storepass参数
-
-          signAlg: 'SHA256withECDSA',
-
-          //生成本地keystore时的-sigalg参数
-
-          profile: 'D:\\Harmony\\openHarmony\\sign\\openHos\\openHos.p7b',
-
-          //导入调试profile
-
-          certpath: 'D:\\Harmony\\openHarmony\\sign\\openHos\\openHos.cer'
-
-          //导入调试证书
-
-        }
-      }
-    ],
+    "signingConfigs": [],
     "compileSdkVersion": 9,
     "compatibleSdkVersion": 9,
     "products": [

@@ -59,7 +59,7 @@ struct FlexExample {
                   //邮件模块
                   let Email = new contact.Email()
                   Email.labelName = this.index1
-                  Email.lableId = parseInt(this.index1)
+                  Email.labelId = parseInt(this.index1)
                   Email.email = this.emails
                   contactall.emails = [Email]
 
