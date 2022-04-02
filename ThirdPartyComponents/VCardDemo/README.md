@@ -8,7 +8,7 @@
 
 要想读懂源码，需要具备以下技能。
 
--   [熟悉基于TS扩展的声明式开发](https://developer.harmonyos.com/cn/docs/documentation/doc-references/reference-document-outline-0000001115016824)
+-   [熟悉基于TS扩展的声明式开发](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/Readme-CN.md)
 -   熟悉ES6
 
 # 搭建OpenHarmony环境
@@ -52,7 +52,7 @@
     import {VCardConfig} from "@ohos/vcard";
     ```
 
-2.  Vcard三方库可添加个人信息，比如姓名、手机、邮箱、备注等等。根据个人信息生成电子名片，在此介绍添加姓名，添加其他信息可参考[源码](三方库源码.md)。
+2.  Vcard三方库可添加个人信息，比如姓名、手机、邮箱、备注等等。根据个人信息生成电子名片，在此介绍添加姓名，添加其他信息可参考[源码](https://gitee.com/openharmony-tpc/VCard)。
 
     ```
     let myCard= new  contact.Contact()
