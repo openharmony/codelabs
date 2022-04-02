@@ -17,7 +17,7 @@ import featureAbility from '@ohos.ability.featureAbility';
 import prompt from '@system.prompt';
 import rpc from "@ohos.rpc";
 import commonEvent from '@ohos.commonEvent';
-import RemoteDeviceModel from '../../model/RemoteDeviceModel.ets';
+import RemoteDeviceModel from '../../model/RemoteDeviceModel';
 
 
 var connectedAbility;

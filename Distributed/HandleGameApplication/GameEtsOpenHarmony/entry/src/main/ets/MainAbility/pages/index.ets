@@ -13,9 +13,9 @@
  * limitations under the License.
  */
 
-import {GameElement} from '../model/GameElement.ets'
+import {GameElement} from '../model/GameElement'
 import prompt from '@system.prompt';
-import RemoteDeviceModel from '../model/RemoteDeviceModel.ets';
+import RemoteDeviceModel from '../model/RemoteDeviceModel';
 import featureAbility from '@ohos.ability.featureAbility';
 import rpc from "@ohos.rpc";
 import commonEvent from '@ohos.commonEvent';

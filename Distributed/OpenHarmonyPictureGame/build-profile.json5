@@ -1,16 +1,14 @@
 {
   "app": {
-    "signingConfigs": [
-     
-    ],
+    "signingConfigs": [],
     "compileSdkVersion": 8,
     "compatibleSdkVersion": 8,
     "products": [
       {
-        "name": "default"
-    
-      },
-    ],
+        "name": "default",
+        "signingConfig": "default",
+      }
+    ]
   },
   "modules": [
     {
@@ -20,10 +18,10 @@
         {
           "name": "default",
           "applyToProducts": [
-            "default",
-          ],
-        },
-      ],
-    },
-  ],
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
 }
