@@ -6,6 +6,8 @@
     "buildTool": "hvigor",
     "directoryLevel": "module"
   },
-  "dependencies": {
-  }
+  "description": "example description",
+  "repository": {},
+  "license": "ISC",
+  "dependencies": {}
 }
