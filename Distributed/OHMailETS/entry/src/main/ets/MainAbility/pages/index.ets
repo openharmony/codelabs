@@ -17,8 +17,8 @@ import featureAbility from '@ohos.ability.featureAbility';
 import prompt from '@system.prompt';
 import rpc from "@ohos.rpc";
 import commonEvent from '@ohos.commonEvent';
-import RemoteDeviceModel from '../../model/RemoteDeviceModel.ets';
-import TextAlign from './css.ets'
+import RemoteDeviceModel from '../../model/RemoteDeviceModel';
+//import TextAlign from './css'
 
 
 var connectedAbility;
@@ -205,7 +205,7 @@ struct CustomDialogExample {
                   onStartRemoteAbility(item, this.dataList);
                   this.controller.close();
                 })
-              Radio({ value: item })
+              Radio({ value: item ,group: 'select'})
                 .onChange(() => {
                   onStartRemoteAbility(item, this.dataList);
                   this.controller.close();
