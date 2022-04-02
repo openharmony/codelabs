@@ -1,7 +1,7 @@
 {
   "app": {
+    "vendor": "example",
     "bundleName": "com.huawei.video",
-    "vendor": "huawei",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -9,18 +9,10 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.video",
-    "name": ".MyApplication",
     "mainAbility": ".MainAbility",
     "deviceType": [
       "phone"
     ],
-    "distro": {
-      "deliveryWithInstall": true,
-      "moduleName": "entry",
-      "moduleType": "entry",
-      "installationFree": false
-    },
     "abilities": [
       {
         "skills": [
@@ -35,35 +27,38 @@
         ],
         "orientation": "unspecified",
         "visible": true,
+        "srcPath": "MainAbility",
         "name": ".MainAbility",
+        "srcLanguage": "js",
         "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,
-        "label": "$string:VideoDemo",
+        "label": "$string:mainAbility_label",
         "type": "page",
-        "launchType": "standard",
-        "srcPath": "mainAbility",
-        "srcLanguage": "js"
+        "launchType": "standard"
       }
     ],
+    "distro": {
+      "moduleType": "entry",
+      "installationFree": false,
+      "deliveryWithInstall": true,
+      "moduleName": "entry"
+    },
+    "package": "com.example.entry",
+    "srcPath": "",
+    "name": ".entry",
     "js": [
       {
         "pages": [
           "pages/index/index",
           "pages/videopage/videopage"
         ],
-        "name": "mainAbility",
+        "name": ".MainAbility",
         "window": {
           "designWidth": 720,
-          "autoDesignWidth": true
+          "autoDesignWidth": false
         }
       }
-    ],
-    "distroFilter": {
-      "apiVersion": {
-        "policy": "include",
-        "value": []
-      }
-    }
+    ]
   }
 }

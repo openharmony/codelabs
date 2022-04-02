@@ -8,9 +8,11 @@
 # 相关概念
 
 
-**[canvas组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-canvas-canvas.md)**：画布组件，用于自定义绘制图形。
+**[canvas组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-canvas-canvas.md)**
+：画布组件，用于自定义绘制图形。
 
-**[slider组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-slider.md)**：滑动条组件，用来快速调节设置值，如音量、亮度等。
+**[slider组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-slider.md)**
+：滑动条组件，用来快速调节设置值，如音量、亮度等。
 
 ## JS FA工程目录
 新建工程的JS目录如下图所示：
