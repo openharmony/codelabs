@@ -9,11 +9,5 @@
     {
       "name": "ohosTest",
     }
-  ],
-  "products": [
-    {
-      "name": "default",
-      "signingConfig": "debug"
-    },
   ]
 }
