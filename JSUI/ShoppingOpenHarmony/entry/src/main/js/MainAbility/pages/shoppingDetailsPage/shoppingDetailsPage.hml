@@ -113,10 +113,12 @@
         <div class="listSty">
             <list>
                 <list-item for="{{ contentList }}">
+                    <div>
                     <text class="container-list-title">{{ $item.title }}
                     </text>
                     <text class="container-list-content">{{ $item.content }}
                     </text>
+                    </div>
                 </list-item>
             </list>
         </div>
