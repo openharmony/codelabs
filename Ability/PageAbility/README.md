@@ -17,7 +17,7 @@
 
 Ability：Ability是应用所具备能力的抽象，也是应用程序的重要组成部分。
 
-[PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/page-ability.md)：Page模板（以下简称“Page”）是FA唯一支持的模板，用于提供与用户交互的能力。
+[PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md)：Page模板（以下简称“Page”）是FA唯一支持的模板，用于提供与用户交互的能力。
 
 # 搭建OpenHarmony环境<a name="ZH-CN_TOPIC_0000001188758428"></a>
 
@@ -86,7 +86,7 @@ Ability：Ability是应用所具备能力的抽象，也是应用程序的重要
    import featureAbility from '@ohos.ability.featureAbility';
    ```
 
-2. 在MainAbility/pages/index.ets中添加按钮，并为按钮添加文本、样式和点击事件，点击后跳转到MainAbility2的index页面，通过featureAbility.startAbility实现，调用featureAbility.startAbility时，这里参数want里主要传递bundleName和abilityName；详情请参看[启动本地PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/page-ability.md#%E5%90%AF%E5%8A%A8%E6%9C%AC%E5%9C%B0pageability)。点击按钮触发点击事件后会默认跳转到MainAbility2的index页面。
+2. 在MainAbility/pages/index.ets中添加按钮，并为按钮添加文本、样式和点击事件，点击后跳转到MainAbility2的index页面，通过featureAbility.startAbility实现，调用featureAbility.startAbility时，这里参数want里主要传递bundleName和abilityName；详情请参看[启动本地PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md#%E5%90%AF%E5%8A%A8%E6%9C%AC%E5%9C%B0pageability)。点击按钮触发点击事件后会默认跳转到MainAbility2的index页面。
 
    ```
    Button() {
