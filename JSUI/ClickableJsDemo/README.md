@@ -2,7 +2,7 @@
 
 # 介绍<a name="ZH-CN_TOPIC_0000001185839250"></a>
 
--   [应用场景](#section225718574575)
+-   [应用场景]
 
 OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图片、图片帧动画播放器组件，并且为这些组件提供了很多属性与可监听到的事件（例如动画属性与点击、触碰事件）。开发者可以根据实际场景和开发需求，选用不同的组件、事件、属性来实现界面交互效果的设计，本篇CodeLab，我们将一起开启ArkUI（基于JS扩展的类Web开发范式）基础组件与动画的学习之路。本教程主要涉及到的页面元素有image，image-animator。
 
@@ -38,15 +38,9 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 
 3. 搭建开发环境
 
-   1.  开始前请参考[下载与安装软件](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/software_install-0000001053582415)、[配置开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-sdk.md)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/use-wizard-to-create-project.md)创建工程，使用JS或者eTS语言开发、“Application”为例，模板选择“\[Standard\]Empty Ability”。
-   3.  工程创建完成后，可参考下面章节进行代码编写，使用真机进行调测：
-
-   -   [配置OpenHarmony应用签名信息](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md)
-   -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
-   -   工程示例：
-
-   ![](figures/截图.png)
+   1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+   3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
 
 # 任务一：完成页面布局<a name="ZH-CN_TOPIC_0000001185998280"></a>
 

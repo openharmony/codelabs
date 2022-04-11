@@ -22,7 +22,7 @@
 .title {
     height: 70vp;
     width: 100%;
-    flex-direction: row;
+/*    flex-direction: row;*/
 }
 
 .title-left,.title-right {
