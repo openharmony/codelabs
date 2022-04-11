@@ -1,7 +1,7 @@
 {
   "app": {
+    "vendor": "example",
     "bundleName": "com.huawei.imagejsdemo",
-    "vendor": "huawei",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -9,18 +9,11 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.imagejsdemo",
-    "name": ".MyApplication",
-    "mainAbility": "com.huawei.imagejsdemo.MainAbility",
+    "mainAbility": ".MainAbility",
     "deviceType": [
-      "phone"
+      "phone",
+      "tablet"
     ],
-    "distro": {
-      "deliveryWithInstall": true,
-      "moduleName": "entry",
-      "moduleType": "entry",
-      "installationFree": false
-    },
     "abilities": [
       {
         "skills": [
@@ -34,23 +27,33 @@
           }
         ],
         "orientation": "unspecified",
-        "name": "com.huawei.imagejsdemo.MainAbility",
-        "icon": "$media:icon",
-        "srcPath": "default",
+        "visible": true,
+        "srcPath": "MainAbility",
+        "name": ".MainAbility",
         "srcLanguage": "js",
+        "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,
-        "label": "$string:entry_MainAbility",
+        "label": "$string:mainAbility_label",
         "type": "page",
         "launchType": "standard"
       }
     ],
+    "distro": {
+      "moduleType": "entry",
+      "installationFree": false,
+      "deliveryWithInstall": true,
+      "moduleName": "entry"
+    },
+    "package": "com.example.entry",
+    "srcPath": "",
+    "name": ".entry",
     "js": [
       {
         "pages": [
           "pages/index/index"
         ],
-        "name": "default",
+        "name": ".MainAbility",
         "window": {
           "designWidth": 720,
           "autoDesignWidth": false

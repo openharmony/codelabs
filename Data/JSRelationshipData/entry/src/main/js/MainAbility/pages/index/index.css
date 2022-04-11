@@ -22,7 +22,7 @@
 .title {
     height: 70vp;
     width: 100%;
-    flex-direction: row;
+/*    flex-direction: row;*/
 }
 
 .title-left,.title-right {
@@ -59,7 +59,7 @@
 .list-title {
     height: 40vp;
     width: 100%;
-    flex-direction: row;
+/*    flex-direction: row;*/
 }
 
 .list-title-left,.list-title-center {
@@ -108,7 +108,7 @@
 }
 
 .list-item-data {
-    flex-direction: row;
+/*    flex-direction: row;*/
 }
 
 .list-item-divider {
@@ -168,7 +168,7 @@
     width: 100%;
     height: 60vp;
     font-size: 16fp;
-    flex-direction: row;
+/*    flex-direction: row;*/
 }
 
 .dialog-input text {
