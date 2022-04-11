@@ -134,10 +134,6 @@
             {{ pageInfo.nowSell }}
         </text>
     </div>
-    <div>
-        <image src="/common/computer/icon-to-top.png" @click="stickFloat" class="to-top">
-        </image>
-    </div>
     <dialog id="simpleDialog" class="dialog-main">
         <div class="dialog-div">
             <div>

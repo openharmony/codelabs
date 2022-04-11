@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import {GameElement} from '../model/GameElement'
+import { GameElement } from '../model/GameElement'
 import prompt from '@system.prompt';
 import RemoteDeviceModel from '../model/RemoteDeviceModel';
 import featureAbility from '@ohos.ability.featureAbility';
@@ -198,6 +198,8 @@ struct Index {
   });
 
   aboutToAppear() {
+    this.grantPermission()
+
     this.subscribeEvent();
     this.screenWidth = 720
     this.screenHeight = 1200
@@ -206,6 +208,14 @@ struct Index {
     this.propsPosX = Math.round((Math.random() * (this.screenWidth - this.propsSize)))
 
     this.startGame()
+  }
+
+  grantPermission() {
+    console.info(`[game] grantPermission`)
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.info(`[game] grantPermission,requestPermissionsFromUser`)
+    })
   }
 
   subscribeEvent() {
@@ -323,7 +333,7 @@ struct Index {
     }, 16);
   }
 
-// 收到手柄指令后移动飞机
+  // 收到手柄指令后移动飞机
   movePlaneByHandle() {
     this.planePosX += Math.cos((this.angle + 90) * (Math.PI / 180)) * 10
     this.planePosY -= Math.sin((this.angle + 90) * (Math.PI / 180)) * 10
@@ -346,7 +356,7 @@ struct Index {
     this.bulletPosY = this.planePosY - this.bulletHeight
   }
 
-// 创建子弹
+  // 创建子弹
   createBullet() {
     var that = this
     let bullet = new GameElement();
@@ -359,7 +369,7 @@ struct Index {
     that.bullets.push(bullet)
   }
 
-// 创建敌机
+  // 创建敌机
   createEnemyPlane() {
     var that = this
     let flag = Math.round((Math.random() + 1))
@@ -382,7 +392,7 @@ struct Index {
     that.enemyPlanes.push(enemy)
   }
 
-// 检查是否发生碰撞
+  // 检查是否发生碰撞
   checkCollision() {
     var that = this;
 
@@ -436,7 +446,7 @@ struct Index {
   }
 
 
-// 销毁所有敌机
+  // 销毁所有敌机
   destroyAllEnemy() {
     for (var k = 0; k < this.enemyPlanes.length; k++) {
       var destroyEnemy = this.enemyPlanes[k];
@@ -453,7 +463,7 @@ struct Index {
     this.propsPosY = 2000
   }
 
-// 判断两个元素是否有重叠
+  // 判断两个元素是否有重叠
   isInside(v1, v2) {
     var v1StartX = v1.positionX;
     var v1EndX = v1.positionX + v1.imgWidth;

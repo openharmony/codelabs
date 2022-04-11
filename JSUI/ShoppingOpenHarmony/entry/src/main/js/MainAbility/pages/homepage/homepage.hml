@@ -55,10 +55,6 @@
             </tab-content>
         </tabs>
     </div>
-    <div class="container-home-pinned" show="{{ flag === oneFlag }}">
-        <image src="/common/computer/icon-to-top.png" @click="stickFloat">
-        </image>
-    </div>
     <div class="container-shopping-title" show="{{ flag === threeFlag }}">
         <text>
             {{ pageWord.shoppingCart }}
