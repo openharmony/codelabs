@@ -242,7 +242,5 @@ export default {
     prompt.showToast({
       message: JSON.stringify(e.text)
     });
-  },
-  stickFloat() {
   }
 };

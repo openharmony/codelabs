@@ -469,8 +469,6 @@ export default {
       uri: 'pages/shoppingDetailsPage/shoppingDetailsPage'
     });
   },
-  stickFloat() {
-  },
   clickBuy() {
     this.iconImageFlag = this.oneFlag;
     this.flag = this.oneFlag;

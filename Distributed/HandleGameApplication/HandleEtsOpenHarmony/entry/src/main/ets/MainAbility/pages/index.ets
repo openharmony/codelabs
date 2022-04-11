@@ -84,6 +84,7 @@ struct Index {
   @State score: number = 0
 
   async aboutToAppear() {
+    this.grantPermission()
     this.subscribeEvent();
 
     // 当被拉起时，通过want传递的参数同步对端界面UI
@@ -94,6 +95,14 @@ struct Index {
         connectRemoteService(remoteDeviceId)
       }
     });
+  }
+
+  grantPermission() {
+    console.info(`[game] grantPermission`)
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.info(`[game] grantPermission,requestPermissionsFromUser`)
+    })
   }
 
   subscribeEvent() {
@@ -169,7 +178,7 @@ struct Index {
     }
   }
 
-// 计算手指(即小圆)移动距离大圆圆心的距离
+  // 计算手指(即小圆)移动距离大圆圆心的距离
   getDisZ() {
     // 小圆和大圆圆心
     var centerX = this.startPosX + this.smallR + 60
@@ -213,7 +222,7 @@ struct Index {
 
   }
 
-// 计算移动距离的绝对值
+  // 计算移动距离的绝对值
   getDisAbsX() {
     var disAbsX = Math.abs(this.smallPosX - this.startPosX);
     console.log("[demo4]disAbsX:" + disAbsX);
@@ -223,7 +232,7 @@ struct Index {
     return disAbsX;
   }
 
-// 计算移动距离的绝对值
+  // 计算移动距离的绝对值
   getDisAbsY() {
     var disAbsY = Math.abs(this.smallPosY - this.startPosY);
     console.log("[demo4]disAbsY:" + disAbsY);
