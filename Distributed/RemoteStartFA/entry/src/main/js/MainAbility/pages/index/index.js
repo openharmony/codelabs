@@ -25,6 +25,7 @@ export default {
     remoteDeviceModel: new RemoteDeviceModel()
   },
   onInit() {
+    this.grantPermission()
     console.info('onInit begin');
     DEVICE_LIST_LOCALHOST = {
       name: this.$t('strings.localhost'),
@@ -33,7 +34,13 @@ export default {
     this.deviceList = [DEVICE_LIST_LOCALHOST];
     console.info('onInit end');
   },
-
+  grantPermission() {
+    console.info(`[game] grantPermission`)
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.info(`[game] grantPermission,requestPermissionsFromUser`)
+    })
+  },
   onContinueAbilityClick() {
     console.info('onContinueAbilityClick begin');
     const self = this;
