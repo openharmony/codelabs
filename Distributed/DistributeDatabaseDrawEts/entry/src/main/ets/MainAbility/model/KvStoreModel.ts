@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import distributedData from '@ohos.data.distributeddata';
+import distributedData from '@ohos.data.distributedData';
 
 const STORE_ID = 'DrawBoard_kvstore';
 
@@ -38,17 +38,17 @@ export default class KvStoreModel {
       distributedData.createKVManager(config).then((manager) => {
         console.info('DrawBoard[KvStoreModel] createKVManager success, kvManager=' + JSON.stringify(manager));
         self.kvManager = manager;
-        var options = {
+        let options = {
           createIfMissing: true,
           encrypt: false,
           backup: false,
           autoSync: true,
-          kvStoreType: 1,
+          kvStoreType: 0,
           schema: '',
-          securityLevel: 3,
+          securityLevel: 1,
         };
         console.info('DrawBoard[KvStoreModel] kvManager.getKVStore begin');
-        self.kvManager.getKVStore(STORE_ID, options).then((store: any) => {
+        self.kvManager.getKVStore(STORE_ID, options).then((store) => {
           console.info('DrawBoard[KvStoreModel] getKVStore success, kvStore=' + store);
           self.kvStore = store;
           callback();
@@ -57,6 +57,7 @@ export default class KvStoreModel {
       });
       console.info('DrawBoard[KvStoreModel] createKVManager end');
     } else {
+      console.info('DrawBoard[KvStoreModel] KVManager is exist');
       callback();
     }
   }
@@ -85,21 +86,21 @@ export default class KvStoreModel {
     });
   }
 
-   get(key: any,callback: any) {
-     this.createKvStore(() => {
-       this.kvStore.get(key, function (err: any ,data: any) {
-         console.log("get success data: " + data);
-         callback(data);
-       });
-     })
-   }
+  get(key: any,callback: any) {
+    this.createKvStore(() => {
+      this.kvStore.get(key, function (err: any ,data: any) {
+        console.log("get success data: " + data);
+        callback(data);
+      });
+    })
+  }
 
   setOnMessageReceivedListener(callback: any) {
     console.info('DrawBoard[KvStoreModel] setOnMessageReceivedListener ');
     let self = this;
     this.createKvStore(() => {
       console.info('DrawBoard[KvStoreModel] kvStore.on(dataChange) begin');
-      self.kvStore.on('dataChange', 1, (data: any) => {
+      self.kvStore.on('dataChange', distributedData.SubscribeType.SUBSCRIBE_TYPE_ALL, (data: any) => {
         console.info('DrawBoard[KvStoreModel] dataChange, ' + JSON.stringify(data));
         console.info('DrawBoard[KvStoreModel] dataChange, insert ' + data.insertEntries.length + ' udpate '
         + data.updateEntries.length);
@@ -112,11 +113,15 @@ export default class KvStoreModel {
       console.info('DrawBoard[KvStoreModel] kvStore.on(dataChange) end');
     });
   }
-  setDataChangeListener(callback: any) {
+  setDataChangeListener(callback) {
+    console.info('DrawBoard[KvStoreModel] setDataChangeListener come in');
     let self = this;
     this.createKvStore(() => {
-      self.kvStore.on('dataChange', 1, (data: any) => {
+      console.info('DrawBoard[KvStoreModel] setDataChangeListener createKvStore');
+      self.kvStore.on('dataChange',2, (data: any) => {
+        console.info('DrawBoard[KvStoreModel] setDataChangeListener kvStore.on');
         if (data.updateEntries.length > 0) {
+          console.info('DrawBoard[KvStoreModel] setDataChangeListener callback');
           callback(data);
         }
       });
