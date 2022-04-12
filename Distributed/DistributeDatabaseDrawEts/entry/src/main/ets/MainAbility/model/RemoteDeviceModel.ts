@@ -21,6 +21,8 @@ export default class RemoteDeviceModel {
     deviceList: any[] = []
     callback: any
     #deviceManager: any
+    discoverList = [];
+    authCallback = null;
 
     constructor() {
     }
@@ -44,32 +46,36 @@ export default class RemoteDeviceModel {
         }
     }
 
-    registerDeviceListCallback_(callback: any) {
-        console.info('DrawBoard[RemoteDeviceModel] registerDeviceListCallback');
+    registerDeviceListCallback_(callback) {
+        console.info('MusicPlayer[RemoteDeviceModel] registerDeviceListCallback');
         this.callback = callback;
         if (this.#deviceManager == undefined) {
-            console.error('DrawBoard[RemoteDeviceModel] deviceManager has not initialized');
+            console.error('MusicPlayer[RemoteDeviceModel] deviceManager has not initialized');
             this.callback();
             return;
         }
 
-        console.info('DrawBoard[RemoteDeviceModel] getTrustedDeviceListSync begin');
+        console.info('MusicPlayer[RemoteDeviceModel] getTrustedDeviceListSync begin');
         var list = this.#deviceManager.getTrustedDeviceListSync();
-        console.info('DrawBoard[RemoteDeviceModel] getTrustedDeviceListSync end, deviceList=' + JSON.stringify(list));
+        console.info('MusicPlayer[RemoteDeviceModel] getTrustedDeviceListSync end, deviceList=' + JSON.stringify(list));
         if (typeof (list) != 'undefined' && typeof (list.length) != 'undefined') {
             this.deviceList = list;
         }
         this.callback();
-        console.info('DrawBoard[RemoteDeviceModel] callback finished');
+        console.info('MusicPlayer[RemoteDeviceModel] callback finished');
 
         let self = this;
-        this.#deviceManager.on('deviceStateChange', (data: any) => {
-            console.info('DrawBoard[RemoteDeviceModel] deviceStateChange data=' + JSON.stringify(data));
+        this.#deviceManager.on('deviceStateChange', (data) => {
+            console.info('MusicPlayer[RemoteDeviceModel] deviceStateChange data=' + JSON.stringify(data));
             switch (data.action) {
                 case 0:
                     self.deviceList[self.deviceList.length] = data.device;
-                    console.info('DrawBoard[RemoteDeviceModel] online, updated device list=' + JSON.stringify(self.deviceList));
+                    console.info('MusicPlayer[RemoteDeviceModel] online, updated device list=' + JSON.stringify(self.deviceList));
                     self.callback();
+                    if (self.authCallback != null) {
+                        self.authCallback();
+                        self.authCallback = null;
+                    }
                     break;
                 case 2:
                     if (self.deviceList.length > 0) {
@@ -80,7 +86,7 @@ export default class RemoteDeviceModel {
                             }
                         }
                     }
-                    console.info('DrawBoard[RemoteDeviceModel] change, updated device list=' + JSON.stringify(self.deviceList));
+                    console.info('MusicPlayer[RemoteDeviceModel] change, updated device list=' + JSON.stringify(self.deviceList));
                     self.callback();
                     break;
                 case 1:
@@ -93,35 +99,31 @@ export default class RemoteDeviceModel {
                         }
                         self.deviceList = list;
                     }
-                    console.info('DrawBoard[RemoteDeviceModel] offline, updated device list=' + JSON.stringify(data.device));
+                    console.info('MusicPlayer[RemoteDeviceModel] offline, updated device list=' + JSON.stringify(data.device));
                     self.callback();
                     break;
                 default:
                     break;
             }
         });
-        this.#deviceManager.on('deviceFound', (data: any) => {
-            console.info('DrawBoard[RemoteDeviceModel] deviceFound data=' + JSON.stringify(data));
-            console.info('DrawBoard[RemoteDeviceModel] deviceFound self.deviceList=' + self.deviceList);
-            console.info('DrawBoard[RemoteDeviceModel] deviceFound self.deviceList.length=' + self.deviceList.length);
-            for (var i = 0; i < self.deviceList.length; i++) {
-                if (self.deviceList[i].deviceId === data.device.deviceId) {
-                    console.info('DrawBoard[RemoteDeviceModel] device founded, ignored');
+        this.#deviceManager.on('deviceFound', (data) => {
+            console.info('MusicPlayer[RemoteDeviceModel] deviceFound data=' + JSON.stringify(data));
+            console.info('MusicPlayer[RemoteDeviceModel] deviceFound self.deviceList=' + self.deviceList);
+            console.info('MusicPlayer[RemoteDeviceModel] deviceFound self.deviceList.length=' + self.deviceList.length);
+            for (var i = 0; i < self.discoverList.length; i++) {
+                if (self.discoverList[i].deviceId === data.device.deviceId) {
+                    console.info('MusicPlayer[RemoteDeviceModel] device founded, ignored');
                     return;
                 }
             }
-
-            console.info('DrawBoard[RemoteDeviceModel] authenticateDevice ' + JSON.stringify(data.device));
-            self.#deviceManager.authenticateDevice(data.device);
+            self.discoverList[self.discoverList.length] = data.device;
+            self.callback();
         });
-        this.#deviceManager.on('discoverFail', (data: any) => {
-            console.info('DrawBoard[RemoteDeviceModel] discoverFail data=' + JSON.stringify(data));
-        });
-        this.#deviceManager.on('authResult', (data: any) => {
-            console.info('DrawBoard[RemoteDeviceModel] authResult data=' + JSON.stringify(data));
+        this.#deviceManager.on('discoverFail', (data) => {
+            console.info('MusicPlayer[RemoteDeviceModel] discoverFail data=' + JSON.stringify(data));
         });
         this.#deviceManager.on('serviceDie', () => {
-            console.error('DrawBoard[RemoteDeviceModel] serviceDie');
+            console.error('MusicPlayer[RemoteDeviceModel] serviceDie');
         });
 
         SUBSCRIBE_ID = Math.floor(65536 * Math.random());
@@ -134,7 +136,7 @@ export default class RemoteDeviceModel {
             isWakeRemote: true,
             capability: 0
         };
-        console.info('DrawBoard[RemoteDeviceModel] startDeviceDiscovery ' + SUBSCRIBE_ID);
+        console.info('MusicPlayer[RemoteDeviceModel] startDeviceDiscovery ' + SUBSCRIBE_ID);
         this.#deviceManager.startDeviceDiscovery(info);
     }
 

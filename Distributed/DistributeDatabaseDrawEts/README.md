@@ -26,9 +26,9 @@
 
 2. 搭建烧录环境
 
-   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
+   1.  [完成DevEco Device Tool的安装](https://device.harmonyos.com/cn/docs/documentation/guide/install_windows-0000001050164976)
 
-   2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
+   2.  [完成Hi3516开发板的烧录](https://device.harmonyos.com/cn/docs/documentation/guide/hi3516_upload-0000001052148681)
 
 3. 搭建开发环境
 
@@ -70,7 +70,7 @@
 
 # 5.代码结构解读
 
-本篇Codelab只对核心代码进行讲解，整个工程的代码结构如下：
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在[参考](参考.md)中提供下载方式，整个工程的代码结构如下：
 
 ![](figures/zh-cn_image_0000001192614852.png)
 
@@ -345,7 +345,7 @@
 
 # 7.页面设计
 
-分布式手写板页面主要由全屏Path绘制区、顶部操作栏组成。为了实现弹框选择设备的效果，在最外层添加了自定义弹框组件。Path组件设置为全屏显示，根据手指触摸的屏幕坐标直接通过Path绘制轨迹；顶部操作栏加入撤回图标、设备选择图标；自定义弹框加入标题、设备列表。页面样式请在参考这一节中查看，页面布局在index.ets中实现。
+分布式手写板页面主要由全屏Path绘制区、顶部操作栏组成。为了实现弹框选择设备的效果，在最外层添加了自定义弹框组件。Path组件设置为全屏显示，根据手指触摸的屏幕坐标直接通过Path绘制轨迹；顶部操作栏加入撤回图标、设备选择图标；自定义弹框加入标题、设备列表。页面样式请在[参考](参考.md)中查看，页面布局在index.ets中实现。
 
 在index.ets中按照如下步骤编写：
 

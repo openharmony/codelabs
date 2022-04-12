@@ -61,6 +61,9 @@
           "autoDesignWidth": false
         }
       }
-    ]
+    ],
+    "reqPermissions": [{
+      "name": "ohos.permission.DISTRIBUTED_DATASYNC"
+    }]
   }
 }
