@@ -1,0 +1,12 @@
+{
+	"BuildOptions":{
+		"BUNDLE_NAME":"",
+		"BUILD_PATH":{
+			"OUTPUT_PATH":"D:\\openHarmony\\codelabs\\Distributed\\OpenHarmonyPictureGame\\build\\outputs\\default"
+		},
+		"SELECT_BUILD_PRODUCT":"default"
+	},
+	"CommonInfo":{
+		"project.ide.version":"3.0.0.900"
+	}
+}
