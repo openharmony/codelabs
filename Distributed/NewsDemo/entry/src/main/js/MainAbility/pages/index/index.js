@@ -14,6 +14,7 @@
  */
 
 import router from '@system.router';
+import featureAbility from '@ohos.ability.featureAbility';
 
 const titles = [
   {
@@ -203,7 +204,17 @@ export default {
   },
   onInit() {
     console.log('onInit::' + titles);
+    this.grantPermission()
   },
+
+  grantPermission() {
+    console.info('grantPermission')
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.info(`grantPermission,requestPermissionsFromUser`)
+    })
+  },
+
   // 选择新闻类型
   changeNewsType: function(e) {
     const type = titles[e.index].name;
