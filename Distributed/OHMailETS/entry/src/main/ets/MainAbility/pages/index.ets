@@ -346,6 +346,8 @@ struct Index {
     });
   }
   async aboutToAppear() {
+    this.grantPermission()
+
     this.subscribeEvent();
     let self = this;
     // 当被拉起时，通过want传递的参数同步对端界面UI
@@ -361,7 +363,13 @@ struct Index {
       }
     });
   }
-
+  grantPermission() {
+    console.info(`[game] grantPermission`)
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.info(`[game] grantPermission,requestPermissionsFromUser`)
+    })
+  }
   subscribeEvent() {
     let self = this;
     // 用于保存创建成功的订阅者对象，后续使用其完成订阅及退订的动作
