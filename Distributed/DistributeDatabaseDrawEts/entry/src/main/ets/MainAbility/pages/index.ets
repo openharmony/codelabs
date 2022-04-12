@@ -14,38 +14,61 @@ struct CustomDialogExample {
   startAbility: (deviceId, deviceName, positionList) => void
   deviceList:() => void
   positionList:() => void
-//  private selectedDevices: any[]= [];
+  private selectedIndex: number = 0
   build() {
     Column() {
-      Text('设备列表').width('70%').fontSize(20).margin({ top: 10, bottom: 10 })
-      Flex({ justifyContent: FlexAlign.SpaceAround }) {
-        List({ space: 20, initialIndex: 0 }) {
-          ForEach(this.deviceList, (item) => {
-            ListItem() {
-              Text('' + item.name)
-                .width('100%').height(100).fontSize(16)
-                .textAlign(TextAlign.Center).borderRadius(10).backgroundColor(0xFFFFFF)
-                .onClick((event: ClickEvent) =>{
-                  this.controller.close();
-                  this.startAbility(item.id, item.name, this.positionList)
-//                  this.confirm(item.id,item.name)
-                })
-            }.editable(true)
-          }, item => item.id)
-        }
-        .listDirection(Axis.Vertical) // 排列方向
-        .divider({ strokeWidth: 2, color: 0xFFFFFF, startMargin: 20, endMargin: 20 }) // 每行之间的分界线
-        .edgeEffect(EdgeEffect.None) // 滑动到边缘无效果
-        .chainAnimation(false) // 联动特效关闭
-        .onScrollIndex((firstIndex: number, lastIndex: number) => {
-          console.info('first' + firstIndex)
-          console.info('last' + lastIndex)
-        })
-      }.margin({ bottom: 10 })
+      Text('选择设备')
+        .fontSize(20)
+        .width('100%')
+        .textAlign(TextAlign.Center)
+        .fontColor(Color.Black)
+        .fontWeight(FontWeight.Bold)
+      List() {
+        ForEach(this.deviceList, (item, index) => {
+          ListItem() {
+            Row() {
+              Text(item.name)
+                .fontSize(20)
+                .width('90%')
+                .fontColor(Color.Black)
+              if (this.deviceList.indexOf(item) == this.selectedIndex) {
+                Image($r('app.media.checked'))
+                  .width('8%')
+                  .objectFit(ImageFit.Contain)
+              } else {
+                Image($r('app.media.uncheck'))
+                  .width('8%')
+                  .objectFit(ImageFit.Contain)
+              }
+            }
+            .height(55)
+            .onClick(() =>{
+              this.selectedIndex = index
+              this.controller.close();
+              this.startAbility(item.id, item.name, this.positionList)
+            })
+          }
+        }, item => item.id)
+      }
+
+      Button() {
+        Text('取消')
+          .fontColor('#0D9FFB')
+          .width('90%')
+          .textAlign(TextAlign.Center)
+          .fontSize(20)
+      }
+      .type(ButtonType.Capsule)
+      .backgroundColor(Color.White)
+      .onClick(() => {
+        this.controller.close()
+      })
     }
+    .backgroundColor(Color.White)
+    .border({ color: Color.White, radius: 20 })
+    .padding(10)
   }
 }
-
 
 @Entry
 @Component
@@ -74,27 +97,25 @@ struct Index {
     positionList: this.positionList
   })
   onCancel() {
-    console.info('Callback when the first button is clicked')
+    console.log('Callback when the first button is clicked')
   }
   onAccept() {
-    console.info('Click when confirm')
+    console.log('Click when confirm')
   }
   existApp() {
-    console.info('Click the callback in the blank area')
+    console.log('Click the callback in the blank area')
   }
 
   build() {
     Column({ space: 1 }) {
-      Flex() {
-        Image($r('app.media.goback')).width(70).height(70).position({ x: 30, y: 0 })
-          .onClick((event: ClickEvent) =>{
+      Row() {
+        Image($r('app.media.goback')).width(100).height(100).margin({left:10})
+          .onClick(() =>{
             this.goBack()
           })
-        Image($r('app.media.ic_hop')).width(70).height(70)
-          .align(Alignment.TopEnd)
-          .flexGrow(1)
-          .position({ x: 375, y: 0 })
-          .onClick((event: ClickEvent) =>{
+        Blank()
+        Image($r('app.media.ic_hop')).width(100).height(100).margin({right:10})
+          .onClick(() =>{
             this.onContinueAbilityClick()
           })
       }.backgroundColor(Color.Grey).width('100%').height('10%')
@@ -107,44 +128,41 @@ struct Index {
       }).width('100%').height('90%')
     }.height('100%').width('100%')
   }
-// 函数在创建自定义组件的新实例后，在执行其build函数之前执行
-  async aboutToAppear() {
-     console.info('DrawBoard[IndexPage] aboutToAppear begin');
-     this.initialData = []
-     let self = this
-     await featureAbility.getWant()
-       .then((Want) => {
-         self.positionList = JSON.parse(Want.parameters.positionList)
-         console.info('Operation successful. self.positionList: ' + JSON.stringify(self.positionList.length));
-       }).catch((error) => {
-       console.error('Operation failed. Cause: ' + JSON.stringify(error));
-     })
-     /*await this.kvStoreModel.get(CHANGE_POSITION,(data)=>{
-       console.info('DrawBoard[IndexPage] aboutToAppear data ='+data)
-       self.positionList = JSON.parse(data)
-     })*/
-     console.info('DrawBoard[IndexPage] aboutToAppear positionList length=' + this.positionList.length);
-
-     if (this.positionList.length > 0) {
-      this.positionList.forEach((num) => {
-        this.initialData.push(num);
+  // 函数在创建自定义组件的新实例后，在执行其build函数之前执行
+  aboutToAppear() {
+    this.grantPermission()
+    console.log('DrawBoard[IndexPage] aboutToAppear begin');
+    this.initialData = []
+    let self = this
+    featureAbility.getWant()
+      .then((Want) => {
+        self.positionList = JSON.parse(Want.parameters.positionList)
+        console.log('Operation successful. self.positionList: ' + JSON.stringify(self.positionList.length));
+      }).catch((error) => {
+      console.error('Operation failed. Cause: ' + JSON.stringify(error));
+    })
+    console.log('DrawBoard[IndexPage] aboutToAppear positionList length=' + this.positionList.length);
+    if (self.positionList.length > 0) {
+      self.positionList.forEach((num) => {
+        self.initialData.push(num);
       });
-      this.initDraw();
+      self.initDraw();
     }
-
-    this.kvStoreModel.setDataChangeListener((data) => {
+    console.log('DrawBoard[IndexPage] setDataChangeListener out setDataChangeListener')
+    self.kvStoreModel.setDataChangeListener((data) => {
+      console.log('DrawBoard[IndexPage] setDataChangeListener come in')
       self.positionList = [];
       data.updateEntries.forEach((num) => {
         const list = JSON.parse(num.value.value);
-        console.info('DrawBoard[IndexPage] setDataChangeListener list=' + JSON.stringify(list))
+        console.log('DrawBoard[IndexPage] setDataChangeListener list=' + JSON.stringify(list))
         if(list.length === 0) {
-          console.info('DrawBoard[IndexPage] setDataChangeListener list.length === 0')
+          console.log('DrawBoard[IndexPage] setDataChangeListener list.length === 0')
           self.pathCommands = DEfAULT_PATH_COMMAND
         } else{
           list.forEach((num) => {
             self.positionList.push(num);
           })
-          console.info('DrawBoard[IndexPage] setDataChangeListener positionList=' + JSON.stringify(this.positionList))
+          console.log('DrawBoard[IndexPage] setDataChangeListener positionList=' + JSON.stringify(self.positionList))
         }
         setTimeout(function() {
           self.redraw();
@@ -152,19 +170,25 @@ struct Index {
       });
     });
   }
-
+  grantPermission() {
+    console.log('MusicPlayer[IndexPage] grantPermission')
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.log(`MusicPlayer[IndexPage] grantPermission,requestPermissionsFromUser,result.requestCode=${result.requestCode}`)
+    })
+  }
   // 初始化画板轨迹
   initDraw() {
-    const self = this;
+    let self = this;
     self.pathCommands = ''
-    this.intervalID = setInterval(function() {
+    self.intervalID = setInterval(function() {
       if (self.initialData[0].isFirstPosition) {
         self.pathCommands += ' M' + self.initialData[0].positionX + ' ' + self.initialData[0].positionY
-        console.info('DrawBoard[IndexPage] initDraw pathCommands=' + self.pathCommands)
+        console.log('DrawBoard[IndexPage] initDraw pathCommands=' + self.pathCommands)
 
       } else {
         self.pathCommands += ' L' + self.initialData[0].positionX + ' ' +  self.initialData[0].positionY
-        console.info('DrawBoard[IndexPage] initDraw pathCommands=' + self.pathCommands)
+        console.log('DrawBoard[IndexPage] initDraw pathCommands=' + self.pathCommands)
       }
       self.initialData.shift();
 
@@ -176,17 +200,19 @@ struct Index {
   }
   // 轨迹重绘制
   redraw() {
-    console.info('DrawBoard[IndexPage] redraw positionList= ' + JSON.stringify(this.positionList))
+    console.log('DrawBoard[IndexPage] redraw positionList= ' + JSON.stringify(this.positionList))
     this.pathCommands = DEfAULT_PATH_COMMAND
     if (this.positionList.length > 0 ) {
       this.positionList.forEach((num) => {
-        console.info('DrawBoard[IndexPage] redraw num=' + JSON.stringify(num))
+        console.log('DrawBoard[IndexPage] redraw num=')
+        console.log('DrawBoard[IndexPage] redraw out isFirstPosition=' + num.isFirstPosition)
         if (num.isFirstPosition) {
+          console.log('DrawBoard[IndexPage] redraw isFirstPosition=' + num.isFirstPosition)
           this.pathCommands += ' M' + num.positionX + ' ' + num.positionY
-          console.info('DrawBoard[IndexPage] redraw pathCommands=' + this.pathCommands)
+          console.log('DrawBoard[IndexPage] redraw pathCommands=' + this.pathCommands)
         } else {
           this.pathCommands += ' L' + num.positionX + ' ' + num.positionY
-          console.info('DrawBoard[IndexPage] redraw pathCommands=' + this.pathCommands)
+          console.log('DrawBoard[IndexPage] redraw pathCommands=' + this.pathCommands)
         }
       });
     }
@@ -208,51 +234,51 @@ struct Index {
     }
   }
 
-   onContinueAbilityClick() {
-      console.info('DrawBoard[IndexPage] onContinueAbilityClick');
-      let self = this;
-      this.remoteDeviceModel.registerDeviceListCallback(() => {
-          console.info('DrawBoard[IndexPage] registerDeviceListCallback, callback entered');
-          var list = [];
-          list[0] = DEVICE_LIST_LOCALHOST
-          var deviceList = self.remoteDeviceModel.deviceList;
-          console.info('DrawBoard[IndexPage] on remote device updated, count=' + deviceList.length);
-          for (var i = 0; i < deviceList.length; i++) {
-              console.info('DrawBoard[IndexPage] device ' + i + '/' + deviceList.length + ' deviceId='
-              + deviceList[i].deviceId + ' deviceName=' + deviceList[i].deviceName + ' deviceType='
-              + deviceList[i].deviceType);
-              list[i + 1] = {
-                  name: deviceList[i].deviceName,
-                  id: deviceList[i].deviceId,
-              };
-          }
-          self.deviceList = list;
-          self.dialogController.open()
-      });
+  onContinueAbilityClick() {
+    console.log('DrawBoard[IndexPage] onContinueAbilityClick');
+    let self = this;
+    this.remoteDeviceModel.registerDeviceListCallback(() => {
+      console.log('DrawBoard[IndexPage] registerDeviceListCallback, callback entered');
+      var list = [];
+      list[0] = DEVICE_LIST_LOCALHOST
+      var deviceList = self.remoteDeviceModel.deviceList;
+      console.log('DrawBoard[IndexPage] on remote device updated, count=' + deviceList.length);
+      for (var i = 0; i < deviceList.length; i++) {
+        console.log('DrawBoard[IndexPage] device ' + i + '/' + deviceList.length + ' deviceId='
+        + deviceList[i].deviceId + ' deviceName=' + deviceList[i].deviceName + ' deviceType='
+        + deviceList[i].deviceType);
+        list[i + 1] = {
+          name: deviceList[i].deviceName,
+          id: deviceList[i].deviceId,
+        };
+      }
+      self.deviceList = list;
+      self.dialogController.open()
+    });
   }
 
-   startAbilityContinuation(deviceId: string, deviceName: string,positionList: any[] ) {
-        var params = {
-          positionList: JSON.stringify(positionList)
-        }
-        console.info('DrawBoard[IndexPage] featureAbility.startAbility positionList=' + JSON.stringify(positionList))
-        console.info('DrawBoard[IndexPage] featureAbility.startAbility deviceId=' + deviceId
-        + ' deviceName=' + deviceName);
-        var wantValue = {
-            bundleName: 'com.huawei.cookbook',
-            abilityName: 'com.huawei.distributedatabasedrawetsopenh.MainAbility',
-            deviceId: deviceId,
-            parameters: params
-        };
-
-        featureAbility.startAbility({
-            want: wantValue
-        }).then((data) => {
-            console.info('DrawBoard[IndexPage] featureAbility.startAbility finished, ' + JSON.stringify(data));
-        });
-        console.info('DrawBoard[IndexPage] featureAbility.startAbility want=' + JSON.stringify(wantValue));
-        console.info('DrawBoard[IndexPage] featureAbility.startAbility end');
+  startAbilityContinuation(deviceId: string, deviceName: string,positionList: any[] ) {
+    var params = {
+      positionList: JSON.stringify(positionList)
     }
+    console.log('DrawBoard[IndexPage] featureAbility.startAbility positionList=' + JSON.stringify(positionList))
+    console.log('DrawBoard[IndexPage] featureAbility.startAbility deviceId=' + deviceId
+    + ' deviceName=' + deviceName);
+    var wantValue = {
+      bundleName: 'com.huawei.cookbook',
+      abilityName: 'com.huawei.distributedatabasedrawetsopenh.MainAbility',
+      deviceId: deviceId,
+      parameters: params
+    };
+
+    featureAbility.startAbility({
+      want: wantValue
+    }).then((data) => {
+      console.log('DrawBoard[IndexPage] featureAbility.startAbility finished, ' + JSON.stringify(data));
+    });
+    console.log('DrawBoard[IndexPage] featureAbility.startAbility want=' + JSON.stringify(wantValue));
+    console.log('DrawBoard[IndexPage] featureAbility.startAbility end');
+  }
 
 
   onTouchEvent(event: TouchEvent) {
@@ -288,20 +314,19 @@ struct Index {
         break
     }
   }
-    pushData(position: any) {
-      this.isNeedSync = true;
-      this.positionList.push(position);
-      console.info('DrawBoard[IndexPage] pushData positionList 1 =' + JSON.stringify(this.positionList.length));
-      let self = this;
-      if (this.intervalID === 0) {
-        this.intervalID = setInterval(function () {
-          if (self.isNeedSync) {
-            self.kvStoreModel.put(CHANGE_POSITION, JSON.stringify(self.positionList));
-            console.info('DrawBoard[IndexPage] pushData positionList 2 =' + JSON.stringify(this.positionList.length));
-            // self.positionList = [];
-            self.isNeedSync = false;
-          }
-        }, 100);
+  pushData(position: any) {
+    this.isNeedSync = true;
+    this.positionList.push(position);
+    console.log('DrawBoard[IndexPage] pushData positionList 1 =' + JSON.stringify(this.positionList.length));
+    let self = this;
+    if (this.intervalID === 0) {
+      this.intervalID = setInterval(function () {
+        if (self.isNeedSync) {
+          self.kvStoreModel.put(CHANGE_POSITION, JSON.stringify(self.positionList));
+          console.log('DrawBoard[IndexPage] pushData positionList 2 =' + JSON.stringify(this.positionList.length));
+          self.isNeedSync = false;
+        }
+      }, 100);
     }
   }
 }
