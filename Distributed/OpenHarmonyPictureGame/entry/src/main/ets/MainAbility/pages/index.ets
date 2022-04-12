@@ -245,6 +245,7 @@ struct PictureGame {
 
   async aboutToAppear() {
     let self = this;
+    self.grantPermission();
     this.onRandom();
     // 当被拉起时，通过want传递的参数同步对端界面UI
     await featureAbility.getWant((error, want) => {
@@ -259,6 +260,13 @@ struct PictureGame {
         }
       }
     });
+  }
+
+  grantPermission(){
+    let context = featureAbility.getContext();
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'],666,function(result){
+      console.info('grantPermission,requestPermissionFromUser,result.requestCode= ${result.requestCode}')
+    })
   }
 
   onRandom() {
