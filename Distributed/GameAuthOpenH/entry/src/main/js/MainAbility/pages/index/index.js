@@ -134,7 +134,7 @@ export default {
         context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
             console.info(`[game] grantPermission,requestPermissionsFromUser`)
         })
-    }
+    },
     // 创建实例
     createDeviceManager() {
         if (dmClass != null) return;
