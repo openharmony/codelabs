@@ -7,7 +7,7 @@
 
 # 介绍<a name="ZH-CN_TOPIC_0000001248988041"></a>
 
-HUAWEI DevEco Device Tool（以下简称DevEco Device Tool）是面向智能设备开发者提供的一站式集成开发环境，支持代码编辑、编译、烧录和调试等功能，支持C/C++语言，以插件的形式部署在Visual Studio Code上。
+HUAWEI DevEco Device Tool（以下简称DevEco Device Tool）是面向智能设备开发者提供的一站式集成开发环境，支持代码编辑、编译、烧录和调试等功能，支持C/C++语言，以插件的形式部署在Visual Studio Code上，本片文章是基于3.0.0.300版本的DevEco Device Tool来进行安装的。
 
 # 环境准备<a name="ZH-CN_TOPIC_0000001204428052"></a>
 
@@ -49,7 +49,7 @@ DevEco Device Tool基于Visual Studio Code进行扩展，在Visual Studio Code�
 
 2.  下载[DevEco Device Tool 3.0 Beta2](https://device.harmonyos.com/cn/ide#download_beta)Linux版本，下载时，请先使用华为开发者帐号进行登录后下载。如未注册华为开发者账号，请先[注册](https://developer.huawei.com/consumer/cn/doc/start/registration-and-verification-0000001053628148)。
 3.  解压DevEco Device Tool软件包并对解压后的文件夹进行赋权。
-    1.  进入DevEco Device Tool软件包目录，执行如下命令解压软件包，其中devicetool-linux-tool-3.0.0.200.zip为软件包名称，请根据实际进行修改。
+    1.  进入DevEco Device Tool软件包目录，执行如下命令解压软件包，其中devicetool-linux-tool-3.0.0.300.zip为软件包名称，请根据实际进行修改。
 
         ```
         unzip devicetool-linux-tool-3.0.0.300.zip
