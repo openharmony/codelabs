@@ -222,8 +222,8 @@ export default {
      * 得到屏幕的宽度和高度
      */
     getScreenWidthAndHeight() {
-        this.screenWidth = 1150
-        this.screenHeight = 720
+        this.screenWidth = 720
+        this.screenHeight = 1150
         display.getDefaultDisplay((err, data) => {
             if (err) {
                 return;
