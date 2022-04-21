@@ -51,6 +51,15 @@ export default class KvStoreModel {
         self.kvManager.getKVStore(STORE_ID, options).then((store) => {
           console.info('DrawBoard[KvStoreModel] getKVStore success, kvStore=' + store);
           self.kvStore = store;
+          try {
+            self.kvStore.enableSync(true).then((err) => {
+              console.log('enableSync success');
+            }).catch((err) => {
+              console.log('enableSync fail ' + JSON.stringify(err));
+            });
+          }catch(e) {
+            console.log('EnableSync e ' + e);
+          }
           callback();
         });
         console.info('DrawBoard[KvStoreModel] kvManager.getKVStore end');
@@ -100,7 +109,7 @@ export default class KvStoreModel {
     let self = this;
     this.createKvStore(() => {
       console.info('DrawBoard[KvStoreModel] kvStore.on(dataChange) begin');
-      self.kvStore.on('dataChange', distributedData.SubscribeType.SUBSCRIBE_TYPE_ALL, (data: any) => {
+      self.kvStore.on('dataChange', 2, (data: any) => {
         console.info('DrawBoard[KvStoreModel] dataChange, ' + JSON.stringify(data));
         console.info('DrawBoard[KvStoreModel] dataChange, insert ' + data.insertEntries.length + ' udpate '
         + data.updateEntries.length);
