@@ -61,9 +61,9 @@ struct DetailTop {
     Column() {
       Row() {
         Image($r('app.media.icon_return'))
-          .height(40)
+          .height(20)
           .width(40)
-          .margin({left: 20})
+          .margin({left: 10})
           .onClick(() => {
             router.push({
               uri: "pages/HomePage"
