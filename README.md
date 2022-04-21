@@ -11,44 +11,45 @@
 为帮助开发者快速熟悉OpenHarmony的能力以及相关的应用开发流程，我们提供了一系列的基于趣味场景的应用示例，即Codelabs，开发者可以根据我们的文档一步步的学习和完成简单项目的开发。
 
 ## 目录<a name="sectionMenu"></a>
+
 - Ability
-  - [Page内和Page间导航跳转](https://gitee.com/openharmony/codelabs/tree/master/Ability/PageAbility)
+  - [Page内和Page间导航跳转](https://gitee.com/openharmony/codelabs/tree/master/Ability/PageAbility)（API8+）
 - ArkUI
-  - [极简声明式UI范式（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleGalleryEts)
-  - [购物应用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ShoppingEts)
-  - [购物应用（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ShoppingOpenHarmony)
-  - [自定义组件（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/JSCanvasComponet)
-  - [转场动画的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TransitionAnimtaionEts)
-  - [基础组件Slider的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SliderApplicationEts)
-  - [image、image-animator（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ClickableJsDemo)
-  - [动画样式（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/AnimationDemo)
-  - [dialog（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/DialogDemo)
-  - [input、label（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/InputApplication)
-  - [rating（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/RatingApplication)
-  - [slider（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SliderApplication)
-  - [switch、chart（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SwitchApplication)
-  - [流式布局（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/FlowLayoutEts)
-  - [弹窗（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CustomDialogEts)
-  - [一次开发多端部署（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/MultiDeploymentEts)
+  - [极简声明式UI范式（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleGalleryEts)（API8+）
+  - [购物应用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ShoppingEts)（API8+）
+  - [购物应用（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ShoppingOpenHarmony)（API8+）
+  - [自定义组件（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/JSCanvasComponet)（API8+）
+  - [转场动画的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TransitionAnimtaionEts)（API8+）
+  - [基础组件Slider的使用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SliderApplicationEts)（API8+）
+  - [image、image-animator（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ClickableJsDemo)（API8+）
+  - [动画样式（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/AnimationDemo)（API8+）
+  - [dialog（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/DialogDemo)（API8+）
+  - [input、label（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/InputApplication)（API8+）
+  - [rating（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/RatingApplication)（API8+）
+  - [slider（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SliderApplication)（API8+）
+  - [switch、chart（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SwitchApplication)（API8+）
+  - [流式布局（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/FlowLayoutEts)（API8+）
+  - [弹窗（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CustomDialogEts)（API8+）
+  - [一次开发多端部署（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/MultiDeploymentEts)（API8+）
 - 分布式
-  - [分布式调度启动远程FA](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteStartFA)
-  - [分布式新闻客户端](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)
-  - [分布式手写板（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)
-  - [分布式鉴权（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)
-  - [分布式游戏手柄（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/HandleGameApplication)
-  - [分布式邮件（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)
-  - [分布式亲子早教系统（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)
-  - [分布式遥控器（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)
+  - [分布式调度启动远程FA](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteStartFA)（API8+）
+  - [分布式新闻客户端](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)（API8+）
+  - [分布式手写板（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)（API8+）
+  - [分布式鉴权（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)（API8+）
+  - [分布式游戏手柄（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/HandleGameApplication)（API8+）
+  - [分布式邮件（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)（API8+）
+  - [分布式亲子早教系统（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)（API8+）
+  - [分布式遥控器（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)（API8+）
 - 媒体
-  - [图片编辑模板](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEditorTemplate)
-  - [图片常见操作](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageJsDemo)
-  - [简易视频播放器](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoOpenHarmony)
-  - [音频播放器](https://gitee.com/openharmony/codelabs/tree/master/Media/Audio_OH_ETS)
+  - [图片编辑模板](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEditorTemplate)（API8+）
+  - [图片常见操作](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageJsDemo)（API8+）
+  - [简易视频播放器](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoOpenHarmony)（API8+）
+  - [音频播放器](https://gitee.com/openharmony/codelabs/tree/master/Media/Audio_OH_ETS)（API9+）
 - 数据库
-  - [分布式数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/JsDistributedData)
-  - [关系型数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/JSRelationshipData)
-  - [轻量级偏好数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/Database)
-  - [备忘录（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/NotePad_OH_ETS)
+  - [分布式数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/JsDistributedData)（API8+）
+  - [关系型数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/JSRelationshipData)（API8+）
+  - [轻量级偏好数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/Database)（API8+）
+  - [备忘录（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/NotePad_OH_ETS)（API8+）
 - 设备开发
   - [轻量系统环境搭建指导](https://gitee.com/openharmony/codelabs/tree/master/Device/DeviceEnvironmentSetupGuide)
   - [日志、线程、定时器](https://gitee.com/openharmony/codelabs/tree/master/Device/%E6%97%A5%E5%BF%97%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%AE%9A%E6%97%B6%E5%99%A8)
@@ -59,7 +60,7 @@
   - [OpenHarmony最小系统移植](https://gitee.com/openharmony/codelabs/tree/master/Device/PortingOpenHarmony)
   - [HDF驱动模型Wi-Fi驱动](https://gitee.com/openharmony/codelabs/tree/master/Device/WifiDemo)
 - 三方库
-  - [VCard](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)
+  - [VCard](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)（API8+）
 
 ## 使用说明<a name="section1954919258619"></a>
 
@@ -78,4 +79,3 @@
 
 1.  HarmonyOS Codelabs仓：[harmonyos\_codelabs](https://gitee.com/harmonyos/harmonyos_codelabs)
 2.  HarmonyOS Codelabs官网：[HarmonyOS Codelabs](https://developer.harmonyos.com/cn/documentation/codelabs/)
-
