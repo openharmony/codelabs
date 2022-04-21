@@ -1,4 +1,4 @@
-# Windows搭建DevEco Device Tool及烧录
+# Windows搭建DevEco Device Tool及标准系统烧录
 
 -   [介绍](介绍.md)
 -   [系统要求](系统要求.md)
@@ -13,7 +13,7 @@
 
 # 介绍<a name="ZH-CN_TOPIC_0000001190944062"></a>
 
-开发者可通过快速掌握OpenHarmony标准系统的环境搭建及网口烧录知识。
+本片文章是基于3.0.0.300版本的DevEco Device Tool来进行烧录的,开发者通过本片文章可快速掌握OpenHarmony标准系统的环境搭建及网口烧录知识。
 
 # 系统要求<a name="ZH-CN_TOPIC_0000001190944954"></a>
 
@@ -22,7 +22,7 @@
 
 # 安装DevEco Device Tool<a name="ZH-CN_TOPIC_0000001192257516"></a>
 
-参考[搭建Windows开发环境](https://device.harmonyos.com/cn/docs/documentation/guide/ide-install-windows-0000001050164976)
+安装最新版本的DevEco Device Tool工具可参考[搭建Windows开发环境](https://device.harmonyos.com/cn/docs/documentation/guide/ide-install-windows-0000001050164976)
 
 # 获取烧录文件<a name="ZH-CN_TOPIC_0000001236704967"></a>
 
