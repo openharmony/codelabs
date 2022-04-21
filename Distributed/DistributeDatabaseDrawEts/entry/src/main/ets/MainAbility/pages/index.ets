@@ -4,7 +4,6 @@ import KvStoreModel from '../model/KvStoreModel';
 import RemoteDeviceModel from '../model/RemoteDeviceModel';
 var DEVICE_LIST_LOCALHOST = { name: '本机', id: 'localhost' };
 const CHANGE_POSITION = 'change_position';
-const DEfAULT_PATH_COMMAND = '';
 
 @CustomDialog
 struct CustomDialogExample {
@@ -73,21 +72,20 @@ struct CustomDialogExample {
 @Entry
 @Component
 struct Index {
-  @State startX: number = 0
-  @State startY: number = 0
-  @State moveX: number = 0
-  @State moveY: number = 0
-  @State endX: number = 0
-  @State endY: number = 0
-  @State pathCommands: string = DEfAULT_PATH_COMMAND
+  private startX: number = 0
+  private startY: number = 0
+  private moveX: number = 0
+  private moveY: number = 0
+  private endX: number = 0
+  private endY: number = 0
   @State deviceList: any[] = []
   private BUNDLE_NAME: string = "com.huawei.cookbook";
   private kvStoreModel: KvStoreModel = new KvStoreModel()
   private remoteDeviceModel: RemoteDeviceModel = new RemoteDeviceModel()
-  @State positionList: any[] = []
-  @State initialData: any[] = []
-  private isNeedSync: boolean = false
-  private intervalID: number = 0
+  private positionList: any[] = []
+  private initialData: any[] = []
+  private settings: RenderingContextSettings = new RenderingContextSettings(true)
+  private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings)
 
   dialogController: CustomDialogController = new CustomDialogController({
     builder: CustomDialogExample({ cancel: this.onCancel, confirm: this.onAccept, deviceList: this.deviceList,positionList: this.positionList,startAbility: this.startAbilityContinuation }),
@@ -119,33 +117,35 @@ struct Index {
             this.onContinueAbilityClick()
           })
       }.backgroundColor(Color.Grey).width('100%').height('10%')
-      Flex() {
-        Path().commands(this.pathCommands).strokeWidth(4).fill('none').stroke(Color.Black)
+      Row() {
+        Canvas(this.context)
           .width('100%')
           .height('100%')
+          .backgroundColor('#FFFFFF')
       }.onTouch((event: TouchEvent) => {
         this.onTouchEvent(event)
       }).width('100%').height('90%')
     }.height('100%').width('100%')
   }
   // 函数在创建自定义组件的新实例后，在执行其build函数之前执行
-  aboutToAppear() {
+  async aboutToAppear() {
     this.grantPermission()
     console.log('DrawBoard[IndexPage] aboutToAppear begin');
     this.initialData = []
     let self = this
-    featureAbility.getWant()
+    await featureAbility.getWant()
       .then((Want) => {
         self.positionList = JSON.parse(Want.parameters.positionList)
         console.log('Operation successful. self.positionList: ' + JSON.stringify(self.positionList.length));
       }).catch((error) => {
-      console.error('Operation failed. Cause: ' + JSON.stringify(error));
-    })
-    console.log('DrawBoard[IndexPage] aboutToAppear positionList length=' + this.positionList.length);
+        console.error('Operation failed. Cause: ' + JSON.stringify(error));
+      })
+    console.log('DrawBoard[IndexPage] aboutToAppear positionList length=' + self.positionList.length);
     if (self.positionList.length > 0) {
       self.positionList.forEach((num) => {
         self.initialData.push(num);
       });
+      console.log('DrawBoard[IndexPage] aboutToAppear initialData='+JSON.stringify(self.initialData))
       self.initDraw();
     }
     console.log('DrawBoard[IndexPage] setDataChangeListener out setDataChangeListener')
@@ -157,16 +157,13 @@ struct Index {
         console.log('DrawBoard[IndexPage] setDataChangeListener list=' + JSON.stringify(list))
         if(list.length === 0) {
           console.log('DrawBoard[IndexPage] setDataChangeListener list.length === 0')
-          self.pathCommands = DEfAULT_PATH_COMMAND
         } else{
           list.forEach((num) => {
             self.positionList.push(num);
           })
           console.log('DrawBoard[IndexPage] setDataChangeListener positionList=' + JSON.stringify(self.positionList))
         }
-        setTimeout(function() {
-          self.redraw();
-        }, 10);
+        self.redraw();
       });
     });
   }
@@ -179,40 +176,43 @@ struct Index {
   }
   // 初始化画板轨迹
   initDraw() {
-    let self = this;
-    self.pathCommands = ''
-    self.intervalID = setInterval(function() {
-      if (self.initialData[0].isFirstPosition) {
-        self.pathCommands += ' M' + self.initialData[0].positionX + ' ' + self.initialData[0].positionY
-        console.log('DrawBoard[IndexPage] initDraw pathCommands=' + self.pathCommands)
-
-      } else {
-        self.pathCommands += ' L' + self.initialData[0].positionX + ' ' +  self.initialData[0].positionY
-        console.log('DrawBoard[IndexPage] initDraw pathCommands=' + self.pathCommands)
+    this.initialData.forEach((point)=>{
+      if(point.isFirstPosition) {
+        this.context.beginPath()
+        this.context.lineWidth = 4
+        this.context.lineJoin = 'miter'
+        this.context.moveTo(point.positionX, point.positionY)
+      } else{
+        this.context.lineTo(point.positionX, point.positionY)
+        if(point.isEndPosition) {
+          this.context.stroke()
+          console.log('DrawBoard[IndexPage] initDraw context.stroke')
+        }
       }
-      self.initialData.shift();
-
-      if (self.initialData.length < 1) {
-        clearInterval(self.intervalID);
-        self.intervalID = 0;
-      }
-    }, 10);
+    })
   }
   // 轨迹重绘制
   redraw() {
     console.log('DrawBoard[IndexPage] redraw positionList= ' + JSON.stringify(this.positionList))
-    this.pathCommands = DEfAULT_PATH_COMMAND
+    this.context.clearRect(0,0, this.context.width,this.context.height)
     if (this.positionList.length > 0 ) {
       this.positionList.forEach((num) => {
         console.log('DrawBoard[IndexPage] redraw num=')
         console.log('DrawBoard[IndexPage] redraw out isFirstPosition=' + num.isFirstPosition)
         if (num.isFirstPosition) {
           console.log('DrawBoard[IndexPage] redraw isFirstPosition=' + num.isFirstPosition)
-          this.pathCommands += ' M' + num.positionX + ' ' + num.positionY
-          console.log('DrawBoard[IndexPage] redraw pathCommands=' + this.pathCommands)
+          this.context.beginPath()
+          this.context.lineWidth = 4
+          this.context.lineJoin = 'miter'
+          this.context.moveTo(num.positionX, num.positionY)
+          console.log('DrawBoard[IndexPage] redraw context.moveTo' + num.positionX+','+ num.positionY)
         } else {
-          this.pathCommands += ' L' + num.positionX + ' ' + num.positionY
-          console.log('DrawBoard[IndexPage] redraw pathCommands=' + this.pathCommands)
+          this.context.lineTo(num.positionX, num.positionY)
+          console.log('DrawBoard[IndexPage] redraw context.lineTo' + num.positionX+','+ num.positionY)
+          if(num.isEndPosition) {
+            this.context.stroke()
+            console.log('DrawBoard[IndexPage] redraw context.stroke')
+          }
         }
       });
     }
@@ -224,7 +224,6 @@ struct Index {
       for (let i = this.positionList.length - 1; i > -1; i--) {
         if (this.positionList[i].isFirstPosition) {
           this.positionList.pop();
-          this.redraw();
           break;
         } else {
           this.positionList.pop();
@@ -287,46 +286,46 @@ struct Index {
       case TouchType.Down:
         this.startX = event.touches[0].x
         this.startY = event.touches[0].y
-        this.pathCommands += ' M' + this.startX + ' ' + this.startY
         position.isFirstPosition = true;
         position.positionX = this.startX;
         position.positionY = this.startY;
+        position.isEndPosition = false
+        this.context.beginPath()
+        this.context.lineWidth = 4
+        this.context.lineJoin = 'miter'
+        this.context.moveTo(this.startX, this.startY)
         this.pushData(position);
         break;
       case TouchType.Move:
         this.moveX = event.touches[0].x
         this.moveY = event.touches[0].y
-        this.pathCommands += ' L' + this.moveX + ' ' + this.moveY
         position.isFirstPosition = false;
         position.positionX = this.moveX;
         position.positionY = this.moveY;
+        position.isEndPosition = false
+        this.context.lineTo(this.moveX, this.moveY)
         this.pushData(position);
         break;
       case TouchType.Up:
         this.endX = event.touches[0].x
         this.endY = event.touches[0].y
         position.isFirstPosition = false;
-        position.positionX = this.moveX;
-        position.positionY = this.moveY;
+        position.positionX = this.endX;
+        position.positionY = this.endY;
+        position.isEndPosition = true
+        this.context.stroke()
         this.pushData(position);
         break;
       default:
-        break
+        break;
     }
   }
   pushData(position: any) {
-    this.isNeedSync = true;
     this.positionList.push(position);
     console.log('DrawBoard[IndexPage] pushData positionList 1 =' + JSON.stringify(this.positionList.length));
-    let self = this;
-    if (this.intervalID === 0) {
-      this.intervalID = setInterval(function () {
-        if (self.isNeedSync) {
-          self.kvStoreModel.put(CHANGE_POSITION, JSON.stringify(self.positionList));
-          console.log('DrawBoard[IndexPage] pushData positionList 2 =' + JSON.stringify(this.positionList.length));
-          self.isNeedSync = false;
-        }
-      }, 100);
+    if(position.isEndPosition){
+      this.kvStoreModel.put(CHANGE_POSITION, JSON.stringify(this.positionList));
+      console.log('DrawBoard[IndexPage] pushData positionList 2 =' + JSON.stringify(this.positionList.length));
     }
   }
 }
