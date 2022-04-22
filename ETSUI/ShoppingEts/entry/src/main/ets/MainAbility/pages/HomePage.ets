@@ -31,7 +31,7 @@ struct Index {
   ]
 
   @Builder NavigationToolbar() {
-    Row() {
+    Flex({direction:FlexDirection.Row,wrap:FlexWrap.NoWrap,justifyContent:FlexAlign.SpaceAround}) {
       ForEach(this.Build, item => {
         Column() {
           Image(this.currentPage == item.num ? item.icon_after : item.icon)
@@ -43,7 +43,6 @@ struct Index {
         .onClick(() => {
           this.currentPage = item.num
         })
-        .margin({ left: 70 })
       })
     }
   }
