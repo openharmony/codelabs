@@ -85,7 +85,7 @@
                     {{ pageInfo.nextDayReach }}
                 </text>
             </div>
-            <div @click="selectCity" class="content-column-height">
+            <div  class="content-column-height">
                 <div class="content-column-width">
                     <text class="content-column-size-mar content-column-color">
                         {{ pageInfo.select }}
