@@ -477,7 +477,6 @@ export default {
   clickShoppingCart() {
     this.iconImageFlag = this.threeFlag;
     this.flag = this.threeFlag;
-    this.priceTotal = parseInt(this.zeroFlag);
     this.ifFlag();
   },
   clickMy() {
