@@ -111,10 +111,7 @@ export default {
     this.selectCityString = this.selectCityList.join('-');
   },
   selectCity() {
-    this.$element('simpleDialog').show();
-    prompt.showToast({
-      message: '选择'
-    });
+
   },
   selectSafeguard() {
     prompt.showToast({
