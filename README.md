@@ -51,14 +51,14 @@
   - [轻量级偏好数据库](https://gitee.com/openharmony/codelabs/tree/master/Data/Database)（API8+）
   - [备忘录（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/NotePad_OH_ETS)（API8+）
 - 设备开发
-  - [轻量系统环境搭建指导](https://gitee.com/openharmony/codelabs/tree/master/Device/DeviceEnvironmentSetupGuide)
-  - [日志、线程、定时器](https://gitee.com/openharmony/codelabs/tree/master/Device/%E6%97%A5%E5%BF%97%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%AE%9A%E6%97%B6%E5%99%A8)
-  - [利用PWM方波控制呼吸灯和蜂鸣器](https://gitee.com/openharmony/codelabs/tree/master/Device/%E5%88%A9%E7%94%A8PWM%E6%96%B9%E6%B3%A2%E6%8E%A7%E5%88%B6%E5%91%BC%E5%90%B8%E7%81%AF%E5%92%8C%E8%9C%82%E9%B8%A3%E5%99%A8)
-  - [利用GPIO点亮小灯泡、红绿灯](https://gitee.com/openharmony/codelabs/tree/master/Device/%E5%88%A9%E7%94%A8GPIO%E7%82%B9%E4%BA%AE%E5%B0%8F%E7%81%AF%E6%B3%A1%E3%80%81%E7%BA%A2%E7%BB%BF%E7%81%AF)
-  - [远程台灯](https://gitee.com/openharmony/codelabs/tree/master/Device/RemoteLamp)
-  - [智能猫眼](https://gitee.com/openharmony/codelabs/tree/master/Device/smart_cat_eye)
-  - [OpenHarmony最小系统移植](https://gitee.com/openharmony/codelabs/tree/master/Device/PortingOpenHarmony)
-  - [HDF驱动模型Wi-Fi驱动](https://gitee.com/openharmony/codelabs/tree/master/Device/WifiDemo)
+  - [轻量系统环境搭建指导](https://gitee.com/openharmony/codelabs/tree/master/Device/DeviceEnvironmentSetupGuide)（指导文档）
+  - [日志、线程、定时器](https://gitee.com/openharmony/codelabs/tree/master/Device/%E6%97%A5%E5%BF%97%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%AE%9A%E6%97%B6%E5%99%A8)（开发板类型：Hi3861，OpenHarmony系统：OpenHarmony 3.0 LTS）
+  - [利用PWM方波控制呼吸灯和蜂鸣器](https://gitee.com/openharmony/codelabs/tree/master/Device/%E5%88%A9%E7%94%A8PWM%E6%96%B9%E6%B3%A2%E6%8E%A7%E5%88%B6%E5%91%BC%E5%90%B8%E7%81%AF%E5%92%8C%E8%9C%82%E9%B8%A3%E5%99%A8)（开发板类型：Hi3861，OpenHarmony系统：OpenHarmony 3.0 LTS）
+  - [利用GPIO点亮小灯泡、红绿灯](https://gitee.com/openharmony/codelabs/tree/master/Device/%E5%88%A9%E7%94%A8GPIO%E7%82%B9%E4%BA%AE%E5%B0%8F%E7%81%AF%E6%B3%A1%E3%80%81%E7%BA%A2%E7%BB%BF%E7%81%AF)（开发板类型：Hi3861，OpenHarmony系统：OpenHarmony 3.0 LTS）
+  - [远程台灯](https://gitee.com/openharmony/codelabs/tree/master/Device/RemoteLamp)（开发板类型：Hi3861，OpenHarmony系统：OpenHarmony 3.0 LTS）
+  - [智能猫眼](https://gitee.com/openharmony/codelabs/tree/master/Device/smart_cat_eye)（开发板类型：Hi3516DV300，OpenHarmony系统：OpenHarmony 3.0.2 LTS）
+  - [OpenHarmony最小系统移植](https://gitee.com/openharmony/codelabs/tree/master/Device/PortingOpenHarmony)（开发板类型：RK3568，OpenHarmony系统：Rk3568 3.1 Release）
+  - [HDF驱动模型Wi-Fi驱动](https://gitee.com/openharmony/codelabs/tree/master/Device/WifiDemo)（开发板类型：Hi3516DV300，OpenHarmony系统：OpenHarmony 3.1 Release）
 - 三方库
   - [VCard](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)（API8+）
 
