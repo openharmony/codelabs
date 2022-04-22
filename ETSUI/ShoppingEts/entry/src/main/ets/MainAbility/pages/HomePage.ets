@@ -47,14 +47,6 @@ struct Index {
     }
   }
 
-  @Builder NavigationTitle() {
-    Row() {
-        Text("ShoppingCart")
-    }
-    .width('100%')
-    .backgroundColor('#FF00BFFF')
-  }
-
   build() {
     Column() {
       Navigation() {
@@ -73,68 +65,12 @@ struct Index {
         .height('100%')
       }
       .toolBar(this.NavigationToolbar)
-      .title("ShoppingCart")
+      .title("购物车")
       .hideTitleBar(this.currentPage == 1 ? false : true)
       .hideBackButton(true)
     }
   }
 }
-
-
-@Component
-struct HomeBottom {
-  @Consume currentPage: number
-  private iconPathTmp: IconImage[] = getIconPath()
-  private iconPathSelectsTmp: IconImage[] = getIconPathSelect()
-  @State iconPath: IconImage[] = getIconPath()
-
-  build() {
-    Row() {
-      Image(this.iconPath[0].imgSrc)
-        .objectFit(ImageFit.Contain)
-        .height(120)
-        .width(120)
-        .margin({ left: 80, top: 20 })
-        .renderMode(ImageRenderMode.Original)
-        .onClick(() => {
-          this.iconPath[0] = this.iconPathTmp[0]
-          this.iconPath[1] = this.iconPathTmp[1]
-          this.iconPath[2] = this.iconPathTmp[2]
-          this.currentPage = 1
-        })
-      Image(this.iconPath[1].imgSrc)
-        .objectFit(ImageFit.Contain)
-        .height(120)
-        .width(120)
-        .margin({ left: 80, top: 20 })
-        .renderMode(ImageRenderMode.Original)
-        .onClick(() => {
-          this.iconPath[0] = this.iconPathSelectsTmp[0]
-          this.iconPath[1] = this.iconPathSelectsTmp[1]
-          this.iconPath[2] = this.iconPathTmp[2]
-          this.currentPage = 2
-        })
-      Image(this.iconPath[2].imgSrc)
-        .objectFit(ImageFit.Contain)
-        .height(120)
-        .width(120)
-        .margin({ left: 80, top: 20 })
-        .renderMode(ImageRenderMode.Original)
-        .onClick(() => {
-          this.iconPath[0] = this.iconPathSelectsTmp[0]
-          this.iconPath[1] = this.iconPathTmp[1]
-          this.iconPath[2] = this.iconPathSelectsTmp[2]
-          this.currentPage = 3
-        })
-
-    }
-    .backgroundColor(Color.White)
-    .alignItems(VerticalAlign.Bottom)
-    .width('100%')
-    .height('10%')
-  }
-}
-
 
 @Component
 struct GoodsList {

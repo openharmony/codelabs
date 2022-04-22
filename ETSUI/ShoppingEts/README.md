@@ -59,7 +59,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
 
 1.  顶部的Tabs组件。
 2.  中间TabContent组件内包含List组件。其中List组件的item是一个水平布局，由一个垂直布局和一个Image组件组成；item中的垂直布局由3个Text组件组成。
-3.  底部的导航页签。
+3.  底部的导航页签navigation组件。
 
 实现步骤如下：
 
@@ -335,7 +335,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
     }
     ```
 
-4.  在HomePage.ets中创建文件入口组件（Index）以及底部页签导航组件（HomeBottom），导入需要使用到的数据实体类以及需要使用的方法和组件，每个page文件都必须包含一个入口组件，使用@Entry修饰，HomePage文件中的入口组件（Index）代码如下：
+4.  在HomePage.ets中创建文件入口组件（Index）以及底部页签导航组件（Navigation），导入需要使用到的数据实体类以及需要使用的方法和组件，每个page文件都必须包含一个入口组件，使用@Entry修饰，HomePage文件中的入口组件（Index）代码如下：
 
     ```
     import {GoodsData} from '../model/GoodsData'
