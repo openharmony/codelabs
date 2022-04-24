@@ -1,9 +1,15 @@
 import router from '@system.router';
 import featureAbility from '@ohos.ability.featureAbility';
+import app from '@system.app'
 
 @Entry
 @Component
 struct Index {
+  onBackPress() {
+    app.terminate();
+    return true;
+  }
+
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
       Text('This is ability1 index page')
@@ -13,7 +19,8 @@ struct Index {
         Text('Click to ability1 second page')
           .fontSize(25)
           .fontWeight(FontWeight.Medium)
-          .margin({left:20,right:20})
+          .margin({ left: 20, right: 20 })
+          .fontColor(Color.White)
       }
       .padding({ top: 20, left: 20, right: 20, bottom: 20 })
       .margin({ top: 20 })
@@ -24,7 +31,8 @@ struct Index {
       Button() {
         Text('Click to ability2 index page')
           .fontSize(25)
-          .margin({left:20,right:20})
+          .margin({ left: 20, right: 20 })
+          .fontColor(Color.White)
       }
       .padding({ top: 20, left: 20, right: 20, bottom: 20 })
       .margin({ top: 20 })
@@ -47,7 +55,8 @@ struct Index {
       Button() {
         Text('Click to ability2 second page')
           .fontSize(25)
-          .margin({left:20,right:20})
+          .margin({ left: 20, right: 20 })
+          .fontColor(Color.White)
       }
       .padding({ top: 20, left: 20, right: 20, bottom: 20 })
       .margin({ top: 20 })
