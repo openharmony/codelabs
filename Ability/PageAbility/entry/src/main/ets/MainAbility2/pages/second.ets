@@ -1,6 +1,25 @@
+import featureAbility from '@ohos.ability.featureAbility';
+
 @Entry
 @Component
 struct Second {
+    onBackPress() {
+    //启动ability
+    let str = {
+      "want": {
+        "bundleName": "com.example.pageabilityopenh",
+        "abilityName": "com.example.pageabilityopenh.MainAbility",
+      },
+    };
+    featureAbility.startAbility(str)
+      .then((data) => {
+        console.info('Operation successful. Data: ' + JSON.stringify(data))
+      }).catch((error) => {
+      console.error('Operation failed. Cause: ' + JSON.stringify(error));
+    })
+    return true;
+  }
+
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
       Button() {
@@ -8,6 +27,7 @@ struct Second {
           .fontSize(25)
           .fontWeight(FontWeight.Medium)
           .margin({left:20,right:20})
+          .fontColor(Color.White)
       }
       .padding({ top: 20, left: 20, right: 20, bottom: 20 })
     }
