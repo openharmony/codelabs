@@ -422,7 +422,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
 
 # 构建购物车页签
 
-![](figures/shopingCart2.png)
+![](figures/shopingCart3.png)
 
 从上面效果图可以看出，主界面购物车页签主要由下面三部分组成：
 
