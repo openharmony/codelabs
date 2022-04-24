@@ -14,6 +14,7 @@
  */
 
 import KvStoreModel from '../../../model/KvStoreModel.js';
+import featureAbility from '@ohos.ability.featureAbility';
 
 export default {
   data: {
@@ -28,6 +29,7 @@ export default {
   },
   onInit() {
     this.title = this.$t('strings.world');
+    this.grantPermission();
 
     // type表示操作0：插入数据、1：修改数据：2：删除数据
     this.kvStoreModel.setOnMessageReceivedListener((k, y, type) => {
@@ -46,6 +48,13 @@ export default {
       }
     });
   },
+   grantPermission() {
+        console.info('Calc[IndexPage] grantPermission')
+        let context = featureAbility.getContext()
+        context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+            console.info(`Calc[IndexPage] grantPermission,requestPermissionsFromUser,result.requestCode=${result.requestCode}`)
+        })
+    },
 
   getIndex(key) {
     for (let i = 0; i < this.contactList.length; i++) {
