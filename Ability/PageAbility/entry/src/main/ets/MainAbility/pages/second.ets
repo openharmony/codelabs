@@ -8,6 +8,7 @@ struct Second {
           .fontSize(25)
           .fontWeight(FontWeight.Medium)
           .margin({left:20,right:20})
+          .fontColor(Color.White)
       }
       .padding({ top: 20, left: 20, right: 20, bottom: 20 })
     }
