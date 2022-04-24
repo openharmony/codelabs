@@ -59,7 +59,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
 
 1.  顶部的Tabs组件。
 2.  中间TabContent组件内包含List组件。其中List组件的item是一个水平布局，由一个垂直布局和一个Image组件组成；item中的垂直布局由3个Text组件组成。
-3.  底部的导航页签。
+3.  底部的导航页签navigation组件。
 
 实现步骤如下：
 
@@ -335,117 +335,98 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
     }
     ```
 
-4.  在HomePage.ets中创建文件入口组件（Index）以及底部页签导航组件（HomeBottom），导入需要使用到的数据实体类以及需要使用的方法和组件，每个page文件都必须包含一个入口组件，使用@Entry修饰，HomePage文件中的入口组件（Index）代码如下：
+4.  在HomePage.ets中创建文件入口组件（Index）以及底部页签导航组件（Navigation），导入需要使用到的数据实体类以及需要使用的方法和组件，每个page文件都必须包含一个入口组件，使用@Entry修饰，HomePage文件中的入口组件（Index）代码如下：
 
     ```
-    import {GoodsData} from '../model/GoodsData'
-    import {initializeOnStartup,getIconPath,getIconPathSelect} from '../model/GoodsDataModels'
-    import {ShoppingCart} from './ShoppingCartPage.ets'
-    import {MyInfo} from './MyPage.ets'
-    import router from '@system.router'
+    import { GoodsData, IconImage } from '../model/GoodsData'
+    import { initializeOnStartup, getIconPath, getIconPathSelect } from '../model/GoodsDataModels'
+    import { ShoppingCart } from './ShoppingCartPage.ets'
+    import { MyInfo } from './MyPage.ets'
+    import router from '@system.router';
+    
     @Entry
     @Component
     struct Index {
       @Provide currentPage: number = 1
       private goodsItems: GoodsData[] = initializeOnStartup()
+      @State Build: Array<Object> = [
+        {
+          icon: $r('app.media.icon_home'),
+          icon_after: $r('app.media.icon_buy1'),
+          text: '首页',
+          num: 0
+        },
+        {
+          icon: $r('app.media.icon_shopping_cart'),
+          icon_after: $r('app.media.icon_shopping_cart_select'),
+          text: '购物车',
+          num: 1
+        },
+        {
+          icon: $r('app.media.icon_my'),
+          icon_after: $r('app.media.icon_my_select'),
+          text: '我的',
+          num: 2
+        }
+      ]
+    
+      @Builder NavigationToolbar() {
+        Flex({direction:FlexDirection.Row,wrap:FlexWrap.NoWrap,justifyContent:FlexAlign.SpaceAround}) {
+          ForEach(this.Build, item => {
+            Column() {
+              Image(this.currentPage == item.num ? item.icon_after : item.icon)
+                .width(25)
+                .height(25)
+              Text(item.text)
+                .fontColor(this.currentPage == item.num ? "#ff7500" : "#000000")
+            }
+            .onClick(() => {
+              this.currentPage = item.num
+            })
+          })
+        }
+      }
+    
       build() {
         Column() {
-          Scroll(){
-            Column() {
-              if (this.currentPage == 1) {
+          Navigation() {
+            Flex() {
+              if (this.currentPage == 0) {
                 GoodsHome({ goodsItems: this.goodsItems })
-              } else if (this.currentPage == 2) {
-                //购物车列表
-                ShoppingCart()
-              } else {
-                //我的
-                MyInfo()
+              }
+              if (this.currentPage == 1) {
+                ShoppingCart() //购物车列表
+              }
+              if (this.currentPage == 2) {
+                MyInfo() //我的
               }
             }
             .width('100%')
-            .flexGrow(1)
-            }
-          .scrollable(ScrollDirection.Vertical)
-          HomeBottom()
+            .height('100%')
+          }
+          .toolBar(this.NavigationToolbar)
+          .title("购物车")
+          .hideTitleBar(this.currentPage == 1 ? false : true)
+          .hideBackButton(true)
         }
-        .height('93%')
-        .width('100%')
-        .backgroundColor("white")
-    
       }
     }
     ```
-
-    从入口组件的代码中可以看出，我们定义了一个全局变量currentPage ，并且使用@provide修饰，在其子组件\(HomeBottom\)中使用@Consume修饰。当子组件currentPage发生变化的时候，父组件currentPage也会发生变化，会重新加载页面，显示不同的页签。在入口组件中，通initializeOnStartup获取商品列表数据（goodsItems）并传入GoodsHome组件中。底部组件是由一个横向的图片列表组成，iconPath是底部初始状态下的3张图片路径数组。遍历iconPath数组，使用Image组件设置图片路径并添加到List中，给每个Image组件设置点击事件，点击更换底部3张图片。在HomeBottom中，iconPath使用的是@State修饰，当iconPath数组内容变化时，页面组件有使用到的地方都会随之发生变化。HomeBottom组件效果图如下：
-
+    
+    从入口组件的代码中可以看出，我们定义了一个全局变量currentPage ，当currentPage发生变化的时候，会显示不同的页签。在入口组件中，通initializeOnStartup获取商品列表数据（goodsItems）并传入GoodsHome组件中。效果图如下：
+    
     ![](figures/3.png)
-
-    代码如下：
-
-    ```
-    @Component
-    struct HomeBottom {
-      @Consume currentPage: number
-      private iconPathTmp: IconImage[] = getIconPath()
-      private iconPathSelectsTmp: IconImage[] = getIconPathSelect()
-      @State iconPath: IconImage[] = getIconPath()
     
-      build() {
-        Row() {
-          Image(this.iconPath[0].imgSrc)
-            .objectFit(ImageFit.Contain)
-            .height(120)
-            .width(120)
-            .margin({left:80,top: 20})
-            .renderMode(ImageRenderMode.Original)
-            .onClick(()=>{
-              this.iconPath[0] = this.iconPathTmp[0]
-              this.iconPath[1] = this.iconPathTmp[1]
-              this.iconPath[2] = this.iconPathTmp[2]
-              this.currentPage = 1
-            })
-          Image(this.iconPath[1].imgSrc)
-            .objectFit(ImageFit.Contain)
-            .height(120)
-            .width(120)
-            .margin({left:80,top: 20})
-            .renderMode(ImageRenderMode.Original)
-            .onClick(()=>{
-              this.iconPath[0] = this.iconPathSelectsTmp[0]
-              this.iconPath[1] = this.iconPathSelectsTmp[1]
-              this.iconPath[2] = this.iconPathTmp[2]
-              this.currentPage = 2
-            })
-          Image(this.iconPath[2].imgSrc)
-            .objectFit(ImageFit.Contain)
-            .height(120)
-            .width(120)
-            .margin({left:80,top: 20})
-            .renderMode(ImageRenderMode.Original)
-            .onClick(()=>{
-              this.iconPath[0] = this.iconPathSelectsTmp[0]
-              this.iconPath[1] = this.iconPathTmp[1]
-              this.iconPath[2] = this.iconPathSelectsTmp[2]
-              this.currentPage = 3
-            })
     
-        }
-        .backgroundColor(Color.White)
-        .alignItems(VerticalAlign.Bottom)
-        .width('100%')
-        .height('10%')
-      }
-    }
-    ```
 
 
 # 构建购物车页签
 
-![](figures/shopingCart2.png)
+![](figures/shopingCart3.png)
 
 从上面效果图可以看出，主界面购物车页签主要由下面三部分组成：
 
-1.  顶部的Text组件。
+1.  顶部的title,由Navigation组件title属性设置。
 2.  中间的List组件，其中List组件的item是一个水平的布局内包含一个toggle组件，一个Image组件和一个垂直布局，其item中的垂直布局是由2个Text组件组成。
 3.  底部一个水平布局包含两个Text组件。
 
@@ -467,17 +448,6 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
     
       build() {
         Column() {
-          Column() {
-            Text('ShoppingCart')
-              .fontColor(Color.Black)
-              .fontSize(25)
-              .margin({ left: 60, right: 60 })
-              .align(Alignment.Center)
-          }
-          .backgroundColor('#FF00BFFF')
-          .width('100%')
-          .height(30)
-    
           ShopCartList({ goodsItems: this.goodsItems });
           ShopCartBottom()
         }
@@ -487,7 +457,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
       }
     }
     ```
-
+    
 3.  新建ShopCartList组件用于存放购物车商品列表，ShopCartList组件效果图如下：
 
     ![](figures/6.png)
@@ -1212,6 +1182,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
 12. [Column组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-column.md)
 13. [Flex组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-flex.md)
 14. [Scroll组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-scroll.md)
+14. [Navigation组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-navigation.md)
 
 # 总结
 
