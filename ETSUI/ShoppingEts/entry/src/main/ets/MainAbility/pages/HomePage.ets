@@ -1,7 +1,7 @@
 import { GoodsData, IconImage } from '../model/GoodsData'
 import { initializeOnStartup, getIconPath, getIconPathSelect } from '../model/GoodsDataModels'
-import { ShoppingCart } from './ShoppingCartPage.ets'
-import { MyInfo } from './MyPage.ets'
+import { ShoppingCart } from './ShoppingCartPage'
+import { MyInfo } from './MyPage'
 import router from '@system.router';
 
 @Entry
@@ -35,11 +35,15 @@ struct Index {
       ForEach(this.Build, item => {
         Column() {
           Image(this.currentPage == item.num ? item.icon_after : item.icon)
-            .width(25)
-            .height(25)
+            .width(35)
+            .height(35)
+            .margin({bottom:2,top:2})
           Text(item.text)
             .fontColor(this.currentPage == item.num ? "#ff7500" : "#000000")
+            .fontSize(15)
+            .margin({bottom:5})
         }
+        .height(80)
         .onClick(() => {
           this.currentPage = item.num
         })
@@ -58,7 +62,7 @@ struct Index {
             ShoppingCart() //购物车列表
           }
           if (this.currentPage == 2) {
-            MyInfo() //我的
+             MyInfo() //我的
           }
         }
         .width('100%')
