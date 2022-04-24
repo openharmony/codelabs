@@ -91,8 +91,8 @@ function onStartRemoteAbility(deviceId, dataList: any[]) {
     remoteDeviceId: localDeviceId
   }
   var wantValue = {
-    bundleName: 'com.example.helloworld0218',
-    abilityName: 'com.example.ohmailets.MainAbility',
+    bundleName: 'com.huawei.cookbook',
+    abilityName: 'com.example.entry.MainAbility',
     deviceId: deviceId,
     parameters: params
   };
@@ -136,8 +136,8 @@ async function onConnectRemoteService(deviceId) {
   connectedAbility = await featureAbility.connectAbility(
     {
       deviceId: deviceId,
-      bundleName: "com.example.helloworld0218",
-      abilityName: "com.example.ohmailets.ServiceAbility",
+      bundleName: "com.huawei.cookbook",
+      abilityName: "com.example.entry.ServiceAbility",
     },
     {
       onConnect: onConnectCallback,
