@@ -60,7 +60,6 @@
                         <text class="delete" onclick="deleteContact($idx)">删除</text>
                     </div>
                 </div>
-                <divider class="list-item-divider" vertical="false"></divider>
             </div>
         </list-item>
     </list>
