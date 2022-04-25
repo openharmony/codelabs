@@ -44,7 +44,7 @@ class FirstServiceAbilityStub extends rpc.RemoteObject {
                 data: 'init data',
                 // 有序公共事件
                 isOrdered: true,
-                bundleName: 'com.huawei.cookbook',
+                bundleName: 'com.example.ohmailets',
                 parameters: params
 
             }
