@@ -40,8 +40,8 @@ function RegisterDeviceListCallback() {
       discovereDeviceIdList.push(remoteDeviceModel.discoverList[i].deviceId);
     }
     DeviceIdList.length = 0;
-    for (var j = 0; j < deviceSize; i++) {
-      DeviceIdList.push(remoteDeviceModel.deviceList[j].deviceId);
+    for (var i = 0; i < deviceSize; i++) {
+      DeviceIdList.push(remoteDeviceModel.deviceList[i].deviceId);
     }
 
     if (deviceSize === 0) {
@@ -91,8 +91,8 @@ function onStartRemoteAbility(deviceId, dataList: any[]) {
     remoteDeviceId: localDeviceId
   }
   var wantValue = {
-    bundleName: 'com.huawei.cookbook',
-    abilityName: 'com.example.entry.MainAbility',
+    bundleName: 'com.example.ohmailets',
+    abilityName: 'com.example.ohmailets.MainAbility',
     deviceId: deviceId,
     parameters: params
   };
@@ -136,8 +136,8 @@ async function onConnectRemoteService(deviceId) {
   connectedAbility = await featureAbility.connectAbility(
     {
       deviceId: deviceId,
-      bundleName: "com.huawei.cookbook",
-      abilityName: "com.example.entry.ServiceAbility",
+      bundleName: "com.example.ohmailets",
+      abilityName: "com.example.ohmailets.ServiceAbility",
     },
     {
       onConnect: onConnectCallback,
