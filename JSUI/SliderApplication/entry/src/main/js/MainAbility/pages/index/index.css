@@ -24,11 +24,7 @@
 }
 /* 图片布局 */
 image {
-    width: 100px;
-    height: 100px;
-    animation-name: Go;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
+    animation: Go 3s infinite linear;
 }
 /* 图片旋转角度：0到360° */
 @keyframes Go

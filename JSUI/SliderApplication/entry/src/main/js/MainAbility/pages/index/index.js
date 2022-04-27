@@ -15,7 +15,7 @@
 export default {
   data: {
     imgUrl: '/common/images/windmill.png',
-    animationDuration: '5000ms',
+    animationDuration: 5,
     animationDurationNum: 5000,
     speed: 50,
     minSpeed: 0,
@@ -23,7 +23,9 @@ export default {
     imageSize: 1,
     size: 50,
     minSize: 0,
-    maxSize: 100
+    maxSize: 100,
+    picSize: '100px',
+    picSizeNum: 100
   },
   // 改变转速
   changeValue(e) {
@@ -38,6 +40,7 @@ export default {
     if (e.mode === 'end' || e.mode === 'click') {
       this.size = e.value;
       this.imageSize = this.size / 50 < 0.1 ? 0.1 : this.size / 50;
+      this.picSize = this.picSizeNum * this.imageSize + 'px'
     }
   }
 };
