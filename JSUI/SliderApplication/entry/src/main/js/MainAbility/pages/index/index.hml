@@ -13,7 +13,7 @@
 
 <div class="container">
     <div class="image-block">
-        <image id="image" src="{{imgUrl}}" style="transform: scale({{imageSize}}); animation-duration: {{animationDuration}};"/>
+        <image id="image" src="{{imgUrl}}" style="width: {{picSize}}; height: {{picSize}}; animation-duration: {{animationDuration}};"/>
     </div>
     <div class="slider-block">
         <text>
