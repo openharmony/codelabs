@@ -70,12 +70,5 @@
 
 ## 约束与限制<a name="section682025019613"></a>
 
-1.  安装运行应用示例之前，请先通过config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，可尝试通过修改该字段使其可以在相应类型的设备上运行（config.json文件一般在代码的entry/src/main路径下，不同的Codelabs可能会有不同）。
-2.  配置开发环境时，如果您想让应用示例运行到HarmonyOS上，请参考[DevEco Studio使用说明](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/tools_overview-0000001053582387)。如果您想让应用示例运行到OpenHarmony上，请参考[DevEco Studio（OpenHarmony）使用指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/Readme-CN.md)。
-3.  IDE版本及配套SDK问题，可前往[DevEco Studio版本说明](https://developer.harmonyos.com/cn/docs/documentation/doc-releases/release_notes-0000001057597449)来查看详细的IDE、SDK、插件及Gradle配套版本。
-4.  所有HarmonyOS相关Codelabs代码已被全部迁移至[Harmony组织](https://gitee.com/harmonyos)之下的[harmonyos\_codelabs](https://gitee.com/harmonyos/harmonyos_codelabs)仓中，本仓中不再体现。
-
-## 相关仓<a name="section01752910717"></a>
-
-1.  HarmonyOS Codelabs仓：[harmonyos\_codelabs](https://gitee.com/harmonyos/harmonyos_codelabs)
-2.  HarmonyOS Codelabs官网：[HarmonyOS Codelabs](https://developer.harmonyos.com/cn/documentation/codelabs/)
+1.  安装应用示例之前，请先查看"README_zh.md"文件来确认应用示例是否为stage模型，若为stage模型需要查看entry/src/main路径下的module.json5文件中的"deviceType"字段来确认该应用支持的设备类型；否则为FA模型，查看entry/src/main路径下的config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，两种模型都可尝试通过修改该字段使其可以在相应类型的设备上运行。
+2.  IDE版本及配套SDK问题，可前往[DevEco Studio版本说明](https://developer.harmonyos.com/cn/docs/documentation/doc-releases/release_notes-0000001057597449)来查看详细的IDE、SDK、插件及Gradle配套版本。
