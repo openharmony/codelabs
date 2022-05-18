@@ -1,15 +1,6 @@
-# Windows搭建DevEco Device Tool及标准系统烧录
+# Windows搭建DevEco Device Tool及烧录
 
--   [介绍](介绍.md)
--   [系统要求](系统要求.md)
--   [安装DevEco Device Tool](安装DevEco-Device-Tool.md)
--   [获取烧录文件](获取烧录文件.md)
--   [创建工程](创建工程.md)
--   [配置烧录选项](配置烧录选项.md)
--   [配置串口及网口协议](配置串口及网口协议.md)
--   [设置网口烧录的IP地址信息](设置网口烧录的IP地址信息.md)
--   [开始烧录](开始烧录.md)
--   [镜像运行（可选）](镜像运行（可选）.md)
+
 
 # 介绍<a name="ZH-CN_TOPIC_0000001190944062"></a>
 
