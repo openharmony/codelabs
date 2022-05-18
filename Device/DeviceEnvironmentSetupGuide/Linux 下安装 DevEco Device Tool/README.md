@@ -1,8 +1,5 @@
 # Linux 下安装 DevEco Device Tool
 
--   [介绍](介绍.md)
--   [环境准备](环境准备.md)
--   [安装 DevEco Device Tool](安装-DevEco-Device-Tool.md)
 
 
 # 介绍<a name="ZH-CN_TOPIC_0000001248988041"></a>

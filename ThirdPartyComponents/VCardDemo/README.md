@@ -33,14 +33,6 @@
     2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
 
-# 添加依赖
-
-工程创建完成后，在项目根目录下存在 package.json文件，根目录下运行命令。
-
-配置仓库：npm config set @ohos:registry=https://repo.harmonyos.com/npm/
-
-安装依赖：npm install @ohos/vcard
-
 # 具体用法
 
 1.  导入类
@@ -77,7 +69,7 @@
 
 通过本篇Codelab，您可以学到：
 
-openHarmony三方库使用。
+OpenHarmony三方库使用。
 
 # 参考
 
