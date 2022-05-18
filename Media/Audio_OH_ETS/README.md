@@ -294,4 +294,4 @@
 
 # 参考
 
-gitee：JS音频录制应用
+[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Media/Audio_OH_ETS)
