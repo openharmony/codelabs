@@ -63,7 +63,6 @@
     ENCODING=QUOTED-PRINTABLE:vnd.android.cursor.item/nickname;
     =e6=98=b5=e7=a7=b0=e5=b0=8f=e5=bc=a0;;;;;;;;;;;;;; END:VCAR
     ```
-    ```
 
 # 恭喜你
 
