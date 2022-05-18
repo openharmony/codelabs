@@ -71,7 +71,7 @@
 
 # 5.代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在[参考](zh-cn_topic_0000001193093116.md)中提供下载方式，整个工程的代码结构如下：
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在[参考](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)中提供下载方式，整个工程的代码结构如下：
 
 ![](figures/zh-cn_image_0000001192614852.png)
 

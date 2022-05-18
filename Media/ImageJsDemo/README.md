@@ -8,17 +8,13 @@ OpenHarmony 基于JS扩展的类Web开发范式支持图片业务的开发，本
 
 # 2.相关概念
 
-[image组件] (https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-image.md)
-：图片组件，用来渲染展示图片。
+[image组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-image.md)：图片组件，用来渲染展示图片。
 
-[button组件] (https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-button.md)
-：按钮组件，用于实现点击效果并实现点击触发事件。
+[button组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-button.md)：按钮组件，用于实现点击效果并实现点击触发事件。
 
-[div组件] (https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-container-div.md)
-：基础容器组件，用作页面结构的根节点或将内容进行分组。
+[div组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-container-div.md)：基础容器组件，用作页面结构的根节点或将内容进行分组。
 
-[text组件] (https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-text.md)
-：文本组件，用于呈现一段信息。
+[text组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-text.md)：文本组件，用于呈现一段信息。
 
 # 3.搭建OpenHarmony环境
 
