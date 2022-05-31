@@ -42,9 +42,9 @@ OpenHarmony的ArkUI（基于JS扩展的类Web开发范式）提供了常用的�
 
 3. 搭建开发环境
 
-   1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-   2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
-   3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
+   1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
+   2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-js.md#%E5%88%9B%E5%BB%BAjs%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+   3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8) 。
 
 
 # 4.将组件添加到布局文件中
@@ -388,7 +388,7 @@ changeBar() {
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >样例中当我们设置switch为动态时，使用setInterval定时器，每秒动态生成数据展示。
 
-# 7.恭喜你
+# 7.恭喜您
 
 在本篇Codelab中，我们主要为大家讲解了如下JS基础组件
 
@@ -396,7 +396,3 @@ changeBar() {
 -   chart
 
 通过一个代码示例，利用switch开关设置chart图形数据的动态变换，从布局、样式、响应事件三个层面，逐步为大家进行代码讲解，希望通过本教程，各位开发者可以对以上基础组件具有更深刻的认识。
-
-# 8.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SwitchApplication)
