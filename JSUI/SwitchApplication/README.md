@@ -388,7 +388,7 @@ changeBar() {
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >样例中当我们设置switch为动态时，使用setInterval定时器，每秒动态生成数据展示。
 
-# 7.恭喜你
+# 7.恭喜您
 
 在本篇Codelab中，我们主要为大家讲解了如下JS基础组件
 

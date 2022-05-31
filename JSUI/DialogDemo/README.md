@@ -367,14 +367,10 @@ export default {
 };
 ```
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001231725625"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001231725625"></a>
 
 在本篇Codelab中，我们主要为大家讲解了如下JS组件
 
 -   dialog
 
 通过一个代码示例，实现dialog的不同呈现效果，从布局、样式、响应事件三个层面，逐步为大家进行代码讲解。希望通过本教程，各位开发者可以对以上组件具有更深刻的认识。
-
-# 参考<a name="ZH-CN_TOPIC_0000001231525575"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/DialogDemo)

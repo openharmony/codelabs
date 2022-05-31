@@ -661,6 +661,6 @@ export default {
 };
 ```
 
-# 9.恭喜你
+# 9.恭喜您
 
 在本篇Codelab中，我们主要学习了OpenHarmony分布式调度启动远程FA的实现。希望通过本教程，各位开发者可以对OpenHarmony的分布式能力有一个深刻的理解。

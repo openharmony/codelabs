@@ -1156,15 +1156,7 @@ OpenHarmony  ArkUI框架提供了丰富的动画组件和接口，开发者可�
       }
     }
     ```
-
-
-# 完整代码
-
-链接如下：
-
-[gitee源码](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ShoppingEts)
-
-# 相关概念与参考
+# 相关概念**与参考**
 
 ## API 参考
 

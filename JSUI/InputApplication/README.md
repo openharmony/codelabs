@@ -357,14 +357,10 @@ optionselect(e) {
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >样例中我们使用了一张input输入框必填标识图片，它放在js/default/common.images目录下，命名为require.png
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001186722184"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001186722184"></a>
 
 在本篇Codelab中，我们主要为大家讲解了如下ArkUI（基于JS扩展的类Web开发范式）基础组件
 
 -   input
 
 通过一个代码示例，实现input组件表单，从布局、样式、响应事件三个层面，逐步为大家进行代码讲解。希望通过本教程，各位开发者可以对以上基础组件具有更深刻的认识。
-
-# 参考<a name="ZH-CN_TOPIC_0000001231563317"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/InputApplication)

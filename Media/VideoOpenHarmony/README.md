@@ -129,7 +129,7 @@ export default {
 
 本篇Codelab我们最终构建了一个JS版本的视频播放器，应用包含两级页面，分别是主页面和播放页面，两个页面都展示了丰富的JS UI组件，本篇Codelab我们学会了swiper、list容器组件的使用和video媒体组件的使用。
 
-# 恭喜你
+# 恭喜您
 
 目前你已经成功完成了Codelab并且学到了：
 

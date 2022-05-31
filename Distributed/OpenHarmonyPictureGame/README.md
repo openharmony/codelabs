@@ -657,11 +657,6 @@ onRemoteRequest(code, data, reply, option) {
 
 在FA中订阅到Service服务发布的"publish\_moveImage"事件后，在SubscribeCallBack\(\)回调中重新赋值imageIndexForPosition数组与pictureList数组，从而同步更新界面UI。
 
-# 完整代码<a name="ZH-CN_TOPIC_0000001249204215"></a>
-
-[gitee源码](https://gitee.com/openharmony/codelabs/edit/master/Distributed/OpenHarmonyPictureGame)
-
-
 # 相关概念与参考<a name="ZH-CN_TOPIC_0000001204484232"></a>
 
 [PageAbility开发说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md)

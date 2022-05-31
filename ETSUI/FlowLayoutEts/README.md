@@ -299,8 +299,3 @@ TextInput：提供单行文本输入组件。
 -   TextInput组件的使用
 -   button组件的使用
 -   text组件的使用
-
-# 9.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/FlowLayoutEts)
-

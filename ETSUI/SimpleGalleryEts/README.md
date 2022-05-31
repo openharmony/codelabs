@@ -452,7 +452,7 @@ export struct HomeTabComponent {
   .sharedTransition(this.shareId, { duration: 500, curve: Curve.Linear })
   ```
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001237085377"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001237085377"></a>
 
 目前你已经成功完成了Codelab并且学到了：
 
@@ -460,8 +460,3 @@ export struct HomeTabComponent {
 -   如何通过极简声明式UI范式完成自定义弹窗。
 -   如何通过极简声明式UI范式完成页面跳转及数据传递。
 -   如何通过极简声明式UI范式完成动画添加。
-
-# 参考<a name="ZH-CN_TOPIC_0000001192445396"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleGalleryEts)
-

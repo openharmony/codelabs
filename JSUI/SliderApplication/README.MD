@@ -342,7 +342,7 @@ export default {
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >样例中我们使用了一张风车图片，它放在js/default/common.images目录下，命名为windmill.png
 
-# 7.恭喜你
+# 7.恭喜您
 
 在本篇Codelab中，我们主要为大家讲解了如下JS基础组件
 

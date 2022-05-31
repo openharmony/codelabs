@@ -169,14 +169,10 @@ rating组件的属性说明可参考下表：
 }
 ```
 
-# 6.恭喜你
+# 6.恭喜您
 
 在本篇Codelab中，我们主要为大家讲解了如下JS基础组件
 
 -   rating
 
 通过一个代码示例，实现自定义星级打分以及显示星级平均分，从布局、样式、响应事件三个层面，逐步为大家进行代码讲解。希望通过本教程，各位开发者可以对以上基础组件具有更深刻的认识。
-
-# 7.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/RatingApplication)
