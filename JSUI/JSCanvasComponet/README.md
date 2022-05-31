@@ -333,17 +333,9 @@ draw() {
    },
    ```
    
-# 恭喜你
+# 恭喜您
 
 通过本教程的学习，您已学会了如何使用自定义组件实现圆形抽奖转盘。
-
-# 参考
-
-[gitee](https://gitee.com/openharmony/codelabs/tree/master/JSUI/JSCanvasComponet)
-
-
-
-
 
 
 

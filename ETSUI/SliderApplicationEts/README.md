@@ -202,7 +202,7 @@ Slider({value: this.imageSize, min: 0.5, max: 2.5, step: 0.1,style:SliderStyle.O
 
 自此我们已经完成了所有的工作：使用Slider、Image、Text组件，实现了一个可以调节风车大小和转速的简易应用。
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001235087515"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001235087515"></a>
 
 在本篇Codelab中，我们主要为大家讲解了部分基础组件的使用，让大家可以通过简单的代码，上手eTS的开发，我们主要介绍了：
 
@@ -211,7 +211,3 @@ Slider({value: this.imageSize, min: 0.5, max: 2.5, step: 0.1,style:SliderStyle.O
 -   @Builder注解的使用
 
 同时逐步分解代码，和大家一起完成了的应用开发。希望通过本教程，各位开发者可以对基础组件有一个初步的了解，并对声明式编程框架具有新的认识。
-
-# 参考<a name="ZH-CN_TOPIC_0000001189407568"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SliderApplicationEts)

@@ -319,7 +319,3 @@ List({ initialIndex: 0}) {
 ```
 
 # 恭喜你<a name="ZH-CN_TOPIC_0000001236998993"></a>
-
-# 参考<a name="ZH-CN_TOPIC_0000001192039060"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/MultiDeploymentEts)

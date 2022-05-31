@@ -175,12 +175,8 @@
 
 更多动画样式可以参考[动画样式](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-common-animation.md)章节。
 
-# 6.恭喜你
+# 6.恭喜您
 
 在本篇Codelab中，我们主要为大家讲解了ArkUI（基于JS扩展的类Web开发范式）通用动画样式的使用。
 
 通过一个代码示例，实现image组件的平移、缩放、旋转和透明度变化动效。希望通过本教程，各位开发者可以对JS通用动画样式具有更深刻的认识。
-
-# 7.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/AnimationDemo)

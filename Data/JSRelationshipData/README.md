@@ -138,7 +138,7 @@ export default class KvStoreModel {
     }
     ```
 	
-# 恭喜你
+# 恭喜您
 
 您已经成功地学习了如何通过getRdbStore创建关系型数据库，并提供数据库表格数据的增、删、改、查API接口。
 

@@ -636,10 +636,6 @@ if (code == 6) {
 }
 ```
 
-# 9.完整代码
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)
-
 # 10.相关概念与参考
 
 [PageAbility开发说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md)

@@ -615,10 +615,6 @@ onRemoteRequest(code, data, reply, option) {
 
 在接收到消息后，把接收到的图片位置数组放入params中，然后发布名称为"publish\_moveImage"的有序公共事件。
 
-# 完整代码<a name="ZH-CN_TOPIC_0000001214139916"></a>
-
-[gitee源码](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)
-
 # 总结<a name="ZH-CN_TOPIC_0000001214299872"></a>
 
 -   应用间跨设别通讯是通过featureAbility.connectAbility连接远端Service服务成功后，再通过RPC相关API来进行消息传递。

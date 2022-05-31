@@ -192,7 +192,7 @@ setOnMessageReceivedListener(callback) {
   });
 }
 ```
-# 恭喜你
+# 恭喜您
 
 通过本Codelab的学习，您已经学会了分布式数据库服务的基础操作（创建、新增、删除、同步）。
 

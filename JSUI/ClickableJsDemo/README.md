@@ -474,7 +474,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
    };
    ```
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001231397833"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001231397833"></a>
 
 1.  image
     -   image的src属性可以指定图片资源位置。
@@ -486,7 +486,3 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）提供了常用的图�
 
 
 通过本代码示，实现了触碰 image改变图片的大小、边框、透明度，点击切换图片；点击image-animator切换帧动画图片资源以及播放帧动画。
-
-# 参考<a name="ZH-CN_TOPIC_0000001231279403"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ClickableJsDemo)
