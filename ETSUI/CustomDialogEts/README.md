@@ -218,11 +218,7 @@ Button('Customization dialog').onClick(() => {
 .margin({ top: 60 }).width(300)
 ```
 
-# 7.恭喜你
+# 7.恭喜您
 
 -   AlertDialog可以实现警告弹窗效果。
 -   可以通过CustomDialogController类显示自定义弹窗。
-
-# 8.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CustomDialogEts)

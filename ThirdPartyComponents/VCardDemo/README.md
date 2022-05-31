@@ -64,12 +64,8 @@
     =e6=98=b5=e7=a7=b0=e5=b0=8f=e5=bc=a0;;;;;;;;;;;;;; END:VCAR
     ```
 
-# 恭喜你
+# 恭喜您
 
 通过本篇Codelab，您可以学到：
 
 OpenHarmony三方库使用。
-
-# 参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)
