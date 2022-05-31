@@ -289,9 +289,3 @@
 
 -   如何使用AudioRecorder录制音频。
 -   如何使用AudioPlayer播放音频。
-
-
-
-# 参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Media/Audio_OH_ETS)
