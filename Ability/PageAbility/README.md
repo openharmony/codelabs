@@ -152,7 +152,3 @@ Button() {
 2、跳转到指定其他Ability的首页；
 
 3、跳转到指定其他Ability的指定页面（非首页）;
-
-# 参考<a name="ZH-CN_TOPIC_0000001188508144"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Ability/PageAbility)
