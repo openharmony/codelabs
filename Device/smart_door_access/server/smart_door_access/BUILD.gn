@@ -1,0 +1,79 @@
+# Copyright (C) 2021 Huawei Device Co., Ltd.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+import("//build/ohos.gni")
+
+config("my_config") {
+  include_dirs = [
+    "include",
+    "//third_party/node/src",
+    "//native_engine",
+    "//utils/native/base/include",
+    "//utils/system/safwk/native/include",
+    "//foundation/communication/wifi/services/wifi_standard/wifi_framework/common/log",
+    "//foundation/communication/wifi/interfaces/innerkits/native_cpp/wifi_standard/interfaces",
+    "//base/hiviewdfx/hilog/interfaces/native/innerkits/include",
+    "//foundation/communication/wifi/interfaces/innerkits/native_cpp/wifi_standard/include",
+    "//foundation/communication/wifi/services/wifi_standard/wifi_framework/common/net_helper",
+    "//base/notification/ces_standard/frameworks/core/include",
+    "//foundation/multimedia/audio_standard/interfaces/innerkits/native/audiocommon/include",
+    "//foundation/multimedia/audio_standard/frameworks/innerkitsimpl/common/include",
+  ]
+}
+
+ohos_executable("smart_door_access_server") {
+  install_enable = true
+  sources = [
+    "src/main.cpp",
+    "src/audio.cpp",
+    "src/hotspot.cpp",
+    "src/tcp.cpp",
+  ]
+  cflags = [ "-fPIC" ]
+  cflags += [ "-Wall" ]
+  cflags_cc = cflags
+
+  configs = [ ":my_config" ]
+
+  deps = [
+    "//base/hiviewdfx/hilog/interfaces/native/innerkits:libhilog",
+    "//base/notification/ces_standard/frameworks/core:cesfwk_core",
+    "//base/notification/ces_standard/frameworks/native:cesfwk_innerkits",
+    "//foundation/aafwk/standard/interfaces/innerkits/want:want",
+    "//foundation/ace/napi:ace_napi",
+    "//foundation/communication/wifi/interfaces/innerkits/native_cpp/wifi_standard:wifi_sdk",
+    "//utils/native/base:utils",
+    "//foundation/multimedia/audio_standard/interfaces/innerkits/native/audiorenderer:audio_renderer"
+  ]
+
+  external_deps = [
+    "hiviewdfx_hilog_native:libhilog",
+    "ipc:ipc_core"
+  ]
+
+  part_name = "smart_door_access"
+  subsystem_name = "demo"
+}
+
+ohos_prebuilt_etc("closeLock_wav") {
+  source = "wav/closeLock.wav"
+  module_install_dir = "data"
+  part_name = "smart_door_access"
+}
+
+ohos_prebuilt_etc("openLock_wav") {
+  source = "wav/openLock.wav"
+  module_install_dir = "data"
+  part_name = "smart_door_access"
+}
+
