@@ -23,7 +23,7 @@ struct Index {
 
     Row() {
       Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.SpaceEvenly }) {
-        TextButton({ content: '像素介绍' ,onclick: () => {
+        TextButton({ content: '像素介绍', onclick: () => {
           router.push({url:  "pages/pixelUnitsPage",})
         }})
         TextButton({ content: '像素转换', onclick: () => {
