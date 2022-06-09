@@ -23,7 +23,7 @@ DevEco Device Tool支持Hi3861V100开发板的源码一键编译功能，支持W
 
 **下载并安装DevEco Device Tool（Linux）**
 
-参考[搭建Ubuntu开发环境](https://gitee.com/openharmony/codelabs/blob/master/Device/DeviceEnvironmentSetupGuide/Linux%20%E4%B8%8B%E5%AE%89%E8%A3%85%20DevEco%20Device%20Tool/Linux%20%E4%B8%8B%E5%AE%89%E8%A3%85%20DevEco%20Device%20Tool.md)
+参考[搭建Ubuntu开发环境](https://device.harmonyos.com/cn/docs/documentation/guide/ide-install-ubuntu-0000001072959308)
 
 **下载并安装DevEco Device Tool（Windows）**
 
