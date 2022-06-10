@@ -13,7 +13,7 @@
 
 # 安装DevEco Device Tool<a name="ZH-CN_TOPIC_0000001192257516"></a>
 
-安装最新版本的DevEco Device Tool工具可参考[搭建Windows开发环境](https://device.harmonyos.com/cn/docs/documentation/guide/ide-install-windows-0000001050164976)
+下载最新Windows版本[DevEco Device Tool](https://docs.openharmony.cn/pages/v3.1/zh-cn/device-dev/get-code/gettools-ide.md/#%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7huawei-deveco-device-tool)
 
 # 获取烧录文件<a name="ZH-CN_TOPIC_0000001236704967"></a>
 
