@@ -44,7 +44,7 @@ DevEco Device Tool基于Visual Studio Code进行扩展，在Visual Studio Code�
 
         ![](figures/zh-cn_image_0000001248709583.png)
 
-2.  下载[DevEco Device Tool 3.0 Beta2](https://device.harmonyos.com/cn/ide#download_beta)Linux版本，下载时，请先使用华为开发者帐号进行登录后下载。如未注册华为开发者账号，请先[注册](https://developer.huawei.com/consumer/cn/doc/start/registration-and-verification-0000001053628148)。
+2.  下载最新Linux版本[DevEco Device Tool](https://docs.openharmony.cn/pages/v3.1/zh-cn/device-dev/get-code/gettools-ide.md/#%E8%8E%B7%E5%8F%96%E8%AE%BE%E5%A4%87%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7huawei-deveco-device-tool)，下载时，请先使用华为开发者帐号进行登录后下载。如未注册华为开发者账号，请先[注册](https://developer.huawei.com/consumer/cn/doc/start/registration-and-verification-0000001053628148)。
 3.  解压DevEco Device Tool软件包并对解压后的文件夹进行赋权。
     1.  进入DevEco Device Tool软件包目录，执行如下命令解压软件包，其中devicetool-linux-tool-3.0.0.300.zip为软件包名称，请根据实际进行修改。
 
@@ -90,5 +90,4 @@ DevEco Device Tool基于Visual Studio Code进行扩展，在Visual Studio Code�
 5.  安装完成后，在Ubuntu左下角的![](figures/zh-cn_image_0000001248714253.png)中，启动Visual Studio Code，出现以下界面，至此DevEco Device Tool Ubuntu开发环境安装完成。
 
     ![](figures/zh-cn_image_0000001204114680.png)
-
 

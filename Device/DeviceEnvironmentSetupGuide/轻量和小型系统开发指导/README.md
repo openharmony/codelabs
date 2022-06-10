@@ -23,11 +23,11 @@ DevEco Device Tool支持Hi3861V100开发板的源码一键编译功能，支持W
 
 **下载并安装DevEco Device Tool（Linux）**
 
-参考[搭建Ubuntu开发环境](https://device.harmonyos.com/cn/docs/documentation/guide/ide-install-ubuntu-0000001072959308)
+参考[搭建Ubuntu开发环境](https://gitee.com/openharmony/codelabs/tree/master/Device/DeviceEnvironmentSetupGuide/Linux%20%E4%B8%8B%E5%AE%89%E8%A3%85%20DevEco%20Device%20Tool)
 
 **下载并安装DevEco Device Tool（Windows）**
 
-参考[搭建Windows开发环境](https://device.harmonyos.com/cn/docs/documentation/guide/ide-install-windows-0000001050164976)
+参考[搭建Windows开发环境](https://gitee.com/openharmony/codelabs/tree/master/Device/DeviceEnvironmentSetupGuide/Windows%E6%90%AD%E5%BB%BADevEco%20Device%20Tool%E5%8F%8A%E7%83%A7%E5%BD%95)
 
 # 获取源码<a name="ZH-CN_TOPIC_0000001234850965"></a>
 
@@ -226,4 +226,3 @@ Hi3861开发板，整板共2MB FLASH，352KB RAM。在编写业务代码时，�
 </tr>
 </tbody>
 </table>
-
