@@ -10,7 +10,7 @@
 
 # 相关概念
 
-**[web组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-web.md#loadurl)：**提供具有网页显示能力的Web组件。
+[web组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-web.md#loadurl)：提供具有网页显示能力的Web组件。
 
 # 开发环境
 
