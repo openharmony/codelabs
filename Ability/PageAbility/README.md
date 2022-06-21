@@ -17,13 +17,13 @@
 
 Ability：Ability是应用所具备能力的抽象，也是应用程序的重要组成部分。
 
-[PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/page-ability.md)：Page模板（以下简称“Page”）是FA唯一支持的模板，用于提供与用户交互的能力。
+[PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md) ：Page模板（以下简称“Page”）是FA唯一支持的模板，用于提供与用户交互的能力。
 
 # 搭建OpenHarmony环境<a name="ZH-CN_TOPIC_0000001188758428"></a>
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**Hi3516DV300**开发板为例，参照以下步骤进行：
 
-1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）
+1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96) ：标准系统解决方案（二进制）
 
    以3.0版本为例：
 
@@ -37,15 +37,9 @@ Ability：Ability是应用所具备能力的抽象，也是应用程序的重要
 
 3. 搭建开发环境
 
-   1.  开始前请参考[下载与安装软件](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/software_install-0000001053582415)、[配置开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-sdk.md)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/use-wizard-to-create-project.md)创建工程，使用JS或者eTS语言开发、“Application”为例，模板选择“\[Standard\]Empty Ability”。
-   3.  工程创建完成后，可参考下面章节进行代码编写，使用真机进行调测：
-
-   -   [配置OpenHarmony应用签名信息](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md)
-   -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
-   -   工程示例：
-
-   ![](figures/截图.png)
+   1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
+   2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+   3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8) 。
 
 # 任务一：Ability内页面跳转<a name="ZH-CN_TOPIC_0000001188668058"></a>
 
@@ -92,7 +86,7 @@ Ability：Ability是应用所具备能力的抽象，也是应用程序的重要
    import featureAbility from '@ohos.ability.featureAbility';
    ```
 
-2. 在MainAbility/pages/index.ets中添加按钮，并为按钮添加文本、样式和点击事件，点击后跳转到MainAbility2的index页面，通过featureAbility.startAbility实现，调用featureAbility.startAbility时，这里参数want里主要传递bundleName和abilityName；详情请参看[启动本地PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/page-ability.md#%E5%90%AF%E5%8A%A8%E6%9C%AC%E5%9C%B0pageability)。点击按钮触发点击事件后会默认跳转到MainAbility2的index页面。
+2. 在MainAbility/pages/index.ets中添加按钮，并为按钮添加文本、样式和点击事件，点击后跳转到MainAbility2的index页面，通过featureAbility.startAbility实现，调用featureAbility.startAbility时，这里参数want里主要传递bundleName和abilityName；详情请参看[启动本地PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md#%E5%90%AF%E5%8A%A8%E6%9C%AC%E5%9C%B0pageability)。点击按钮触发点击事件后会默认跳转到MainAbility2的index页面。
 
    ```
    Button() {
@@ -149,7 +143,7 @@ Button() {
       })
 ```
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001233909219"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001233909219"></a>
 
 学会了如何进行Ability 内部的页面跳转和Ability之间的页面跳转。即如下三种场景：
 
@@ -158,7 +152,3 @@ Button() {
 2、跳转到指定其他Ability的首页；
 
 3、跳转到指定其他Ability的指定页面（非首页）;
-
-# 参考<a name="ZH-CN_TOPIC_0000001188508144"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Ability/PageAbility)

@@ -33,17 +33,14 @@
 
 2. 搭建烧录环境。
 
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
-    2.  完成RK3568开发板的烧录
-
-    -   [DevEco Device Tool编译源码烧录](https://device.harmonyos.com/cn/docs/documentation/guide/ide-rk3568-upload-0000001239220669)
-    -   [每日构建版本烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-running-rk3568-burn.md)
+   1. [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
+   2. [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-running-rk3568-burning.md)
 
 3. 搭建开发环境。
 
-    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
-    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
+    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-js.md#%E5%88%9B%E5%BB%BAjs%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”） ，选择JS或者eTS语言开发。
+    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8) 。
 
 # 4.分布式组网
 
@@ -506,8 +503,8 @@
 
 # 9.游戏：图形的运动、碰撞与合成
 
--   [图形的运动](#section187941120145510)
--   [图形的碰撞与合成](#section66477253562)
+-   [图形的运动](#section1089827124123)
+-   [图形的碰撞与合成](#section284523516123)
 
 如下图所示，按照从左到右的顺序，相同的图形碰撞合成下一个图形，最终合成OpenHarmony图形。
 
@@ -517,7 +514,7 @@
 
 ![](figures/10.gif)
 
-## 图形的运动
+## 图形的运动<a name="section1089827124123"></a>
 
 1. 在index.js的data下定义图片资源数组imgArray和显示在屏幕中图片的数组modes。代码如下：
 
@@ -633,7 +630,7 @@
    ```
 
 
-## 图形的碰撞与合成
+## 图形的碰撞与合成<a name="section284523516123"></a>
 
 这部分仅介绍核心的思路，具体的实现过程读者可自行完成，其达到的效果图如下：
 
@@ -663,13 +660,9 @@
    }
    ```
 
-# 10.恭喜你
+# 10.恭喜您
 
 通过本篇Codelab，您可以学到：
 
 -   JS如何分布式拉起FA
 -   Ability启动模式
-
-# 11.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)

@@ -1,7 +1,7 @@
 {
   "app": {
     "vendor": "example",
-    "bundleName": "com.example.GameAuthOpenH",
+    "bundleName": "com.example.gameauthopenh",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -57,6 +57,11 @@
           "designWidth": 720,
           "autoDesignWidth": false
         }
+      }
+    ],
+    "reqPermissions": [
+      {
+        "name": "ohos.permission.DISTRIBUTED_DATASYNC"
       }
     ]
   }

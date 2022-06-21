@@ -8,13 +8,13 @@ OpenHarmony 基于JS扩展的类Web开发范式支持图片业务的开发，本
 
 # 2.相关概念
 
-[image组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：图片组件，用来渲染展示图片。
+[image组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-image.md)：图片组件，用来渲染展示图片。
 
-[button组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-button.md)：按钮组件，用于实现点击效果并实现点击触发事件。
+[button组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-button.md)：按钮组件，用于实现点击效果并实现点击触发事件。
 
-[div组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-container-div.md)：基础容器组件，用作页面结构的根节点或将内容进行分组。
+[div组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-container-div.md)：基础容器组件，用作页面结构的根节点或将内容进行分组。
 
-[text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-text.md)：文本组件，用于呈现一段信息。
+[text组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-text.md)：文本组件，用于呈现一段信息。
 
 # 3.搭建OpenHarmony环境
 
@@ -34,15 +34,10 @@ OpenHarmony 基于JS扩展的类Web开发范式支持图片业务的开发，本
 
 3. 搭建开发环境
 
-   1.  开始前请参考[下载与安装软件](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/software_install-0000001053582415)、[配置开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-sdk.md)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/use-wizard-to-create-project.md)创建工程，使用JS或者eTS语言开发、“Application”为例，模板选择“\[Standard\]Empty Ability”。
-   3.  工程创建完成后，可参考下面章节进行代码编写，使用真机进行调测：
+   1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-js.md#%E5%88%9B%E5%BB%BAjs%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+   3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
 
-   -   [配置OpenHarmony应用签名信息](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md)
-   -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
-   -   工程示例：
-
-   ![](figures/截图.png)
 
 # 4.代码结构解读
 
@@ -292,7 +287,7 @@ OpenHarmony 基于JS扩展的类Web开发范式支持图片业务的开发，本
    }
    ```
 
-# 7.恭喜你
+# 7.恭喜您
 
 恭喜你已经成功完成了本篇Codelab，并且学到了：
 
@@ -300,7 +295,3 @@ OpenHarmony 基于JS扩展的类Web开发范式支持图片业务的开发，本
 -   button组件的使用
 -   text组件的使用
 -   图片的旋转、剪裁、缩放、镜像四种常见操作
-
-# 8.参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageJsDemo)

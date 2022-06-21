@@ -1,13 +1,16 @@
 {
-  "name": ""myapplication",
+  "name": "myapplication",
   "version": "1.0.0",
   "ohos": {
     "org": "huawei",
     "buildTool": "hvigor",
     "directoryLevel": "project"
   },
+  "description": "example description",
+  "repository": {},
+  "license": "ISC",
   "dependencies": {
-    "@ohos/hvigor": "1.0.4-rc",
-    "@ohos/hvigor-ohos-plugin": "1.0.4-rc"
+    "@ohos/hvigor": "1.0.6",
+    "@ohos/hvigor-ohos-plugin": "1.0.6"
   }
 }

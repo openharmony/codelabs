@@ -17,8 +17,8 @@ import featureAbility from '@ohos.ability.featureAbility';
 import prompt from '@system.prompt';
 import rpc from "@ohos.rpc";
 import commonEvent from '@ohos.commonEvent';
-import RemoteDeviceModel from '../../model/RemoteDeviceModel.ets';
-import TextAlign from './css.ets'
+import RemoteDeviceModel from '../../model/RemoteDeviceModel';
+//import TextAlign from './css'
 
 
 var connectedAbility;
@@ -40,8 +40,8 @@ function RegisterDeviceListCallback() {
       discovereDeviceIdList.push(remoteDeviceModel.discoverList[i].deviceId);
     }
     DeviceIdList.length = 0;
-    for (var j = 0; j < deviceSize; i++) {
-      DeviceIdList.push(remoteDeviceModel.deviceList[j].deviceId);
+    for (var i = 0; i < deviceSize; i++) {
+      DeviceIdList.push(remoteDeviceModel.deviceList[i].deviceId);
     }
 
     if (deviceSize === 0) {
@@ -91,7 +91,7 @@ function onStartRemoteAbility(deviceId, dataList: any[]) {
     remoteDeviceId: localDeviceId
   }
   var wantValue = {
-    bundleName: 'com.example.helloworld0218',
+    bundleName: 'com.example.ohmailets',
     abilityName: 'com.example.ohmailets.MainAbility',
     deviceId: deviceId,
     parameters: params
@@ -136,7 +136,7 @@ async function onConnectRemoteService(deviceId) {
   connectedAbility = await featureAbility.connectAbility(
     {
       deviceId: deviceId,
-      bundleName: "com.example.helloworld0218",
+      bundleName: "com.example.ohmailets",
       abilityName: "com.example.ohmailets.ServiceAbility",
     },
     {
@@ -205,7 +205,7 @@ struct CustomDialogExample {
                   onStartRemoteAbility(item, this.dataList);
                   this.controller.close();
                 })
-              Radio({ value: item })
+              Radio({ value: item ,group: 'select'})
                 .onChange(() => {
                   onStartRemoteAbility(item, this.dataList);
                   this.controller.close();
@@ -346,6 +346,8 @@ struct Index {
     });
   }
   async aboutToAppear() {
+    this.grantPermission()
+
     this.subscribeEvent();
     let self = this;
     // 当被拉起时，通过want传递的参数同步对端界面UI
@@ -361,7 +363,13 @@ struct Index {
       }
     });
   }
-
+  grantPermission() {
+    console.info(`[game] grantPermission`)
+    let context = featureAbility.getContext()
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+      console.info(`[game] grantPermission,requestPermissionsFromUser`)
+    })
+  }
   subscribeEvent() {
     let self = this;
     // 用于保存创建成功的订阅者对象，后续使用其完成订阅及退订的动作

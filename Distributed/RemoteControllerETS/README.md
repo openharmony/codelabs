@@ -34,11 +34,8 @@ UI效果图如下：
 
 2. 搭建烧录环境。
 
-   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
-   2.  完成RK3568开发板的烧录
-
-   -   [DevEco Device Tool编译源码烧录](https://device.harmonyos.com/cn/docs/documentation/guide/ide-rk3568-upload-0000001239220669)
-   -   [每日构建版本烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-running-rk3568-burn.md)
+    1. [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
+    2. [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-running-rk3568-burning.md)
 
 3. 搭建开发环境。
 
@@ -638,10 +635,6 @@ if (code == 6) {
   })
 }
 ```
-
-# 9.完整代码
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)
 
 # 10.相关概念与参考
 

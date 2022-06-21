@@ -1,7 +1,7 @@
 {
   "app": {
-    "bundleName": "com.huawei.cookbook",
     "vendor": "example",
+    "bundleName": "com.huawei.cookbook",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -9,18 +9,10 @@
   },
   "deviceConfig": {},
   "module": {
-    "package": "com.huawei.cookbook",
-    "name": ".MyApplication",
-    "mainAbility": "com.huawei.cookbook.MainAbility",
+    "mainAbility": ".MainAbility",
     "deviceType": [
       "phone"
     ],
-    "distro": {
-      "deliveryWithInstall": true,
-      "moduleName": "entry",
-      "moduleType": "entry",
-      "installationFree": false
-    },
     "abilities": [
       {
         "skills": [
@@ -35,10 +27,10 @@
         ],
         "orientation": "unspecified",
         "visible": true,
-        "name": "com.huawei.cookbook.MainAbility",
-        "icon": "$media:icon",
-        "srcPath": "default",
+        "srcPath": "MainAbility",
+        "name": ".MainAbility",
         "srcLanguage": "js",
+        "icon": "$media:icon",
         "description": "$string:mainability_description",
         "formsEnabled": false,
         "label": "$string:entry_MainAbility",
@@ -46,16 +38,30 @@
         "launchType": "standard"
       }
     ],
+    "distro": {
+      "moduleType": "entry",
+      "installationFree": false,
+      "deliveryWithInstall": true,
+      "moduleName": "entry"
+    },
+    "package": "com.huawei.cookbook",
+    "srcPath": "",
+    "name": ".MainAbility",
     "js": [
       {
         "pages": [
           "pages/index/index"
         ],
-        "name": "default",
+        "name": ".MainAbility",
         "window": {
           "designWidth": 720,
           "autoDesignWidth": false
         }
+      }
+    ],
+    "reqPermissions": [
+      {
+        "name": "ohos.permission.DISTRIBUTED_DATASYNC"
       }
     ]
   }

@@ -1,6 +1,6 @@
 {
   "app": {
-    "bundleName": "com.huawei.test66",
+    "bundleName": "com.example.test66",
     "vendor": "huawei",
     "version": {
       "code": 1000000,

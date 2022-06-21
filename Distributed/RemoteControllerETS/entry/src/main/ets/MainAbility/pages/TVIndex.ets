@@ -292,7 +292,15 @@ struct Index {
   }
 
   async aboutToAppear() {
+    this.grantPermission();
     this.subscribeEvent();
+  }
+
+  grantPermission(){
+    let context = featureAbility.getContext();
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'],666,function(result){
+      console.info(`grantPermission,requestPermissionFromUser,result.requestCode= ${result.requestCode}`)
+    })
   }
 
   subscribeEvent() {

@@ -1,7 +1,7 @@
 {
   "app": {
     "vendor": "example",
-    "bundleName": "com.huawei.cookbook",
+    "bundleName": "com.pictureGame.pictureGame",
     "version": {
       "code": 1000000,
       "name": "1.0.0"
@@ -54,7 +54,7 @@
       "deliveryWithInstall": true,
       "moduleName": "entry"
     },
-    "package": "com.example.entry",
+    "package": "com.example.openharmonypicturegame",
     "srcPath": "",
     "name": ".entry",
     "js": [
@@ -72,6 +72,11 @@
           "autoDesignWidth": false
         }
       }
+    ],
+    "reqPermissions": [
+      {
+      "name": "ohos.permission.DISTRIBUTED_DATASYNC"
+     }
     ]
   }
 }
