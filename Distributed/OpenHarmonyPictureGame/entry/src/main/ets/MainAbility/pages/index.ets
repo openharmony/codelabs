@@ -17,7 +17,7 @@ import featureAbility from '@ohos.ability.featureAbility';
 import prompt from '@system.prompt';
 import rpc from "@ohos.rpc";
 import commonEvent from '@ohos.commonEvent';
-import RemoteDeviceModel from '../../model/RemoteDeviceModel.ets';
+import RemoteDeviceModel from '../../model/RemoteDeviceModel';
 
 
 var connectedAbility;
@@ -245,6 +245,7 @@ struct PictureGame {
 
   async aboutToAppear() {
     let self = this;
+    self.grantPermission();
     this.onRandom();
     // 当被拉起时，通过want传递的参数同步对端界面UI
     await featureAbility.getWant((error, want) => {
@@ -259,6 +260,13 @@ struct PictureGame {
         }
       }
     });
+  }
+
+  grantPermission(){
+    let context = featureAbility.getContext();
+    context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'],666,function(result){
+      console.info('grantPermission,requestPermissionFromUser,result.requestCode= ${result.requestCode}')
+    })
   }
 
   onRandom() {

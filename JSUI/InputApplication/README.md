@@ -1,7 +1,7 @@
 # InputApplication
 # 介绍<a name="ZH-CN_TOPIC_0000001231762989"></a>
 
--   [应用场景](#section225718574575)
+-   [应用场景]
 
 OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用的接口和组件，开发者可以根据实际场景和开发需求，选用不同的组件和接口。本篇Codelab，我们将一起开启ArkUI（基于JS扩展的类Web开发范式）基础组件的学习之路。本教程是基础组件之input组件的使用。
 
@@ -15,13 +15,13 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 # 相关概念<a name="ZH-CN_TOPIC_0000001231763361"></a>
 
-**[input组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-input.md)**：交互式组件，包括单选框、多选框、按钮和单行文本输入框。
+[input组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-js/js-components-basic-input.md) ：交互式组件，包括单选框、多选框、按钮和单行文本输入框。
 
 # 搭建OpenHarmony环境<a name="ZH-CN_TOPIC_0000001238774623"></a>
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**Hi3516DV300**开发板为例，参照以下步骤进行：
 
-1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）
+1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96) ：标准系统解决方案（二进制）
 
    以3.0版本为例：
 
@@ -35,19 +35,13 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 3. 搭建开发环境
 
-   1.  开始前请参考[下载与安装软件](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/software_install-0000001053582415)、[配置开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-sdk.md)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/use-wizard-to-create-project.md)创建工程，使用JS或者eTS语言开发、“Application”为例，模板选择“\[Standard\]Empty Ability”。
-   3.  工程创建完成后，可参考下面章节进行代码编写，使用真机进行调测：
-
-   -   [配置OpenHarmony应用签名信息](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md)
-   -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
-   -   工程示例：
-
-   ![](figures/截图.png)
-
+    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-js.md#%E5%88%9B%E5%BB%BAjs%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8) 。
+    
 # 将组件添加到布局文件中<a name="ZH-CN_TOPIC_0000001186403694"></a>
 
--   [input组件](#section1648574312326)
+-   [input组件]
 
 在这个任务中，我们需要完成程序页面的新建和设计，并将程序使用到的input组件添加到布局文件index.hml中。在完成任务一新建项目后生成的默认目录pages.index下，打开index.hml文件，开始进行页面设计。
 
@@ -61,7 +55,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 </div>
 ```
 
-代码使用div组件和text组件来共同呈现文本显示的效果，其中div属于[基础容器](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-components-container-div-0000000000611484)，用作页面结构的根节点或将内容进行分组；text是[文本组件](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-components-basic-text-0000000000611633)，用于呈现一段信息。有关这两个组件更多的知识，我们会在其他Codelab中为大家讲解。
+代码使用div组件和text组件来共同呈现文本显示的效果，其中div属于[基础容器](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-components-container-div-0000000000611484) ，用作页面结构的根节点或将内容进行分组；text是[文本组件](https://developer.harmonyos.com/cn/docs/documentation/doc-references/js-components-basic-text-0000000000611633) ，用于呈现一段信息。有关这两个组件更多的知识，我们会在其他Codelab中为大家讲解。
 
 ## input组件<a name="section1648574312326"></a>
 
@@ -142,7 +136,7 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 # 为页面设计样式<a name="ZH-CN_TOPIC_0000001186562260"></a>
 
--   [input组件部分样式](#section165281839182814)
+-   [input组件部分样式]
 
 在这个任务中，我们将一起为写好的页面添加样式，上面所有的组件，我们都定义了class属性，它对应的样式都定义在index.css中，有关css更多的知识可以参考[CSS语法参考](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/js-framework-syntax-css.md)。
 
@@ -200,8 +194,8 @@ OpenHarmony ArkUI（基于JS扩展的类Web开发范式）框架提供了常用�
 
 # 为组件添加响应事件<a name="ZH-CN_TOPIC_0000001232001867"></a>
 
--   [数据定义](#section191691020144313)
--   [事件](#section2363155714436)
+-   [数据定义]
+-   [事件]
 
 ## 数据定义<a name="section191691020144313"></a>
 
@@ -363,14 +357,10 @@ optionselect(e) {
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >样例中我们使用了一张input输入框必填标识图片，它放在js/default/common.images目录下，命名为require.png
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001186722184"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001186722184"></a>
 
 在本篇Codelab中，我们主要为大家讲解了如下ArkUI（基于JS扩展的类Web开发范式）基础组件
 
 -   input
 
 通过一个代码示例，实现input组件表单，从布局、样式、响应事件三个层面，逐步为大家进行代码讲解。希望通过本教程，各位开发者可以对以上基础组件具有更深刻的认识。
-
-# 参考<a name="ZH-CN_TOPIC_0000001231563317"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/JSUI/InputApplication)

@@ -23,13 +23,9 @@
    ![](figures/zh-cn_image_0000001214154402.png)
 
 2. 搭建烧录环境。
-
-   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
-   2.  完成RK3568开发板的烧录
-
-   -   [DevEco Device Tool编译源码烧录](https://device.harmonyos.com/cn/docs/documentation/guide/ide-rk3568-upload-0000001239220669)
-   -   [每日构建版本烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-running-rk3568-burn.md)
-
+   1. [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
+   2. [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-running-rk3568-burning.md)
+   
 3. 搭建开发环境。
 
    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
@@ -732,7 +728,7 @@ build() {
 
 本篇Codelab详细讲解了本案例的数据定义，包括如何进行数据存储、数据查询、数据新增和删除等功能。同时，我们讲解了备忘录的列表页面和编辑页面是如何实现的。
 
-# 9.恭喜你<a name="ZH-CN_TOPIC_0000001259304099"></a>
+# 9.恭喜您<a name="ZH-CN_TOPIC_0000001259304099"></a>
 
 通过本Codelab的学习，您已经学会了：
 

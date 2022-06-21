@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+ 
 import router from "@system.router";
 import {contact} from "@ohos/vcard";
 import {VCardBuilder} from "@ohos/vcard";
@@ -59,7 +74,7 @@ struct FlexExample {
                   //邮件模块
                   let Email = new contact.Email()
                   Email.labelName = this.index1
-                  Email.lableId = parseInt(this.index1)
+                  Email.labelId = parseInt(this.index1)
                   Email.email = this.emails
                   contactall.emails = [Email]
 
@@ -106,7 +121,7 @@ struct FlexExample {
           .width('100%')
           //姓名填写
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) { //1
-            Image($rawfile('ic_public_contacts.png')) //图片
+            Image($r('app.media.ic_public_contacts')) //图片
               .objectFit(ImageFit.Contain)
               .height(30)
               .width(30)
@@ -131,7 +146,7 @@ struct FlexExample {
 
           //单位
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
-            Image($rawfile('ic_edit_company.png'))
+            Image($r('app.media.ic_edit_company'))
               .objectFit(ImageFit.Contain)
               .height(30)
               .width(30)
@@ -157,7 +172,7 @@ struct FlexExample {
           //手机
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}) {
-              Image($rawfile('ic_public_phone.png'))
+              Image($r('app.media.ic_public_phone'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -189,7 +204,7 @@ struct FlexExample {
           //電子郵件
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_public_email.png'))
+              Image($r('app.media.ic_public_email'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -220,7 +235,7 @@ struct FlexExample {
           //备注
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_public_drawer.png'))
+              Image($r('app.media.ic_public_drawer'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -249,7 +264,7 @@ struct FlexExample {
           //住宅
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_public_phone.png'))
+              Image($r('app.media.ic_public_phone'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -280,7 +295,7 @@ struct FlexExample {
           //网址
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}) {
-              Image($rawfile('ic_public_worldclock.png'))
+              Image($r('app.media.ic_public_worldclock'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)
@@ -310,7 +325,7 @@ struct FlexExample {
           //生日
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
-              Image($rawfile('ic_Edit_Birthday.png'))
+              Image($r('app.media.ic_Edit_Birthday'))
                 .objectFit(ImageFit.Contain)
                 .height(30)
                 .width(30)

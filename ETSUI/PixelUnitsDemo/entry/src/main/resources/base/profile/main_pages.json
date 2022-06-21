@@ -1,0 +1,11 @@
+{
+  "src": [
+    "pages/index",
+    "pages/pixelConversionPage",
+    "pages/pixelUnitsPage"
+  ],
+  "window": {
+    "designWidth": 720,
+    "autoDesignWidth": false
+  }
+}

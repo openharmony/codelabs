@@ -1,0 +1,17 @@
+{
+  "subsystem": "demo",
+  "parts": {
+    "smart_door_access": {
+      "variants": [
+        "phone"
+      ],
+      "module_list": [
+        "//demo/smart_door_access:smart_door_access_server",
+        "//demo/smart_door_access:closeLock_wav",
+        "//demo/smart_door_access:openLock_wav"
+      ],
+      "test_list": [
+      ]
+    }
+  }
+}

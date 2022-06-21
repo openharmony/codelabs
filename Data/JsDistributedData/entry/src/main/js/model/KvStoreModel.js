@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2021 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
+
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
@@ -18,46 +19,65 @@ import distributedData from '@ohos.data.distributeddata';
 const STORE_ID = 'musicplayer_kvstore';
 
 export default class KvStoreModel {
-    kvManager;
-    kvStore;
+	  kvManager;
+	  kvStore;
 
     constructor() {
     }
 
-    createKvStore(callback) {
-      if (typeof (this.kvStore) === 'undefined') {
-        var config = {
-          bundleName: 'com.ohos.distributedmusicplayer',
-          userInfo: {
-            userId: '0',
-            userType: 0
-          }
+  createKvStore(callback) {
+    if (typeof (this.kvStore) === 'undefined') {
+      var config = {
+        bundleName: 'com.huawei.cookbook',
+        userInfo: {
+          userId: '0',
+          userType: 0
+        }
+      };
+      let self = this;
+      console.info('DrawBoard[KvStoreModel] createKVManager begin');
+      distributedData.createKVManager(config).then((manager) => {
+        console.info('DrawBoard[KvStoreModel] createKVManager success, kvManager=' + JSON.stringify(manager));
+        self.kvManager = manager;
+        let options = {
+          createIfMissing: true,
+          encrypt: false,
+          backup: false,
+          autoSync: true,
+          kvStoreType: 0,
+          schema: '',
+          securityLevel: 1,
         };
-        let self = this;
-        distributedData.createKVManager(config).then((manager) => {
-          self.kvManager = manager;
-          var options = {
-            createIfMissing: true,
-            encrypt: false,
-            backup: false,
-            autoSync: true,
-            kvStoreType: 1,
-            securityLevel: 3,
-          };
-          self.kvManager.getKVStore(STORE_ID, options).then((store) => {
-            self.kvStore = store;
-            callback();
-          });
+        console.info('DrawBoard[KvStoreModel] kvManager.getKVStore begin');
+        self.kvManager.getKVStore(STORE_ID, options).then((store) => {
+          console.info('DrawBoard[KvStoreModel] getKVStore success, kvStore=' + store);
+          self.kvStore = store;
+          try {
+            self.kvStore.enableSync(true).then((err) => {
+              console.log('enableSync success');
+            }).catch((err) => {
+              console.log('enableSync fail ' + JSON.stringify(err));
+            });
+          }catch(e) {
+            console.log('EnableSync e ' + e);
+          }
+          callback();
         });
-      } else {
-        callback();
-      }
+        console.info('DrawBoard[KvStoreModel] kvManager.getKVStore end');
+      });
+      console.info('DrawBoard[KvStoreModel] createKVManager end');
+    } else {
+      console.info('DrawBoard[KvStoreModel] KVManager is exist');
+      callback();
     }
+  }
 
     broadcastMessage(key,value) {
+      console.info('DrawBoard[KvStoreModel] kvStore.put ' + key + '=' + value);
       let self = this;
       this.createKvStore(() => {
         self.put(key,value+";");
+        console.info('DrawBoard[KvStoreModel] kvStore.put ' + key + '=' + value);
       });
     }
 
@@ -68,16 +88,17 @@ export default class KvStoreModel {
       });
     }
 
-    put(key,value) {
-        console.info('dataChange:' + key+"-------"+value+"----------"+value.length);
-      this.kvStore.put(key,value).then((data) => {
-          console.info('dataChange:' + JSON.stringify(data));
+	put(key, value) {
+      console.info('DrawBoard[KvStoreModel] kvStore.put ' + key + '=' + value);
+      this.kvStore.put(key, value).then((data) => {
         this.kvStore.get(key).then((data) => {
-            console.info('dataChange:' + JSON.stringify(data));
+          console.info('DrawBoard[KvStoreModel] kvStore.get ' + key + '=' + JSON.stringify(data));
         });
+        console.info('DrawBoard[KvStoreModel] kvStore.put ' + key + ' finished, data=' + JSON.stringify(data));
       }).catch((err) => {
+        console.error('DrawBoard[KvStoreModel] kvStore.put ' + key + ' failed, ' + JSON.stringify(err));
       });
-    }
+	}
 
     delete(key) {
       this.kvStore.delete(key).then((data) => {
@@ -109,4 +130,5 @@ export default class KvStoreModel {
         });
       });
     }
+
 }

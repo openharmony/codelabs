@@ -82,6 +82,7 @@ export default {
      * 页面初始化方法
      */
     onInit() {
+        this.grantPermission()
         // 获取Ability启动参数
         featureAbility.getWant().then((want) => {
             if(want.parameters != undefined && want.parameters != null && want.parameters != '') {
@@ -127,7 +128,13 @@ export default {
     log(m) {
         console.info(TAG + m);
     },
-
+    grantPermission() {
+        console.info(`[game] grantPermission`)
+        let context = featureAbility.getContext()
+        context.requestPermissionsFromUser(['ohos.permission.DISTRIBUTED_DATASYNC'], 666, function (result) {
+            console.info(`[game] grantPermission,requestPermissionsFromUser`)
+        })
+    },
     // 创建实例
     createDeviceManager() {
         if (dmClass != null) return;
@@ -215,8 +222,8 @@ export default {
      * 得到屏幕的宽度和高度
      */
     getScreenWidthAndHeight() {
-        this.screenWidth = 1150
-        this.screenHeight = 720
+        this.screenWidth = 720
+        this.screenHeight = 1150
         display.getDefaultDisplay((err, data) => {
             if (err) {
                 return;

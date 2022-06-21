@@ -1,4 +1,4 @@
-# SliderApplicationEts
+# TransitionAnimtaionEts
 # 介绍<a name="ZH-CN_TOPIC_0000001237044819"></a>
 
 -   [应用场景](#section225718574575)
@@ -366,7 +366,7 @@ struct BottomTransition{
    }
    ```
 
-# 恭喜你<a name="ZH-CN_TOPIC_0000001236724851"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001236724851"></a>
 
 在本篇Codelab中，我们主要用到了以下知识点：
 
@@ -374,8 +374,3 @@ struct BottomTransition{
 -   路由
 
 本示例代码从布局、样式、响应事件三个层面，逐步实现了页面间转场、组件内转场以及共享元素转场。希望通过本教程，各位开发者可以对转场动画具有更深刻的认识。
-
-# 参考<a name="ZH-CN_TOPIC_0000001236884841"></a>
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TransitionAnimtaionEts)
-

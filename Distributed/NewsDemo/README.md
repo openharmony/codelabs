@@ -29,17 +29,10 @@
 
 3. 搭建开发环境：
 
-   1. 开始前请参考[下载与安装软件](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/software_install-0000001053582415)、[配置开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-sdk.md)，完成DevEco Studio的安装和开发环境配置。
+   1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
+   2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-js.md#%E5%88%9B%E5%BB%BAjs%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+   3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8) 。
 
-   2. 开发环境配置完成后，请参考[使用工程工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/use-wizard-to-create-project.md)创建工程，使用JS或者eTS语言开发、“Application”为例，模板选择“\[Standard\]Empty Ability”。
-
-   3. 工程创建完成后，可参考下面章节进行代码编写，使用真机进行调测：
-
-      -   [配置OpenHarmony应用签名信息](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/configuring-openharmony-app-signature.md)
-      -   [hap包安装指导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/installing-openharmony-app.md)
-      -   工程示例：
-
-      ![](screenshots/device/截图.png)
 # 分布式组网<a name="ZH-CN_TOPIC_0000001192921592"></a>
 
 完成本篇Codelab我们还需要完成开发板的分布式组网，本示例以**Hi3516DV300**开发板为例，参照以下步骤进行：
@@ -318,7 +311,7 @@ chooseComform() {
 本篇Codelab中我们介绍了应用的主页面和详情页。在主页面可以切换新闻类型、滑动新闻列表、点击查看新闻详情；在新闻详情页可以上下滑动查看新闻，并且跨设备拉起。
 
 需要说明的是，本篇codelab是采用JS作为主要编程语言，其中分布式的相关实现也是用的JS提供的相关接口来实现的。
-# 恭喜你<a name="ZH-CN_TOPIC_0000001206764005"></a>
+# 恭喜您<a name="ZH-CN_TOPIC_0000001206764005"></a>
 
 目前你已经成功完成了Codelab并且学到了：
 
@@ -327,10 +320,6 @@ chooseComform() {
 -   如何使用list、list-item、tabs、tab-bar等组件。
 -   如何进行布局编写及页面跳转。
 -   如何进行跨设备分布式拉起。
-# 参考<a name="ZH-CN_TOPIC_0000001160885580"></a>
-
-[gitee源码](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)
-
 
 
 

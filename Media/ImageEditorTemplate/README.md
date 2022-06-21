@@ -8,9 +8,11 @@
 # 相关概念
 
 
-**[canvas组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-canvas-canvas.md)**：画布组件，用于自定义绘制图形。
+**[canvas组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-canvas-canvas.md)**
+：画布组件，用于自定义绘制图形。
 
-**[slider组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-slider.md)**：滑动条组件，用来快速调节设置值，如音量、亮度等。
+**[slider组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.0-LTS/zh-cn/application-dev/js-reference/component/js-components-basic-slider.md)**
+：滑动条组件，用来快速调节设置值，如音量、亮度等。
 
 ## JS FA工程目录
 新建工程的JS目录如下图所示：
@@ -44,9 +46,9 @@
 
 3.  搭建开发环境
 
-    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
-    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
+    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-js.md#%E5%88%9B%E5%BB%BAjs%E5%B7%A5%E7%A8%8B) 创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8) 。
 
 
 # 实现页面布局和样式
@@ -496,25 +498,12 @@ hsv2rgb(hsv) {
 }
 ```
 
-# 总结
+# 恭喜您
 
 通过本篇Codelab，您可以学到：
 
 1.  利用canvas组件提供的方法，实现图片绘制、裁剪、缩放、保存和恢复。
 2.  利用公式算法，结合silder调节值的大小，计算图片的HSV和RGB值，从而调节图片的亮度、对比度和饱和度。
-
-# 编码挑战
-
-本节提供了一个简单的家庭作业，用来测试您的学习情况。
-
-## 目标
-
-按1：1裁剪图片后顺时针旋转180度。
-# 完整代码
-
-您可以点击下面的链接，查看工程的完整代码：
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEditorTemplate)
 
 
 

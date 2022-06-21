@@ -8,7 +8,7 @@
 
 要想读懂源码，需要具备以下技能。
 
--   [熟悉基于TS扩展的声明式开发](https://developer.harmonyos.com/cn/docs/documentation/doc-references/reference-document-outline-0000001115016824)
+-   [熟悉基于TS扩展的声明式开发](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/Readme-CN.md)
 -   熟悉ES6
 
 # 搭建OpenHarmony环境
@@ -33,14 +33,6 @@
     2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E5%88%9B%E5%BB%BAets%E5%B7%A5%E7%A8%8B)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets.md#%E4%BD%BF%E7%94%A8%E7%9C%9F%E6%9C%BA%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8)。
 
-# 添加依赖
-
-工程创建完成后，在项目根目录下存在 package.json文件，根目录下运行命令。
-
-配置仓库：npm config set @ohos:registry=https://repo.harmonyos.com/npm/
-
-安装依赖：npm install @ohos/vcard
-
 # 具体用法
 
 1.  导入类
@@ -52,7 +44,7 @@
     import {VCardConfig} from "@ohos/vcard";
     ```
 
-2.  Vcard三方库可添加个人信息，比如姓名、手机、邮箱、备注等等。根据个人信息生成电子名片，在此介绍添加姓名，添加其他信息可参考[源码](三方库源码.md)。
+2.  Vcard三方库可添加个人信息，比如姓名、手机、邮箱、备注等等。根据个人信息生成电子名片，在此介绍添加姓名，添加其他信息可参考[源码](https://gitee.com/openharmony-tpc/VCard)。
 
     ```
     let myCard= new  contact.Contact()
@@ -71,14 +63,9 @@
     ENCODING=QUOTED-PRINTABLE:vnd.android.cursor.item/nickname;
     =e6=98=b5=e7=a7=b0=e5=b0=8f=e5=bc=a0;;;;;;;;;;;;;; END:VCAR
     ```
-    ```
 
-# 恭喜你
+# 恭喜您
 
 通过本篇Codelab，您可以学到：
 
-openHarmony三方库使用。
-
-# 参考
-
-[gitee地址](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)
+OpenHarmony三方库使用。
