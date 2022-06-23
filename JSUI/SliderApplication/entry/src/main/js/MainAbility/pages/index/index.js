@@ -31,7 +31,7 @@ export default {
   changeValue(e) {
     if (e.mode === 'end' || e.mode === 'click') {
       this.speed = e.value;
-      this.animationDurationNum = 10000 - e.value * 95;
+      this.animationDurationNum = (e.value == 0) ? 0 : (10000 - e.value * 95);
       this.animationDuration = this.animationDurationNum + 'ms';
     }
   },
