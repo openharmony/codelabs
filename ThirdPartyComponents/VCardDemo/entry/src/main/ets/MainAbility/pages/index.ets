@@ -21,18 +21,18 @@ import {VCardConfig} from "@ohos/vcard";
 @Entry
 @Component
 struct FlexExample {
-  private scroller: Scroller = new Scroller() //滚动
-  @State name: string= "zhangsan"//router.getParams() == null ? "姓名"
+  private scroller: Scroller = new Scroller() // 滚动
+  @State name: string= "zhangsan"// router.getParams() == null ? "姓名"
   @State OrganizationName: string= "chengmai"
-  @State phonename: string= "13537292684"//电话号码
-  @State emails : string= "qq.q@qq.com"//电子邮件
-  @State note : string= "程序员苦逼"//备注
-  @State PostalAddreSSA  : string= "wuhan"//地址
-  @State website : string= "baidu"//网站
-  @State EventA: string="20000000" //生日
-  @State index: string= '手机'//手机下拉框
-  @State index1: string= '私人'//邮箱下拉框
-  @State index2: string= '住宅'//住宅下拉框
+  @State phonename: string= "13537292684"// 电话号码
+  @State emails : string= "qq.q@qq.com"// 电子邮件
+  @State note : string= "程序员苦逼"// 备注
+  @State PostalAddreSSA  : string= "wuhan"// 地址
+  @State website : string= "baidu"// 网站
+  @State EventA: string="20000000" // 生日
+  @State index: string= '手机'// 手机下拉框
+  @State index1: string= '私人'// 邮箱下拉框
+  @State index2: string= '住宅'// 住宅下拉框
   @State fd: number = 0
 
   build() {
@@ -53,48 +53,48 @@ struct FlexExample {
                 .onClick(() =>
                 {
                   console.info('onClick start')
-                  //姓名模块
+                  // 姓名模块
                   let name = new contact.Name()
                   let contactall = new contact.Contact()
                   contactall.name = name
                   contactall.name.fullName = this.name // 将名字存入name类中fullname
 
-                  //单位
+                  // 单位
                   let Organization = new contact.Organization()
                   contactall.organization = Organization
                   contactall.organization.name = this.OrganizationName
 
-                  //手机模块12
+                  // 手机模块12
                   let phoneNumber = new contact.PhoneNumber()
                   phoneNumber.labelName = this.index
                   phoneNumber.labelId = parseInt(this.index)
                   phoneNumber.phoneNumber = this.phonename
-                  contactall.phoneNumbers = [phoneNumber] //只能传一个，不能更改或者添加
+                  contactall.phoneNumbers = [phoneNumber] // 只能传一个，不能更改或者添加
 
-                  //邮件模块
+                  // 邮件模块
                   let Email = new contact.Email()
                   Email.labelName = this.index1
                   Email.labelId = parseInt(this.index1)
                   Email.email = this.emails
                   contactall.emails = [Email]
 
-                  //备注
+                  // 备注
                   let note = new contact.Note()
                   contactall.note = note
                   contactall.note.noteContent = this.note
 
-                  //住宅地址
+                  // 住宅地址
                   let PostalAddreSS = new contact.PostalAddress()
                   PostalAddreSS.labelId = parseInt(this.index2)
                   PostalAddreSS.region = this.PostalAddreSSA
                   contactall.postalAddresses = [PostalAddreSS]
 
-                  //网站
+                  // 网站
                   let website = new contact.Website()
                   contactall.websites = [website]
                   contactall.websites[0].website = this.website
 
-                  //生日
+                  // 生日
                   let event = new contact.Event()
                   event.eventDate = this.EventA
                   contactall.events = [event]
@@ -119,9 +119,9 @@ struct FlexExample {
           }
           .height(50)
           .width('100%')
-          //姓名填写
+          // 姓名填写
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) { //1
-            Image($r('app.media.ic_public_contacts')) //图片
+            Image($r('app.media.ic_public_contacts')) // 图片
               .objectFit(ImageFit.Contain)
               .height(30)
               .width(30)
@@ -144,7 +144,7 @@ struct FlexExample {
           .borderColor(Color.Red)
           .borderRadius(15)
 
-          //单位
+          // 单位
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }) {
             Image($r('app.media.ic_edit_company'))
               .objectFit(ImageFit.Contain)
@@ -169,7 +169,7 @@ struct FlexExample {
           .borderColor(Color.Red)
           .borderRadius(15)
 
-          //手机
+          // 手机
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}) {
               Image($r('app.media.ic_public_phone'))
@@ -185,7 +185,7 @@ struct FlexExample {
             }
             .width('45%')
 
-            //下拉菜单
+            // 下拉菜单
             TextInput({ placeholder:"电话号码",  text: this.phonename })
               .placeholderFont({size: "14fp",weight: "40"})
               .width('55%')
@@ -201,7 +201,7 @@ struct FlexExample {
           .borderWidth(0)
           .borderColor(Color.Red)
           .borderRadius(15)
-          //電子郵件
+          // 電子郵件
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
               Image($r('app.media.ic_public_email'))
@@ -216,7 +216,7 @@ struct FlexExample {
                 .margin({left:5})
             }
             .width('45%')
-            //下拉菜单
+            // 下拉菜单
             TextInput({ placeholder:"电子邮件",  text: this.emails })
               .placeholderFont({size: "14fp",weight: "40"})
               .width('55%')
@@ -232,7 +232,7 @@ struct FlexExample {
           .borderWidth(0)
           .borderColor(Color.Red)
           .borderRadius(15)
-          //备注
+          // 备注
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
               Image($r('app.media.ic_public_drawer'))
@@ -261,7 +261,7 @@ struct FlexExample {
           .borderColor(Color.Red)
           .borderRadius(15)
 
-          //住宅
+          // 住宅
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
               Image($r('app.media.ic_public_phone'))
@@ -276,7 +276,7 @@ struct FlexExample {
                 .margin({left:5})
             }
             .width('45%')
-            //下拉菜单
+            // 下拉菜单
             TextInput({ placeholder:"地址",  text: this.PostalAddreSSA })
               .placeholderFont({size: "14fp",weight: "40"})
               .width('55%')
@@ -292,7 +292,7 @@ struct FlexExample {
           .borderColor(Color.Red)
           .borderRadius(15)
 
-          //网址
+          // 网址
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}) {
               Image($r('app.media.ic_public_worldclock'))
@@ -306,7 +306,7 @@ struct FlexExample {
                 .fontSize(16)
                 .margin({left:5})
             }.width('45%')
-            //下拉菜单
+            // 下拉菜单
             TextInput({ placeholder:"网站",  text: this.website })
               .placeholderFont({size: "14fp",weight: "40"})
               .width('55%')
@@ -322,7 +322,7 @@ struct FlexExample {
           .borderColor(Color.Red)
           .borderRadius(15)
 
-          //生日
+          // 生日
           Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center }){
             Flex({ justifyContent: FlexAlign.Start, alignItems: ItemAlign.Center}){
               Image($r('app.media.ic_Edit_Birthday'))
@@ -337,7 +337,7 @@ struct FlexExample {
                 .margin({left:5})
             }
             .width('45%')
-            //下拉菜单
+            // 下拉菜单
             TextInput({ placeholder:"日期",  text: this.EventA })
               .placeholderFont({size: "14fp",weight: "40"})
               .width("55%")
