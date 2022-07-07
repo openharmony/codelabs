@@ -1,0 +1,6 @@
+{
+  "src": [
+    "pages/video_player",
+    "pages/video_lib"
+  ]
+}
