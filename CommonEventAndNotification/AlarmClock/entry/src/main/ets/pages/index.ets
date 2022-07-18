@@ -384,7 +384,7 @@ struct Index {
     promise.then((preferences) => {
       let promiseGet = preferences.get('data', '')
       promiseGet.then(value => {
-        this.clockItems = JSON.parse(value)
+        this.clockItems = JSON.parse(value.toString())
       })
     })
   }
