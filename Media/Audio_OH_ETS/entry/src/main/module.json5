@@ -6,8 +6,8 @@
     "description": "$string:entry_desc",
     "mainElement": "MainAbility",
     "deviceTypes": [
-      "phone",
-      "tablet",
+      "default",
+      "tablet"
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
@@ -21,17 +21,19 @@
         "icon": "$media:icon",
         "label": "$string:MainAbility_label",
         "visible": true,
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:white",
         "skills": [
           {
             "entities": [
-              "entity.system.home",
+              "entity.system.home"
             ],
             "actions": [
-              "action.system.home",
-            ],
-          },
-        ],
-      },
+              "action.system.home"
+            ]
+          }
+        ]
+      }
     ],
     "requestPermissions": [
       {

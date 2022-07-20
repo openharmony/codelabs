@@ -6,7 +6,7 @@
     "description": "$string:entry_test_desc",
     "mainElement": "TestAbility",
     "deviceTypes": [
-      "phone",
+      "default",
       "tablet"
     ],
     "deliveryWithInstall": true,
@@ -21,6 +21,8 @@
         "icon": "$media:icon",
         "label": "$string:TestAbility_label",
         "visible": true,
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:white",
         "skills": [
           {
             "actions": [
