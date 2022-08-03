@@ -20,7 +20,7 @@
 
 # 相关权限
 
-加载web资源需要在config.json中配置如下权限：
+加载Web资源需要在config.json中配置如下权限：
 
 ```
 "requestPermissions": [
@@ -156,17 +156,17 @@
     }
     ```
 
-# web组件
+# Web组件
 
-通过web组件不仅可以在OpenHarmony设备上展示H5小程序的界面，也可以通过runJavaScript\(\)执行小程序的JS函数，来实现eTS与H5小程序的交互功能。
+通过Web组件不仅可以在OpenHarmony设备上展示H5小程序的界面，也可以通过runJavaScript\(\)执行小程序的JS函数，来实现eTS与H5小程序的交互功能。
 
-web组件代码：
+Web组件代码：
 
 ```
 @Entry
 @Component
 struct Index {
-  // web组件控制器可以控制Web组件各种行为
+  // Web组件控制器可以控制Web组件各种行为
   webController: WebController = new WebController()
 
   build() {
@@ -188,7 +188,7 @@ struct Index {
         Text("Web组件内")
           .fontSize(50)
           .fontWeight(FontWeight.Bold)
-        // web组件加载本地H5
+        // Web组件加载本地H5
         Web({ src: $rawfile('index.html'), controller: this.webController })
           // 设置是否开启通过$rawfile(filepath/filename)访问应用中rawfile路径的文件， 默认启用。
           .fileAccess(true)
