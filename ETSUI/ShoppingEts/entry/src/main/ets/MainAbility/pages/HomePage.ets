@@ -17,7 +17,6 @@ import { GoodsData, IconImage } from '../model/GoodsData'
 import { initializeOnStartup, getIconPath, getIconPathSelect } from '../model/GoodsDataModels'
 import { ShoppingCart } from './ShoppingCartPage'
 import { MyInfo } from './MyPage'
-import router from '@system.router';
 
 @Entry
 @Component
