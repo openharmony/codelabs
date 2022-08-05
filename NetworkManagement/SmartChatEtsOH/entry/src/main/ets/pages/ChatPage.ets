@@ -18,7 +18,7 @@ import http from '@ohos.net.http';
 @Entry
 @Component
 struct Index {
-  @State msgArr: string[] = ['1-您好！这是使用基于TS扩展的类Web开发范式 实现的一个人工智能聊天窗口，有什么想和我聊的吗？',
+  @State msgArr: string[] = ['1-您好！这是使用基于TS扩展的声明式开发范式实现的一个人工智能聊天窗口，有什么想和我聊的吗？',
   ]
   private sendMsg: string = ""
   scroller: Scroller = new Scroller()
@@ -93,7 +93,7 @@ struct DialogBox {
       if (this.chatMsg.search("1-") != -1) {
         LeftDialogBox({ imageSrc: "person(0).jpg", chatMsg: this.chatMsg.replace("1-", "") })
       } else if (this.chatMsg.search("2-") != -1) {
-        RightDialogBox({ imageSrc: "person(1).png", chatMsg: this.chatMsg.replace("2-", "") })
+        RightDialogBox({ imageSrc: "person(1).jpg", chatMsg: this.chatMsg.replace("2-", "") })
       }
     }
   }
