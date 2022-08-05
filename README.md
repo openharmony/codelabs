@@ -54,6 +54,7 @@
   - [关系型数据库（JS）](https://gitee.com/openharmony/codelabs/tree/master/Data/JSRelationshipData)（API 8+）
   - [轻量级偏好数据库（JS）](https://gitee.com/openharmony/codelabs/tree/master/Data/Database)（API 8+）
   - [备忘录（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/NotePad_OH_ETS)（API 8+）
+  - [字符串加解密（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/StringCipherETS)（API 9+）
 - 设备开发
   - [轻量系统环境搭建指导](https://gitee.com/openharmony/codelabs/tree/master/Device/DeviceEnvironmentSetupGuide)（指导文档）
   - [日志、线程、定时器](https://gitee.com/openharmony/codelabs/tree/master/Device/%E6%97%A5%E5%BF%97%E3%80%81%E7%BA%BF%E7%A8%8B%E3%80%81%E5%AE%9A%E6%97%B6%E5%99%A8)（开发板类型：Hi3861，OpenHarmony系统：OpenHarmony 3.0 LTS）
@@ -82,5 +83,4 @@
 
 ## 约束与限制<a name="section682025019613"></a>
 
-1.  安装应用示例之前，请先查看"README.md"文件来确认应用示例是否为stage模型，若为stage模型需要查看entry/src/main路径下的module.json5文件中的"deviceType"字段来确认该应用支持的设备类型；否则为FA模型，查看entry/src/main路径下的config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，两种模型都可尝试通过修改该字段使其可以在相应类型的设备上运行。
-2.  IDE版本及配套SDK问题，可前往[DevEco Studio版本说明](https://developer.harmonyos.com/cn/docs/documentation/doc-releases/ohos-release-notes-0000001226452454)来查看详细内容。
+安装应用示例之前，请先查看"README_zh.md"文件来确认应用示例是否为stage模型，若为Stage模型需要查看entry/src/main路径下的module.json5文件中的"deviceType"字段来确认该应用支持的设备类型；否则为FA模型，查看entry/src/main路径下的config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，两种模型都可尝试通过修改该字段使其可以在相应类型的设备上运行。
