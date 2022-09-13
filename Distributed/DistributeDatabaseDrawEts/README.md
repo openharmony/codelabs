@@ -52,7 +52,6 @@
 3.  将设备A，B设置为互相信任的设备。
 
    -   找到系统应用“音乐”。
-
     ![](figures/音乐.png)
 
    -   设备A打开音乐，点击左下角流转按钮，弹出列表框，在列表中会展示远端设备的id。
@@ -64,8 +63,8 @@
        ![](figures/信.png)
 
    -   设备B点击允许，设备B将会弹出随机PIN码，将设备B的PIN码输入到设备A的PIN码填入框中。
-
-    ![](figures/pin.png)![](figures/确认.png)
+    ![](figures/pin.png)
+    ![](figures/确认.png)
 
     配网完毕。
 
