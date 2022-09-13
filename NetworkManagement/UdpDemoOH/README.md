@@ -421,7 +421,7 @@ UDP部分API如下：
       @State msgArr: ChatMsg[]= []
       private localIp: string = router.getParams().localIp
       private oppositeIp: string = router.getParams().oppositeIp
-      }
+    }
     ```
 
 3. 在ChatPage.ets中导入UdpClient类，创建UdpClient对象，使用UdpClient对象调用bindUdp和onMessage函数。
