@@ -4,6 +4,9 @@
 
 ![](figures/zh-cn_other_0000001261237389.jpeg)
 
+>![](public_sys-resources/icon-note.gif) **说明：** 
+>本示例涉及使用系统接口，需要手动替换Full SDK才能编译通过，具体操作可参考[替换指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/full-sdk-switch-guide.md)。
+
 # 搭建OpenHarmony开发环境<a name="ZH-CN_TOPIC_0000001214139914"></a>
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**Hi3516DV300**开发板为例，参照以下步骤进行：
