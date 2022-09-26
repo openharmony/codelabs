@@ -4,6 +4,9 @@
 
 本篇Codelab是基于TS扩展的声明式开发范式编程语言，以及OpenHarmony的分布式能力实现的一个手柄游戏。
 
+>![](public_sys-resources/icon-note.gif) **说明：** 
+>本示例涉及使用系统接口，需要手动替换Full SDK才能编译通过，具体操作可参考[替换指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/full-sdk-switch-guide.md)。
+
 完成本篇Codelab需要两台开发板，一台开发板作为游戏端，一台开发板作为手柄端，实现如下功能：
 
 -   游戏端呈现飞机移动、发射子弹等效果。
