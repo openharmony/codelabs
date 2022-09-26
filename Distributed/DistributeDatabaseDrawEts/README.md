@@ -6,6 +6,8 @@
 
 ![](figures/2.gif)
 
+>![](public_sys-resources/icon-note.gif) **说明：** 
+>本示例涉及使用系统接口，需要手动替换Full SDK才能编译通过，具体操作可参考[替换指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/full-sdk-switch-guide.md)。
 
 
 # 2.相关概念

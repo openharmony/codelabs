@@ -2,6 +2,10 @@
 
 本篇Codelab实现了一个简单的动态权限申请示例。该示例采用基于TS扩展的声明式开发范式进行开发，需要使用OpenHarmony允许不同设备间的数据交换权限。
 
+>![](public_sys-resources/icon-note.gif) **说明：** 
+>本示例涉及使用系统接口，需要手动替换Full SDK才能编译通过，具体操作可参考[替换指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/full-sdk-switch-guide.md)。
+
+
 本篇Codelab主要讲述以下内容：
 
 -   如何配置动态权限。
