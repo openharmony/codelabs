@@ -8,7 +8,7 @@
 
 - Ability
   - [Page内和Page间导航跳转（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/PageAbility)（API 8+）
-  - [为应用添加运行时权限（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/AccessPermission)（API 9+）
+  - [为应用添加运行时权限（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Ability/AccessPermission)（API 9+）
 - ArkUI
   - [极简声明式UI范式（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleGalleryEts)（API 8+）
   - [购物应用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ShoppingEts)（API 8+）
@@ -32,20 +32,20 @@
 - 分布式
   - [分布式调度启动远程FA（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteStartFA)（API 8+）
   - [分布式新闻客户端（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)（API 8+）
-  - [分布式手写板（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)（API 8+）
+  - [分布式手写板（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)（API 8+）
   - [分布式鉴权（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)（API 8+）
-  - [分布式游戏手柄（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/HandleGameApplication)（API 8+）
-  - [分布式邮件（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)（API 8+）
-  - [分布式亲子早教系统（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)（API 8+）
-  - [分布式遥控器（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)（API 8+）
+  - [分布式游戏手柄（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/HandleGameApplication)（API 8+）
+  - [分布式邮件（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)（API 8+）
+  - [分布式亲子早教系统（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)（API 8+）
+  - [分布式遥控器（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)（API 8+）
 - 公共事件与通知
-  - [闹钟应用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/CommonEventAndNotification/AlarmClock)（API 9+）
+  - [闹钟应用（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/CommonEventAndNotification/AlarmClock)（API 9+）
 - 媒体
   - [图片编辑模板（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEditorTemplate)（API 8+）
   - [图片常见操作（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageJsDemo)（API 8+）
   - [简易视频播放器（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoOpenHarmony)（API 8+）
   - [音频播放器（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/Audio_OH_ETS)（API 9+）
-  - [视频播放器（eTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoPlayerStage)（API 9+）
+  - [视频播放器（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoPlayerStage)（API 9+）
 - NativeAPI
   - [第一个Native C++应用（eTS）](https://gitee.com/openharmony/codelabs/tree/master/NativeAPI/NativeTemplateDemo)（API 9+）
   - [Native Component（eTS）](https://gitee.com/openharmony/codelabs/tree/master/NativeAPI/XComponent)（API 9+）
@@ -73,7 +73,7 @@
   - [使用HTTP实现与服务端通信（eTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/SmartChatEtsOH)（API 9+）
   - [使用TCP实现与服务端通信（eTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/TcpSocketDemo)（API 9+）
 - 图形图像
-  - [手势截屏（eTS）](https://gitee.com/openharmony/codelabs/tree/master/GraphicImage/GestureScreenshot)（API 9+）
+  - [手势截屏（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/GraphicImage/GestureScreenshot)（API 9+）
 
 ## 使用说明<a name="section1954919258619"></a>
 
