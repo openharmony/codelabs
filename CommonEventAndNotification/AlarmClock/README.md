@@ -100,9 +100,9 @@
         this.screenHeight = data.height
         // 设置canvas尺寸，竖屏取值为宽高最小值的1/3，横屏取值为宽高最小值的1/4
         this.canvasOnScreenRatio = (this.screenWidth < this.screenHeight ? 3 : 4)
-        this.size = (this.screenWidth < this.screenHeight ? this.screenWidth : this.screenHeight) / this.canvasOnScreenRatio
+        this.canvasSize = (this.screenWidth < this.screenHeight ? this.screenWidth : this.screenHeight) / this.canvasOnScreenRatio
         // 重置原点到canvas画布中间
-        this.context.translate(this.size, this.size / 2)
+        this.context.translate(this.canvasSize, this.canvasSize / 2)
       });
     }
     ```
@@ -111,11 +111,11 @@
 
     ```
     Canvas(this.context)
-      .height(this.size)
+      .height(this.canvasSize)
       .aspectRatio(2.0)
       .onReady(() =>{
         // 获取半径
-        this.radius = this.size / 2 - 2.5
+        this.radius = this.canvasSize / 2 - 2.5
         var that = this
         // 避免时钟闪现，先画一遍
         that.draw()
@@ -136,7 +136,7 @@
     // 开始绘制
     private draw(): void{
       // 清空绘制
-      this.context.clearRect(-this.size, this.size / -2, this.size * 2, this.size)
+      this.context.clearRect(-this.canvasSize, this.canvasSize / -2, this.canvasSize * 2, this.canvasSize)
       // 获取当前时间
       let date = new Date()
       if(this.showClock) {
