@@ -23,7 +23,7 @@
 -   [OpenHarmony的WIFI 能力（Native）](https://gitee.com/openharmony/communication_wifi)
 -   [OpenHarmony的音频能力（Native）](https://gitee.com/openharmony/multimedia_audio_standard)
 -   [OpenHarmony Socket 通信能力（ets）](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-socket.md)
--   [OpenHarmony stage模型（API9）](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/module-structure.md)
+-   [OpenHarmony Stage模型（API9）](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md)
 
 # 搭建OpenHarmony环境
 
@@ -62,10 +62,7 @@
 
 ## 北向环境搭建
 
-北向环境可以参考官网的教程进行安装与配置，点击下列步骤标题的链接进一步操作。
-
-1.  [下载DevEco Studio 3.0 Beta3](https://developer.harmonyos.com/cn/develop/deveco-studio/)
-2.  [配置与安装](https://developer.harmonyos.com/cn/docs/documentation/doc-guides/ohos-deveco-studio-setup-flow-0000001218600628)
+北向环境可以参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)的教程进行安装与配置。
 
 # 代码结构解读
 
