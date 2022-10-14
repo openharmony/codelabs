@@ -17,10 +17,9 @@
 
 2. 搭建烧录环境
 
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
-
-    2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-lite-steps-hi3516-burn.md)
-
+    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env--win.md)
+2.  [完成Hi3516开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3516-burn.md)
+    
 3. 搭建开发环境
 
     1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) ，完成DevEco Studio的安装和开发环境配置。
@@ -155,7 +154,7 @@ export default class KvStoreModel {
     });
   }
   ```
-	
+
 # 同步分布式数据库
 
 通常情况下，当数据库的数据产生变化时，需要主动通知与该数据相关联的进程或者应用，从而使得相关进程或者应用接收到数据变化后完成相应的处理。对于数据提供方，当数据库数据变化，可以通过如下方法通知数据订阅者：
