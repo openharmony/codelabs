@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import distributedData from '@ohos.data.distributeddata';
+import distributedData from '@ohos.data.distributedData';
 
 const STORE_ID = 'musicplayer_kvstore';
 

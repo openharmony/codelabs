@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import ohos_data_ability from '@ohos.data.dataability'
-import ohos_data_rdb from '@ohos.data.rdb'
+import dataAbility from '@ohos.data.dataAbility';
+import ohos_data_rdb from '@ohos.data.rdb';
 
 const STORE_CONFIG = { name: "RdbTest.db" }
 const SQL_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS EMPLOYEE (ID INTEGER PRIMARY KEY AUTOINCREMENT, NAME TEXT NOT NULL, AGE INTEGER, GENDER TEXT NOT NULL)"
@@ -25,7 +25,7 @@ export default class KvStoreModel {
     createKvStore(callback) {
        if (typeof (this.rdbStore) === 'undefined') {
            let self = this;
-           let promise = ohos_data_rdb.getRdbStore(STORE_CONFIG, 1)
+           let promise = dataAbility.getRdbStore(STORE_CONFIG, 1)
            promise.then(async (rdbStore) => {
                self.rdbStore = rdbStore;
                await rdbStore.executeSql(SQL_CREATE_TABLE, null);
