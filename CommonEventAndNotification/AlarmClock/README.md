@@ -33,8 +33,8 @@
     ![](figures/zh-cn_image_0000001214154402.png)
 
 2.  搭建烧录环境。
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
-    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-running-rk3568-burning.md)
+    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env--win.md)
+    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
 3.  搭建开发环境。
     1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
@@ -100,9 +100,9 @@
         this.screenHeight = data.height
         // 设置canvas尺寸，竖屏取值为宽高最小值的1/3，横屏取值为宽高最小值的1/4
         this.canvasOnScreenRatio = (this.screenWidth < this.screenHeight ? 3 : 4)
-        this.size = (this.screenWidth < this.screenHeight ? this.screenWidth : this.screenHeight) / this.canvasOnScreenRatio
+        this.canvasSize = (this.screenWidth < this.screenHeight ? this.screenWidth : this.screenHeight) / this.canvasOnScreenRatio
         // 重置原点到canvas画布中间
-        this.context.translate(this.size, this.size / 2)
+        this.context.translate(this.canvasSize, this.canvasSize / 2)
       });
     }
     ```
@@ -111,11 +111,11 @@
 
     ```
     Canvas(this.context)
-      .height(this.size)
+      .height(this.canvasSize)
       .aspectRatio(2.0)
       .onReady(() =>{
         // 获取半径
-        this.radius = this.size / 2 - 2.5
+        this.radius = this.canvasSize / 2 - 2.5
         var that = this
         // 避免时钟闪现，先画一遍
         that.draw()
@@ -136,7 +136,7 @@
     // 开始绘制
     private draw(): void{
       // 清空绘制
-      this.context.clearRect(-this.size, this.size / -2, this.size * 2, this.size)
+      this.context.clearRect(-this.canvasSize, this.canvasSize / -2, this.canvasSize * 2, this.canvasSize)
       // 获取当前时间
       let date = new Date()
       if(this.showClock) {
