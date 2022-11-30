@@ -2,6 +2,10 @@
 
 本篇Codelab实现了一个简单的动态权限申请示例。该示例采用基于TS扩展的声明式开发范式进行开发，需要使用OpenHarmony允许不同设备间的数据交换权限。
 
+>![](public_sys-resources/icon-note.gif) **说明：** 
+>本示例涉及使用系统接口，需要手动替换Full SDK才能编译通过，具体操作可参考[替换指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/full-sdk-switch-guide.md)。
+
+
 本篇Codelab主要讲述以下内容：
 
 -   如何配置动态权限。
@@ -32,8 +36,8 @@
     ![](figures/zh-cn_image_0000001214154402.png)
 
 2.  搭建烧录环境。
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-standard-env-setup.md)
-    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-standard-running-rk3568-burning.md)
+    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env--win.md)
+    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
 3.  搭建开发环境。
     1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
