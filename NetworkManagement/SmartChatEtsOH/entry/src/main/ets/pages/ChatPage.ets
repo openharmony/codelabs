@@ -33,17 +33,19 @@ struct Index {
         }.width('100%')
       }.layoutWeight(1)
       Divider().color(0xCCCCCC)
-      Row() {
+      Flex({ justifyContent: FlexAlign.SpaceBetween }) {
         TextInput({ placeholder: '', text: '' })
           .height(60)
           .fontSize(30)
           .margin(10)
-          .width('80%')
+          .flexBasis(1)
+          .flexGrow(3)
           .onChange((value: string) => {
             this.sendMsg = value
           })
         Button("发送").height(50)
-          .width(100)
+          .flexBasis(1)
+          .flexGrow(1)
           .margin(10)
           .onClick(() => {
             this.msgArr.push("2-" + this.sendMsg)
