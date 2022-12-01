@@ -379,24 +379,24 @@ struct CustomDialogSave {
         .fontSize(30)
         .height(100)
 
-      Flex({ justifyContent: FlexAlign.Center }) {
-        Button('不保存')
-          .onClick(() => {
-            this.controller.close()
-            this.cancel()
-          })
-          .backgroundColor(0xffffff)
-          .fontColor(Color.Blue)
-          .fontSize(30)
+      Flex({ justifyContent: FlexAlign.SpaceBetween }) {
+        Button('不保存') {
+          Text('不保存').fontSize(24).fontColor(Color.Blue)
+        }
+        .onClick(() => {
+          this.controller.close()
+          this.cancel()
+        })
+        .backgroundColor(0xffffff)
 
-        Button('保存')
-          .onClick(() => {
-            this.controller.close()
-            this.confirm()
-          })
-          .backgroundColor(0xffffff)
-          .fontColor(Color.Blue)
-          .fontSize(30)
+        Button('保存') {
+          Text('保存').fontSize(24).fontColor(Color.Blue)
+        }
+        .onClick(() => {
+          this.controller.close()
+          this.confirm()
+        })
+        .backgroundColor(0xffffff)
       }
       .height(100)
     }
