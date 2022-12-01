@@ -39,15 +39,15 @@ struct Index {
           Text(this.message).height('100%').align(Alignment.Center).fontSize(24).fontWeight(500)
         }.height('15%').width('100%').justifyContent(FlexAlign.Center)
         Row(){
-          Text(this.tipsNum1).fontColor(Color.Black).fontSize(24).width('30%').height('100%').margin({left:30})
+          Text(this.tipsNum1).fontColor(Color.Black).fontSize(24).width('40%').height('100%').margin({left:30})
           TextInput({ placeholder: '请输入第一个数字：', controller:this.textInputController1}).type(InputType.Number)
-            .height('100%').width('60%').margin({left:10,right:30})
+            .height('100%').width('50%').margin({left:10,right:30})
             .onChange(value =>{this.num1 = parseFloat(value)})
         }.height('5%').width('100%').justifyContent(FlexAlign.Start)
         Row(){
-          Text(this.tipsNum2).fontColor(Color.Black).fontSize(24).width('30%').height('100%').margin({left:30})
+          Text(this.tipsNum2).fontColor(Color.Black).fontSize(24).width('40%').height('100%').margin({left:30})
           TextInput({ placeholder: '请输入第二个数字：', controller:this.textInputController2}).type(InputType.Number)
-            .height('100%').width('60%').margin({left:10,right:30})
+            .height('100%').width('50%').margin({left:10,right:30})
             .onChange(value =>{this.num2 = parseFloat(value)})
         }.height('5%').width('100%').margin({top:20})
         Row(){
