@@ -38,8 +38,6 @@
   - [分布式邮件（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)（API 8+）
   - [分布式亲子早教系统（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)（API 8+）
   - [分布式遥控器（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)（API 8+）
-- 公共事件与通知
-  - [闹钟应用（eTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/CommonEventAndNotification/AlarmClock)（API 9+）
 - 媒体
   - [图片编辑模板（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEditorTemplate)（API 8+）
   - [图片常见操作（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageJsDemo)（API 8+）
@@ -67,7 +65,7 @@
   - [OLED屏幕显示](https://gitee.com/openharmony/codelabs/tree/master/Device/OLED%E5%B1%8F%E5%B9%95%E7%9A%84%E6%98%BE%E7%A4%BA)（开发板类型：Hi3861，OpenHarmony系统：OpenHarmony 3.0 LTS）
   - [智能门禁](https://gitee.com/openharmony/codelabs/tree/master/Device/smart_door_access)（开发板类型：RK3568，OpenHarmony系统：OpenHarmony 3.0.2 LTS）
 - 三方库
-  - [VCard（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)（API 8+）
+  - [VCard（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)（API 9+）
 - 网络管理
   - [使用UDP实现与服务端通信（eTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/UdpDemoOH)（API 9+）
   - [使用HTTP实现与服务端通信（eTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/SmartChatEtsOH)（API 9+）
