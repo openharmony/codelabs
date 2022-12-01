@@ -110,6 +110,8 @@ export default {
   },
 
   onDestroy() {
-    this.deviceMag.release();
+    if (this.deviceMag !== null && JSON.stringify(this.deviceMag) !== '{}') {
+      this.deviceMag.release();
+    }
   }
 };
