@@ -23,11 +23,11 @@ struct Index {
   private context = null;
   aboutToAppear() {
     console.log('[LIFECYCLE-Index] aboutToAppear');
-    nativePageLifecycle.aboutToAppear();
+    // nativePageLifecycle.aboutToAppear();
   }
   aboutToDisappear() {
     console.log('[LIFECYCLE-Index] aboutToDisappear');
-    nativePageLifecycle.aboutToDisappear();
+    // nativePageLifecycle.aboutToDisappear();
   }
 
   onPageShow() {
