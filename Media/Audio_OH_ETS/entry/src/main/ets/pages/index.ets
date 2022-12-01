@@ -133,14 +133,20 @@ struct Index {
   @Builder RecordItem(item) {
     Column() {
       Text('录音名称：' + item.displayName)
+        .maxLines(1)
         .width('100%')
-        .fontSize(24)
+        .fontSize(16)
+        .textOverflow({overflow:TextOverflow.Ellipsis})
       Text('录音时间：' + DateTimeUtils.dateFormat(item.dateAdded))
+        .maxLines(1)
         .width('100%')
-        .fontSize(24)
+        .fontSize(16)
+        .textOverflow({overflow:TextOverflow.Ellipsis})
       Text('录音目录：' + item.uri)
+        .maxLines(1)
         .width('100%')
-        .fontSize(24)
+        .fontSize(16)
+        .textOverflow({overflow:TextOverflow.Ellipsis})
     }
     .stateStyles({
       normal: this.normalStyles,
