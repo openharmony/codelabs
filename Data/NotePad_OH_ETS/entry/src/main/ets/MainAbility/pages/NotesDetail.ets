@@ -380,7 +380,7 @@ struct CustomDialogSave {
         .height(100)
 
       Flex({ justifyContent: FlexAlign.SpaceBetween }) {
-        Button('不保存') {
+        Button() {
           Text('不保存').fontSize(24).fontColor(Color.Blue)
         }
         .onClick(() => {
@@ -389,7 +389,7 @@ struct CustomDialogSave {
         })
         .backgroundColor(0xffffff)
 
-        Button('保存') {
+        Button() {
           Text('保存').fontSize(24).fontColor(Color.Blue)
         }
         .onClick(() => {
