@@ -1,18 +1,19 @@
 {
-	"name": "notepad_oh_ets",
-	"version": "1.0.0",
-	"ohos": {
-		"org": "huawei",
-		"buildTool": "hvigor",
-		"directoryLevel": "project"
+	"license":"ISC",
+	"devDependencies":{},
+	"name":"notepad_oh_ets",
+	"ohos":{
+		"org":"huawei",
+		"directoryLevel":"project",
+		"buildTool":"hvigor"
 	},
-	"description": "example description",
-	"repository": {},
-	"license": "ISC",
-	"dependencies": {
-		"hypium": "^1.0.0",
-		"@ohos/hvigor": "1.2.2",
-		"@ohos/hvigor-ohos-plugin": "1.2.2",
-		"@ohos/hypium": "1.0.2"
+	"description":"example description",
+	"repository":{},
+	"version":"1.0.0",
+	"dependencies":{
+		"@ohos/hypium":"1.0.2",
+		"@ohos/hvigor-ohos-plugin":"1.2.2",
+		"hypium":"^1.0.0",
+		"@ohos/hvigor":"1.2.2"
 	}
 }
