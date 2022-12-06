@@ -26,7 +26,6 @@
   - [流式布局（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/FlowLayoutEts)（API 8+）
   - [弹窗（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CustomDialogEts)（API 8+）
   - [一次开发多端部署（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/MultiDeploymentEts)（API 8+）
-  - [Web组件加载本地H5小程序（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/WebComponent)（API 9+）
   - [像素转换（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/PixelUnitsDemo)（API 9+）
   - [ArkUI常用布局容器对齐方式（eTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/LayoutAlignmentDemo)（API 9+）
 - 分布式
