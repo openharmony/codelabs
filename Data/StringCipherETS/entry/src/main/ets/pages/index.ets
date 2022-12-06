@@ -14,8 +14,8 @@
  */
 
 // @ts-nocheck
-import prompt from '@system.prompt';
-import router from '@system.router';
+import prompt from '@ohos.prompt';
+import router from '@ohos.router';
 import cipher from '@system.cipher';
 import { User } from '../model/User';
 import { InputItem } from '../pages/inputItem'
@@ -166,7 +166,7 @@ struct Index {
       ivOffset: 0,
       ivLen: 16,
       success: function(data) {
-        that.decryptPassword = data.data.text;
+        that.decryptPassword = data.text;
         that.login();
       },
       fail: function (data, code) {
