@@ -14,8 +14,8 @@
  */
 
 // @ts-nocheck
-import prompt from '@system.prompt';
-import router from '@system.router';
+import prompt from '@ohos.prompt';
+import router from '@ohos.router';
 import cipher from '@system.cipher';
 import { User } from '../model/User';
 import { InputItem } from '../pages/inputItem';
@@ -187,7 +187,7 @@ struct Register {
       ivOffset: 0,
       ivLen: 16,
       success: function(data) {
-        that.encryptPassword = data.data.text;
+        that.encryptPassword = data.text;
         that.insertUser();
       },
       fail: function (data, code) {
