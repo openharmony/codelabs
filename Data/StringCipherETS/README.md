@@ -278,7 +278,7 @@
        ivOffset: 0,
        ivLen: 16,
        success: function(data) {
-         that.decryptPassword = data.data.text;
+         that.decryptPassword = data.text;
          that.login();
        },
        fail: function (data, code) {
@@ -486,7 +486,7 @@
        ivOffset: 0,
        ivLen: 16,
        success: function(data) {
-         that.encryptPassword = data.data.text;
+         that.encryptPassword = data.text;
          that.insertUser();
        },
        fail: function (data, code) {

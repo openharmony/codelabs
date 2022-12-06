@@ -14,7 +14,7 @@
  */
 
 import dataRdb from '@ohos.data.rdb'
-import prompt from '@system.prompt'
+import prompt from '@ohos.prompt'
 
 export class RdbModel {
     private rdbStore: any = null
