@@ -48,7 +48,7 @@ export default {
   // 开始画
   draw() {
     // 将画布沿X、Y轴平移指定距离
-    this.ctx.translate(this.centerX + 10, this.centerY);
+    this.ctx.translate(this.centerX + 20, this.centerY - this.padding * 1.3);
     // 画外部圆盘的花瓣
     this.drawFlower();
     // 画外部圆盘、小圈圈、五角星
@@ -217,8 +217,8 @@ export default {
     const floatX = event.touches[0].globalX;
     const floatY = event.touches[0].globalY;
     const radius = this.centerX / 7 + this.padding / 2;
-    const isScopeX = this.centerX - radius < floatX && this.centerX + radius > floatX;
-    const isScopeY = this.centerY - radius < floatY && this.centerY + radius > floatY;
+    const isScopeX = this.centerX + 20 - radius < floatX && this.centerX + 20 + radius > floatX;
+    const isScopeY = this.centerY - this.padding * 1.3 - radius < floatY && this.centerY - this.padding * 1.3 + radius > floatY;
     if (isScopeX && isScopeY && this.playState !== 'running') {
       this.startAnimator();
     }
@@ -228,7 +228,7 @@ export default {
   drawCenter() {
     const nine = 10;
     const centerCtx = this.$element('center').getContext('2d');
-    centerCtx.translate(this.centerX, this.centerY);
+    centerCtx.translate(this.centerX + 20, this.centerY - this.padding * 1.3);
 
     // 画大指针
     centerCtx.beginPath();
