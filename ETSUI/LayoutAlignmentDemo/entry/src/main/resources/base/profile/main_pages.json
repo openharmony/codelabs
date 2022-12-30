@@ -1,9 +1,0 @@
-{
-  "src": [
-    "pages/Index",
-    "pages/FlexComponent",
-    "pages/ColumnComponent",
-    "pages/RowComponent",
-    "pages/StackComponent"
-  ]
-}

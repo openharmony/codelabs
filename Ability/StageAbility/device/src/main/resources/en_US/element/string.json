@@ -1,0 +1,40 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Module Description"
+    },
+    {
+      "name": "SecondAbility_desc",
+      "value": "SecondAbility Description"
+    },
+    {
+      "name": "SecondAbility_label",
+      "value": "SecondAbility"
+    },
+    {
+      "name": "second_index_page_name",
+      "value": "I am the Index Page of SecondAbility"
+    },
+    {
+      "name": "second_second_page_name",
+      "value": "I am the Second Page of SecondAbility"
+    },
+    {
+      "name": "terminate_second_btn_text",
+      "value": "Stop SecondAbility itself"
+    },
+    {
+      "name": "terminate_second_for_result_btn_text",
+      "value": "Stop SecondAbility itself and return the result"
+    },
+    {
+      "name": "text_message",
+      "value": "The value that comes from the Index Page of EntryAbility"
+    },
+    {
+      "name": "return_message",
+      "value": "The value returned by the Second Page of SecondAbility"
+    }
+  ]
+}

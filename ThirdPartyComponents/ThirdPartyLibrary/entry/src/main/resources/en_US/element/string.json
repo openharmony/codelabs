@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "MainAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "main_title",
+      "value": "Library calls"
+    },
+    {
+      "name": "tab_title_inner",
+      "value": "Local call"
+    },
+    {
+      "name": "tab_title_outer",
+      "value": "Community call"
+    },
+    {
+      "name": "outer_button_load",
+      "value": "Load Animation"
+    },
+    {
+      "name": "outer_button_end",
+      "value": "End and return to frame 0"
+    },
+    {
+      "name": "outer_button_start",
+      "value": "play"
+    },
+    {
+      "name": "outer_button_pause",
+      "value": "pause"
+    }
+  ]
+}

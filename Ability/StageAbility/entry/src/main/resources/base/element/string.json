@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Entry Description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "EntryAbility Description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "StageAbility"
+    },
+    {
+      "name": "main_index_page_name",
+      "value": "I am the Index Page of EntryAbility"
+    },
+    {
+      "name": "main_second_page_name",
+      "value": "I am the Second Page of EntryAbility"
+    },
+    {
+      "name": "to_main_second_page_btn_text",
+      "value": "Navigate to the Second Page of EntryAbility"
+    },
+    {
+      "name": "to_second_index_page_btn_text",
+      "value": "Navigate to the Index Page of SecondAbility"
+    },
+    {
+      "name": "to_second_second_page_btn_text",
+      "value": "Navigate to the Second Page of SecondAbility"
+    },
+    {
+      "name": "back_main_index_page_btn_text",
+      "value": "Return to the Index Page of EntryAbility"
+    },
+    {
+      "name": "text_message",
+      "value": "The value that comes from the Index Page of EntryAbility"
+    },
+    {
+      "name": "return_message",
+      "value": "The value returned by the Second Page of SecondAbility"
+    }
+  ]
+}
