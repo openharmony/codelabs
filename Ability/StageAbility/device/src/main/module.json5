@@ -1,0 +1,27 @@
+{
+  "module": {
+    "name": "device",
+    "type": "feature",
+    "description": "$string:module_desc",
+    "mainElement": "SecondAbility",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    "abilities": [
+      {
+        "name": "SecondAbility",
+        "srcEntrance": "./ets/secondability/SecondAbility.ts",
+        "description": "$string:SecondAbility_desc",
+        "icon": "$media:icon",
+        "label": "$string:SecondAbility_label",
+        "startWindowIcon": "$media:icon",
+        "startWindowBackground": "$color:start_window_background",
+        "visible": true
+      }
+    ]
+  }
+}
