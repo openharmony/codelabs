@@ -35,7 +35,7 @@ lpx：视窗逻辑像素单位，lpx单位为实际屏幕宽度与逻辑宽度�
     ![](figures/zh-cn_image_0000001264659110.png)
 
 2.  搭建烧录环境。
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env--win.md)
+    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
     2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
 3.  搭建开发环境。
