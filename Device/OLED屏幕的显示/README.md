@@ -12,7 +12,7 @@ ADC是模拟-数字转换器（Analog to Digital Converter）的缩写。可以�
 
 完成本篇Codelab，我们首先需要完成开发环境搭建、源码编译，可参照如下步骤进行。
 
-1.  [搭建开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env--win.md)。
+1.  [搭建开发环境](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)。
 2.  编译源码：建议开发者选择LTS 3.0版本源码进行编译，本篇Codelab是基于此版本开发的。
 
     [编译Hi3861V100开发板源码](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3861-build.md)

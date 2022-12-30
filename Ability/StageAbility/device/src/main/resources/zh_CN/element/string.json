@@ -1,0 +1,40 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "SecondAbility_desc",
+      "value": "SecondAbility Description"
+    },
+    {
+      "name": "SecondAbility_label",
+      "value": "SecondAbility"
+    },
+    {
+      "name": "second_index_page_name",
+      "value": "我是SecondAbility的Index Page"
+    },
+    {
+      "name": "second_second_page_name",
+      "value": "我是SecondAbility的Second Page"
+    },
+    {
+      "name": "terminate_second_btn_text",
+      "value": "停止SecondAbility自身"
+    },
+    {
+      "name": "terminate_second_for_result_btn_text",
+      "value": "停止SecondAbility自身并返回结果"
+    },
+    {
+      "name": "text_message",
+      "value": "EntryAbility的Index Page传来的数值"
+    },
+    {
+      "name": "return_message",
+      "value": "SecondAbility的Second Page返回的数值"
+    }
+  ]
+}

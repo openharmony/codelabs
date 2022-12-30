@@ -1,0 +1,16 @@
+{
+  "color": [
+    {
+      "name": "text_font_color",
+      "value": "#182431"
+    },
+    {
+      "name": "button_background_color",
+      "value": "#007DFF"
+    },
+    {
+      "name": "background_color",
+      "value": "#F1F3F5"
+    }
+  ]
+}

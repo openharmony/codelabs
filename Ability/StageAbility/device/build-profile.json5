@@ -1,0 +1,13 @@
+{
+  "apiType": 'stageMode',
+  "buildOption": {
+  },
+  "entryModules": [
+    "entry"
+  ],
+  "targets": [
+    {
+      "name": "default"
+    }
+  ]
+}

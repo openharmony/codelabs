@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "EntryAbility Description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "StageAbility"
+    },
+    {
+      "name": "main_index_page_name",
+      "value": "我是EntryAbility的Index Page"
+    },
+    {
+      "name": "main_second_page_name",
+      "value": "我是EntryAbility的Second Page"
+    },
+    {
+      "name": "to_main_second_page_btn_text",
+      "value": "导航到EntryAbility的Second Page"
+    },
+    {
+      "name": "to_second_index_page_btn_text",
+      "value": "导航到SecondAbility的Index Page"
+    },
+    {
+      "name": "to_second_second_page_btn_text",
+      "value": "导航到SecondAbility的Second Page"
+    },
+    {
+      "name": "back_main_index_page_btn_text",
+      "value": "返回到EntryAbility的Index Page"
+    },
+    {
+      "name": "text_message",
+      "value": "EntryAbility的Index Page传来的数值"
+    },
+    {
+      "name": "return_message",
+      "value": "SecondAbility的Second Page返回的数值"
+    }
+  ]
+}

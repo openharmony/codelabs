@@ -1,0 +1,92 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "description"
+    },
+    {
+      "name": "Entry_ability_desc",
+      "value": "description"
+    },
+    {
+      "name": "Entry_ability_label",
+      "value": "SetAppFontSize"
+    },
+    {
+      "name": "home_display_and_brightness",
+      "value": "Display & brightness"
+    },
+    {
+      "name": "home_title",
+      "value": "Settings"
+    },
+    {
+      "name": "home_voice",
+      "value": "Sounds"
+    },
+    {
+      "name": "home_app_management",
+      "value": "Apps"
+    },
+    {
+      "name": "home_storage",
+      "value": "Storage"
+    },
+    {
+      "name": "home_privacy",
+      "value": "Privacy"
+    },
+    {
+      "name": "home_setting_the_font_size",
+      "value": "Setting the font size"
+    },
+    {
+      "name": "set_title",
+      "value": "Font size settings"
+    },
+    {
+      "name": "set_chat_content1",
+      "value": "Did you know that you can now clock in a variety of health goals for healthy living?"
+    },
+    {
+      "name": "set_chat_content2",
+      "value": "Yes, I added exercise and diet related goals."
+    },
+    {
+      "name": "set_chat_content3",
+      "value": "That's great. How do you feel?"
+    },
+    {
+      "name": "set_chat_content4",
+      "value": "Life is getting better and better, you have a try!"
+    },
+    {
+      "name": "set_size_small",
+      "value": "Small"
+    },
+    {
+      "name": "set_size_normal",
+      "value": "Normal"
+    },
+    {
+      "name": "set_size_large",
+      "value": "Large"
+    },
+    {
+      "name": "set_size_extra_large",
+      "value": "Extra large"
+    },
+    {
+      "name": "set_size_huge",
+      "value": "Huge"
+    },
+    {
+      "name": "set_font_size",
+      "value": "Text size"
+    },
+    {
+      "name": "set_char_a",
+      "value": "A"
+    }
+  ]
+}
