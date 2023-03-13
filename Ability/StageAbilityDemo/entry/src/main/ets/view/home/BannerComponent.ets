@@ -15,7 +15,7 @@
 
 import BannerData from '../../common/bean/BannerData';
 import { Banner } from '../../common/constants/HomeConstants';
-import { PERCENTAGE_100, PERCENTAGE_23 } from '../../common/constants/Constants';
+import { PERCENTAGE_100, PERCENTAGE_20 } from '../../common/constants/Constants';
 
 @Component
 export default struct BannerComponent {
@@ -28,7 +28,7 @@ export default struct BannerComponent {
           Image(item.imgSrc)
             .width(PERCENTAGE_100)
             .objectFit(ImageFit.Contain)
-        })
+        }, item => JSON.stringify(item))
       }
       .cachedCount(Banner.CACHE_COUNT)
       .index(Banner.POSITION)
@@ -47,6 +47,6 @@ export default struct BannerComponent {
       .curve(Curve.Linear)
     }
     .width(Banner.WIDTH)
-    .height(PERCENTAGE_23)
+    .height(PERCENTAGE_20)
   }
 }

@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import web_webview from '@ohos.web.webview';
 import router from '@ohos.router';
 import { showDialog } from '../common/utils/DialogUtil';
@@ -61,15 +60,15 @@ export struct LinkButton {
           let originCookie = web_webview.WebCookieManager.getCookie(USER_CENTER_URL);
           showDialog(originCookie);
         } catch (error) {
-          showDialog(`EorrorCode:${error.code},Message:${error.message}`);
+          showDialog(`ErrorCode: ${error.code},  Message: ${error.message}`);
         }
         break;
       case CookieOperation.SET_COOKIE:
         try {
-          web_webview.WebCookieManager.setCookie(USER_ABOUT_URL, 'info=测试cookie写入')
+          web_webview.WebCookieManager.setCookie(USER_ABOUT_URL, 'info=测试cookie写入');
           showDialog($r('app.string.write_success'));
         } catch (error) {
-          showDialog($r('app.string.write_fail'));
+          showDialog(`ErrorCode: ${error.code},  Message: ${error.message}`);
         }
         break;
       case CookieOperation.DELETE_COOKIE:
@@ -78,8 +77,10 @@ export struct LinkButton {
         showDialog(deleteMessage);
         break;
       case CookieOperation.VERIFY_COOKIE:
-        router.push({
+        router.pushUrl({
           url: PAGE_VERIFY
+        }).catch(err => {
+          console.error('[LinkButton] push url fail: ' + err);
         });
         break;
       default:

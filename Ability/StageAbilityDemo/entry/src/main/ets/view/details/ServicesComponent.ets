@@ -38,7 +38,7 @@ export default struct ServicesComponent {
             isShowActionMore: item?.name != null
           })
         }
-      }, (item) => (item?.id).toString())
+      }, item => JSON.stringify(item))
 
     }
     .width(PERCENTAGE_100)

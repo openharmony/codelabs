@@ -24,13 +24,10 @@ import {
   WEB_WIDTH,
   PAGE_TITLE_HEIGHT,
   PAGE_TITLE_WIDTH,
-  PAGE_TITLE_MARGIN_TOP,
-  PAGE_TITLE_MARGIN_BOTTOM,
   FONT_WEIGHT_DEEPER,
   APP_TITLE_MARGIN_TOP,
   APP_TITLE_MARGIN_LEFT,
   WEB_MARGIN_BOTTOM,
-  ROW_MARGIN_BOTTOM,
   CookieOperation
 } from '../common/constants/CommonConstant';
 import { LinkButton } from '../view/LinkButton'
@@ -59,7 +56,7 @@ struct WebIndex {
         .fontColor($r('app.color.title_black'))
         .width(PAGE_TITLE_WIDTH)
         .height(PAGE_TITLE_HEIGHT)
-        .margin({ top: PAGE_TITLE_MARGIN_TOP, bottom: PAGE_TITLE_MARGIN_BOTTOM })
+        .margin({ top: $r('app.float.page_title_margin_top'), bottom: $r('app.float.page_title_margin_bottom') })
 
       Web({
         src: USER_CENTER_URL,
@@ -79,9 +76,7 @@ struct WebIndex {
         LinkButton({ buttonType: CookieOperation.DELETE_COOKIE, isNeedDivider: true })
         LinkButton({ buttonType: CookieOperation.VERIFY_COOKIE, isNeedDivider: false })
       }
-      .align(Alignment.End)
       .width(WEB_WIDTH)
-      .margin({ bottom: ROW_MARGIN_BOTTOM })
     }
     .backgroundColor($r('app.color.page_background_grey'))
     .width(FULL_WIDTH)

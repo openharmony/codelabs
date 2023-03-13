@@ -55,8 +55,7 @@ export struct Inner {
                   buttonShape: item.buttonShape,
                   buttonType: item.buttonType,
                   stateEffect: item.stateEffect,
-                  fontColor: item.fontColor,
-                  click: ()=> {}
+                  fontColor: item.fontColor
                 })
                   .alignSelf(ItemAlign.Center)
                   .margin({ bottom: $r('app.float.default_21') })

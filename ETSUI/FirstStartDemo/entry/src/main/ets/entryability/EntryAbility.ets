@@ -13,21 +13,19 @@
  * limitations under the License.
  */
 
-import Ability from '@ohos.application.Ability';
-import Want from '@ohos.application.Want';
-import window from '@ohos.window';
+import UIAbility from '@ohos.app.ability.UIAbility';
 import Logger from '../common/utils/Logger';
 import CommonConstants from '../common/constants/CommonConstants';
 
 /**
  * Lift cycle management of Ability.
  */
-export default class EntryAbility extends Ability {
-  onCreate(want: Want) {
+export default class EntryAbility extends UIAbility {
+  onCreate(want) {
     globalThis.abilityWant = want;
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage) {
+  onWindowStageCreate(windowStage) {
     Logger.info(CommonConstants.ENTRY_ABILITY_TAG, 'onWindowStageCreate');
     windowStage.loadContent('pages/LauncherPage', (err, data) => {
       if (err.code) {

@@ -30,8 +30,6 @@ import {
   PAGE_TITLE_WIDTH,
   NAVIGATOR_MARGIN_TOP,
   NAVIGATOR_MARGIN_LEFT,
-  PAGE_TITLE_MARGIN_TOP,
-  PAGE_TITLE_MARGIN_BOTTOM,
   FONT_WEIGHT_DEEPER
 } from '../common/constants/CommonConstant';
 
@@ -74,7 +72,7 @@ struct Verify {
         .fontColor($r('app.color.title_black'))
         .width(PAGE_TITLE_WIDTH)
         .height(PAGE_TITLE_HEIGHT)
-        .margin({ top: PAGE_TITLE_MARGIN_TOP, bottom: PAGE_TITLE_MARGIN_BOTTOM })
+        .margin({ top: $r('app.float.page_title_margin_top'), bottom: $r('app.float.page_title_margin_bottom') })
 
       Web({
         src: USER_ABOUT_URL,
@@ -86,14 +84,14 @@ struct Verify {
         .javaScriptAccess(true)
         .onPageEnd(() => {
           try {
-            if (this.isRedirect) {
+            let originCookie = web_webview.WebCookieManager.getCookie(USER_ABOUT_URL);
+            if (originCookie === '' || this.isRedirect) {
               return;
             }
             this.isRedirect = true;
-            let originCookie = web_webview.WebCookieManager.getCookie(USER_ABOUT_URL);
             showDialog(originCookie);
           } catch (error) {
-            showDialog(`EorrorCode:${error.code},Message:${error.message}`);
+            showDialog(`ErrorCode: ${error.code},  Message: ${error.message}`);
           }
         })
     }
