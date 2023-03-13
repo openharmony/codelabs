@@ -191,6 +191,17 @@ napi_value PluginRender::NapiDrawRectangle(napi_env env, napi_callback_info info
     return nullptr;
 }
 
+PluginRender* PluginRender::releaseEgl()
+{
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    std::string id(idStr);
+        PluginRender* render = PluginRender::getInstance(id);
+        if (render) {
+            render->eglCore_->release();
+        }
+        return nullptr;
+}
+
 
 #ifdef __cplusplus
 }

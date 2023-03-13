@@ -15,6 +15,7 @@
 #ifndef PLUGIN_RENDER_H
 #define PLUGIN_RENDER_H
 
+#include <signal.h>
 #include <string>
 #include <unordered_map>
 
@@ -29,6 +30,7 @@ public:
     explicit PluginRender(std::string& id);
     ~PluginRender() {}
     static PluginRender* getInstance(std::string& id);
+    static PluginRender* releaseEgl();
 
 public:
     napi_value Export(napi_env env, napi_value exports);

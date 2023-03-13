@@ -20,6 +20,7 @@
 #include <hilog/log.h>
 
 #include "plugin_manager.h"
+#include "render/plugin_render.h"
 
 
 enum ContextType {
@@ -180,6 +181,7 @@ napi_value PluginManager::NapiOnHide(napi_env env, napi_callback_info info)
 napi_value PluginManager::NapiOnDestroy(napi_env env, napi_callback_info info)
 {
     OH_LOG_Print(LOG_APP, LOG_INFO, 0xFF00, "PluginManager", "NapiOnDestroy");
+    PluginRender::releaseEgl();
     // do something
     return nullptr;
 }
