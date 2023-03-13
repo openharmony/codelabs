@@ -29,6 +29,7 @@ public:
     void eglContextInit(void* window, int w, int h);
     void draw();
     void changeColor();
+    void release();
 
 public:
     std::string id_;

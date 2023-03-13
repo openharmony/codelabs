@@ -266,3 +266,10 @@ GLuint EGLCore::createProgram(const char * vertexShader, const char * fragShader
     glDeleteShader(fragment);
     return program;
 }
+
+void EGLCore::release()
+{
+    eglDestroySurface(mEglDisplay, mEglSurface);
+    eglDestroyContext(mEglDisplay, mEglContext);
+    eglTerminate(mEglDisplay);
+}
