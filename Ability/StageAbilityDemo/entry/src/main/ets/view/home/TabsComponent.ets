@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { AppFontSize, AppFontWeight, PERCENTAGE_100 } from '../../common/constants/Constants';
+import { AppFontSize, AppFontWeight, PERCENTAGE_100, Text_Margin } from '../../common/constants/Constants';
 import { GoodsTabs } from '../../common/constants/HomeConstants';
 
 @Component
@@ -27,7 +27,7 @@ export default struct TabsComponent {
           TabContent() {
           }
           .tabBar(this.TabBuilder(index))
-        })
+        }, item => JSON.stringify(item))
       }
       .vertical(false)
       .scrollable(true)
@@ -63,6 +63,7 @@ export default struct TabsComponent {
         .fontSize(AppFontSize.MIDDLE)
     }
     .height(PERCENTAGE_100)
+    .margin({left:Text_Margin})
     .justifyContent(FlexAlign.Center)
     .align(Alignment.Start)
   }

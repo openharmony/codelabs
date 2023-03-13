@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import AppContext from '@ohos.application.context';
+import AppContext from '@ohos.app.ability.common';
 import HomeViewModel from '../../viewmodel/HomeViewModel';
 import TopBarComponent from './TopBarComponent';
 import TabsComponent from './TabsComponent';
@@ -63,7 +63,8 @@ export default struct HomePage {
           let handler = getContext(this) as AppContext.Context;
           viewModel.startDetailsAbility(handler, index);
         } })
-      }.width(PERCENTAGE_100)
+      }
+      .width(PERCENTAGE_100)
     }
     .height(PERCENTAGE_100)
     .backgroundImage($rawfile('index/index_background.png'), ImageRepeat.NoRepeat)

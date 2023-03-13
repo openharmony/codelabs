@@ -31,7 +31,7 @@ export default struct GoodsComponent {
         }.onClick(() => {
           this.startPage(index);
         })
-      })
+      }, item => JSON.stringify(item))
     }
     .columnsTemplate(GoodsList.GRID_STYLE)
     .columnsGap(GoodsList.SPACE)

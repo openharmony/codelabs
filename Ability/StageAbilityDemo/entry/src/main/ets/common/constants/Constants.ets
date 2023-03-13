@@ -40,14 +40,19 @@ export { AppFontSize, AppFontWeight };
 export const PERCENTAGE_100 = '100%';
 
 /**
- * The percentage of 23.
+ * The percentage of 20.
  */
-export const PERCENTAGE_23 = '23%';
+export const PERCENTAGE_20 = '20%';
 
 /**
  * The percentage of 50.
  */
 export const PERCENTAGE_50 = '50%';
+
+/**
+ * The text margin of 18.
+ */
+export const Text_Margin = 18;
 
 /**
  * The style of CardComponent.
@@ -221,9 +226,13 @@ export const DetailsPageStyle = {
   /**
    * The image size for more action.
    */
-  IMAGE_SIZE_MORE: 14,
+  IMAGE_SIZE_MORE: 14
 };
 
+/**
+ * ability name.
+ */
+export const DETAILS_ABILITY_NAME = 'DetailsAbility'
 
 
 

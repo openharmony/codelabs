@@ -19,7 +19,7 @@ import { GoodsServiceItem } from '../../common/constants/DetailsConstants';
 @Component
 export default struct ServiceItemComponent {
   serviceName: string;
-  @Prop description: string;
+  description: string;
   isShowActionMore: boolean;
 
   build() {

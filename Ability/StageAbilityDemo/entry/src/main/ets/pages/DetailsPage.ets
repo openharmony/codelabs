@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import AppContext from '@ohos.application.context';
+import AppContext from '@ohos.app.ability.common';
 import { DetailsPageStyle, PERCENTAGE_100 } from '../common/constants/Constants';
 import AddressComponent from '../view/details/AddressComponent';
 import PickerComponent from '../view/details/PickerComponent';
@@ -77,7 +77,7 @@ struct DetailsPage {
     Image($rawfile('detail/detail_back.png'))
       .setTopImageStyle()
       .onClick(() => {
-        let handler = getContext(this) as AppContext.AbilityContext;
+        let handler = getContext(this) as AppContext.UIAbilityContext;
         handler.terminateSelf();
       })
   }
