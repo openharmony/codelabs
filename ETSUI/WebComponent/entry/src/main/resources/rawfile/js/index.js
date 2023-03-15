@@ -34,7 +34,7 @@ let prizesPosition = 0; // 转到哪个位置
 for (let j = 0;j < prizesImg.length; j++) {
     prizesImg[j].src = arrBigImg[j];
 }
-let speed = 500; // 转圈速度，值越大越慢
+let speed = 500; //转圈速度，值越大越慢
 
 // 旋转函数
 function roll() {

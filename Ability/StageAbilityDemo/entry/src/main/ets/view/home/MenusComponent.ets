@@ -37,7 +37,7 @@ export default struct MenusComponent {
         .width(Menus.LAYOUT_WEIGHT)
         .padding({ top: Menus.ITEM_PADDING_VERTICAL,
           bottom: Menus.ITEM_PADDING_VERTICAL })
-      })
+      }, item => JSON.stringify(item))
     }
     .justifyContent(FlexAlign.Center)
     .padding({ top: Menus.CONTAINER_PADDING_VERTICAL,

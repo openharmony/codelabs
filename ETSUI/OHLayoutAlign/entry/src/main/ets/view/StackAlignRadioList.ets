@@ -43,10 +43,10 @@ export struct StackAlignRadioList {
         ForEach(this.radioList, (item, index) => {
           StackAlignRadioListItem({ textName: item, groupName: this.groupName, isChecked: index === 0 ? true : false })
             .margin({ right: MARGIN_FONT_SIZE_SPACE.COMMON_MARGIN })
-        })
+        }, item => JSON.stringify(item))
       }
       .width(ALL_PERCENT)
-      .height(MARGIN_FONT_SIZE_SPACE.SEVENTH_MARGIN)
+      .height(ALL_PERCENT)
     }
     .width(ALL_PERCENT)
     .justifyContent(FlexAlign.Start)
@@ -56,11 +56,11 @@ export struct StackAlignRadioList {
 
 @Component
 export struct StackAlignRadioListItem {
-  @Consume message: string;
   private textName: string;
   private groupName: string;
   private isChecked: boolean;
   @Consume currentStackAlignContent: Alignment;
+  @Consume message: string;
 
   build() {
     Row() {
@@ -68,23 +68,27 @@ export struct StackAlignRadioListItem {
         .checked(this.isChecked)
         .height((MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN))
         .width((MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN))
-        .onChange(() => {
-          this.message = this.textName;
+        .onClick(() => {
           switch (this.textName) {
             case ATTRIBUTE.TOP_START:
               this.currentStackAlignContent = Alignment.TopStart;
+              this.message = ATTRIBUTE.TOP_START;
               break;
             case ATTRIBUTE.TOP_END:
               this.currentStackAlignContent = Alignment.TopEnd;
+              this.message = ATTRIBUTE.TOP_END;
               break;
             case ATTRIBUTE.CENTER:
               this.currentStackAlignContent = Alignment.Center;
+              this.message = ATTRIBUTE.CENTER;
               break;
             case ATTRIBUTE.BOTTOM_START:
               this.currentStackAlignContent = Alignment.BottomStart;
+              this.message = ATTRIBUTE.BOTTOM_START;
               break;
             default:
               this.currentStackAlignContent = Alignment.BottomEnd;
+              this.message = ATTRIBUTE.BOTTOM_END;
               break;
           }
         })

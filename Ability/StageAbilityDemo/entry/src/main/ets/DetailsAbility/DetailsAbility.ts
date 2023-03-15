@@ -14,7 +14,7 @@
  */
 
 import hilog from '@ohos.hilog';
-import Ability from '@ohos.application.Ability';
+import Ability from '@ohos.app.ability.UIAbility';
 
 const TAG: string = 'DetailsAbility';
 const KEY: string = 'GoodsPosition';
@@ -37,10 +37,10 @@ export default class DetailsAbility extends Ability {
 
         windowStage.loadContent('pages/DetailsPage', (err, data) => {
             if (err.code) {
-                hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+                hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed. Cause: %{public}s', JSON.stringify(err) ?? '');
                 return;
             }
-            hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
+            hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded. Data: %{public}s', JSON.stringify(data) ?? '');
         });
     }
 

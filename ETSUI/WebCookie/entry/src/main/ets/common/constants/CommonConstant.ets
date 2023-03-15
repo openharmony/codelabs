@@ -111,16 +111,6 @@ export const NAVIGATOR_MARGIN_TOP = '1.7%';
 export const NAVIGATOR_MARGIN_LEFT = '10%';
 
 /**
- * top margin of page title
- */
-export const PAGE_TITLE_MARGIN_TOP = '4.2%';
-
-/**
- * bottom margin of page title
- */
-export const PAGE_TITLE_MARGIN_BOTTOM = '3.7%';
-
-/**
  * deeper font weight than normal font
  */
 export const FONT_WEIGHT_DEEPER = 500;
@@ -128,22 +118,17 @@ export const FONT_WEIGHT_DEEPER = 500;
 /**
  * top margin of app title
  */
-export const APP_TITLE_MARGIN_TOP = '1.7%';
+export const APP_TITLE_MARGIN_TOP = '15vp';
 
 /**
  * left margin of app title
  */
-export const APP_TITLE_MARGIN_LEFT = '15%';
-
-/**
- * bottom margin of row
- */
-export const ROW_MARGIN_BOTTOM = '12%';
+export const APP_TITLE_MARGIN_LEFT = '26vp';
 
 /**
  * bottom margin of web
  */
-export const WEB_MARGIN_BOTTOM = '12%';
+export const WEB_MARGIN_BOTTOM = '90vp';
 
 /**
  * type of cookie Operation

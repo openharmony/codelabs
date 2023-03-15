@@ -14,7 +14,8 @@
  */
 
 // Thousandth
-export const THOUSANDTH_80: string = '8%'; 
+export const THOUSANDTH_80: string = '8%';
+export const THOUSANDTH_100: string = '10%';
 export const THOUSANDTH_400: string = '40%';
 export const THOUSANDTH_500: string = '50%';
 export const THOUSANDTH_560: string = '56%';
@@ -45,7 +46,7 @@ export const ADD_TASK_TITLE: string = '添加任务';
 export const EDIT_TASK_TITLE: string = '编辑任务';
 
 // prompt message
-export const SETTING_FINISHED_MESSAGE = '设置完成！！！';
+export const SETTING_FINISHED_MESSAGE = '设置完成';
 export const CHOOSE_TIME_OUT_RANGE: string = '选择时间超出范围';
 
 // date format

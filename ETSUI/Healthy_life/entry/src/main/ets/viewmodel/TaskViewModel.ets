@@ -16,7 +16,6 @@
 import { TaskInfoTable } from '../common/database/tables/TaskInfoTable';
 import { Logger } from '../common/utils/log/Logger';
 import TaskInfo, { oneWeek } from '../common/bean/TaskInfo';
-import reminder from '../common/reminderagent/ReminderAgent';
 import {
     EVERYDAY,
     GLOBAL_KEY,
@@ -26,64 +25,13 @@ import {
     EAT_APPLE_RANGE,
     TIMES_100
 } from '../common/constants/CommonConstants';
-import { TaskMapById, RemindContentMap, ITaskItem } from '../model/TaskInitList';
+import { TaskMapById, ITaskItem } from '../model/TaskInitList';
 import { padTo2Digits } from '../common/utils/Utils';
 
-const { publishReminder, cancelReminder, hasNotificationId } = reminder;
 const taskInfoTable = new TaskInfoTable();
 export const taskOriginData: ITaskItem[] = Object.keys(TaskMapById).map(item => {
     return TaskMapById[item];
 })
-
-/**
- * @description Call notification capability
- * @param params {
- *  hour: Hour
- *  minute: Minute
- *  daysOfWeek: Frequency of a week
- *  title: Notice Title
- *  content: Contents of notice
- *  notificationId: Notification ID
- * }
- *
- */
-const useReminder = (params) => {
-    try {
-        publishReminder({
-            hour: Number(params?.startTime.split(':')[0]),
-            minute: Number(params?.startTime.split(':')[1]),
-            daysOfWeek: params?.frequency.split(',').map(item => Number(item)),
-            title: RemindContentMap[params?.taskID].title,
-            content: RemindContentMap[params?.taskID].content,
-            notificationId: params?.taskID
-        });
-    } catch (error) {
-        Logger.error('publishReminder', JSON.stringify(error));
-    }
-}
-
-/**
- * @description Call cancel notification capability
- * @param reminderId Notification ID
- */
-const useCancelReminder = (reminderId) => {
-    try {
-        cancelReminder(reminderId);
-    } catch (error) {
-        Logger.error('cancelReminder', JSON.stringify(error));
-    }
-}
-
-/**
- * @description Determine whether there is a notification
- * @param notificationId Notification ID
- */
-const isHasNotificationId = (notificationId: number) => {
-    return new Promise((resolve) => {
-        resolve(hasNotificationId(notificationId));
-    });
-}
-
 
 /**
  * @description Get all task status
@@ -110,17 +58,6 @@ export const addTask = (params: TaskInfo) => {
         return;
     }
     return new Promise((resolve, reject) => {
-        // 调用通知
-        if (params?.isAlarm) {
-            useReminder(params);
-        }
-        if (!params?.isAlarm) {
-            isHasNotificationId(params?.taskID).then(flag => {
-                if (flag) {
-                    useCancelReminder(params.taskID);
-                }
-            })
-        }
         taskInfoTable.updateDataByDate(params, (flag) => {
             if (!flag) {
                 Logger.error('insertTaskSetting', 'updateTaskSetting Error!');

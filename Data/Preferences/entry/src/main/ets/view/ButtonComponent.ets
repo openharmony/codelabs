@@ -39,7 +39,7 @@ export default struct ButtonComponent {
           .onClick(() => {
             item.clickMethod();
           })
-      }, item => item.toString())
+      }, item => JSON.stringify(item))
     }
   }
 

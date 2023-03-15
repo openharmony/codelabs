@@ -37,7 +37,7 @@ let viewModel: NavViewModel = new NavViewModel();
 @Component
 struct NavPage {
   @State toolBarConfigs: ToolBarData[] = []; // bottom navigation data.
-  @State navCurrentPosition: number = NavPageStyle.POSITION_INITIAL;
+  navCurrentPosition: number = NavPageStyle.POSITION_INITIAL;
   private controller: TabsController = new TabsController();
 
   aboutToAppear() {
@@ -55,7 +55,7 @@ struct NavPage {
               this.HolderPage(item?.text)
             }
           }
-        }, item => item.toString())
+        }, item => JSON.stringify(item))
       }.setTabStyle()
     }
     .toolBar(this.ToolBarBuilder())
@@ -66,8 +66,10 @@ struct NavPage {
     ToolBarComponent({
       controller: this.controller,
       toolBarConfigs: this.toolBarConfigs,
-      navCurrentPosition: $navCurrentPosition
+      navCurrentPosition: this.navCurrentPosition
     })
+      .backgroundColor(Color.White)
+      .height(PERCENTAGE_100)
   }
 
   @Builder HolderPage(text: Resource) {

@@ -15,10 +15,11 @@
 
 import ToolBarData from '../common/bean/ToolBarData';
 import { AppFontSize, AppFontWeight, PERCENTAGE_100, ToolBarStyle } from '../common/constants/Constants';
+import { NavPageStyle } from '../common/constants/Constants';
 
 @Component
 export default struct ToolBarComponent {
-  @Link navCurrentPosition: number;
+  @State navCurrentPosition: number = NavPageStyle.POSITION_INITIAL;;
   toolBarConfigs: ToolBarData[];
   controller: TabsController;
 
@@ -46,11 +47,9 @@ export default struct ToolBarComponent {
             this.navCurrentPosition = item.num
             this.controller.changeIndex(this.navCurrentPosition)
           })
-        })
+        }, item => JSON.stringify(item))
       }
     }
-    .backgroundColor(Color.White)
-    .height(PERCENTAGE_100)
   }
 }
 
