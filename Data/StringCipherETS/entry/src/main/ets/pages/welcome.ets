@@ -18,7 +18,7 @@ import router from '@ohos.router';
 @Entry
 @Component
 struct Welcome {
-  @State nickname: string = router.getParams().nickname.toString()
+  @State nickname: string = router.getParams()['nickname'].toString()
   @State message: string = '登录成功'
 
   build() {

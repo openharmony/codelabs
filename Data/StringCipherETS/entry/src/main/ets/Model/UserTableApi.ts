@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import dataRdb from '@ohos.data.rdb'
+import relationalStore from '@ohos.data.relationalStore'
 import { User } from '../model/User'
 import { RdbModel } from '../model/RdbModel'
 
@@ -42,7 +42,7 @@ export class UserTableApi {
     async queryUserByUsername(username) {
         let resultList;
         await this.userTable.getRdbStore().then(async () => {
-            let predicates = new dataRdb.RdbPredicates(TABLE_NAME);
+            let predicates = new relationalStore.RdbPredicates(TABLE_NAME);
             predicates.equalTo('username', username);
             let ret = await this.userTable.query(predicates);
             resultList = getListFromResultSet(ret);
