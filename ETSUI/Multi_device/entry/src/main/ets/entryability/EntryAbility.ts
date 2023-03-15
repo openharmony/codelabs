@@ -14,10 +14,10 @@
  */
 
 import hilog from '@ohos.hilog';
-import Ability from '@ohos.application.Ability'
+import UIAbility from '@ohos.app.ability.UIAbility'
 import Window from '@ohos.window'
 
-export default class entryAbility extends Ability {
+export default class entryAbility extends UIAbility {
     onCreate(want, launchParam) {
         hilog.isLoggable(0x0000, 'testTag', hilog.LogLevel.INFO);
         hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
@@ -34,6 +34,14 @@ export default class entryAbility extends Ability {
         // Main window is created, set main page for this ability
         hilog.isLoggable(0x0000, 'testTag', hilog.LogLevel.INFO);
         hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
+
+        windowStage.getMainWindow((err, data) => {
+            if (err && err.code) {
+                console.error('getMainWindow error');
+                return;
+            }
+            data.setSystemBarEnable([]);
+        })
 
         windowStage.loadContent('pages/Home', (err, data) => {
             if (err.code) {

@@ -44,7 +44,7 @@ export struct FlexMainDirectionRadioList {
         ForEach(this.radioList, (item, index) => {
           MainDirectionRadioItem({ textName: item, groupName: this.groupName, isChecked: index === 0 ? true : false })
             .margin({ right: MARGIN_FONT_SIZE_SPACE.COMMON_MARGIN })
-        })
+        }, item => JSON.stringify(item))
       }
       .width(ALL_PERCENT)
       .height(MARGIN_FONT_SIZE_SPACE.SEVENTH_MARGIN)
@@ -68,7 +68,7 @@ struct MainDirectionRadioItem {
         .checked(this.isChecked)
         .height((MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN))
         .width((MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN))
-        .onChange(() => {
+        .onClick(() => {
           switch (this.textName) {
             case ATTRIBUTE.COLUMN:
               this.currentFlexDirection = FlexDirection.Column;

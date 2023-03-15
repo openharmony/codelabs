@@ -1,16 +1,12 @@
 {
   "string": [
     {
-      "name": "module_desc",
-      "value": "module description"
-    },
-    {
-      "name": "EntryAbility_desc",
+      "name": "entry_desc",
       "value": "description"
     },
     {
-      "name": "EntryAbility_label",
-      "value": "label"
+      "name": "MainAbility_desc",
+      "value": "description"
     },
     {
       "name": "MainAbility_label",

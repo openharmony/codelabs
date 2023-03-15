@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import prompt from '@ohos.prompt';
+import prompt from '@ohos.promptAction';
 import router from '@ohos.router';
 import CommonConstants from '../common/constants/CommonConstants';
 
@@ -70,7 +70,7 @@ struct LoginPage {
         this.timeOutId = setTimeout(() => {
           this.isShowProgress = false;
           this.timeOutId = null;
-          router.replace({ url: 'pages/MainPage' });
+          router.replaceUrl({ url: 'pages/MainPage' });
         }, CommonConstants.LOGIN_DELAY_TIME);
       }
     }
@@ -82,90 +82,88 @@ struct LoginPage {
   }
 
   build() {
-    Scroll() {
-      Column() {
-        Image($r('app.media.logo'))
-          .width($r('app.float.logo_image_size'))
-          .height($r('app.float.logo_image_size'))
-          .margin({ top: $r('app.float.logo_margin_top'), bottom: $r('app.float.logo_margin_bottom') })
-        Text($r('app.string.login_page'))
-          .fontSize($r('app.float.page_title_text_size'))
-          .fontWeight(FontWeight.Medium)
-          .fontColor($r('app.color.title_text_color'))
-        Text($r('app.string.login_more'))
-          .fontSize($r('app.float.normal_text_size'))
-          .fontColor($r('app.color.login_more_text_color'))
-          .margin({ bottom: $r('app.float.login_more_margin_bottom'), top: $r('app.float.login_more_margin_top') })
+    Column() {
+      Image($r('app.media.logo'))
+        .width($r('app.float.logo_image_size'))
+        .height($r('app.float.logo_image_size'))
+        .margin({ top: $r('app.float.logo_margin_top'), bottom: $r('app.float.logo_margin_bottom') })
+      Text($r('app.string.login_page'))
+        .fontSize($r('app.float.page_title_text_size'))
+        .fontWeight(FontWeight.Medium)
+        .fontColor($r('app.color.title_text_color'))
+      Text($r('app.string.login_more'))
+        .fontSize($r('app.float.normal_text_size'))
+        .fontColor($r('app.color.login_more_text_color'))
+        .margin({ bottom: $r('app.float.login_more_margin_bottom'), top: $r('app.float.login_more_margin_top') })
 
-        TextInput({ placeholder: $r('app.string.account') })
-          .maxLength(CommonConstants.INPUT_ACCOUNT_LENGTH)
-          .type(InputType.Number)
-          .inputStyle()
-          .onChange((value: string) => {
-            this.account = value;
-          })
-        Line().lineStyle()
+      TextInput({ placeholder: $r('app.string.account') })
+        .maxLength(CommonConstants.INPUT_ACCOUNT_LENGTH)
+        .type(InputType.Number)
+        .inputStyle()
+        .onChange((value: string) => {
+          this.account = value;
+        })
+      Line().lineStyle()
 
-        TextInput({ placeholder: $r('app.string.password') })
-          .maxLength(CommonConstants.INPUT_PASSWORD_LENGTH)
-          .type(InputType.Password)
-          .inputStyle()
-          .onChange((value: string) => {
-            this.password = value;
-          })
-        Line().lineStyle()
+      TextInput({ placeholder: $r('app.string.password') })
+        .maxLength(CommonConstants.INPUT_PASSWORD_LENGTH)
+        .type(InputType.Password)
+        .inputStyle()
+        .onChange((value: string) => {
+          this.password = value;
+        })
+      Line().lineStyle()
 
-        Row() {
-          Text($r('app.string.message_login')).blueTextStyle()
-          Text($r('app.string.forgot_password')).blueTextStyle()
-        }
-        .justifyContent(FlexAlign.SpaceBetween)
-        .width(CommonConstants.FULL_PARENT)
-        .margin({ top: $r('app.float.forgot_margin_top') })
-
-        Button($r('app.string.login'), { type: ButtonType.Capsule })
-          .width(CommonConstants.BUTTON_WIDTH)
-          .height($r('app.float.login_button_height'))
-          .fontSize($r('app.float.normal_text_size'))
-          .fontWeight(FontWeight.Medium)
-          .backgroundColor($r('app.color.login_button_color'))
-          .margin({ top: $r('app.float.login_button_margin_top'), bottom: $r('app.float.login_button_margin_bottom') })
-          .onClick(() => {
-            this.login();
-          })
-        Text($r('app.string.register_account'))
-          .fontColor($r('app.color.login_blue_text_color'))
-          .fontSize($r('app.float.normal_text_size'))
-          .fontWeight(FontWeight.Medium)
-
-        if (this.isShowProgress) {
-          LoadingProgress()
-            .color($r('app.color.loading_color'))
-            .width($r('app.float.login_progress_size'))
-            .height($r('app.float.login_progress_size'))
-            .margin({ top: $r('app.float.login_progress_margin_top') })
-        }
-
-        Blank()
-        Text($r('app.string.other_login_method'))
-          .fontColor($r('app.color.other_login_text_color'))
-          .fontSize($r('app.float.little_text_size'))
-          .fontWeight(FontWeight.Medium)
-          .margin({ top: $r('app.float.other_login_margin_top'), bottom: $r('app.float.other_login_margin_bottom') })
-        Row({ space: CommonConstants.LOGIN_METHODS_SPACE }) {
-          this.imageButton($r('app.media.login_method1'))
-          this.imageButton($r('app.media.login_method2'))
-          this.imageButton($r('app.media.login_method3'))
-        }
+      Row() {
+        Text($r('app.string.message_login')).blueTextStyle()
+        Text($r('app.string.forgot_password')).blueTextStyle()
       }
+      .justifyContent(FlexAlign.SpaceBetween)
       .width(CommonConstants.FULL_PARENT)
-      .padding({
-        left: $r('app.float.page_padding_hor'),
-        right: $r('app.float.page_padding_hor'),
-        bottom: $r('app.float.login_page_padding_bottom')
-      })
+      .margin({ top: $r('app.float.forgot_margin_top') })
+
+      Button($r('app.string.login'), { type: ButtonType.Capsule })
+        .width(CommonConstants.BUTTON_WIDTH)
+        .height($r('app.float.login_button_height'))
+        .fontSize($r('app.float.normal_text_size'))
+        .fontWeight(FontWeight.Medium)
+        .backgroundColor($r('app.color.login_button_color'))
+        .margin({ top: $r('app.float.login_button_margin_top'), bottom: $r('app.float.login_button_margin_bottom') })
+        .onClick(() => {
+          this.login();
+        })
+      Text($r('app.string.register_account'))
+        .fontColor($r('app.color.login_blue_text_color'))
+        .fontSize($r('app.float.normal_text_size'))
+        .fontWeight(FontWeight.Medium)
+
+      if (this.isShowProgress) {
+        LoadingProgress()
+          .color($r('app.color.loading_color'))
+          .width($r('app.float.login_progress_size'))
+          .height($r('app.float.login_progress_size'))
+          .margin({ top: $r('app.float.login_progress_margin_top') })
+      }
+
+      Blank()
+      Text($r('app.string.other_login_method'))
+        .fontColor($r('app.color.other_login_text_color'))
+        .fontSize($r('app.float.little_text_size'))
+        .fontWeight(FontWeight.Medium)
+        .margin({ top: $r('app.float.other_login_margin_top'), bottom: $r('app.float.other_login_margin_bottom') })
+      Row({ space: CommonConstants.LOGIN_METHODS_SPACE }) {
+        this.imageButton($r('app.media.login_method1'))
+        this.imageButton($r('app.media.login_method2'))
+        this.imageButton($r('app.media.login_method3'))
+      }
     }
-    .height(CommonConstants.FULL_PARENT)
     .backgroundColor($r('app.color.background'))
+    .height(CommonConstants.FULL_PARENT)
+    .width(CommonConstants.FULL_PARENT)
+    .padding({
+      left: $r('app.float.page_padding_hor'),
+      right: $r('app.float.page_padding_hor'),
+      bottom: $r('app.float.login_page_padding_bottom')
+    })
   }
 }

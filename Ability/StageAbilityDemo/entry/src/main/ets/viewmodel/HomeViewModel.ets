@@ -18,6 +18,7 @@ import DataModel from '../model/DataModel';
 import GoodsData from '../common/bean/GoodsData';
 import BannerData from '../common/bean/BannerData';
 import MenuData from '../common/bean/MenuData';
+import { DETAILS_ABILITY_NAME } from '../common/constants/Constants';
 
 const TAG = 'HomeViewModel';
 const HOME_PAGE_DOMAIN = 0x00004;
@@ -41,8 +42,8 @@ export default class HomeViewModel {
 
   public startDetailsAbility(context, index: number): void {
     const want = {
-      bundleName: 'com.example.StageAbilityDemo',
-      abilityName: 'DetailsAbility',
+      bundleName: getContext(context).applicationInfo.name,
+      abilityName: DETAILS_ABILITY_NAME,
       parameters: {
         position: index
       }

@@ -48,7 +48,7 @@ struct LayoutAlignIndex {
           ListItem() {
             ListItemComp({ item: item }).margin({ top: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
           }
-        }, item => item.name)
+        }, item => JSON.stringify(item))
       }
       .listDirection(Axis.Vertical)
       .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
@@ -88,7 +88,7 @@ struct ListItemComp {
     .margin({ left: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN, right: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
     .backgroundColor($r("app.color.white"))
     .onClick(() => {
-      router.push({
+      router.pushUrl({
         url: SECOND_PAGE,
         params: {
           containerType: this.item['containerType'],

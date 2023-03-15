@@ -13,7 +13,8 @@
  * limitations under the License.
  */
 
-import Router from '@ohos.router';
+import router from '@ohos.router';
+import Logger from '../common/utils/Logger';
 import CommonConstants from '../common/constants/CommonConstants';
 
 /**
@@ -36,7 +37,7 @@ struct AdvertisingPage {
   }
 
   onPageHide() {
-    Router.clear();
+    router.clear();
     clearInterval(this.timeId);
   }
 
@@ -44,8 +45,10 @@ struct AdvertisingPage {
    * Jump to app home page.
    */
   jumpToAppHomePage() {
-    Router.push({
+    router.pushUrl({
       url: CommonConstants.APP_HOME_PAGE_URL
+    }).catch((error) => {
+      Logger.error(CommonConstants.ADVERTISING_PAGE_TAG, 'AdvertisingPage pushUrl error ' + JSON.stringify(error));
     });
   }
 
@@ -65,8 +68,8 @@ struct AdvertisingPage {
           color: Color.White
         })
         .margin({
-          top: CommonConstants.ADVERTISING_TITLE_TEXT_MARGIN_TOP,
-          left: CommonConstants.ADVERTISING_TITLE_TEXT_MARGIN_LEFT
+          top: $r('app.float.advertising_title_text_margin_top'),
+          left: $r('app.float.advertising_title_text_margin_left')
         })
         .padding({
           left: $r('app.float.advertising_text_padding_left'),
@@ -85,14 +88,14 @@ struct AdvertisingPage {
         Column() {
           Text($r('app.string.healthy_life_text'))
             .bottomTextStyle(FontWeight.Bolder,
-              CommonConstants.ADVERTISING_HEALTHY_LIFE_TEXT_SPACING,
-              $r('app.float.advertising_text_title_size'),
-              $r('app.color.advertising_text_title_color'))
+            CommonConstants.ADVERTISING_HEALTHY_LIFE_TEXT_SPACING,
+            $r('app.float.advertising_text_title_size'),
+            $r('app.color.advertising_text_title_color'))
           Text($r('app.string.healthy_life_introduce'))
             .bottomTextStyle(FontWeight.Normal,
-              CommonConstants.ADVERTISING_TEXT_INTRODUCE_LETTER_SPACING,
-              $r('app.float.advertising_text_introduce_size'),
-              $r('app.color.launcher_text_introduce_color'))
+            CommonConstants.ADVERTISING_TEXT_INTRODUCE_LETTER_SPACING,
+            $r('app.float.advertising_text_introduce_size'),
+            $r('app.color.launcher_text_introduce_color'))
             .opacity($r('app.float.advertising_text_opacity'))
             .margin({ top: CommonConstants.ADVERTISING_TEXT_INTRODUCE_MARGIN_TOP })
         }
