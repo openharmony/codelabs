@@ -26,10 +26,10 @@ export struct InputItem {
       TextInput({ placeholder: this.placeholderName })
         .type(this.typeFlag ? InputType.Password : InputType.Normal)
         .placeholderColor(Color.Gray)
-        .fontSize(30)
+        .fontSize(20)
         .caretColor(Color.Gray)
         .width('60%')
-        .height('55%')
+        .height('60%')
         .maxLength(14)
         .margin({ left: '8%' })
         .onChange((value) => {
