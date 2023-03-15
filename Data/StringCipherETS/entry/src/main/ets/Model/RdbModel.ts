@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import dataRdb from '@ohos.data.rdb'
-import prompt from '@ohos.prompt'
+import relationalStore from '@ohos.data.relationalStore'
+import prompt from '@ohos.promptAction'
 
 export class RdbModel {
     private rdbStore: any = null
@@ -22,7 +22,10 @@ export class RdbModel {
     private tableName: string = ''
     private sqlCreateTable: string = ''
     private columns: Array<string> = []
-    private STORE_CONFIG = { name: 'user.db', encryptKey: null }
+    private STORE_CONFIG = {
+        name: 'user.db',
+        securityLevel: relationalStore.SecurityLevel.S1
+    }
 
     constructor(tableName: string, sqlCreateTable: string, columns: Array<string>) {
         this.tableName = tableName
@@ -35,7 +38,7 @@ export class RdbModel {
         if (this.rdbStore != null) {
             return this.rdbStore.executeSql(this.sqlCreateTable);
         }
-        let getPromiseRdb = dataRdb.getRdbStore(globalThis.context, this.STORE_CONFIG, 1);
+        let getPromiseRdb = relationalStore.getRdbStore(globalThis.context, this.STORE_CONFIG);
         await getPromiseRdb.then(async (rdbStore) => {
             this.rdbStore = rdbStore;
             this.promiseExecSql = rdbStore.executeSql(this.sqlCreateTable);
@@ -56,7 +59,7 @@ export class RdbModel {
     // 更新数据
     updateData(user) {
         const valueBucket = JSON.parse(JSON.stringify(user));
-        let predicates = new dataRdb.RdbPredicates(this.tableName);
+        let predicates = new relationalStore.RdbPredicates(this.tableName);
         predicates.equalTo('id', user.id);
         this.rdbStore.update(valueBucket, predicates, function (err, ret) {
             prompt.showToast({ message: 'updated row done:' + ret });
@@ -65,7 +68,7 @@ export class RdbModel {
 
     // 删除数据
     deleteById(user) {
-        let predicates = new dataRdb.RdbPredicates(this.tableName);
+        let predicates = new relationalStore.RdbPredicates(this.tableName);
         predicates.equalTo('id', user.id);
         this.rdbStore.delete(predicates, function (err, rows) {
             prompt.showToast({ message: 'delete user' + rows });

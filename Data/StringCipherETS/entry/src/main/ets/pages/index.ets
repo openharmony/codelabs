@@ -14,7 +14,7 @@
  */
 
 // @ts-nocheck
-import prompt from '@ohos.prompt';
+import prompt from '@ohos.promptAction';
 import router from '@ohos.router';
 import cipher from '@system.cipher';
 import { User } from '../model/User';
@@ -77,8 +77,8 @@ struct Index {
         .margin({ top: '3%' })
         .textAlign(TextAlign.Center)
         .onClick(() => {
-          router.push({
-            uri: 'pages/register'
+          router.pushUrl({
+            url: 'pages/register'
           });
         });
     }
@@ -181,8 +181,8 @@ struct Index {
     let user = this.userList[0];
     if (this.decryptPassword == this.password) {
       // 跳转到登录成功页面
-      router.push({
-        uri: 'pages/welcome',
+      router.pushUrl({
+        url: 'pages/welcome',
         params: { 'nickname': user.nickname }
       });
     } else {
