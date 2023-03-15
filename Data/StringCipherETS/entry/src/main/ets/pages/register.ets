@@ -14,7 +14,7 @@
  */
 
 // @ts-nocheck
-import prompt from '@ohos.prompt';
+import prompt from '@ohos.promptAction';
 import router from '@ohos.router';
 import cipher from '@system.cipher';
 import { User } from '../model/User';
@@ -208,8 +208,8 @@ struct Register {
       bottom: '40%'
     });
     // 注册成功之后，跳转到登录页面
-    router.push({
-      uri: 'pages/index'
+    router.pushUrl({
+      url: 'pages/index'
     });
   }
 }
