@@ -13,15 +13,14 @@
  * limitations under the License.
  */
 
-import ctx from '@ohos.application.context';
 import ButtonClickMethod from '../model/ButtonClickMethod';
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
 
 /**
- * Get AbilityContext.
+ * Get context.
  */
-let context = getContext(this) as ctx.AbilityContext;
+let context = getContext(this);
 
 /**
  * The Index Page of EntryAbility.

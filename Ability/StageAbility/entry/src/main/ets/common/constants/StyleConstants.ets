@@ -30,17 +30,17 @@ class StyleConstants {
   /**
    * The top margin of the image.
    */
-  IMAGE_MARGIN_TOP = '18%';
+  IMAGE_MARGIN_TOP = '140vp';
 
   /**
    * The bottom margin of the image.
    */
-  IMAGE_MARGIN_BOTTOM = '7%';
+  IMAGE_MARGIN_BOTTOM = '55vp';
 
   /**
    * The top margin of the text component of EntryAbility Index page.
    */
-  MAIN_INDEX_TEXT_MARGIN_BOTTOM = '19%';
+  MAIN_INDEX_TEXT_MARGIN_BOTTOM = '148vp';
 
   /**
    * The width of the button.
@@ -55,17 +55,17 @@ class StyleConstants {
   /**
    * The bottom margin of the button.
    */
-  BUTTON_MARGIN_BOTTOM = '1.5%';
+  BUTTON_MARGIN_BOTTOM = '12vp';
 
   /**
    * The bottom margin of the button component of EntryAbility Index page.
    */
-  MAIN_INDEX_BUTTON_MARGIN_BOTTOM = '23%';
+  MAIN_INDEX_BUTTON_MARGIN_BOTTOM = '179vp';
 
   /**
    * The bottom margin of the text component.
    */
-  TEXT_MARGIN_BOTTOM = '32%';
+  TEXT_MARGIN_BOTTOM = '250vp';
 
   /**
    * One hundred percent.

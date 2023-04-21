@@ -14,14 +14,13 @@
  */
 
 import router from '@ohos.router';
-import ctx from '@ohos.application.context';
 import Logger from '../common/utils/Logger';
 import CommonConstants from '../common/constants/CommonConstants';
 
 /**
- * Get the AbilityContext.
+ * Get the context.
  */
-let currentContext = getContext(this) as ctx.AbilityContext;
+let currentContext = getContext(this);
 let textMessage: string = currentContext.resourceManager.getStringSync($r('app.string.text_message'));
 let returnMessage: string = currentContext.resourceManager.getStringSync($r('app.string.return_message'));
 
@@ -33,7 +32,7 @@ class ButtonClickMethod {
    * Navigate to the Second Page of EntryAbility.
    */
   toEntryAbilitySecond() {
-    router.push({
+    router.pushUrl({
       url: 'pages/Second',
       params: {
         src: textMessage,
