@@ -26,32 +26,32 @@ HarmonyOS ArkUI提供了丰富多样的UI组件，您可以使用这些组件轻
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Canary1及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Beta3及以上版本。
+-   OpenHarmony系统：3.2 Release及以上版本。
 
 ### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Beta3版本为例：
+1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Release版本为例：
 
    ![](figures/zh-cn_image_0000001405854998.png)
 
 2. 搭建烧录环境。
 
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
-    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
+   2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
 3. 搭建开发环境。
 
-    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
-    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
+   1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
+   3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
 
@@ -87,28 +87,49 @@ HarmonyOS ArkUI提供了丰富多样的UI组件，您可以使用这些组件轻
 ```typescript
 @Entry
 @Component
-export struct LoginPage {
-
+struct LoginPage {
+  ...
   build() {
-    Scroll() {
-      Column() {
-        Image($r('app.media.logo'))
-          ...
-        Text($r('app.string.login_page'))
-          ...
-        Text($r('app.string.login_more'))
-          ...
-        TextInput({ placeholder: $r('app.string.account') })
-          ...
-        TextInput({ placeholder: $r('app.string.password') })
-          ...
-        Button($r('app.string.login'), { type: ButtonType.Capsule })
-          ...
-        LoadingProgress()
-          ...
+    Column() {
+      Image($r('app.media.logo'))
+       ...
+      Text($r('app.string.login_page'))
+        ...
+      Text($r('app.string.login_more'))
+        ...
+
+      TextInput({ placeholder: $r('app.string.account') })
+        ...
+
+      TextInput({ placeholder: $r('app.string.password') })
+        ...
+
+      Row() {
+        Text($r('app.string.message_login')).blueTextStyle()
+        Text($r('app.string.forgot_password')).blueTextStyle()
       }
-      ...
+      ....
+
+      Button($r('app.string.login'), { type: ButtonType.Capsule })
+        ....
+      Text($r('app.string.register_account'))
+        ....
+
+      if (this.isShowProgress) {
+        LoadingProgress()
+          ....
+      }
+
+      Blank()
+      Text($r('app.string.other_login_method'))
+        ....
+      Row({ space: CommonConstants.LOGIN_METHODS_SPACE }) {
+        this.imageButton($r('app.media.login_method1'))
+        this.imageButton($r('app.media.login_method2'))
+        this.imageButton($r('app.media.login_method3'))
+      }
     }
+    ....
   }
 }
 ```
@@ -119,7 +140,7 @@ export struct LoginPage {
 
 ```typescript
 TextInput({ placeholder: $r('app.string.account') })
-  .maxLength(CommonConstants.INPUT_PASSWORD_LENGTH)
+  .maxLength(CommonConstants.INPUT_ACCOUNT_LENGTH)
   .type(InputType.Number)
   .inputStyle()
   .onChange((value: string) => {
@@ -134,30 +155,55 @@ TextInput({ placeholder: $r('app.string.account') })
 ```typescript
 @Entry
 @Component
-export struct LoginPage {
+struct LoginPage {
+  @State account: string = '';
+  @State password: string = '';
   @State isShowProgress: boolean = false;
-  private timeOutId;
+  private timeOutId = null;
+
+  ...
 
   login() {
-    ...
-    this.isShowProgress = true;
-    this.timeOutId = setTimeout(() => {
-      this.isShowProgress = false;
-      router.replace({ url: "pages/MainPage" });
-    }, LOGIN_DELAY_TIME);
+    if (this.account === '' || this.password === '') {
+      prompt.showToast({
+        message: $r('app.string.input_empty_tips')
+      })
+    } else {
+      this.isShowProgress = true;
+      if (this.timeOutId === null) {
+        this.timeOutId = setTimeout(() => {
+          this.isShowProgress = false;
+          this.timeOutId = null;
+          router.replaceUrl({ url: 'pages/MainPage' });
+        }, CommonConstants.LOGIN_DELAY_TIME);
+      }
+    }
   }
+
+  ...
 
   build() {
     Column() {
+      ...
+
       Button($r('app.string.login'), { type: ButtonType.Capsule })
+        ....
         .onClick(() => {
           this.login();
         })
+      ...
+
       if (this.isShowProgress) {
         LoadingProgress()
-          ...
+          .color($r('app.color.loading_color'))
+          .width($r('app.float.login_progress_size'))
+          .height($r('app.float.login_progress_size'))
+          .margin({ top: $r('app.float.login_progress_margin_top') })
       }
+
+      ...
     }
+    ...
   }
 }
 ```
@@ -170,11 +216,17 @@ export struct LoginPage {
 import router from '@ohos.router';
 
 login() {
+  if (this.account === '' || this.password === '') {
     ...
-    this.timeOutId = setTimeout(() => {
-      this.isShowProgress = false;
-      router.replace({ url: "pages/MainPage" });
-    }, LOGIN_DELAY_TIME);
+  } else {
+    this.isShowProgress = true;
+    if (this.timeOutId === null) {
+      this.timeOutId = setTimeout(() => {
+        this.isShowProgress = false;
+        this.timeOutId = null;
+        router.replaceUrl({ url: 'pages/MainPage' });
+      }, CommonConstants.LOGIN_DELAY_TIME);
+    }
   }
 }
 ```
@@ -191,7 +243,7 @@ export default class ItemData {
   title: Resource;
   img?: Resource;
   others?: Resource;
-  constructor(title: Resource,img?: Resource,others?: Resource) {
+  constructor(title: Resource, img?: Resource, others?: Resource) {
     this.title = title;
     this.img = img;
     this.others = others;
@@ -227,6 +279,7 @@ Tabs({
   TabContent() {
     ...
   }
+  ...
   .backgroundColor($r('app.color.mainPage_backgroundColor')) // “首页”的页面背景色
   .tabBar(this.baseTab(CommonConstants.HOME_TITLE, CommonConstants.HOME_TAB_INDEX,
   $r('app.media.home_selected'), $r('app.media.home_normal')))
@@ -272,20 +325,11 @@ Grid() {
           .margin({ top: $r('app.float.home_homeCell_margin') })
       }
     }
-  }, item => item.toString())
+  }, item => JSON.stringify(item))
 }
 .columnsTemplate('1fr 1fr 1fr 1fr')
 .rowsTemplate('1fr 1fr')
 ...
-		
-@Builder homeCell(item: ItemData) {
-  Column() {
-    Image(item.img)
-      ...
-    Text(item.title)
-      ...
-  }
-}
 ```
 
 使用Grid组件实现4\*4栅格列表栏，其中单个栅格中有一张背景图片和两行字体不同的文本，因此在Column组件中放置两个Text组件，并设置背景图，注意Grid组件必须设置高度，否则可能出现页面空白。
@@ -302,14 +346,16 @@ Grid() {
       }
       .alignItems(HorizontalAlign.Start)
     }
+    ...
     .backgroundImage(secondItem.img)
     .backgroundImageSize(ImageSize.Cover) 
     ...
-  }, secondItem => secondItem.toString())
+  }, secondItem => JSON.stringify(secondItem))
 }
+...
+.height($r('app.float.home_secondGrid_height')) 
 .columnsTemplate('1fr 1fr')
 .rowsTemplate('1fr 1fr')
-.height($r('app.float.home_secondGrid_height')) 
 ...
 ```
 
@@ -323,13 +369,14 @@ Grid() {
 
 ```typescript
 List() {
-  ForEach(settingLists, (item: ItemData) => {
+  ForEach(mainViewModel.getSettingListData(), (item: ItemData) => {
     ListItem() {
       this.settingCell(item)
     }
     .height($r('app.float.setting_list_height'))
-  }, item => item.toString())
+  }, JSON.stringify(item))
 }
+...
 .divider({  // 设置分隔线
   ...
 })
@@ -351,6 +398,7 @@ List() {
     }
   }
   .justifyContent(FlexAlign.SpaceBetween)  // 相邻元素之间距离相同
+  ...
 }
 ```
 
