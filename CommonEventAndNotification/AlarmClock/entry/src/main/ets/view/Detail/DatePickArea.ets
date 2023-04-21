@@ -29,7 +29,7 @@ export default struct DatePickArea {
             .onChange((value: string, index: number) => {
               item.delSelect = index;
             })
-        }, item => item.timeType)
+        }, item => JSON.stringify(item))
       }
     }
     .height(DimensionUtil.getVp($r('app.float.date_picker_height')))

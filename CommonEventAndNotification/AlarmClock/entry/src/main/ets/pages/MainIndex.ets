@@ -65,7 +65,7 @@ struct MainIndex {
         top: DimensionUtil.getVp($r('app.float.new_alarm_button_margin_vertical'))
       })
       .onClick(() => {
-        router.push({ url: "pages/DetailIndex" });
+        router.pushUrl({ url: "pages/DetailIndex" });
       })
     }
     .width(CommonConstants.FULL_LENGTH)

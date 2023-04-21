@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import reminderAgent from '@ohos.reminderAgent';
+import reminderAgent from '@ohos.reminderAgentManager';
 
 export default class ReminderItemBean {
   id: number;

@@ -3,7 +3,7 @@
     "name": "entry",
     "type": "entry",
     "description": "$string:entry_desc",
-    "mainElement": "MainAbility",
+    "mainElement": "EntryAbility",
     "deviceTypes": [
       "default"
     ],
@@ -12,14 +12,14 @@
     "pages": "$profile:main_pages",
     "abilities": [
       {
-        "name": "MainAbility",
-        "srcEntrance": "./ets/entryability/EntryAbility.ets",
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "$string:MainAbility_desc",
         "icon": "$media:icon",
         "label": "$string:MainAbility_label",
         "startWindowIcon": "$media:icon",
         "startWindowBackground": "$color:white",
-        "visible": true,
+        "exported": true,
         "orientation": "portrait",
         "skills": [
           {

@@ -24,7 +24,7 @@ import RepeatDialog from './dialog/RepeatDialog';
 
 @Component
 export default struct SettingItem {
-  @State settingInfo: AlarmSettingBean[] = [];
+  @Link settingInfo: Array<AlarmSettingBean>;
   repeatDialogController: CustomDialogController = new CustomDialogController({
     builder: RepeatDialog(),
     autoCancel: true
@@ -101,7 +101,7 @@ export default struct SettingItem {
         .onClick(() => {
           this.showSettingDialog(item.sType);
         })
-      }, item => item.sType)
+      }, (item, index) => JSON.stringify(item) + index)
     }
     .margin({
       bottom: DimensionUtil.getVp($r('app.float.setting_item_interval')),

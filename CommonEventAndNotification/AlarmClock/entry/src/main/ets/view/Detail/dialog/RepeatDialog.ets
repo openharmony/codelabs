@@ -23,7 +23,7 @@ import DimensionUtil from '../../../common/utils/DimensionUtil';
 
 @CustomDialog
 export default struct RepeatDialog {
-  @Consume(DetailConstant.DEFAULT_STRING_PROVIDER_KEY) alarmItem: AlarmItem;
+  @Consume(DetailConstant.DEFAULT_PROVIDER_KEY) alarmItem: AlarmItem;
   private viewModel: DetailModel = DetailModel.getInstant();
   private selects: number[] = [];
   controller: CustomDialogController;
