@@ -2,31 +2,31 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "description"
+      "value": "模块描述"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "Main program entry"
+      "value": "主程序入口"
     },
     {
       "name": "EntryAbility_label",
-      "value": "AnimateRefresh"
+      "value": "自定义下拉刷新动画"
     },
     {
       "name": "refresh_default_header_hint",
-      "value": "Pull Down Refresh"
+      "value": "下拉刷新"
     },
     {
       "name": "refresh_default_header_load",
-      "value": "Release Refresh"
+      "value": "松开刷新"
     },
     {
       "name": "refresh_default_header_loading",
-      "value": "Refreshing..."
+      "value": "正在刷新..."
     },
     {
       "name": "file_index_title",
-      "value": "Cloud space"
+      "value": "云空间"
     }
   ]
 }

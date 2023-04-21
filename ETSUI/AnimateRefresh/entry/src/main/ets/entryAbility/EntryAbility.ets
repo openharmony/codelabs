@@ -17,13 +17,13 @@ import window from '@ohos.window';
 import display from '@ohos.display';
 import Ability from '@ohos.app.ability.UIAbility';
 
-export default class MainAbility extends Ability {
-    onCreate(want) {
-        globalThis.abilityWant = want;
-    }
+export default class EntryAbility extends Ability {
+  onCreate(want) {
+    globalThis.abilityWant = want;
+  }
 
-    async onWindowStageCreate(windowStage: window.WindowStage) {
-        globalThis.display = await display.getDefaultDisplay();
-        windowStage.loadContent('pages/TabIndex');
-    }
+  async onWindowStageCreate(windowStage: window.WindowStage) {
+    globalThis.display = await display.getDefaultDisplaySync();
+    windowStage.loadContent('pages/TabIndex');
+  }
 };
