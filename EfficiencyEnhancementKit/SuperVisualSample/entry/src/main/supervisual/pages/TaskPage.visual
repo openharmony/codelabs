@@ -1,11 +1,29 @@
 {
     "document": {
         "VisualVersion": "12",
-        "type": "ETS"
+        "type": "ETS",
+        "custom": false,
+        "path": "/entry/src/main/supervisual/pages/TaskPage"
     },
     "visualModel": {
         "dataType": "VisualModel",
         "value": {
+            "propertyStorage": {
+                "dataType": "Map",
+                "value": {}
+            },
+            "dynamicPropertyStorage": {
+                "dataType": "Map",
+                "value": {}
+            },
+            "mediaPropertyStorage": {
+                "dataType": "Map",
+                "value": {}
+            },
+            "dynamicMediaPropertyStorage": {
+                "dataType": "Map",
+                "value": {}
+            },
             "property": {
                 "dataType": "Map",
                 "value": {
@@ -22,6 +40,22 @@
                 {
                     "dataType": "VisualModel",
                     "value": {
+                        "propertyStorage": {
+                            "dataType": "Map",
+                            "value": {}
+                        },
+                        "dynamicPropertyStorage": {
+                            "dataType": "Map",
+                            "value": {}
+                        },
+                        "mediaPropertyStorage": {
+                            "dataType": "Map",
+                            "value": {}
+                        },
+                        "dynamicMediaPropertyStorage": {
+                            "dataType": "Map",
+                            "value": {}
+                        },
                         "property": {
                             "dataType": "Map",
                             "value": {
@@ -65,7 +99,8 @@
                                         "value": {
                                             "width": "90%",
                                             "height": "100vp",
-                                            "background-color": "#FFF"
+                                            "background-color": "#FFF",
+                                            "justify-content-rc": "flex-start"
                                         }
                                     },
                                     "dynamicProperty": {
@@ -102,8 +137,7 @@
                                                         "width": "200vp",
                                                         "height": "60vp",
                                                         "font-color": "#182431",
-                                                        "font-weight": "700",
-                                                        "flex-shrink": "0"
+                                                        "font-weight": "700"
                                                     }
                                                 },
                                                 "dynamicProperty": {
@@ -244,7 +278,9 @@
                                                                         },
                                                                         "dynamicPropertyStorage": {
                                                                             "dataType": "Map",
-                                                                            "value": {}
+                                                                            "value": {
+                                                                                "padding-right": "$r('app.float.default_16')"
+                                                                            }
                                                                         },
                                                                         "mediaPropertyStorage": {
                                                                             "dataType": "Map",
@@ -261,13 +297,12 @@
                                                                                 "height": "100%",
                                                                                 "background-color": "#FFF",
                                                                                 "align-items-row": "center",
-                                                                                "flex-shrink": "0"
+                                                                                "padding-right": "24vp"
                                                                             }
                                                                         },
                                                                         "dynamicProperty": {
                                                                             "dataType": "Map",
                                                                             "value": {
-                                                                                "padding-right": "$r('app.float.default_16')",
                                                                                 "padding-left": "$r('app.float.default_12')",
                                                                                 "border-radius": "$r('app.float.default_20')"
                                                                             }
@@ -276,12 +311,27 @@
                                                                             {
                                                                                 "dataType": "VisualModel",
                                                                                 "value": {
+                                                                                    "propertyStorage": {
+                                                                                        "dataType": "Map",
+                                                                                        "value": {}
+                                                                                    },
+                                                                                    "dynamicPropertyStorage": {
+                                                                                        "dataType": "Map",
+                                                                                        "value": {}
+                                                                                    },
+                                                                                    "mediaPropertyStorage": {
+                                                                                        "dataType": "Map",
+                                                                                        "value": {}
+                                                                                    },
+                                                                                    "dynamicMediaPropertyStorage": {
+                                                                                        "dataType": "Map",
+                                                                                        "value": {}
+                                                                                    },
                                                                                     "property": {
                                                                                         "dataType": "Map",
                                                                                         "value": {
                                                                                             "width": "50%",
-                                                                                            "height": "100%",
-                                                                                            "flex-shrink": "0"
+                                                                                            "height": "100%"
                                                                                         }
                                                                                     },
                                                                                     "dynamicProperty": {
@@ -316,8 +366,7 @@
                                                                                                         "width": "34.34vp",
                                                                                                         "height": "33.13vp",
                                                                                                         "left": "0vp",
-                                                                                                        "object-fit": "contain",
-                                                                                                        "flex-shrink": "0"
+                                                                                                        "object-fit": "contain"
                                                                                                     }
                                                                                                 },
                                                                                                 "dynamicProperty": {
@@ -463,6 +512,16 @@
             "value": {}
         },
         "actions": {
+            "dataType": "Map",
+            "value": {}
+        }
+    },
+    "customData": {
+        "property": {
+            "dataType": "Map",
+            "value": {}
+        },
+        "event": {
             "dataType": "Map",
             "value": {}
         }
