@@ -21,37 +21,39 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Canary1及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Beta3及以上版本。
+-   OpenHarmony系统：3.2 Release及以上版本。
 
 ### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Beta3版本为例：
+1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Release版本为例：
 
-    ![](figures/zh-cn_image_0000001405854998.png)
+   ![](figures/zh-cn_image_0000001405854998.png)
 
-2.  搭建烧录环境。
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
-    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
+2. 搭建烧录环境。
 
-3.  搭建开发环境。
-    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
-    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
+   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
+   2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
+
+3. 搭建开发环境。
+
+   1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
+   3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
 
 本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
-├──entry/src/main/ets	                 // 代码区
+├──entry/src/main/ets	                // 代码区
 │  ├──common
 │  │  ├──bean
 │  │  │  ├──ContainerModuleItem.ets     // 属性模块对象
@@ -111,7 +113,7 @@
                 ListItemComp({ item: item })
                   .margin({ top: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
               }
-            }, item => item.name)
+            }, item => JSON.stringify(item))
           }
           .listDirection(Axis.Vertical)
           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
@@ -134,209 +136,222 @@
 
     ![](figures/zh-cn_image_0000001457893797.png)
 
-2.  在ColumnShowList.ets中，自定组件ColumnShowList主要效果是在Column布局容器中，设置不同的主轴与交叉轴的对齐方式属性时，显示容器内元素的对齐方式，以及主轴对其方式和交叉轴对其方式属性设置模块。
+2. 在ColumnShowList.ets中，自定组件ColumnShowList主要效果是在Column布局容器中，设置不同的主轴与交叉轴的对齐方式属性时，显示容器内元素的对齐方式，以及主轴对其方式和交叉轴对其方式属性设置模块。
 
-    ![](figures/zh-cn_image_0000001458316749.png)
+   ![](figures/zh-cn_image_0000001458316749.png)
 
-    具体代码如下：
+   具体代码如下：
 
-    ```typescript
-    @Component
-    export struct ColumnShowList {
-      @Consume currentColumnJustifyContent: FlexAlign;
-      @Consume currentColumnAlignItems: HorizontalAlign;
-    
-      build() {
-        Column() {
-          // Column中元素对齐方式布局
-          Column() {
-            ForEach(LIST, (item) => {
-              CommonItem({ item: item })
-            }, item => item)
-          }
-          ...
-          // 设置主轴对齐方式
-          ColumnMainAlignRadioList().margin({ top:MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-          // 设置交叉轴对齐方式
-          ColumnAxisAlignRadioList().margin({ top:MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-        }
-        .width(ALL_PERCENT)
-      }
-    }
-    ```
-
-    其中ColumnMainAlignRadioList子组件和ColumnAxisAlignRadioList子组件分别是设置主轴对齐方式单选框列表和设置交叉轴对齐方式单选框列表，并且在FlexShowList，RowShowList和StackComponent中都存在代码结构类似的子组件，只是设置的属性和参数单选框列表不同，后面不在重复其详细代码，这里选择其中一个单选框列表子组件来显示。
-
-    ![](figures/zh-cn_image_0000001408157208.png)
-
-    具体代码如下：
-
-    ```typescript
-    @Component
-    export struct ColumnMainAlignRadioList {
-      ...
-    
-      build() {
-        Column({ space: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN }) {
-    　　　　// 单选框列表模块名称
-          Row() {
-            Text(this.moduleName)
-              .fontSize(MARGIN_FONT_SIZE_SPACE.FOURTH_MARGIN)
-          }
-          .margin({ left: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
-    
-          Flex({
-            direction: FlexDirection.Row,
-            justifyContent:  FlexAlign.SpaceBetween ,
-            wrap:  FlexWrap.NoWrap
-          }) {
-            ForEach(this.radioList, (item, index) => {
-              MainAlignRadioItem({ textName: item, groupName: this.groupName, 
-                isChecked: index === 0 ? true : false })
-                .margin({ right: MARGIN_FONT_SIZE_SPACE.COMMON_MARGIN })
-            })
-          }
+   ```typescript
+   @Component
+   export struct ColumnShowList {
+     @Consume currentColumnJustifyContent: FlexAlign;
+     @Consume currentColumnAlignItems: HorizontalAlign;
+   
+     build() {
+       Column() {
+         // Column中元素对齐方式布局
+         Column() {
+           ForEach(LIST, (item) => {
+             CommonItem({ item: item })
+           }, item => JSON.stringify(item))
+         }
          ...
-        }
+         // 设置主轴对齐方式
+         ColumnMainAlignRadioList()
+           .margin({ top:MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         // 设置交叉轴对齐方式
+         ColumnAxisAlignRadioList()
+           .margin({ top:MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+       }
+       .layoutWeight(1)
+       .height(ALL_PERCENT)
+       .width(ALL_PERCENT)
+     }
+   }
+   ```
+
+   其中ColumnMainAlignRadioList子组件和ColumnAxisAlignRadioList子组件分别是设置主轴对齐方式单选框列表和设置交叉轴对齐方式单选框列表，并且在FlexShowList，RowShowList和StackComponent中都存在代码结构类似的子组件，只是设置的属性和参数单选框列表不同，后面不在重复其详细代码，这里选择其中一个单选框列表子组件来显示。
+
+   ![](figures/zh-cn_image_0000001408157208.png)
+
+   具体代码如下：
+
+   ```typescript
+   @Component
+   export struct ColumnMainAlignRadioList {
+     ...
+   
+     build() {
+       Column({ space: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN }) {
+   　　　　// 单选框列表模块名称
+         Row() {
+           Text(this.moduleName)
+             .fontSize(MARGIN_FONT_SIZE_SPACE.FOURTH_MARGIN)
+         }
+         .margin({ left: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
+   
+         Flex({
+           direction: FlexDirection.Row,
+           justifyContent: FlexAlign.SpaceBetween ,
+           wrap:  FlexWrap.NoWrap
+         }) {
+           ForEach(this.radioList, (item, index) => {
+             MainAlignRadioItem({ textName: item, groupName: this.groupName, 
+               isChecked: index === 0 ? true : false })
+               .margin({ right: MARGIN_FONT_SIZE_SPACE.COMMON_MARGIN })
+           }, item => JSON.stringify(item))
+         }
         ...
-      }
-    }
-    
-    @Component
-    struct MainAlignRadioItem {
-      ...
-    
-      build() {
-        Row() {
-          Radio({ value: this.textName, group: this.groupName })
-            ......
-            .onChange(() => {
-              switch (this.textName) {
-                case ATTRIBUTE.START:
-                  this.currentColumnJustifyContent = FlexAlign.Start;
-                  break;
-                case ATTRIBUTE.CENTER:
-                  this.currentColumnJustifyContent = FlexAlign.Center;
-                  break;
-                default:
-                  this.currentColumnJustifyContent = FlexAlign.End;
-                  break;
-              }
-            })
-          Text(this.textName)
-            .fontSize(MARGIN_FONT_SIZE_SPACE.THIRD_MARGIN)
-            .opacity(ATTRIBUTE_OPACITY)
-        }
-      }
-    }
-    ```
+       }
+       ...
+     }
+   }
+   
+   @Component
+   struct MainAlignRadioItem {
+     ...
+   
+     build() {
+       Row() {
+         Radio({ value: this.textName, group: this.groupName })
+           ...
+           .onClick(() => {
+             switch (this.textName) {
+               case ATTRIBUTE.START:
+                 this.currentColumnJustifyContent = FlexAlign.Start;
+                 break;
+               case ATTRIBUTE.CENTER:
+                 this.currentColumnJustifyContent = FlexAlign.Center;
+                 break;
+               default:
+                 this.currentColumnJustifyContent = FlexAlign.End;
+                 break;
+             }
+           })
+         Text(this.textName)
+           .fontSize(MARGIN_FONT_SIZE_SPACE.THIRD_MARGIN)
+           .opacity(ATTRIBUTE_OPACITY)
+       }
+     }
+   }
+   ```
 
-3.  在FlexShowList.ets中，自定组件FlexShowList主要效果是在Flex布局容器中，设置不同的参数时，显示容器内元素对齐方式。
+3. 在FlexShowList.ets中，自定组件FlexShowList主要效果是在Flex布局容器中，设置不同的参数时，显示容器内元素对齐方式。
 
-    ![](figures/zh-cn_image_0000001458437253.png)
+   ![](figures/zh-cn_image_0000001458437253.png)
 
-    具体代码如下：
+   具体代码如下：
 
-    ```typescript
-    @Component
-    export struct FlexShowList {
-      @Consume list: number[];
-      @Consume currentFlexDirection: FlexDirection;
-      @Consume currentFlexJustifyContent: FlexAlign;
-      @Consume currentFlexAlignItems: ItemAlign;
-      @Consume currentFlexWrap: FlexWrap;
-      @Consume currentFlexAlignContent: FlexAlign;
-    
-      build() {
-        Column() {
-          // Flex中元素对齐方式布局
-          Flex({
-            // 参数设置
-             ...
-          }) {
-            ForEach(this.list, (item) => {
-              CommonItem({ item: item })
-            }, item => item.toString())
-          }
+   ```typescript
+   @Component
+   export struct FlexShowList {
+     @Consume list: number[];
+     @Consume currentFlexDirection: FlexDirection;
+     @Consume currentFlexJustifyContent: FlexAlign;
+     @Consume currentFlexAlignItems: ItemAlign;
+     @Consume currentFlexWrap: FlexWrap;
+     @Consume currentFlexAlignContent: FlexAlign;
+   
+     build() {
+       Column() {
+         // Flex中元素对齐方式布局
+         Flex({
+           // 参数设置
+            ...
+         }) {
+           ForEach(this.list, (item) => {
+             CommonItem({ item: item })
+           }, item => JSON.stringify(item))
+         }
          ...
-          // 设置主轴方向
-          FlexMainDirectionRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-          // 设置主轴对齐方式
-          FlexMainAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-          // 设置交叉轴对齐方式
-          FlexAxisAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-        }
-        .width(ALL_PERCENT)
-      }
-    }
-    ```
+         // 设置主轴方向
+         FlexMainDirectionRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         // 设置主轴对齐方式
+         FlexMainAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         // 设置交叉轴对齐方式
+         FlexAxisAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+       }
+       .layoutWeight(1)
+       .height(ALL_PERCENT)
+       .width(ALL_PERCENT)
+     }
+   }
+   ```
 
-4.  在RowShowList.ets中，自定组件RowShowList主要效果是在Row布局容器中，当设置不同的主轴与交叉轴的对齐方式属性时，显示容器内元素的对齐方式。
+4. 在RowShowList.ets中，自定组件RowShowList主要效果是在Row布局容器中，当设置不同的主轴与交叉轴的对齐方式属性时，显示容器内元素的对齐方式。
 
-    ![](figures/zh-cn_image_0000001458117689.png)
+   ![](figures/zh-cn_image_0000001458117689.png)
 
-    代码如下：
+   代码如下：
 
-    ```typescript
-    @Component
-    export struct RowShowList {
-      @Consume currentRowJustifyContent: FlexAlign;
-      @Consume currentRowAlignItems: VerticalAlign;
-    
-      build() {
-        Column() {
-          // Row中元素对齐方式布局
-          Row() {
-            ForEach(LIST, (item) => {
-              CommonItem({ item: item })
-            }, item => item)
-          }
-          ...
-          // 设置主轴对齐方式
-          RowMainAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-          // 设置交叉轴对齐方式
-          RowAxisAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-        }
-        .width(ALL_PERCENT)
-      }
-    }
-    ```
+   ```typescript
+   @Component
+   export struct RowShowList {
+     @Consume currentRowJustifyContent: FlexAlign;
+     @Consume currentRowAlignItems: VerticalAlign;
+   
+     build() {
+       Column() {
+         // Row中元素对齐方式布局
+         Row() {
+           ForEach(LIST, (item) => {
+             CommonItem({ item: item })
+           }, item => JSON.stringify(item))
+         }
+         ...
+         // 设置主轴对齐方式
+         RowMainAlignRadioList()
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         // 设置交叉轴对齐方式
+         RowAxisAlignRadioList()
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+       }
+       .layoutWeight(1)
+       .height(ALL_PERCENT)
+       .width(ALL_PERCENT)
+     }
+   }
+   ```
 
-5.  在StackComponent.ets中，自定组件StackComponent主要效果是在Stack布局容器中，设置不同对齐方式属性时，容器内堆叠元素的对齐方式。
+5. 在StackComponent.ets中，自定组件StackComponent主要效果是在Stack布局容器中，设置不同对齐方式属性时，容器内堆叠元素的对齐方式。
 
-    ![](figures/zh-cn_image_0000001407837816.png)
+   ![](figures/zh-cn_image_0000001407837816.png)
 
-    代码如下：
+   代码如下：
 
-    ```typescript
-    @Component
-    export struct StackComponent {
-      @Consume currentStackAlignContent: Alignment;
-      @Consume message: string ;
-      @State textAl: TextAlign = TextAlign.Center;
-    
-      build() {
-        Column() {
-          // Stack中元素对齐方式布局
-          Stack({ alignContent: this.currentStackAlignContent }) {
-            Text('')
-              .width(ALL_PERCENT)
-              .height(ALL_PERCENT)
-              .fontSize(MARGIN_FONT_SIZE_SPACE.FOURTH_MARGIN)
-              .backgroundColor($r('app.color.show_list_backgroundColor'))
-            Text(this.message)
-              ...
-          }
-          .margin({ top: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN })
-          .width(ALL_PERCENT)
-          .height(SHOW_LIST_HEIGHT_PERCENT.STACK_SHOW_LIST_HEIGHT)
-          // 设置对齐方式
-          StackAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-        }
-        .width(ALL_PERCENT)
-      }
-    }
-    ```
+   ```typescript
+   @Component
+   export struct StackComponent {
+     @Consume currentStackAlignContent: Alignment;
+     @Consume message: string ;
+     @State textAl: TextAlign = TextAlign.Center;
+   
+     build() {
+       Column() {
+         // Stack中元素对齐方式布局
+         Stack({ alignContent: this.currentStackAlignContent }) {
+           Text('')
+             .width(ALL_PERCENT)
+             .height(ALL_PERCENT)
+             .fontSize(MARGIN_FONT_SIZE_SPACE.FOURTH_MARGIN)
+             .backgroundColor($r('app.color.show_list_backgroundColor'))
+           Text(this.message)
+             ...
+         }
+         .margin({ top: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN })
+         .width(ALL_PERCENT)
+         .height(SHOW_LIST_HEIGHT_PERCENT.STACK_SHOW_LIST_HEIGHT)
+         // 设置对齐方式
+         StackAlignRadioList()
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+       }
+       .layoutWeight(1)
+       .height(ALL_PERCENT)
+       .width(ALL_PERCENT)
+     }
+   }
+   ```
 
 6.  在CommonComponent.ets中，自定义组件CommonItem，代码如下：
 
@@ -386,7 +401,9 @@
               } else {
                 StackComponent()
               }
-            }.width(ALL_PERCENT).height(ALL_PERCENT)
+            }
+            .width(ALL_PERCENT)
+            .height(ALL_PERCENT)
           }
           .width(ALL_PERCENT)
         }

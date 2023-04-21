@@ -7,31 +7,29 @@
 
 ### 相关概念
 
--   [Ability框架](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/ability-brief.md)：Ability是系统调度应用的最小单元，是能够完成一个独立功能的组件。一个应用可以包含一个或多个Ability。
+-   [UIAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-ability-uiAbility.md)：UIAbility组件是系统调度的基本单元，为应用提供绘制界面的窗口；一个UIAbility组件中可以通过多个页面来实现一个功能模块。每一个UIAbility组件实例，都对应于一个最近任务列表中的任务。
 
--   [AbilityContext](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/context-userguide.md)：Ability类拥有context属性，context属性为AbilityContext类，AbilityContext类拥有abilityInfo、currentHapModuleInfo等属性，启动Ability等方法。
--   [Want](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-application-Want.md)：应用开发者可以通过want传递启动参数，比如希望指定页面启动Ability，可以通过want中的uri参数或parameters参数传递pages信息。
+-   [UIAbilityContext](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-inner-application-uiAbilityContext.md)：UIAbilityContext是UIAbility的上下文环境，继承自Context，提供UIAbility的相关配置信息以及操作UIAbility和ServiceExtensionAbility的方法，如启动UIAbility，停止当前UIAbilityContext所属的UIAbility，启动、停止、连接、断开连接ServiceExtensionAbility等。
+-   [Want](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-ability-want.md)：Want是对象间信息传递的载体, 可以用于应用组件间的信息传递。 Want的使用场景之一是作为startAbility的参数, 其包含了指定的启动目标, 以及启动时需携带的相关数据。
 -   [HiLog](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-hilog.md)：HiLog日志系统，让应用可以按照指定类型、指定级别、指定格式字符串输出日志内容，帮助开发者了解应用的运行状态，更好地调试程序。
--   [AbilityStage](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-application-abilitystage.md)：对应HAP的运行期类，在[HAP](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/stage-brief.md)首次加载到进程中时创建，运行期开发者可见，当AbilityStage被创建时，会执行onCreate方法。
--   [Ability模块](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-application-ability.md)：Ability模块提供对Ability生命周期、上下文环境等调用管理的能力。
 
 ## 环境搭建
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Canary1及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Beta3及以上版本。
+-   OpenHarmony系统：3.2 Release及以上版本。
 
 ### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Beta3版本为例：
+1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Release版本为例：
 
     ![](figures/zh-cn_image_0000001405854998.png)
 
@@ -41,7 +39,7 @@
 
 3.  搭建开发环境。
     1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 
@@ -121,10 +119,10 @@
             ...
             windowStage.loadContent('pages/DetailsPage', (err, data) => {
                 if (err.code) {
-                    hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+                    hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed. Cause: %{public}s', JSON.stringify(err) ?? '');
                     return;
                 }
-                hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
+                hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded. Data: %{public}s', JSON.stringify(data) ?? '');
             });
         }
         ...
@@ -138,11 +136,11 @@
 
 由于篇幅有限，这里不再详细介绍页面中的具体布局和布局中的业务视图组件。
 
-## 使用AbilityContext启动另一个Ability
+## UIAbilityContext模块启动Ability的能力
 
-在相关概念中，我们知道AbilityContext拥有启动另一个Ability的能力，通过AbilityContext接口提供的startAbility方法，实现在当前Ability中启动另一个Ability。
+UIAbilityContext是UIAbility的上下文环境，继承自Context，提供UIAbility的相关配置信息以及操作UIAbility和ServiceExtensionAbility的方法，如启动UIAbility，停止当前UIAbilityContext所属的UIAbility，启动、停止、连接、断开连接ServiceExtensionAbility等。
 
-在购物应用中，我们点击首页商品列表中的某一项商品，即可跳转到商品的详情页面。关于[获取AbilityContext的方法](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/context-userguide.md#在arkts页面中访问context)，我们推荐在自定义组件中使用getContext\(this\)方式来获取AbilityContext。在首页HomePage文件中，我们使用getContext\(this\)方式来获取AbilityContext，代码如下：
+在购物应用中，我们点击首页商品列表中的某一项商品，即可跳转到商品的详情页面。此处使用到UIAbilityContext模块的启动Ability的能力。关于[获取UIAbilityContext的方法](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-inner-application-uiAbilityContext.md)，推荐使用getContext(this)方式来获取UIAbilityContext。
 
 ```typescript
 ...
@@ -176,7 +174,7 @@
  ...
 ```
 
-HomeViewModel文件中，跳转详情页的业务逻辑，代码如下：
+startDetailsAbility方法调用了UIAbilityContext模块启动Ability的能力。
 
 ```typescript
 ... 
@@ -197,17 +195,12 @@ HomeViewModel文件中，跳转详情页的业务逻辑，代码如下：
 ...
 ```
 
-## 借助Want在Ability之间通信
+## 信息传递载体Want
 
-[Want](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-application-Want.md)模块提供系统的基本通信组件的能力，借助Want接口可实现不同Ability之间的通信。Want有deviceId、bundleName、abilityName以及parameters等属性，这里我们只讲解bundleName、abilityName、parameters三个属性以及Want在购物应用中的基础用法。
+[Want](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-ability-want.md)是对象间信息传递的载体, 可以用于应用组件间的信息传递。Want的使用场景之一是作为startAbility的参数, 其包含了指定的启动目标, 以及启动时需携带的相关数据。
+在购物应用的EntryAbility中，我们使用startDetailsAbility方法启动DetailsAbility，并在代码中指定了Want的具体参数，并使用parameters参数传递商品信息。
 
-下面展示了购物应用中页面跳转使用的三个参数具体含义：
-
--   bundleName：表示包名称。如果在Want中同时指定了BundleName和AbilityName，则Want可以直接匹配到指定的Ability。
--   abilityName：表示待启动的Ability名称。如果在Want中该字段同时指定了BundleName和AbilityName，则Want可以直接匹配到指定的Ability。AbilityName需要在一个应用的范围内保证唯一。
--   parameters：表示WantParams描述，由开发者自行决定传入的键值对。
-
-在购物应用的EntryAbility中，我们使用startDetailsAbility方法启动DetailsAbility，并在代码中指定了Want的具体参数，并使用parameters参数传递商品信息，由于上面已给出代码，这里我们只讲解如何在详情页面中获取传递过来的参数，首先我们在DetailsAbility中通过AppStorage来存储detailWant对象。代码如下：
+在DetailsAbility中通过AppStorage来存储detailWant对象。
 
 ```typescript
 ...
@@ -221,7 +214,7 @@ export default class DetailsAbility extends Ability {
 };
 ```
 
-在对应的DetailsPage页面，使用AppStorage来获取detailWant对象，解析detailWant对象中的商品信息参数，调用loadDetails方法来展示商品详情。代码如下：
+在对应的DetailsPage页面，使用AppStorage来获取detailWant对象，解析detailWant对象中的商品信息参数，调用loadDetails方法来展示商品详情。
 
 ```typescript
 ...
@@ -278,7 +271,7 @@ export default class EntryAbility extends Ability {
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
-1. AbilityContext的获取方式和startAbility方法的使用。
+1. UIAbilityContext的获取方式和startAbility方法的使用。
 2. Want的基础使用。
 3. HiLog的使用方式。
 4. Ability相关生命周期函数的调用。

@@ -28,7 +28,9 @@ import DimensionUtil from '../common/utils/DimensionUtil';
 @Entry
 @Component
 struct DetailIndex {
-  @Provide(DetailConstant.DEFAULT_STRING_PROVIDER_KEY) alarmItem: AlarmItem = new AlarmItem();
+  @Watch('onAlarmItemChange') @Provide(DetailConstant.DEFAULT_PROVIDER_KEY) alarmItem: AlarmItem = new AlarmItem();
+  @State repeatSettingArr: Array<AlarmSettingBean> = [];
+  @State alarmSettingInfoArr: Array<AlarmSettingBean> = [];
   private isNow: boolean = true;
   private viewModel: DetailModel = DetailModel.getInstant();
 
@@ -40,6 +42,27 @@ struct DetailIndex {
     } else {
       this.viewModel.setAlarmDefaultTime();
     }
+    this.initData();
+  }
+
+  onAlarmItemChange() {
+    this.initData();
+  }
+
+  initData() {
+    this.repeatSettingArr = [
+      new AlarmSettingBean(DetailConstant.DEFAULT_STRING_REPEAT,
+        this.alarmItem.isRepeat ? DetailConstant.DEFAULT_STRING_REPEAT
+                                : CommonConstants.DEFAULT_STRING_NO_REPEAT, AlarmSettingType.REPEAT)
+    ];
+    this.alarmSettingInfoArr = [
+      new AlarmSettingBean(DetailConstant.DEFAULT_STRING_ALARM_NAME, this.alarmItem.name, AlarmSettingType.ALARM_NAME),
+      new AlarmSettingBean(DetailConstant.DEFAULT_STRING_DURATION,
+        this.alarmItem.duration + DetailConstant.DEFAULT_STRING_MINUTE, AlarmSettingType.RING_DURATION),
+      new AlarmSettingBean(DetailConstant.DEFAULT_STRING_INTERVAL, this.alarmItem.intervalMinute
+      + DetailConstant.DEFAULT_STRING_MINUTE + CommonConstants.DEFAULT_STRING_COMMA
+      + this.alarmItem.intervalTimes + DetailConstant.DEFAULT_STRING_TIMES, AlarmSettingType.INTERVAL)
+    ]
   }
 
   build() {
@@ -63,26 +86,10 @@ struct DetailIndex {
       DatePickArea()
 
       SettingItem({
-        settingInfo: [new AlarmSettingBean(DetailConstant.DEFAULT_STRING_REPEAT,
-            this.alarmItem.isRepeat
-            ? DetailConstant.DEFAULT_STRING_REPEAT
-            : CommonConstants.DEFAULT_STRING_NO_REPEAT, AlarmSettingType.REPEAT)]
+        settingInfo: $repeatSettingArr
       })
       SettingItem({
-        settingInfo: [
-          new AlarmSettingBean(
-            DetailConstant.DEFAULT_STRING_ALARM_NAME,
-            this.alarmItem.name,
-            AlarmSettingType.ALARM_NAME),
-          new AlarmSettingBean(
-            DetailConstant.DEFAULT_STRING_DURATION,
-            this.alarmItem.duration + DetailConstant.DEFAULT_STRING_MINUTE,
-            AlarmSettingType.RING_DURATION),
-          new AlarmSettingBean(
-            DetailConstant.DEFAULT_STRING_INTERVAL,
-            this.alarmItem.intervalMinute + DetailConstant.DEFAULT_STRING_MINUTE + CommonConstants.DEFAULT_STRING_COMMA
-            + this.alarmItem.intervalTimes + DetailConstant.DEFAULT_STRING_TIMES,
-            AlarmSettingType.INTERVAL)]
+        settingInfo: $alarmSettingInfoArr
       })
 
       Blank()

@@ -54,7 +54,7 @@ export const DetailConstant = {
   /**
    * default string provider key.
    */
-  DEFAULT_STRING_PROVIDER_KEY: 'alarmItemProvide',
+  DEFAULT_PROVIDER_KEY: 'alarmItemProvide',
 
   /**
    * default string repeat.

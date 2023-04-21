@@ -14,48 +14,48 @@
  */
 
 import hilog from '@ohos.hilog';
-import Ability from '@ohos.app.ability.UIAbility';
+import UIAbility from '@ohos.app.ability.UIAbility';
 
 const TAG: string = 'DetailsAbility';
 const KEY: string = 'GoodsPosition';
 const DETAIL_ABILITY_DOMAIN = 0x00002;
 
-export default class DetailsAbility extends Ability {
-    onCreate(want, launchParam) {
-        let index: number = want?.parameters?.position;
-        AppStorage.SetOrCreate(KEY, index);
-        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onCreate');
-    }
+export default class DetailsAbility extends UIAbility {
+  onCreate(want, launchParam) {
+    let index: number = want?.parameters?.position;
+    AppStorage.SetOrCreate(KEY, index);
+    hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onCreate');
+  }
 
-    onDestroy() {
-        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onDestroy');
-    }
+  onDestroy() {
+    hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onDestroy');
+  }
 
-    onWindowStageCreate(windowStage) {
-        // Main window is created, set main page for this ability
-        hilog.info(0x0000, TAG, '%{public}s', 'Ability onWindowStageCreate');
+  onWindowStageCreate(windowStage) {
+    // Main window is created, set main page for this ability
+    hilog.info(0x0000, TAG, '%{public}s', 'Ability onWindowStageCreate');
 
-        windowStage.loadContent('pages/DetailsPage', (err, data) => {
-            if (err.code) {
-                hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed. Cause: %{public}s', JSON.stringify(err) ?? '');
-                return;
-            }
-            hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded. Data: %{public}s', JSON.stringify(data) ?? '');
-        });
-    }
+    windowStage.loadContent('pages/DetailsPage', (err, data) => {
+      if (err.code) {
+        hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed. Cause: %{public}s', JSON.stringify(err) ?? '');
+        return;
+      }
+      hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded. Data: %{public}s', JSON.stringify(data) ?? '');
+    });
+  }
 
-    onWindowStageDestroy() {
-        // Main window is destroyed, release UI related resources
-        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onWindowStageDestroy');
-    }
+  onWindowStageDestroy() {
+    // Main window is destroyed, release UI related resources
+    hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onWindowStageDestroy');
+  }
 
-    onForeground() {
-        // Ability has brought to foreground
-        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onForeground');
-    }
+  onForeground() {
+    // Ability has brought to foreground
+    hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onForeground');
+  }
 
-    onBackground() {
-        // Ability has back to background
-        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onBackground');
-    }
+  onBackground() {
+    // Ability has back to background
+    hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onBackground');
+  }
 };

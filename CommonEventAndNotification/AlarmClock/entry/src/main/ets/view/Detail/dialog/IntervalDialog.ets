@@ -21,7 +21,7 @@ import DimensionUtil from '../../../common/utils/DimensionUtil';
 
 @CustomDialog
 export default struct IntervalDialog {
-  @Consume(DetailConstant.DEFAULT_STRING_PROVIDER_KEY) alarmItem: AlarmItem;
+  @Consume(DetailConstant.DEFAULT_PROVIDER_KEY) alarmItem: AlarmItem;
   @State intervalMinuteSelect: number = 0;
   @State intervalTimesSelect: number = 0;
   controller: CustomDialogController;
@@ -75,7 +75,7 @@ export default struct IntervalDialog {
         .trackColor(Color.Gray)
         .selectedColor(Color.Blue)
         .showSteps(true)
-        .showTips(true)
+        .showTips(false)
         .onChange((value: number) => {
           if (intervalType === 0) {
             this.intervalMinuteSelect = value;

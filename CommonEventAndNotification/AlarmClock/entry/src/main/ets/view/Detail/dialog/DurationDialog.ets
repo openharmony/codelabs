@@ -21,7 +21,7 @@ import DimensionUtil from '../../../common/utils/DimensionUtil';
 
 @CustomDialog
 export default struct DurationDialog {
-  @Consume(DetailConstant.DEFAULT_STRING_PROVIDER_KEY) alarmItem: AlarmItem;
+  @Consume(DetailConstant.DEFAULT_PROVIDER_KEY) alarmItem: AlarmItem;
   private durations: Array<number> = DetailConstant.RING_DURATION; //响铃时长，分钟
   controller: CustomDialogController;
 
