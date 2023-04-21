@@ -23,19 +23,19 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Canary1及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Beta3及以上版本。
+-   OpenHarmony系统：3.2 Release及以上版本。
 
 ### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Beta3版本为例：
+1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Release版本为例：
 
    ![](figures/zh-cn_image_0000001405854998.png)
 
@@ -47,7 +47,7 @@
 3. 搭建开发环境。
 
    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
@@ -220,21 +220,20 @@
 Preferences的数据存储在文件中，因此需要指定存储的文件名PREFERENCES\_NAME。再通过Preferences提供的方法进行数据库的相关操作。具体代码如下：
 
 ```typescript
-import ctx from '@ohos.application.context';
 // 导入dataPreferences模块
 import dataPreferences from '@ohos.data.preferences';
 
-// 获取AbilityContext
-let context = getContext(this) as ctx.AbilityContext;
+let context = getContext(this);
 let preference: dataPreferences.Preferences = null;
 
 // 调用getPreferences方法读取指定首选项持久化文件，将数据加载到Preferences实例，用于数据操作
-await dataPreferences.getPreferences(context, CommonConstants.PREFERENCES_NAME).then((data) => {
-  preference = data;
-  Logger.info(CommonConstants.TAG, `Succeeded in getting preferences`);
-}).catch((err) => {
-  Logger.error(CommonConstants.TAG, `Failed to get preferences, Cause: ${err}`);
-});
+async getPreferencesFromStorage() {
+  try {
+    preference = await dataPreferences.getPreferences(context, CommonConstants.PREFERENCES_NAME);
+  } catch (err) {
+    Logger.error(CommonConstants.TAG, `Failed to get preferences, Cause: ${err}`);
+  }
+}
 ```
 
 ## 写入数据
@@ -242,14 +241,17 @@ await dataPreferences.getPreferences(context, CommonConstants.PREFERENCES_NAME).
 获取Preferences实例后，使用Preferences的put方法，将用户输入的水果名称和水果数量数据，保存到缓存的实例中。再通过Preferences的flush方法将Preferences实例异步存储到首选项持久化文件中。具体代码如下：
 
 ```typescript
-// 将用户输入的水果名称和水果数量数据，保存到缓存的Preference实例中
-await preference.put(CommonConstants.KEY_NAME, JSON.stringify(fruit)).then(() => {
-  Logger.info(CommonConstants.TAG, `Succeeded in putting value`);
-}).catch((err) => {
-  Logger.error(CommonConstants.TAG, `Failed to put value, Cause: ${err}`);
-});
-// 将Preference实例存储到首选项持久化文件中
-await preference.flush();
+async putPreference(fruit: Fruit) {
+  ...
+  try {
+    // 将用户输入的水果名称和水果数量数据，保存到缓存的Preference实例中
+    await preference.put(CommonConstants.KEY_NAME, JSON.stringify(fruit));
+  } catch (err) {
+    Logger.error(CommonConstants.TAG, `Failed to put value, Cause: ${err}`);
+  }
+  // 将Preference实例存储到首选项持久化文件中
+  await preference.flush();
+}
 ```
 
 ## 读取数据
@@ -257,13 +259,16 @@ await preference.flush();
 使用Preferences的get方法读取数据。如果键不存在，则返回默认值。例如获取下面代码中fruit的值，如果fruit的键KEY\_NAME不存在，则会返回空字符串。通过默认值的设置，来避免程序出现异常。具体代码如下：
 
 ```typescript
-let fruit = '';
-await preference.get(CommonConstants.KEY_NAME, '').then((data) => {
-  fruit = <string> data;
-  Logger.info(CommonConstants.TAG, `Succeeded in getting value`);
-}).catch((err) => {
-  Logger.error(CommonConstants.TAG, `Failed to get value, Cause: ${err}`);
-});
+async getPreference() {
+  let fruit = '';
+  ...
+  try {
+    fruit = <string> await preference.get(CommonConstants.KEY_NAME, '');
+  } catch (err) {
+    Logger.error(CommonConstants.TAG, `Failed to get value, Cause: ${err}`);
+  }
+  ...
+}
 ```
 
 ## 删除数据文件
@@ -271,11 +276,14 @@ await preference.get(CommonConstants.KEY_NAME, '').then((data) => {
 通过dataPreferences模块的deletePreferences\(context, name\)方法从内存中移除指定文件对应的Preferences单实例。移除Preferences单实例时，应用不允许再使用该实例进行数据操作，否则会出现数据一致性问题。具体代码如下：
 
 ```typescript
-await dataPreferences.deletePreferences(context, CommonConstants.PREFERENCES_NAME).then(() => {
-  Logger.info(CommonConstants.TAG, `Succeeded in delete preferences`);
-}).catch((err) => {
-  Logger.error(CommonConstants.TAG, `Failed to delete preferences, Cause: ${err}`);
-});
+async deletePreferences() {
+  try {
+    await dataPreferences.deletePreferences(context, CommonConstants.PREFERENCES_NAME);
+  } catch(err) {
+    Logger.error(CommonConstants.TAG, `Failed to delete preferences, Cause: ${err}`);
+  };
+  ...
+}
 ```
 
 ## 总结
