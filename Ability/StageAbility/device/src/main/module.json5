@@ -5,8 +5,13 @@
     "description": "$string:module_desc",
     "mainElement": "SecondAbility",
     "deviceTypes": [
-      "default",
-      "tablet"
+      "default"
+    ],
+    "metadata": [
+      {
+        "name": "ArkTSPartialUpdate",
+        "value": "true"
+      }
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
@@ -14,13 +19,13 @@
     "abilities": [
       {
         "name": "SecondAbility",
-        "srcEntrance": "./ets/secondability/SecondAbility.ts",
+        "srcEntry": "./ets/secondability/SecondAbility.ts",
         "description": "$string:SecondAbility_desc",
         "icon": "$media:icon",
         "label": "$string:SecondAbility_label",
         "startWindowIcon": "$media:icon",
         "startWindowBackground": "$color:start_window_background",
-        "visible": true
+        "exported": true
       }
     ]
   }

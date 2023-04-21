@@ -13,14 +13,13 @@
  * limitations under the License.
  */
 
-import ctx from '@ohos.application.context';
 import ButtonClickMethod from '../../../../../entry/src/main/ets/model/ButtonClickMethod';
 import StyleConstants from '../../../../../entry/src/main/ets/common/constants/StyleConstants';
 
 /**
- * Get AbilityContext.
+ * Get context.
  */
-let context = getContext(this) as ctx.AbilityContext;
+let context = getContext(this);
 
 /**
  * The Second Page of SecondAbility.
