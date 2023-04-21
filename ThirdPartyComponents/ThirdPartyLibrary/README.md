@@ -14,36 +14,36 @@
 
 - [Canvas](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-components-canvas-canvas.md)：画布组件，用于自定义绘制图形。
 
-- [OpenHarmony npm包](https://gitee.com/openharmony-tpc/docs/blob/master/OpenHarmony_npm_usage.md)：它是在传统的npm包的基础上，定义了OpenHarmony npm共享包特定的工程结构和配置文件，支持OpenHarmony页面组件相关API、资源的调用。
+- [OpenHarmony 共享包](https://gitee.com/openharmony-tpc/docs/blob/master/OpenHarmony_npm_usage.md)：OpenHarmony 共享包定义了特定的工程结构和配置文件，支持OpenHarmony页面组件相关API、资源的调用。
 
-## 环境搭建
+# 环境搭建<a name="ZH-CN_TOPIC_0000001454565741"></a>
 
-### 软件要求
+## 软件要求<a name="zh-cn_topic_0000001353166866_section17200112092018"></a>
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Canary1及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
-### 硬件要求
+## 硬件要求<a name="zh-cn_topic_0000001353166866_section820192019206"></a>
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Beta3及以上版本。
+-   OpenHarmony系统：3.2 Release及以上版本。
 
-### 环境搭建
+## 环境搭建<a name="zh-cn_topic_0000001353166866_section1020132022018"></a>
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Beta3版本为例：
+1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Release版本为例：
 
-    ![](figures/zh-cn_image_0000001405854998.png)
+    ![](figures/zh-cn_image_0000001554588725.png)
 
-2. 搭建烧录环境。
+2.  搭建烧录环境。
     1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
     2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
-3. 搭建开发环境。
-    1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
-    3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
+3.  搭建开发环境。
+    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
+    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
 
@@ -60,8 +60,6 @@
 │  │  │  └──data.json                  // 动画JSON文件
 │  │  └──utils
 │  │     └──log                        // 日志工具类
-│  │        ├──HiLogger.ets
-│  │        ├──ILogger.ets
 │  │        └──Logger.ets
 │  ├──entryability
 │  │  └──EntryAbility.ts               // 程序入口类
@@ -79,11 +77,11 @@
          └──Buttons.ets                // 本地库代码实现
 ```
 
-## 整体框架搭建
+# 整体框架搭建<a name="ZH-CN_TOPIC_0000001403886182"></a>
 
 本篇Codelab由主页面、本地库组件页面、社区库组件页面三个页面组成，主页面由Navigation作为根组件实现全局标题，由Tabs组件实现本地库和社区库页面的切换，代码如下：
 
-```typescript
+```
 import { Outer } from '../view/OuterComponent';
 import { Inner } from '../view/InnerComponent';
 import { CommonConstants } from '../common/constants/CommonConst';
@@ -114,6 +112,7 @@ struct Index {
           this.currentIndex = index;
         })
       }
+      .titleMode(NavigationTitleMode.Mini)
       .title(this.NavigationTitle)
       .hideBackButton(true)
     }
@@ -124,26 +123,26 @@ struct Index {
 
 在pages文件夹下新建components文件并在此文件夹下创建两个ArkTS文件，分别命名为inner和outer，至此整体框架搭建完毕。
 
-## 本地库实现
+# 本地库实现<a name="ZH-CN_TOPIC_0000001454246089"></a>
 
-本地库主要是指未上架到npm中心且在项目组内共享使用的库文件，这类库需要开发者在项目中创建并开发新的Library模块，创建步骤如下：
+本地库主要是指未上架到ohpm中心且在项目组内共享使用的库文件，这类库需要开发者在项目中创建并开发新的Library模块，创建步骤如下：
 
-1.  通过如下两种方法，在OpenHarmony工程中添加OpenHarmony npm块。
+1.  通过如下两种方法，在OpenHarmony工程中添加OpenHarmony ohpm块。
     -   方法1：鼠标移到工程目录顶部，单击鼠标右键，选择New\>Module。
     -   方法2：在菜单栏选择File \> New \> Module。
 
-2.  在Choose Your Ability Template界面中，选择Ohos Library，并单击Next。
+2.  在Choose Your Ability Template界面中，选择Static Library，并单击Next。
 3.  在Configure the New Module界面中，设置新添加的模块信息，设置完成后，单击Finish完成创建。
     -   Module name：新增模块的名称。
-    -   Language：选择开发OpenHarmony npm包的语言。
-    -   Device type：选择OpenHarmony npm包支持的设备类型。
-    -   Enable Native：是否创建一个用于调用C++代码的OpenHarmony npm共享模块。
+    -   Language：选择开发OpenHarmony ohpm包的语言。
+    -   Device type：选择OpenHarmony ohpm包支持的设备类型。
+    -   Enable Native：是否创建一个用于调用C++代码的OpenHarmony ohpm共享模块。
 
-4.  创建完成后，会在工程目录中生成OpenHarmony npm共享模块及相关文件。
+4.  创建完成后，会在工程目录中生成OpenHarmony ohpm共享模块及相关文件。
 
 本Codelab在本地库中实现了对Button组件的简单封装，主要代码实现如下：
 
-```typescript
+```
 @Component
 export struct Buttons {
   @Prop buttonText: string;
@@ -179,27 +178,27 @@ export struct Buttons {
 
 方式一：在Terminal窗口中，执行如下命令进行安装，并会在package.json中自动添加依赖。
 
-```typescript
-npm install ../library --save
+```
+ohpm install ../library --save
 ```
 
-方式二：在工程的package.json中设置OpenHarmony npm三方包依赖，配置示例如下：
+方式二：在工程的oh\_package.json5中设置OpenHarmony ohpm三方包依赖，配置示例如下：
 
-```typescript
+```
 "dependencies": {
   "@ohos/library": "file:../library"
 }
 ```
 
-依赖设置完成后，需要执行npm install命令安装依赖包，依赖包会存储在工程的node\_modules目录下。
+依赖设置完成后，需要执行ohpm install命令安装依赖包，依赖包会存储在工程的oh\_modules目录下。
 
-```typescript
-npm install
+```
+ohpm install
 ```
 
 在完成上述步骤后，我们继续完成inner页面的开发，在inner页面中我们通过import的方式引入开发的本地库，并通过循环传入不同的参数展示不同的button，代码实现如下：
 
-```typescript
+```
 import { Buttons } from '@ohos/library';
 import { BUTTON_LIST, SPACE_12, FONT_WEIGHT_400, OPACITY_6, ASPECT_RATIO_175 } from '../../common/Const';
 
@@ -274,43 +273,39 @@ export struct Inner {
 
 至此本地库的调用已完成。
 
-## 社区库调用
 
-社区库是指已经由贡献者上架到npm中心供其他开发者下载使用的库，调用这类库的步骤如下：
 
-1.  引用npm仓中的OpenHarmony npm包，首先需要设置OpenHarmony npm三方包的仓库信息，请在DevEco Studio的Terminal窗口执行如下命令进行设置：
+# 社区库调用<a name="ZH-CN_TOPIC_0000001454565745"></a>
 
-    ```typescript
-    npm config set @ohos:registry=https://repo.harmonyos.com/npm/
+社区库是指已经由贡献者上架到ohpm中心供其他开发者下载使用的库，调用这类库的方法如下：
+
+然后通过如下两种方式设置OpenHarmony ohpm三方包依赖信息（下面步骤以@ohos/lottie三方库为例，其他库替换对应库的名字及版本号即可）：
+
+-   方式一：在Terminal窗口中，执行如下命令安装OpenHarmony ohpm三方包，DevEco Studio会自动在工程的oh\_package.json中自动添加三方包依赖。
+
+    ```
+    ohpm install @ohos/lottie --save
     ```
 
-2.  然后通过如下两种方式设置OpenHarmony npm三方包依赖信息（下面步骤以@ohos/lottieETS三方库为例，其他库替换对应库的名字及版本号即可）：
-    -   方式一：在Terminal窗口中，执行如下命令安装OpenHarmony npm三方包，DevEco Studio会自动在工程的package.json中自动添加三方包依赖。
+-   方式二：在工程的oh\_package.json5中设置OpenHarmony ohpm三方包依赖，配置示例如下：
 
-        ```typescript
-        npm install @ohos/lottieETS --save
-        ```
+    ```
+    "dependencies": {
+        "@ohos/lottie": "^2.0.0"
+    }
+    ```
 
-    -   方式二：在工程的package.json中设置OpenHarmony npm三方包依赖，配置示例如下：
+    依赖设置完成后，需要执行ohpm install命令安装依赖包，依赖包会存储在工程的oh\_modules目录下。
 
-        ```typescript
-        "dependencies": {
-            "@ohos/lottieETS": "^1.0.2"
-        }
-        ```
-
-        依赖设置完成后，需要执行npm install命令安装依赖包，依赖包会存储在工程的node\_modules目录下。
-
-        ```typescript
-        npm install
-        ```
-
+    ```
+    ohpm install
+    ```
 
 
 在完成上述步骤后，我们继续完成outer页面的开发，在outer页面中我们通过import的方式引入配置的社区库，并实现对社区库动画的调用，关键代码如下：
 
-```typescript
-import lottie from '@ohos/lottieETS';
+```
+import lottie from '@ohos/lottie';
 import { Logger } from '../common/utils/log/logger';
 import { CommonConstants } from '../common/constants/CommonConst';
 
@@ -379,6 +374,8 @@ export struct Outer {
 ```
 
 至此本篇Codelab的开发已经完成。
+
+
 
 ## 总结
 
