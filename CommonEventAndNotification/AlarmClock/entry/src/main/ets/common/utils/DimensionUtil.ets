@@ -13,9 +13,7 @@
  * limitations under the License.
  */
 
-import ctx from '@ohos.application.context';
-
-var context = getContext(this) as ctx.Context;
+var context = getContext(this);
 
 /**
  * Design drawing width.

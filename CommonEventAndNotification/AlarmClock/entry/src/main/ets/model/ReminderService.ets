@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import reminderAgent from '@ohos.reminderAgent';
-import notification from '@ohos.notification';
+import reminderAgent from '@ohos.reminderAgentManager';
+import notification from '@ohos.notificationManager';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import ReminderItem from '../common/bean/ReminderItemBean';
 
@@ -84,7 +84,7 @@ export default class ReminderService {
       notificationId: item.notificationId,
       expiredContent: 'this reminder has expired',
       snoozeContent: 'remind later',
-      slotType: notification.SlotType.SOCIAL_COMMUNICATION
+      slotType: notification.SlotType.SERVICE_INFORMATION
     }
   }
 }

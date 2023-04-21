@@ -107,6 +107,8 @@ export struct OpenRemindItem {
         .fontSize(DEFAULT_20)
         .fontWeight(FontWeight.Medium)
 
+      Blank()
+        .layoutWeight(1)
       Toggle({ type: ToggleType.Switch, isOn: this.settingParams?.isAlarm })
         .width(DEFAULT_56)
         .height(DEFAULT_32)
@@ -127,6 +129,8 @@ export struct RemindTimeItem {
   build() {
     Row() {
       Text($r('app.string.remind_time')).fontSize(DEFAULT_20).fontWeight(FontWeight.Medium)
+      Blank()
+        .layoutWeight(1)
       Text(this.settingParams?.startTime)
         .targetSetCommon()
         .remindTimeStyle(this.settingParams?.isOpen, this.settingParams?.isAlarm)
@@ -145,6 +149,8 @@ export struct FrequencyItem {
   build() {
     Row() {
       Text($r('app.string.frequency')).fontSize(DEFAULT_20).fontWeight(FontWeight.Medium)
+      Blank()
+        .layoutWeight(1)
       Text(this.frequency)
         .targetSetCommon()
         .frequencyStyle(this.settingParams?.isOpen)

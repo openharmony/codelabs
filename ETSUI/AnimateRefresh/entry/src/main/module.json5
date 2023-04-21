@@ -2,28 +2,24 @@
   "module": {
     "name": "entry",
     "type": "entry",
-    "description": "$string:entry_desc",
-    "mainElement": "MainAbility",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
     "deviceTypes": [
       "default"
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
-    "metadata": [{
-      "name": "ArkTSPartialUpdate",
-      "value": "true"
-    }],
     "abilities": [
       {
-        "name": "MainAbility",
-        "srcEntrance": "./ets/entryAbility/EntryAbility.ts",
-        "description": "$string:MainAbility_desc",
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryAbility/EntryAbility.ets",
+        "description": "$string:EntryAbility_desc",
         "icon": "$media:icon",
-        "label": "$string:MainAbility_label",
+        "label": "$string:EntryAbility_label",
         "startWindowIcon": "$media:icon",
         "startWindowBackground": "$color:white",
-        "visible": true,
+        "exported": true,
         "orientation": "portrait",
         "skills": [
           {

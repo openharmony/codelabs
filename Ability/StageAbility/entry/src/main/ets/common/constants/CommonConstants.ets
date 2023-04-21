@@ -20,7 +20,7 @@ class CommonConstants {
   /**
    * Bundle name.
    */
-  BUNDLE_NAME = 'com.example.ability';
+  BUNDLE_NAME = 'com.example.stageability';
 
   /**
    * The name for SecondAbility.

@@ -14,10 +14,10 @@
  */
 
 import display from '@ohos.display';
-import Ability from '@ohos.application.Ability';
+import UIAbility from '@ohos.app.ability.UIAbility';
 import PreferencesHandler from '../model/database/PreferencesHandler';
 
-export default class MainAbility extends Ability {
+export default class EntryAbility extends UIAbility {
   onCreate(want) {
     let abilityInfo = this.context.abilityInfo;
     globalThis.bundleName = abilityInfo.bundleName;
