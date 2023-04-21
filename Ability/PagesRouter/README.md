@@ -15,19 +15,19 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Canary1及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Beta3及以上版本。
+-   OpenHarmony系统：3.2 Release及以上版本。
 
 ### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Beta3版本为例：
+1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以3.2 Release版本为例：
 
     ![](figures/systemVersion.png)
 
@@ -37,7 +37,7 @@
 
 3.  搭建开发环境。
     1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”），选择JS或者eTS语言开发。
+    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
@@ -45,7 +45,7 @@
 本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
-├──entry/src/main/ets                // ArkTS代码区
+├──entry/src/main/ets                // 代码区
 │  ├──common
 │  │  └──constants
 │  │     └──CommonConstants.ets      // 公共常量类
@@ -75,7 +75,7 @@
 3.  从IndexPage页面跳转到SecondPage页面，并进行数据传递，需要如下几个步骤：
 
     -   给两个页面导入router路由模块。
-    -   在IndexPage页面中给Button组件添加点击事件，使用router.push\(\)方法将SecondPage页面路径添加到url中，params为自定义参数。
+    -   在IndexPage页面中给Button组件添加点击事件，使用router.pushUrl\(\)方法将SecondPage页面路径添加到url中，params为自定义参数。
     -   SecondPage页面通过router.getParams\(\)方法获取IndexPage页面传递过来的自定义参数。
 
     IndexPage页面有一个Text文本和Button按钮，点击按钮跳转到下一个页面，并传递数据。IndexPage.ets代码如下：
@@ -98,7 +98,7 @@
             Button($r('app.string.next'))
               ...
               .onClick(() => {
-                router.push({
+                router.pushUrl({
                   url: CommonConstants.SECOND_URL,
                   params: {
                     src: CommonConstants.SECOND_SRC_MSG
@@ -154,6 +154,6 @@ Button($r('app.string.back'))
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
-1. 使用页面路由实现应用内页面跳转
+1. 使用页面路由实现应用内页面跳转。
 
 ![](figures/summarize.gif)
