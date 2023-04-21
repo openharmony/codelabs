@@ -7,7 +7,7 @@
 ## 目录<a name="sectionMenu"></a>
 
 - 优秀案例
-  - [健康生活（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ExcellentCase/Healthy_life)（API 9+）
+  - [健康生活应用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ExcellentCase/Healthy_life)（API 9+）
 - Ability开发
   - [UIAbility内和UIAbility间页面的跳转（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/StageAbility)（API 9+）
   - [Stage模型下Ability的创建和使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/StageAbilityDemo)（API 9+）
