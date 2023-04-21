@@ -35,13 +35,14 @@ export default class entryAbility extends UIAbility {
         hilog.isLoggable(0x0000, 'testTag', hilog.LogLevel.INFO);
         hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
 
+        /*
         windowStage.getMainWindow((err, data) => {
             if (err && err.code) {
                 console.error('getMainWindow error');
                 return;
             }
             data.setSystemBarEnable([]);
-        })
+        })*/
 
         windowStage.loadContent('pages/Home', (err, data) => {
             if (err.code) {
