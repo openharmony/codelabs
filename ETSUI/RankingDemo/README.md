@@ -8,7 +8,7 @@
 
 1.渲染控制语法：
 
--   [条件渲染](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control.md#条件渲染)：使用if/else进行条件渲染。语法如下：
+-   [条件渲染](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control-ifelse.md)：使用if/else进行条件渲染。语法如下：
 
 ```typescript
 Column() {
@@ -18,7 +18,7 @@ Column() {
 }
 ```
 
--   [循环渲染](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control.md#循环渲染)：开发框架提供循环渲染（ForEach组件）来迭代数组，并为每个数组项创建相应的组件。ForEach定义如下：
+-   [循环渲染](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control-foreach.md)：开发框架提供循环渲染（ForEach组件）来迭代数组，并为每个数组项创建相应的组件。ForEach定义如下：
 
 ```typescript
 ForEach(
@@ -32,10 +32,10 @@ ForEach(
 
 组件状态管理装饰器用来管理组件中的状态，它们分别是：@State、@Prop、@Link。
 
--   [@State](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#state)装饰的变量是组件内部的状态数据，当这些状态数据被修改时，将会调用所在组件的build方法进行UI刷新。
--   [@Prop](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#prop)与@State有相同的语义，但初始化方式不同。@Prop装饰的变量必须使用其父组件提供的@State变量进行初始化，允许组件内部修改@Prop变量，但更改不会通知给父组件，即@Prop属于单向数据绑定。
--   [@Link](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#link)装饰的变量可以和父组件的@State变量建立双向数据绑定，需要注意的是：@Link变量不能在组件内部进行初始化。
--   [@Builder](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-dynamic-ui-elememt-building.md)装饰的方法用于定义组件的声明式UI描述，在一个自定义组件内快速生成多个布局内容。
+-   [@State](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state.md)装饰的变量是组件内部的状态数据，当这些状态数据被修改时，将会调用所在组件的build方法进行UI刷新。
+-   [@Prop](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-prop.md)与@State有相同的语义，但初始化方式不同。@Prop装饰的变量必须使用其父组件提供的@State变量进行初始化，允许组件内部修改@Prop变量，但更改不会通知给父组件，即@Prop属于单向数据绑定。
+-   [@Link](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-link.md)装饰的变量可以和父组件的@State变量建立双向数据绑定，需要注意的是：@Link变量不能在组件内部进行初始化。
+-   [@Builder](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-builder.md)装饰的方法用于定义组件的声明式UI描述，在一个自定义组件内快速生成多个布局内容。
 
 @State、@Prop、@Link三者关系如下图所示：
 
@@ -43,7 +43,7 @@ ForEach(
 
 3.组件生命周期函数：
 
-[自定义组件的生命周期函数](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/ui-ts-custom-component-lifecycle-callbacks.md)用于通知用户该自定义组件的生命周期，这些回调函数是私有的，在运行时由开发框架在特定的时间进行调用，不能从应用程序中手动调用这些回调函数。 右图是自定义组件生命周期的简化图示：
+[自定义组件的生命周期函数](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/js-framework-lifecycle.md)用于通知用户该自定义组件的生命周期，这些回调函数是私有的，在运行时由开发框架在特定的时间进行调用，不能从应用程序中手动调用这些回调函数。 右图是自定义组件生命周期的简化图示：
 
 ![](figures/image6.png)
 
