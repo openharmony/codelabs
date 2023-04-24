@@ -660,9 +660,9 @@ onRemoteRequest(code, data, reply, option) {
 
 # 相关概念与参考<a name="ZH-CN_TOPIC_0000001204484232"></a>
 
-[PageAbility开发说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md)
+[创建PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/create-pageability.md)
 
-[ServiceAbility开发说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-serviceability.md)
+[创建ServiceAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/create-serviceability.md)
 
 [CommonEvent开发指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-commonEvent.md)
 
