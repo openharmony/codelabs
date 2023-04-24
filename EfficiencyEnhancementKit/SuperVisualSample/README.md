@@ -18,7 +18,7 @@
 
 -   [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md)：List 是很常用的滚动类容器组件之一，它按照水平或者竖直方向线性排列子组件， List 的子组件必须是 ListItem ，它的宽度默认充满 List 的宽度。
 
--   [循环渲染](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control.md#%E5%BE%AA%E7%8E%AF%E6%B8%B2%E6%9F%93)：开发框架提供循环渲染（ForEach组件）来迭代数组，并为每个数组项创建相应的组件。
+-   [循环渲染](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control-foreach.md)：开发框架提供循环渲染（ForEach组件）来迭代数组，并为每个数组项创建相应的组件。
 
 -   [警告弹窗](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-methods-alert-dialog-box.md)：显示警告弹窗组件，可设置文本内容与响应回调。
 
