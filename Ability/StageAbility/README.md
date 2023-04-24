@@ -266,7 +266,7 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
    - 在EntryAbility的Index页面中，点击“导航到SecondAbility的Index Page”按钮后，调用ButtonClickMethod类中的toSecondAbilityIndex方法，拉起SecondAbility的Index页面。使用UIAbilityContext.startAbility来实现，可以通过parameters来向被拉起方传递参数，示例代码如下：
 
      ```typescript
-    // 导航到SecondAbility的Index Page
+     // 导航到SecondAbility的Index Page
      toSecondAbilityIndex(context) {
        let want = {
          'deviceId': '',
@@ -289,7 +289,7 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
    - 在SecondAbility的Index页面，获取从EntryAbility的Index页面传递过来的自定义参数，并用一个Text文本展示从Index页面传递过来的数据，示例代码如下：
 
      ```typescript
-   @Entry
+     @Entry
      @Component
      struct Index {
        // 获取从EntryAbility的Index页面传递过来的自定义参数
