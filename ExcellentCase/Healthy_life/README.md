@@ -19,9 +19,11 @@
 
 ### 相关概念
 
-- [@Observed 和 @ObjectLink](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#observed%E5%92%8Cobjectlink%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86)：@Observed适用于类，表示类中的数据变化由UI页面管理；@ObjectLink应用于被@Observed装饰类的对象。
+- [@AppStorage](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-appstorage.md)：应用程序中的单例对象，为应用程序范围内的可变状态属性提供中央存储。
 
-- [@Consume 和 @Provide](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#consume%E5%92%8Cprovide)：@Provide作为数据提供者，可以更新子节点的数据，触发页面渲染。@Consume检测到@Provide数据更新后，会发起当前视图的重新渲染。
+- [@Observed 和 @ObjectLink](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-observed-and-objectlink.md)：@Observed适用于类，表示类中的数据变化由UI页面管理；@ObjectLink应用于被@Observed装饰类的对象。
+
+- [@Consume 和 @Provide](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-provide-and-consume.md)：@Provide作为数据提供者，可以更新子节点的数据，触发页面渲染。@Consume检测到@Provide数据更新后，会发起当前视图的重新渲染。
 
 - [Flex](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-flex.md)：一个功能强大的容器组件，支持横向布局，竖向布局，子组件均分和流式换行布局。
 
@@ -30,8 +32,6 @@
 - [TimePicker](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-timepicker.md)：TimePicker是选择时间的滑动选择器组件，默认以00:00至23:59的时间区创建滑动选择器。
 
 - [Toggle](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-toggle.md)：组件提供勾选框样式、状态按钮样式及开关样式。
-
-- [后台代理提醒](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-reminderAgentManager.md)：使用后台代理提醒能力后，应用可以被冻结或退出，计时和弹出提醒的功能将被后台系统服务代理。
 
 - [关系型数据库（Relational Database，RDB）](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-data-rdb.md)：一种基于关系模型来管理数据的数据库。
 
@@ -69,80 +69,78 @@
 本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
-├─entry/src/main/ets                 // 代码区
-│  ├─common
-│  │  ├─bean
-│  │  │  ├─ColumnInfo.ets            // 数据库表结构
-│  │  │  ├─DayInfo.ets               // 每日信息
-│  │  │  ├─GlobalInfo.ets            // 全局信息
-│  │  │  └─TaskInfo.ets              // 任务信息
-│  │  ├─constants
-│  │  │  └─CommonConstants.ets       // 公共常量
-│  │  ├─database
-│  │  │  ├─rdb                       // 数据库
-│  │  │  │  ├─RdbHelper.ets
-│  │  │  │  ├─RdbHelperImp.ets
-│  │  │  │  ├─RdbUtil.ets
-│  │  │  │  └─TableHelper.ets
-│  │  │  ├─tables                    // 数据库接口
-│  │  │  │  ├─DayInfoApi.ets
-│  │  │  │  ├─GlobalInfoApi.ets
-│  │  │  │  └─TaskInfoApi.ets
-│  │  │  └─Rdb.ets                   // RDB数据库
-│  │  ├─reminderagent
-│  │  │  └─ReminderAgent.ets         // 后台代理提醒接口
-│  │  └─utils
-│  │     ├─Logger.ets                // 日志类
-│  │     ├─BroadCast.ets             // 通知
-│  │     ├─HealthDataSrcMgr.ets      // 数据管理单例
-│  │     └─Utils.ets                 // 工具类
-│  ├─entryability
-│  │  └─EntryAbility.ets              // 程序入口类
-│  ├─model                           // model
-│  │  ├─AchieveModel.ets
-│  │  ├─DatabaseModel.ets            // 数据库model
-│  │  ├─Mine.ets
-│  │  ├─NavItemModel.ets             // 菜单栏model
-│  │  ├─RdbColumnModel.ets           // 数据库表数据
-│  │  ├─TaskInitList.ets
-│  │  └─WeekCalendarModel.ets        // 日历model
-│  ├─pages
-│  │  ├─AdvertisingPage.ets          // 广告页
-│  │  ├─MainPage.ets                 // 应用主页面
-│  │  ├─MinePage.ets                 // 我的页面
-│  │  ├─SplashPage.ets               // 启动页
-│  │  ├─TaskEditPage.ets             // 任务编辑页面
-│  │  └─TaskListPage.ets             // 任务列表页面
-│  ├─view
-│  │  ├─dialog                       // 弹窗组件
-│  │  │  ├─AchievementDialog.ets     // 成就弹窗
-│  │  │  ├─CustomDialogView.ets      // 自定义弹窗
-│  │  │  ├─TaskDetailDialog.ets      // 打卡弹窗
-│  │  │  ├─TaskSettingDialog.ets     // 任务编辑相关弹窗
-│  │  │  └─UserPrivacyDialog.ets
-│  │  ├─home                         // 主页面相关组件
-│  │  │  ├─AddBtnComponent.ets       // 添加任务按钮组件
-│  │  │  ├─HomeTopComponent.ets      // 首页顶部组件
-│  │  │  ├─TaskCardComponent.ets     // 任务item组件件
-│  │  │  └─WeekCalendarComponent.ets // 日历组件
-│  │  ├─task                         // 任务相关组件
-│  │  │  ├─TaskDetailComponent.ets   // 任务编辑详情组件
-│  │  │  ├─TaskEditListItem.ets      // 任务编辑行内容
-│  │  │  └─TaskListComponent.ets     // 任务列表组件
-│  │  ├─AchievementComponent.ets     // 成就页面
-│  │  ├─BadgeCardComponent.ets       // 勋章卡片组件
-│  │  ├─BadgePanelComponent.ets      // 勋章面板组件
-│  │  ├─HealthTextComponent.ets      // 自定义text组件
-│  │  ├─HomeComponent.ets            // 首页页面
-│  │  ├─ListInfo.ets                 // 用户信息列表
-│  │  ├─TitleBarComponent.ets        // 成就标题组件
-│  │  └─UserBaseInfo.ets             // 用户基本信息
-│  └─viewmodel                       // viewmodel
-│     ├─AchievementViewModel.ets     // 成就相关模块
-│     ├─CalendarViewModel.ets        // 日历相关模块
-│     ├─HomeViewModel.ets            // 首页相关模块
-│     └─TaskViewModel.ets            // 任务设置相关模块
-└─resources                          // 资源文件夹
+├──entry/src/main/ets                 // 代码区
+│  ├──common
+│  │  ├──bean
+│  │  │  ├──ColumnInfo.ets            // 数据表信息接口
+│  │  │  ├──DayInfo.ets               // 每日信息接口
+│  │  │  ├──GlobalInfo.ets            // 全局信息接口
+│  │  │  └──TaskInfo.ets              // 任务信息接口
+│  │  ├──constants
+│  │  │  └──CommonConstants.ets       // 公共常量
+│  │  ├──database
+│  │  │  ├──rdb                       // 数据库封装类
+│  │  │  │  ├──RdbHelper.ets
+│  │  │  │  ├──RdbHelperImp.ets
+│  │  │  │  ├──RdbUtils.ets
+│  │  │  │  └──TableHelper.ets
+│  │  │  └──tables                    // 数据表
+│  │  │     ├──DayInfoApi.ets
+│  │  │     ├──GlobalInfoApi.ets
+│  │  │     └──TaskInfoApi.ets
+│  │  └──utils
+│  │     ├──Logger.ets                // 日志类
+│  │     ├──BroadCast.ets             // 通知
+│  │     ├──HealthDataSrcMgr.ets      // 数据管理单例
+│  │     └──Utils.ets                 // 工具类
+│  ├──entryability
+│  │  └──EntryAbility.ts              // 程序入口类
+│  ├──model                           // model
+│  │  ├──AchieveModel.ets
+│  │  ├──DatabaseModel.ets            // 数据库model
+│  │  ├──Mine.ets
+│  │  ├──NavItemModel.ets             // 菜单栏model
+│  │  ├──RdbColumnModel.ets  
+│  │  ├──TaskInitList.ets
+│  │  └──WeekCalendarModel.ets        // 日历model
+│  ├──pages
+│  │  ├──AdvertisingPage.ets          // 广告页
+│  │  ├──MainPage.ets                 // 应用主页面
+│  │  ├──MinePage.ets                 // 我的页面
+│  │  ├──SplashPage.ets               // 启动页
+│  │  ├──TaskEditPage.ets             // 任务编辑页面
+│  │  └──TaskListPage.ets             // 任务列表页面
+│  ├──view
+│  │  ├──dialog                       // 弹窗组件
+│  │  │  ├──AchievementDialog.ets     // 成就弹窗
+│  │  │  ├──CustomDialogView.ets      // 自定义弹窗
+│  │  │  ├──TaskDetailDialog.ets      // 打卡弹窗
+│  │  │  ├──TaskDialogView.ets
+│  │  │  ├──TaskSettingDialog.ets     // 任务编辑相关弹窗
+│  │  │  └──UserPrivacyDialog.ets
+│  │  ├──home                         // 主页面相关组件
+│  │  │  ├──AddBtnComponent.ets       // 添加任务按钮组件
+│  │  │  ├──HomeTopComponent.ets      // 首页顶部组件
+│  │  │  ├──TaskCardComponent.ets     // 任务item组件件
+│  │  │  └──WeekCalendarComponent.ets // 日历组件
+│  │  ├──task                         // 任务相关组件
+│  │  │  ├──TaskDetailComponent.ets   // 任务编辑详情组件
+│  │  │  ├──TaskEditListItem.ets      // 任务编辑行内容
+│  │  │  └──TaskListComponent.ets     // 任务列表组件
+│  │  ├──AchievementComponent.ets     // 成就页面
+│  │  ├──BadgeCardComponent.ets       // 勋章卡片组件
+│  │  ├──BadgePanelComponent.ets      // 勋章面板组件
+│  │  ├──HealthTextComponent.ets      // 自定义text组件
+│  │  ├──HomeComponent.ets            // 首页页面
+│  │  ├──ListInfo.ets                 // 用户信息列表
+│  │  ├──TitleBarComponent.ets        // 成就标题组件
+│  │  └──UserBaseInfo.ets             // 用户基本信息
+│  └──viewmodel                       // viewmodel
+│     ├──AchievementViewModel.ets     // 成就相关模块
+│     ├──CalendarViewModel.ets        // 日历相关模块
+│     ├──HomeViewModel.ets            // 首页相关模块
+│     └──TaskViewModel.ets            // 任务设置相关模块
+└──entry/src/main/resources           // 资源文件夹
 ```
 
 ## 应用架构分析
@@ -1153,7 +1151,7 @@ export function getBadgeCardsItems(successiveDays: number):[string, string][] {
 }
 ```
 
-## 搭建关系型数据库
+## 搭建关系数据库
 
 本节将介绍如何调用关系型数据库接口在本地搭建数据库，并读写相应的用户数据。
 
@@ -1164,40 +1162,34 @@ export function getBadgeCardsItems(successiveDays: number):[string, string][] {
 导入关系型数据库模块：
 
 ```typescript
-import data_rdb from '@ohos.data.rdb';
+import dataRdb from '@ohos.data.relationalStore';
 ```
 
 关系型数据库提供以下两个基本功能：
 
-![](figures/zh-cn_image_0000001459867377.png)
+![](figures/1.png)
 
 #### 获取RdbStore
 
 首先要获取一个RdbStore来操作关系型数据库，代码如下：
 
 ```typescript
-getRdbStore(callback) {
-  // 如果已经获取到RdbStore则不做操作
-  if (this.rdbStore != null) {
-    Logger.info('Rdb', 'The rdbStore exists.');
-    callback();
-    return;
-  }
-
-  // 应用上下文，本Codelab使用API9 Stage模型的Context
-  let context: Context = getContext(this) as Context;
-  data_rdb.getRdbStore(context, STORE_CONFIG, 1, (err, rdb) => {
-    if (err) {
-      Logger.error('Rdb', 'gerRdbStore() failed, err: ' + err);
-      return;
-    }
-    this.rdbStore = rdb;
-
-    // 获取到RdbStore后，需使用executeSql接口初始化数据库表结构和相关数据
-    this.rdbStore.executeSql(this.sqlCreateTable);          
-    Logger.info('Rdb', 'getRdbStore() finished.');
-    callback();
-  });
+// RdbHelperImp.ets
+getRdb(context: any): Promise<RdbHelper> {
+  Logger.info(`initRdb getRdb success`);
+  this.storeConfig = {
+    // 配置数据库文件名、安全级别
+    name: this.mDatabaseName, securityLevel: dataRdb.SecurityLevel.S1
+  };
+  return new Promise<RdbHelper>((success, error) => {
+    dataRdb.getRdbStore(context, this.storeConfig).then(dbStore => {
+      this.rdbStore = dbStore;  // 获取RdbStore
+      success(this);
+    }).catch(err => {
+      Logger.error(`initRdb err : ${JSON.stringify(err)}`);
+      error(err);
+    })
+  })
 }
 ```
 
@@ -1206,74 +1198,72 @@ getRdbStore(callback) {
 关系型数据库接口提供的增、删、改、查操作均有callback和Promise两种异步回调方式，本Codelab使用了callback异步回调，其中插入数据使用了insert\(\)接口，实现代码如下：
 
 ```typescript
-insertData(data, callback) {
-  let resFlag: boolean = false;  // 用于记录插入是否成功的flag
-  const valueBucket = data;  // 存储键值对的类型，表示要插入到表中的数据行
-  this.rdbStore.insert(this.tableName, valueBucket, function (err, ret) {
-    if (err) {
-      Logger.error('Rdb', 'insertData() failed, err: ' + err);
-      callback(resFlag);
-      return;
+// RdbHelperImp.ets
+insert(tableName: string, values: dataRdb.ValuesBucket | Array<dataRdb.ValuesBucket>): Promise<number> {
+  return new Promise<any>((success, error) => {
+    Logger.info(`insert tableName : ${tableName}, values : ${JSON.stringify(values)}`);
+    ...
+    if (Array.isArray(values)) {
+      // 如果插入一组数据，则批量插入
+      Logger.info(`insert values isArray = ${values.length}`);
+      this.rdbStore.beginTransaction();
+      this.saveArray(tableName, values).then(data => {
+        Logger.info(`insert success, data : ${JSON.stringify(data)}`);
+        success(data);
+        this.rdbStore.commit();
+      }).catch(err => {
+        Logger.error(`insert failed, err : ${err}`);
+        error(err);
+        this.rdbStore.commit();
+      })
+    } else {
+      this.rdbStore.insert(tableName, values).then(data => {
+        // 调用insert()接口插入数据
+        Logger.info(`insert success id : ${data}`);
+        success(data);
+        this.rdbStore.commit();
+      }).catch(err => {
+        Logger.error(`insert failed, err : ${err}`);
+        error(err);
+        this.rdbStore.commit();
+      })
     }
-    callback(!resFlag);
-  });
+  })
 }
 ```
 
 删除数据使用了delete\(\)接口，实现代码如下：
 
 ```typescript
-deleteData(predicates, callback) {
-  let resFlag: boolean = false;
-
-  // predicates表示待删除数据的操作条件
-  this.rdbStore.delete(predicates, function (err, ret) {
-    if (err) {
-      Logger.error('Rdb', 'deleteData() failed, err: ' + err);
-      callback(resFlag);
-      return;
-    }
-    callback(!resFlag);
-  });
+// RdbHelperImp.ets
+delete(rdbPredicates: dataRdb.RdbPredicates): Promise<number> {
+  Logger.info(`delete rdbPredicates : ${JSON.stringify(rdbPredicates)}`);
+  return this.rdbStore.delete(rdbPredicates);
 }
 ```
 
 更新数据使用了update\(\)接口，实现代码如下：
 
 ```typescript
-updateData(predicates, data, callback) {
-  let resFlag: boolean = false;
-  const valueBucket = data;
-  this.rdbStore.update(valueBucket, predicates, function (err, ret) {
-    if (err) {
-      Logger.error('Rdb', 'updateData() failed, err: ' + err);
-      callback(resFlag);
-      return;
-    }
-    callback(!resFlag);
-  });
+// RdbHelperImp.ets
+update(values: dataRdb.ValuesBucket, rdbPredicates: dataRdb.RdbPredicates): Promise<number> {
+  return this.rdbStore.update(values, rdbPredicates);
 }
 ```
 
 查找数据使用了query\(\)接口，实现代码如下：
 
 ```typescript
-query(predicates, callback){
-  // columns表示要查询的列，如果为空则表示查询所有列
-  this.rdbStore.query(predicates, this.columns, function (err, resultSet) {
-    if (err) {
-      Logger.error('Rdb', 'query() failed, err: ' + err);
-      return;
-    }
-    callback(resultSet);  // 如果查找成功则返回resultSet结果集
-    resultSet.close();  // 操作完成后关闭结果集
-  });
+// RdbHelperImp.ets
+query(rdbPredicates: dataRdb.RdbPredicates, columns?: Array<string>): Promise<dataRdb.ResultSet> {
+  Logger.info(`query rdbPredicates : ${JSON.stringify(rdbPredicates)}`);
+  return this.rdbStore.query(rdbPredicates, columns);
 }
 ```
 
 
 
-### 数据库表结构
+### 数据表定义
 
 根据健康生活APP的使用场景和业务逻辑，定义了三个数据对象，并使用三张数据表来存储，分别是健康任务信息表、每日信息表和全局信息表。
 
@@ -1281,23 +1271,23 @@ query(predicates, callback){
 
 目前健康生活应用提供了6个基本的健康任务，分别是早起、喝水、吃苹果、每日微笑、睡前刷牙和早睡。用户可以选择开启或关闭某个任务，开启的任务可以选择是否开启提醒，在指定的时间段内提醒用户进行打卡。任务也可以选择开启的频率，如只在周一到周五开启等。需要记录每项任务的目标值和实际完成值，在用户打卡后判断任务是否已经完成，并记录在数据库中。因此，需要创建一张存储每天的健康任务信息的表，表头如下：
 
-![](figures/zh-cn_image_0000001409507612.png)
+![](figures/2.png)
 
 #### 每日信息表
 
 在主页面，用户可以查看当天健康任务的完成进度，需要创建一张表记录当天开启的任务个数和已经完成的任务个数，表头如下：
 
-![](figures/zh-cn_image_0000001409347632.png)
+![](figures/3.png)
 
 #### 全局信息表
 
 用户连续多日打卡完成所有创建的任务可以获得相应的成就，因此，需要有一张表记录连续打卡天数和已达成的成就项。另外，考虑应用多日未打开的情况，需要记录应用第一次打开的日期和最后一次打开的日期以向数据库回填数据，表头如下：
 
-![](figures/zh-cn_image_0000001409187812.png)
+![](figures/4.png)
 
 ### 创建数据表
 
-根据6.2中设计的表结构，创建对应的数据表，实现对相应数据的读写操作。
+根据上文设计的表结构，创建对应的数据表，实现对相应数据的读写操作。
 
 #### 健康任务信息数据表
 
@@ -1322,10 +1312,13 @@ CREATE TABLE IF NOT EXISTS taskInfo(
 健康任务信息数据表需要提供插入数据的接口，以在用户当天第一次打开应用时创建当天的健康任务信息，实现代码如下：
 
 ```typescript
+// TaskInfoApi.ets
 insertData(taskInfo: TaskInfo, callback) {
   // 根据输入数据创建待插入的数据行
   const valueBucket = generateBucket(taskInfo);
-  this.taskInfoTable.insertData(valueBucket, callback);
+  RdbUtils.insert('taskInfo', valueBucket).then(result => {
+    callback(result);
+  });
   Logger.info('TaskInfoTable', `Insert taskInfo {${taskInfo.date}:${taskInfo.taskID}} finished.`);
 }
 ```
@@ -1333,6 +1326,7 @@ insertData(taskInfo: TaskInfo, callback) {
 其中generateBucket\(\)代码如下：
 
 ```typescript
+// TaskInfoApi.ets
 function generateBucket(taskInfo: TaskInfo) {
   let obj = {};
   TASK_INFO.columns.forEach((item) => {
@@ -1341,26 +1335,38 @@ function generateBucket(taskInfo: TaskInfo) {
   return obj;
 }
 
-// Const.ts
+// CommonConstants.ets
 export const TASK_INFO = {
   tableName: 'taskInfo',
-  sqlCreate: 'CREATE TABLE IF NOT EXISTS taskInfo(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, taskID INTEGER, targetValue ' + 
-  'TEXT NOT NULL, isAlarm BOOLEAN, startTime TEXT NOT NULL, endTime TEXT NOT NULL, frequency TEXT NOT NULL, isDone BOOLEAN, finValue ' + 
-  'TEXT NOT NULL, isOpen BOOLEAN)',
-  columns: ['id', 'date', 'taskID', 'targetValue', 'isAlarm', 'startTime', 'endTime', 'frequency', 'isDone', 'finValue', 'isOpen']
+  columns: [
+    'id', 
+    'date', 
+    'taskID', 
+    'targetValue', 
+    'isAlarm', 
+    'startTime', 
+    'endTime', 
+    'frequency', 
+    'isDone', 
+    'finValue', 
+    'isOpen'
+  ]
 }
 ```
 
 用户开启和关闭任务，改变任务的目标值、提醒时间、频率等，用户打卡后修改任务的实际完成值都是通过更新数据接口来实现的，代码如下：
 
 ```typescript
+// TaskInfoApi.ets
 updateDataByDate(taskInfo: TaskInfo, callback) {
   const valueBucket = generateBucket(taskInfo);
-  let predicates = new data_rdb.RdbPredicates(TASK_INFO.tableName);
+  let predicates = new dataRdb.RdbPredicates(TASK_INFO.tableName);
 
   // 根据date和taskID匹配要更新的数据行
   predicates.equalTo('date', taskInfo.date).and().equalTo('taskID', taskInfo.taskID);
-  this.taskInfoTable.updateData(predicates, valueBucket, callback);
+  RdbUtils.update(valueBucket, predicates).then(result => {
+    callback(result);
+  });
   Logger.info('TaskInfoTable', `Update data {${taskInfo.date}:${taskInfo.taskID}} finished.`);
 }
 ```
@@ -1368,8 +1374,9 @@ updateDataByDate(taskInfo: TaskInfo, callback) {
 用户可以查看当天和以前某日的健康任务信息，需要提供查找数据接口，实现代码如下：
 
 ```typescript
+// TaskInfoApi.ets
 query(date: string, isOpen: boolean = true, callback) {
-  let predicates = new data_rdb.RdbPredicates(TASK_INFO.tableName);
+  let predicates = new dataRdb.RdbPredicates(TASK_INFO.tableName);
   predicates.equalTo('date', date);
 
   // 如果isOpen为true，则只查找开启的任务
@@ -1377,18 +1384,18 @@ query(date: string, isOpen: boolean = true, callback) {
     predicates.equalTo('isOpen', true);
   }
   predicates.orderByAsc('taskID');  // 查找结果按taskID排序
-  this.taskInfoTable.query(predicates, function(resultSet) {
+  RdbUtils.query(predicates, function(resultSet) {
     let count = resultSet.rowCount;
-        
+    
     // 查找结果为空则返回空数组，否则返回查找结果数组
     if (count === 0 || typeof count === 'string') {
-      Logger.info('TaskInfoTable',`${date} query no results!`);
+      Logger.info('TaskInfoTable', `${date} query no results!`);
       callback([]);
     } else {
       resultSet.goToFirstRow();
       const result = [];
       for (let i = 0; i < count; i++) {
-        let tmp = new TaskInfo(0,'', 0, '', false, '', '', '', false, '');
+        let tmp = new TaskInfo(0, '', 0, '', false, '', '', '', false, '');
         tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
         ...  // 省略赋值代码
         result[i] = tmp;
@@ -1418,10 +1425,11 @@ CREATE TABLE IF NOT EXISTS dayInfo(
 页面需要查找对应日期的目标任务个数和完成任务个数用以在页面显示任务进度，因此需要查找数据的接口。且页面在打开时需要显示当周每天任务的完成情况，因此需要允许一次调用查找一周的每日任务信息。实现代码如下：
 
 ```typescript
+// DayInfoApi.ets
 queryList(dates: string[], callback) {
-  let predicates = new data_rdb.RdbPredicates(DAY_INFO.tableName);
+  let predicates = new dataRdb.RdbPredicates(DAY_INFO.tableName);
   predicates.in('date', dates);  // 匹配日期数组内的所有日期
-  this.dayInfoTable.query(predicates, function(resultSet) {
+  RdbUtils.query(predicates, function(resultSet) {
     let count = resultSet.rowCount;
     if (count === 0) {
       Logger.info('DayInfoTable','query no results.');
@@ -1463,57 +1471,58 @@ CREATE TABLE IF NOT EXISTS globalInfo(
 应用首次打开时，数据库中没有数据，要做数据库的初始化，写入一组空数据。另外，如果用户连续几天没有打开APP，再次打开时需要将数据回写至数据库。因此需要实现一个数据库接口，在应用打开时调用，进行上述操作。代码如下：
 
 ```typescript
+// DatabaseModel.ets
 query(date: string, callback) {
   let result = [];
   let self = this;
-  this.globalInfoTable.query(function(globalResult) {
-    if (globalResult.length === 0) {  // 如果查不到全局信息，就写入全局信息
+  GlobalInfoApi.query(function(globalResult) {
+    // 如果查不到全局信息，就写入全局信息
+    if (globalResult.length === 0) {
       ...  // 插入健康任务信息、每日信息和全局信息
       callback(result, dayInfo);
-    } else {  // 如果查到全局信息，那么查询当日任务信息
+    } else {
+      // 如果查到全局信息，那么查询当日任务信息
       let newGlobalInfo = globalResult;
       let preDate = globalResult.lastDate;
       newGlobalInfo.lastDate = date;
       ...  // 更新全局信息
 
       // 查询当日任务信息
-      self.taskInfoTable.query(date, false, (taskResult) => {
+      TaskInfoApi.query(date, false, (taskResult) => {
+        let dayInfo = new DayInfo(date, 0, 0);
         // 如果查不到当日任务信息，就查询全局任务信息
         if (taskResult.length === 0) {
           ...
-          self.taskInfoTable.query(GLOBAL_KEY, false, (globalTaskResult) => {
-          ...  // 回写没打开应用的时间段的健康任务信息和每日信息
+          TaskInfoApi.query(GLOBAL_KEY, false, (globalTaskResult) => {
+            ...  // 回写没打开应用的时间段的健康任务信息和每日信息
           })
         } else {
-          let taskNum = 0;
-          let finNum = 0;
-          ...  // 计算当日健康任务的开启个数和完成数
-          dayInfo.targetTaskNum = taskNum;
-          dayInfo.finTaskNum = finNum;
+        // 计算当日健康任务的开启个数和完成数
+          let dayInfoList = self.calFinishNum(taskResult, result);
+          dayInfo.targetTaskNum = dayInfoList[0];
+          dayInfo.finTaskNum = dayInfoList[1];
+          callback(result, dayInfo);
         }
-        callback(result, dayInfo);
       });
     }
   });
 }
 ```
 
-## 编写通用工具类
+## 通用工具类
 
 本节将介绍日志打印、时间换算等通用工具类的编写和使用，工具类可以简化应用代码编写和业务流程处理。
 
 ### 日志类
 
-日志类Logger旨在提供一个全局的日志打印、日志管理的地方，既可以规范整个应用的日志打印，也方便日后对日志工具类进行修改，而不需要去改动代码中每一个调用日志的地方，如切换具体的日志实现类（比如不使用Console而是HiLog），将日志记录到本地文件等。
-
-Logger对外的日志API全部使用静态方法，方便调用者使用，目前分verbose，debug，info，warn，error五个级别。
+日志类Logger旨在提供一个全局的日志打印、日志管理的地方，既可以规范整个应用的日志打印，也方便日后对日志工具类进行修改，而不需要去改动代码中每一个调用日志的地方，目前分info，debug，warn，error四个级别。
 
 使用方法如下：
 
 1. import Logger日志类：
 
    ```typescript
-   import { Logger } from '../utils/log/Logger';
+   import Logger from '../../utils/Logger';
    ```
 
 2. 调用对应级别的静态方法:
@@ -1522,43 +1531,23 @@ Logger对外的日志API全部使用静态方法，方便调用者使用，目�
    Logger.debug('MyAbilityStage', 'onCreate');
    ```
 
-   Logger内部采用单例模式，全局所有日志共享一个实例：
-
-   ```typescript
-   private static logger: ILogger;
-   private constructor() {}
-   public static getInstance(): Logger {
-     if (!Logger.logger) {
-       ...    
-     } 
-     return Logger.logger;
-   }
-   ```
-
    Logger目前在打印日志时会拼装本应用的唯一标识，方便筛选日志和调试：
 
    ```typescript
-   // Logger.ets  
-   private static appIdentifier: string = 'EHAPP';
-   
-   // ConsoleLogger.ets 
-   public debug(tag: string, msg: string): void {
-     console.debug(`[${ Logger.appIdentifier }] [debug] tag:${ tag } msg:${ msg }`);
-   }
+    // Logger.ets
+    class Logger {
+      private domain: number;
+      private prefix: string;
+
+      constructor(prefix: string = '', domain: number = 0xFF00) {
+        this.prefix = prefix;
+        this.domain = domain;
+      }
+      ...
+    }
+
+    export default new Logger(LOGGER_PREFIX, 0xFF02);
    ```
-
-   Logger在打印日志前会判断当前是debug版本还是release版本，在release版本中关闭日志，防止应用上线后日志泄露，影响应用安全：
-
-   ```typescript
-   private static isAppDebugMode: boolean = true;
-   
-   public static debug(tag: string, msg: string): void {
-     if (Logger.isAppDebugMode) {
-       Logger.getInstance().debug(tag, msg);    
-     }
-   }
-   ```
-
 
 ### 时间工具
 
@@ -1609,9 +1598,11 @@ export function ratio2percent(ratio: number): string {
 2. 引用工具方法 \( 例如成就页面，每个徽章占据屏幕宽度的三分之一 \) ：
 
    ```typescript
-   Column({space: commonConst.DEFAULT_18}) { 
+   // 引用工具方法( 例如成就页面，每个徽章占据屏幕宽度的三分之一 ) :
+   Column({ space: commonConst.DEFAULT_18 }) { 
      ...  // 省略徽章卡片的 UI 布局细节
-   }.width(ratio2percent(achieveConst.ACHIEVE_SPLIT_RATIO)) // achieveConst.ACHIEVE_SPLIT_RATIO = 1 / 3
+   }
+   .width(ratio2percent(achieveConst.ACHIEVE_SPLIT_RATIO))
    ```
 
 ### 事件分发类
@@ -1661,14 +1652,14 @@ aboutToDisappear() {
 // BroadCast.ets
 public off(event, callback) {
   ... // 省略入参检查
-  let len = cbs.length;
-  for (let i = 0; i < len; i++) {
-    cb = cbs[i];
-    if (cb === callback || cb.fn === callback) {
-      cbs.splice(i, 1);
-      break;
-    }
+  const cbs = this.callBackArray[event];
+  if (!cbs) {
+    return;
   }
+  if (!callback) {
+    this.callBackArray[event] = null;
+  }
+  cbs.splice(cbs.indexOf(callback), 1);  
 }
 ```
 
@@ -1691,12 +1682,15 @@ taskItemAction(item: TaskInfo, isClick: boolean) {
 // BroadCast.ets
 public emit(event, args?: any[]) { 
   ... // 省略入参检查
-  let len = cbs.length;
-  for (let i = 0; i < len; i++) {
-    try {
-      cbs[i].apply(_self, args);
-    } catch (e) {
-      new Error(e);
+  let cbs = [...this.callBackArray[event]];
+  if (cbs) {
+    let len = cbs.length;
+    for (let i = 0; i < len; i++) {
+      try {
+        cbs[i].apply(_self, args);
+      } catch (error) {
+        new Error(error);
+      }
     }
   }
 }
@@ -1704,7 +1698,19 @@ public emit(event, args?: any[]) {
 
 ## 总结
 
-通过本次Codelab的学习，您应该已经掌握了页面跳转、自定义弹窗等UI方法，并学会了操作关系型数据库读写数据。
+您已经完成了本次Codelab的学习，并了解到以下知识点：
+
+1. ArkUI基础组件、容器组件的使用。
+
+2. 使用页面路由跳转到指定页面并传递所需参数。
+
+3. 基于基础组件封装自定义组件，如日历、弹窗等。
+
+4. 数据驱动UI组件刷新。
+
+5. 使用首选项接口实现应用权限管理。
+
+6. 使用关系型数据库读写关系型数据。
 
 ![](figures/彩带动效.gif)
 
