@@ -17,7 +17,7 @@
 -   [TextInput](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-textinput.md)：提供单行文本输入组件。
 -   [颜色渐变](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-universal-attributes-gradient-color.md)：提供组件的渐变颜色。
 -   [加密算法](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-system-cipher.md)：提供文本的加解密算法。
--   [关系型数据库](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/database-relational-guidelines.md)：提供给用户无需编写原生SQL语句就能进行数据增删改查的方法，同时也支持原生SQL语句操作。
+-   [关系型数据库](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/database/data-persistence-by-rdb-store.md)：提供了关系型数据库的增删改查、加密、手动备份以及订阅通知能力。
 
 # 搭建OpenHarmony环境<a name="ZH-CN_TOPIC_0000001342144617"></a>
 
