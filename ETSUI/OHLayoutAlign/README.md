@@ -13,7 +13,7 @@
 -   **主轴**：在布局容器中，默认存在两根轴，分别是主轴和交叉轴，不同的容器中主轴的方向不一样的。
     -   在Column容器中主轴的方向是垂直方向。
     -   在Row容器中主轴的方向是水平方向。
-    -   在Flex容器中可以通过direction参数设置主轴的方向，设置为Column时，主轴的方向是垂直方向。设置为Row时，主轴的方向是水平方向
+    -   在Flex容器中可以通过direction参数设置主轴的方向，设置为Column时，主轴的方向是垂直方向。设置为Row时，主轴的方向是水平方向。
     -   在Stack容器中没有明确主轴与交叉轴，通过设置alignContent参数来改变容器内组件的对齐方式。
 -   **交叉轴**：与主轴垂直相交的轴线，如果主轴是垂直方向，则交叉轴就是水平方向；如果主轴是水平方向，则交叉轴是垂直方向。
 
@@ -101,6 +101,7 @@
     @Entry
     @Component
     struct LayoutAlignIndex {
+      private indexList: IndexListItem[] = getIndexList();
       build() {
         Column() {
           // 标题
@@ -108,7 +109,7 @@
             ...
     
           List() {
-            ForEach(INDEX_LIST, (item) => {
+            ForEach(this.indexList, (item) => {
               ListItem() {
                 ListItemComp({ item: item })
                   .margin({ top: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
