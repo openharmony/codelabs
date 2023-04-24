@@ -239,7 +239,7 @@ login() {
 
 ```typescript
 // ItemData.ets
-export default class ItemData {
+    export default class PageResourcce {
   title: Resource;
   img?: Resource;
   others?: Resource;
@@ -281,13 +281,13 @@ Tabs({
   }
   ...
   .backgroundColor($r('app.color.mainPage_backgroundColor')) // “首页”的页面背景色
-  .tabBar(this.baseTab(CommonConstants.HOME_TITLE, CommonConstants.HOME_TAB_INDEX,
+  .tabBar(this.TabBuilder(CommonConstants.HOME_TITLE, CommonConstants.HOME_TAB_INDEX,
   $r('app.media.home_selected'), $r('app.media.home_normal')))
   ...
 }
 .backgroundColor(Color.White)  // 底部tabBar栏背景色
 .onChange((index: number) => {
-  this.index = index;
+  this.currentIndex = index;
 })
 ...
 ```
@@ -306,8 +306,8 @@ Swiper(this.swiperController) {
     Image(img).borderRadius($r('app.float.home_swiper_borderRadius'))
   }, img => img.id)
 }
-.autoPlay(true)
 ...
+.autoPlay(true)
 ```
 
 然后使用Grid组件实现2\*4栅格图，代码如下
@@ -374,7 +374,7 @@ List() {
       this.settingCell(item)
     }
     .height($r('app.float.setting_list_height'))
-  }, JSON.stringify(item))
+  }, item => JSON.stringify(item))
 }
 ...
 .divider({  // 设置分隔线
@@ -384,7 +384,7 @@ List() {
 
 @Builder settingCell(item: ItemData) {
   Row() {
-    Row({ space: Constants.CommonConstants.COMMON_SPACE }) {
+    Row({ space: CommonConstants.COMMON_SPACE }) {
       Image(item.img)
         ...
       Text(item.title)
