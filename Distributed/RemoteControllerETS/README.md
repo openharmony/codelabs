@@ -641,9 +641,6 @@ if (code == 6) {
 
 # 10.相关概念与参考
 
-[PageAbility开发说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-pageability.md)
-
-[ServiceAbility开发说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ability/fa-serviceability.md)
-
+[创建PageAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/create-pageability.md)
+[创建ServiceAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/create-serviceability.md)
 [CommonEvent开发指南](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-commonEvent.md)
-
