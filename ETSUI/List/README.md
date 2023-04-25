@@ -11,7 +11,7 @@ OpenHarmony ArkTS提供了丰富的接口和组件，开发者可以根据实际
 -   [Scroll](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-scroll.md/)：可滚动的容器组件，当子组件的布局尺寸超过父组件的视口时，内容可以滚动。
 -   [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md/)：列表包含一系列相同宽度的列表项。适合连续、多行呈现同类数据，例如图片和文本。
 -   [Tabs](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-tabs.md/)：一种可以通过页签进行内容视图切换的容器组件，每个页签对应一个内容视图。
--   [LazyForEach](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control.md#%E6%95%B0%E6%8D%AE%E6%87%92%E5%8A%A0%E8%BD%BD)  ：开发框架提供数据懒加载（LazyForEach组件）从提供的数据源中按需迭代数据，并在每次迭代过程中创建相应的组件。
+-   [LazyForEach](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control-lazyforeach.md)  ：开发框架提供数据懒加载（LazyForEach组件）从提供的数据源中按需迭代数据，并在每次迭代过程中创建相应的组件。
 
 ## 环境搭建
 
