@@ -8,7 +8,7 @@
 
 ### 相关概念
 
--   [@CustomDialog](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-dynamic-ui-elememt-building.md#customdialog)：@CustomDialog装饰器用于装饰自定义弹窗。
+-   [@CustomDialog](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/arkts-common-components-custom-dialog.md)：@CustomDialog装饰器用于装饰自定义弹窗。
 -   [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md/)：List是常用的滚动类容器组件之一，它按照水平或者竖直方向线性排列子组件， List的子组件必须是ListItem，它的宽度默认充满List的宽度。
 -   [TimePicker](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-timepicker.md)：TimePicker是选择时间的滑动选择器组件，默认以 00:00 至 23:59 的时间区创建滑动选择器。
 -   [Toggle](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-toggle.md)：组件提供勾选框样式、状态按钮样式及开关样式。
