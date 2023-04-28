@@ -601,7 +601,7 @@
 
 # 8.设备拉起
 
-点击操作栏“分享图标”，弹出设备选择列表，选中设备后拉起该设备的手写板页面。这里使用[分布式拉起](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-featureAbility.md)实现设备拉起功能，首先调用FeatureAbility.getDeviceList接口获取设备信息列表，然后调用FeatureAbility.startAbility接口拉起目标设备的FA。此功能在index.js中实现。
+点击操作栏“分享图标”，弹出设备选择列表，选中设备后拉起该设备的手写板页面。这里使用[FeatureAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-ability-featureAbility.md)实现设备拉起功能，首先调用FeatureAbility.getDeviceList接口获取设备信息列表，然后调用FeatureAbility.startAbility接口拉起目标设备的FA。此功能在index.js中实现。
 
 ![](figures/1-0.gif)
 
