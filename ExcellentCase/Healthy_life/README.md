@@ -181,9 +181,9 @@ onConfirm() {
   preferences.then((res) => {
     res.put(IS_PRIVACY, true).then(() => {
       res.flush();
-      Logger.info('TaskInfoTable',‘isPrivacy is put success’);
+      Logger.info('TaskInfoTable', 'isPrivacy is put success');
     }).catch((err) => {
-      Logger.info('TaskInfoTable', ‘isPrivacy put failed. Cause:’ + err);
+      Logger.info('TaskInfoTable', 'isPrivacy put failed. Cause:' + err);
     });
   })
   this.jumpAdPage();
