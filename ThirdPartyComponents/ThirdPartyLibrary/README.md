@@ -8,27 +8,24 @@
 
 ### 相关概念
 
-- [Navigation](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-navigation.md)：一般作为Page页面的根容器，通过属性设置来展示页面的标题、工具栏、菜单。
+-   [Navigation](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-navigation.md)：一般作为Page页面的根容器，通过属性设置来展示页面的标题、工具栏、菜单。
+-   [Tabs](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-tabs.md)：一种可以通过页签进行内容视图切换的容器组件，每个页签对应一个内容视图。
+-   [Canvas](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-components-canvas-canvas.md)：画布组件，用于自定义绘制图形。
+-   [OpenHarmony 共享包](https://gitee.com/openharmony-tpc/docs/blob/master/OpenHarmony_npm_usage.md)：OpenHarmony 共享包定义了特定的工程结构和配置文件，支持OpenHarmony页面组件相关API、资源的调用。
 
-- [Tabs](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-tabs.md)：一种可以通过页签进行内容视图切换的容器组件，每个页签对应一个内容视图。
+# 环境搭建
 
-- [Canvas](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-components-canvas-canvas.md)：画布组件，用于自定义绘制图形。
+## 软件要求
 
-- [OpenHarmony 共享包](https://gitee.com/openharmony-tpc/docs/blob/master/OpenHarmony_npm_usage.md)：OpenHarmony 共享包定义了特定的工程结构和配置文件，支持OpenHarmony页面组件相关API、资源的调用。
-
-# 环境搭建<a name="ZH-CN_TOPIC_0000001454565741"></a>
-
-## 软件要求<a name="zh-cn_topic_0000001353166866_section17200112092018"></a>
-
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
-## 硬件要求<a name="zh-cn_topic_0000001353166866_section820192019206"></a>
+## 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
 -   OpenHarmony系统：3.2 Release及以上版本。
 
-## 环境搭建<a name="zh-cn_topic_0000001353166866_section1020132022018"></a>
+## 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
@@ -47,7 +44,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
 ├──entry/src/main/ets                  // 代码区
@@ -77,11 +74,11 @@
          └──Buttons.ets                // 本地库代码实现
 ```
 
-# 整体框架搭建<a name="ZH-CN_TOPIC_0000001403886182"></a>
+# 整体框架搭建
 
 本篇Codelab由主页面、本地库组件页面、社区库组件页面三个页面组成，主页面由Navigation作为根组件实现全局标题，由Tabs组件实现本地库和社区库页面的切换，代码如下：
 
-```
+```typescript
 import { Outer } from '../view/OuterComponent';
 import { Inner } from '../view/InnerComponent';
 import { CommonConstants } from '../common/constants/CommonConst';
@@ -123,7 +120,7 @@ struct Index {
 
 在pages文件夹下新建components文件并在此文件夹下创建两个ArkTS文件，分别命名为inner和outer，至此整体框架搭建完毕。
 
-# 本地库实现<a name="ZH-CN_TOPIC_0000001454246089"></a>
+# 本地库实现
 
 本地库主要是指未上架到ohpm中心且在项目组内共享使用的库文件，这类库需要开发者在项目中创建并开发新的Library模块，创建步骤如下：
 
@@ -142,7 +139,7 @@ struct Index {
 
 本Codelab在本地库中实现了对Button组件的简单封装，主要代码实现如下：
 
-```
+```typescript
 @Component
 export struct Buttons {
   @Prop buttonText: string;
@@ -178,13 +175,13 @@ export struct Buttons {
 
 方式一：在Terminal窗口中，执行如下命令进行安装，并会在package.json中自动添加依赖。
 
-```
+```typescript
 ohpm install ../library --save
 ```
 
 方式二：在工程的oh\_package.json5中设置OpenHarmony ohpm三方包依赖，配置示例如下：
 
-```
+```typescript
 "dependencies": {
   "@ohos/library": "file:../library"
 }
@@ -192,13 +189,13 @@ ohpm install ../library --save
 
 依赖设置完成后，需要执行ohpm install命令安装依赖包，依赖包会存储在工程的oh\_modules目录下。
 
-```
+```typescript
 ohpm install
 ```
 
 在完成上述步骤后，我们继续完成inner页面的开发，在inner页面中我们通过import的方式引入开发的本地库，并通过循环传入不同的参数展示不同的button，代码实现如下：
 
-```
+```typescript
 import { Buttons } from '@ohos/library';
 import { BUTTON_LIST, SPACE_12, FONT_WEIGHT_400, OPACITY_6, ASPECT_RATIO_175 } from '../../common/Const';
 
@@ -275,7 +272,7 @@ export struct Inner {
 
 
 
-# 社区库调用<a name="ZH-CN_TOPIC_0000001454565745"></a>
+# 社区库调用
 
 社区库是指已经由贡献者上架到ohpm中心供其他开发者下载使用的库，调用这类库的方法如下：
 
@@ -283,13 +280,13 @@ export struct Inner {
 
 -   方式一：在Terminal窗口中，执行如下命令安装OpenHarmony ohpm三方包，DevEco Studio会自动在工程的oh\_package.json中自动添加三方包依赖。
 
-    ```
+    ```typescript
     ohpm install @ohos/lottie --save
     ```
 
 -   方式二：在工程的oh\_package.json5中设置OpenHarmony ohpm三方包依赖，配置示例如下：
 
-    ```
+    ```typescript
     "dependencies": {
         "@ohos/lottie": "^2.0.0"
     }
@@ -297,14 +294,14 @@ export struct Inner {
 
     依赖设置完成后，需要执行ohpm install命令安装依赖包，依赖包会存储在工程的oh\_modules目录下。
 
-    ```
+    ```typescript
     ohpm install
     ```
 
 
 在完成上述步骤后，我们继续完成outer页面的开发，在outer页面中我们通过import的方式引入配置的社区库，并实现对社区库动画的调用，关键代码如下：
 
-```
+```typescript
 import lottie from '@ohos/lottie';
 import { Logger } from '../common/utils/log/logger';
 import { CommonConstants } from '../common/constants/CommonConst';
