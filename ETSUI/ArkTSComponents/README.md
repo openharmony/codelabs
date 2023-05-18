@@ -26,7 +26,7 @@ HarmonyOS ArkUI提供了丰富多样的UI组件，您可以使用这些组件轻
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
@@ -55,7 +55,7 @@ HarmonyOS ArkUI提供了丰富多样的UI组件，您可以使用这些组件轻
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在附件下载和gitee源码中提供下载方式。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
 ├──entry/src/main/ets              // 代码区
