@@ -60,23 +60,23 @@
 │  ├──pages
 │  │  ├──Index.ets			        // SecondAbility的Index页面
 │  │  └──Second.ets                 // SecondAbility的Second页面
-│  ├──secondability
-│  │  └──SecondAbility.ts           // 程序入口类
+│  └──secondability
+│     └──SecondAbility.ts           // 程序入口类
 ├──device/src/main/resources        // device模块的资源文件目录
 ├──entry/src/main/ets               // entry模块的代码区
 │  ├──common
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets     // 公共常量类
 │  │  │  └──StyleConstants.ets		// 样式常量类
-│  │  ├──utils
-│  │  │  └──Logger.ets			    // 日志打印类
+│  │  └──utils
+│  │     └──Logger.ets			    // 日志打印类
 │  ├──entryability
 │  │  └──EntryAbility.ts            // 程序入口类
 │  ├──model
 │  │  └──ButtonClickMethod.ets      // 按钮点击后调用的方法类
-│  ├──pages
-│  │  ├──Index.ets                  // EntryAbility的Index页面
-│  │  └──Second.ets                 // EntryAbility的Second页面
+│  └──pages
+│     ├──Index.ets                  // EntryAbility的Index页面
+│     └──Second.ets                 // EntryAbility的Second页面
 └──entry/src/main/resources         // entry模块的资源文件目录
 ```
 
