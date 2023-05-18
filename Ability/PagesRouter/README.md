@@ -1,9 +1,7 @@
-# Ability内页面间的跳转（ArkTS）
+# UIAbility内页面间的跳转（ArkTS）
 
 ## 介绍
-本篇Codelab基于Stage模型下的Ability开发，实现Ability内页面间的跳转和数据传递。
-
-最终效果图如下：
+本篇Codelab基于Stage模型下的UIAbility开发，实现UIAbility内页面间的跳转和数据传递。最终效果图如图所示：
 
 ![](figures/pageRouter.gif)
 
@@ -15,7 +13,7 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
@@ -42,7 +40,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
 ├──entry/src/main/ets                // 代码区
@@ -154,6 +152,6 @@ Button($r('app.string.back'))
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
-1. 使用页面路由实现应用内页面跳转。
+1. 使用页面路由实现UIAbility内页面间的跳转。
 
 ![](figures/summarize.gif)
