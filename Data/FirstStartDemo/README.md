@@ -8,16 +8,12 @@
 3. 实现自定义隐私协议弹窗，点击协议可查看隐私协议具体内容。
 4. 隐私协议状态持久化存储，再次启动时，如果没有保存状态会再次弹出，否则不弹出。
 
-效果如图所示：
-
 ![](figures/FirstStartDemo.gif)
 
 ### 相关概念
 
 -   [首选项](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-data-preferences.md) ：首选项为应用提供Key-Value键值型的数据处理能力，支持应用持久化轻量级数据，并对其修改和查询。数据存储形式为键值对，键的类型为字符串型，值的存储数据类型包括数字型、字符型、布尔型以及这3种类型的数组类型。
-
 -   [自定义弹窗](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-methods-custom-dialog-box.md) ： 通过CustomDialogController类显示自定义弹窗。
-
 -   [页面路由](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-router.md) ：提供通过不同的url访问不同的页面，包括跳转到应用内的指定页面、用应用内的某个页面替换当前页面、返回上一页面或指定的页面等。
 
 
@@ -25,7 +21,7 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) 版本：DevEco Studio 3.1 Beta2及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) 版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
 ### 硬件要求
@@ -54,7 +50,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
 ├──entry/src/main/ets               // 代码区 

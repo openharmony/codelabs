@@ -1,6 +1,6 @@
 # Web组件的使用（ArkTS）
 
-# 介绍<a name="ZH-CN_TOPIC_0000001413452813"></a>
+# 介绍
 
 本篇Codelab使用ArkTS语言实现一个简单的免登录过程，向大家介绍基本的cookie管理操作。主要包含以下功能：
 
@@ -11,7 +11,7 @@
 
 ![](figures/Web.gif)
 
-## 原理说明<a name="section197901935184412"></a>
+## 原理说明
 
 本应用旨在说明Web组件中cookie的管理操作。结合应用弹框和免登录两种方式进行讲解。
 
@@ -28,12 +28,12 @@
 
 ![](figures/process.png)
 
-## 相关概念<a name="section3702651154310"></a>
+## 相关概念
 
 -   [Web](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-web.md)：提供网页显示能力的组件。
 -   [WebCookie](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-web.md#webcookie)：WebCookie可以控制Web组件中的cookie的各种行为，其中每个应用中的所有Web组件共享一个WebCookie。通过controller方法中的getCookieManager方法可以获取WebCookie对象，进行后续的cookie管理操作。
 
-## 相关权限<a name="section84925455416"></a>
+## 相关权限
 
 本篇Codelab使用的是在线网页，需添加网络权限：ohos.permission.INTERNET。在配置文件module.json5中添加对应信息：
 
@@ -51,19 +51,19 @@
 }
 ```
 
-# 环境搭建<a name="ZH-CN_TOPIC_0000001363186960"></a>
+# 环境搭建
 
-## 软件要求<a name="zh-cn_topic_0000001353166866_section17200112092018"></a>
+## 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Beta2及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
-## 硬件要求<a name="zh-cn_topic_0000001353166866_section820192019206"></a>
+## 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
 -   OpenHarmony系统：3.2 Release及以上版本。
 
-## 环境搭建<a name="zh-cn_topic_0000001353166866_section1020132022018"></a>
+## 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
@@ -82,9 +82,9 @@
    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
-# 代码结构解读<a name="ZH-CN_TOPIC_0000001362492936"></a>
+# 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
 ├──entry/src/main/ets               // 代码区
@@ -104,12 +104,9 @@
 └──entry/src/main/resources         // 应用资源目录
 ```
 
-# 实现步骤<a name="ZH-CN_TOPIC_0000001362333376"></a>
+# 实现步骤
 
--   [应用首页](#section9665192317430)
--   [免登录验证页](#section194311353144311)
-
-## 应用首页<a name="section9665192317430"></a>
+## 应用首页
 
 首次打开应用时，应用首页的Web组件内呈现的是登录界面。用户完成登录操作后，会跳转至账号中心界面。在用户不点击“删除cookies”按钮的情况下，用户关闭并再次打开应用，首页仍会跳转至账号中心界面。Web组件会自动存储所加载界面的cookie信息，包括登录的cookie信息。用户可以通过点击“删除cookies”按钮，清除所有cookie信息。首页呈现效果如图：
 
@@ -195,7 +192,7 @@ operationMethod() {
 }
 ```
 
-## 免登录验证页<a name="section194311353144311"></a>
+## 免登录验证页
 
 当用户在应用内已完成登录操作，在应用的其他位置使用Web组件访问需要相同授权的页面时，可免去多余的登录操作。一个应用中的所有Web组件共享一个WebCookie，因此一个应用中Web组件存储的cookie信息，也是可以共享的。界面呈现效果如图：
 
