@@ -270,7 +270,7 @@ function hsv2rgb(hue: number, saturation: number, value: number) {
 2. 确定裁剪的方式，当前裁剪默认有自由选取、1:1选取、4:3选取、16:9选取。
 3. 通过pixelMap调用接口crop\(\)进行裁剪操作。
 
->![](/public_sys-resources/icon-note.gif) **说明：** 
+>![](public_sys-resources/icon-note.gif) **说明：** 
 >当前裁剪功能采用pixelMap裁剪能力直接做切割，会有叠加效果，后续会通过增加选取框对当前功能进行优化。
 
 ![](figures/zh-cn_image_0000001542044862.gif)
@@ -350,7 +350,7 @@ rotateImage(rotateType: RotateType) {
 4.  将计算好的ArrayBuffer发送回主线程。
 5.  将ArrayBuffer写入pixelMap，刷新UI。
 
->![](/public_sys-resources/icon-note.gif) **说明：** 
+>![](public_sys-resources/icon-note.gif) **说明：** 
 >当前亮度调节是在UI层面实现的，未实现细节优化算法，只做简单示例。调节后的图片会有色彩上的失真。
 
 ![](figures/zh-cn_image_0000001542044962.gif)
@@ -432,7 +432,7 @@ export async function adjustOpacity(pixelMap: PixelMap, value: number) {
 4.  将计算好的ArrayBuffer发送回主线程。
 5.  将ArrayBuffer写入pixelMap，刷新UI。
 
->![](/public_sys-resources/icon-note.gif) **说明：** 
+>![](public_sys-resources/icon-note.gif) **说明：** 
 > 当前饱和度调节是在UI层面实现的，未实现细节优化算法，只做简单示例。调节后的图片会有色彩上的失真。
 
 ![](figures/zh-cn_image_0000001592604569.gif)
