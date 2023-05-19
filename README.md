@@ -7,13 +7,25 @@
 ## 目录
 
 - 优秀案例
+  - [一次开发，多端部署-音乐专辑（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ExcellentCase/MultiDeviceMusic)（API 9+）
+  - [一次开发，多端部署-视频应用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ExcellentCase/Multi_device_V2)（API 9+）
   - [健康生活应用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ExcellentCase/Healthy_life)（API 9+）
 - Ability开发
+  - [UIAbility和自定义组件生命周期（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/UIAbilityLifeCycle)（API 9+）
   - [UIAbility内和UIAbility间页面的跳转（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/StageAbility)（API 9+）
-  - [Stage模型下Ability的创建和使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/StageAbilityDemo)（API 9+）
   - [UIAbility内页面间的跳转（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/PagesRouter)（API 9+）
+  - [Stage模型下Ability的创建和使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/StageAbilityDemo)（API 9+）
   - [为应用添加运行时权限（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Ability/AccessPermission)（API 9+）
 - UI(ArkTS)
+  - [电子相册（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ElectronicAlbum)（API 9+）
+  - [构建多种样式弹窗（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/MultipleDialog)（API 9+）
+  - [简易计算器（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleCalculator)（API 9+）
+  - [自定义抽奖转盘（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CanvasComponent)（API 9+）
+  - [像素转换（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/PixelConversion)（API 9+）
+  - [二级联动（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SecondLevelLinkage)（API 9+）
+  - [目标管理（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TargetManagement)（API 9+）
+  - [弹性布局（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/FlexLayout)（API 9+）
+  - [待办列表（ArkTS））](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ToDoListArkTS)（API 9+）
   - [ArkTS基础知识（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/RankingDemo)（API 9+）
   - [动效示例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/Animation)（API 9+）
   - [转场动画的使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TransitionAnimation)（API 9+）
@@ -21,6 +33,7 @@
   - [ArkUI常用布局容器对齐方式（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/OHLayoutAlign)（API 9+）
   - [常用组件与布局（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ArkTSComponents)（API 9+）
   - [Web组件的使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/WebCookie)（API 9+）
+  - [Swiper的使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SwiperArkTS)（API 9+）
   - [基础组件Slider的使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SliderExample)（API 9+）
   - [Web组件抽奖案例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/WebComponent)（API 9+）
   - [List组件的使用之商品列表（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/List)（API 9+）
@@ -40,6 +53,8 @@
 - 公共事件与通知
   - [闹钟（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/CommonEventAndNotification/AlarmClock)（API 9+）
 - 媒体
+  - [图片编辑（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEdit)（API 9+）
+  - [简易视频播放器（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/SimpleVideo)（API 9+）
   - [音频播放器（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/Audio_OH_ETS)（API 9+）
   - [视频播放器（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoPlayerStage)（API 9+）
   - [图片编辑模板（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEditorTemplate)（API 8+）
@@ -69,13 +84,16 @@
   - [分布式调度启动远程FA（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteStartFA)（API 8+）
   - [分布式新闻客户端（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)（API 8+）
   - [分布式鉴权（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)（API 8+）
+- 卡片
+  - [电影卡片（JS）](https://gitee.com/openharmony/codelabs/tree/master/Card/MovieCard)（API 9+）
+  - [计步器卡片（JS）](https://gitee.com/openharmony/codelabs/tree/master/Card/StepsCardJS)（API 9+）
+- 效率提升套件
+  - [常用组件和容器低代码开发示例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/EfficiencyEnhancementKit/SuperVisualSample)（API 9+）
+- 三方库
+  - [库的调用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/ThirdPartyLibrary)（API 9+）
 - NativeAPI
   - [第一个Native C++应用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NativeAPI/NativeTemplateDemo)（API 9+）
   - [Native Component（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NativeAPI/XComponent)（API 9+）
-- 三方库
-  - [库的调用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/ThirdPartyLibrary)（API 9+）
-- 效率提升套件
-  - [常用组件和容器低代码开发示例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/EfficiencyEnhancementKit/SuperVisualSample)（API 9+）
 - 图形图像
   - [手势截屏（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/GraphicImage/GestureScreenshot)（API 9+）
 
