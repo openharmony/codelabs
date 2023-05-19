@@ -1,0 +1,36 @@
+{
+  "float": [
+    {
+      "name": "opacity_light",
+      "value": "0.6"
+    },
+    {
+      "name": "opacity_deep",
+      "value": "0.9"
+    },
+    {
+      "name": "font_size_description",
+      "value": "12fp"
+    },
+    {
+      "name": "font_size_photo_name",
+      "value": "14fp"
+    },
+    {
+      "name": "font_size_sort_title",
+      "value": "16fp"
+    },
+    {
+      "name": "font_size_unchecked",
+      "value": "18fp"
+    },
+    {
+      "name": "font_size_title",
+      "value": "20fp"
+    },
+    {
+      "name": "font_size_checked",
+      "value": "24fp"
+    }
+  ]
+}
