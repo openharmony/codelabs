@@ -1,10 +1,10 @@
-# OpenHarmony Codelabs<a name="ZH-CN_TOPIC_0000001228194435"></a>
+# OpenHarmony Codelabs
 
-## 概要简介<a name="section117915431558"></a>
+## 概要简介
 
 为帮助开发者快速熟悉OpenHarmony的能力以及相关的应用开发流程，我们提供了一系列的基于趣味场景的应用示例，即Codelabs，开发者可以根据我们的文档一步步的学习和完成简单项目的开发。
 
-## 目录<a name="sectionMenu"></a>
+## 目录
 
 - 优秀案例
   - [健康生活应用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ExcellentCase/Healthy_life)（API 9+）
@@ -14,7 +14,6 @@
   - [UIAbility内页面间的跳转（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Ability/PagesRouter)（API 9+）
   - [为应用添加运行时权限（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Ability/AccessPermission)（API 9+）
 - UI(ArkTS)
-  - [一次开发多端部署（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/Multi_device)（API 9+）
   - [ArkTS基础知识（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/RankingDemo)（API 9+）
   - [动效示例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/Animation)（API 9+）
   - [转场动画的使用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/TransitionAnimation)（API 9+）
@@ -26,10 +25,7 @@
   - [Web组件抽奖案例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/WebComponent)（API 9+）
   - [List组件的使用之商品列表（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/List)（API 9+）
   - [List组件的使用之设置项（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/List_HDC)（API 9+）
-  - [像素转换（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/PixelUnitsDemo)（API 9+）
-  - [极简声明式UI范式（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleGalleryEts)（API 8+）
   - [购物应用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ShoppingEts)（API 8+）
-  - [流式布局（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/FlowLayoutEts)（API 8+）
   - [弹窗（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CustomDialogEts)（API 8+）
 - UI(JS)
   - [image、image-animator（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ClickableJsDemo)（API 8+）
@@ -78,18 +74,17 @@
   - [Native Component（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NativeAPI/XComponent)（API 9+）
 - 三方库
   - [库的调用（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/ThirdPartyLibrary)（API 9+）
-  - [VCard（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ThirdPartyComponents/VCardDemo)（API 9+）
 - 效率提升套件
   - [常用组件和容器低代码开发示例（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/EfficiencyEnhancementKit/SuperVisualSample)（API 9+）
 - 图形图像
   - [手势截屏（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/GraphicImage/GestureScreenshot)（API 9+）
 
-## 使用说明<a name="section1954919258619"></a>
+## 使用说明
 
 1.  将独立的应用示例工程导入DevEco Studio进行编译构建及运行调试。
 2.  部分应用示例中含有多个模块，开发者可以选择对单个模块进行编译构建，生成一个HAP应用安装包，也可以对整个工程进行编译构建，生成多个HAP应用安装包。
 3.  安装运行后，即可在设备上查看应用示例运行效果，以及进行相关调试。
 
-## 约束与限制<a name="section682025019613"></a>
+## 约束与限制
 
 安装应用示例之前，请先查看"README_zh.md"文件来确认应用示例是否为stage模型，若为Stage模型需要查看entry/src/main路径下的module.json5文件中的"deviceType"字段来确认该应用支持的设备类型；否则为FA模型，查看entry/src/main路径下的config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，两种模型都可尝试通过修改该字段使其可以在相应类型的设备上运行。
