@@ -277,7 +277,16 @@ struct HomePage {
         height: this.imageHeight
       }
       this.showCanvas = true;
+      this.calcScale();
     });
+  }
+
+  calcScale() {
+    let imageWidthScale = (this.screenWidth - CommonConstants.DOUBLE * CommonConstants.SCREEN_DISPLAY_MARGIN) /
+    this.imageOldSize.width;
+    let imageHeightScale = (this.screenHeight - CommonConstants.DOUBLE * CommonConstants.SCREEN_DISPLAY_MARGIN) /
+    this.imageOldSize.height;
+    this.imageScale = imageWidthScale > imageHeightScale ? imageHeightScale : imageWidthScale;
   }
 
   pixelInit() {
