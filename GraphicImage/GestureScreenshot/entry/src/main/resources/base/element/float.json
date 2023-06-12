@@ -1,0 +1,40 @@
+{
+  "float": [
+    {
+      "name": "title_font_size",
+      "value": "32fp"
+    },
+    {
+      "name": "text_font_size",
+      "value": "24fp"
+    },
+    {
+      "name": "main_margin_size",
+      "value": "24vp"
+    },
+    {
+      "name": "image_border_radius",
+      "value": "12vp"
+    },
+    {
+      "name": "image_margin_size",
+      "value": "24vp"
+    },
+    {
+      "name": "text_height",
+      "value": "36vp"
+    },
+    {
+      "name": "toolbar_item_height",
+      "value": "28vp"
+    },
+    {
+      "name": "cancel_font_size",
+      "value": "24fp"
+    },
+    {
+      "name": "close_height",
+      "value": "24vp"
+    }
+  ]
+}

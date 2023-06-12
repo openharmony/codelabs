@@ -1,0 +1,32 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "dialog_background",
+      "value": "#00FFFFFF"
+    },
+    {
+      "name": "image_area_background",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "black_area",
+      "value": "#FF000000"
+    },
+    {
+      "name": "main_area",
+      "value": "#FFF1F3F5"
+    },
+    {
+      "name": "cancel_font_color",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "toolbar_color",
+      "value": "#00FFFFFF"
+    }
+  ]
+}
