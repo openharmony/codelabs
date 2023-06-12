@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "GestureScreenshot"
+    },
+    {
+      "name": "reason",
+      "value": "edit later"
+    },
+    {
+      "name": "cancel_areaScreenshot",
+      "value": "cancel"
+    },
+    {
+      "name": "title_content",
+      "value": "Beautiful YuLong Snow Mountain"
+    },
+    {
+      "name": "text_context",
+      "value": "YuLong Snow Mountain is located in the junction of Qinghai-Tibet Plateau and Yunnan-Guizhou Plateau and the junction of two geomorphological combination areas in Hengduan Mountain Area and East Yunnan Plateau Area."
+    }
+  ]
+}

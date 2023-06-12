@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "GestureScreenshot"
+    },
+    {
+      "name": "reason",
+      "value": "稍后填写"
+    },
+    {
+      "name": "cancel_areaScreenshot",
+      "value": "取消"
+    },
+    {
+      "name": "title_content",
+      "value": "秀丽山川之玉龙雪山"
+    },
+    {
+      "name": "text_context",
+      "value": "玉龙雪山处于青藏、云贵2个高原的衔接部位及滇西北横断山区和滇东高原区2个地貌形态组合区域的交界地带属年轻的石灰岩断块褶皱山。"
+    }
+  ]
+}
