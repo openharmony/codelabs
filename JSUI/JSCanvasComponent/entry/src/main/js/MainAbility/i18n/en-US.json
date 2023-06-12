@@ -1,0 +1,16 @@
+{
+  "strings": {
+    "text_confirm": "Confirm",
+    "text_smile": "Thanks",
+    "text_hamburger": "Hamburger",
+    "text_cake": "Cake",
+    "text_beer": "Beer",
+    "text_watermelon": "Watermelon",
+    "prize_text_smile": "Sorry, you didn't win the prize",
+    "prize_text_hamburger": "Congratulations, you won the prize burger",
+    "prize_text_cake": "Congratulations, you won the prize cake",
+    "prize_text_beer": "Congratulations, you won the prize beer",
+    "prize_text_watermelon": "Congratulations, you won the prize watermelon",
+    "confirm_text": "Confirm"
+  }
+}

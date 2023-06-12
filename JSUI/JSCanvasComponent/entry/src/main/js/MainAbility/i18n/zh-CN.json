@@ -1,0 +1,16 @@
+{
+  "strings": {
+    "text_confirm": "确定",
+    "text_smile": "谢谢",
+    "text_hamburger": "汉堡",
+    "text_cake": "蛋糕",
+    "text_beer": "啤酒",
+    "text_watermelon": "西瓜",
+    "prize_text_smile": "sorry，您没有中奖",
+    "prize_text_hamburger": "恭喜您，抽中奖品汉堡",
+    "prize_text_cake": "恭喜您，抽中奖品蛋糕",
+    "prize_text_beer": "恭喜您，抽中奖品啤酒",
+    "prize_text_watermelon": "恭喜您，抽中奖品西瓜",
+    "confirm_text": "确定"
+  }
+}
