@@ -1,0 +1,19 @@
+{
+  "strings": {
+    "search_key": "请输入key搜索内容...",
+    "search": "搜索",
+    "delete_all": "清空",
+    "add": "添加",
+    "key_input": "请输入key",
+    "value_input": "请输入value",
+    "cancel": "取消",
+    "confirm": "确定",
+    "delete": "删除",
+    "delete_hint": "确定要删除吗",
+    "delete_all_hint": "确定要清空吗",
+    "add_success": "添加成功",
+    "clear_success": "清空成功",
+    "delete_success": "删除成功",
+    "input_enter_check": "请输入key值与value值"
+  }
+}

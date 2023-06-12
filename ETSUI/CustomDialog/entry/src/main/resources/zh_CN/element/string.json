@@ -1,0 +1,52 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "描述"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "弹窗"
+    },
+    {
+      "name": "one_button_dialog",
+      "value": "one button dialog"
+    },
+    {
+      "name": "two_button_dialog",
+      "value": "two button dialog"
+    },
+    {
+      "name": "customization_dialog",
+      "value": "customization dialog"
+    },
+    {
+      "name": "dialog_title",
+      "value": "Title"
+    },
+    {
+      "name": "dialog_message",
+      "value": "This is a dialog message"
+    },
+    {
+      "name": "confirm_txt",
+      "value": "OK"
+    },
+    {
+      "name": "cancel_txt",
+      "value": "CANCEL"
+    },
+    {
+      "name": "custom_dialog_message",
+      "value": "Whether to uninstall a software?"
+    },
+    {
+      "name": "custom_dialog_confirm_txt",
+      "value": "CONFIRM"
+    }
+  ]
+}

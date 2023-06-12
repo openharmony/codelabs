@@ -1,0 +1,9 @@
+{
+  "strings": {
+    "edit": "编辑",
+    "crop_description": "裁剪",
+    "rotate_description": "旋转",
+    "zoom_description": "缩放",
+    "mirror_description": "镜像"
+  }
+}
