@@ -1,0 +1,60 @@
+{
+  "float": [
+    {
+      "name": "font_size_normal",
+      "value": "16fp"
+    },
+    {
+      "name": "button_margin_top",
+      "value": "16vp"
+    },
+    {
+      "name": "image_size",
+      "value": "64vp"
+    },
+    {
+      "name": "icon_margin_top",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_message_margin_top",
+      "value": "16vp"
+    },
+    {
+      "name": "dialog_button_margin_top",
+      "value": "17vp"
+    },
+    {
+      "name": "dialog_offset_x",
+      "value": "0vp"
+    },
+    {
+      "name": "dialog_offset_y",
+      "value": "-10vp"
+    },
+    {
+      "name": "dialog_border_radius",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_button_width",
+      "value": "128vp"
+    },
+    {
+      "name": "dialog_button_height",
+      "value": "22vp"
+    },
+    {
+      "name": "dialog_button_margin_left",
+      "value": "12vp"
+    },
+    {
+      "name": "dialog_button_margin_right",
+      "value": "24vp"
+    },
+    {
+      "name": "diver_height",
+      "value": "24vp"
+    }
+  ]
+}

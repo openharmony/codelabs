@@ -1,0 +1,20 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "font_color_blue",
+      "value": "#007DFF"
+    },
+    {
+      "name": "font_color_red",
+      "value": "#FA2A2D"
+    },
+    {
+      "name": "dialog_button_background_color",
+      "value": "#00FFFFFF"
+    }
+  ]
+}
