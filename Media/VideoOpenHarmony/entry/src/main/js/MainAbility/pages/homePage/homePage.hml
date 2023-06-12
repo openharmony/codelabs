@@ -1,0 +1,40 @@
+<!--
+Copyright (c) 2023 Huawei Device Co., Ltd.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <swiper class="swiper" id="swiper" index="0" autoplay='true' indicator="true"
+            loop="true" digital="false">
+        <image class="swiper-img" src="{{ swiperVideos[0] }}" onclick="playVideo"></image>
+        <image class="swiper-img" src="{{ swiperVideos[1] }}" onclick="playVideo"></image>
+        <image class="swiper-img" src="{{ swiperVideos[2] }}" onclick="playVideo"></image>
+    </swiper>
+    <div class="horizontal-area">
+        <list class="todo-wrapper">
+            <list-item for="{{ horizontal_description }}" class="todo-item" clickeffect="false">
+                <div class="horizontal-area-div">
+                    <text class="horizontal-area-description">{{ $item }}</text>
+                    <list class="todo-wrapper">
+                        <list-item for="{{ horizontal_videos }}" clickeffect="false" class="todo-item">
+                            <div class="image-area" onclick="playVideo">
+                                <image src="{{ $item.image }}"></image>
+                                <text>{{ $item.name }}</text>
+                            </div>
+                        </list-item>
+                    </list>
+                </div>
+            </list-item>
+        </list>
+    </div>
+</div>

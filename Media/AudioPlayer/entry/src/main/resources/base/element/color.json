@@ -1,0 +1,28 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "font_color_pink",
+      "value": "#F53374"
+    },
+    {
+      "name": "font_color_black",
+      "value": "#182431"
+    },
+    {
+      "name": "music_card_color",
+      "value": "#556B89"
+    },
+    {
+      "name": "dialog_name_color",
+      "value": "#000000"
+    },
+    {
+      "name": "dialog_singer_color",
+      "value": "#66000000"
+    }
+  ]
+}

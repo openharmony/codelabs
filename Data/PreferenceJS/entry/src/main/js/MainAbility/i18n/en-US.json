@@ -1,0 +1,19 @@
+{
+  "strings": {
+    "search_key": "Enter a key to search for content.",
+    "search": "Search",
+    "delete_all": "clear",
+    "add": "add",
+    "key_input": "Enter a key.",
+    "value_input": "Enter a value.",
+    "cancel": "cancel",
+    "confirm": "confirm",
+    "delete": "delete",
+    "delete_hint": "Are you sure you want to delete it?",
+    "delete_all_hint": "Are you sure you want to clear it?",
+    "add_success": "Add succeeded.",
+    "clear_success": "Clear successfully.",
+    "delete_success": "Delete successfully.",
+    "input_enter_check": "Enter the key and value."
+  }
+}

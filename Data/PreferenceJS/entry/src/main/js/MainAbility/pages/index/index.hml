@@ -1,0 +1,80 @@
+<!--
+ Copyright (c) 2023 Huawei Device Co., Ltd.
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+     http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ -->
+
+<div class="container">
+    <div class="title-container">
+        <text class="title">DataBase</text>
+    </div>
+    <div class="search-container">
+        <search class="search-bar" hint="{{ $t('strings.search_key') }}" searchbutton="{{ $t('strings.search') }}"
+                @submit="searchByKey"></search>
+    </div>
+    <div class="no-data-container" if="{{ isNoData }}">
+        <image src='/common/images/ic_no_data.png'></image>
+    </div>
+    <list class="data-container" if="{{ ! isNoData }}" scrollbar="auto">
+        <list-item for="{{ allDataArray }}" class="list-item">
+            <div class="card-container">
+                <div class="text-container">
+                    <text class="key-text">{{ $item.key }}</text>
+                    <text class="value-text">{{ $item.value }}</text>
+                </div>
+                <image class="delete-img" src="/common/images/ic_delete.png" @click="deleteData({{ $item.key }})">
+                </image>
+            </div>
+        </list-item>
+    </list>
+    <div class="button-container">
+        <button class="remove" type="capsule" value="{{ $t('strings.delete_all') }}" @click="removeAll"></button>
+        <button class="add" type="capsule" value="{{ $t('strings.add') }}" @click="addData"></button>
+    </div>
+    <dialog id="addDialog" class="add-dialog">
+        <div class="add-dialog-container">
+            <div class="add-input-container">
+                <text class="add-dialog-title">{{ $t('strings.add') }}</text>
+                <input id="dataKey" class="add-dialog-input" placeholder="{{ $t('strings.key_input') }}"
+                       @change="keyChange"></input>
+                <input id="dataValue" class="add-dialog-input" placeholder="{{ $t('strings.value_input') }}"
+                       @change="dataChange"></input>
+            </div>
+            <div class="add-button-container">
+                <button type="capsule" value="{{ $t('strings.cancel') }}" onclick="addCancel" class="normal-button">
+                </button>
+                <button type="capsule" value="{{ $t('strings.confirm') }}" onclick="addConfirm" class="normal-button">
+                </button>
+            </div>
+        </div>
+    </dialog>
+    <dialog id="deleteDialog" class="delete-dialog">
+        <div class="delete-dialog-container">
+            <text>{{ $t('strings.delete_hint') }}</text>
+            <div class="delete-button-container">
+                <button type="capsule" value="{{ $t('strings.cancel') }}" onclick="deleteCancel" class="normal-button">
+                </button>
+                <button type="capsule" value="{{ $t('strings.delete') }}" onclick="deleteConfirm" class="delete-button">
+                </button>
+            </div>
+        </div>
+    </dialog>
+    <dialog id="clearDialog" class="delete-dialog">
+        <div class="delete-dialog-container">
+            <text>{{ $t('strings.delete_all_hint') }}</text>
+            <div class="delete-button-container">
+                <button type="capsule" value="{{ $t('strings.cancel') }}" onclick="clearCancel" class="normal-button">
+                </button>
+                <button type="capsule" value="{{ $t('strings.delete_all') }}" onclick="clearConfirm"
+                        class="delete-button"></button>
+            </div>
+        </div>
+    </dialog>
+</div>

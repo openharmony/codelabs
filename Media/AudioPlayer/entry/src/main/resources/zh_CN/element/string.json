@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "描述"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "音乐播放器"
+    },
+    {
+      "name": "app_name",
+      "value": "沸点音乐"
+    },
+    {
+      "name": "app_slogan",
+      "value": "陪伴生活每一刻"
+    },
+    {
+      "name": "hot_music",
+      "value": "热门歌单"
+    },
+    {
+      "name": "play_title",
+      "value": "正在播放"
+    },
+    {
+      "name": "lyrics",
+      "value": "作词：%s"
+    },
+    {
+      "name": "sequence",
+      "value": "顺序播放"
+    },
+    {
+      "name": "single",
+      "value": "单曲循环"
+    },
+    {
+      "name": "random",
+      "value": "随机播放"
+    }
+  ]
+}

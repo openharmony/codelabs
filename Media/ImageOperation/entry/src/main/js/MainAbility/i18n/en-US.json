@@ -1,0 +1,9 @@
+{
+  "strings": {
+    "edit": "edit",
+    "crop_description": "crop",
+    "rotate_description": "rotate",
+    "zoom_description": "zoom",
+    "mirror_description": "mirror"
+  }
+}

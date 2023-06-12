@@ -1,0 +1,80 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.container {
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    background-color: #F1F3F5;
+}
+
+.title-container {
+    justify-content: space-between;
+    width: 100%;
+    padding-top: 13vp;
+    padding-left: 26vp;
+    padding-bottom: 15vp;
+    padding-right: 24vp;
+}
+
+.image-back {
+    width: 20vp;
+    height: 20vp;
+    margin-right: 18vp;
+}
+
+.title-text {
+    font-size: 24fp;
+    width: 136fp;
+}
+
+.image-save {
+    width: 24vp;
+    height: 24vp;
+}
+
+.button-icon {
+    width: 27vp;
+    height: 27vp;
+    margin-left: 24vp;
+    margin-right: 24vp;
+    margin-top: 52vp;
+    margin-bottom: 6vp;
+}
+
+.operation-text {
+    font-size: 12fp;
+    color: #182431;
+}
+
+.button-container {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.image-container {
+    justify-content: center;
+    width: 100%;
+    height: 68%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.picture {
+    object-fit: contain;
+}
