@@ -42,7 +42,6 @@
   - [弹窗（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CustomDialogEts)（API 8+）
 - UI(JS)
   - [image、image-animator（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/ClickableJsDemo)（API 8+）
-  - [input、label（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/InputApplication)（API 8+）
   - [rating（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/RatingApplication)（API 8+）
   - [slider（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SliderApplication)（API 8+）
   - [switch、chart（JS）](https://gitee.com/openharmony/codelabs/tree/master/JSUI/SwitchApplication)（API 8+）
@@ -62,9 +61,6 @@
   - [简易视频播放器（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoOpenHarmony)（API 8+）
 - 网络管理
   - [新闻数据加载（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/NewsDataArkTS)（API 9+）
-  - [使用UDP实现与服务端通信（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/UdpDemoOH)（API 9+）
-  - [使用HTTP实现与服务端通信（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/SmartChatEtsOH)（API 9+）
-  - [使用TCP实现与服务端通信（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/NetworkManagement/TcpSocketDemo)（API 9+）
 - 数据库
   - [关系型数据库（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/Rdb)（API 9+）
   - [首选项（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/Preferences)（API 9+）
@@ -72,7 +68,6 @@
   - [应用的首次启动（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/FirstStartDemo)（API 9+）
   - [字符串加解密（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/StringCipherETS)（API 9+）
   - [备忘录（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Data/NotePad_OH_ETS)（API 8+）
-  - [关系型数据库（JS）](https://gitee.com/openharmony/codelabs/tree/master/Data/JSRelationshipData)（API 8+）
   - [轻量级偏好数据库（JS）](https://gitee.com/openharmony/codelabs/tree/master/Data/Database)（API 8+）
   - [分布式数据库（JS）](https://gitee.com/openharmony/codelabs/tree/master/Data/JsDistributedData)（API 8+）
 - 分布式
@@ -81,7 +76,6 @@
   - [分布式邮件（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)（API 8+）
   - [分布式亲子早教系统（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)（API 8+）
   - [分布式遥控器（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)（API 8+）
-  - [分布式调度启动远程FA（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteStartFA)（API 8+）
   - [分布式新闻客户端（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)（API 8+）
   - [分布式鉴权（JS）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)（API 8+）
 - 卡片
@@ -105,4 +99,4 @@
 
 ## 约束与限制
 
-安装应用示例之前，请先查看"README_zh.md"文件来确认应用示例是否为stage模型，若为Stage模型需要查看entry/src/main路径下的module.json5文件中的"deviceType"字段来确认该应用支持的设备类型；否则为FA模型，查看entry/src/main路径下的config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，两种模型都可尝试通过修改该字段使其可以在相应类型的设备上运行。
+安装应用示例之前，请先查看"README.md"文件来确认应用示例是否为Stage模型，若为Stage模型需要查看entry/src/main路径下的module.json5文件中的"deviceType"字段来确认该应用支持的设备类型；否则为FA模型，查看entry/src/main路径下的config.json文件中的"deviceType"字段来确认该应用示例支持的设备类型，两种模型都可尝试通过修改该字段使其可以在相应类型的设备上运行。
