@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Music player"
+    },
+    {
+      "name": "app_name",
+      "value": "Boiling point music"
+    },
+    {
+      "name": "app_slogan",
+      "value": "Accompanying every moment of life"
+    },
+    {
+      "name": "hot_music",
+      "value": "Hot Playlists"
+    },
+    {
+      "name": "play_title",
+      "value": "Is playing"
+    },
+    {
+      "name": "lyrics",
+      "value": "lyrics:%s"
+    },
+    {
+      "name": "sequence",
+      "value": "Sequential play"
+    },
+    {
+      "name": "single",
+      "value": "Single loop"
+    },
+    {
+      "name": "random",
+      "value": "Random Play"
+    }
+  ]
+}

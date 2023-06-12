@@ -1,0 +1,60 @@
+{
+  "float": [
+    {
+      "name": "start_title",
+      "value": "24fp"
+    },
+    {
+      "name": "musicList_title",
+      "value": "24fp"
+    },
+    {
+      "name": "start_text",
+      "value": "16fp"
+    },
+    {
+      "name": "play_text",
+      "value": "20fp"
+    },
+    {
+      "name": "music_name",
+      "value": "24fp"
+    },
+    {
+      "name": "music_singer",
+      "value": "14fp"
+    },
+    {
+      "name": "music_lyrics",
+      "value": "14fp"
+    },
+    {
+      "name": "lyrics_opacity",
+      "value": "0.8"
+    },
+    {
+      "name": "singer_opacity",
+      "value": "0.6"
+    },
+    {
+      "name": "musicView_name",
+      "value": "16fp"
+    },
+    {
+      "name": "musicView_singer",
+      "value": "14fp"
+    },
+    {
+      "name": "play_mode_description",
+      "value": "20fp"
+    },
+    {
+      "name": "dialog_name",
+      "value": "16fp"
+    },
+    {
+      "name": "dialog_singer",
+      "value": "12fp"
+    }
+  ]
+}
