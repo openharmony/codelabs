@@ -1,0 +1,128 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "字符串加解密"
+    },
+    {
+      "name": "login_page",
+      "value": "登录界面"
+    },
+    {
+      "name": "login_more",
+      "value": "登录帐号以使用更多服务"
+    },
+    {
+      "name": "account",
+      "value": "帐号"
+    },
+    {
+      "name": "password",
+      "value": "密码"
+    },
+    {
+      "name": "login",
+      "value": "登录"
+    },
+    {
+      "name": "register_account",
+      "value": "注册帐号"
+    },
+    {
+      "name": "forgot_password",
+      "value": "忘记密码"
+    },
+    {
+      "name": "message_login",
+      "value": "短信验证码登录"
+    },
+    {
+      "name": "register_page",
+      "value": "注册账号"
+    },
+    {
+      "name": "register_name",
+      "value": "请输入用户名"
+    },
+    {
+      "name": "register_password",
+      "value": "请输入密码"
+    },
+    {
+      "name": "register_confirm_password",
+      "value": "请再次输入密码"
+    },
+    {
+      "name": "register_button",
+      "value": "注册"
+    },
+    {
+      "name": "message_password_prompt",
+      "value": "输入的密码不相同，请重新输入"
+    },
+    {
+      "name": "message_application_prompt",
+      "value": "请重新启动应用注册"
+    },
+    {
+      "name": "message_login_prompt",
+      "value": "用户名或密码不正确请重新输入"
+    },
+    {
+      "name": "message_input_empty",
+      "value": "用户名/密码输入不能为空！"
+    },
+    {
+      "name": "message_register_empty",
+      "value": "用户名/密码/确认密码不能为空"
+    },
+    {
+      "name": "message_name_format",
+      "value": "用户名格式不正确，请重新输入！"
+    },
+    {
+      "name": "message_password_format",
+      "value": "密码格式不正确，请重新输入！"
+    },
+    {
+      "name": "message_user_empty",
+      "value": "用户名不存在，请先注册！"
+    },
+    {
+      "name": "message_user_exist",
+      "value": "用户名已经存在，请重新输入！"
+    },
+    {
+      "name": "message_sys_err",
+      "value": "系统异常，请联系管理员"
+    },
+    {
+      "name": "message_password_err",
+      "value": "密码输入错误！"
+    },
+    {
+      "name": "message_register_success",
+      "value": "注册成功，请登录！"
+    },
+    {
+      "name": "message_login_success",
+      "value": "登录成功"
+    },
+    {
+      "name": "message_name_tip",
+      "value": "用户名长度为1-14个字符，包括字母、数字和下划线，或这些字符的组合"
+    },
+    {
+      "name": "message_password_tip",
+      "value": "密码为4 - 14位数字、字母或!@$#%^&*的组合"
+    }
+  ]
+}
