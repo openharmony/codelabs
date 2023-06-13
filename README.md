@@ -54,7 +54,7 @@
 - 媒体
   - [图片编辑（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageEdit)（API 9+）
   - [简易视频播放器（ArkTS）](https://gitee.com/openharmony/codelabs/tree/master/Media/SimpleVideo)（API 9+）
-  - [音频播放器（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Media/AudioPlayer)（API 9+）
+  - [音乐播放器（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Media/AudioPlayer)（API 9+）
   - [视频播放器（ArkTS）（Full SDK）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoPlayerStage)（API 9+）
   - [图片常见操作（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/ImageOperation)（API 9+）
   - [简易视频播放器（JS）](https://gitee.com/openharmony/codelabs/tree/master/Media/VideoOpenHarmony)（API 9+）
