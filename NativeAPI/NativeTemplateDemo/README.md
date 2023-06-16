@@ -2,13 +2,13 @@
 
 ## 介绍
 
-本篇Codelab主要介绍如何使用DevEco Studio创建一个Native C++应用。应用采用Native C++模板，实现使用Native API调用C标准库的功能。使用C标准库hypot接口计算两个给定数平方和的平方根。在输入框中输入两个数字，点击计算结果按钮显示计算后的数值。
+本篇Codelab主要介绍如何使用DevEco Studio创建一个Native C++应用。应用采用Native C++模板，实现使用NAPI调用C标准库的功能。使用C标准库hypot接口计算两个给定数平方和的平方根。在输入框中输入两个数字，点击计算结果按钮显示计算后的数值。
 
 ![](./figures/zh-cn_image_0000001570142635.gif)
 
 ### 相关概念
 
--   [Native API](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/napi/napi-guidelines.md)：Native API提供的接口名与三方Node.js一致，目前支持部分接口。
+-   [Native API](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/napi/napi-guidelines.md)：NAPI提供的接口名与三方Node.js一致，目前支持部分接口。
 -   [Native API中支持的标准库](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/native-lib/third_party_libc/musl.md)：目前支持标准C库、C++库、OpenSL ES、zlib。
 
 ## 环境搭建
@@ -46,6 +46,8 @@
 
 本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
+使用Native C++模板创建项目会自动生成cpp文件夹、types文件夹、CMakeList.txt文件，开发者可以根据实际情况自行添加修改其他文件及文件夹。
+
 ```
 ├──entry/src/main
 │  ├──common
@@ -75,9 +77,9 @@
 -   ArkTS：包含界面UI、自身方法、调用引用包的方法等。
 -   工具链：包含CMake编译工具在内的系列工具。
 
-使用ArkTS调用C++方法的过程中，需要使用到Native API、CMake等工具来做中间转换，整个架构及其关联关系参考示意图。
+使用ArkTS调用C++方法的过程中，需要使用到NAPI、CMake等工具来做中间转换，整个架构及其关联关系参考示意图。
 
-示意图中，hello.cpp文件实现C++方法，并通过Native API将C++方法与ArkTS方法关联。
+示意图中，hello.cpp文件实现C++方法，并通过NAPI将C++方法与ArkTS方法关联。
 
 C++代码通过CMake编译工具编译成动态链接库so文件，使用index.d.ts文件对外提供接口。ArkTS引入so文件后调用其中的接口。
 
@@ -93,124 +95,157 @@ ArkTS与C++方法的调用、编译流程参考示意图。图中C++代码通过
 
 ### Native侧操作详解
 
-1. 配置模块描述信息，设置Init方法为napi\_module的入口方法。\_\_attribute\_\_\(\(constructor\)\)修饰的方法由系统自动调用，使用Native API接口napi\_module\_register\(\)传入模块描述信息进行模块注册。
+1.  配置模块描述信息，设置Init方法为napi\_module的入口方法。\_\_attribute\_\_\(\(constructor\)\)修饰的方法由系统自动调用，使用NAPI接口napi\_module\_register\(\)传入模块描述信息进行模块注册。Native C++模板创建项目会自动生成此结代码，开发者可根据实际情况修改其中内容。
 
-   ``` cpp
-   // hello.cpp
-   static napi_module demoModule = {
-       nm_version = 1,
-       nm_flags = 0,
-       nm_filename = nullptr,
-       nm_register_func = Init,         // napi_module入口方法
-       nm_modname = "hello",            // napi_module模块名
-       nm_priv = ((void *)0),
-       reserved = { 0 }
-   };
-   
-   extern "C" __attribute__((constructor)) void RegisterModule(void) {
-       napi_module_register(&demoModule);
-   }
-   ```
+    ```cpp
+    // hello.cpp
+    static napi_module demoModule = {
+        nm_version = 1,
+        nm_flags = 0,
+        nm_filename = nullptr,
+        nm_register_func = Init,         // napi_module入口方法
+        nm_modname = "hello",            // napi_module模块名
+        nm_priv = ((void *)0),
+        reserved = { 0 }
+    };
+    
+    extern "C" __attribute__((constructor)) void RegisterModule(void) {
+        napi_module_register(&demoModule);
+    }
+    ```
 
-2. 关联C++方法至ArkTS。在napi\_property\_descriptor desc\[\]中，我们需要将编写的MyHypot方法与对外提供的接口myHypot接口进行关联，其他参数使用示例默认值填写。使用Native API接口napi\_define\_properties构建包含方法对应列表的返回值。
+2.  Init方法为Native C++模板生成的结构，开发者可根据实际情况修改其中内容。在napi\_property\_descriptor desc\[\]中，我们需要将编写的MyHypot方法与对外提供的接口myHypot接口进行关联，其他参数使用示例默认值填写。使用NAPI接口napi\_define\_properties构建包含方法对应列表的返回值。
 
-   ``` cpp
-   // hello.cpp
-   EXTERN_C_START
-   static napi_value Init(napi_env env, napi_value exports) {
-       napi_property_descriptor desc[] = {
-           { "myHypot", nullptr, MyHypot, nullptr, nullptr, nullptr, napi_default, nullptr }
-       };
-       napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
-       return exports;
-   }
-   EXTERN_C_END
-   ```
+    ```cpp
+    // hello.cpp
+    static napi_value Init(napi_env env, napi_value exports)
+    {
+        if ((nullptr == env) || (nullptr == exports)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Init", "env or exports is null");
+            return exports;
+        }
+    
+        napi_property_descriptor desc[] = {
+            { "myHypot", nullptr, MyHypot, nullptr, nullptr, nullptr, napi_default, nullptr }
+        };
+        if (napi_ok != napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Init", "napi_define_properties failed");
+            return nullptr;
+        }
+        return exports;
+    }
+    ```
 
-3. 实现C++方法。本例中使用C标准库的hypot方法进行计算。引入C标准库头文件math.h，使用double类型解析传入的参数后，调用C标准库方法hypot计算两数平方的和后计算平方根。使用Native API接口napi\_create\_double将结果转化为napi\_value类型的变量并返回。
+3.  本例中使用C标准库的hypot方法进行计算。引入C标准库头文件math.h，使用double类型解析传入的参数后，调用C标准库方法hypot计算两数平方的和后计算平方根。使用NAPI接口napi\_create\_double将结果转化为napi\_value类型的变量并返回。
 
-   ``` cpp
-   // hello.cpp
-   #include "napi/native_api.h"
-   #include "math.h"
-   static napi_value MyHypot(napi_env env, napi_callback_info info) {
-       // 参数数量
-       size_t argc = 2;
-   
-       // 声明参数数组
-       napi_value args[2] = {nullptr};
-   
-       // 获取传入的参数并依次放入参数数组中
-       napi_get_cb_info(env, info, &argc, args, nullptr, nullptr);
-   
-       // 将第一个传入参数转化为double类型
-       double value0;
-       napi_get_value_double(env, args[0], &value0);
-   
-       // 将第二个传入参数转化为double类型
-       double value1;
-       napi_get_value_double(env, args[1], &value1);
-   
-       // 调用C标准库的hypot接口进行计算
-       double result = hypot(value0, value1);
-       napi_value sum;
-       napi_create_double(env, result, &sum);
-       return sum;
-   }
-   ```
+    ```cpp
+    // hello.cpp
+    #include <hilog/log.h>
+    #include "napi/native_api.h"
+    #include "math.h"
+    
+    static napi_value MyHypot(napi_env env, napi_callback_info info)
+    {
+        if ((nullptr == env) || (nullptr == info)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "MyHypot", "env or exports is null");
+            return nullptr;
+        }
+    
+        // 参数数量
+        size_t argc = PARAMETER_COUNT;
+    
+        // 定义参数数组
+        napi_value args[PARAMETER_COUNT] = { nullptr };
+    
+        // 获取传入的参数并放入参数数组中
+        if (napi_ok != napi_get_cb_info(env, info, &argc, args, nullptr, nullptr)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "MyHypot", "api_get_cb_info failed");
+            return nullptr;
+        }
+    
+        // 将传入的参数转化为double类型
+        double valueX = 0.0;
+        double valueY = 0.0;
+        if (napi_ok != napi_get_value_double(env, args[0], &valueX) ||
+            napi_ok != napi_get_value_double(env, args[1], &valueY)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "MyHypot", "napi_get_value_double failed");
+            return nullptr;
+        }
+    
+        // 调用C标准库的hypot接口进行计算
+        double result = hypot(valueX, valueY);
+    
+        // 创建返回结果并返回
+        napi_value napiResult;
+        if (napi_ok != napi_create_double(env, result, &napiResult)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "MyHypot", "napi_create_double failed");
+            return nullptr;
+        }
+        return napiResult;
+    }
+    ```
 
-4. 添加接口文件以及接口配置文件。接口文件index.d.ts用于对外提供方法说明。接口配置文件oh-package.json5文件中将index.d.ts与CMake编译的so文件关联起来。模块级目录下oh-package.json5文件添加so文件依赖。
+4.  添加接口文件以及接口配置文件。接口文件index.d.ts用于对外提供方法说明。接口配置文件oh-package.json5文件中将index.d.ts与CMake编译的so文件关联起来。模块级目录下oh-package.json5文件添加so文件依赖。
 
-   ```typescript
-   // index.d.ts
-   export const myHypot: (a: number, b: number) => number;
-   ```
-   ```json
-   // oh-package.json5
-   {
-     "name": "libhello.so",
-     "types": "./index.d.ts"
-   }
-   
-   // entry/oh-package.json5
-   {
-     "devDependencies": {
-       "@types/libhello.so": "file:./src/main/cpp/types/libhello"
-     }
-   }
-   ```
+    ```typescript
+    // index.d.ts
+    export const myHypot: (a: number, b: number) => number;
+    ```
+    ```json
+    // oh-package.json5
+    {
+      "name": "libhello.so",
+      "types": "./index.d.ts"
+    }
+    
+    // entry/oh-package.json5
+    {
+      "devDependencies": {
+        "@types/libhello.so": "file:./src/main/cpp/types/libhello"
+      }
+    }
+    ```
 
-5. 在CMakeLists.txt文件中配置CMake编译参数。配置需要添加的hello.cpp文件，编译后的so文件名为libhello.so。CMakeLists.txt是CMake编译的配置文件，里面的大部分内容无需修改，project、add\_library方法中的内容可以根据实际情况修改。
+5.  在CMakeLists.txt文件中配置CMake编译参数。配置需要添加的hello.cpp文件，编译后的so文件名为libhello.so。CMakeLists.txt是CMake编译的配置文件，里面的大部分内容无需修改，project、add\_library方法中的内容可以根据实际情况修改。
 
-   ```cmake
-   # CMakeLists.txt
-   # 声明使用 CMAKE 的最小版本号
-   cmake_minimum_required(VERSION 3.4.1)
-   
-   # 配置项目信息
-   project(NativeTemplateDemo)
-   
-   # set命令，格式为set(key value)，表示设置key的值为value
-   set(NATIVERENDER_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
-   
-   # 设置头文件的搜索目录
-   include_directories(
-       ${NATIVERENDER_ROOT_PATH}
-       ${NATIVERENDER_ROOT_PATH}/include
-   )
-   
-   # 添加名为hello的库，库文件名为libhello.so
-   add_library(hello SHARED hello.cpp)
-   
-   # 添加构建需要链接的库
-   target_link_libraries(hello PUBLIC libace_napi.z.so libc++.a)
-   ```
+    ```cmake
+    # CMakeLists.txt
+    # 声明使用 CMAKE 的最小版本号
+    cmake_minimum_required(VERSION 3.4.1)
+    
+    # 配置项目信息
+    project(NativeTemplateDemo)
+    
+    # set命令，格式为set(key value)，表示设置key的值为value
+    set(NATIVERENDER_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
+    
+    # 设置头文件的搜索目录
+    include_directories(
+        ${NATIVERENDER_ROOT_PATH}
+        ${NATIVERENDER_ROOT_PATH}/include
+    )
+    
+    # 添加日志库
+    find_library(
+        # Sets the name of the path variable.
+        hilog-lib
+        # Specifies the name of the NDK library that
+        # you want CMake to locate.
+        hilog_ndk.z
+    )
+    
+    # 添加名为hello的库，库文件名为libhello.so
+    add_library(hello SHARED hello.cpp)
+    
+    # 添加构建需要链接的库
+    target_link_libraries(hello PUBLIC ${hilog-lib} libace_napi.z.so libc++.a)
+    ```
 
-   >![](public_sys-resources/icon-note.gif) **说明：** 
-   >
-   >-   CMAKE\_CURRENT\_SOURCE\_DIR：CMakeList.txt文件所在的目录。
-   >-   add\_library：添加本地的cpp文件，多cpp文件使用空格或换行间隔。
-   >-   target\_link\_libraries：添加需要链接的库，本篇Codelab使用C标准库hypot方法，此处链接libc++.a库文件。
+    >![](public_sys-resources/icon-note.gif) **说明：** 
+    >-   CMAKE\_CURRENT\_SOURCE\_DIR：CMakeList.txt文件所在的目录。
+    >-   add\_library：添加本地的cpp文件，多cpp文件使用空格或换行间隔。
+    >-   target\_link\_libraries：添加需要链接的库，本篇Codelab使用C标准库hypot方法，此处链接libc++.a库文件。
+
 
 ### ArkTS调用C++方法
 
