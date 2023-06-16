@@ -2,7 +2,9 @@
 
 ## 介绍
 
-本篇Codelab主要介绍如何使用XComponent组件调用Native API来创建EGL/GLES环境，从而使用标准OpenGL ES进行图形渲染。使用OpenGL ES实现在主页面绘制一个正方形，并可以改变正方形的颜色。如图所示，点击绘制矩形按钮，XComponent组件绘制区域中渲染出一个正方形，点击绘制区域，正方形显示另一种颜色，点击绘制矩形按钮正方形还原至初始绘制的颜色。
+本篇Codelab主要介绍如何使用XComponent组件调用NAPI来创建EGL/GLES环境，实现在主页面绘制一个正方形，并可以改变正方形的颜色。本篇CodeLab使用Native C++模板创建。
+
+如图所示，点击绘制矩形按钮，XComponent组件绘制区域中渲染出一个正方形，点击绘制区域，正方形显示另一种颜色，点击绘制矩形按钮正方形还原至初始绘制的颜色。
 
 ![](figures/zh-cn_image_0000001569305413.gif)
 
@@ -47,6 +49,8 @@
 ### 代码目录结构图
 
 本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+
+使用Native C++模板创建项目会自动生成cpp文件夹、types文件夹、CMakeList.txt文件，开发者可以根据实际情况自行添加修改其他文件及文件夹。
 
 ```
 ├──entry/src/main
@@ -126,7 +130,12 @@ struct Index {
 
 ## ArkTS侧方法调用
 
-在ArkTS侧导入编译生成的动态链接库文件。增加XComponent组件，设置XComponent组件的唯一标识id，指定XComponent组件类型及需要链接的动态库名称。组件链接动态库加载完成后回调onLoad()方法指定上下文环境，上下文环境包含来自C++挂载的方法。新增Button组件，绑定由Native API注册的drawRectangle()方法，点击后绘制正方形。
+ArkTS侧方法调用步骤如下：
+
+- 使用import语句导入编译生成的动态链接库文件。
+- 增加XComponent组件，设置XComponent组件的唯一标识id，指定XComponent组件类型及需要链接的动态库名称。
+- 组件链接动态库加载完成后回调onLoad()方法，指定XComponent组件的上下文环境，上下文环境包含来自C++挂载的方法。
+- 新增Button组件，绑定由NAPI注册的drawRectangle()方法，实现绘制正方形的功能。
 
 ```typescript
 // Index.ets
@@ -172,11 +181,17 @@ struct Index {
 
   ``` c++
   // egl_core.cpp
-  void EGLCore::EglContextInit(void *window, int width, int height)
+  bool EGLCore::EglContextInit(void *window, int width, int height)
   {
+      OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "EGLCore", "EglContextInit execute");
+      if ((nullptr == window) || (0 >= width) || (0 >= height)) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "EglContextInit: param error");
+          return false;
+      }
+  
       m_width = width;
       m_height = height;
-      if (m_width > 0) {
+      if (0 < m_width) {
           // 计算绘制矩形宽度百分比
           m_widthPercent = FIFTY_PERCENT * m_height / m_width;
       }
@@ -185,41 +200,59 @@ struct Index {
       // 初始化display
       m_eglDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
       if (EGL_NO_DISPLAY == m_eglDisplay) {
-          return;
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "eglGetDisplay: unable to get EGL display");
+          return false;
       }
   
       EGLint majorVersion;
       EGLint minorVersion;
       if (!eglInitialize(m_eglDisplay, &majorVersion, &minorVersion)) {
-          return;
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore",
+              "eglInitialize: unable to get initialize EGL display");
+          return false;
       }
   
       // 选择配置
       const EGLint maxConfigSize = 1;
       EGLint numConfigs;
       if (!eglChooseConfig(m_eglDisplay, ATTRIB_LIST, &m_eglConfig, maxConfigSize, &numConfigs)) {
-          return;
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "eglChooseConfig: unable to choose configs");
+          return false;
       }
   
+      // 创建环境
+      return CreateEnvironment();
+  }
+  
+  bool EGLCore::CreateEnvironment()
+  {
       // 创建surface
-      if (nullptr != m_eglWindow) {
-          m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, m_eglWindow, NULL);
-          if (m_eglSurface == nullptr) {
-              return;
-          }
+      if (nullptr == m_eglWindow) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "m_eglWindow is null");
+          return false;
+      }
+      m_eglSurface = eglCreateWindowSurface(m_eglDisplay, m_eglConfig, m_eglWindow, NULL);
+  
+      if (nullptr == m_eglSurface) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore",
+              "eglCreateWindowSurface: unable to create surface");
+          return false;
       }
   
       // 创建context
       m_eglContext = eglCreateContext(m_eglDisplay, m_eglConfig, EGL_NO_CONTEXT, CONTEXT_ATTRIBS);
       if (!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext)) {
-          return;
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "eglMakeCurrent failed");
+          return false;
       }
   
       // 创建program
-      m_programHandle = CreateProgram(VERTEX_SHADER, FRAGMENT_SHADER);
-      if (!m_programHandle) {
-          return;
+      m_program = CreateProgram(VERTEX_SHADER, FRAGMENT_SHADER);
+      if (PROGRAM_ERROR == m_program) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "CreateProgram: unable to create program");
+          return false;
       }
+      return true;
   }
   ```
 
@@ -250,11 +283,22 @@ struct Index {
   // egl_core.cpp
   void EGLCore::Draw()
   {
+      m_flag = false;
+      OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "EGLCore", "Draw");
+  
       // 绘制准备工作
-      GLint positionHandle = PrepareDraw();
+      GLint position = PrepareDraw();
+      if (POSITION_ERROR == position) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Draw get position failed");
+          return;
+      }
   
       // 绘制背景
-      ExecuteDraw(positionHandle, BACKGROUND_COLOR, BACKGROUND_RECTANGLE_VERTICES);
+      if (!ExecuteDraw(position, BACKGROUND_COLOR, BACKGROUND_RECTANGLE_VERTICES,
+          sizeof(BACKGROUND_RECTANGLE_VERTICES))) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Draw execute draw background failed");
+          return;
+      }
   
       // 确定绘制矩形的顶点，使用绘制区域的百分比表示
       const GLfloat rectangleVertices[] = {
@@ -265,50 +309,67 @@ struct Index {
       };
   
       // 绘制矩形
-      ExecuteDraw(positionHandle, DRAW_COLOR, rectangleVertices);
+      if (!ExecuteDraw(position, DRAW_COLOR, rectangleVertices, sizeof(rectangleVertices))) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Draw execute draw rectangle failed");
+          return;
+      }
   
       // 绘制后操作
-      FinishDraw();
+      if (!FinishDraw()) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Draw FinishDraw failed");
+          return;
+      }
   
       // 标记已绘制
       m_flag = true;
   }
   
-  // 绘制前准备，获取positionHandle
+  // 绘制前准备，获取position，创建成功时position值从0开始
   GLint EGLCore::PrepareDraw()
   {
-      if (!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext)) {
-          return -1;
+      if ((nullptr == m_eglDisplay) || (nullptr == m_eglSurface) || (nullptr == m_eglContext) ||
+          (!eglMakeCurrent(m_eglDisplay, m_eglSurface, m_eglSurface, m_eglContext))) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "PrepareDraw: param error");
+          return POSITION_ERROR;
       }
   
+      // 下列方法无返回值
       glViewport(DEFAULT_X_POSITION, DEFAULT_X_POSITION, m_width, m_height);
       glClearColor(GL_RED_DEFAULT, GL_GREEN_DEFAULT, GL_BLUE_DEFAULT, GL_ALPHA_DEFAULT);
       glClear(GL_COLOR_BUFFER_BIT);
-      glUseProgram(m_programHandle);
+      glUseProgram(m_program);
   
-      GLint positionHandle = glGetAttribLocation(m_programHandle, POSITION_HANDLE_NAME);
-      return positionHandle;
+      return glGetAttribLocation(m_program, POSITION_NAME);
   }
   
   // 依据传入参数在指定区域绘制指定颜色
-  void EGLCore::ExecuteDraw(GLint positionHandle, const GLfloat *color, const GLfloat rectangleVertices[])
+  bool EGLCore::ExecuteDraw(GLint position, const GLfloat *color, const GLfloat rectangleVertices[],
+      unsigned long vertSize)
   {
-      glVertexAttribPointer(positionHandle, POINTER_SIZE, GL_FLOAT, GL_FALSE, 0, rectangleVertices);
-      glEnableVertexAttribArray(positionHandle);
+      if ((0 > position) || (nullptr == color) || (RECTANGLE_VERTICES_SIZE != vertSize / sizeof(rectangleVertices[0]))) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "ExecuteDraw: param error");
+          return false;
+      }
+  
+      // 下列方法无返回值
+      glVertexAttribPointer(position, POINTER_SIZE, GL_FLOAT, GL_FALSE, 0, rectangleVertices);
+      glEnableVertexAttribArray(position);
       glVertexAttrib4fv(1, color);
       glDrawArrays(GL_TRIANGLE_FAN, 0, TRIANGLE_FAN_SIZE);
-      glDisableVertexAttribArray(positionHandle);
+      glDisableVertexAttribArray(position);
+  
+      return true;
   }
   
   // 结束绘制操作
-  void EGLCore::FinishDraw()
+  bool EGLCore::FinishDraw()
   {
       // 强制刷新缓冲
       glFlush();
       glFinish();
   
       // 交换前后缓存
-      eglSwapBuffers(m_eglDisplay, m_eglSurface);
+      return eglSwapBuffers(m_eglDisplay, m_eglSurface);
   }
   ```
   
@@ -330,10 +391,18 @@ struct Index {
       }
   
       // 绘制准备工作
-      GLint positionHandle = PrepareDraw();
+      GLint position = PrepareDraw();
+      if (POSITION_ERROR == position) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "ChangeColor get position failed");
+          return;
+      }
   
       // 绘制背景
-      ExecuteDraw(positionHandle, BACKGROUND_COLOR, BACKGROUND_RECTANGLE_VERTICES);
+      if (!ExecuteDraw(position, BACKGROUND_COLOR, BACKGROUND_RECTANGLE_VERTICES,
+          sizeof(BACKGROUND_RECTANGLE_VERTICES))) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "ChangeColor execute draw background failed");
+          return;
+      }
   
       // 确定绘制矩形的顶点，使用绘制区域的百分比表示
       const GLfloat rectangleVertices[] = {
@@ -344,87 +413,126 @@ struct Index {
       };
   
       // 使用新的颜色绘制矩形
-      ExecuteDraw(positionHandle, CHANGE_COLOR, rectangleVertices);
+      if (!ExecuteDraw(position, CHANGE_COLOR, rectangleVertices, sizeof(rectangleVertices))) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "ChangeColor execute draw rectangle failed");
+          return;
+      }
   
       // 结束绘制
-      FinishDraw();
+      if (!FinishDraw()) {
+          OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "ChangeColor FinishDraw failed");
+      }
   }
   ```
 
 
-### 使用Native API将C++方法传递给ArkTS
+### 使用NAPI将C++方法传递给ArkTS
 
-- 创建NAPI接口函数NapiDrawRectangle\(\)，封装对应C++渲染方法。根据XComponent组件信息，获取对应的渲染模块render，调用绘制矩形的方法。
+-   创建接口函数NapiDrawRectangle\(\)，封装对应C++渲染方法。根据XComponent组件信息，获取对应的渲染模块render，调用绘制矩形的方法。
 
-  ```c++
-  // plugin_render.cpp
-  napi_value PluginRender::NapiDrawRectangle(napi_env env, napi_callback_info info)
-  {
-      // 获取环境变量参数
-      napi_value thisArg;
-      if (napi_ok != napi_get_cb_info(env, info, nullptr, nullptr, &thisArg, nullptr)) {
-          return nullptr;
-      }
-  
-      // 获取环境变量中XComponent实例
-      napi_value exportInstance;
-      if (napi_ok != napi_get_named_property(env, thisArg, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance)) {
-          return nullptr;
-      }
-  
-      OH_NativeXComponent *nativeXComponent = nullptr;
-      if (napi_ok != napi_unwrap(env, exportInstance, reinterpret_cast<void **>(&nativeXComponent))) {
-          return nullptr;
-      }
-  
-      // 获取XComponent实例的id
-      char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
-      uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
-      if (OH_NATIVEXCOMPONENT_RESULT_SUCCESS != OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize)) {
-          return nullptr;
-      }
-  
-      std::string id(idStr);
-      PluginRender *render = PluginRender::GetInstance(id);
-      if (render) {
-          // 该接口函数封装的是上文实现的渲染方法
-          render->m_eglCore->Draw();
-      }
-      return nullptr;
-  }
-  ```
+    注册为ArkTS侧接口的方法，固定为napi\_value \(\*napi\_callback\)\(napi\_env env, napi\_callback\_info info\)类型，不可更改。napi\_value为NAPI定义的指针，无返回值时返回 nullptr。
 
-- 使用Native API中的napi\_define\_properties方法，将接口函数NapiDrawRectangle\(\)注册为ArkTS侧接口drawRectangle\(\)，在ArkTS侧调用drawRectangle\(\)方法，完成正方形的绘制。
+    ```c++
+    // plugin_render.cpp
+    // NAPI注册方法固定参数及返回值类型，无返回值时返回nullptr
+    napi_value PluginRender::NapiDrawRectangle(napi_env env, napi_callback_info info)
+    {
+        OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "PluginRender", "NapiDrawRectangle");
+        if ((nullptr == env) || (nullptr == info)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender", "NapiDrawRectangle: env or info is null");
+            return nullptr;
+        }
+    
+        // 获取环境变量参数
+        napi_value thisArg;
+        if (napi_ok != napi_get_cb_info(env, info, nullptr, nullptr, &thisArg, nullptr)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender", "NapiDrawRectangle: napi_get_cb_info fail");
+            return nullptr;
+        }
+    
+        // 获取环境变量中XComponent实例
+        napi_value exportInstance;
+        if (napi_ok != napi_get_named_property(env, thisArg, OH_NATIVE_XCOMPONENT_OBJ, &exportInstance)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender",
+                "NapiDrawRectangle: napi_get_named_property fail");
+            return nullptr;
+        }
+    
+        OH_NativeXComponent *nativeXComponent = nullptr;
+        if (napi_ok != napi_unwrap(env, exportInstance, reinterpret_cast<void **>(&nativeXComponent))) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender", "NapiDrawRectangle: napi_unwrap fail");
+            return nullptr;
+        }
+    
+        // 获取XComponent实例的id
+        char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = { '\0' };
+        uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+        if (OH_NATIVEXCOMPONENT_RESULT_SUCCESS != OH_NativeXComponent_GetXComponentId(nativeXComponent, idStr, &idSize)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender",
+                "NapiDrawRectangle: Unable to get XComponent id");
+            return nullptr;
+        }
+    
+        std::string id(idStr);
+        PluginRender *render = PluginRender::GetInstance(id);
+        if (render) {
+            // 调用绘制矩形的方法
+            render->m_eglCore->Draw();
+            OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "PluginRender", "render->m_eglCore->Draw() executed");
+        }
+        return nullptr;
+    }
+    ```
 
-  ```C++
-  // plugin_render.cpp
-  napi_value PluginRender::Export(napi_env env, napi_value exports)
-  {
-      // 将接口函数注册为ArkTS侧接口drawRectangle 
-      napi_property_descriptor desc[] = {
-          { "drawRectangle", nullptr, PluginRender::NapiDrawRectangle, nullptr, nullptr, nullptr, napi_default, nullptr }
-      };
-      napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
-      return exports;
-  }
-  ```
+-   使用NAPI中的napi\_define\_properties方法，将接口函数NapiDrawRectangle\(\)注册为ArkTS侧接口drawRectangle\(\)，在ArkTS侧调用drawRectangle\(\)方法，完成正方形的绘制。
 
-### 使用Native API实现触摸事件回调函数
+    ```c++
+    // plugin_render.cpp
+    void PluginRender::Export(napi_env env, napi_value exports)
+    {
+        if ((nullptr == env) || (nullptr == exports)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender", "Export: env or exports is null");
+            return;
+        }
+    
+        // 将接口函数注册为ArkTS侧接口drawRectangle
+        napi_property_descriptor desc[] = {
+            { "drawRectangle", nullptr, PluginRender::NapiDrawRectangle, nullptr, nullptr, nullptr, napi_default, nullptr }
+        };
+        if (napi_ok != napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc)) {
+            OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "PluginRender", "Export: napi_define_properties failed");
+        }
+    }
+    ```
 
-通过将上文实现的改变颜色函数ChangeColor\(\)封装为触摸事件回调函数的方式，实现在触摸时改变正方形的颜色。创建一个新函数DispatchTouchEventCB\(\)，将C++对应方法封装于其中。将新函数绑定为组件触摸事件的回调函数，组件绘制区域产生触摸事件时触发，改变正方形展示的颜色。
+### 使用NAPI实现触摸事件回调函数
+
+通过将C++方法封装至触摸事件回调函数的方式，实现触摸绘制区域时改变正方形的颜色的功能。
+
+- 创建一个新函数DispatchTouchEventCB()，将改变颜色的C++方法ChangeColor()封装于其中。
+- 将新函数绑定为组件触摸事件的回调函数，组件绘制区域产生触摸事件时触发，改变正方形展示的颜色。
 
 ```c++
 // plugin_render.cpp
 void DispatchTouchEventCB(OH_NativeXComponent *component, void *window)
 {
-    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = {};
+    OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "Callback", "DispatchTouchEventCB");
+    if ((nullptr == component) || (nullptr == window)) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Callback",
+            "DispatchTouchEventCB: component or window is null");
+        return;
+    }
+
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = { '\0' };
     uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
     if (OH_NATIVEXCOMPONENT_RESULT_SUCCESS != OH_NativeXComponent_GetXComponentId(component, idStr, &idSize)) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Callback",
+            "DispatchTouchEventCB: Unable to get XComponent id");
         return;
     }
 
     std::string id(idStr);
-    auto render = PluginRender::GetInstance(id);
+    PluginRender *render = PluginRender::GetInstance(id);
     if (nullptr != render) {
         // 封装改变颜色的函数
         render->m_eglCore->ChangeColor();
@@ -434,36 +542,121 @@ void DispatchTouchEventCB(OH_NativeXComponent *component, void *window)
 PluginRender::PluginRender(std::string &id)
 {
     this->m_id = id;
-    this->m_eglCore = new EGLCore(id);
+    this->m_eglCore = new EGLCore();
     auto renderCallback = &PluginRender::m_callback;
     renderCallback->OnSurfaceCreated = OnSurfaceCreatedCB;
     renderCallback->OnSurfaceChanged = OnSurfaceChangedCB;
     renderCallback->OnSurfaceDestroyed = OnSurfaceDestroyedCB;
 
-    // 这一步修改了触摸事件的回调函数，在触摸事件触发时调用NAPI接口函数，从而调用原C++方法
+    // 设置触摸事件的回调函数，在触摸事件触发时调用NAPI接口函数，从而调用原C++方法
     renderCallback->DispatchTouchEvent = DispatchTouchEventCB;
 }
 ```
 
-## 注册与编译
+### 释放相关资源
 
-在napi\_init.cpp文件中，Init方法注册上文实现的接口函数，从而将封装的C++方法传递出来，供ArkTS侧调用。编写接口的描述信息，根据实际需要可以修改对应参数。
+释放申请资源的步骤如下：
+
+-   EGLCore类下创建Release\(\)方法，释放初始化环境时申请的资源，包含窗口display、渲染区域surface、环境上下文context等。
+-   PluginRender类添加Release\(\)方法，释放EGLCore实例及PluginRender实例。
+-   创建一个新方法OnSurfaceDestroyedCB\(\)，将PluginRender类内释放资源的方法Release\(\)封装于其中。
+-   将新方法绑定为组件销毁事件的回调方法，组件销毁时触发，释放相关资源。
+
+```c++
+// egl_core.cpp
+void EGLCore::Release()
+{
+    if ((nullptr == m_eglDisplay) || (nullptr == m_eglSurface) || (!eglDestroySurface(m_eglDisplay, m_eglSurface))) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Release eglDestroySurface failed");
+    }
+
+    if ((nullptr == m_eglDisplay) || (nullptr == m_eglContext) || (!eglDestroyContext(m_eglDisplay, m_eglContext))) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Release eglDestroyContext failed");
+    }
+
+    if ((nullptr == m_eglDisplay) || (!eglTerminate(m_eglDisplay))) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "EGLCore", "Release eglTerminate failed");
+    }
+}
+
+// plugin_render.cpp
+void PluginRender::Release(std::string &id)
+{
+    PluginRender *render = PluginRender::GetInstance(id);
+    if (nullptr != render) {
+        render->m_eglCore->Release();
+        delete render->m_eglCore;
+        render->m_eglCore = nullptr;
+        delete render;
+        render = nullptr;
+        m_instance.erase(m_instance.find(id));
+    }
+}
+
+void OnSurfaceDestroyedCB(OH_NativeXComponent *component, void *window)
+{
+    OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "Callback", "OnSurfaceDestroyedCB");
+    if ((nullptr == component) || (nullptr == window)) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Callback",
+            "OnSurfaceDestroyedCB: component or window is null");
+        return;
+    }
+
+    char idStr[OH_XCOMPONENT_ID_LEN_MAX + 1] = { '\0' };
+    uint64_t idSize = OH_XCOMPONENT_ID_LEN_MAX + 1;
+    if (OH_NATIVEXCOMPONENT_RESULT_SUCCESS != OH_NativeXComponent_GetXComponentId(component, idStr, &idSize)) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Callback",
+            "OnSurfaceDestroyedCB: Unable to get XComponent id");
+        return;
+    }
+
+    // 释放申请的资源
+    std::string id(idStr);
+    PluginRender::Release(id);
+}
+
+PluginRender::PluginRender(std::string &id)
+{
+    this->m_id = id;
+    this->m_eglCore = new EGLCore();
+    OH_NativeXComponent_Callback *renderCallback = &PluginRender::m_callback;
+    renderCallback->OnSurfaceCreated = OnSurfaceCreatedCB;
+    renderCallback->OnSurfaceChanged = OnSurfaceChangedCB;
+
+    // 设置组件销毁事件的回调函数，组件销毁时触发相关操作，释放申请的资源
+    renderCallback->OnSurfaceDestroyed = OnSurfaceDestroyedCB;
+    renderCallback->DispatchTouchEvent = DispatchTouchEventCB;
+}
+```
+
+
+
+### 注册与编译
+
+在napi\_init.cpp文件中，Init方法注册上文实现的接口函数，从而将封装的C++方法传递出来，供ArkTS侧调用。编写接口的描述信息，根据实际需要可以修改对应参数。\_\_attribute\_\_\(\(constructor\)\)修饰的方法由系统自动调用，使用NAPI接口napi\_module\_register\(\)传入模块描述信息进行模块注册。Native C++模板创建项目会自动生成此结构代码，开发者可根据实际情况修改其中内容。
 
 ```c++
 // napi_init.cpp
 static napi_value Init(napi_env env, napi_value exports)
 {
+    OH_LOG_Print(LOG_APP, LOG_INFO, LOG_PRINT_DOMAIN, "Init", "Init begins");
+    if ((nullptr == env) || (nullptr == exports)) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Init", "env or exports is null");
+        return nullptr;
+    }
+
     napi_property_descriptor desc[] = {
         { "getContext", nullptr, PluginManager::GetContext, nullptr, nullptr, nullptr, napi_default, nullptr }
     };
+
     // 将接口函数注册为ArkTS侧接口getContext()
-    napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc);
+    if (napi_ok != napi_define_properties(env, exports, sizeof(desc) / sizeof(desc[0]), desc)) {
+        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Init", "napi_define_properties failed");
+        return nullptr;
+    }
 
     // 方法内检查环境变量是否包含XComponent组件实例，若实例存在注册绘制相关接口
-    bool ret = PluginManager::GetInstance()->Export(env, exports);
-    if (!ret) {
-        OH_LOG_Print(LOG_APP, LOG_ERROR, LOG_PRINT_DOMAIN, "Init", "Init failed");
-    }
+    PluginManager::GetInstance()->Export(env, exports);
     return exports;
 }
 
@@ -476,6 +669,11 @@ static napi_module nativerenderModule = {
     .nm_priv = ((void *)0),
     .reserved = { 0 }
 };
+
+extern "C" __attribute__((constructor)) void RegisterModule(void)
+{
+    napi_module_register(&nativerenderModule);
+}
 ```
 
 使用CMake工具链将C++源代码编译成动态链接库文件。本篇Codelab中会链接两次动态库，第一次为import语句，第二次为XComponent组件链接动态库。
@@ -513,7 +711,7 @@ target_link_libraries(nativerender PUBLIC ${EGL-lib} ${GLES-lib} ${hilog-lib} ${
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
-1.  使用XComponent组件调用Native API创建EGL/GLES环境。
+1.  使用XComponent组件调用NAPI创建EGL/GLES环境。
 2.  使用OpenGL ES进行开发渲染。
 3.  使用回调函数响应触摸事件。
 
