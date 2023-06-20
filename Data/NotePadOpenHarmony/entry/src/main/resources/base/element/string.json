@@ -1,0 +1,76 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "NotePadOHETS"
+    },
+    {
+      "name": "notes_all",
+      "value": "All notes"
+    },
+    {
+      "name": "notes_personal",
+      "value": "Personal notes"
+    },
+    {
+      "name": "notes_work",
+      "value": "Work notes"
+    },
+    {
+      "name": "back_text",
+      "value": "back"
+    },
+    {
+      "name": "note_title_placeholder",
+      "value": "Input Title"
+    },
+    {
+      "name": "note_content_placeholder",
+      "value": "Input content"
+    },
+    {
+      "name": "share_note",
+      "value": "share"
+    },
+    {
+      "name": "collect_note",
+      "value": "collect"
+    },
+    {
+      "name": "delete_note",
+      "value": "delete"
+    },
+    {
+      "name": "add_note_photo",
+      "value": "insert photo"
+    },
+    {
+      "name": "save_update",
+      "value": "Whether to save modification"
+    },
+    {
+      "name": "delete_update",
+      "value": "Whether to delete"
+    },
+    {
+      "name": "cancel_txt",
+      "value": "Cancel"
+    },
+    {
+      "name": "delete_txt",
+      "value": "Delete"
+    },
+    {
+      "name": "confirm_txt",
+      "value": "Save"
+    }
+  ]
+}

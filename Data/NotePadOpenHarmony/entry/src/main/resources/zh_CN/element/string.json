@@ -1,0 +1,76 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "NotePadOHETS"
+    },
+    {
+      "name": "notes_all",
+      "value": "全部笔记"
+    },
+    {
+      "name": "notes_personal",
+      "value": "个人笔记"
+    },
+    {
+      "name": "notes_work",
+      "value": "工作笔记"
+    },
+    {
+      "name": "back_text",
+      "value": "返回"
+    },
+    {
+      "name": "note_title_placeholder",
+      "value": "输入标题"
+    },
+    {
+      "name": "note_content_placeholder",
+      "value": "输入文本"
+    },
+    {
+      "name": "share_note",
+      "value": "分享"
+    },
+    {
+      "name": "collect_note",
+      "value": "收藏"
+    },
+    {
+      "name": "delete_note",
+      "value": "删除"
+    },
+    {
+      "name": "add_note_photo",
+      "value": "插入图片"
+    },
+    {
+      "name": "save_update",
+      "value": "是否保存修改"
+    },
+    {
+      "name": "delete_update",
+      "value": "是否删除"
+    },
+    {
+      "name": "cancel_txt",
+      "value": "取消"
+    },
+    {
+      "name": "delete_txt",
+      "value": "删除"
+    },
+    {
+      "name": "confirm_txt",
+      "value": "保存"
+    }
+  ]
+}

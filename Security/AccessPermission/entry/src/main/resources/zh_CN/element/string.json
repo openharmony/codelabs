@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "为应用添加运行时权限"
+    },
+    {
+      "name": "no_permission",
+      "value": "授权状态：未授权"
+    },
+    {
+      "name": "has_permission",
+      "value": "授权状态：已授权"
+    },
+    {
+      "name": "button_text",
+      "value": "查询内网设备"
+    },
+    {
+      "name": "device_list",
+      "value": "设备列表"
+    },
+    {
+      "name": "no_device",
+      "value": "未查询到设备"
+    },
+    {
+      "name": "dialog_confirm",
+      "value": "确定"
+    },
+    {
+      "name": "no_permission_title",
+      "value": "权限未申请，不能进行请求配对操作"
+    },
+    {
+      "name": "clear_permission",
+      "value": "如需重新申请权限，请在设置-应用-应用管理-应用名-存储-删除数据、清空缓存"
+    }
+  ]
+}
