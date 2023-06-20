@@ -77,7 +77,7 @@
   - [分布式邮件（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)
   - [分布式亲子早教系统（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)
   - [分布式遥控器（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/RemoteControllerETS)
-  - [分布式新闻客户端（JS）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)）
+  - [分布式新闻客户端（JS）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/NewsDemo)
   - [分布式鉴权（JS）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/GameAuthOpenH)
 - 卡片
   - [电影卡片（JS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Card/MovieCard)
