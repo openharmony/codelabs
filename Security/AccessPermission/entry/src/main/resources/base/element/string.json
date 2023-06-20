@@ -1,0 +1,48 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Adding Runtime Permissions to Applications"
+    },
+    {
+      "name": "no_permission",
+      "value": "Authorization status: Unauthorized"
+    },
+    {
+      "name": "has_permission",
+      "value": "Authorization Status: Authorized"
+    },
+    {
+      "name": "button_text",
+      "value": "Querying Intranet Devices"
+    },
+    {
+      "name": "device_list",
+      "value": "Device list"
+    },
+    {
+      "name": "no_device",
+      "value": "No device is found."
+    },
+    {
+      "name": "dialog_confirm",
+      "value": "Determined"
+    },
+    {
+      "name": "no_permission_title",
+      "value": "The permission has not been applied for. The pairing request cannot be performed."
+    },
+    {
+      "name": "clear_permission",
+      "value": "To apply for a new permission, go to Settings > Applications > App Management > Application name > Storage > Delete data and clear the cache."
+    }
+  ]
+}
