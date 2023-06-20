@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="18px" viewBox="0 0 18 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_sanjiao_title</title>
+    <g id="ic_sanjiao_title" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <path d="M10.6,5.13333333 L15.6,11.8 C16.2627417,12.6836556 16.0836556,13.9372583 15.2,14.6 C14.8538077,14.8596443 14.4327404,15 14,15 L4,15 C2.8954305,15 2,14.1045695 2,13 C2,12.5672596 2.14035574,12.1461923 2.4,11.8 L7.4,5.13333333 C8.0627417,4.24967773 9.3163444,4.07059163 10.2,4.73333333 C10.3516113,4.84704183 10.4862915,4.981722 10.6,5.13333333 Z" id="三角形" fill="#182431" transform="translate(9.000000, 9.000000) scale(1, -1) translate(-9.000000, -9.000000) "></path>
+    </g>
+</svg>
