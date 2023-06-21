@@ -68,8 +68,8 @@
   - [首选项（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/Preferences)
   - [应用内字体大小调节（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/SetAppFontSize)
   - [应用的首次启动（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/FirstStartDemo)
-  - [用户首选项（JS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/PreferenceJS)
   - [备忘录（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/NotePadOpenHarmony)
+  - [用户首选项（JS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/PreferenceJS)
   - [分布式数据库（JS）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Data/JsDistributedData)
 - 分布式
   - [分布式手写板（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)
