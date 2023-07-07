@@ -31,11 +31,6 @@
           }
         ]
       }
-    ],
-    "requestPermissions": [
-      {
-        "name": "SystemCapability.DistributedDataManager.Preferences.Core"
-      }
     ]
   }
 }
