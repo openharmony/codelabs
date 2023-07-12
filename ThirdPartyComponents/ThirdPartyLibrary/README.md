@@ -13,19 +13,19 @@
 -   [Canvas](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-components-canvas-canvas.md)：画布组件，用于自定义绘制图形。
 -   [OpenHarmony 共享包](https://gitee.com/openharmony-tpc/docs/blob/master/OpenHarmony_npm_usage.md)：OpenHarmony 共享包定义了特定的工程结构和配置文件，支持OpenHarmony页面组件相关API、资源的调用。
 
-# 环境搭建
+## 环境搭建
 
-## 软件要求
+### 软件要求
 
 -   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
-## 硬件要求
+### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
 -   OpenHarmony系统：3.2 Release及以上版本。
 
-## 环境搭建
+### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
@@ -74,7 +74,7 @@
          └──Buttons.ets                // 本地库代码实现
 ```
 
-# 整体框架搭建
+## 整体框架搭建
 
 本篇Codelab由主页面、本地库组件页面、社区库组件页面三个页面组成，主页面由Navigation作为根组件实现全局标题，由Tabs组件实现本地库和社区库页面的切换，代码如下：
 
@@ -120,7 +120,7 @@ struct Index {
 
 在pages文件夹下新建components文件并在此文件夹下创建两个ArkTS文件，分别命名为inner和outer，至此整体框架搭建完毕。
 
-# 本地库实现
+## 本地库实现
 
 本地库主要是指未上架到ohpm中心且在项目组内共享使用的库文件，这类库需要开发者在项目中创建并开发新的Library模块，创建步骤如下：
 
@@ -270,9 +270,7 @@ export struct Inner {
 
 至此本地库的调用已完成。
 
-
-
-# 社区库调用
+## 社区库调用
 
 社区库是指已经由贡献者上架到ohpm中心供其他开发者下载使用的库，调用这类库的方法如下：
 
@@ -371,8 +369,6 @@ export struct Outer {
 ```
 
 至此本篇Codelab的开发已经完成。
-
-
 
 ## 总结
 
