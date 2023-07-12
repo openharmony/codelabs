@@ -1,12 +1,12 @@
 # Swiper的使用（ArkTS）
 
-# 介绍
+## 介绍
 
 本篇Codelab主要介绍了滑动容器组件Swiper的几种常见的应用场景，包括顶部导航、轮播图以及视频滑动播放。
 
 ![](/figures/swiper.gif)
 
-## 相关概念
+### 相关概念
 
 -   [Swiper](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-ts/ts-container-swiper.md)：滑动容器，提供子组件切换滑动的能力。
 -   [Stack](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-ts/ts-container-stack.md)：堆叠容器，子组件按照顺序依次入栈，后入栈组件在先入栈组件上方显示。
@@ -15,19 +15,19 @@
     -   @Observed应用于类，表示该类中的数据变更被UI页面管理，例如：@Observed class ClassA \{\}。
     -   @ObjectLink应用于被@Observed所装饰类的对象，例如：@ObjectLink a: ClassA。
 
-# 环境搭建
+## 环境搭建
 
-## 软件要求
+### 软件要求
 
 -   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
 -   OpenHarmony SDK版本：API version 9及以上版本。
 
-## 硬件要求
+### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
 -   OpenHarmony系统：3.2 Release及以上版本。
 
-## 环境搭建
+### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
@@ -46,7 +46,7 @@
    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
-# 代码结构解读
+## 代码结构解读
 
 本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
@@ -95,7 +95,7 @@
 └──entry/src/main/resources           // 应用资源目录
 ```
 
-# 顶部导航场景
+## 顶部导航场景
 
 应用首页首页使用Swiper组件实现了顶部导航的应用场景。用户点击不同的分类标题，会切换展示不同的界面内容。同时也支持用户左右滑动界面，对应导航标题联动变化的效果。
 
@@ -169,7 +169,7 @@ export struct TopBar {
 
 最终实现导航栏与内容区的双向联动效果。
 
-# 轮播图场景
+## 轮播图场景
 
 轮播图常见于各种应用首页，用于各类信息、资讯的轮番展示。本应用使用Swiper组件，同样实现了这一能力。“全部”页签的“电影精选”部分，即为一个电影内容的轮播模块。它可以切换展示不同电影内容。
 
@@ -222,7 +222,7 @@ build() {
 }
 ```
 
-# 视频滑动播放场景
+## 视频滑动播放场景
 
 视频滑动播放是Swiper组件的另一个常见应用场景。点击应用首页中的视频图片，会跳转至视频播放界面。我们可以通过上下滑动，切换播放的视频内容。
 
@@ -292,7 +292,7 @@ build() {
 }
 ```
 
-# 总结
+## 总结
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
