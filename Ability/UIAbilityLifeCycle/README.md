@@ -141,7 +141,7 @@ export default class EntryAbility extends UIAbility {
 }
 ```
 
-**Destory状态**
+**Destroy状态**
 
 Destroy状态在UIAbility实例销毁时触发。可以在onDestroy\(\)回调中进行系统资源的释放、数据的保存等操作。
 

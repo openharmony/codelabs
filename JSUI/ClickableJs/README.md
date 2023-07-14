@@ -9,7 +9,7 @@ OpenHarmony提供了常用的图片、图片帧动画播放器组件，开发者
 ### 相关概念
 
 -   [image组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-js/js-components-basic-image.md)：图片组件，用于图片资源的展示。
--   [image-animitor组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-js/js-components-basic-image-animator.md)：帧动画播放器，用以播放一组图片，可以设置播放时间、次数等参数。
+-   [image-animator组件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-js/js-components-basic-image-animator.md)：帧动画播放器，用以播放一组图片，可以设置播放时间、次数等参数。
 -   [通用事件](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-js/js-components-common-events.md)：事件绑定在组件上，当组件达到事件触发条件时，会执行JS中对应的事件回调函数，实现页面UI视图和页面JS逻辑层的交互。
 
 ## 环境搭建
