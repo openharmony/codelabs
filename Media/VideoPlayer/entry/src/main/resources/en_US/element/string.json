@@ -87,6 +87,18 @@
     {
       "name": "place_holder_name",
       "value": "Please enter a file name"
+    },
+	{
+      "name": "reason_read",
+      "value": "Reading Local Videos."
+    },
+	{
+      "name": "reason_location",
+      "value": "Obtaining Local Videos."
+    },
+	{
+      "name": "reason_internet",
+      "value": "Network video rights."
     }
   ]
 }
