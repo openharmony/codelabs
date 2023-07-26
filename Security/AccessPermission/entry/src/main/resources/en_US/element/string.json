@@ -43,6 +43,10 @@
     {
       "name": "clear_permission",
       "value": "To apply for a new permission, go to Settings > Applications > App Management > Application name > Storage > Delete data and clear the cache."
+    },
+    {
+      "name": "reason",
+      "value": "Querying Peripheral Untrusted Devices."
     }
   ]
 }
