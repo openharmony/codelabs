@@ -51,6 +51,9 @@ struct HomePage {
   private menuIconChangeList = menuIconList;
   private cropIconChange = cropIconChangeList;
   private statusBar: number = 0;
+  @Provide isPixelMapChange: boolean = false;
+  @Provide isSave: boolean = false;
+  @Provide isSaveFresh: boolean = false;
 
   aboutToAppear() {
     this.pixelInit();
@@ -108,7 +111,7 @@ struct HomePage {
               primaryButton: {
                 value: $r('app.string.save'),
                 action: () => {
-                  encode(this.pixelMap);
+                  this.isSave = true;
                 }
               },
               secondaryButton: {
@@ -128,13 +131,25 @@ struct HomePage {
 
       Column() {
         if (this.isCrop && this.showCanvas && this.statusBar > 0) {
-          ImageSelect({
-            statusBar: this.statusBar
-          })
+          if (this.isSaveFresh) {
+            ImageSelect({
+              statusBar: this.statusBar
+            })
+          } else {
+            ImageSelect({
+              statusBar: this.statusBar
+            })
+          }
         } else {
-          Image(this.pixelMap)
-            .scale({ x: this.imageScale, y: this.imageScale, z: 1 })
-            .objectFit(ImageFit.None)
+          if (this.isPixelMapChange) {
+            Image(this.pixelMap)
+              .scale({ x: this.imageScale, y: this.imageScale, z: 1 })
+              .objectFit(ImageFit.None)
+          } else {
+            Image(this.pixelMap)
+              .scale({ x: this.imageScale, y: this.imageScale, z: 1 })
+              .objectFit(ImageFit.None)
+          }
         }
       }
       .clip(true)
