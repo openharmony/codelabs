@@ -87,6 +87,7 @@ struct SliderCustom {
   @Prop min: number;
   @Prop max: number;
   @Consume pixelMap: PixelMap;
+  @Consume isPixelMapChange: boolean;
   private postState: boolean = true;
   workerInstance: worker.ThreadWorker = undefined;
   saturationLastSlider: number = CommonConstants.SLIDER_MAX;
@@ -122,18 +123,19 @@ struct SliderCustom {
   }
 
   sliderChange(value: number, mode: SliderChangeMode) {
-    if (mode === SliderChangeMode.End || mode === CommonConstants.SLIDER_CLICK_MODE) {
+    if (mode === SliderChangeMode.End) {
       this.currentAdjustData[this.currentIndex] = Math.round(value);
       switch (this.currentIndex) {
         case AdjustId.BRIGHTNESS:
           this.postToWorker(AdjustId.BRIGHTNESS, value, CommonConstants.BRIGHTNESS_WORKER_FILE);
           break;
         case AdjustId.TRANSPARENCY:
-          adjustOpacity(this.pixelMap, Math.round(value))
-            .then(pixelMap => {
-              this.pixelMap = undefined;
-              this.pixelMap = pixelMap;
-            });
+          if (!this.pixelMap) {
+            return;
+          }
+          this.pixelMap.opacity(Math.round(value) / CommonConstants.SLIDER_MAX).then(() => {
+            this.isPixelMapChange = !this.isPixelMapChange;
+          });
           break;
         case AdjustId.SATURATION:
           this.postToWorker(AdjustId.SATURATION, value, CommonConstants.SATURATION_WORKER_FILE);
@@ -175,11 +177,12 @@ struct SliderCustom {
 
   updatePixelMap(event: MessageEvents) {
     const newPixel = this.pixelMap;
-    newPixel.writeBufferToPixels(event.data);
-    this.pixelMap = undefined;
-    this.pixelMap = newPixel;
-    this.deviceListDialogController.close();
-    this.postState = true;
+    newPixel.writeBufferToPixels(event.data).then(() => {
+      this.pixelMap = newPixel;
+      this.isPixelMapChange = !this.isPixelMapChange;
+      this.deviceListDialogController.close();
+      this.postState = true;
+    });
   }
 }
 
