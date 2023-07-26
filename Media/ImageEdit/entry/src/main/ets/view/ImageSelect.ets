@@ -23,6 +23,7 @@ import { PixelMapWrapper } from '../common/bean/PixelMapWrapper';
 import Log from '../utils/LoggerUtil';
 import { ScreenManager } from '../viewModel/ScreenManager';
 import { CropRatioType } from '../common/bean/CropType';
+import { encode } from '../utils/EncodeUtil';
 
 const TAG = 'ImageSelect';
 
@@ -44,6 +45,8 @@ export struct ImageSelect {
   @Consume screenWidth: number;
   @Consume screenHeight: number;
   @Consume resetShow: boolean;
+  @Consume @Watch('listenSave') isSave: boolean;
+  @Consume isSaveFresh: boolean;
 
   private statusBar: number = 0;
   private titleHeight: number = CommonConstants.TITLE_HEIGHT;
@@ -52,6 +55,25 @@ export struct ImageSelect {
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private stateMenuSize: number = ScreenManager.getInstance().getStatusBarHeight();
   private defaultDisplay: display.Display = undefined;
+
+  listenSave() {
+    if (this.isSave) {
+      let filter = this.cropEdit.exit();
+      if (filter === undefined) {
+        return;
+      }
+      filter.readerNew(new PixelMapWrapper(this.pixelMap, this.imageOldSize.width, this.imageOldSize.height), () => {
+        let temp = this.pixelMap;
+        this.pixelMap = undefined;
+        this.pixelMap = temp;
+        encode(this.pixelMap);
+        this.cropEdit.setCanvasContext(this.context);
+        this.updateImageInfo();
+        this.isSaveFresh = !this.isSaveFresh;
+      });
+    }
+    this.isSave = false;
+  }
 
   aboutToAppear() {
     this.initImageSize();
@@ -132,7 +154,7 @@ export struct ImageSelect {
     try {
       this.defaultDisplay = display.getDefaultDisplaySync();
       this.screenWidth = px2vp(this.defaultDisplay.width);
-      this.screenHeight = px2vp((this.defaultDisplay.height - this.statusBar * 2) *
+      this.screenHeight = px2vp((this.defaultDisplay.height - this.statusBar) *
         CommonConstants.EDIT_SCREEN_USAGE);
       this.calcScale();
       this.cropEdit = new ImageEditCrop();
