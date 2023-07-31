@@ -59,6 +59,10 @@
     {
       "name": "main_page_title_font_family",
       "value": "HarmonyHeiTi-Bold"
+    },
+    {
+      "name": "reason",
+      "value": "通知"
     }
   ]
 }
