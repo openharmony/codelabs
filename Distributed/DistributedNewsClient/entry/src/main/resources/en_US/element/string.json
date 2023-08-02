@@ -1,0 +1,276 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "distribute news client"
+    },
+    {
+      "name": "read_count",
+      "value": "reads:"
+    },
+    {
+      "name": "like",
+      "value": "like:"
+    },
+    {
+      "name": "write_note",
+      "value": "write note"
+    },
+    {
+      "name": "cancel",
+      "value": "Cancel"
+    },
+    {
+      "name": "ok",
+      "value": "Ok"
+    },
+    {
+      "name": "select_device",
+      "value": "Select device"
+    },
+    {
+      "name": "trusted_device",
+      "value": "Trusted device"
+    },
+    {
+      "name": "please_select_device",
+      "value": "Please select device."
+    },
+    {
+      "name": "news_label_top",
+      "value": "Top"
+    },
+    {
+      "name": "news_label_more_comment",
+      "value": "More than 10000 posts"
+    },
+    {
+      "name": "news_label_recommend",
+      "value": "Recommend"
+    },
+    {
+      "name": "xx_daily",
+      "value": "XX Daily"
+    },
+    {
+      "name": "xxx_daily",
+      "value": "XXX Daily"
+    },
+    {
+      "name": "xx_com",
+      "value": "XX COM"
+    },
+    {
+      "name": "news_client",
+      "value": "News Client"
+    },
+    {
+      "name": "news_1_title",
+      "value": "The results of the exam are announced! Who's the champion?"
+    },
+    {
+      "name": "news_2_title",
+      "value": "College entrance examination students rushed to the examination room, we cheered for them together."
+    },
+    {
+      "name": "news_3_title",
+      "value": "Openness and Cooperation Helps Industry Upgrade"
+    },
+    {
+      "name": "news_4_title",
+      "value": "XX Community Mid-Autumn Festival benefits, hurry to receive"
+    },
+    {
+      "name": "news_5_title",
+      "value": "XX Mall big promotion!"
+    },
+    {
+      "name": "news_6_title",
+      "value": "The next decade in the computer industry"
+    },
+    {
+      "name": "news_7_title",
+      "value": "The city's basketball competition is hot."
+    },
+    {
+      "name": "news_8_title",
+      "value": "Enterprise Data Center Upgrade"
+    },
+    {
+      "name": "news_9_title",
+      "value": "A fiber optic lights up a green smart room"
+    },
+    {
+      "name": "news_10_title",
+      "value": "How do you spend Singles' Day?"
+    },
+    {
+      "name": "news_11_title",
+      "value": "Trust technology, embrace openness, and share technology"
+    },
+    {
+      "name": "news_12_title",
+      "value": "Influence of Transportation Efficiency on Residents' Life Rhythm"
+    },
+    {
+      "name": "news_13_title",
+      "value": "Enterprise executives get involved to accelerate revenue growth."
+    },
+    {
+      "name": "news_14_title",
+      "value": "Down! CPI released in November! These things are cheap"
+    },
+    {
+      "name": "news_15_title",
+      "value": "Spring Festival Movies Set New Year's Day"
+    },
+    {
+      "name": "news_16_title",
+      "value": "Three living things are smart"
+    },
+    {
+      "name": "news_17_title",
+      "value": "Realize your own value"
+    },
+    {
+      "name": "news_18_title",
+      "value": "Tree planting activities are launched on Arbor Planting Day in XX Primary School, with parents and students participating."
+    },
+    {
+      "name": "news_19_title",
+      "value": "Clean up!"
+    },
+    {
+      "name": "news_1_content",
+      "value": "The results of the exam are announced! Who's the champion? The results of the exam are announced! Who's the champion? The results of the exam are announced! Who's the champion? The results of the exam are announced! Who's the champion? The results of the exam are announced! Who's the champion?"
+    },
+    {
+      "name": "news_2_content",
+      "value": "College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads. College entrance examination students rushed to the examination room, we refueled for them together, the urban area bypassed these roads."
+    },
+    {
+      "name": "news_3_content",
+      "value": "Open cooperation helps industry upgrade. Open cooperation helps industry upgrade. Open cooperation helps industry upgrade. Open cooperation helps industry upgrade. Open cooperation helps industry upgrade. Open cooperation helps industry upgrade. Open cooperation helps industry upgrade. Open cooperation helps industry upgrade."
+    },
+    {
+      "name": "news_4_content",
+      "value": "XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left. XX community Mid-Autumn Festival benefits, hurry to receive, time only 3 days left."
+    },
+    {
+      "name": "news_5_content",
+      "value": "XX mall big promotion! XX mall big promotion!XX mall big promotion! XX mall big promotion!XX mall big promotion! XX mall big promotion!XX mall big promotion! XX mall big promotion!XX mall big promotion! XX mall big promotion!"
+    },
+    {
+      "name": "news_6_content",
+      "value": "The Computer Industry's Next Decade: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical Analysis. The Next Decade of Computer Industry: A Worrying Future? The future can be expected? Dialectical analysis."
+    },
+    {
+      "name": "news_7_content",
+      "value": "The city's basketball competition is hot, the top three rewards are generous, come and invite the little friends to participate together. The city's basketball competition is hot, the top three rewards are generous, come and invite the little friends to participate together. The city's basketball competition is hot, the top three rewards are generous, come and invite the little friends to participate together. The city's basketball competition is hot, the top three rewards are generous, come and invite the little friends to participate together."
+    },
+    {
+      "name": "news_8_content",
+      "value": "Enterprise data center upgrade. Enterprise data center upgrade. Enterprise data center upgrade. Enterprise data center upgrade. Enterprise data center upgrade."
+    },
+    {
+      "name": "news_9_content",
+      "value": "A fiber optic lights up a green smart room. A fiber optic lights up a green smart room. A fiber optic lights up a green smart room. A fiber optic lights up a green smart room. A fiber optic lights up a green smart room."
+    },
+    {
+      "name": "news_10_content",
+      "value": "How do you spend Singles' Day? How do you spend Singles' Day? How do you spend Singles' Day? How do you spend Singles' Day? How do you spend Singles' Day? How do you spend Singles' Day? How do you spend Singles' Day? How do you spend Singles' Day?"
+    },
+    {
+      "name": "news_11_content",
+      "value": "Trust technology, embrace openness, and share technology. Trust technology, embrace openness, and share technology. Trust technology, embrace openness, and share technology."
+    },
+    {
+      "name": "news_12_content",
+      "value": "What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents? What is the impact of transportation efficiency on the pace of life of residents?"
+    },
+    {
+      "name": "news_13_content",
+      "value": "Enterprise executives are involved, and revenue growth is accelerated. Enterprise executives are involved, and revenue growth is accelerated. Enterprise executives are involved, and revenue growth is accelerated. Enterprise executives are involved, and revenue growth is accelerated. Enterprise executives are involved, and revenue growth is accelerated. Enterprise executives are involved, and revenue growth is accelerated."
+    },
+    {
+      "name": "news_14_content",
+      "value": "Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap.Down! CPI released in November! These things are cheap."
+    },
+    {
+      "name": "news_15_content",
+      "value": "Spring Festival movie set for New Year! Spring Festival movie set for New Year! Spring Festival movie set for New Year! Spring Festival movie set for New Year! Spring Festival movie set for New Year! Spring Festival movie set for New Year! Spring Festival movie set for New Year!"
+    },
+    {
+      "name": "news_16_content",
+      "value": "Three intelligent creatures. Three intelligent creatures. Three intelligent creatures."
+    },
+    {
+      "name": "news_17_content",
+      "value": "Realize their own value, tap their own potential, and strive to contribute to the society!"
+    },
+    {
+      "name": "news_18_content",
+      "value": "Tree planting activities are carried out on Arbor Planting Day in XX primary school, with parents and students participating. Tree planting activities are carried out on Arbor Planting Day in XX primary school, with parents and students participating. Tree planting activities are carried out on Arbor Planting Day in XX primary school, with parents and students participating."
+    },
+    {
+      "name": "news_19_content",
+      "value": "Clean up!!! cleaning up!!! cleaning up!!! cleaning up!!! Clean up!!!"
+    },
+    {
+      "name": "tabs_all",
+      "value": "All"
+    },
+    {
+      "name": "tabs_health",
+      "value": "Health"
+    },
+    {
+      "name": "tabs_finance",
+      "value": "Finance"
+    },
+    {
+      "name": "tabs_technology",
+      "value": "Technology"
+    },
+    {
+      "name": "tabs_sports",
+      "value": "Sports"
+    },
+    {
+      "name": "tabs_internet",
+      "value": "Internet"
+    },
+    {
+      "name": "tabs_game",
+      "value": "Game"
+    },
+    {
+      "name": "dependency_reason_1",
+      "value": "Provides distributed device management capabilities."
+    },
+    {
+      "name": "dependency_reason_2",
+      "value": "Supports multi-device collaboration and cross-device application startup."
+    },
+    {
+      "name": "no_device_manager",
+      "value": "deviceManager has not initialized"
+    },
+    {
+      "name": "get_trusted_device_list_failed",
+      "value": "getTrustedDeviceList failed"
+    },
+    {
+      "name": "start_ability_continuation_error",
+      "value": "startAbilityContinuation error "
+    }
+  ]
+}
