@@ -1,0 +1,40 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "DistributeDraw"
+    },
+    {
+      "name": "cancel",
+      "value": "Cancel"
+    },
+    {
+      "name": "confirm",
+      "value": "Confirm"
+    },
+    {
+      "name": "please_select_device",
+      "value": "Please select a device"
+    },
+    {
+      "name": "select_device",
+      "value": "Select device"
+    },
+    {
+      "name": "access_service_dm_reason",
+      "value": "request for device manager"
+    },
+    {
+      "name": "distributed_datasync_reason",
+      "value": "request for distribute store"
+    }
+  ]
+}
