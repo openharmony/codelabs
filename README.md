@@ -72,7 +72,8 @@
   - [用户首选项（JS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/Data/PreferenceJS)
   - [分布式数据库（JS）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Data/JsDistributedData)
 - 分布式
-  - [分布式手写板（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDatabaseDrawEts)
+  - [分布式手写板（ArkTS）（Full SDK）（API 10）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributeDraw)
+  - [分布式新闻客户端（ArkTS）（Full SDK）（API 10）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/DistributedNewsClient)
   - [分布式游戏手柄（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/HandleGameApplication)
   - [分布式邮件（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OHMailETS)
   - [分布式亲子早教系统（ArkTS）（Full SDK）（API 8）](https://gitee.com/openharmony/codelabs/tree/master/Distributed/OpenHarmonyPictureGame)
