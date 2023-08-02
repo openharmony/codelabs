@@ -39,7 +39,14 @@
     ],
     "requestPermissions": [
       {
-        "name": "ohos.permission.INTERNET"
+        "name": "ohos.permission.INTERNET",
+        "reason": "$string:reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"    
+          ],
+          "when": "inuse"
+        }
       }
     ]
   }
