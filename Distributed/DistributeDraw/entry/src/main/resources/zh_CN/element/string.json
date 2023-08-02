@@ -1,0 +1,40 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "分布式手写板"
+    },
+    {
+      "name": "cancel",
+      "value": "取消"
+    },
+    {
+      "name": "confirm",
+      "value": "确认"
+    },
+    {
+      "name": "please_select_device",
+      "value": "请选择一个设备"
+    },
+    {
+      "name": "select_device",
+      "value": "选择设备"
+    },
+    {
+      "name": "access_service_dm_reason",
+      "value": "设备管理申请权限"
+    },
+    {
+      "name": "distributed_datasync_reason",
+      "value": "分布式键值数据库申请权限"
+    }
+  ]
+}
