@@ -1,0 +1,244 @@
+{
+  "float": [
+    {
+      "name": "news_label_margin_right",
+      "value": "5vp"
+    },
+    {
+      "name": "list_image_border_radius",
+      "value": "8vp"
+    },
+    {
+      "name": "message_margin_left",
+      "value": "8vp"
+    },
+    {
+      "name": "dialog_button_padding_top",
+      "value": "8vp"
+    },
+    {
+      "name": "dialog_icon_margin_bottom",
+      "value": "9.5vp"
+    },
+    {
+      "name": "footer_margin_sm",
+      "value": "12vp"
+    },
+    {
+      "name": "footer_margin_other",
+      "value": "24vp"
+    },
+    {
+      "name": "like_margin_right",
+      "value": "12vp"
+    },
+    {
+      "name": "read_like_margin_top",
+      "value": "12vp"
+    },
+    {
+      "name": "head_image_margin",
+      "value": "12vp"
+    },
+    {
+      "name": "list_title_margin_bottom",
+      "value": "12vp"
+    },
+    {
+      "name": "list_row_padding_top",
+      "value": "12vp"
+    },
+    {
+      "name": "list_label_padding_bottom",
+      "value": "13vp"
+    },
+    {
+      "name": "dialog_offset_y",
+      "value": "-12vp"
+    },
+    {
+      "name": "small_font_size",
+      "value": "14fp"
+    },
+    {
+      "name": "message_margin_right",
+      "value": "16vp"
+    },
+    {
+      "name": "back_margin",
+      "value": "16vp"
+    },
+    {
+      "name": "dialog_icon_margin_right",
+      "value": "16vp"
+    },
+    {
+      "name": "radio_margin_left",
+      "value": "16vp"
+    },
+    {
+      "name": "dialog_button_padding_bottom",
+      "value": "16vp"
+    },
+    {
+      "name": "news_list_padding",
+      "value": "16vp"
+    },
+    {
+      "name": "news_tab_margin_right",
+      "value": "16vp"
+    },
+    {
+      "name": "normal_font_size",
+      "value": "16fp"
+    },
+    {
+      "name": "middle_font_size",
+      "value": "18fp"
+    },
+    {
+      "name": "choose_device_line_height",
+      "value": "19vp"
+    },
+    {
+      "name": "choose_device_margin_top",
+      "value": "19.5vp"
+    },
+    {
+      "name": "text_input_border_radius",
+      "value": "20vp"
+    },
+    {
+      "name": "device_list_line_height",
+      "value": "22vp"
+    },
+    {
+      "name": "footer_icon_size",
+      "value": "24vp"
+    },
+    {
+      "name": "grid_row_gutter",
+      "value": "24vp"
+    },
+    {
+      "name": "back_size",
+      "value": "24vp"
+    },
+    {
+      "name": "news_detail_title_font_size",
+      "value": "24fp"
+    },
+    {
+      "name": "news_detail_image_border_radius",
+      "value": "24vp"
+    },
+    {
+      "name": "news_detail_margin",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_padding",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_icon_size",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_radio_size",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_border_radius",
+      "value": "24vp"
+    },
+    {
+      "name": "news_item_padding_right",
+      "value": "24vp"
+    },
+    {
+      "name": "news_tab_margin_left",
+      "value": "24vp"
+    },
+    {
+      "name": "news_tab_height",
+      "value": "24vp"
+    },
+    {
+      "name": "lager_font_size",
+      "value": "24fp"
+    },
+    {
+      "name": "news_content_line_height",
+      "value": "25vp"
+    },
+    {
+      "name": "news_tab_current_height",
+      "value": "32vp"
+    },
+    {
+      "name": "text_input_height",
+      "value": "40vp"
+    },
+    {
+      "name": "dialog_button_height",
+      "value": "40vp"
+    },
+    {
+      "name": "choose_device_row_height",
+      "value": "48vp"
+    },
+    {
+      "name": "news_item_title_height",
+      "value": "52vp"
+    },
+    {
+      "name": "device_list_column_height",
+      "value": "55.5vp"
+    },
+    {
+      "name": "footer_height",
+      "value": "56vp"
+    },
+    {
+      "name": "back_row_height",
+      "value": "56vp"
+    },
+    {
+      "name": "device_list_row_height",
+      "value": "56vp"
+    },
+    {
+      "name": "dialog_button_row_height",
+      "value": "56vp"
+    },
+    {
+      "name": "news_tab_bar_height",
+      "value": "56vp"
+    },
+    {
+      "name": "footer_icon_column_width",
+      "value": "60vp"
+    },
+    {
+      "name": "news_item_image_height",
+      "value": "80vp"
+    },
+    {
+      "name": "news_item_column_height",
+      "value": "103vp"
+    },
+    {
+      "name": "news_item_image_width",
+      "value": "106vp"
+    },
+    {
+      "name": "news_detail_padding_bottom",
+      "value": "124vp"
+    },
+    {
+      "name": "news_detail_image_height",
+      "value": "176vp"
+    }
+  ]
+}

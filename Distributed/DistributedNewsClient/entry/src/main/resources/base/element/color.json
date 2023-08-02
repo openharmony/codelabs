@@ -1,0 +1,40 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "white",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "bg_color_gray",
+      "value": "#F1F3F5"
+    },
+    {
+      "name": "font_color_gray",
+      "value": "#99000000"
+    },
+    {
+      "name": "tab_font_select",
+      "value": "#E6000000"
+    },
+    {
+      "name": "dialog_button_font",
+      "value": "#FF007DFF"
+    },
+    {
+      "name": "detail_divider_color",
+      "value": "#33182431"
+    },
+    {
+      "name": "list_divider",
+      "value": "#FF000000"
+    },
+    {
+      "name": "device_dialog_background",
+      "value": "#D8FFFFFF"
+    }
+  ]
+}
