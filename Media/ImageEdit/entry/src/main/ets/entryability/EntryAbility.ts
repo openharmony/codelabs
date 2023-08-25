@@ -22,6 +22,12 @@ import { ScreenManager } from '../viewModel/ScreenManager';
 export default class EntryAbility extends UIAbility {
     onCreate(want, launchParam) {
         hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
+        window.getLastWindow(this.context, (err, window) => {
+            if (err) {
+                hilog.error(0x0000, 'testTag', '%{public}s',`window loading has error: ${JSON.stringify(err)}`);
+            }
+            globalThis.statusBar = window.getWindowProperties().windowRect?.top;
+        });
     }
 
     onDestroy() {

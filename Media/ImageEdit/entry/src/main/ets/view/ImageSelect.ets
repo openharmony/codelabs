@@ -60,6 +60,9 @@ export struct ImageSelect {
     if (this.isSave) {
       let filter = this.cropEdit.exit();
       if (filter === undefined) {
+        encode(this.pixelMap);
+        this.isSaveFresh = !this.isSaveFresh;
+        this.isSave = false;
         return;
       }
       filter.readerNew(new PixelMapWrapper(this.pixelMap, this.imageOldSize.width, this.imageOldSize.height), () => {
@@ -154,7 +157,7 @@ export struct ImageSelect {
     try {
       this.defaultDisplay = display.getDefaultDisplaySync();
       this.screenWidth = px2vp(this.defaultDisplay.width);
-      this.screenHeight = px2vp((this.defaultDisplay.height - this.statusBar) *
+      this.screenHeight = px2vp((this.defaultDisplay.height - this.statusBar * 2) *
         CommonConstants.EDIT_SCREEN_USAGE);
       this.calcScale();
       this.cropEdit = new ImageEditCrop();
