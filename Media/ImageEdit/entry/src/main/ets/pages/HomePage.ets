@@ -59,7 +59,7 @@ struct HomePage {
     this.pixelInit();
     window.getLastWindow(getContext(this), (err, window) => {
       if (err) {
-        Logger.error(`window loading has error: ${JSON.stringify(err)}`);
+        Logger.error(0x0000, 'testTag', '%{public}s',`window loading has error: ${JSON.stringify(err)}`);
       }
       this.statusBar = window.getWindowProperties().windowRect?.top;
     });
@@ -246,6 +246,7 @@ struct HomePage {
         break;
       case CropType.RECTANGLE:
         this.cropRatio = CropRatioType.RATIO_TYPE_16_9;
+        break;
       default:
         this.cropRatio = CropRatioType.RATIO_TYPE_FREE;
         break;
@@ -257,7 +258,7 @@ struct HomePage {
       try {
         this.pixelMap.rotate(CommonConstants.CLOCK_WISE)
           .then(() => {
-            this.flushPixelMap();
+            this.flushPixelMapNew();
           })
       } catch (error) {
         Logger.error(TAG, `there is a error in rotate process with ${error?.code}`);
@@ -267,7 +268,7 @@ struct HomePage {
       try {
         this.pixelMap.rotate(CommonConstants.ANTI_CLOCK)
           .then(() => {
-            this.flushPixelMap();
+            this.flushPixelMapNew();
           })
       } catch (error) {
         Logger.error(TAG, `there is a error in rotate process with ${error?.code}`);
@@ -279,6 +280,11 @@ struct HomePage {
     const temp = this.pixelMap;
     this.pixelMap = undefined;
     this.pixelMap = temp;
+    this.updateImageInfo();
+  }
+
+  flushPixelMapNew() {
+    this.isPixelMapChange = !this.isPixelMapChange;
     this.updateImageInfo();
   }
 
