@@ -19,7 +19,7 @@ import CommonConstants from '../common/utils/CommonConstaint';
 export default struct ScreenshotDialog {
   @State dialogWidth: string = CommonConstants.WIDTH_FIRST;
   controller: CustomDialogController;
-  private pixelMap: PixelMap = null;
+  private pixelMap?: PixelMap;
   private screenAspectRatio: number = -1;
 
   aboutToAppear() {
@@ -38,7 +38,7 @@ export default struct ScreenshotDialog {
       .width(CommonConstants.FULL_PARAM)
       .justifyContent(FlexAlign.End)
       Row() {
-        Image(this.pixelMap)
+        Image(this.pixelMap !== undefined ? this.pixelMap : '')
           .width(CommonConstants.IMAGE_ON_DIALOG)
           .margin(CommonConstants.IMAGE_MARGIN)
           .objectFit(ImageFit.Contain)
@@ -54,14 +54,16 @@ export default struct ScreenshotDialog {
   }
 
   private async getDialogWidth() {
-    let info = await this.pixelMap.getImageInfo();
-    let pixelMapAspectRatio = info.size.height / info.size.width;
+    if (this.pixelMap !== undefined) {
+      let info = await this.pixelMap.getImageInfo();
+      let pixelMapAspectRatio = info.size.height / info.size.width;
 
-    if ((this.screenAspectRatio !== -1) && (pixelMapAspectRatio > this.screenAspectRatio)) {
-      let width = CommonConstants.HEIGHT_FIRST / pixelMapAspectRatio * this.screenAspectRatio;
-      this.dialogWidth = width + '%';
-    } else {
-      this.dialogWidth = CommonConstants.WIDTH_FIRST;
+      if ((this.screenAspectRatio !== -1) && (pixelMapAspectRatio > this.screenAspectRatio)) {
+        let width = CommonConstants.HEIGHT_FIRST / pixelMapAspectRatio * this.screenAspectRatio;
+        this.dialogWidth = width + '%';
+      } else {
+        this.dialogWidth = CommonConstants.WIDTH_FIRST;
+      }
     }
   }
 }

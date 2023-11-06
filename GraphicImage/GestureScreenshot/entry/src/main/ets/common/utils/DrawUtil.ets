@@ -20,7 +20,8 @@ import offsetModel from '../../model/OffsetModel';
 export class DrawUtil {
   private screenWidth: number = 0;
   private screenHeight: number = 0;
-  private canvasContext: CanvasRenderingContext2D;
+  private settings: RenderingContextSettings = new RenderingContextSettings(true);
+  private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private offsetXLeft: number = 0;
   private offsetXRight: number = 0;
   private offsetYTop: number = 0;
