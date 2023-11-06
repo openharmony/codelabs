@@ -15,7 +15,8 @@
 
 import { CommonConstants } from '../common/constant/CommonConstant';
 import Logger from '../common/utils/Logger';
-import TaskItemBean from '../common/bean/TaskItemBean';
+import TaskItemViewModel from './TaskItemViewModel';
+
 
 const TAG = '[DataModel]';
 
@@ -27,12 +28,12 @@ export class DataModel {
   /**
    * Saved data.
    */
-  private targetData: Array<TaskItemBean> = [];
+  private targetData: Array<TaskItemViewModel> = [];
 
   /**
    * Get the latest data.
    */
-  getData(): Array<TaskItemBean> {
+  getData(): Array<TaskItemViewModel> {
     return this.targetData;
   }
 
@@ -58,7 +59,7 @@ export class DataModel {
    *
    * @param Data of the RecordItemBean type to be added.
    */
-  addData(data: TaskItemBean) {
+  addData(data: TaskItemViewModel) {
     if (!data) {
       Logger.error(TAG, 'addData error because data is: ' + data);
       return;
