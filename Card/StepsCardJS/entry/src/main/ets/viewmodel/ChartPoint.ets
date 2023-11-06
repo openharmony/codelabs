@@ -13,34 +13,35 @@
  * limitations under the License.
  */
 
-import ChartValues from '../bean/ChartValues';
+import PointStyle from './PointStyle';
 
 /**
- * Form data entity class.
+ * Chart point entity class.
  */
-export default class FormData {
+export default class ChartPoint {
   /**
-   * Form ID
+   * Step value.
    */
-  formId: string;
-
+  value: number = 0;
   /**
-   * Step percentage.
+   * Style of chart points.
    */
-  percent: number;
-
+  pointStyle: PointStyle = {
+    shape: '',
+    fillColor: '',
+    strokeColor: '',
+    size: 0
+  };
   /**
-   * Form steps.
+   * Description of icon points.
    */
-  steps: number;
-
+  description: string = '';
   /**
-   * Chart data point collection.
+   * Chart text position.
    */
-  datasets: Array<ChartValues>;
-
+  textLocation: string = '';
   /**
-   * Travel mileage.
+   * Chart text color.
    */
-  mileage: number;
+  textColor: string = '';
 }

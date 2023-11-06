@@ -13,29 +13,30 @@
  * limitations under the License.
  */
 
-import ChartPoint from './ChartPoint';
+import ChartValues from './ChartValues';
 
 /**
- * Chart value entity class.
+ * Form data entity class.
  */
-export default class ChartValues {
+export default class FormData {
   /**
-   * Chart fill color.
+   * Form ID
    */
-  fillColor: string;
-
+  formId: string = '';
   /**
-   * Chart line color.
+   * Step percentage.
    */
-  strokeColor: string;
-
+  percent: number = 0;
   /**
-   * Sets whether to display the fill gradient color.
+   * Form steps.
    */
-  gradient: boolean;
-
+  steps: number = 0;
   /**
-   * Draw a set of points in a line type chart.
+   * Chart data point collection.
    */
-  data: Array<ChartPoint>;
+  datasets: Array<ChartValues> = [];
+  /**
+   * Travel mileage.
+   */
+  mileage: number = 0;
 }
