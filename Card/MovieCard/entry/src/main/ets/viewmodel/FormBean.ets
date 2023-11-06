@@ -13,27 +13,35 @@
  * limitations under the License.
  */
 
+import relationalStore from '@ohos.data.relationalStore';
+
 /**
- * Classes required for LazyForEach loading.
+ * Database form entity class.
  */
-export default class DataSource<T> implements IDataSource {
-  private listData: T[];
+export default class FormBean {
+  /**
+   * Form ID
+   */
+  formId: string = '';
+  /**
+   * Form name
+   */
+  formName: string = '';
+  /**
+   * Card dimension
+   */
+  dimension: number = 0;
 
-  constructor(listData: T[]) {
-    this.listData = listData;
-  }
-
-  totalCount() {
-    return this.listData.length;
-  }
-
-  getData(index: number) {
-    return this.listData[index];
-  }
-
-  registerDataChangeListener() {
-  }
-
-  unregisterDataChangeListener() {
+  /**
+   * Get inserted form data.
+   *
+   * @return Return form data
+   */
+  toValuesBucket(): relationalStore.ValuesBucket {
+    return {
+      'formId': this.formId,
+      'formName': this.formName,
+      'dimension': this.dimension
+    };
   }
 }

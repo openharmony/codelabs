@@ -17,21 +17,21 @@ import router from '@ohos.router';
 import Logger from '../common/utils/Logger';
 import CommonConstants from '../common/constants/CommonConstants';
 import StyleConstants from '../common/constants/StyleConstants';
-import MovieDataBean from '../common/bean/MovieDataBean';
+import MovieDataBean from '../viewmodel/MovieDataBean';
 import StarsWidget from './StarsWidget';
 import CommonUtils from '../common/utils/CommonUtils';
 
 @Component
 export default struct MovieItem {
-  private movieItem: MovieDataBean;
-  private sort: number;
-  private isShowSort: boolean;
-  private sortImage: Resource;
-  private title: string;
-  private describe: string;
-  private movieImage: Resource;
-  private stars: Resource[];
-  private rating: string;
+  private movieItem: MovieDataBean = new MovieDataBean();
+  private sort: number = 0;
+  private isShowSort: boolean = true;
+  private sortImage: Resource = $r('app.media.ic_first');
+  private title: string = '冰山姐妹';
+  private describe: string = '讲述冰上女运动员之间团结友爱，互帮互助的故事';
+  private movieImage: Resource = $r('app.media.ic_movie_one');
+  private stars: Resource[] = [];
+  private rating: string = '9';
 
   aboutToAppear() {
     if (CommonUtils.isEmpty(this.movieItem)) {
@@ -103,7 +103,7 @@ export default struct MovieItem {
             params: {
               index: this.sort
             }
-          }).catch((error) => {
+          }).catch((error: Error) => {
             Logger.error(CommonConstants.TAG_MOVIE_ITEM, 'push error ' + JSON.stringify(error));
           });
         })
