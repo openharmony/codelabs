@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,30 +13,25 @@
  * limitations under the License.
  */
 
-import { AlarmSettingType } from '../constants/AlarmSettingType';
+export class GlobalContext {
+  private constructor() {
+  }
 
-/**
- * Alarm setting bean information.
- */
-export default class AlarmSettingBean {
-  /**
-   * Alarm setting title.
-   */
-  public title: string;
+  private static instance: GlobalContext;
+  private _objects = new Map<string, Object>();
 
-  /**
-   * Alarm setting content.
-   */
-  public content: string;
+  public static getContext(): GlobalContext {
+    if (!GlobalContext.instance) {
+      GlobalContext.instance = new GlobalContext();
+    }
+    return GlobalContext.instance;
+  }
 
-  /**
-   * Alarm setting type.
-   */
-  public sType: AlarmSettingType;
+  getObject(value: string): Object | undefined {
+    return this._objects.get(value);
+  }
 
-  constructor(title, content, sType) {
-    this.title = title;
-    this.content = content;
-    this.sType = sType;
+  setObject(key: string, objectClass: Object): void {
+    this._objects.set(key, objectClass);
   }
 }

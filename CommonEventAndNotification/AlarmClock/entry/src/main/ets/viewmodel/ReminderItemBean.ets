@@ -13,29 +13,18 @@
  * limitations under the License.
  */
 
-/**
- * Data type utils.
- */
-export default class DataTypeUtils {
-  /**
-   * return obj is null.
-   *
-   * @return boolean.
-   */
-  static isNull(obj: Object): boolean {
-    return (typeof obj === 'undefined' || obj == null || obj === '');
-  }
+import reminderAgent from '@ohos.reminderAgentManager';
 
-  /**
-   * return new deep copy object from obj.
-   *
-   * @return type in obj.
-   */
-  static deepCopy(obj: number[]) {
-    let newObj: number[] = [];
-    for (let i = 0; i < obj.length; i++) {
-      newObj[i] = JSON.parse(JSON.stringify(obj[i]));
-    }
-    return newObj;
-  }
+export default class ReminderItemBean {
+  id: number = 0;
+  remindType: reminderAgent.ReminderType = reminderAgent.ReminderType.REMINDER_TYPE_ALARM;
+  name: string = '';
+  hour: number = 0;
+  minute: number = 0;
+  duration: number = 0;
+  intervalMinute: number = 0;
+  intervalTimes: number = 0;
+  repeatDays: Array<number> = [];
+  notificationId: number = 0;
 }
+

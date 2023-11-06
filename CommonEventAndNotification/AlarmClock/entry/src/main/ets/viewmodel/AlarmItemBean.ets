@@ -13,14 +13,44 @@
  * limitations under the License.
  */
 
+import ReminderItem from './ReminderItemBean';
+
 /**
- * Preferences listener interface.
+ * Alarm item description.
  */
-export default interface PreferencesListener {
+@Observed export default class AlarmItemBean extends ReminderItem {
   /**
-   * Preferences on data changed listener.
-   *
-   * @param key string
+   * Custom alarm name.
    */
-  onDataChanged: (key: string) => void
+  name = '闹钟';
+
+  /**
+   * Custom alarm is open.
+   */
+  isOpen: boolean = true;
+
+  /**
+   * Custom alarm is repeat.
+   */
+  isRepeat: boolean = false;
+
+  /**
+   * Custom alarm duration.
+   */
+  duration: number = 5;
+
+  /**
+   * Custom alarm interval minute.
+   */
+  intervalMinute: number = 10;
+
+  /**
+   * Custom alarm interval times.
+   */
+  intervalTimes: number = 3;
+
+  /**
+   * Custom alarm notification id.
+   */
+  notificationId: number = 0;
 }

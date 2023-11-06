@@ -15,19 +15,20 @@
 
 import { MainConstant } from '../common/constants/MainConstant';
 import ReminderService from '../model/ReminderService';
-import { ALARM_KEY, CommonConstants } from '../common/constants/CommonConstants';
-import AlarmItem from '../common/bean/AlarmItemBean';
+import { CommonConstants, WeekDays } from '../common/constants/CommonConstants';
+import AlarmItem from './AlarmItemBean';
 import DataTypeUtils from '../common/utils/DataTypeUtils';
+import { GlobalContext } from '../common/utils/GlobalContext';
+import PreferencesHandler from '../model/database/PreferencesHandler';
+import PreferencesListener from '../model/database/PreferencesListener';
 
 /**
  * Declare class of main view model.
  */
 export default class MainViewModel {
-  private static instant;
+  static instant: MainViewModel = new MainViewModel();
   private reminderService: ReminderService;
   private alarms: Array<AlarmItem>;
-  private drawInterval: any = CommonConstants.DEFAULT_NUMBER_NEGATIVE;
-  private showClock: boolean = true;
 
   private constructor() {
     this.alarms = new Array();
@@ -38,12 +39,12 @@ export default class MainViewModel {
   /**
    * Get instant in MainViewModel.
    */
-  public static getInstant() {
-    if (this.instant == null) {
-      this.instant = new MainViewModel();
-    }
-    return this.instant;
-  }
+  // public static getInstant() {
+  //   if (this.instant == null) {
+  //     this.instant = new MainViewModel();
+  //   }
+  //   return this.instant;
+  // }
 
   /**
    * Querying alarm task database tables.
@@ -51,7 +52,8 @@ export default class MainViewModel {
    * @param callback (alarms: Array<AlarmItem>) => void
    */
   private queryDatabaseAlarms(callback: (alarms: Array<AlarmItem>) => void) {
-    globalThis.preference.get(ALARM_KEY).then((data) => {
+    let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+    preference.get(CommonConstants.ALARM_KEY).then((data: string) => {
       if (!DataTypeUtils.isNull(data)) {
         this.alarms = JSON.parse(data);
         callback(this.alarms);
@@ -67,11 +69,12 @@ export default class MainViewModel {
   public queryAlarmsTasker(callback: (alarms: Array<AlarmItem>) => void) {
     let that = this;
     that.queryDatabaseAlarms(callback);
-    globalThis.preference.addPreferencesListener({
+    let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+    preference.addPreferencesListener({
       onDataChanged() {
         that.queryDatabaseAlarms(callback);
       }
-    })
+    } as PreferencesListener)
   }
 
   /**
@@ -132,29 +135,29 @@ export default class MainViewModel {
    */
   public getAlarmRepeatDayContent(repeatDays: Array<number>): string{
     let content = MainConstant.DEFAULT_STRING_NULL;
-    for (var i = 0; i < repeatDays.length; i++) {
+    for (let i = 0; i < repeatDays.length; i++) {
       let repeatDay = repeatDays[i];
-      let repeatContent;
+      let repeatContent: string = CommonConstants.DEFAULT_STRING_MONDAY;
       switch (repeatDay) {
-        case CommonConstants.DEFAULT_NUMBER_MONDAY:
+        case WeekDays.DEFAULT_NUMBER_MONDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_MONDAY;
           break;
-        case CommonConstants.DEFAULT_NUMBER_TUESDAY:
+        case WeekDays.DEFAULT_NUMBER_TUESDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_TUESDAY;
           break;
-        case CommonConstants.DEFAULT_NUMBER_WEDNESDAY:
+        case WeekDays.DEFAULT_NUMBER_WEDNESDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_WEDNESDAY;
           break;
-        case CommonConstants.DEFAULT_NUMBER_THURSDAY:
+        case WeekDays.DEFAULT_NUMBER_THURSDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_THURSDAY;
           break;
-        case CommonConstants.DEFAULT_NUMBER_FRIDAY:
+        case WeekDays.DEFAULT_NUMBER_FRIDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_FRIDAY;
           break;
-        case CommonConstants.DEFAULT_NUMBER_SATURDAY:
+        case WeekDays.DEFAULT_NUMBER_SATURDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_SATURDAY;
           break;
-        case CommonConstants.DEFAULT_NUMBER_SUNDAY:
+        case WeekDays.DEFAULT_NUMBER_SUNDAY:
           repeatContent = CommonConstants.DEFAULT_STRING_SUNDAY;
           break;
         default:
@@ -180,7 +183,8 @@ export default class MainViewModel {
         } else {
           this.reminderService.deleteReminder(this.alarms[i].id);
         }
-        globalThis.preference.set(ALARM_KEY, JSON.stringify(this.alarms));
+        let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+        preference.set(CommonConstants.ALARM_KEY, JSON.stringify(this.alarms));
         break;
       }
     }

@@ -20,16 +20,16 @@ import DimensionUtil from '../../common/utils/DimensionUtil';
 
 @Component
 export default struct ClockArea {
-  private mainModel: MainModel;
-  private drawInterval: any = CommonConstants.DEFAULT_NUMBER_NEGATIVE;
+  private mainModel: MainModel = MainModel.instant;
+  private drawInterval: number = CommonConstants.DEFAULT_NUMBER_NEGATIVE;
   @State showClock: boolean = true;
-  private canvasSize: number;
-  private clockRadius: number;
+  private canvasSize: number = DimensionUtil.getVp($r('app.float.clock_size'));
+  private clockRadius: number = this.canvasSize / CommonConstants.DEFAULT_DOUBLE - CommonConstants.DEFAULT_DOUBLE;
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private renderContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
 
   aboutToAppear() {
-    this.mainModel = MainModel.getInstant();
+    this.mainModel = MainModel.instant;
     this.canvasSize = DimensionUtil.getVp($r('app.float.clock_size'));
     this.clockRadius = this.canvasSize / CommonConstants.DEFAULT_DOUBLE - CommonConstants.DEFAULT_DOUBLE;
   }
@@ -100,9 +100,9 @@ export default struct ClockArea {
   }
 
   // 绘制时针、分针、秒针
-  private drawPointer(degree, pointerImgRes) {
+  private drawPointer(degree: number, pointerImgRes: string) {
     this.renderContext.save();
-    var theta = (degree + MainConstant.DEFAULT_HORIZONTAL_ANGLE) * Math.PI / MainConstant.DEFAULT_HORIZONTAL_ANGLE;
+    let theta = (degree + MainConstant.DEFAULT_HORIZONTAL_ANGLE) * Math.PI / MainConstant.DEFAULT_HORIZONTAL_ANGLE;
     this.renderContext.rotate(theta);
     this.renderContext.beginPath();
     let secondImg = new ImageBitmap(pointerImgRes);

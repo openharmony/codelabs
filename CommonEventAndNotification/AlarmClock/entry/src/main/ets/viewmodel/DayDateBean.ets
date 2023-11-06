@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,18 +13,8 @@
  * limitations under the License.
  */
 
-import reminderAgent from '@ohos.reminderAgentManager';
-
-export default class ReminderItemBean {
-  id: number;
-  remindType: reminderAgent.ReminderType = reminderAgent.ReminderType.REMINDER_TYPE_ALARM;
-  name: string;
-  hour: number;
-  minute: number;
-  duration: number;
-  intervalMinute: number;
-  intervalTimes: number;
-  repeatDays: Array<number> = [];
-  notificationId: number;
+export default class DayDataBean {
+  timeType: number = 0;
+  delSelect: number = 0;
+  data: Array<string> = [];
 }
-
