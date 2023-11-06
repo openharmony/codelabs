@@ -17,13 +17,13 @@ OpenHarmony ArkTS提供了丰富的接口和组件，开发者可以根据实际
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -44,7 +44,7 @@ OpenHarmony ArkTS提供了丰富的接口和组件，开发者可以根据实际
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets                      // 代码区
@@ -69,7 +69,6 @@ OpenHarmony ArkTS提供了丰富的接口和组件，开发者可以根据实际
     ├──en_US
     │  └──element
     │     └──string.json                   // 英文字符存放位置
-    ├──rawfile                             // 大体积媒体资源存放位置
     └──zh_CN
         └──element
            └──string.json                  // 中文字符存放位置
@@ -80,6 +79,7 @@ OpenHarmony ArkTS提供了丰富的接口和组件，开发者可以根据实际
 页面使用Navigation与Tabs做页面布局，使用Navigation的title属性实现页面的标题，Tabs做商品内容的分类。示例代码如下：
 
 ```typescript
+// ListIndex.ets
 Row() {
   Navigation() {
     Column() {
@@ -90,6 +90,7 @@ Row() {
   }
   .size({ width: LAYOUT_WIDTH_OR_HEIGHT, height: LAYOUT_WIDTH_OR_HEIGHT })
   .title(STORE)
+  .titleMode(NavigationTitleMode.Mini)
 }
 .height(LAYOUT_WIDTH_OR_HEIGHT)
 .backgroundColor($r('app.color.primaryBgColor'))
@@ -98,6 +99,7 @@ Row() {
 页面分为“精选”、“手机”、“服饰”、“穿搭”、“家居”五个模块，由于本篇CodeLab的主要内容在“精选”部分，故将“精选”部分单独编写代码，其余模块使用ForEach遍历生成。示例代码如下：
 
 ```typescript
+// TabBarsComponent.ets
 Tabs() {
   // 精选模块
   TabContent() {
@@ -113,11 +115,12 @@ Tabs() {
       }
       .width(LAYOUT_WIDTH_OR_HEIGHT)
     }
+    ...
   }
   .tabBar(this.firstTabBar)
 
   // 其他模块
-  ForEach(initTabBarData, (item, index) => {
+  ForEach(initTabBarData, (item: Resource, index?: number) => {
     TabContent() {
       Column() {
         Text(item).fontSize(MAX_FONT_SIZE)
@@ -126,9 +129,10 @@ Tabs() {
       .width(LAYOUT_WIDTH_OR_HEIGHT)
       .height(LAYOUT_WIDTH_OR_HEIGHT)
     }
-    .tabBar(this.otherTabBar(item, index))
+    .tabBar(this.otherTabBar(item, index !== undefined ? index : 0))
   })
 }
+...
 ```
 
 ## 商品列表的懒加载
@@ -136,6 +140,7 @@ Tabs() {
 使用Scroll嵌套List做长列表，实现Scroll与List的联动。具体实现代码如下：
 
 ```typescript
+// TabBarsComponent.ets
 Scroll() {
   Column() {
     // 下拉刷新的组件
@@ -145,10 +150,11 @@ Scroll() {
 
     // List的自定义组件
     GoodsList()
-    Text($r('app.string.to_bottom')).fontSize(DEFAULT_16)
+    Text($r('app.string.to_bottom')).fontSize(NORMAL_FONT_SIZE).fontColor($r('app.color.gray'))
   }
-  .width(THOUSANDTH_1000)
+  .width(LAYOUT_WIDTH_OR_HEIGHT)
 }
+...
 ```
 
 商品列表往往数据量很多，如果使用ForEach一次性遍历生成的话，性能不好，所以这里使用LazyForEach进行数据的懒加载。当向下滑动时，需要加载新的数据的时候，再将新的数据加载出来，生成新的列表。
@@ -156,13 +162,14 @@ Scroll() {
 通过onTouch事件来触发懒加载行为，当商品列表向下滑动，加载新的数据。示例代码如下：
 
 ```typescript
-// GoodsListComponent
+// GoodsListComponent.ets
 List({ space:commonConst.LIST_ITEM_SPACE }) {
-  LazyForEach(this.goodsListData, (item) => {
+  LazyForEach(this.goodsListData, (item: GoodsListItemType) => {
     ListItem() {
       Row() {
         Column() {
           Image(item?.goodsImg)
+            ...
         }
         ... // 布局样式
 
@@ -174,7 +181,10 @@ List({ space:commonConst.LIST_ITEM_SPACE }) {
     }
 
     // 通过Touch事件来触发懒加载
-    .onTouch((event：TouchEvent) => {
+    .onTouch((event?：TouchEvent) => {
+      if (event === undefined) {
+        return;
+      }
       switch (event.type) {
         case TouchType.Down：
           this.startTouchOffsetY = event.touches[0].y;
@@ -187,12 +197,11 @@ List({ space:commonConst.LIST_ITEM_SPACE }) {
             this.goodsListData.pushData();
           }
           break;
-        default:
-          break;
       }
     })
   })
 }
+...
 ```
 
 ## 下拉刷新与到底提示
@@ -204,28 +213,27 @@ List({ space:commonConst.LIST_ITEM_SPACE }) {
 具体代码如下：
 
 ```typescript
-putDownRefresh(event：TouchEvent) {
+// TabBarsComponent.ets
+putDownRefresh(event?：TouchEvent): void {
+  if (event === undefined) {
+    return;
+  }
   switch (event.type) {
     case TouchType.Down：
-
       // 记录手指按下的y坐标
       this.currentOffsetY = event.touches[0].y;
       break;
     case TouchType.Move:
-
       // 根据下拉的偏移量来判断是否刷新
       this.refreshStatus = event.touches[0].y - this.currentOffsetY > MAX_OFFSET_Y;
       break;
     case TouchType.Cancel:
       break;
     case TouchType.Up:
-
       // 模拟刷新效果，并未真实请求数据
-      const timer = setTimeout(() => {
+      this.timer = setTimeout(() => {
         this.refreshStatus = false;
         }, REFRESH_TIME)
-      break;
-    default:
       break;
   }
 }
@@ -243,19 +251,20 @@ if (this.refreshStatus) {
 具体代码如下：
 
 ```typescript
+// TabBarsComponent.ets
 Scroll() {
   Column() {
     ...
     GoodsList()
-    Text($r('app.string.to_bottom')).fontSize(DEFAULT_16)
+    Text($r('app.string.to_bottom')).fontSize(NORMAL_FONT_SIZE).fontColor($r('app.color.gray'))
   }
-  .width(THOUSANDTH_1000)
+  .width(LAYOUT_WIDTH_OR_HEIGHT)
 }
 .scrollBar(BarState.Off)
 .edgeEffect(EdgeEffect.Spring)
-.width(THOUSANDTH_1000)
-.height(THOUSANDTH_1000)
-.onTouch((event) => {
+.width(LAYOUT_WIDTH_OR_HEIGHT)
+.height(LAYOUT_WIDTH_OR_HEIGHT)
+.onTouch((event?: TouchEvent) => {
   this.putDownRefresh(event)
 })
 ```
