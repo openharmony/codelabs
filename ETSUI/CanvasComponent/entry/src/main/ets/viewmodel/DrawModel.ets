@@ -16,8 +16,8 @@
 import CommonConstants from '../common/constants/CommonConstants';
 import ColorConstants from '../common/constants/ColorConstants';
 import StyleConstants from '../common/constants/StyleConstants';
-import PrizeData from '../common/bean/PrizeData';
-import FillArcData from '../common/bean/FillArcData';
+import PrizeData from '../viewmodel/PrizeData';
+import FillArcData from '../viewmodel//FillArcData';
 import Logger from '../common/utils/Logger';
 import CheckEmptyUtils from '../common/utils/CheckEmptyUtils';
 
@@ -28,7 +28,7 @@ export default class DrawModel {
   private startAngle: number = 0;
   private avgAngle: number = CommonConstants.CIRCLE / CommonConstants.COUNT;
   private screenWidth: number = 0;
-  private canvasContext: CanvasRenderingContext2D;
+  private canvasContext?: CanvasRenderingContext2D;
 
   /**
    * Draw the raffle round turntable.
@@ -75,11 +75,13 @@ export default class DrawModel {
       Logger.error('[DrawModel][fillArc] fillArcData or fillColor is empty.');
       return;
     }
-    this.canvasContext.beginPath();
-    this.canvasContext.fillStyle = fillColor;
-    this.canvasContext.arc(fillArcData.x, fillArcData.y, fillArcData.radius,
-      fillArcData.startAngle, fillArcData.endAngle);
-    this.canvasContext.fill();
+    if (this.canvasContext !== undefined) {
+      this.canvasContext.beginPath();
+      this.canvasContext.fillStyle = fillColor;
+      this.canvasContext.arc(fillArcData.x, fillArcData.y, fillArcData.radius,
+        fillArcData.startAngle, fillArcData.endAngle);
+      this.canvasContext.fill();
+    }
   }
 
   /**
@@ -91,15 +93,15 @@ export default class DrawModel {
     const radius = this.screenWidth * CommonConstants.FLOWER_RADIUS_RATIOS;
     const innerRadius = this.screenWidth * CommonConstants.FLOWER_INNER_RATIOS;
     for (let i = 0; i < CommonConstants.COUNT; i++) {
-      this.canvasContext.save();
-      this.canvasContext.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
+      this.canvasContext?.save();
+      this.canvasContext?.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
       this.fillArc(new FillArcData(0, -pointY, radius, 0, Math.PI * CommonConstants.TWO),
         ColorConstants.FLOWER_OUT_COLOR);
 
       this.fillArc(new FillArcData(0, -pointY, innerRadius, 0, Math.PI * CommonConstants.TWO),
         ColorConstants.FLOWER_INNER_COLOR);
       beginAngle += this.avgAngle;
-      this.canvasContext.restore();
+      this.canvasContext?.restore();
     }
   }
 
@@ -114,13 +116,13 @@ export default class DrawModel {
     let beginAngle = this.startAngle;
     // Draw small circle.
     for (let i = 0; i < CommonConstants.SMALL_CIRCLE_COUNT; i++) {
-      this.canvasContext.save();
-      this.canvasContext.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
+      this.canvasContext?.save();
+      this.canvasContext?.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
       this.fillArc(new FillArcData(this.screenWidth * CommonConstants.SMALL_CIRCLE_RATIOS, 0,
         CommonConstants.SMALL_CIRCLE_RADIUS, 0, Math.PI * CommonConstants.TWO),
         ColorConstants.WHITE_COLOR);
       beginAngle = beginAngle + CommonConstants.CIRCLE / CommonConstants.SMALL_CIRCLE_COUNT;
-      this.canvasContext.restore();
+      this.canvasContext?.restore();
     }
   }
 
@@ -147,8 +149,8 @@ export default class DrawModel {
     for (let i = 0; i < CommonConstants.COUNT; i++) {
       this.fillArc(new FillArcData(0, 0, radius, this.startAngle * Math.PI / CommonConstants.HALF_CIRCLE,
         (this.startAngle + this.avgAngle) * Math.PI / CommonConstants.HALF_CIRCLE), colors[i]);
-      this.canvasContext.lineTo(0, 0);
-      this.canvasContext.fill();
+      this.canvasContext?.lineTo(0, 0);
+      this.canvasContext?.fill();
       this.startAngle += this.avgAngle;
     }
   }
@@ -157,10 +159,12 @@ export default class DrawModel {
    * Draw text in the internal fan area.
    */
   drawArcText() {
-    this.canvasContext.textAlign = CommonConstants.TEXT_ALIGN;
-    this.canvasContext.textBaseline = CommonConstants.TEXT_BASE_LINE;
-    this.canvasContext.fillStyle = ColorConstants.TEXT_COLOR;
-    this.canvasContext.font = StyleConstants.ARC_TEXT_SIZE + CommonConstants.CANVAS_FONT;
+    if (this.canvasContext !== undefined) {
+      this.canvasContext.textAlign = CommonConstants.TEXT_ALIGN;
+      this.canvasContext.textBaseline = CommonConstants.TEXT_BASE_LINE;
+      this.canvasContext.fillStyle = ColorConstants.TEXT_COLOR;
+      this.canvasContext.font = StyleConstants.ARC_TEXT_SIZE + CommonConstants.CANVAS_FONT;
+    }
     let textArrays = [
       $r('app.string.text_smile'),
       $r('app.string.text_hamburger'),
@@ -187,14 +191,13 @@ export default class DrawModel {
   getResourceString(resource: Resource): string {
     if (CheckEmptyUtils.isEmptyObj(resource)) {
       Logger.error('[DrawModel][getResourceString] resource is empty.')
-      return;
+      return '';
     }
     let resourceString: string = '';
     try {
       resourceString = getContext(this).resourceManager.getStringSync(resource.id);
     } catch (error) {
-      Logger.error(`[DrawModel][getResourceString]getStringSync failed,
-	    error code: ${error.code}, message: ${error.message}.`);
+      Logger.error(`[DrawModel][getResourceString]getStringSync failed, error : ${JSON.stringify(error)}.`);
     }
     return resourceString;
   }
@@ -211,7 +214,12 @@ export default class DrawModel {
       Logger.error('[DrawModel][drawCircularText] textString is empty.')
       return;
     }
-    let circleText = {
+    class CircleText {
+      x: number = 0;
+      y: number = 0;
+      radius: number = 0;
+    }
+    let circleText: CircleText = {
       x: 0,
       y: 0,
       radius: this.screenWidth * CommonConstants.INNER_ARC_RATIOS
@@ -222,19 +230,19 @@ export default class DrawModel {
     let angleDecrement = (startAngle - endAngle) / (textString.length - 1);
     let angle = startAngle;
     let index = 0;
-    let character;
+    let character: string;
 
     while (index < textString.length) {
       character = textString.charAt(index);
-      this.canvasContext.save();
-      this.canvasContext.beginPath();
-      this.canvasContext.translate(circleText.x + Math.cos(angle) * radius,
+      this.canvasContext?.save();
+      this.canvasContext?.beginPath();
+      this.canvasContext?.translate(circleText.x + Math.cos(angle) * radius,
         circleText.y - Math.sin(angle) * radius);
-      this.canvasContext.rotate(Math.PI / CommonConstants.TWO - angle);
-      this.canvasContext.fillText(character, 0, 0);
+      this.canvasContext?.rotate(Math.PI / CommonConstants.TWO - angle);
+      this.canvasContext?.fillText(character, 0, 0);
       angle -= angleDecrement;
       index++;
-      this.canvasContext.restore();
+      this.canvasContext?.restore();
     }
   }
 
@@ -250,13 +258,13 @@ export default class DrawModel {
     ];
     for (let i = 0; i < CommonConstants.COUNT; i++) {
       let image = new ImageBitmap(imageSrc[i]);
-      this.canvasContext.save();
-      this.canvasContext.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
-      this.canvasContext.drawImage(image, this.screenWidth * CommonConstants.IMAGE_DX_RATIOS,
+      this.canvasContext?.save();
+      this.canvasContext?.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
+      this.canvasContext?.drawImage(image, this.screenWidth * CommonConstants.IMAGE_DX_RATIOS,
         this.screenWidth * CommonConstants.IMAGE_DY_RATIOS, CommonConstants.IMAGE_SIZE,
         CommonConstants.IMAGE_SIZE);
       beginAngle += this.avgAngle;
-      this.canvasContext.restore();
+      this.canvasContext?.restore();
     }
   }
 
@@ -312,29 +320,4 @@ export default class DrawModel {
     }
     return prizeData;
   }
-}
-
-/**
- * Start animator.
- */
-export function startAnimator() {
-  let randomAngle = Math.round(Math.random() * CommonConstants.CIRCLE);
-  // Obtaining prize information.
-  this.prizeData = this.drawModel.showPrizeData(randomAngle);
-
-  animateTo({
-    duration: CommonConstants.DURATION,
-    curve: Curve.Ease,
-    delay: 0,
-    iterations: 1,
-    playMode: PlayMode.Normal,
-    onFinish: () => {
-      this.rotateDegree = CommonConstants.ANGLE - randomAngle;
-      // Display prize information pop-up window.
-      this.dialogController.open();
-    }
-  }, () => {
-    this.rotateDegree = CommonConstants.CIRCLE * CommonConstants.FIVE +
-      CommonConstants.ANGLE - randomAngle;
-  })
 }
