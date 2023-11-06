@@ -15,7 +15,6 @@
 
 import { TopBar } from '../view/common/TopBar';
 import { PageAll } from '../view/tabcontent/PageAll';
-import { CommonConstants } from '../common/constants/CommonConstant';
 import { PageLive } from '../view/tabcontent/PageLive';
 import { PageGame } from '../view/tabcontent/PageGame';
 import { PageEntertainment } from '../view/tabcontent/PageEntertainment';

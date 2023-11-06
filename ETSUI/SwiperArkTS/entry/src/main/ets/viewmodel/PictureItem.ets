@@ -14,22 +14,11 @@
  */
 
 /**
- * Video entity class.
+ * Picture entity class.
  */
-@Observed export class VideoItem {
-  id: string;
-  src: Resource;
-  likesCount: number;
-  isLikes: boolean;
-  comment: number;
-  shareTimes: number;
-
-  constructor(id: string, src: Resource, likesCount: number, isLikes: boolean, comment: number, shareTimes: number) {
-    this.id = id;
-    this.src = src;
-    this.likesCount = likesCount;
-    this.isLikes = isLikes;
-    this.comment = comment;
-    this.shareTimes = shareTimes;
-  }
+export class PictureItem {
+  id: string = '1';
+  name: string = '怒海';
+  description: string = '怒海波涛';
+  image: Resource = $r('app.media.ic_image1');
 }

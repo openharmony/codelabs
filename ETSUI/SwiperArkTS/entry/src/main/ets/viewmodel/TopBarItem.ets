@@ -14,18 +14,9 @@
  */
 
 /**
- * Picture entity class.
+ * TopBar entity class.
  */
-export class PictureItem {
-  id: string;
-  name: string;
-  description: string;
-  image: Resource;
-
-  constructor(id: string, name: string, description: string, image: Resource) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.image = image;
-  }
+export class TopBarItem {
+  id: number = 0;
+  name: string = '全部';
 }
