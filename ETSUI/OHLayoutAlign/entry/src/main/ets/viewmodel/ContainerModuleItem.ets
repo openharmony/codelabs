@@ -12,21 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import {ContainerModuleItem} from './ContainerModuleItem'
+import { ATTRIBUTE, GROUP } from '../common/constants/CommonConstants';
 
 /*
- * class for IndexListItem
+ * class for ContainerModuleItem
  */
-export class IndexListItem{
-  private name : string;
-  private  icon :Resource;
-  private containerType : number
-  private moduleList :ContainerModuleItem[];
-  constructor(name : string,icon:Resource,containerType :number,moduleList :ContainerModuleItem[]){
-    this.name = name;
-    this.icon = icon;
-    this.containerType = containerType;
-    this.moduleList = moduleList;
-  }
+export class ContainerModuleItem {
+   groupName: string = GROUP.MAIN_ALIGN;
+   moduleName: Resource = $r("app.string.main_align");
+   attributeList: string[] = [ATTRIBUTE.START, ATTRIBUTE.CENTER, ATTRIBUTE.END];
 }
