@@ -22,13 +22,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -91,7 +91,7 @@ Column() {
         Image(item)
         ...
       }
-    }, (item, index) => JSON.stringify(item) + index)
+    }, (item: Resource, index: number) => JSON.stringify(item) + index)
   }
   ...
 
@@ -105,9 +105,11 @@ Column() {
         router.pushUrl({
           url: Constants.URL_LIST_PAGE,
           params: { photoArr: JSON.stringify(photoArr) }
+        }).catch((error: Error) => {
+          Logger.error(Constants.TAG_INDEX_PAGE, JSON.stringify(error));
         });
       })
-    }, (item, index) => JSON.stringify(item) + index)
+    }, (item: Array<Resource>, index: number) => JSON.stringify(item) + index)
   }
   ...
   .layoutWeight(1)
@@ -128,18 +130,20 @@ Navigation() {
       GridItem() {
         Image(img)
           .onClick(() => {
-            this.selectedIndex.set(index);
+            this.selectedIndex = index;
             router.pushUrl({
               url: Constants.URL_DETAIL_LIST_PAGE,
               params: {
                 photoArr: JSON.stringify(this.photoArr),
               }
-            })
+            }).catch((error: Error) => {
+              Logger.error(Constants.TAG_LIST_PAGE, JSON.stringify(error));
+            });
           })
       }
       ...
       .aspectRatio(1)
-    }, item => JSON.stringify(item))
+    }, (item: Resource) => JSON.stringify(item))
   }
   .columnsTemplate(Constants.GRID_COLUMNS_TEMPLATE)
   .layoutWeight(1)
@@ -153,18 +157,18 @@ Navigation() {
 ![](figures/oh_list_360.gif)
 
 ```typescript
-// ListDetailPage.ets
+// DetailListPage.ets
 Stack({ alignContent: Alignment.Bottom }) {
-  List({ scroller: this.bigScroller, initialIndex: this.selectedIndex.get() }) {
+  List({ scroller: this.bigScroller, initialIndex: this.selectedIndex }) {
     ForEach(this.photoArr, (img: Resource, index: number) => {
       ListItem() {
         Image(img)
           ...
           .gesture(PinchGesture({ fingers: Constants.DOUBLE_NUMBER })
-            .onActionStart(this.goDetailPage.bind(this)))
-          .onClick(this.goDetailPage.bind(this))
+            .onActionStart(() => this.goDetailPage()))
+          .onClick(() => this.goDetailPage())
       }
-    }, item => JSON.stringify(item))
+    }, (item: Resource) => JSON.stringify(item))
   }
   ...
   .onScroll((scrollOffset, scrollState) => {
@@ -174,12 +178,12 @@ Stack({ alignContent: Alignment.Bottom }) {
   })
   .onScrollStop(() => this.bigScrollAction(scrollTypeEnum.STOP))
 
-  List({ scroller: this.smallScroller, space: Constants.LIST_ITEM_SPACE, initialIndex: this.selectedIndex.get() }) {
+  List({ scroller: this.smallScroller, space: Constants.LIST_ITEM_SPACE, initialIndex: this.selectedIndex }) {
     ForEach(this.smallPhotoArr, (img: Resource, index: number) => {
       ListItem() {
         this.SmallImgItemBuilder(img, index)
       }
-    }, item => JSON.stringify(item))
+    }, (item: Resource, index: number) => JSON.stringify(item) + index)
   }
   ...
   .listDirection(Axis.Horizontal)
@@ -201,8 +205,8 @@ Stack({ alignContent: Alignment.Bottom }) {
 ```typescript
 // DetailPage.ets
 Stack() {
-  List({ scroller: this.scroller }) {
-    ForEach(this.photoArr, (img: Resource, index: number) => {
+  List({ scroller: this.scroller, initialIndex: this.selectedIndex }) {
+    ForEach(this.photoArr, (img: Resource) => {
       ListItem() {
         Image(img)
           ...
@@ -211,23 +215,37 @@ Stack() {
       }
       .gesture(PinchGesture({ fingers: Constants.DOUBLE_NUMBER })
         .onActionStart(() => {
-          this.selectedIndex.set(index);
           this.resetImg();
           this.isScaling = true;
+          this.imgOffSetX = 0;
+          this.imgOffSetY = 0;
+        })
+        .onActionUpdate((event: GestureEvent) => {
+          this.imgScale = this.currentScale * event.scale;
+        })
+        .onActionEnd(() => {
+          if (this.imgScale < 1) {
+            this.resetImg();
+            this.imgOffSetX = 0;
+            this.imgOffSetY = 0;
+          } else {
+            this.currentScale = this.imgScale;
+          }
         })
       )
-    }, item => JSON.stringify(item))
+    }, (item: Resource) => JSON.stringify(item))
   }
   ...
   .onScrollStop(() => {
     let currentIndex = Math.round((this.scroller.currentOffset()
       .xOffset + (this.imageWidth / Constants.DOUBLE_NUMBER)) / this.imageWidth);
+    this.selectedIndex = currentIndex;
     this.scroller.scrollTo({ xOffset: currentIndex * this.imageWidth, yOffset: 0 });
   })
   .visibility(this.isScaling ? Visibility.Hidden : Visibility.Visible)
 
   Row() {
-    Image(this.photoArr[this.selectedIndex.get()])
+    Image(this.photoArr[this.selectedIndex])
     ...
   }
   .visibility(this.isScaling ? Visibility.Visible : Visibility.Hidden)
@@ -241,20 +259,22 @@ Stack() {
 ```typescript
 // DetailPage.ets 
 Row() {
-    Image(this.photoArr[this.selectedIndex.get()])
+    Image(this.photoArr[this.selectedIndex])
       .position({ x: this.imgOffSetX, y: this.imgOffSetY })
       .scale({ x: this.imgScale, y: this.imgScale })
   }
-  .gesture(GestureGroup(GestureMode.Parallel,
+  .gesture(GestureGroup(GestureMode.Exclusive,
   PinchGesture({ fingers: Constants.DOUBLE_NUMBER })
     .onActionUpdate((event: GestureEvent) => {
-      this.imgScale = event.scale;
+      this.imgScale = this.currentScale * event.scale;
     })
     .onActionEnd(() => {
       if (this.imgScale < 1) {
         this.resetImg();
         this.imgOffSetX = 0;
         this.imgOffSetY = 0;
+      } else {
+        this.currentScale = this.imgScale;
       }
     }),
   PanGesture()
@@ -266,7 +286,7 @@ Row() {
       this.imgOffSetX = this.preOffsetX + event.offsetX;
       this.imgOffSetY = this.preOffsetY + event.offsetY;
     })
-    .onActionEnd(this.handlePanEnd.bind(this))
+    .onActionEnd(() => this.handlePanEnd())
   ))
 ```
 
