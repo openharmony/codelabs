@@ -17,9 +17,11 @@ import StyleConstants from '../common/constants/StyleConstants';
 
 @CustomDialog
 export default struct CustomAlertDialog {
-  controller: CustomDialogController;
-  cancel: () => void;
-  confirm: () => void;
+  controller?: CustomDialogController;
+  cancel: () => void = () => {
+  };
+  confirm: () => void = () => {
+  };
 
   build() {
     Column() {
@@ -29,8 +31,11 @@ export default struct CustomAlertDialog {
       Flex({ justifyContent: FlexAlign.SpaceAround, alignItems: ItemAlign.Center }) {
         Button($r('app.string.cancel_txt'))
           .onClick(() => {
-            this.controller.close();
             this.cancel();
+            if (!this.controller) {
+              return;
+            }
+            this.controller.close();
           })
           .backgroundColor($r('app.color.dialog_button_background_color'))
           .fontColor($r('app.color.font_color_blue'))
@@ -42,8 +47,11 @@ export default struct CustomAlertDialog {
           .height($r('app.float.diver_height'))
         Button($r('app.string.confirm_txt'))
           .onClick(() => {
-            this.controller.close();
             this.confirm();
+            if (!this.controller) {
+              return;
+            }
+            this.controller.close();
           })
           .backgroundColor($r('app.color.dialog_button_background_color'))
           .fontColor($r('app.color.font_color_blue'))
