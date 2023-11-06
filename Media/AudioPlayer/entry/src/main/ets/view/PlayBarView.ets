@@ -14,72 +14,65 @@
  */
 
 import { PlayListDialogView } from '../view/PlayListDialogView';
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { PlayBarController } from '../controller/PlayBarController';
-import { CommonConstants, PlayState } from '../common/constants/CommonConstants';
+import { CommonConstants } from '../common/constants/CommonConstants';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 @Component
 export struct PlayBarView {
   @StorageLink('musicList') musicList: Array<MusicItem> = [];
-  @Link musicItem: MusicItem;
-  @State playModeIcon: Resource = $r('app.media.ic_list_mode'); // Playback mode icon.
-  @Link playStateIcon: Resource;
-  @Link playMode: number; // Playback mode.
-  @Link playValue: number; // Playback duration position.
-  playState: number = PlayState.PLAY; // Playback status.
-  PlayBarController: PlayBarController = new PlayBarController();
+  private playBarController?: PlayBarController;
+  @Consume playBarModel: PlayBarModel;
   dialogController: CustomDialogController = new CustomDialogController({
     builder: PlayListDialogView({
-      musicList: $musicList,
-      musicItem: $musicItem,
-      playModeIcon: $playModeIcon,
-      playMode: $playMode
+      musicList: $musicList
     }),
     alignment: DialogAlignment.Bottom
   })
 
   build() {
     Row() {
-      Image(this.playModeIcon)
-        .width(CommonConstants.CONTROL_VIEW.MODE_ICON_WIDTH)
-        .height(CommonConstants.CONTROL_VIEW.MODE_ICON_HEIGHT)
+      Image(this.playBarModel.playModeIcon)
+        .width(CommonConstants.MODE_ICON_WIDTH)
+        .height(CommonConstants.MODE_ICON_HEIGHT)
         .onClick(() => {
-          this.PlayBarController.switchPlayMode(this);
+          this.playBarController!.switchPlayMode();
         })
       Blank()
         .layoutWeight(1)
       Image($r('app.media.ic_previous'))
-        .width(CommonConstants.CONTROL_VIEW.PREVIOUS_WIDTH)
-        .height(CommonConstants.CONTROL_VIEW.PREVIOUS_HEIGHT)
+        .width(CommonConstants.PREVIOUS_WIDTH)
+        .height(CommonConstants.PREVIOUS_HEIGHT)
         .onClick(() => {
-          this.PlayBarController.getPreviousMusic(this);
+          this.playBarController!.getPreviousMusic(this.musicList, this.playBarModel.playState);
         })
       Blank()
         .layoutWeight(1)
-      Image(this.playStateIcon)
-        .width(CommonConstants.CONTROL_VIEW.STATE_ICON_WIDTH)
-        .height(CommonConstants.CONTROL_VIEW.STATE_ICON_HEIGHT)
+      Image(this.playBarModel.playStateIcon)
+        .width(CommonConstants.STATE_ICON_WIDTH)
+        .height(CommonConstants.STATE_ICON_HEIGHT)
         .objectFit(ImageFit.Contain)
         .onClick(() => {
-          this.PlayBarController.switchPlayState(this);
+          this.playBarController!.switchPlayState(this.playBarModel.playState);
         })
       Blank()
         .layoutWeight(1)
       Image($r('app.media.ic_next'))
-        .width(CommonConstants.CONTROL_VIEW.NEXT_WIDTH)
-        .height(CommonConstants.CONTROL_VIEW.NEXT_HEIGHT)
+        .width(CommonConstants.NEXT_WIDTH)
+        .height(CommonConstants.NEXT_HEIGHT)
         .onClick(() => {
-          this.PlayBarController.getNextMusic(this);
+          this.playBarController!.getNextMusic(this.musicList);
         })
       Blank()
         .layoutWeight(1)
       Image($r('app.media.ic_play_list'))
-        .width(CommonConstants.CONTROL_VIEW.PLAY_LIST_WIDTH)
-        .height(CommonConstants.CONTROL_VIEW.PLAY_LIST_HEIGHT)
+        .width(CommonConstants.PLAY_LIST_WIDTH)
+        .height(CommonConstants.PLAY_LIST_HEIGHT)
         .onClick(() => {
           this.dialogController.open();
         })
     }
-    .margin({ top: CommonConstants.CONTROL_VIEW.PAGE_MARGIN_TOP })
+    .margin({ top: CommonConstants.PAGE_MARGIN_TOP })
   }
 }

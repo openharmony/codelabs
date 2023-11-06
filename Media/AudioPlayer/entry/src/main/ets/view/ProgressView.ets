@@ -15,32 +15,32 @@
 
 import { CommonUtil } from '../common/utils/CommonUtil';
 import { CommonConstants } from '../common/constants/CommonConstants';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 @Component
 export struct ProgressView {
-  @Link playValue: number;
-  @Link totalValue: number;
+  @Consume playBarModel: PlayBarModel;
 
   build() {
     Row() {
-      Text(CommonUtil.formatDuration(this.playValue))
+      Text(CommonUtil.formatDuration(this.playBarModel.playValue))
         .fontColor($r("app.color.music_card_color"))
         .fontSize($r('app.float.dialog_singer'))
-        .margin({ right: CommonConstants.PROGRESS_VIEW.TEXT_MARGIN_RIGHT })
+        .margin({ right: CommonConstants.PROGRESS_MARGIN_RIGHT })
       Slider({
-        value: this.playValue,
-        min: CommonConstants.PROGRESS_VIEW.PROGRESS_MIN,
-        max: this.totalValue,
+        value: this.playBarModel.playValue,
+        min: CommonConstants.PROGRESS_MIN,
+        max: this.playBarModel.totalValue,
         style: SliderStyle.OutSet
       })
         .enabled(false)
         .selectedColor($r("app.color.music_card_color"))
         .layoutWeight(1)
-      Text(CommonUtil.formatDuration(this.totalValue))
+      Text(CommonUtil.formatDuration(this.playBarModel.totalValue))
         .fontColor($r("app.color.music_card_color"))
         .fontSize($r('app.float.dialog_singer'))
-        .margin({ left: CommonConstants.PROGRESS_VIEW.TEXT_MARGIN_LEFT })
+        .margin({ left: CommonConstants.PROGRESS_MARGIN_LEFT })
     }
-    .margin({ top: CommonConstants.PROGRESS_VIEW.VIEW_MARGIN_TOP })
+    .margin({ top: CommonConstants.VIEW_MARGIN_TOP })
   }
 }

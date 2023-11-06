@@ -14,8 +14,10 @@
  */
 
 import avSession from '@ohos.multimedia.avsession';
+import { AudioPlayerController } from '../../controller/AudioPlayerControllerl';
+import { PlayBarModel } from '../model/PlayBarModel';
 import Logger from '../utils/Logger';
-import { CommonUtil } from './CommonUtil';
+import { GlobalContext } from './GlobalContext';
 
 const TAG = '[AvSessionUtil]';
 
@@ -23,43 +25,41 @@ const TAG = '[AvSessionUtil]';
  * Media session tool class.
  */
 export class AvSessionUtil {
-
   /**
    * Initializing the playback control center.
    *
    * @param context Context.
    */
-  public static initAvSession(context) {
-    if (CommonUtil.isEmpty(context)) {
-      Logger.error(TAG, 'initAvSession fail,context is empty.');
-      return;
-    }
-    return new Promise(async () => {
+  public static initAvSession(playBarModel: PlayBarModel) {
+    return new Promise<string>(async () => {
       try {
         // Sets the current music metadata.
         let metadata = {
-          assetId: context.musicItem.id.toString(),
-          title: context.musicItem.name,
-          artist: context.musicItem.singer
-        };
-        await globalThis.currentSession.setAVMetadata(metadata);
+          assetId: playBarModel!.musicItem!.id.toString(),
+          title: playBarModel!.musicItem!.name,
+          artist: playBarModel!.musicItem!.singer
+        } as avSession.AVMetadata;
+        let currentSession = GlobalContext.getContext().getObject('currentSession') as avSession.AVSession;
+        await currentSession.setAVMetadata(metadata);
 
         // Set the playback status and give an initial status.
         AvSessionUtil.setAVPlayState(avSession.PlaybackState.PLAYBACK_STATE_PLAY);
 
         // The following are all callback listeners. Currently, only the playback and pause functions are implemented.
-        globalThis.currentSession.on('play', () => {
+        currentSession.on('play', () => {
           Logger.info(TAG, 'Invoke the playback method of avSession.');
-          globalThis.AudioPlayerController.play(context.musicItem.rawFileDescriptor, context.playValue);
-          context.playStateIcon = $r('app.media.ic_play');
+          let playController = GlobalContext.getContext().getObject('audioPlayerController') as AudioPlayerController;
+          playController.play(playBarModel!.musicItem!.rawFileDescriptor, playBarModel.playValue);
+          playBarModel.playStateIcon = $r('app.media.ic_play');
           AvSessionUtil.setAVPlayState(avSession.PlaybackState.PLAYBACK_STATE_PLAY);
         });
 
         // Registering and suspending command listening.
-        globalThis.currentSession.on('pause', () => {
+        currentSession.on('pause', () => {
           Logger.info(TAG, 'Invoke the pause method of avSession.');
-          globalThis.AudioPlayerController.pause();
-          context.playStateIcon = $r('app.media.ic_pause');
+          let playController = GlobalContext.getContext().getObject('audioPlayerController') as AudioPlayerController;
+          playController.pause();
+          playBarModel.playStateIcon = $r('app.media.ic_pause');
           AvSessionUtil.setAVPlayState(avSession.PlaybackState.PLAYBACK_STATE_PAUSE);
         });
       }
@@ -74,17 +74,18 @@ export class AvSessionUtil {
    *
    * @param state Status of the Playback Control Center.
    */
-  public static setAVPlayState(state:avSession.PlaybackState) {
-    if (CommonUtil.isEmpty(state)) {
+  public static setAVPlayState(state: avSession.PlaybackState) {
+    if (state === undefined) {
       Logger.info(TAG, 'setAVPlayState fail,state is empty.');
       return;
     }
-    globalThis.currentSession.setAVPlaybackState({ state: state })
+    let currentSession = GlobalContext.getContext().getObject('currentSession') as avSession.AVSession;
+    currentSession.setAVPlaybackState({ state: state })
       .then(() => {
         Logger.info(TAG, 'setAVPlaybackState successfully');
       })
-      .catch((err) => {
-        Logger.info(TAG, `setAVPlaybackState : ERROR : ${err.message}`);
+      .catch((err: Error) => {
+        Logger.info(TAG, `setAVPlaybackState : ERROR : ${err}`);
       });
   }
 
@@ -93,16 +94,13 @@ export class AvSessionUtil {
    *
    * @param context Context.
    */
-  public static setAVMetadata(context) {
-    if (CommonUtil.isEmpty(context)) {
-      Logger.error(TAG, 'setAVMetadata fail,context is empty.');
-      return;
-    }
+  public static setAVMetadata(playBarModel: PlayBarModel) {
     let metadata = {
-      assetId: context.musicItem.id.toString(),
-      title: context.musicItem.name,
-      artist: context.musicItem.singer
-    };
-    globalThis.currentSession.setAVMetadata(metadata);
+      assetId: playBarModel!.musicItem!.id.toString(),
+      title: playBarModel!.musicItem!.name,
+      artist: playBarModel!.musicItem!.singer
+    } as avSession.AVMetadata;
+    let currentSession = GlobalContext.getContext().getObject('currentSession') as avSession.AVSession;
+    currentSession.setAVMetadata(metadata);
   }
 }

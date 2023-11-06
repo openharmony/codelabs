@@ -14,40 +14,43 @@
  */
 
 import router from '@ohos.router';
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { AvSessionUtil } from '../common/utils/AvSessionUtil';
 import { PlayBarView } from '../view/PlayBarView';
 import { ProgressView } from '../view/ProgressView';
 import { MusicCardView } from '../view/MusicCardView';
 import { CommonConstants, PlayMode } from '../common/constants/CommonConstants';
-import { CommonUtil } from '../common/utils/CommonUtil';
 import Logger from '../common/utils/Logger';
+import { GlobalContext } from '../common/utils/GlobalContext';
+import { AudioPlayerController } from '../controller/AudioPlayerControllerl';
+import { PlayBarModel } from '../common/model/PlayBarModel';
+import { PlayBarController } from '../controller/PlayBarController';
 
 @Entry
 @Component
 struct Play {
   @StorageLink('musicList') musicList: Array<MusicItem> = [];
-  @State musicItem: MusicItem = this.musicList[0];
-  @State playValue: number = CommonConstants.START_POSITION; // Progress bar position.
-  @State totalValue: number = CommonConstants.TOTAL_VALUE; // Total length of the progress bar.
-  @State playMode: number = PlayMode.LIST_LOOP; // Playback mode.
-  @State playStateIcon: Resource = $r('app.media.ic_play') // Playback status icon.
+  @Provide playBarModel: PlayBarModel = new PlayBarModel();
+  playBarController: PlayBarController = new PlayBarController(this.playBarModel);
 
   aboutToAppear() {
-    globalThis.AudioPlayerController.setMusicList(this.musicList);
+    let playController = GlobalContext.getContext().getObject('audioPlayerController') as AudioPlayerController;
+    playController.setMusicList(this.musicList);
     // Obtain the music file to be played.
-    this.musicItem = router.getParams()['item'];
-    if (CommonUtil.isEmpty(this.musicItem)) {
+    let params = router.getParams() as Record<string, Object>;
+    this.playBarModel.musicItem = params.item as MusicItem;
+    if (this.playBarModel.musicItem === undefined) {
       Logger.error('play fail,musicItem is empty.');
       return;
     }
 
     // Access the playback control center.
-    AvSessionUtil.initAvSession(this);
+    AvSessionUtil.initAvSession(this.playBarModel);
 
     // Setting the media source triggers the dataLoad callback.
-    globalThis.AudioPlayerController.setEventCallBack(this);
-    globalThis.AudioPlayerController.play(this.musicItem.rawFileDescriptor, CommonConstants.START_POSITION);
+    playController.playBarModel = this.playBarModel;
+    playController.setEventCallBack();
+    playController.play(this.playBarModel.musicItem.rawFileDescriptor, CommonConstants.START_POSITION);
   }
 
   build() {
@@ -56,37 +59,34 @@ struct Play {
         Navigator({ target: CommonConstants.PAGE_MUSIC_LIST, type: NavigationType.Back }) {
           Image($r('app.media.ic_back'))
             .objectFit(ImageFit.Contain)
-            .width(CommonConstants.PLAY_PAGE.NAVIGATOR_WIDTH)
-            .height(CommonConstants.PLAY_PAGE.NAVIGATOR_HEIGHT)
+            .width(CommonConstants.NAVIGATOR_WIDTH)
+            .height(CommonConstants.NAVIGATOR_HEIGHT)
         }
+
         Text($r('app.string.play_title'))
           .fontSize($r('app.float.play_text'))
           .fontWeight(CommonConstants.FONT_WEIGHT_BOLDER)
           .fontColor($r("app.color.font_color_black"))
-          .layoutWeight(CommonConstants.PLAY_PAGE.LAYOUT_WEIGHT)
+          .layoutWeight(CommonConstants.LAYOUT_WEIGHT)
           .textAlign(TextAlign.Center)
           .width(CommonConstants.FULL_WIDTH)
       }
       .width(CommonConstants.FULL_WIDTH)
       .padding({
-        left: CommonConstants.PLAY_PAGE.NAVIGATOR_PADDING_LEFT,
-        right: CommonConstants.PLAY_PAGE.NAVIGATOR_PADDING_RIGHT
+        left: CommonConstants.NAVIGATOR_PADDING_LEFT,
+        right: CommonConstants.NAVIGATOR_PADDING_RIGHT
       })
       .margin({
-        top: CommonConstants.PLAY_PAGE.NAVIGATOR_PADDING_TOP,
-        bottom: CommonConstants.PLAY_PAGE.NAVIGATOR_PADDING_BOTTOM
+        top: CommonConstants.NAVIGATOR_PADDING_TOP,
+        bottom: CommonConstants.NAVIGATOR_PADDING_BOTTOM
       })
+
       Column() {
-        MusicCardView({ musicItem: $musicItem })
-        ProgressView({ playValue: $playValue, totalValue: $totalValue })
-        PlayBarView({
-          musicItem: $musicItem,
-          playMode: $playMode,
-          playValue: $playValue,
-          playStateIcon: $playStateIcon
-        })
+        MusicCardView()
+        ProgressView()
+        PlayBarView({ playBarController: this.playBarController })
       }
-      .width(CommonConstants.PLAY_PAGE.CONTROL_WIDTH)
+      .width(CommonConstants.CONTROL_WIDTH)
       .alignItems(HorizontalAlign.Start)
     }
     .height(CommonConstants.FULL_HEIGHT)

@@ -23,13 +23,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -56,15 +56,16 @@
 
 ```
 ├──entry/src/main/ets               // 代码区
-│  ├──common         
-│  │  ├──bean							
-│  │  │  └──MusicItem.ets           // 音乐类          
+│  ├──common              
 │  │  ├──constants                   
 │  │  │  └──CommonConstants.ets     // 公共常量
+│  │  ├──model                   
+│  │  │  └──PlayBarModel            // 播放栏数据模型
 │  │  └──utils
 │  │     ├──AvSessionUtil.ets  	    // 媒体会话工具类	
 │  │     ├──BackgroundTaskUtil.ets  // 后台任务工具类
 │  │     ├──CommonUtil.ets  	    // 公共工具类	
+│  │     ├──GlobalContext.ets  	    // 公共工具类	
 │  │     ├──Logger.ets              // 日志类          
 │  │     └──ResourceManagerUtil.ets // 资源管理工具类
 │  ├──controller           
@@ -84,6 +85,7 @@
 │  │  ├──PlayListMusicView.ets      // 弹窗音乐模块
 │  │  └──ProgressView.ets           // 播放页
 │  └──viewmodel  
+│     ├──MusicItem.ets              // 音乐类
 │     └──MusicViewModel.ets         // 歌单音乐模型
 └──entry/src/main/resources         // 应用资源目录
 ```
@@ -100,22 +102,16 @@
 
 ```typescript
 // AudioPlayerController.ets
-import media from '@ohos.multimedia.media';
-...
-export class AudioPlayerController {
-  ...
-  initAudioPlayer() {
-    media.createAVPlayer((error, video) => {
-      if (CommonUtil.isEmpty(video)) {
-        this.avPlayer = video;
-        Logger.error(TAG, `createAVPlayer fail, error: ${error}`);
-      } else {
-        this.avPlayer = video;
-        Logger.info(TAG, 'createAVPlayer success');
-      }
-    });
-  }
-  ...  
+initAudioPlayer() {
+  media.createAVPlayer((error, video) => {
+    if (video === undefined) {
+      this.avPlayer = video;
+      Logger.error(TAG, `createAVPlayer fail, error: ${error}`);
+    } else {
+      this.avPlayer = video;
+      Logger.info(TAG, 'createAVPlayer success');
+    }
+  });
 }
 ```
 
@@ -124,75 +120,94 @@ export class AudioPlayerController {
 ```typescript
 // AudioPlayerController.ets
 // 注册AVPlayer回调函数
-setEventCallBack(context) {
-  if (CommonUtil.isEmpty(context)) {
-    Logger.info(TAG, 'setEventCallBack fail,context is empty.');
-    return;
-  }
-  // 状态变更回调函数
+setEventCallBack() {
+  ...
+  // 状态变更回调函数。
   this.avPlayer.on('stateChange', async (state) => {
+    ...
     switch (state) {
       case StateEvent.IDLE: // 调用reset成功后触发此状态。
         ...
-        break;
       case StateEvent.INITIALIZED: // 设置播放源触发此状态。
         ...
-        break;
       case StateEvent.PREPARED:
         ...
-        break;
       case StateEvent.PLAYING:
         ...
-        break;
       case StateEvent.COMPLETED:
         ...
-        break;
       default:
         Logger.error('unknown state: ' + state);
         break;
     }
   })
-}
+}  
 ```
 
 设置音频资源，AVPlayer进入initialized状态。在initialized状态回调中，调用prepare方法，准备播放，AVPlayer进入prepared状态。
 
 ```typescript
 // AudioPlayerController.ets
-// 设置播放源
-this.avPlayer.fdSrc = src;
-...
-// 设置播放源后进入initialized状态
-case stateEvent.INITIALIZED: 
-  Logger.info(TAG, 'state initialized called');
-  this.avPlayerState = playerState.INITIALIZED;
-  this.avPlayer.prepare().then(() => {
-    Logger.info(TAG, 'prepare success');
-  }, (err) => {
-    Logger.error(TAG, 'prepare failed,error message is: ' + err.message);
+async play(src: media.AVFileDescriptor, seekTo: number) {
+  Logger.info(TAG, 'audioPlayer play');
+  ...
+  // 设置播放源
+  this.avPlayer.fdSrc = src;
+}
+
+setEventCallBack() {
+  ...
+  this.avPlayer.on('stateChange', async (state) => {
+    ...
+    switch (state) {
+      ...
+      case StateEvent.INITIALIZED:// 设置播放源后进入initialized状态
+        Logger.info(TAG, 'state initialized called');
+        this.avPlayerState = PlayerState.INITIALIZED;
+        this.avPlayer.prepare().then(() => {
+          Logger.info(TAG, 'prepare success');
+        }, (err) => {
+          Logger.error(TAG, `prepare failed,error message is: ${err.message}`);
+        })
+        break;
+      ...
+    }
   })
-  break;
+}
 ```
 
 AVPlayer进入prepared状态，可进行音频播控操作。包括播放play\(\)、跳转至指定位置播放seek\(\)、暂停pause\(\)、停止stop\(\)等操作。
 
 ```typescript
 // AudioPlayerController.ets
-case stateEvent.PREPARED:
-  Logger.info(TAG, 'state prepared called');
-  this.avPlayer.play();
-  break;
+setEventCallBack() {
+  ...
+  this.avPlayer.on('stateChange', async (state) => {
+    ...
+    switch (state) {
+      ...
+      case StateEvent.PREPARED:
+        Logger.info(TAG, 'state prepared called');
+        this.avPlayer.play();
+        break;
+      ...
+    }
+  })
+}
 ```
 
 切换歌曲播放时，需调用reset\(\)重置资源。此时AVPlayer重新进入idle状态，允许更换资源。
 
 ```typescript
 // AudioPlayerController.ets
-if (this.avPlayerState === playerState.INITIALIZED) {
-  await this.avPlayer.reset();
-  Logger.info(TAG, 'play reset success');
+async play(src: media.AVFileDescriptor, seekTo: number) {
+  ...
+  if (this.avPlayerState === PlayerState.INITIALIZED) {
+    await this.avPlayer.reset();
+    Logger.info(TAG, 'play reset success');
+  }
+  ...
 }
-this.avPlayer.fdSrc = src;
 ```
 
 >![](public_sys-resources/icon-note.gif) **说明：** 
@@ -249,8 +264,10 @@ async release() {
 import wantAgent from '@ohos.app.ability.wantAgent';
 import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager';
 ...
-  public static startContinuousTask(context) {
-    if (CommonUtil.isEmpty(context)) {
+export class BackgroundTaskUtil {
+  ...
+  public static startContinuousTask(context: Context) {
+    if (context === undefined) {
       Logger.info(TAG, 'startContinuousTask fail,context is empty.');
       return;
     }
@@ -266,7 +283,7 @@ import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager'
       operationType: wantAgent.OperationType.START_ABILITY,
       // 用户定义的私有属性
       requestCode: CommonConstants.BACKGROUND_REQUEST_CODE
-    };
+    } as wantAgent.WantAgentInfo;
 
     // 通过WanAgent模块的方法获取WanAgent对象
     wantAgent.getWantAgent(wantAgentInfo).then((wantAgentObj) => {
@@ -274,15 +291,16 @@ import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager'
         backgroundTaskManager.startBackgroundRunning(context, backgroundTaskManager.BackgroundMode.AUDIO_PLAYBACK,
           wantAgentObj).then(() => {
           Logger.info(TAG, 'startBackgroundRunning succeeded');
-        }).catch((err) => {
-          Logger.error(TAG, 'startBackgroundRunning failed Cause: ' + JSON.stringify(err));
+        }).catch((err: Error) => {
+          Logger.error(TAG, 'startBackgroundRunning failed, Cause: ' + JSON.stringify(err));
         });
       } catch (error) {
         Logger.error(TAG, `startBackgroundRunning failed. code is ${error.code} message is ${error.message}`);
       }
     });
   }
-...
+  ...
+}
 ```
 
 暂停音乐播放，结束长时任务。
@@ -292,22 +310,24 @@ import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager'
 import wantAgent from '@ohos.app.ability.wantAgent';
 import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager';
 ...
-  public static stopContinuousTask(context) {
-    if (CommonUtil.isEmpty(context)) {
+export class BackgroundTaskUtil {
+  ...
+  public static stopContinuousTask(context: Context) {
+    if (context === undefined) {
       Logger.info(TAG, 'stopContinuousTask fail,context is empty.');
       return;
     }
     try {
       backgroundTaskManager.stopBackgroundRunning(context).then(() => {
         Logger.info(TAG, 'stopBackgroundRunning succeeded');
-      }).catch((err) => {
+      }).catch((err: Error) => {
         Logger.error(TAG, 'stopBackgroundRunning failed Cause: ' + JSON.stringify(err));
       });
     } catch (error) {
       Logger.error(TAG, `stopBackgroundRunning failed. code is ${error.code} message is ${error.message}`);
     }
   }
-...
+}
 ```
 
 ## 总结
