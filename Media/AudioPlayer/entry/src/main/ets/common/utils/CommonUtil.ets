@@ -29,12 +29,12 @@ export class CommonUtil {
     if (ms < 0) {
       ms = 0;
     }
-    const secondPrecision = CommonConstants.COMMON_UTIL.SECOND_PRECISION;
-    const secondDuration = ms / CommonConstants.COMMON_UTIL.SECOND_TO_MS;
-    let min = Math.floor(secondDuration / CommonConstants.COMMON_UTIL.MIN_TO_SEC);
-    let sec = Math.round(secondDuration - min * CommonConstants.COMMON_UTIL.MIN_TO_SEC);
+    const secondPrecision = CommonConstants.SECOND_PRECISION;
+    const secondDuration = ms / CommonConstants.SECOND_TO_MS;
+    let min = Math.floor(secondDuration / CommonConstants.MIN_TO_SEC);
+    let sec = Math.round(secondDuration - min * CommonConstants.MIN_TO_SEC);
     let secStr = sec.toFixed(secondPrecision);
-    if (parseInt(secStr) <= CommonConstants.COMMON_UTIL.MAX_OF_INDIVIDUAL) {
+    if (Number.parseInt(secStr) <= CommonConstants.MAX_OF_INDIVIDUAL) {
       secStr = `0${secStr}`;
     }
     return `${min}:${secStr}`;
@@ -48,23 +48,15 @@ export class CommonUtil {
    */
   public static getRandomNumber(n: number) {
     // Generates an array from 0 to n-1.
-    let arr: number[] = Array.from(Array(n), (v, k) => k);
+    let arr: number[] = Array.from(Array(n), (v: number, k: number) => k);
     // Randomly disrupted.
     for (let i = 0; i < n; i++) {
       let j = Math.floor(Math.random() * (arr.length - i) + i);
-      [arr[i], arr[j]] = [arr[j], arr[i]];
+      let tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
     }
     arr.length = n;
     return arr;
-  }
-
-  /**
-   * Check obj is empty or not.
-   *
-   * @param obj Object.
-   * @returns
-   */
-  public static isEmpty(obj) {
-    return typeof obj === 'undefined' || obj == null || obj === '';
   }
 }

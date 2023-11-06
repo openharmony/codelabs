@@ -14,23 +14,26 @@
  */
 
 import media from '@ohos.multimedia.media';
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { PlayMode, PlayerState, StateEvent, CommonConstants } from '../common/constants/CommonConstants';
 import { BackgroundTaskUtil } from '../common/utils/BackgroundTaskUtil';
 import { AvSessionUtil } from '../common/utils/AvSessionUtil';
 import Logger from '../common/utils/Logger';
-import { CommonUtil } from '../common/utils/CommonUtil';
+import { GlobalContext } from '../common/utils/GlobalContext';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 const TAG = '[AudioPlayerController]';
 
 export class AudioPlayerController {
-  avPlayer: media.AVPlayer;
+  public playBarModel: PlayBarModel;
+  avPlayer?: media.AVPlayer;
   musicList: Array<MusicItem> = [];
   currentTimeMs: number = 0; // Current playback position.
   timeId = CommonConstants.DEFAULT_TIME_ID;
   avPlayerState = PlayerState.IDLE;
 
-  constructor() {
+  constructor(playBarModel: PlayBarModel) {
+    this.playBarModel = playBarModel;
     this.initAudioPlayer();
   }
 
@@ -43,7 +46,7 @@ export class AudioPlayerController {
    */
   initAudioPlayer() {
     media.createAVPlayer((error, video) => {
-      if (CommonUtil.isEmpty(video)) {
+      if (video === undefined) {
         this.avPlayer = video;
         Logger.error(TAG, `createAVPlayer fail, error: ${error}`);
       } else {
@@ -58,13 +61,15 @@ export class AudioPlayerController {
    *
    * @param context Context.
    */
-  setEventCallBack(context) {
-    if (CommonUtil.isEmpty(context)) {
-      Logger.info(TAG, 'setEventCallBack fail,context is empty.');
+  setEventCallBack() {
+    if (this.avPlayer === undefined) {
       return;
     }
     // Callback function for state machine changes.
     this.avPlayer.on('stateChange', async (state) => {
+      if (this.avPlayer === undefined) {
+        return;
+      }
       switch (state) {
         case StateEvent.IDLE: // This state machine is triggered after the reset interface is successfully invoked.
           Logger.info(TAG, 'state idle called');
@@ -87,12 +92,12 @@ export class AudioPlayerController {
           if (this.currentTimeMs > 0) {
             this.avPlayer.seek(this.currentTimeMs);
           }
-          this.progressChange(context);
+          this.progressChange();
           break;
         case StateEvent.COMPLETED:
           Logger.info(TAG, 'state completed called');
           BackgroundTaskUtil.stopContinuousTask(getContext(this))
-          this.loopPlay(context);
+          this.loopPlay();
           break;
         default:
           Logger.error('unknown state: ' + state);
@@ -107,7 +112,7 @@ export class AudioPlayerController {
    * @param src Resource path.
    * @param seekTo Playing position.
    */
-  async play(src, seekTo) {
+  async play(src: media.AVFileDescriptor, seekTo: number) {
     Logger.info(TAG, 'audioPlayer play');
     if (this.timeId === CommonConstants.DEFAULT_TIME_ID) {
       clearInterval(this.timeId);
@@ -115,6 +120,9 @@ export class AudioPlayerController {
     // Enable a long-term task to allow long-term playback in the background.
     BackgroundTaskUtil.startContinuousTask(getContext(this));
     this.currentTimeMs = Math.max(0, seekTo);
+    if (this.avPlayer === undefined) {
+      return;
+    }
     if (this.avPlayerState === PlayerState.INITIALIZED) {
       await this.avPlayer.reset();
       Logger.info(TAG, 'play reset success');
@@ -126,6 +134,9 @@ export class AudioPlayerController {
     Logger.info(TAG, 'audioPlayer play');
     if (this.timeId === CommonConstants.DEFAULT_TIME_ID) {
       clearInterval(this.timeId);
+    }
+    if (this.avPlayer === undefined) {
+      return;
     }
     BackgroundTaskUtil.stopContinuousTask(getContext(this));
     await this.avPlayer.pause();
@@ -142,54 +153,57 @@ export class AudioPlayerController {
     }
   }
 
-  progressChange(context) {
-    context.playValue = this.currentTimeMs;
-    context.totalValue = this.avPlayer.duration;
+  progressChange() {
+    this.playBarModel.playValue = this.currentTimeMs;
+    if (this.avPlayer === undefined) {
+      return;
+    }
+    this.playBarModel.totalValue = this.avPlayer.duration;
     this.timeId = setInterval(() => {
-      context.playValue = this.avPlayer.currentTime;
+      if (this.avPlayer === undefined) {
+        return;
+      }
+      this.playBarModel.playValue = this.avPlayer.currentTime;
     }, CommonConstants.DELAY_TIME)
   }
 
-  loopPlay(context) {
-    if (CommonUtil.isEmpty(context)) {
-      Logger.info(TAG, 'setEventCallBack fail,context is empty.');
-      return;
-    }
+  loopPlay() {
     this.currentTimeMs = 0;
     // Play the next song in loop mode.
-    switch (context.playMode) {
+    switch (this.playBarModel.playMode) {
       case PlayMode.SINGLE_LOOP:
-        this.play(context.musicItem.rawFileDescriptor, 0);
+        this.play(this.playBarModel!.musicItem!.rawFileDescriptor, 0);
         break;
       case PlayMode.LIST_LOOP:
         let nextIndex = this.musicList.length - 1;
         this.musicList.forEach((item, index) => {
-          if (item.id === context.musicItem.id) {
+          if (item.id === this.playBarModel!.musicItem!.id) {
             nextIndex = index + 1 > this.musicList.length - 1 ? 0 : index + 1;
             return;
           }
         })
-        context.musicItem = this.musicList[nextIndex];
-        this.play(context.musicItem.rawFileDescriptor, 0);
-        // Sets the current music metadata.
-        AvSessionUtil.setAVMetadata(context);
+        this.playBarModel.musicItem = this.musicList[nextIndex];
+        this.play(this.playBarModel.musicItem.rawFileDescriptor, 0);
+      // Sets the current music metadata.
+        AvSessionUtil.setAVMetadata(this.playBarModel);
         break;
       case PlayMode.RANDOM_PLAY:
-        // Obtain the previous song in the random list.
-        let nextIndexRandom = globalThis.randomList.length - 1;
-        globalThis.randomList.forEach((item, index) => {
-          if (item === context.musicItem.id) {
-            nextIndexRandom = index + 1 > globalThis.randomList.length - 1 ? 0 : index + 1;
+      // Obtain the previous song in the random list.
+        let randomList = GlobalContext.getContext().getObject('randomList') as number[];
+        let nextIndexRandom = randomList.length - 1;
+        randomList.forEach((item, index) => {
+          if (item === this.playBarModel!.musicItem!.id) {
+            nextIndexRandom = index + 1 > randomList.length - 1 ? 0 : index + 1;
             return;
           }
         })
-        context.musicItem = this.musicList[globalThis.randomList[nextIndexRandom]];
-        this.play(context.musicItem.rawFileDescriptor, 0);
-        // Sets the current music metadata.
-        AvSessionUtil.setAVMetadata(context);
+        this.playBarModel.musicItem = this.musicList[randomList[nextIndexRandom]];
+        this.play(this.playBarModel.musicItem.rawFileDescriptor, 0);
+      // Sets the current music metadata.
+        AvSessionUtil.setAVMetadata(this.playBarModel);
         break;
       default:
-        Logger.error('unknown mode: ' + context.playMode);
+        Logger.error('unknown mode: ' + this.playBarModel.playMode);
         break;
     }
   }

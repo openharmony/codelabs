@@ -14,22 +14,21 @@
  */
 
 import { PlayListMusicView } from './PlayListMusicView';
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { CommonConstants, PlayMode } from '../common/constants/CommonConstants';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 @CustomDialog
 export struct PlayListDialogView {
   @Link musicList: Array<MusicItem>;
-  @Link musicItem: MusicItem;
-  @Link playModeIcon: Resource;
-  @Link playMode: number;
+  @Consume playBarModel: PlayBarModel;
   @State playModeDesc: Resource = $r('app.string.sequence');
-  controller: CustomDialogController;
+  controller: CustomDialogController = new CustomDialogController({ builder: {} });
 
   switchPlayModeDesc() {
-    if (this.playMode === PlayMode.RANDOM_PLAY) {
+    if (this.playBarModel.playMode === PlayMode.RANDOM_PLAY) {
       this.playModeDesc = $r('app.string.random');
-    } else if (this.playMode === PlayMode.SINGLE_LOOP) {
+    } else if (this.playBarModel.playMode === PlayMode.SINGLE_LOOP) {
       this.playModeDesc = $r('app.string.single');
     } else {
       this.playModeDesc = $r('app.string.sequence');
@@ -43,10 +42,10 @@ export struct PlayListDialogView {
   build() {
     Column() {
       Row() {
-        Image(this.playModeIcon)
-          .width(CommonConstants.LIST_DIALOG.IMAGE_WIDTH)
-          .height(CommonConstants.LIST_DIALOG.IMAGE_HEIGHT)
-          .margin({ right: CommonConstants.LIST_DIALOG.IMAGE_MARGIN_RIGHT })
+        Image(this.playBarModel.playModeIcon)
+          .width(CommonConstants.DIALOG_IMAGE_WIDTH)
+          .height(CommonConstants.DIALOG_IMAGE_HEIGHT)
+          .margin({ right: CommonConstants.IMAGE_MARGIN_RIGHT })
         Text(this.playModeDesc)
           .fontSize($r("app.float.play_mode_description"))
           .fontWeight(CommonConstants.FONT_WEIGHT_BOLDER)
@@ -54,32 +53,33 @@ export struct PlayListDialogView {
           .textAlign(TextAlign.Start)
           .alignSelf(ItemAlign.Start)
       }
-      .width(CommonConstants.LIST_DIALOG.ROW_WIDTH)
+      .width(CommonConstants.ROW_WIDTH)
       .margin({
-        top: CommonConstants.LIST_DIALOG.ROW_MARGIN_TOP,
-        bottom: CommonConstants.LIST_DIALOG.ROW_MARGIN_BOTTOM
+        top: CommonConstants.ROW_MARGIN_TOP,
+        bottom: CommonConstants.ROW_MARGIN_BOTTOM
       })
+
       List({
-        space: CommonConstants.LIST_DIALOG.LIST_SPACE,
-        initialIndex: CommonConstants.LIST_DIALOG.LIST_INITIAL_INDEX
+        space: CommonConstants.LIST_SPACE,
+        initialIndex: CommonConstants.LIST_INITIAL_INDEX
       }) {
         ForEach(this.musicList, (item: MusicItem) => {
           ListItem() {
-            PlayListMusicView({ musicItem: $musicItem, item: item })
+            PlayListMusicView({item: item })
           }
-        }, item => JSON.stringify(item))
+        }, (item: MusicItem) => JSON.stringify(item))
       }
       .listDirection(Axis.Vertical)
       .divider({
-        strokeWidth: CommonConstants.LIST_DIALOG.DIVIDER_STROKE_WIDTH,
+        strokeWidth: CommonConstants.DIVIDER_STROKE_WIDTH,
         color: CommonConstants.DIVIDER_COLOR,
-        startMargin: CommonConstants.LIST_DIALOG.DIVIDER_START_MARGIN,
-        endMargin: CommonConstants.LIST_DIALOG.END_MARGIN
+        startMargin: CommonConstants.DIVIDER_START_MARGIN,
+        endMargin: CommonConstants.END_MARGIN
       })
-      .height(CommonConstants.LIST_DIALOG.LIST_HEIGHT)
-      .width(CommonConstants.LIST_DIALOG.LIST_WIDTH)
+      .height(CommonConstants.LIST_HEIGHT)
+      .width(CommonConstants.LIST_WIDTH)
     }
     .width(CommonConstants.FULL_WIDTH)
-    .margin({ left: CommonConstants.LIST_DIALOG.PAGE_MARGIN_LEFT })
+    .margin({ left: CommonConstants.DIALOG_MARGIN_LEFT })
   }
 }

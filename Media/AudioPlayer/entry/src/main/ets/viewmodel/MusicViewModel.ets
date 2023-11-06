@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
+import resourceManager from '@ohos.resourceManager';
 import Logger from '../common/utils/Logger';
-import { MusicItem, MusicItemProperties } from '../common/bean/MusicItem';
+import { MusicItem } from './MusicItem';
 import { ResourceManagerUtil } from '../common/utils/ResourceManagerUtil';
-import { CommonUtil } from '../common/utils/CommonUtil';
 
 /**
  * Log tag.
@@ -26,60 +26,66 @@ const TAG = '[MusicViewModel]';
 /**
  * Music data.
  */
-const MUSIC_DATA: MusicItemProperties[] = [
+const MUSIC_DATA: MusicItem[] = [
   {
-    'id': 0,
-    'name': 'CLASSIC',
-    'singer': 'classic',
-    'lyrics': 'cl_lyrics',
-    'path': 'classic.wav',
-    'isVip': false,
-    'image': $r('app.media.ic_music_icon')
+    id: 0,
+    name: 'CLASSIC',
+    singer: 'classic',
+    lyrics: 'cl_lyrics',
+    path: 'classic.wav',
+    isVip: false,
+    image: $r('app.media.ic_music_icon'),
+    rawFileDescriptor: {} as resourceManager.RawFileDescriptor
   },
   {
-    'id': 1,
-    'name': 'DYNAMIC',
-    'singer': 'dynamic',
-    'lyrics': 'cl_dynamic',
-    'path': 'dynamic.wav',
-    'isVip': false,
-    'image': $r('app.media.ic_music_icon')
+    id: 1,
+    name: 'DYNAMIC',
+    singer: 'dynamic',
+    lyrics: 'cl_dynamic',
+    path: 'dynamic.wav',
+    isVip: false,
+    image: $r('app.media.ic_music_icon'),
+    rawFileDescriptor: {} as resourceManager.RawFileDescriptor
   },
   {
-    'id': 2,
-    'name': 'FRESHNESS',
-    'singer': 'freshness',
-    'lyrics': 'cl_freshness',
-    'path': 'freshness.wav',
-    'isVip': true,
-    'image': $r('app.media.ic_music_icon')
+    id: 2,
+    name: 'FRESHNESS',
+    singer: 'freshness',
+    lyrics: 'cl_freshness',
+    path: 'freshness.wav',
+    isVip: true,
+    image: $r('app.media.ic_music_icon'),
+    rawFileDescriptor: {} as resourceManager.RawFileDescriptor
   },
   {
-    'id': 3,
-    'name': 'LIVELY',
-    'singer': 'lively',
-    'lyrics': 'cl_lively',
-    'path': 'lively.mp3',
-    'isVip': false,
-    'image': $r('app.media.ic_music_icon')
+    id: 3,
+    name: 'LIVELY',
+    singer: 'lively',
+    lyrics: 'cl_lively',
+    path: 'lively.mp3',
+    isVip: false,
+    image: $r('app.media.ic_music_icon'),
+    rawFileDescriptor: {} as resourceManager.RawFileDescriptor
   },
   {
-    'id': 4,
-    'name': 'NATURE',
-    'singer': 'nature',
-    'lyrics': 'cl_nature',
-    'path': 'nature.mp3',
-    'isVip': false,
-    'image': $r('app.media.ic_music_icon')
+    id: 4,
+    name: 'NATURE',
+    singer: 'nature',
+    lyrics: 'cl_nature',
+    path: 'nature.mp3',
+    isVip: false,
+    image: $r('app.media.ic_music_icon'),
+    rawFileDescriptor: {} as resourceManager.RawFileDescriptor
   },
   {
-    'id': 5,
-    'name': 'ROMANTIC',
-    'singer': 'romantic',
-    'lyrics': 'cl_romantic',
-    'path': 'romantic.wav',
-    'isVip': false,
-    'image': $r('app.media.ic_music_icon')
+    id: 5,
+    name: 'ROMANTIC',
+    singer: 'romantic',
+    lyrics: 'cl_romantic',
+    path: 'romantic.wav',
+    isVip: false,
+    image: $r('app.media.ic_music_icon'),
+    rawFileDescriptor: {} as resourceManager.RawFileDescriptor
   }
 ];
 
@@ -90,13 +96,14 @@ const MUSIC_DATA: MusicItemProperties[] = [
  * @param musicDataArray Music data array.
  */
 export function initializeMusic(musicDataArray: Array<MusicItem>) {
-  if (CommonUtil.isEmpty(musicDataArray)) {
+  if (musicDataArray === undefined) {
     Logger.error(TAG, 'getNextMusic fail,context is empty.');
     return;
   }
-  MUSIC_DATA.forEach((item) => {
-    ResourceManagerUtil.getSrcPath(item.path, (value) => {
-      musicDataArray.push(new MusicItem(item, value));
+  MUSIC_DATA.forEach((item: MusicItem) => {
+    ResourceManagerUtil.getSrcPath(item.path, (value: resourceManager.RawFileDescriptor) => {
+      item.rawFileDescriptor = value;
+      musicDataArray.push(item);
       Logger.info(TAG, 'ResourceManagerUtil: ' + musicDataArray.length);
     })
   })
