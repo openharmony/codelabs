@@ -123,12 +123,12 @@ export default class CommonConstants {
    * The user name contains 1 to 14 characters,
    * including letters, digits, and underscores (_), or a combination of these characters.
    */
-  static readonly REGEXP_NAME: RegExp = /^[\u4E00-\u9FA5A-Za-z0-9_]{1,14}$/;
+  static readonly REGEXP_NAME: RegExp = new RegExp(`^[\u4E00-\u9FA5A-Za-z0-9_]{1,14}$`);
 
   /**
    * The password is 4 - 14 digits, letters, or! @ $#% ^ & * or a combination of them.
    */
-  static readonly REGEXP_PASSWORD: RegExp = /^[A-Za-z0-9!@$#%^&*]{4,14}$/;
+  static readonly REGEXP_PASSWORD: RegExp = new RegExp(`^[A-Za-z0-9!@$#%^&*]{4,14}$`);
 
   /**
    * Duration of prompt.

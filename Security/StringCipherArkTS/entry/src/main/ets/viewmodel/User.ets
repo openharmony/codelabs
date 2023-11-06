@@ -14,12 +14,12 @@
  */
 
 export class User {
-  id: number;
+  id: number | null;
   username: string;
   password: string;
   authTag: string;
 
-  constructor(id: number, username: string, password: string, authTag: string) {
+  constructor(id: number | null, username: string, password: string, authTag: string) {
     this.id = id;
     this.username = username;
     this.password = password;

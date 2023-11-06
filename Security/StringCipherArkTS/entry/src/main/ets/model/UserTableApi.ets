@@ -14,7 +14,7 @@
  */
 
 import dataRdb from '@ohos.data.relationalStore';
-import { User } from '../common/bean/User';
+import { User } from '../viewmodel/User';
 import { RdbModel } from '../model/RdbModel'
 import CommonConstants from '../common/constants/CommonConstants';
 import Logger from '../common/utils/Logger';
@@ -60,7 +60,7 @@ export class UserTableApi {
     if (!resultSet) {
       Logger.error(`resultSet is null or undefined`);
     }
-    let userList = [];
+    let userList: User[]  = [];
     for (let i = 0; i < resultSet.rowCount; i++) {
       resultSet.goToNextRow();
       let user = new User(resultSet.getDouble(resultSet.getColumnIndex('id')),
