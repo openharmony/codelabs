@@ -10,20 +10,20 @@
 
 ### 相关概念
 
--   [EGL\(Embedded Graphic Library\)](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/native-lib/third_party_libc/musl.md#egl)：EGL 是Khronos渲染API (如OpenGL ES 或 OpenVG) 与底层原生窗口系统之间的接口。
--   [XComponent](https://gitee.com/openharmony/docs/blob/OpenHarmony-3.2-Release/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-xcomponent.md)：可用于EGL/OpenGLES和媒体数据写入，并显示在XComponent组件。
+-   [EGL\(Embedded Graphic Library\)](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/native-lib/third_party_opengl/egl.md)：EGL 是Khronos渲染API (如OpenGL ES 或 OpenVG) 与底层原生窗口系统之间的接口。
+-   [XComponent](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-xcomponent.md)：可用于EGL/OpenGLES和媒体数据写入，并显示在XComponent组件。
 
 ## 环境搭建
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -146,7 +146,7 @@ import nativerender from 'libnativerender.so';
 @Component
 struct Index {
   // XComponent实例对象的context
-  private xComponentContext = null;
+  private xComponentContext: Record<string, () => void> = {};
   ...
   build() {
     ...
@@ -156,9 +156,10 @@ struct Index {
       type: CommonConstants.XCOMPONENT_TYPE,
       libraryname: CommonConstants.XCOMPONENT_LIBRARY_NAME
     })
-      .onLoad((xComponentContext) => {
-        // 获取XComponent实例对象的context，context上挂载的方法由开发者在C++侧定义
-        this.xComponentContext = xComponentContext;
+      .onLoad((xComponentContext?: object | Record<string, () => void>) => {
+        if (xComponentContext) {
+          this.xComponentContext = xComponentContext as Record<string, () => void>;
+        }
       })
     ...
     // 增加Button组件
