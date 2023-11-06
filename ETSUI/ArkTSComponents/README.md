@@ -2,7 +2,7 @@
 
 ## 介绍
 
-OpenHarmony ArkUI提供了丰富多样的UI组件，您可以使用这些组件轻松地编写出更加丰富、漂亮的界面。在本篇Codelab中，您将通过一个简单的购物社交应用示例，学习如何使用常用的基础组件和容器组件。
+HarmonyOS ArkUI提供了丰富多样的UI组件，您可以使用这些组件轻松地编写出更加丰富、漂亮的界面。在本篇Codelab中，您将通过一个简单的购物社交应用示例，学习如何使用常用的基础组件和容器组件。
 
 本示例主要包含：“登录”、“首页”、“我的”三个页面，效果图如下：
 
@@ -26,13 +26,13 @@ OpenHarmony ArkUI提供了丰富多样的UI组件，您可以使用这些组件�
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -55,13 +55,11 @@ OpenHarmony ArkUI提供了丰富多样的UI组件，您可以使用这些组件�
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在附件下载和gitee源码中提供下载方式。
 
 ```
 ├──entry/src/main/ets              // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──ItemData.ets           // 列表数据实体类
 │  │  └──constants
 │  │     └──CommonConstants.ets    // 公共常量类
 │  ├──entryability
@@ -73,6 +71,7 @@ OpenHarmony ArkUI提供了丰富多样的UI组件，您可以使用这些组件�
 │  │  ├──Home.ets                  // 首页
 │  │  └──Setting.ets               // 设置页
 │  └──viewmodel
+│     ├──ItemData.ets              // 列表数据实体类
 │     └──MainViewModel.ets         // 主界面视图Model
 └──entry/src/main/resources        // 应用资源目录
 ```
@@ -85,6 +84,7 @@ OpenHarmony ArkUI提供了丰富多样的UI组件，您可以使用这些组件�
 界面使用Column容器组件布局，由Image、Text、TextInput、Button、LoadingProgress等基础组件构成，主要代码如下：
 
 ```typescript
+// LoginPage.ets
 @Entry
 @Component
 struct LoginPage {
@@ -139,6 +139,7 @@ struct LoginPage {
 当用户登录前，需要获取用户输入的帐号和密码才能执行登录逻辑。给TextInput设置onChange事件，在onChange事件里面实时获取用户输入的文本信息。
 
 ```typescript
+// LoginPage.ets
 TextInput({ placeholder: $r('app.string.account') })
   .maxLength(CommonConstants.INPUT_ACCOUNT_LENGTH)
   .type(InputType.Number)
@@ -153,6 +154,7 @@ TextInput({ placeholder: $r('app.string.account') })
 给登录按钮绑定onClick事件，调用login方法模拟登录。定义变量isShowProgress结合条件渲染if用来控制LoadingProgress的显示和隐藏。当用户点击按钮时设置isShowProgress为true，即显示LoadingProgress；使用定时器setTimeout设置isShowProgress 2秒后为false，即隐藏LoadingProgress，然后执行跳转到首页的逻辑。
 
 ```typescript
+// LoginPage.ets
 @Entry
 @Component
 struct LoginPage {
@@ -213,6 +215,7 @@ struct LoginPage {
 页面间的跳转可以使用router模块相关API来实现，使用前需要先导入该模块，然后使用router.replace\(\)方法实现页面跳转。
 
 ```typescript
+// LoginPage.ets
 import router from '@ohos.router';
 
 login() {
@@ -220,10 +223,10 @@ login() {
     ...
   } else {
     this.isShowProgress = true;
-    if (this.timeOutId === null) {
+    if (this.timeOutId === -1) {
       this.timeOutId = setTimeout(() => {
         this.isShowProgress = false;
-        this.timeOutId = null;
+        this.timeOutId = -1;
         router.replaceUrl({ url: 'pages/MainPage' });
       }, CommonConstants.LOGIN_DELAY_TIME);
     }
@@ -239,7 +242,7 @@ login() {
 
 ```typescript
 // ItemData.ets
-    export default class PageResourcce {
+export default class PageResource {
   title: Resource;
   img?: Resource;
   others?: Resource;
@@ -251,7 +254,7 @@ login() {
 }
 
 // MainViewModel.ets
-import ItemData from '../common/bean/ItemData';
+import ItemData from './temData';
 export class MainViewModel {
   ...
   getFirstGridData(): Array<ItemData> {
@@ -272,6 +275,7 @@ export default new MainViewModel();
 从前面介绍章节的示意图可以看出，本示例由两个tab页组成，使用Tabs组件来实现，提取tabBar的公共样式，同时设置TabContent和Tabs的backgroundColor来实现底部tabBar栏背景色突出的效果。
 
 ```typescript
+// MainPage.ets
 Tabs({
   barPosition: BarPosition.End,
   controller: this.tabsController
@@ -285,7 +289,9 @@ Tabs({
   $r('app.media.home_selected'), $r('app.media.home_normal')))
   ...
 }
+...
 .backgroundColor(Color.White)  // 底部tabBar栏背景色
+...
 .onChange((index: number) => {
   this.currentIndex = index;
 })
@@ -301,18 +307,21 @@ Tabs({
 从上面效果如可以看出“首页”由三部分内容组成分别是轮播图、2\*4栅格图、4\*4栅格图。首先使用Swiper组件实现轮播图，无需设置图片大小。
 
 ```typescript
+// Home.ets
 Swiper(this.swiperController) {
   ForEach(mainViewModel.getSwiperImages(), (img: Resource) => {
     Image(img).borderRadius($r('app.float.home_swiper_borderRadius'))
-  }, img => img.id)
+  }, (img: Resource) => JSON.stringify(img.id))
 }
 ...
 .autoPlay(true)
+...
 ```
 
 然后使用Grid组件实现2\*4栅格图，代码如下
 
 ```typescript
+// Home.ets
 Grid() {
   ForEach(mainViewModel.getFirstGridData(), (item: ItemData) => {
     GridItem() {
@@ -325,7 +334,7 @@ Grid() {
           .margin({ top: $r('app.float.home_homeCell_margin') })
       }
     }
-  }, item => JSON.stringify(item))
+  }, (item: ItemData) => JSON.stringify(item))
 }
 .columnsTemplate('1fr 1fr 1fr 1fr')
 .rowsTemplate('1fr 1fr')
@@ -335,6 +344,7 @@ Grid() {
 使用Grid组件实现4\*4栅格列表栏，其中单个栅格中有一张背景图片和两行字体不同的文本，因此在Column组件中放置两个Text组件，并设置背景图，注意Grid组件必须设置高度，否则可能出现页面空白。
 
 ```typescript
+// Home.ets
 Grid() {
   ForEach(mainViewModel.getSecondGridData(), (secondItem: ItemData) => {
     GridItem() {
@@ -350,7 +360,7 @@ Grid() {
     .backgroundImage(secondItem.img)
     .backgroundImageSize(ImageSize.Cover) 
     ...
-  }, secondItem => JSON.stringify(secondItem))
+  }, (secondItem: ItemData) => JSON.stringify(secondItem))
 }
 ...
 .height($r('app.float.home_secondGrid_height')) 
@@ -368,13 +378,14 @@ Grid() {
 使用List组件结合ForEach语句来实现页面列表内容，其中引用了settingCell子组件，列表间的灰色分割线可以使用Divider属性实现，代码实现如下：
 
 ```typescript
+// Setting.ets
 List() {
   ForEach(mainViewModel.getSettingListData(), (item: ItemData) => {
     ListItem() {
       this.settingCell(item)
     }
     .height($r('app.float.setting_list_height'))
-  }, item => JSON.stringify(item))
+  }, (item: ItemData) => JSON.stringify(item))
 }
 ...
 .divider({  // 设置分隔线
