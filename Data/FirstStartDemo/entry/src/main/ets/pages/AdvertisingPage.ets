@@ -24,7 +24,7 @@ import CommonConstants from '../common/constants/CommonConstants';
 @Component
 struct AdvertisingPage {
   @State countDownSeconds: number = CommonConstants.ADVERTISING_COUNT_DOWN_SECONDS;
-  private timeId: number;
+  private timeId: number = 0;
 
   onPageShow() {
     this.timeId = setInterval(() => {
@@ -44,10 +44,10 @@ struct AdvertisingPage {
   /**
    * Jump to app home page.
    */
-  jumpToAppHomePage() {
+  jumpToAppHomePage(): void {
     router.pushUrl({
       url: CommonConstants.APP_HOME_PAGE_URL
-    }).catch((error) => {
+    }).catch((error: Error) => {
       Logger.error(CommonConstants.ADVERTISING_PAGE_TAG, 'AdvertisingPage pushUrl error ' + JSON.stringify(error));
     });
   }
@@ -88,14 +88,14 @@ struct AdvertisingPage {
         Column() {
           Text($r('app.string.healthy_life_text'))
             .bottomTextStyle(FontWeight.Bolder,
-            CommonConstants.ADVERTISING_HEALTHY_LIFE_TEXT_SPACING,
-            $r('app.float.advertising_text_title_size'),
-            $r('app.color.advertising_text_title_color'))
+              CommonConstants.ADVERTISING_HEALTHY_LIFE_TEXT_SPACING,
+              $r('app.float.advertising_text_title_size'),
+              $r('app.color.advertising_text_title_color'))
           Text($r('app.string.healthy_life_introduce'))
             .bottomTextStyle(FontWeight.Normal,
-            CommonConstants.ADVERTISING_TEXT_INTRODUCE_LETTER_SPACING,
-            $r('app.float.advertising_text_introduce_size'),
-            $r('app.color.launcher_text_introduce_color'))
+              CommonConstants.ADVERTISING_TEXT_INTRODUCE_LETTER_SPACING,
+              $r('app.float.advertising_text_introduce_size'),
+              $r('app.color.launcher_text_introduce_color'))
             .opacity($r('app.float.advertising_text_opacity'))
             .margin({ top: CommonConstants.ADVERTISING_TEXT_INTRODUCE_MARGIN_TOP })
         }
@@ -112,9 +112,9 @@ struct AdvertisingPage {
     .height(CommonConstants.FULL_HEIGHT)
   }
 }
+
 // Bottom text common style.
-@Extend(Text) function bottomTextStyle (fontWeight: number,
-  textAttribute: number, fontSize: Resource, fontColor: Resource) {
+@Extend(Text) function bottomTextStyle (fontWeight: number, textAttribute: number, fontSize: Resource, fontColor: Resource) {
     .fontWeight(fontWeight)
     .letterSpacing(textAttribute)
     .fontSize(fontSize)
