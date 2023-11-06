@@ -14,13 +14,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -73,7 +73,8 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import Window from '@ohos.window';
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want, launchParam) {
+  ...
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     // 初始化应用
     ...
   }
@@ -90,20 +91,27 @@ export default class EntryAbility extends UIAbility {
 ```typescript
 // EntryAbility.ts
 import UIAbility from '@ohos.app.ability.UIAbility';
-import Window from '@ohos.window';
+import window from '@ohos.window';
 
 export default class EntryAbility extends UIAbility {
   ...
-  onWindowStageCreate(windowStage: Window.WindowStage) {
+  onWindowStageCreate(windowStage: window.WindowStage): void {
+    this.windowStage = windowStage;
     // 设置WindowStage事件订阅（获取/失焦、可见/不可见）
     try {
       windowStage.on('windowStageEvent', (data) => {
-        hilog.info(0x0000, 'testTag', 'Succeeded in enabling the listener for window stage event changes. Data: ' +
-          JSON.stringify(data));
+        hilog.info(
+          this.domain,
+          'Succeeded in enabling the listener for window stage event changes. Data: %{public}',
+          JSON.stringify(data) ?? ''
+        );
       });
     } catch (exception) {
-      hilog.info(0x0000, 'testTag', 'Failed to enable the listener for window stage event changes. Cause:' +
-        JSON.stringify(exception));
+      hilog.error(
+        this.domain,
+        'Failed to enable the listener for window stage event changes. Cause: %{public}',
+        JSON.stringify(exception) ?? ''
+      );
     }
     // 设置UI加载
     windowStage.loadContent('pages/LifeCyclePage', (err, data) => {
@@ -130,18 +138,18 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 
 export default class EntryAbility extends UIAbility {
   ...
-  onForeground() {
+  onForeground(): void {
     // 申请系统所需的资源或在onBackground中申请释放的资源
   }
 
-  onBackground() {
+  onBackground(): void {
     // UI不可见时释放无用资源，或在此回调中执行耗时操作
     // 例如，状态保存
   }
 }
 ```
 
-**Destroy状态**
+**Destory状态**
 
 Destroy状态在UIAbility实例销毁时触发。可以在onDestroy\(\)回调中进行系统资源的释放、数据的保存等操作。
 
@@ -154,7 +162,7 @@ import Window from '@ohos.window';
 
 export default class EntryAbility extends UIAbility {
   ...
-  onDestroy() {
+  onDestroy(): void | Promise<void> {
     // 释放系统资源，保存数据
   }
 }
@@ -215,26 +223,26 @@ export default class EntryAbility extends UIAbility {
   
     aboutToAppear() {
       this.textColor = Color.Blue;
-      Logger.info('[LifeCyclePage]  LifeCyclePage aboutToAppear')
+      Logger.info('[LifeCyclePage]  LifeCyclePage aboutToAppear');
     }
   
     onPageShow() {
       this.textColor = Color.Brown;
-      Logger.info('[LifeCyclePage]  LifeCyclePage onPageShow')
+      Logger.info('[LifeCyclePage]  LifeCyclePage onPageShow');
     }
   
     onPageHide() {
-      Logger.info('[LifeCyclePage]  LifeCyclePage onPageHide')
+      Logger.info('[LifeCyclePage]  LifeCyclePage onPageHide');
     }
   
     onBackPress() {
       this.textColor = Color.Red;
-      Logger.info('[LifeCyclePage]  LifeCyclePage onBackPress')
+      Logger.info('[LifeCyclePage]  LifeCyclePage onBackPress');
       return false;
     }
   
     aboutToDisappear() {
-      Logger.info('[LifeCyclePage]  LifeCyclePage aboutToDisappear')
+      Logger.info('[LifeCyclePage]  LifeCyclePage aboutToDisappear');
     }
   
     build() {
