@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,14 +14,10 @@
  */
 
 /**
- * GoodsData is used to initialize the GoodsComponent.
+ * GoodsData is used to initialize ServicesComponent.
  */
-export default class GoodsData {
-  goodsName: Resource;
-  price: string;
-  originalPrice: string;
-  discounts: Resource;
-  label: Resource;
-  goodsImg: Resource;
-  goodsDescription: Resource;
+export default class GoodsServiceData {
+  id: number = 0;
+  name: Resource | null = null;
+  description: Resource = $r('app.string.goods_service_1_desc');
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,10 +14,12 @@
  */
 
 import hilog from '@ohos.hilog';
+import Want from '@ohos.app.ability.Want';
+import common from '@ohos.app.ability.common';
 import DataModel from '../model/DataModel';
-import GoodsData from '../common/bean/GoodsData';
-import BannerData from '../common/bean/BannerData';
-import MenuData from '../common/bean/MenuData';
+import GoodsData from './GoodsData';
+import BannerData from './BannerData';
+import MenuData from './MenuData';
 import { DETAILS_ABILITY_NAME } from '../common/constants/Constants';
 
 const TAG = 'HomeViewModel';
@@ -40,8 +42,8 @@ export default class HomeViewModel {
     return DataModel.BANNER;
   }
 
-  public startDetailsAbility(context, index: number): void {
-    const want = {
+  public startDetailsAbility(context: common.UIAbilityContext, index: number): void {
+    const want: Want = {
       bundleName: getContext(context).applicationInfo.name,
       abilityName: DETAILS_ABILITY_NAME,
       parameters: {

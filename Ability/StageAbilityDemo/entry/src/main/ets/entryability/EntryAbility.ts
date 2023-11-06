@@ -15,25 +15,27 @@
 
 import hilog from '@ohos.hilog';
 import UIAbility from '@ohos.app.ability.UIAbility';
-import Window from '@ohos.window';
+import window from '@ohos.window';
+import Want from '@ohos.app.ability.Want';
+import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 
 const TAG: string = 'EntryAbility';
 const ENTRY_ABILITY_DOMAIN = 0x00001;
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want, launchParam) {
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onCreate');
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'want param:' + JSON.stringify(want) ?? '');
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'launchParam:' + JSON.stringify(launchParam) ?? '');
   }
 
-  onDestroy() {
+  onDestroy(): void | Promise<void> {
     hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage: Window.WindowStage) {
+  onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onWindowStageCreate');
@@ -49,19 +51,19 @@ export default class EntryAbility extends UIAbility {
     });
   }
 
-  onWindowStageDestroy() {
+  onWindowStageDestroy(): void {
     // Main window is destroyed, release UI related resources
     hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onWindowStageDestroy');
   }
 
-  onForeground() {
+  onForeground(): void {
     // Ability has brought to foreground
     hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onForeground');
   }
 
-  onBackground() {
+  onBackground(): void {
     // Ability has back to background
     hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
     hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onBackground');

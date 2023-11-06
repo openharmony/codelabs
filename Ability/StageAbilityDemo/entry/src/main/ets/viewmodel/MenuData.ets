@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,8 +17,8 @@
  * MenuData is used to initialize MenusComponent.
  */
 export default class MenuData {
-  menuName: Resource;
-  menuContent: Resource;
-  fontWeight: string;
-  fontColor: string;
+  menuName: Resource = $r('app.string.home_menu_all');
+  menuContent: Resource = $r('app.string.home_menu_all_content');
+  fontWeight: string = '';
+  fontColor: string = '';
 }

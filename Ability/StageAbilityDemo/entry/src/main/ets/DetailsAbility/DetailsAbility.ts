@@ -15,23 +15,24 @@
 
 import hilog from '@ohos.hilog';
 import UIAbility from '@ohos.app.ability.UIAbility';
+import window from '@ohos.window';
 
 const TAG: string = 'DetailsAbility';
 const KEY: string = 'GoodsPosition';
 const DETAIL_ABILITY_DOMAIN = 0x00002;
 
 export default class DetailsAbility extends UIAbility {
-  onCreate(want, launchParam) {
+  onCreate(want, launchParam): void {
     let index: number = want?.parameters?.position;
     AppStorage.SetOrCreate(KEY, index);
     hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onCreate');
   }
 
-  onDestroy() {
+  onDestroy(): void | Promise<void> {
     hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onDestroy');
   }
 
-  onWindowStageCreate(windowStage) {
+  onWindowStageCreate(windowStage: window.WindowStage): void {
     // Main window is created, set main page for this ability
     hilog.info(0x0000, TAG, '%{public}s', 'Ability onWindowStageCreate');
 
@@ -44,17 +45,17 @@ export default class DetailsAbility extends UIAbility {
     });
   }
 
-  onWindowStageDestroy() {
+  onWindowStageDestroy(): void {
     // Main window is destroyed, release UI related resources
     hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onWindowStageDestroy');
   }
 
-  onForeground() {
+  onForeground(): void {
     // Ability has brought to foreground
     hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onForeground');
   }
 
-  onBackground() {
+  onBackground(): void {
     // Ability has back to background
     hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onBackground');
   }
