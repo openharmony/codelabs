@@ -33,17 +33,17 @@ import { taskType } from '../model/TaskInfo'
   .align(Alignment.End)
 }
 
-@Extend(Text) function targetSettingStyle (isOpen, taskID) {
+@Extend(Text) function targetSettingStyle (isOpen: boolean, taskID: number) {
   .fontColor(isOpen && taskID !== taskType.smile && taskID !== taskType.brushTeeth ?
   $r('app.color.titleColor') :
   $r('app.color.disabledColor'))
 }
 
-@Extend(Text) function remindTimeStyle (isOpen, isAlarm) {
+@Extend(Text) function remindTimeStyle (isOpen: boolean, isAlarm: boolean) {
   .fontColor(isOpen && isAlarm ? $r('app.color.titleColor') : $r('app.color.disabledColor'))
 }
 
-@Extend(Text) function frequencyStyle (isOpen) {
+@Extend(Text) function frequencyStyle (isOpen: boolean) {
   .fontSize(DEFAULT_12)
   .flexGrow(1)
   .margin({ right: DEFAULT_8 })
@@ -85,10 +85,12 @@ export struct TargetSetItem {
         Text(`${this.settingParams?.targetValue}`)
           .targetSetCommon()
           .targetSettingStyle(this.settingParams?.isOpen, this.settingParams?.taskID)
+          .textAlign(TextAlign.End)
       } else {
         Text(`${this.settingParams?.targetValue} ${this.settingParams?.unit} ${PER_DAY}`)
           .targetSetCommon()
           .targetSettingStyle(this.settingParams?.isOpen, this.settingParams?.taskID)
+          .textAlign(TextAlign.End)
       }
       Image($r('app.media.right_grey')).width(DEFAULT_8).height(DEFAULT_16);
     }

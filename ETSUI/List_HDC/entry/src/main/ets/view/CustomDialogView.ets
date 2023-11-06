@@ -47,27 +47,25 @@ export struct CustomDialogView {
   });
 
   aboutToAppear() {
-    let self = this;
-
     //目标设置
     this.broadCast.on(
       BroadCastType.SHOW_TARGET_SETTING_DIALOG,
-      function () {
-        self.targetSettingDialog.open();
+      () => {
+        this.targetSettingDialog.open();
       })
 
     // 提醒时间弹窗
     this.broadCast.on(
       BroadCastType.SHOW_REMIND_TIME_DIALOG,
-      function () {
-        self.RemindTimeDialogController.open();
+      () => {
+        this.RemindTimeDialogController.open();
       })
 
     // 频率弹窗
     this.broadCast.on(
       BroadCastType.SHOW_FREQUENCY_DIALOG,
-      function () {
-        self.FrequencyDialogController.open();
+      () => {
+        this.FrequencyDialogController.open();
       })
   }
 
