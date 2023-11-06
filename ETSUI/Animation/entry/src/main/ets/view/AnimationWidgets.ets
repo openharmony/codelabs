@@ -16,7 +16,7 @@
 import { IconsModel } from '../viewmodel/IconsModel';
 import { IconAnimation } from './IconAnimation';
 import Common from '../common/constants/Const';
-import IconItem from '../common/bean/IconItem';
+import IconItem from '../viewmodel/IconItem';
 
 @Component
 export struct AnimationWidgets {
@@ -54,7 +54,7 @@ export struct AnimationWidgets {
             item: item,
             mainFlag: $mainFlag
           })
-        }, item => JSON.stringify(item.index))
+        }, (item: IconItem) => JSON.stringify(item.index))
       }
       .width(Common.DEFAULT_FULL_WIDTH)
       .height(Common.DEFAULT_FULL_HEIGHT)
