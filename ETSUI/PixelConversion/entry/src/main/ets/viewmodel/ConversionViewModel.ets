@@ -14,7 +14,7 @@
  */
 
 import Constants from '../common/constants/Constants';
-import ConversionItem from '../common/bean/ConversionItem';
+import ConversionItem from './ConversionItem';
 
 class ConversionViewModel {
   /**
@@ -35,8 +35,7 @@ export const CONVERSION_LIST: ConversionItem[] = [
     value: vp2px(Constants.VP_SIZE),
     conversionTitle: 'px > vp',
     conversionSubTitle: `px2vp(${Constants.VP_SIZE})`,
-    conversionValue: px2vp(Constants.VP_SIZE),
-    notice: null
+    conversionValue: px2vp(Constants.VP_SIZE)
   },
   {
     title: 'fp > px',
@@ -44,8 +43,7 @@ export const CONVERSION_LIST: ConversionItem[] = [
     value: fp2px(Constants.VP_SIZE),
     conversionTitle: 'px > fp',
     conversionSubTitle: `px2fp(${Constants.VP_SIZE})`,
-    conversionValue: px2fp(Constants.VP_SIZE),
-    notice: null
+    conversionValue: px2fp(Constants.VP_SIZE)
   },
   {
     title: 'lpx > px',
