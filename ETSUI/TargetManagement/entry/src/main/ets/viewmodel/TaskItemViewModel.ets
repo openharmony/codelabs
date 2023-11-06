@@ -13,20 +13,35 @@
  * limitations under the License.
  */
 
-import getCurrentTime from '../common/utils/DateUtil';
-import DataModel from '../viewmodel/DataModel';
-
 /**
- * Save the adjustment progress.
- *
- * @param progress progress value saved.
+ * Task item entity class.
  */
-export function changeProgress(progress: number) {
-  this.latestProgress = progress;
-  this.updateDate = getCurrentTime();
-  let result = DataModel.updateProgress(this.index, this.latestProgress, this.updateDate);
-  if (result) {
-    this.overAllProgressChanged = !this.overAllProgressChanged;
+export default class TaskItemViewModel {
+  /**
+   * Progress value of task item.
+   */
+  taskName: string;
+
+  /**
+   * Update time of task item.
+   */
+  updateDate: string;
+
+  /**
+   * progress value of task item.
+   */
+  progressValue: number;
+
+
+  /**
+   * Construction method.
+   *
+   * @param progressValue progress value.
+   * @param updateDate update time.
+   */
+  constructor(taskName: string, progressValue: number, updateDate: string) {
+    this.taskName = taskName;
+    this.progressValue = progressValue;
+    this.updateDate = updateDate;
   }
-  this.isExpanded = false;
 }
