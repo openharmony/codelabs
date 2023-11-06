@@ -26,33 +26,32 @@ export default class EntryAbility extends UIAbility {
   want: Want;
   launchParam: AbilityConstant.LaunchParam;
 
-  onCreate(want, launchParam) {
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): void {
     this.want = want;
     this.launchParam = launchParam;
     hilog.info(this.domain, this.tag, 'Ability is onCreate.');
   }
 
-  onDestroy() {
+  onDestroy(): void | Promise<void> {
     hilog.info(this.domain, this.tag, 'Ability is onDestroy.');
   }
 
-  onWindowStageCreate(windowStage: window.WindowStage) {
+  onWindowStageCreate(windowStage: window.WindowStage): void {
     this.windowStage = windowStage;
-
     // Setting Event Subscription for WindowStage (Obtained/Out-of-focus, Visible/Invisible)
     try {
       windowStage.on('windowStageEvent', (data) => {
         hilog.info(
           this.domain,
           'Succeeded in enabling the listener for window stage event changes. Data: %{public}',
-          JSON.stringify(data)?? ''
+          JSON.stringify(data) ?? ''
         );
       });
     } catch (exception) {
       hilog.error(
         this.domain,
         'Failed to enable the listener for window stage event changes. Cause: %{public}',
-        JSON.stringify(exception)?? ''
+        JSON.stringify(exception) ?? ''
       );
     }
 
@@ -69,7 +68,7 @@ export default class EntryAbility extends UIAbility {
     });
   }
 
-  onWindowStageDestroy() {
+  onWindowStageDestroy(): void {
     // Releasing UI Resources
     // Unregisters the WindowStage event for getting/out of focus in onWindowStageDestroy()
     try {
@@ -80,12 +79,12 @@ export default class EntryAbility extends UIAbility {
     }
   }
 
-  onForeground() {
+  onForeground(): void {
     // Ability has brought to foreground
     hilog.info(this.domain, this.tag, 'Ability is onForeground.');
   }
 
-  onBackground() {
+  onBackground(): void {
     // Ability has back to background
     hilog.info(this.domain, this.tag, 'Ability is onBackground.');
   }
