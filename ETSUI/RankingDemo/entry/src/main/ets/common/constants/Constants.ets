@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
+import { itemStyle, listHeaderStyle, style, titleBarStyle } from '../../viewmodel/RankData';
 
 /**
  * The font size of application.
@@ -58,7 +60,7 @@ export const TITLE: Resource = $r('app.string.title');
 /**
  * The Style of RankPage.
  */
-export const Style = {
+export const Style: style = {
   /**
    * The padding of ranking.
    */
@@ -98,7 +100,7 @@ export const Style = {
 /**
  * The Style of ListHeaderComponent.
  */
-export const ListHeaderStyle = {
+export const ListHeaderStyle: listHeaderStyle = {
   /**
    * The weight of font.
    */
@@ -123,7 +125,7 @@ export const ListHeaderStyle = {
 /**
  * The Style of ListItemComponent.
  */
-export const ItemStyle = {
+export const ItemStyle: itemStyle = {
   /**
    * The line height of text.
    */
@@ -137,7 +139,7 @@ export const ItemStyle = {
   /**
    * The size of circle text.
    */
-  CIRCLE_TEXT_SIZE:24,
+  CIRCLE_TEXT_SIZE: 24,
 
   /**
    * Gradient color proportion.
@@ -188,7 +190,7 @@ export const ItemStyle = {
 /**
  * The Style of TitleComponent.
  */
-export const TitleBarStyle = {
+export const TitleBarStyle: titleBarStyle = {
   /**
    * The image size of back button.
    */
@@ -224,7 +226,3 @@ export const TitleBarStyle = {
    */
   WEIGHT: '50%',
 };
-
-
-
-
