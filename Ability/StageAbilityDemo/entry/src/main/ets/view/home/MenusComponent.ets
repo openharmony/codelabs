@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,16 +14,16 @@
  */
 
 import { AppFontSize } from '../../common/constants/Constants';
-import MenuData from '../../common/bean/MenuData';
+import MenuData from '../../viewmodel/MenuData';
 import { Menus } from '../../common/constants/HomeConstants';
 
 @Component
 export default struct MenusComponent {
-  menus: MenuData[];
+  menus: MenuData[] = [];
 
   build() {
     Row() {
-      ForEach(this.menus, (item) => {
+      ForEach(this.menus, (item: MenuData) => {
         Column() {
           Text(item?.menuName)
             .fontColor(item?.fontColor)
@@ -37,7 +37,7 @@ export default struct MenusComponent {
         .width(Menus.LAYOUT_WEIGHT)
         .padding({ top: Menus.ITEM_PADDING_VERTICAL,
           bottom: Menus.ITEM_PADDING_VERTICAL })
-      }, item => JSON.stringify(item))
+      }, (item: MenuData) => JSON.stringify(item))
     }
     .justifyContent(FlexAlign.Center)
     .padding({ top: Menus.CONTAINER_PADDING_VERTICAL,

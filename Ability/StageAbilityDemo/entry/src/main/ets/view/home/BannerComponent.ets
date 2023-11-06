@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,22 +13,22 @@
  * limitations under the License.
  */
 
-import BannerData from '../../common/bean/BannerData';
+import BannerData from '../../viewmodel/BannerData';
 import { Banner } from '../../common/constants/HomeConstants';
 import { PERCENTAGE_100, PERCENTAGE_20 } from '../../common/constants/Constants';
 
 @Component
 export default struct BannerComponent {
-  bannerList: BannerData[];
+  bannerList: BannerData[] = [];
 
   build() {
     Column({ space: Banner.SPACE }) {
       Swiper() {
-        ForEach(this.bannerList, (item) => {
+        ForEach(this.bannerList, (item: BannerData) => {
           Image(item.imgSrc)
             .width(PERCENTAGE_100)
             .objectFit(ImageFit.Contain)
-        }, item => JSON.stringify(item))
+        }, (item: BannerData) => JSON.stringify(item))
       }
       .cachedCount(Banner.CACHE_COUNT)
       .index(Banner.POSITION)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,8 +17,8 @@
  * ToolBarData is used to initialize ToolBarComponent.
  */
 export default class ToolBarData {
-  num: number;
-  text: Resource;
-  icon_after: Resource;
-  icon: Resource;
+  num: number = 0;
+  text: Resource = $r('app.string.nav_index');
+  icon_after: Resource = $rawfile('index/home.png');
+  icon: Resource = $rawfile('index/home_selected.png');
 }

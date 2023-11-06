@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,12 +14,12 @@
  */
 
 import { AppFontSize, AppFontWeight, PERCENTAGE_100 } from '../../common/constants/Constants';
-import GoodsData from '../../common/bean/GoodsData';
+import GoodsData from '../../viewmodel/GoodsData';
 import { GoodsListItem } from '../../common/constants/HomeConstants';
 
 @Component
 export default struct GoodsItemComponent {
-  private config: GoodsData;
+  private config: GoodsData = new GoodsData();
 
   build() {
     Column() {

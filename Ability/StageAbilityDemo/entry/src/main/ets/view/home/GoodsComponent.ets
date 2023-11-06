@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,23 +15,26 @@
 
 import GoodsItemComponent from './GoodsItemComponent';
 import { GoodsList } from '../../common/constants/HomeConstants';
-import GoodsData from '../../common/bean/GoodsData';
+import GoodsData from '../../viewmodel/GoodsData';
 import { PERCENTAGE_100, PERCENTAGE_50 } from '../../common/constants/Constants';
 
 @Component
 export default struct GoodsComponent {
-  private goodsList: GoodsData[];
-  private startPage: (index: number) => void;
+  private goodsList: GoodsData[] = [];
+  private startPage: (index: number) => void = (index: number) => {};
 
   build() {
     Grid() {
-      ForEach(this.goodsList, (item, index) => {
+      ForEach(this.goodsList, (item: GoodsData, index?: number) => {
         GridItem() {
           GoodsItemComponent({ config: item })
         }.onClick(() => {
+          if (!index) {
+            index = 0;
+          }
           this.startPage(index);
         })
-      }, item => JSON.stringify(item))
+      }, (item: GoodsData) => JSON.stringify(item))
     }
     .columnsTemplate(GoodsList.GRID_STYLE)
     .columnsGap(GoodsList.SPACE)

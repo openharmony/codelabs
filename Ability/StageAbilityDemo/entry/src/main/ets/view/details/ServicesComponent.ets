@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
 
 import ServiceItemComponent from './ServiceItemComponent';
 import ServicesViewModel from '../../viewmodel/ServicesViewModel';
-import GoodsServiceData from '../../common/bean/GoodsServiceData';
+import GoodsServiceData from '../../viewmodel/GoodsServiceData';
 import { PERCENTAGE_100 } from '../../common/constants/Constants';
 import { GoodsService } from '../../common/constants/DetailsConstants';
 
@@ -30,7 +30,7 @@ export default struct ServicesComponent {
 
   build() {
     List({ space: GoodsService.SPACE }) {
-      ForEach(goodsServiceList, (item) => {
+      ForEach(goodsServiceList, (item: GoodsServiceData) => {
         ListItem() {
           ServiceItemComponent({
             serviceName: item?.name,
@@ -38,7 +38,7 @@ export default struct ServicesComponent {
             isShowActionMore: item?.name != null
           })
         }
-      }, item => JSON.stringify(item))
+      }, (item: GoodsServiceData) => JSON.stringify(item))
 
     }
     .width(PERCENTAGE_100)
