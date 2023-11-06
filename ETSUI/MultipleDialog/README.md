@@ -21,13 +21,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -57,8 +57,6 @@
 ```
 ├──entry/src/main/ets             // 代码区 
 │  ├──common
-│  │  ├──bean
-│  │  │  └──HobbyBean.ets         // 兴趣爱好bean类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets   // 常量类
 │  │  └──utils
@@ -68,10 +66,12 @@
 │  │  └──EntryAbility.ets         // 程序入口类
 │  ├──pages
 │  │  └──HomePage.ets             // 主页面
-│  └──view
-│     ├──CustomDialogWidget.ets   // 自定义弹窗组件
-│     ├──TextCommonWidget.ets     // 自定义Text组件
-│     └──TextInputWidget.ets      // 自定义TextInput组件 
+│  ├──view
+│  │  ├──CustomDialogWidget.ets   // 自定义弹窗组件
+│  │  ├──TextCommonWidget.ets     // 自定义Text组件
+│  │  └──TextInputWidget.ets      // 自定义TextInput组件
+│  └──viewmodel
+│     └──HobbyModel.ets           // 兴趣爱好model类
 └──entry/src/main/resources       // 资源文件目录
 ```
 
@@ -94,9 +94,9 @@
    @Component
    export default struct TextInputWidget {
      // 文本框左侧图片
-     private inputImage: Resource; 
+     private inputImage?: Resource; 
      // 文本框提示
-     private hintText: Resource;
+     private hintText?: Resource;
    
      build() {
        Row() {
@@ -121,11 +121,11 @@
      // 显示内容
      @Link content: string;
      // 文字标题左侧图片
-     private textImage: Resource;
+     private textImage?: Resource;
      // 文本标题
-     private title: Resource;
+     private title?: Resource;
      // 点击事件回调
-     onItemClick: () => void;
+     onItemClick: () => void = () => {};
    
      build() {
        Row() {
@@ -250,9 +250,9 @@ datePickerDialog(dateCallback) {
     // 是否显示农历
     lunar: false,
     onAccept: (value: DatePickerResult) => {
-      let year = value.year;
-      let month = value.month + CommonConstants.PLUS_ONE;
-      let day = value.day;
+      let year = value.year as number;
+      let month = value.month as number + CommonConstants.PLUS_ONE;
+      let day = value.day as number;
       let birthdate: string = this.getBirthDateValue(year, month, day);
       dateCallback(birthdate);
     }
@@ -294,7 +294,7 @@ build() {
 
 ```typescript
 // CommonUtils.ets
-textPickerDialog(sexArray: Resource, sexCallback) {
+textPickerDialog(sexArray: Resource, sexCallback: (sexValue: string) => void) {
   TextPickerDialog.show({
     range: sexArray,
     selected: 0,
@@ -341,7 +341,7 @@ build() {
 
    ```typescript
    // CustomDialogWeight.ets
-   @State hobbyBeans: hobbyBean[] = [];
+   @State hobbyModels: HobbyModel[] = [];
    
    aboutToAppear() {
      let context: Context = getContext(this);
@@ -355,10 +355,10 @@ build() {
          Logger.error(CommonConstants.TAG_CUSTOM, 'error = ' + JSON.stringify(error));
        } else {
          hobbyArray.forEach((hobbyItem: string) => {
-           let hobbyBean = new HobbyBean();
-           hobbyBean.label = hobbyItem;
-           hobbyBean.isChecked = false;
-           this.hobbyBeans.push(hobbyBean);
+           let hobbyModel = new HobbyModel();
+           hobbyModel.label = hobbyItem;
+           hobbyModel.isChecked = false;
+           this.hobbyModels.push(hobbyModel);
          });
        }
      });
@@ -369,18 +369,18 @@ build() {
 
    ```typescript
    // CustomDialogWeight.ets
-   @State hobbyBeans: hobbyBean[] = [];
+   @State hobbyModels: HobbyModel[] = [];
    @Link hobbies: string;
    
    // 处理自定义弹窗选项结果
-   setHobbiesValue(hobbyBeans: HobbyBean[]) {
-     if (CommonUtils.isEmptyArr(hobbyBeans)) {
-       Logger.error(CommonConstants.TAG_CUSTOM, 'hobbyBeans length is 0');
+   setHobbiesValue(hobbyModels: HobbyModel[]) {
+     if (CommonUtils.isEmptyArr(hobbyModels)) {
+       Logger.error(CommonConstants.TAG_CUSTOM, 'hobbyModels length is 0');
        return;
      }
      let hobbiesText: string = '';
-     hobbiesText = hobbyBeans.filter((isCheckItem: HobbyBean) => isCheckItem?.isChecked)
-       .map((checkedItem: HobbyBean) => {
+     hobbiesText = hobbyModels.filter((isCheckItem: HobbyModel) => isCheckItem?.isChecked)
+       .map((checkedItem: HobbyModel) => {
          return checkedItem.label;
        })
        .join(CommonConstants.COMMA);
@@ -403,7 +403,7 @@ build() {
          Button($r('app.string.definite_button'))
            .dialogButtonStyle()
            .onClick(() => {
-             this.setHobbiesValue(this.hobbyBeans);
+             this.setHobbiesValue(this.hobbyModels);
              this.controller.close();
            })
        }

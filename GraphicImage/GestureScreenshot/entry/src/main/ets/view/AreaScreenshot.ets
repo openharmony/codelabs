@@ -21,6 +21,7 @@ import ScreenshotDialog from './ScreenshotDialog';
 import drawUtil from '../common/utils/DrawUtil';
 import offsetModel from '../model/OffsetModel';
 import CommonConstants from '../common/utils/CommonConstaint';
+import { ScaleInterface } from '../common/utils/CommonConstaint';
 
 /**
  * Custom component to determine the screenshot area.
@@ -29,7 +30,7 @@ import CommonConstants from '../common/utils/CommonConstaint';
 export default struct AreaScreenShot {
   @Link showScreen: boolean;
   @Link pixelMap: image.PixelMap;
-  @Link scaleNum: Object;
+  @Link scaleNum: ScaleInterface;
   private screenAspectRatio: number = 0;
   dialogController: CustomDialogController = new CustomDialogController({
     builder: ScreenshotDialog({
@@ -62,8 +63,8 @@ export default struct AreaScreenShot {
 
         this.screenAspectRatio = px2vp(property.windowRect.height) / px2vp(property.windowRect.width);
       })
-      .catch((err) => {
-        Logger.error(`window loading has error: ${ JSON.stringify(err) }`);
+      .catch((err: Error) => {
+        Logger.error(`window loading has error: ${JSON.stringify(err)}`);
       })
   }
 
@@ -105,21 +106,21 @@ export default struct AreaScreenShot {
 
           Image($r('app.media.ic_save'))
             .onClick(() => {
-              let ScreenshotOptions = {
+              let screenshotOptions: screenshot.ScreenshotOptions = {
                 screenRect: {
                   left: vp2px(offsetModel.getXLeft()),
                   top: vp2px(offsetModel.getYTop()) + this.systemBarHeight,
                   width: vp2px(offsetModel.getWidth()),
                   height: vp2px(offsetModel.getHeight())
-                },
+                } as screenshot.Rect,
                 imageSize: {
                   width: vp2px(offsetModel.getWidth()),
                   height: vp2px(offsetModel.getHeight())
-                },
+                } as screenshot.Size,
                 rotation: 0,
                 displayId: 0
               };
-              screenshot.save(ScreenshotOptions, (err, data: image.PixelMap) => {
+              screenshot.save(screenshotOptions, (err: Error, data: image.PixelMap) => {
                 if (err) {
                   Logger.error(`Failed to save the screenshot. Error:${JSON.stringify(err)}`);
                 }
@@ -141,7 +142,7 @@ export default struct AreaScreenShot {
       .height(CommonConstants.FULL_PARAM)
       .alignContent(Alignment.Top)
       .onTouch((event: TouchEvent) => {
-        switch(event.type) {
+        switch (event.type) {
           case TouchType.Down:
             offsetModel.setXLocationType(event.touches[0].screenX);
             offsetModel.setYLocationType(event.touches[0].screenY);

@@ -17,7 +17,6 @@ import wantAgent from '@ohos.app.ability.wantAgent';
 import backgroundTaskManager from '@ohos.resourceschedule.backgroundTaskManager';
 import { CommonConstants } from '../constants/CommonConstants';
 import Logger from '../utils/Logger';
-import { CommonUtil } from './CommonUtil';
 
 const TAG = '[BackgroundTaskUtil]';
 
@@ -25,14 +24,13 @@ const TAG = '[BackgroundTaskUtil]';
  * Background task tool class.
  */
 export class BackgroundTaskUtil {
-
   /**
    * Start a long-time task in the background.
    *
    * @param context Context.
    */
-  public static startContinuousTask(context) {
-    if (CommonUtil.isEmpty(context)) {
+  public static startContinuousTask(context: Context) {
+    if (context === undefined) {
       Logger.info(TAG, 'startContinuousTask fail,context is empty.');
       return;
     }
@@ -48,7 +46,7 @@ export class BackgroundTaskUtil {
       operationType: wantAgent.OperationType.START_ABILITY,
       // A private value defined by the user.
       requestCode: CommonConstants.BACKGROUND_REQUEST_CODE
-    };
+    } as wantAgent.WantAgentInfo;
 
     // Obtain the WantAgent object by using the method of the wantAgent module.
     wantAgent.getWantAgent(wantAgentInfo).then((wantAgentObj) => {
@@ -56,8 +54,8 @@ export class BackgroundTaskUtil {
         backgroundTaskManager.startBackgroundRunning(context, backgroundTaskManager.BackgroundMode.AUDIO_PLAYBACK,
           wantAgentObj).then(() => {
           Logger.info(TAG, 'startBackgroundRunning succeeded');
-        }).catch((err) => {
-          Logger.error(TAG, 'startBackgroundRunning failed Cause: ' + JSON.stringify(err));
+        }).catch((err: Error) => {
+          Logger.error(TAG, 'startBackgroundRunning failed, Cause: ' + JSON.stringify(err));
         });
       } catch (error) {
         Logger.error(TAG, `startBackgroundRunning failed. code is ${error.code} message is ${error.message}`);
@@ -70,15 +68,15 @@ export class BackgroundTaskUtil {
    *
    * @param context context.
    */
-  public static stopContinuousTask(context) {
-    if (CommonUtil.isEmpty(context)) {
+  public static stopContinuousTask(context: Context) {
+    if (context === undefined) {
       Logger.info(TAG, 'stopContinuousTask fail,context is empty.');
       return;
     }
     try {
       backgroundTaskManager.stopBackgroundRunning(context).then(() => {
         Logger.info(TAG, 'stopBackgroundRunning succeeded');
-      }).catch((err) => {
+      }).catch((err: Error) => {
         Logger.error(TAG, 'stopBackgroundRunning failed Cause: ' + JSON.stringify(err));
       });
     } catch (error) {

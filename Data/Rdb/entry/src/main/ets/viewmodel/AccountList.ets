@@ -1,4 +1,4 @@
-import AccountItem from '../common/bean/AccountItem';
+import AccountItem from './AccountItem';
 
 export const PayList: Array<AccountItem> = [
   {
@@ -54,7 +54,7 @@ export const EarnList: Array<AccountItem> = [
   }
 ]
 
-export const ImageList = {
+export const ImageList: Record<string,Resource> = {
   '吃饭': $rawfile('foods.png'),
   '零食': $rawfile('snacks.png'),
   '汽车加油': $rawfile('fuel.png'),

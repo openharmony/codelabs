@@ -14,7 +14,6 @@
  */
 
 import CommonConstants from '../common/constants/CommonConstants';
-import { NewsData } from '../common/bean/NewsData';
 
 export class NewsDataModel {
   static getNewsByType(news: NewsData[], type: string): NewsData[] {
@@ -24,8 +23,8 @@ export class NewsDataModel {
     return news.filter(item => (item.newsTypeStr === type));
   }
 
-  static getTypeByStr(type: string): Resource {
-    let newsType: Resource;
+  static getTypeByStr(type: string): Resource | undefined {
+    let newsType: Resource | undefined = undefined;
     switch (type) {
       case CommonConstants.ALL_TITLE[0]:
         newsType = $r('app.string.tabs_all');
@@ -59,13 +58,13 @@ export class NewsDataModel {
     for (let i: number = 0; i < CommonConstants.NEWS_ID.length; i++) {
       let newsId: string = CommonConstants.NEWS_ID[i];
       let newsTypeStr: string = CommonConstants.ALL_TITLE[i % CommonConstants.TITLES_NUMBER + 1];
-      let newsType: Resource = this.getTypeByStr(newsTypeStr);
-      let title: Resource;
-      let content: Resource;
-      let imgUrl: Resource;
-      let label: Resource;
-      let redLabel: boolean;
-      let from: Resource;
+      let newsType: Resource | undefined = NewsDataModel.getTypeByStr(newsTypeStr);
+      let title: Resource | undefined = undefined;
+      let content: Resource | undefined = undefined;
+      let imgUrl: Resource | undefined = undefined;
+      let label: Resource | undefined = undefined;
+      let redLabel: boolean = false;
+      let from: Resource | undefined = undefined;
       switch (i % CommonConstants.IMAGES_NUMBER) {
         case 0:
           imgUrl = $r('app.media.ic_news_image1');
@@ -83,13 +82,11 @@ export class NewsDataModel {
           imgUrl = $r('app.media.ic_news_image3');
           label = $r('app.string.news_label_recommend');
           from = $r('app.string.xx_com');
-          redLabel = false;
           break;
         case 3:
           imgUrl = $r('app.media.ic_news_image4');
           label = $r('app.string.news_label_recommend');
           from = $r('app.string.news_client');
-          redLabel = false;
           break;
         default:
           break;
@@ -182,5 +179,78 @@ export class NewsDataModel {
       newsComposition.push(newsItem);
     }
     return newsComposition;
+  }
+}
+
+export class NewsData {
+  /**
+   * The Id of news.
+   */
+  newsId: string;
+
+  /**
+   * The title of news.
+   */
+  title: Resource | undefined;
+
+  /**
+   * The type string of news.
+   */
+  newsTypeStr: string;
+
+  /**
+   * The type of news.
+   */
+  newsType: Resource | undefined;
+
+  /**
+   * The image url of news.
+   */
+  imgUrl: Resource | undefined;
+
+  /**
+   * The reads of news.
+   */
+  reads: string | undefined;
+
+  /**
+   * The likes of news.
+   */
+  likes: string | undefined;
+
+  /**
+   * The content of news.
+   */
+  content: Resource | undefined;
+
+  /**
+   * The label of news.
+   */
+  label: Resource | undefined;
+
+  /**
+   * The color of label.
+   */
+  redLabel: boolean;
+
+  /**
+   * The from of news.
+   */
+  from: Resource | undefined;
+
+  constructor(newsId: string, title: Resource | undefined, newsTypeStr: string, newsType: Resource | undefined,
+              imgUrl: Resource | undefined, reads: string, likes: string, content: Resource | undefined,
+              label: Resource | undefined, redLabel: boolean, from: Resource | undefined) {
+    this.newsId = newsId;
+    this.title = title;
+    this.newsTypeStr = newsTypeStr;
+    this.newsType = newsType;
+    this.imgUrl = imgUrl;
+    this.reads = reads;
+    this.likes = likes;
+    this.content = content;
+    this.label = label;
+    this.redLabel = redLabel;
+    this.from = from;
   }
 }

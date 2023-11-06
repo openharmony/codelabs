@@ -18,9 +18,9 @@ import Want from '@ohos.app.ability.Want';
 import prompt from '@ohos.promptAction';
 import common from '@ohos.app.ability.common';
 import CommonConstants from '../common/constants/CommonConstants';
-import { NewsData } from '../common/bean/NewsData';
 import RemoteDeviceModel from '../model/RemoteDeviceModel';
 import Logger from '../common/utils/Logger';
+import { NewsData } from '../viewmodel/NewsDataModel';
 
 @Extend(Text) function textStyle() {
   .fontColor($r('app.color.dialog_button_font'))
@@ -29,22 +29,17 @@ import Logger from '../common/utils/Logger';
 }
 
 @CustomDialog
-
 export struct DeviceListDialog {
   @StorageLink('discoverDeviceList') discoverDeviceList: deviceManager.DeviceInfo[] = [];
   @StorageLink('trustedDeviceList') trustedDeviceList: deviceManager.DeviceInfo[] = [];
   @Consume newsData: NewsData;
-  private selectedDevice: deviceManager.DeviceInfo;
-  private confirm: (device: deviceManager.DeviceInfo) => void;
-  private isTrusted: boolean;
-  private controller: CustomDialogController;
-  private context: common.UIAbilityContext;
+  private selectedDevice?: deviceManager.DeviceInfo;
+  private confirm?: (device: deviceManager.DeviceInfo) => void;
+  private isTrusted?: boolean;
+  private controller?: CustomDialogController;
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
 
-  aboutToAppear() {
-    this.context = getContext(this) as common.UIAbilityContext;
-  }
-
-  getDeviceTypeIcon(deviceType): Resource {
+  getDeviceTypeIcon(deviceType: deviceManager.DeviceType): Resource {
     if (deviceType === deviceManager.DeviceType.TABLET) {
       return $r('app.media.ic_pad');
     } else if (deviceType === deviceManager.DeviceType.PHONE) {
@@ -107,8 +102,8 @@ export struct DeviceListDialog {
                           this.selectedDevice = item;
                           this.isTrusted = true;
                         } else {
-                          this.selectedDevice = null;
-                          this.isTrusted = null;
+                          this.selectedDevice = undefined;
+                          this.isTrusted = undefined;
                         }
                       })
                   }
@@ -134,7 +129,7 @@ export struct DeviceListDialog {
             })
             .width(CommonConstants.FULL_COMPONENT)
           }
-        }, item => item.deviceId)
+        }, (item: deviceManager.DeviceInfo) => JSON.stringify(item.deviceId))
       }
 
       Row() {
@@ -185,8 +180,8 @@ export struct DeviceListDialog {
                           this.selectedDevice = item;
                           this.isTrusted = false;
                         } else {
-                          this.selectedDevice = null;
-                          this.isTrusted = null;
+                          this.selectedDevice = undefined;
+                          this.isTrusted = undefined;
                         }
                       })
                       .margin({ left: $r('app.float.radio_margin_left') })
@@ -213,7 +208,7 @@ export struct DeviceListDialog {
             })
             .width(CommonConstants.FULL_COMPONENT)
           }
-        }, item => item.deviceId)
+        }, (item: deviceManager.DeviceInfo) => JSON.stringify(item.deviceId))
       }
 
       Row() {
@@ -222,6 +217,10 @@ export struct DeviceListDialog {
             .textStyle()
             .onClick(() => {
               RemoteDeviceModel.stopDeviceDiscovery();
+              if (this.controller === undefined) {
+                Logger.error(`Controller is undefined`);
+                return;
+              }
               this.controller.close();
             })
         }
@@ -239,7 +238,7 @@ export struct DeviceListDialog {
           Text($r('app.string.ok'))
             .textStyle()
             .onClick(() => {
-              if ((this.selectedDevice === null)) {
+              if ((this.selectedDevice === undefined)) {
                 prompt.showToast({
                   message: $r('app.string.please_select_device')
                 });
@@ -247,11 +246,23 @@ export struct DeviceListDialog {
               }
               if (this.isTrusted === false) {
                 // Connect the device.
+                if (this.confirm === undefined) {
+                  Logger.error(`Confirm is undefined`);
+                  return;
+                }
                 this.confirm(this.selectedDevice);
+                if (this.controller === undefined) {
+                  Logger.error(`Controller is undefined`);
+                  return;
+                }
                 this.controller.close();
               } else {
                 // Start the app.
                 startAbilityContinuation(this.selectedDevice.networkId, this.newsData.newsId, this.context);
+                if (this.controller === undefined) {
+                  Logger.error(`Controller is undefined`);
+                  return;
+                }
                 this.controller.close();
               }
             })
@@ -281,12 +292,11 @@ function startAbilityContinuation(deviceId: string, newsId: string, context: com
     bundleName: context.abilityInfo.bundleName,
     abilityName: CommonConstants.ABILITY_NAME,
     parameters: {
-      'url': CommonConstants.NEWS_DETAIL_PAGE,
-      'newsId': newsId
+      newsId: newsId
     }
   };
-  globalThis.context.startAbility(want).catch((err) => {
-    Logger.error(`startAbilityContinuation error. Code is ${err.code}, message is ${err.message}`);
+  context.startAbility(want).catch((err: Error) => {
+    Logger.error(`startAbilityContinuation failed error = ${JSON.stringify(err)}`);
     prompt.showToast({
       message: $r('app.string.start_ability_continuation_error')
     });

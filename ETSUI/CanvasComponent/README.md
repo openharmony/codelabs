@@ -22,13 +22,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -56,9 +56,6 @@
 ```
 ├──entry/src/main/ets	            // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──FillArcData.ets         // 绘制圆弧数据实体类
-│  │  │  └──PrizeData.ets           // 中奖信息实体类
 │  │  ├──constants
 │  │  │  ├──ColorConstants.ets      // 颜色常量类
 │  │  │  ├──CommonConstants.ets     // 公共常量类 
@@ -73,7 +70,9 @@
 │  ├──view
 │  │  └──PrizeDialog.ets            // 中奖信息弹窗类
 │  └──viewmodel
-│     └──DrawModel.ets              // 画布相关方法类
+│     ├──DrawModel.ets              // 画布相关方法类
+│     ├──FillArcData.ets            // 绘制圆弧数据实体类
+│     └──PrizeData.ets              // 中奖信息实体类
 └──entry/src/main/resources         // 资源文件目录
 ```
 
@@ -98,7 +97,7 @@ aboutToAppear() {
       this.screenWidth = px2vp(windowProperties.windowRect.width);
       this.screenHeight = px2vp(windowProperties.windowRect.height);
     })
-    .catch((error) => {
+    .catch((error: Error) => {
       Logger.error('Failed to obtain the window size. Cause: ' + JSON.stringify(error));
     })
 }
@@ -172,15 +171,15 @@ drawFlower() {
   const radius = this.screenWidth * CommonConstants.FLOWER_RADIUS_RATIOS;
   const innerRadius = this.screenWidth * CommonConstants.FLOWER_INNER_RATIOS;
   for (let i = 0; i < CommonConstants.COUNT; i++) {
-    this.canvasContext.save();
-    this.canvasContext.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
+    this.canvasContext?.save();
+    this.canvasContext?.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
     this.fillArc(new FillArcData(0, -pointY, radius, 0, Math.PI * CommonConstants.TWO),
       ColorConstants.FLOWER_OUT_COLOR);
 
     this.fillArc(new FillArcData(0, -pointY, innerRadius, 0, Math.PI * CommonConstants.TWO),
       ColorConstants.FLOWER_INNER_COLOR);
     beginAngle += this.avgAngle;
-    this.canvasContext.restore();
+    this.canvasContext?.restore();
   }
 }
 
@@ -190,11 +189,13 @@ fillArc(fillArcData: FillArcData, fillColor: string) {
     Logger.error('[DrawModel][fillArc] fillArcData or fillColor is empty.');
     return;
   }
-  this.canvasContext.beginPath();
-  this.canvasContext.fillStyle = fillColor;
-  this.canvasContext.arc(fillArcData.x, fillArcData.y, fillArcData.radius,
-    fillArcData.startAngle, fillArcData.endAngle);
-  this.canvasContext.fill();
+  if (this.canvasContext !== undefined) {
+    this.canvasContext.beginPath();
+    this.canvasContext.fillStyle = fillColor;
+    this.canvasContext.arc(fillArcData.x, fillArcData.y, fillArcData.radius,
+      fillArcData.startAngle, fillArcData.endAngle);
+    this.canvasContext.fill();
+  }
 }
 ```
 
@@ -210,13 +211,13 @@ drawOutCircle() {
   let beginAngle = this.startAngle;
   // 画小圆圈
   for (let i = 0; i < CommonConstants.SMALL_CIRCLE_COUNT; i++) {
-    this.canvasContext.save();
-    this.canvasContext.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
+    this.canvasContext?.save();
+    this.canvasContext?.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
     this.fillArc(new FillArcData(this.screenWidth * CommonConstants.SMALL_CIRCLE_RATIOS, 0,
       CommonConstants.SMALL_CIRCLE_RADIUS, 0, Math.PI * CommonConstants.TWO),
       ColorConstants.WHITE_COLOR);
     beginAngle = beginAngle + CommonConstants.CIRCLE / CommonConstants.SMALL_CIRCLE_COUNT;
-    this.canvasContext.restore();
+    this.canvasContext?.restore();
   }
 }
 ```
@@ -247,8 +248,8 @@ drawInnerArc() {
   for (let i = 0; i < CommonConstants.COUNT; i++) {
     this.fillArc(new FillArcData(0, 0, radius, this.startAngle * Math.PI / CommonConstants.HALF_CIRCLE,
       (this.startAngle + this.avgAngle) * Math.PI / CommonConstants.HALF_CIRCLE), colors[i]);
-    this.canvasContext.lineTo(0, 0);
-    this.canvasContext.fill();
+    this.canvasContext?.lineTo(0, 0);
+    this.canvasContext?.fill();
     this.startAngle += this.avgAngle;
   }
 }
@@ -260,10 +261,12 @@ drawInnerArc() {
 // DrawModel.ets
 // 画内部扇形区域文字
 drawArcText() {
-  this.canvasContext.textAlign = CommonConstants.TEXT_ALIGN;
-  this.canvasContext.textBaseline = CommonConstants.TEXT_BASE_LINE;
-  this.canvasContext.fillStyle = ColorConstants.TEXT_COLOR;
-  this.canvasContext.font = StyleConstants.ARC_TEXT_SIZE + CommonConstants.CANVAS_FONT;
+  if (this.canvasContext !== undefined) {
+    this.canvasContext.textAlign = CommonConstants.TEXT_ALIGN;
+    this.canvasContext.textBaseline = CommonConstants.TEXT_BASE_LINE;
+    this.canvasContext.fillStyle = ColorConstants.TEXT_COLOR;
+    this.canvasContext.font = StyleConstants.ARC_TEXT_SIZE + CommonConstants.CANVAS_FONT;
+  }
   // 需要绘制的文本数组集合
   let textArrays = [
     $r('app.string.text_smile'),
@@ -289,7 +292,12 @@ drawCircularText(textString: string, startAngle: number, endAngle: number) {
     Logger.error('[DrawModel][drawCircularText] textString is empty.');
     return;
   }
-  let circleText = {
+  class CircleText {
+    x: number = 0;
+    y: number = 0;
+    radius: number = 0;
+  }
+  let circleText: CircleText = {
     x: 0,
     y: 0,
     radius: this.screenWidth * CommonConstants.INNER_ARC_RATIOS
@@ -300,19 +308,19 @@ drawCircularText(textString: string, startAngle: number, endAngle: number) {
   let angleDecrement = (startAngle - endAngle) / (textString.length - 1);
   let angle = startAngle;
   let index = 0;
-  let character;
+  let character: string;
 
   while (index < textString.length) {
     character = textString.charAt(index);
-    this.canvasContext.save();
-    this.canvasContext.beginPath();
-    this.canvasContext.translate(circleText.x + Math.cos(angle) * radius,
+    this.canvasContext?.save();
+    this.canvasContext?.beginPath();
+    this.canvasContext?.translate(circleText.x + Math.cos(angle) * radius,
       circleText.y - Math.sin(angle) * radius);
-    this.canvasContext.rotate(Math.PI / CommonConstants.TWO - angle);
-    this.canvasContext.fillText(character, 0, 0);
+    this.canvasContext?.rotate(Math.PI / CommonConstants.TWO - angle);
+    this.canvasContext?.fillText(character, 0, 0);
     angle -= angleDecrement;
     index++;
-    this.canvasContext.restore();
+    this.canvasContext?.restore();
   }
 }
 ```
@@ -331,13 +339,13 @@ drawImage() {
   ];
   for (let i = 0; i < CommonConstants.COUNT; i++) {
     let image = new ImageBitmap(imageSrc[i]);
-    this.canvasContext.save();
-    this.canvasContext.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
-    this.canvasContext.drawImage(image, this.screenWidth * CommonConstants.IMAGE_DX_RATIOS,
+    this.canvasContext?.save();
+    this.canvasContext?.rotate(beginAngle * Math.PI / CommonConstants.HALF_CIRCLE);
+    this.canvasContext?.drawImage(image, this.screenWidth * CommonConstants.IMAGE_DX_RATIOS,
       this.screenWidth * CommonConstants.IMAGE_DY_RATIOS, CommonConstants.IMAGE_SIZE,
       CommonConstants.IMAGE_SIZE);
     beginAngle += this.avgAngle;
-    this.canvasContext.restore();
+    this.canvasContext?.restore();
   }
 }
 ```
@@ -370,7 +378,7 @@ Stack({ alignContent: Alignment.Center }) {
     .onClick(() => {
       this.enableFlag = !this.enableFlag;
       // 开始抽奖
-      startAnimator.call(this);
+      this.startAnimator();
     })
 }
 ...
@@ -388,7 +396,7 @@ dialogController: CustomDialogController = new CustomDialogController({
   autoCancel: false
 });
 
-// DrawModel.ets
+// CanvasPage.ets
 // 开始抽奖
 startAnimator() {
   let randomAngle = Math.round(Math.random() * CommonConstants.CIRCLE);
@@ -421,7 +429,7 @@ startAnimator() {
 export default struct PrizeDialog {
   @Link prizeData: PrizeData;
   @Link enableFlag: boolean;
-  private controller: CustomDialogController;
+  private controller?: CustomDialogController;
 
   build() {
     Column() {
@@ -435,7 +443,7 @@ export default struct PrizeDialog {
         ...
         .onClick(() => {
           // 关闭自定义弹窗		
-          this.controller.close();
+          this.controller?.close();
           this.enableFlag = !this.enableFlag;
         })
     }

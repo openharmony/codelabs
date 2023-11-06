@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { LineSegment } from '../common/bean/Line';
-import { Point } from '../common/bean/Point';
-import { RectF } from '../common/bean/Rect';
-import { CropAngle } from '../common/bean/CropType';
+import { LineSegment } from '../viewmodel/Line';
+import { Point } from '../viewmodel/Point';
+import { RectF } from '../viewmodel/Rect';
+import { CropAngle } from '../viewmodel/CropType';
 import { CommonConstants } from '../common/constant/CommonConstants';
 
 export abstract class MathUtils {
@@ -25,8 +25,7 @@ export abstract class MathUtils {
    * @param rect
    */
   static roundOutRect(rect: RectF): void {
-    let copy = { ...rect };
-    rect.set(Math.round(copy.left), Math.round(copy.top), Math.round(copy.right), Math.round(copy.bottom));
+    rect.set(Math.round(rect.left), Math.round(rect.top), Math.round(rect.right), Math.round(rect.bottom));
   }
 
   /**
@@ -61,7 +60,7 @@ export abstract class MathUtils {
    * @returns
    */
   static rectToPoints(rect: RectF): Array<Point> {
-    let points = [];
+    let points: Array<Point> = [];
     points.push(new Point(rect.left, rect.top));
     points.push(new Point(rect.right, rect.top));
     points.push(new Point(rect.right, rect.bottom));
@@ -93,7 +92,7 @@ export abstract class MathUtils {
    */
   static rotatePoints(inputs: Array<Point>, angle: number, origin: Point): Array<Point> {
     let alpha = MathUtils.formulaAngle(-angle);
-    let outputs = [];
+    let outputs: Array<Point> = [];
     for (let input of inputs) {
       let dx = input.x - origin.x;
       let dy = input.y - origin.y;
@@ -136,7 +135,7 @@ export abstract class MathUtils {
    * @param scale
    */
   static scaleRectBasedOnPoint(rect: RectF, p: Point, scale: number): void {
-    let operate = { ...rect };
+    let operate: RectF = rect;
     operate.left = (rect.left - p.x) * scale + p.x;
     operate.right = (rect.right - p.x) * scale + p.x;
     operate.top = (rect.top - p.y) * scale + p.y;
@@ -156,14 +155,14 @@ export abstract class MathUtils {
     let p3 = line2.start;
     let p4 = line2.end;
     if (Math.max(p1.x, p2.x) < Math.min(p3.x, p4.x) || Math.max(p1.y, p2.y) < Math.min(p3.y, p4.y)
-    || Math.max(p3.x, p4.x) < Math.min(p1.x, p2.x) || Math.max(p3.y, p4.y) < Math.min(p1.y, p2.y)) {
+      || Math.max(p3.x, p4.x) < Math.min(p1.x, p2.x) || Math.max(p3.y, p4.y) < Math.min(p1.y, p2.y)) {
       return false;
     }
 
     if ((((p1.x - p3.x) * (p4.y - p3.y) - (p1.y - p3.y) * (p4.x - p3.x))
-    * ((p2.x - p3.x) * (p4.y - p3.y) - (p2.y - p3.y) * (p4.x - p3.x))) >= 0
-    || (((p3.x - p1.x) * (p2.y - p1.y) - (p3.y - p1.y) * (p2.x - p1.x))
-    * ((p4.x - p1.x) * (p2.y - p1.y) - (p4.y - p1.y) * (p2.x - p1.x))) >= 0) {
+      * ((p2.x - p3.x) * (p4.y - p3.y) - (p2.y - p3.y) * (p4.x - p3.x))) >= 0
+      || (((p3.x - p1.x) * (p2.y - p1.y) - (p3.y - p1.y) * (p2.x - p1.x))
+        * ((p4.x - p1.x) * (p2.y - p1.y) - (p4.y - p1.y) * (p2.x - p1.x))) >= 0) {
       return false;
     }
     return true;
@@ -175,7 +174,7 @@ export abstract class MathUtils {
    * @param line2
    * @returns Intersection coordinates.
    */
-  static getIntersection(line1: LineSegment, line2: LineSegment): Point {
+  static getIntersection(line1: LineSegment, line2: LineSegment): Point | undefined {
     let yStartSpacing1 = line1.start.y - line1.end.y;
     let yEndSpacing1 = line1.end.x - line1.start.x;
     let resultLine1 = yStartSpacing1 * line1.start.x + yEndSpacing1 * line1.start.y;
@@ -385,7 +384,7 @@ export abstract class MathUtils {
    */
   static areRectsSame(rect1: RectF, rect2: RectF): boolean {
     if (rect1.left == rect2.left && rect1.top == rect2.top
-    && rect1.right == rect2.right && rect1.bottom == rect2.bottom) {
+      && rect1.right == rect2.right && rect1.bottom == rect2.bottom) {
       return true;
     }
     return false;

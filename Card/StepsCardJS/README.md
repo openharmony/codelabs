@@ -14,9 +14,9 @@
 -   [消息通知](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-notificationManager.md)：提供通知管理的能力，包括发布、取消发布通知，创建、获取、移除通知通道，订阅、取消订阅通知，获取通知的使能状态、角标使能状态，获取通知的相关信息等。
 -   [关系型数据库](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-data-relationalStore.md)：关系型数据库基于SQLite组件提供了一套完整的对本地数据库进行管理的机制，对外提供了一系列的增、删、改、查等接口，也可以直接运行用户输入的SQL语句来满足复杂的场景需要。
 -   [元服务卡片开发](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-form-formExtensionAbility.md)：卡片是一种界面展示形式，可以将应用的重要信息或操作前置到卡片，以达到服务直达、减少体验层级的目的。
-    -   卡片提供方：显示卡片内容，控制卡片布局以及控件点击事件。
-    -   卡片使用方：显示卡片内容的宿主应用，控制卡片在宿主中展示的位置。
-    -   卡片管理服务：用于管理系统中所添加卡片的常驻代理服务，包括卡片对象的管理与使用，以及卡片周期性刷新等。
+-   卡片提供方：显示卡片内容，控制卡片布局以及控件点击事件。
+-   卡片使用方：显示卡片内容的宿主应用，控制卡片在宿主中展示的位置。
+-   卡片管理服务：用于管理系统中所添加卡片的常驻代理服务，包括卡片对象的管理与使用，以及卡片周期性刷新等。
 
 
 
@@ -24,13 +24,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -58,11 +58,6 @@
 ```
 ├──entry/src/main/ets            // 代码区     
 │  ├──common  
-│  │  ├──bean
-│  │  │  ├──ChartPoint.ets       // 图表点bean
-│  │  │  ├──ChartValues.ets      // 图表值bean
-│  │  │  ├──FormData.ets         // 表单数据bean
-│  │  │  └──PointStyle.ets       // 图表点样式bean
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets  // 常量类
 │  │  ├──database
@@ -72,13 +67,19 @@
 │  │     ├──ChartDataUtils.ets   // 图表数据操作工具类  
 │  │     ├──DatabaseUtils.ets    // 数据库工具类
 │  │     ├──DateUtils.ets        // 日期工具类
+│  │     ├──GlobalContext.ets    // 项目工具类
 │  │     └──Logger.ets           // 日志打印工具类
 │  ├──entryability
 │  │  └──EntryAbility.ets        // 程序入口类
 │  ├──entryformability
 │  │  └──EntryFormAbility.ets    // 卡片创建，更新，删除操作类
-│  └──pages
-│     └──MainPage.ets            // 主界面
+│  ├──pages
+│  │   └──MainPage.ets           // 主界面
+│  └──viewmodel
+│      ├──ChartPoint.ets         // 图表点类
+│      ├──ChartValues.ets        // 图表值类
+│      ├──FormData.ets           // 表单数据类
+│      └──PointStyle.ets         // 图表点样式类
 ├──entry/src/main/js             // js代码区
 │  ├──card2x2                    // 2x2卡片目录
 │  ├──card2x4                    // 2x4卡片目录
@@ -93,30 +94,31 @@
 
 1. 数据库创建使用的SQLite。
 
-   ```typescript
-   // CommonConstants.ets
-   // 表单SQLite
-   static readonly CREATE_TABLE_FORM: string = 'CREATE TABLE IF NOT EXISTS Form ' +
-     '(id INTEGER PRIMARY KEY AUTOINCREMENT, formId STRING, formName STRING, dimension INTEGER)';
-   // 行走步数SQLite
-   static readonly CREATE_TABLE_SENSOR_DATA: string = 'CREATE TABLE IF NOT EXISTS SensorData ' +
-     '(id INTEGER PRIMARY KEY AUTOINCREMENT, date STRING, stepsValue INTEGER)';
-   ```
+```typescript
+  // CommonConstants.ets
+  // 表单SQLite
+  static readonly CREATE_TABLE_FORM: string = 'CREATE TABLE IF NOT EXISTS Form ' +
+    '(id INTEGER PRIMARY KEY AUTOINCREMENT, formId TEXT NOT NULL, formName TEXT NOT NULL, dimension INTEGER)';
+  // 行走步数SQLite
+  static readonly CREATE_TABLE_SENSOR_DATA: string = 'CREATE TABLE IF NOT EXISTS SensorData ' +
+    '(id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, stepsValue INTEGER)';
+```
 
 2. 在EntryAbility的onCreate方法通过DatabaseUtils.createRdbStore方法创建数据库，并创建相应的表。
 
-   ```typescript
-   // EntryAbility.ets
-   onCreate(want: Want) {
-     globalThis.abilityWant = want;
-     DatabaseUtils.createRdbStore(this.context).then((rdbStore: DataRdb.RdbStore) => {
-       // 添加前三天行走模拟数据
-       DatabaseUtils.addSimulationData(rdbStore);
-     }).catch((error) => {
-       ...
-     });
-   }
-   ```
+```typescript
+  // EntryAbility.ets
+  onCreate(want: Want, param: AbilityConstant.LaunchParam): void {
+    GlobalContext.getContext().setObject('abilityWant', want);
+    GlobalContext.getContext().setObject('abilityParam', param);
+    DatabaseUtils.createRdbStore(this.context).then((rdbStore: Object | undefined) => {
+      // 添加前三天行走模拟数据
+      DatabaseUtils.addSimulationData(rdbStore as DataRdb.RdbStore);
+    }).catch((error: Error) => {
+      ...
+    });
+  }
+```
 
 ## 消息通知
 
@@ -135,7 +137,7 @@ aboutToAppear() {
 requestNotification() {
   Notification.requestEnableNotification().then(() => {
     ...
-  }).catch((err) => {
+  }).catch((err: Error) => {
     ...
   });
 }
@@ -150,28 +152,27 @@ requestNotification() {
 // 发送通知
 sendNotifications(stepsValue: string, notificationId: number) {
   // 获取当前系统语言
-  let Language: string = I18n.System.getSystemLanguage();
   let notificationBarTitle: string;
+  let Language: string = I18n.System.getSystemLanguage();
   // 判断是否为中文
   if (Language.match(CommonConstants.CHINESE_LANGUAGE)) {
-    notificationBarTitle = CommonConstants.NOTIFICATIONS_TITLE_GONE_TODAY_ZH + 
-      stepsValue + CommonConstants.NOTIFICATIONS_TITLE_STEPS_ZH;
+    notificationBarTitle = CommonConstants.NOTIFICATIONS_TITLE_GONE_TODAY_ZH +
+        stepsValue + CommonConstants.NOTIFICATIONS_TITLE_STEPS_ZH;
   } else {
-    notificationBarTitle = CommonConstants.NOTIFICATIONS_TITLE_GONE_TODAY_EN + 
-      stepsValue + CommonConstants.NOTIFICATIONS_TITLE_STEPS_EN;
+    notificationBarTitle = CommonConstants.NOTIFICATIONS_TITLE_GONE_TODAY_EN +
+        stepsValue + CommonConstants.NOTIFICATIONS_TITLE_STEPS_EN;
   }
-  // 构造NotificationRequest对象.
-  let notificationRequest = {
-    id: notificationId,
+  // 发布NotificationRequest.
+  Notification.publish({
+    id: CommonConstants.NOTIFICATIONS_ID,
     content: {
-      contentType: Notification.ContentType.NOTIFICATION_CONTENT_BASIC_TEXT,
-      normal: {
-        title: notificationBarTitle,
-        text: ''
-      }
+        contentType: Notification.ContentType.NOTIFICATION_CONTENT_BASIC_TEXT,
+        normal: {
+          title: notificationBarTitle,
+          text: ''
+        }
     }
-  };
-  Notification.publish(notificationRequest).then(() => {
+  }).then(() => {
     ...
   });
 }
@@ -210,19 +211,23 @@ sendNotifications(stepsValue: string, notificationId: number) {
 ```typescript
 // EntryFormAbility.ets
 onAddForm(want: Want) {
-  let formId: string = want.parameters[CommonConstants.FORM_PARAM_IDENTITY_KEY] as string;
-  let formName: string = want.parameters[CommonConstants.FORM_PARAM_NAME_KEY] as string;
-  let dimensionFlag: number = want.parameters[CommonConstants.FORM_PARAM_DIMENSION_KEY] as number;
+  let formId: string = want.parameters !== undefined ?
+    want.parameters[CommonConstants.FORM_PARAM_IDENTITY_KEY] as string : '';
+  let formName: string = want.parameters !== undefined ?
+    want.parameters[CommonConstants.FORM_PARAM_NAME_KEY] as string : '';
+  let dimensionFlag: number = want.parameters !== undefined ?
+    want.parameters[CommonConstants.FORM_PARAM_DIMENSION_KEY] as number : 0;
   // 创建数据库
-  DatabaseUtils.createRdbStore(this.context).then((rdbStore: DataRdb.RdbStore) => {
+  DatabaseUtils.createRdbStore(this.context).then((rdbStore: Object | undefined) => {
     // 存储卡片信息
     let form: Form = new Form();
     form.formId = formId;
     form.formName = formName;
     form.dimension = dimensionFlag;
     ...
-    DatabaseUtils.insertForm(form, rdbStore);
-  }).catch((error) => {
+    DatabaseUtils.insertForm(form, rdbStore as DataRdb.RdbStore);
+    getToDaySteps(rdbStore as DataRdb.RdbStore, dimensionFlag, formId);
+  }).catch((error: Error) => {
     ...
   });
   ...
@@ -237,133 +242,134 @@ onAddForm(want: Want) {
 ### 更新元服务卡片
 
 1. 初始化加载主页面布局之前，在MainPage的aboutToAppear方法中，调用setInterval方法开启定时器。时间到则先通过DatabaseUtils.insertValues方法把步数插入到数据库，再通过DatabaseUtils.updateForms方法更新卡片步数。
-   ```typescript
-   // MainPage.ets
-   aboutToAppear() {
-     ...
-     DatabaseUtils.getSensorData(globalThis.rdbStore, DateUtils.getDate(0))
-       .then((sensorData: SensorData) => {
-         if (sensorData != null) {
-           this.stepsValue = sensorData.stepsValue;
-         }
-         // 开启定时器
-         this.intervalId = setInterval(() => {
-           ...
-           DatabaseUtils.insertValues(this.stepsValue, globalThis.rdbStore);
-           DatabaseUtils.updateForms(this.stepsValue,globalThis.rdbStore);
-         }, CommonConstants.INTERVAL_DELAY_TIME);
-       });
-   }
-   
-   // DatabaseUtils.ets
-   updateForms(stepValue: number, rdbStore: DataRdb.RdbStore) {
-     let predicates: DataRdb.RdbPredicates =
-       new DataRdb.RdbPredicates(CommonConstants.TABLE_FORM);
-     // 查询卡片
-     rdbStore.query(predicates).then((resultSet: DataRdb.ResultSet) => {
-       ...
-       // 查询第一行
-       resultSet.goToFirstRow();
-       do {
-         let formId: string = resultSet.getString(resultSet.getColumnIndex(CommonConstants.FIELD_FORM_ID));
-         let dimension: number = resultSet.getLong(resultSet.getColumnIndex(CommonConstants.FIELD_DIMENSION));
-         ChartDataUtils.getFormData(formId, stepValue, dimension, rdbStore)
-           .then((formData: FormData) => {
-             // 更新多张卡片
-             FormProvider.updateForm(formData.formId, FormBindingData.createFormBindingData(formData))
-               .catch((error) => {
-                 ...
-               });
-           }).catch((error) => {
-           ...
-           }); 
-       } while (resultSet.goToNextRow());
-       resultSet.close();
-     }).catch((error) => {
-       ...
-     });
-   }
-   ```
+```typescript
+// MainPage.ets
+aboutToAppear() {
+  ...
+  DatabaseUtils.getSensorData(rdbStoreValue, DateUtils.getDate(0))
+    .then((sensorData: SensorData) => {
+      if (sensorData) {
+        this.stepsValue = sensorData.stepsValue;
+      }
+        // 开启定时器
+        this.intervalId = setInterval(() => {
+          ...
+          DatabaseUtils.insertValues(this.stepsValue, rdbStoreValue);
+          DatabaseUtils.updateForms(this.stepsValue, rdbStoreValue);
+        }, CommonConstants.INTERVAL_DELAY_TIME);
+      ...
+  });
+}
+  
+// DatabaseUtils.ets
+updateForms(stepValue: number, rdbStore: DataRdb.RdbStore) {
+  let predicates: DataRdb.RdbPredicates =
+    new DataRdb.RdbPredicates(CommonConstants.TABLE_FORM);
+  // 查询卡片
+  rdbStore.query(predicates).then((resultSet: DataRdb.ResultSet) => {
+    ...
+    // 查询第一行
+    resultSet.goToFirstRow();
+    do {
+      let formId: string = resultSet.getString(resultSet.getColumnIndex(CommonConstants.FIELD_FORM_ID));
+      let dimension: number = resultSet.getLong(resultSet.getColumnIndex(CommonConstants.FIELD_DIMENSION));
+      ChartDataUtils.getFormData(formId, stepValue, dimension, rdbStore)
+        .then((formData: FormData) => {
+          // 更新多张卡片
+          FormProvider.updateForm(formData.formId, FormBindingData.createFormBindingData(formData))
+            .catch((error: Error) => {
+              ...
+            });
+        }).catch((error: Error) => {
+          ...
+        }); 
+    } while (resultSet.goToNextRow());
+    resultSet.close();
+  }).catch((error: Error) => {
+    ...
+  });
+}
+```
 
 2. 卡片添加到桌面后，在EntryFormAbility的onAddForm方法中，调用formProvider.setFormNextRefreshTime方法设置倒计时。时间到了则通过updateSensorData方法更新卡片步数。
-   ```typescript
-   // EntryFormAbility.ets
-   onAddForm(want: Want) {
-     ...
-     // 五分钟倒计时
-     formProvider.setFormNextRefreshTime(formId, CommonConstants.FIVE_MINUTES, (error, data) => {
-       ...
-     });
-   }
-   
-   onUpdateForm(formId: string) {
-     // 更新步数
-     updateSensorData();
-     ...
-   }
-   
-   function updateSensorData() {
-     DatabaseUtils.createRdbStore(this.context).then((rdbStore: DataRdb.RdbStore) => {
-       ...
-       // 获取今天步数
-       let getSensorData: Promise<SensorData> = DatabaseUtils.getSensorData(rdbStore,
-         DateUtils.getDate(0));
-       getSensorData.then((sensorData: SensorData) => {
-         let stepValue: number = 0;
-         if (sensorData) {
-           stepValue = sensorData.stepsValue;
-         }
-         // 更新卡片数据
-         DatabaseUtils.updateForms(stepValue, rdbStore);
-       }).catch((error) => {
-         ...
-       });
-     }).catch((error) => {
-       ...
-     });
-   }
-   ```
+```typescript
+  // EntryFormAbility.ets
+  onAddForm(want: Want) {
+    ...
+    // 五分钟倒计时
+    formProvider.setFormNextRefreshTime(formId, CommonConstants.FIVE_MINUTES, (error, data) => {
+      ...
+    });
+  }
+  
+  onUpdateForm(formId: string) {
+    // 更新步数
+    this.updateSensorData();
+    ...
+  }
+  
+  updateSensorData() {
+    DatabaseUtils.createRdbStore(this.context).then((rdbStore: Object | undefined) => {
+      ...
+      // 获取今天步数
+      let getSensorData: Promise<SensorData> =
+      DatabaseUtils.getSensorData(rdbStore as DataRdb.RdbStore, DateUtils.getDate(0));
+      getSensorData.then((sensorData: SensorData) => {
+        let stepValue: number = 0;
+        if (sensorData) {
+          stepValue = sensorData.stepsValue;
+        }
+        // 更新卡片数据
+        DatabaseUtils.updateForms(stepValue, rdbStore);
+      }).catch((error: Error) => {
+        ...
+      });
+    }).catch((error: Error) => {
+      ...
+    });
+  }
+```
 
 3. 通过src/main/resources/base/profile/form_config.json配置文件，根据updateDuration或者scheduledUpdateTime字段配置刷新时间。updateDuration优先级高于scheduledUpdateTime，两者同时配置时，以updateDuration配置的刷新时间为准。当配置的刷新时间到了，系统调用onUpdateForm方法进行更新。
-   ```typescript
-   // form_config.json
-   {
-     // 卡片的类名
-     "name": "card2x2",
-     // 卡片的描述
-     "description": "This is a service widget.",
-     // 卡片对应完整路径 
-     "src": "./js/card2x2/pages/index/index",
-     // 定义与显示窗口相关的配置
-     "window": {
-       "designWidth": 720,
-       "autoDesignWidth": true
-     },
-     // 卡片的主题样式
-     "colorMode": "auto",
-     // 是否为默认卡片
-     "isDefault": true,
-     // 卡片是否支持周期性刷新
-     "updateEnabled": true,
-     // 采用24小时制，精确到分钟
-     "scheduledUpdateTime": "00:00",
-     // 当取值为0时，表示该参数不生效，当取值为正整数N时，表示刷新周期为30*N分钟。
-     "updateDuration": 1,
-     // 卡片默认外观规格
-     "defaultDimension": "2*2",
-     // 卡片支持外观规格
-     "supportDimensions": [
-       "2*2"
-     ]
-   }
-   
-   // EntryFormAbility.ets
-   onUpdateForm(formId: string) {
-     // 更新步数
-     updateSensorData();
-     ...
-   }
-   ```
+```typescript
+  // form_config.json
+  {
+    // 卡片的类名
+    "name": "card2x2",
+    // 卡片的描述
+    "description": "This is a service widget.",
+    // 卡片对应完整路径 
+    "src": "./js/card2x2/pages/index/index",
+    // 定义与显示窗口相关的配置
+    "window": {
+      "designWidth": 720,
+      "autoDesignWidth": true
+    },
+    // 卡片的主题样式
+    "colorMode": "auto",
+    // 是否为默认卡片
+    "isDefault": true,
+    // 卡片是否支持周期性刷新
+    "updateEnabled": true,
+    // 采用24小时制，精确到分钟
+    "scheduledUpdateTime": "00:00",
+    // 当取值为0时，表示该参数不生效，当取值为正整数N时，表示刷新周期为30*N分钟。
+    "updateDuration": 1,
+    // 卡片默认外观规格
+    "defaultDimension": "2*2",
+    // 卡片支持外观规格
+    "supportDimensions": [
+      "2*2"
+    ]
+  }
+  
+  // EntryFormAbility.ets
+  onUpdateForm(formId: string) {
+    // 更新步数
+    updateSensorData();
+    ...
+  }
+```
 
 ### 删除元服务卡片
 
@@ -371,11 +377,11 @@ onAddForm(want: Want) {
 ```typescript
 // EntryFormAbility.ets
 onRemoveForm(formId: string) {
-  DatabaseUtils.createRdbStore(this.context).then((rdbStore: DataRdb.RdbStore) => {
+  DatabaseUtils.createRdbStore(this.context).then((rdbStore: Object | undefined) => {
     ...
     // 删除数据库中对应的卡片信息
-    DatabaseUtils.deleteFormData(formId, rdbStore);
-  }).catch((error) => {
+    DatabaseUtils.deleteFormData(formId, rdbStore as DataRdb.RdbStore);
+  }).catch((error: Error) => {
     ...
   });
 }
@@ -384,7 +390,7 @@ onRemoveForm(formId: string) {
 deleteFormData(formId: string, rdbStore: DataRdb.RdbStore) {
   let predicates: DataRdb.RdbPredicates = new DataRdb.RdbPredicates(CommonConstants.TABLE_FORM);
   predicates.equalTo(CommonConstants.FIELD_FORM_ID, formId);
-  rdbStore.delete(predicates).catch((error) => {
+  rdbStore.delete(predicates).catch((error: Error) => {
     ...
   });
 }

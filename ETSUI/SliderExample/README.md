@@ -16,13 +16,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -41,8 +41,7 @@
     2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 ## 代码结构解读
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
-
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 ```
 ├──entry/src/main/ets             // 代码区      
 │  ├──common                        
@@ -57,7 +56,7 @@
 ```
 ## 页面结构
 
-整个程序的页面构造十分简洁，由Image组件构成风车。自定义组件PanelComponent由Text组件和Slider组件构成，用来显示文本和控制图像，具体效果如下图所示：
+整个程序的页面构造十分简洁，由Image组件构成风车。自定义组件PanelComponent由Text组件和Slider组件构成，用来显示文本和控制图像，效果如图所示：
 
 ![](figures/image1.png)
 
@@ -66,6 +65,7 @@
 在SliderPage文件中，添加Image组件，给定使用图片的路径，并配置通用属性[图形变换](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-universal-attributes-transformation.md)中的rotate属性和scale属性。自此，页面中已经有了风车的图像。
 
 ```typescript
+// SliderPage.ets
 ...
   build() {
     Column() {
@@ -89,7 +89,7 @@
 ...
 ```
 
-效果如下：
+效果如图所示：
 
 ![](figures/image2.png)
 
@@ -98,16 +98,16 @@
 在speedChange\(\)函数中，以固定的时间间隔调整rotate的角度，也就是参数angle。onPageShow是SliderPage页面的生命周期方法，在其中调用speedChange\(\)函数，表示从程序启动时，便开始执行。自此我们已经实现了风车的旋转效果。代码如下：
 
 ```typescript
+// SliderPage.ets
 ...
-  speedChange() {
-    let that = this;
+  speedChange(): void {
     this.angle = Constants.ANGLE;
-    this.interval = setInterval(function () {
-      that.angle += that.speed;
+    this.interval = setInterval(() => {
+      this.angle += this.speed;
     }, Constants.DELAY_TIME)
   }
 
-  onPageShow() {
+  onPageShow(): void {
     clearInterval(this.interval);
     this.speedChange();
   }
@@ -119,6 +119,8 @@
 在PanelComponent的构造参数中，给定调节转速的初始值和样式。在callback事件中，将子组件Slider滑动的value给到事先定义好的变量speed，实现Text组件的更新，并且通过调用speedChange\(\)方法实现转速的改变。代码如下：
 
 ```typescript
+// SliderPage.ets
+...
 PanelComponent({
   mode: SliderMode.SPEED,
   title: $r('app.string.speed_text'),
@@ -136,6 +138,7 @@ PanelComponent({
     style: SliderStyle.InSet
   }
 })
+...
 ```
 
 ## 调节风车的大小
@@ -143,6 +146,8 @@ PanelComponent({
 在PanelComponent的构造参数中，给定调节大小的初始值和样式。在callback事件中，将子组件Slider滑动的value给到事先定义好的变量imageSize，实现Text组件的更新和调节风车大小。代码如下：
 
 ```typescript
+// SliderPage.ets
+...
 PanelComponent({
   mode: SliderMode.SCALE,
   title: $r('app.string.scale_text'),
@@ -157,8 +162,12 @@ PanelComponent({
     step: SliderScale.STEP,
     style: SliderStyle.InSet
   }
-}).margin({ bottom: Constants.PANEL_MARGIN_BOTTOM,
-    top: Constants.PANEL_MARGIN_TOP });
+})
+.margin({
+  bottom: Constants.PANEL_MARGIN_BOTTOM,
+  top: Constants.PANEL_MARGIN_TOP
+});
+...
 ```
 ## 总结
 
@@ -170,11 +179,3 @@ PanelComponent({
 4. 通用属性rotate和scale属性的使用。
 
 ![](figures/finished.gif)
-
-
-
-
-
-
-
-

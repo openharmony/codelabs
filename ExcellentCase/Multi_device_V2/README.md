@@ -20,13 +20,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -54,16 +54,16 @@
 ```
 ├──common                                // 公共能力层
 │  ├──src/main/ets
-│  │  ├──bean                            // 资源类接口
-│  │  │  ├──BottomTabsItem.ets
-│  │  │  ├──DriveTabsItem.ets  
-│  │  │  ├──FindTabsItem.ets
-│  │  │  ├──HomeTabsItem.ets
-│  │  │  └──MineTabsItem.ets
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets          // 公共常量类
-│  │  └──utils
-│  │     └──BreakpointSystem.ets         // 断点工具类
+│  │  ├──utils
+│  │  │  └──BreakpointSystem.ets         // 断点工具类
+│  │  └──viewmodel                       // 资源类接口
+│  │     ├──BottomTabsItem.ets
+│  │     ├──DriveTabsItem.ets  
+│  │     ├──FindTabsItem.ets
+│  │     ├──HomeTabsItem.ets
+│  │     └──MineTabsItem.ets
 │  └──src/main/resources                 // 资源文件夹
 └──product                               // 产品定制层
    ├──default/src/main/ets               // 支持手机（含折叠屏）、平板
@@ -223,7 +223,7 @@ export struct FindTabs {
           }) {
             ... // 榜单内容
           }
-        }, item => JSON.stringify(item))
+        }, (item: FindTabsItem) => JSON.stringify(item))
       }
     }
     ...
@@ -262,7 +262,7 @@ export struct DriveTabs {
           GridCol({ span: { xs: Const.NUM_2, sm: Const.NUM_2, md: Const.NUM_2, lg: Const.NUM_2 } }) {
             ... // 云盘内容
           }
-        }, item => JSON.stringify(item))
+        }, (item: DriveTabsItem) => JSON.stringify(item))
       }
     }
     ...

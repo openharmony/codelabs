@@ -17,13 +17,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -49,8 +49,6 @@
 ```
 ├──entry/src/main/ets                   // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──User.ets                    // 用户实体类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets         // 公共常量类
 │  │  └──utils
@@ -63,10 +61,12 @@
 │  ├──model
 │  │  ├──RdbModel.ets                   // 数据库业务处理文件
 │  │  └──UserTableApi.ets               // 用户表具体业务文件
-│  └──pages
-│     ├──Login.ets                      // 登录页
-│     ├──Register.ets                   // 注册页
-│     └──Welcome.ets                    // 欢迎页
+│  ├──pages
+│  │  ├──Login.ets                      // 登录页
+│  │  ├──Register.ets                   // 注册页
+│  │  └──Welcome.ets                    // 欢迎页
+│  └──viewmodel
+│     └──User.ets                       // 用户实体类
 └──entry/src/main/resources             // 资源文件目录
 ```
 
@@ -75,9 +75,9 @@
 
 ```typescript
 // CommonConstants.ets
-/**
- * 创建表的SQL语句
- */
+  /**
+   * 创建表的SQL语句
+   */
   static readonly CREATE_TABLE_SQL: string = 'CREATE TABLE IF NOT EXISTS user(' +
     'id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
     'username TEXT NOT NULL, ' +
@@ -92,9 +92,9 @@
 import dataRdb from '@ohos.data.relationalStore';
 ...
 export class RdbModel {
+  private rdbStore: dataRdb.RdbStore | null = null;
+  private tableName: string = '';
   private sqlCreateTable: string = '';
-  private columns: Array<string> = [];
-  private STORE_CONFIG = { name: CommonConstants.DATABASE_NAME, securityLevel: dataRdb.SecurityLevel.S1 };
   ...
   constructor(tableName: string, sqlCreateTable: string, columns: Array<string>) {
     this.tableName = tableName;
@@ -104,18 +104,17 @@ export class RdbModel {
   }
 
   /**
-   * 获取数据库操作对象rdbStore
+   * 获取数据库操作对象rdbStore.
    */
   getRdbStore() {
-    let getPromiseRdb = dataRdb.getRdbStore(getContext(), this.STORE_CONFIG);
+    let getPromiseRdb = dataRdb.getRdbStore(getContext(), { name: CommonConstants.DATABASE_NAME, securityLevel: dataRdb.SecurityLevel.S1 });
     getPromiseRdb.then(rdbStore => {
       this.rdbStore = rdbStore;
       this.rdbStore.executeSql(this.sqlCreateTable);
-    }).catch((err) => {
-      Logger.error("getRdbStore err." + JSON.stringify(err));
+    }).catch((err: Error) => {
+      Logger.error(`getRdbStore err ${JSON.stringify(err)}`);
     });
   }
-}
 ```
 
 创建UserTableApi.ets文件，实例化RdbModel创建userTable对象。并对外提供可操作用户数据表的API接口，包括插入数据、根据用户名查询用户信息等方法。
@@ -123,8 +122,8 @@ export class RdbModel {
 ```typescript
 // UserTableApi.ets
 export class UserTableApi {
-  private userTable = new RdbModel(TABLE_NAME, CREATE_USER_TABLE, COLUMNS);  
-	
+  private userTable = new RdbModel(TABLE_NAME, CREATE_USER_TABLE, COLUMNS);
+
   /**
    * 将数据保存到数据库中
    *
@@ -134,14 +133,14 @@ export class UserTableApi {
     this.userTable.insertData(user);
   }
 
-   /**
+  /**
    * 根据用户名查询用户信息
    *
    * @param username 查询的用户名
    * @returns 查询结果集
    */
-  async queryUserByUsername(username: string) {
-    let resultList;
+  async queryUserByUsername(username: string): Promise<User[]> {
+    let resultList: Array<User>;
     // 过滤条件
     let predicates = new dataRdb.RdbPredicates(TABLE_NAME);
     predicates.equalTo('username', username);
@@ -171,7 +170,7 @@ export class UserTableApi {
 import cryptoFramework from '@ohos.security.cryptoFramework';
 ...
 class AesUtil {
-  private globalCipher: cryptoFramework.Cipher = null;
+  private globalCipher: cryptoFramework.Cipher = cryptoFramework.createCipher(CommonConstants.GENERATOR_NAME;
   private globalKey: cryptoFramework.SymKey = null;
 
   /**
@@ -194,18 +193,18 @@ class AesUtil {
         // 生成加解密生成器
         this.globalCipher = cryptoFramework.createCipher(cipherAlgName);
       } catch (error) {
-        Logger.error(`createCipher failed, ${error.code}, ${error.message}`);
+        Logger.error(`createCipher failed, error is ${JSON.stringify(err)}`);
       }
     });
   }
 
   // 加密
-  async encrypt(content: string): Promise<string> {
+  async encrypt(content: string, authTag: string): Promise<string> {
     ...
   }
 
-  // 解密
-  async decrypt(content: string): Promise<string> {
+  // 解密 
+  async decrypt(content: string, authTag: string): Promise<string> {
     ...
   }
 }
@@ -231,7 +230,7 @@ class AesUtil {
       iv: ivBlob,
       aad: aadBlob,
       authTag: tagBlob,
-      algName: "GcmParamsSpec"
+      algName: `GcmParamsSpec`
     };
     return gcmParamsSpec;
   }
@@ -245,7 +244,7 @@ class AesUtil {
   genKeyMaterialBlob(data: Array<number>): cryptoFramework.DataBlob {
     let keyMaterial = new Uint8Array(data);
     return { data: keyMaterial };
-  }  
+  }
 }
 ```
 在AesUtil.ets的encrypt方法中实现密码加密逻辑。由于本示例加密数据量较小，所以这里直接使用update一步完成加密操作。若数据量较大，可通过update方法分段加密。主要实现以下步骤：
@@ -284,7 +283,7 @@ class AesUtil {
     // Uint8Array转base64
     let encryptContent: string = DataTransformUtil.uint8ArrayToBase64(updateOutput.data);
     let authTagContent: string = DataTransformUtil.uint8ArrayToBase64(authTag.data);
-    let user = new User(null, null, encryptContent, authTagContent);
+    let user = new User(null, ``, encryptContent, authTagContent);
     return user;
   }
 }
@@ -303,7 +302,7 @@ class AesUtil {
 class AesUtil {
   ...
 
-  /** 
+  /**
    * 解密
    *
    * @param content 解密内容

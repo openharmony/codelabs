@@ -18,13 +18,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -45,21 +45,18 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
-├──entry/src/main/ets                // 代码区
+├──entry/src/main/ets                // ArkTS代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──ChatData.ets             // 聊天列表数据类
-│  │  │  ├──ItemDirection.ets        // 聊天数据位置
-│  │  │  └──SettingData.ets          // 设置列表数据类
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets      // 公共常量类
-│  │  │  └─StyleConstants.ets        // 属性常量类
+│  │  │  └──StyleConstants.ets       // 属性常量类
 │  │  ├──database
 │  │  │  └──PreferencesUtil.ets      // 首选项数据操作工具类
 │  │  └──utils
+│  │     ├──GlobalContext.ets        // 全局上下文工具类
 │  │     └──Logger.ets               // 日志工具类
 │  ├──entryability
 │  │  └──EntryAbility.ets            // 程序入口类
@@ -71,9 +68,12 @@
 │  │  ├──SettingItemComponent.ets    // 主页面列表Item组件
 │  │  └──TitleBarComponent.ets       // 页面标题栏组件
 │  └──viewmodel
+│     ├──ChatData.ets                // 聊天列表数据类
 │     ├──HomeViewModel.ets           // 主页面数据模型
+│     ├──ItemDirection.ets           // 聊天数据位置
+│     └──SettingData.ets             // 设置列表数据类
 │     └──SetViewModel.ets            // 字体大小调节页面数据模型
-└──entry/src/main/resources          // 资源文件目录
+└──entry/src/main/resources	         // 资源文件目录
 ```
 
 ## 保存默认大小
@@ -81,37 +81,37 @@
 应用初始化时，为了保证页面中文本的正常显示。在entryAbility生命周期onCreate方法处，添加一个命名为“myPreferences”的首选项表。在表中添加一个名为“appFontSize”的字段，保存默认字体大小。代码如下所示：
 
 ```typescript
+// PreferencesUtil.ets
 // 导入首选项数据库
 import dataPreferences from '@ohos.data.preferences';
 
-// 先将Promise<Preferences>保存到全局
-globalThis.getFontPreferences = (() => {
-  let preferences: Promise<dataPreferences.Preferences> = dataPreferences.getPreferences(context, PREFERENCES_NAME);
-  return preferences;
-});
-```
-
-```typescript
-// 保存默认字体大小
-saveDefaultFontSize(fontSize: number) {
-  globalThis.getFontPreferences().then((preferences) => {
-    // 拿到preferences实例后，先判断是否存在该字段
-    preferences.has(KEY_APP_FONT_SIZE).then(async (isExist) => {
-      Logger.info(TAG, 'preferences has changeFontSize is ' + isExist);
-      // 如果不存在，调用保存方法
-      if (!isExist) {
-        Logger.info(TAG, 'saveSize do not has exit...');
-        // 将字体大小写入到preferences实例
-        await preferences.put(KEY_APP_FONT_SIZE, fontSize);
-        // 将preferences实例数据进行持久化
-        preferences.flush();
-      }
-    }).catch((err) => {
-      Logger.error(TAG, 'Has the value failed with err: ' + err);
+export class PreferencesUtil {
+  // 先将Promise<Preferences>保存到全局
+  createFontPreferences(context: Context) {
+    let fontPreferences: Function = (() => {
+      let preferences: Promise<dataPreferences.Preferences> = dataPreferences.getPreferences(context,
+        PREFERENCES_NAME);
+      return preferences;
     });
-  }).catch((err) => {
-    Logger.error(TAG, 'Get the preferences failed, err: ' + err);
-  });
+    GlobalContext.getContext().setObject('getFontPreferences', fontPreferences);
+  }
+  // 保存默认字体大小
+  saveDefaultFontSize(fontSize: number) {
+    let getFontPreferences: Function =  GlobalContext.getContext().getObject('getFontPreferences') as Function;
+    getFontPreferences().then((preferences: dataPreferences.Preferences) => {
+      preferences.has(KEY_APP_FONT_SIZE).then(async (isExist: boolean) => {
+        Logger.info(TAG, 'preferences has changeFontSize is ' + isExist);
+        if (!isExist) {
+          await preferences.put(KEY_APP_FONT_SIZE, fontSize);
+          preferences.flush();
+        }
+      }).catch((err: Error) => {
+        Logger.error(TAG, 'Has the value failed with err: ' + err);
+      });
+    }).catch((err: Error) => {
+      Logger.error(TAG, 'Get the preferences failed, err: ' + err);
+    });
+  }
 }
 ```
 
@@ -130,16 +130,14 @@ onPageShow() {
   })
 }
 ...
-Text('设置字体大小')
-  .fontSize(this.changeFontSize + 'fp')
 ```
 
 ```typescript
 // PreferencesUtil.ets工具类
 async getChangeFontSize() {
   let fontSize: number = 0;
-  const preferences = await globalThis.getFontPreferences();
-  fontSize = await preferences.get(KEY_APP_FONT_SIZE, fontSize);
+  let getFontPreferences: Function = GlobalContext.getContext().getObject('getFontPreferences') as Function;
+  fontSize = await (await getFontPreferences()).get(KEY_APP_FONT_SIZE, fontSize);
   return fontSize;
 }
 ```
@@ -151,17 +149,23 @@ async getChangeFontSize() {
 ```typescript
 // SetFontSizePage.ets
 Slider({
-  value: this.changeFontSize === CommonConstants.SET_SIZE_HUGE
-    ? CommonConstants.SET_SLIDER_MAX : this.changeFontSize,
+  value: this.changeFontSize === CommonConstants.SET_SIZE_HUGE ? 
+    CommonConstants.SET_SLIDER_MAX : this.changeFontSize,
   min: CommonConstants.SET_SLIDER_MIN,
   max: CommonConstants.SET_SLIDER_MAX,
   step: CommonConstants.SET_SLIDER_STEP,
   style: SliderStyle.InSet
 })
   ...
-  .onChange((value: number) => {
+  .onChange(async (value: number) => {
+    if (this.changeFontSize === 0) {
+      this.changeFontSize = await PreferencesUtil.getChangeFontSize();
+      this.fontSizeText = SetViewModel.getTextByFontSize(value);
+      return;
+    }
     // 获取改变后的字体大小
-    this.changeFontSize = value === CommonConstants.SET_SLIDER_MAX ? CommonConstants.SET_SIZE_HUGE : value;
+    this.changeFontSize = (value === CommonConstants.SET_SLIDER_MAX ?
+      CommonConstants.SET_SIZE_HUGE : value);
     // 获取字体大小的文本
     this.fontSizeText = SetViewModel.getTextByFontSize(this.changeFontSize);
     // 保存数据
@@ -172,11 +176,12 @@ Slider({
 ```typescript
 // PreferencesUtil.ets工具类
 saveChangeFontSize(fontSize: number) {
-  globalThis.getFontPreferences().then(async (preferences) => {
+  let getFontPreferences: Function =  GlobalContext.getContext().getObject('getFontPreferences') as Function;
+  getFontPreferences().then(async (preferences: dataPreferences.Preferences) => {
     await preferences.put(KEY_APP_FONT_SIZE, fontSize);
     preferences.flush();
-  }).catch((err) => {
-    Logger.error(TAG, 'Get the preferences failed, err: ' + err);
+  }).catch((err: Error) => {
+    Logger.error(TAG, 'put the preferences failed, err: ' + err);
   });
 }
 ```

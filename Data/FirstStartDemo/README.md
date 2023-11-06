@@ -1,19 +1,23 @@
 # 应用首次启动（ArkTS）
 
 ## 介绍
-本篇Codelab基于自定义弹框、首选项和页面路由router实现了一个模拟应用首次启动的案例。需要完成以下功能：
+本篇Codelab基于自定义弹框、首选项和页面路由实现一个模拟应用首次启动的案例。需要完成以下功能：
 
 1. 实现四个页面，启动页、隐私协议页、广告页、应用首页。
 2. 页面之间的跳转。
 3. 实现自定义隐私协议弹窗，点击协议可查看隐私协议具体内容。
 4. 隐私协议状态持久化存储，再次启动时，如果没有保存状态会再次弹出，否则不弹出。
 
+效果如图所示：
+
 ![](figures/FirstStartDemo.gif)
 
 ### 相关概念
 
 -   [首选项](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-data-preferences.md) ：首选项为应用提供Key-Value键值型的数据处理能力，支持应用持久化轻量级数据，并对其修改和查询。数据存储形式为键值对，键的类型为字符串型，值的存储数据类型包括数字型、字符型、布尔型以及这3种类型的数组类型。
+
 -   [自定义弹窗](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-methods-custom-dialog-box.md) ： 通过CustomDialogController类显示自定义弹窗。
+
 -   [页面路由](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-router.md) ：提供通过不同的url访问不同的页面，包括跳转到应用内的指定页面、用应用内的某个页面替换当前页面、返回上一页面或指定的页面等。
 
 
@@ -21,13 +25,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) 版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87) 版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md) 。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -50,7 +54,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets               // 代码区 
@@ -58,6 +62,7 @@
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets     // 常量类
 │  │  └──utils
+│  │     ├──GlobalContext.ets       // 项目工具类
 │  │     └──Logger.ets              // 日志打印工具类
 │  ├──entryability
 │  │  └──EntryAbility.ets           // 程序入口类
@@ -111,17 +116,16 @@ build() {
         .opacity($r('app.float.launcher_text_opacity'))
         .margin({ top: CommonConstants.LAUNCHER_TEXT_INTRODUCE_MARGIN_TOP })
     }
-    .height(CommonConstants.FULL_HEIGHT)
-    .width(CommonConstants.FULL_WIDTH)
-  }
+.height(CommonConstants.FULL_HEIGHT)
+   .width(CommonConstants.FULL_WIDTH)
+}
 }
 // 健康生活字体公共样式
-@Extend(Text) function healthyLifeTextStyle (fontWeight: number,
-  textAttribute: number, fontSize: Resource, fontColor: Resource) {
-    .fontWeight(fontWeight)
-    .letterSpacing(textAttribute)
-    .fontSize(fontSize)
-    .fontColor(fontColor)
+@Extend(Text) function healthyLifeTextStyle (fontWeight: number, textAttribute: number, fontSize: Resource, fontColor: Resource) {
+   .fontWeight(fontWeight)
+      .letterSpacing(textAttribute)
+      .fontSize(fontSize)
+      .fontColor(fontColor)
 }
 ```
 
@@ -136,15 +140,15 @@ build() {
 // 自定义弹窗
 @CustomDialog
 export default struct CustomDialogComponent {
-  controller: CustomDialogController;
+  controller: CustomDialogController = new CustomDialogController({'builder': ''});
   // 不同意按钮回调
-  cancel: () => void;
+  cancel: Function = () => {}
   // 同意按钮回调
-  confirm: () => void;
+  confirm: Function = () => {}
   build() {
     Column() {
-     // 弹窗标题
-     Text($r('app.string.dialog_text_title'))
+      // 弹窗标题
+      Text($r('app.string.dialog_text_title'))
         .width(CommonConstants.DIALOG_COMPONENT_WIDTH_PERCENT)
         .fontColor($r('app.color.dialog_text_color'))
         .fontSize($r('app.float.dialog_text_privacy_size'))
@@ -163,11 +167,10 @@ export default struct CustomDialogComponent {
         .fontColor($r('app.color.dialog_text_statement_color'))
         .fontSize($r('app.float.dialog_common_text_size'))
         .onClick(() => {
-          globalThis.isJumpPrivacy = true;
           router.pushUrl({
             url: CommonConstants.PRIVACY_PAGE_URL
-          }).catch((error) => {
-            Logger.error(CommonConstants.CUSTOM_DIALOG_TAG, 'CustomDialog pushUrl error ' + JSON.stringify(error));          
+          }).catch((error: Error) => {
+            Logger.error(CommonConstants.CUSTOM_DIALOG_TAG, 'CustomDialog pushUrl error ' + JSON.stringify(error));
           });
         })
       // 协议声明
@@ -200,6 +203,9 @@ export default struct CustomDialogComponent {
       }
       .margin({ bottom: CommonConstants.DIALOG_ROW_MARGIN_BOTTOM })
     }
+    .width(CommonConstants.DIALOG_WIDTH_PERCENT)
+    .borderRadius(CommonConstants.DIALOG_BORDER_RADIUS)
+    .backgroundColor(Color.White)
   }
 }
 
@@ -222,12 +228,12 @@ export default struct CustomDialogComponent {
 onPageShow() {
   ...
   // 获取保存数据操作类
-  this.getDataPreferences().then((preferences: preferences.Preferences) => {
-    preferences.get(CommonConstants.PREFERENCES_KEY_PRIVACY, true)
-    .then((value: preferences.ValueType) => {
+  this.getDataPreferences(this).then((preferences: preferences.Preferences) => {
+    preferences.get(CommonConstants.PREFERENCES_KEY_PRIVACY, true).then((value: preferences.ValueType) => {
       Logger.info(CommonConstants.LAUNCHER_PAGE_TAG, 'onPageShow value: ' + value);
       if (value) {
-        let isJumpPrivacy: boolean = globalThis.isJumpPrivacy ?? false;
+        // let isJumpPrivacy: boolean = globalThis.isJumpPrivacy ?? false;
+        let isJumpPrivacy: boolean = (GlobalContext.getContext().getObject('isJumpPrivacy') as boolean) ?? false;
         if (!isJumpPrivacy) {
           // 自定义协议弹窗
           this.dialogController.open();          
@@ -241,8 +247,8 @@ onPageShow() {
 }
 
 // 获取数据首选项操作
-getDataPreferences() {
-  return preferences.getPreferences(this.context, 'myStore');
+getDataPreferences(common: Object) : Promise<preferences.Preferences>{
+  return preferences.getPreferences(getContext(common), CommonConstants.PREFERENCES_FILE_NAME);
 }
 ```
 
@@ -252,14 +258,14 @@ getDataPreferences() {
 
 ```typescript
 // LauncherPage.ets
-onConfirm() {
+onConfirm(): void {
   // 保存隐私协议状态
   this.saveIsPrivacy();
   ...
 }
 
-saveIsPrivacy() {
-  let preferences: Promise<preferences.Preferences> = this.getDataPreferences();
+saveIsPrivacy(): void {
+  let preferences: Promise<preferences.Preferences> = this.getDataPreferences(this);
   preferences.then((result: preferences.Preferences) => {
     let privacyPut = result.put(CommonConstants.PREFERENCES_KEY_PRIVACY, false);
     result.flush();
@@ -277,26 +283,30 @@ saveIsPrivacy() {
 ```typescript
 // LauncherPage.ets
 private isJumpToAdvertising: boolean = false;
-onConfirm() {
+onConfirm() :void{
   ...
   // 跳转到广告页
   this.jumpToAdvertisingPage();
 }
 
-jumpToAdvertisingPage() {
+jumpToAdvertisingPage() :void{ 
   this.timerId = setTimeout(() => {
     // 设置跳转标识
     this.isJumpToAdvertising = true;
-    router.push({ url: CommonConstants.ADVERTISING_PAGE_URL })
+    router.pushUrl({
+      url: CommonConstants.ADVERTISING_PAGE_URL
+    }).catch((error: Error) => {
+      Logger.error(CommonConstants.LAUNCHER_PAGE_TAG, 'LauncherPage pushUrl error ' + JSON.stringify(error));
+    });
   }, CommonConstants.LAUNCHER_DELAY_TIME);
 }
 
-onPageHide() {
+onPageHide(): void {
   if (this.isJumpToAdvertising) {
     // 清除页面
     router.clear();
   }
-  globalThis.isJumpPrivacy = true;
+  GlobalContext.getContext().setObject('isJumpPrivacy', true);
   // 清除定时器
   clearTimeout(this.timerId);
 }
@@ -309,23 +319,24 @@ onPageHide() {
 ```typescript
 // AdvertisingPage.ets
 @State countDownSeconds: number = CommonConstants.ADVERTISING_COUNT_DOWN_SECONDS;
+private timeId: number = 0;
 onPageShow() {
-  // 开启2秒倒计时
-  this.timeId = setInterval(() => {
-    if (this.countDownSeconds == 0) {
-      // 跳转到首页
-      this.jumpToAppHomePage();
-    } else {
-      this.countDownSeconds--;
-    }
-  }, CommonConstants.ADVERTISING_INTERVAL_TIME);
+   // 开启2秒倒计时
+   this.timeId = setInterval(() => {
+      if (this.countDownSeconds == 0) {
+         // 跳转到首页
+         this.jumpToAppHomePage();
+      } else {
+         this.countDownSeconds--;
+      }
+   }, CommonConstants.ADVERTISING_INTERVAL_TIME);
 }
 
 onPageHide() {
-  // 清除页面
-  router.clear();
-  // 清除定时器
-  clearInterval(this.timeId);
+   // 清除页面
+   router.clear();
+   // 清除定时器
+   clearInterval(this.timeId);
 }
 
 build() {
@@ -340,16 +351,16 @@ build() {
     })
     ...
   }
-  .width(CommonConstants.FULL_WIDTH)
-  .height(CommonConstants.FULL_HEIGHT)
+.width(CommonConstants.FULL_WIDTH)
+   .height(CommonConstants.FULL_HEIGHT)
 }
 
-jumpToAppHomePage() {
-  router.pushUrl({
-    url: CommonConstants.APP_HOME_PAGE_URL
-  }).catch((error) => {
-    Logger.error(CommonConstants.ADVERTISING_PAGE_TAG, 'AdvertisingPage pushUrl error ' + JSON.stringify(error));
-  });
+jumpToAppHomePage(): void {
+   router.pushUrl({
+      url: CommonConstants.APP_HOME_PAGE_URL
+   }).catch((error) => {
+      Logger.error(CommonConstants.ADVERTISING_PAGE_TAG, 'AdvertisingPage pushUrl error ' + JSON.stringify(error));
+   });
 }
 ```
 

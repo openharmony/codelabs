@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { VideoItem } from '../common/bean/VideoItem';
+import { VideoItem } from '../viewmodel/VideoItem';
 import { initializeOnStartup } from '../viewmodel/VideoViewModel';
 import { PlayView } from '../view/play/PlayView';
 import { CommonConstants } from '../common/constants/CommonConstant';
@@ -38,7 +38,7 @@ struct PageVideo {
             item: item,
             barPosition: index
           });
-        }, item => JSON.stringify(item))
+        }, (item: VideoItem) => JSON.stringify(item))
       }
       .width(CommonConstants.FULL_WIDTH)
       .height(CommonConstants.FULL_HEIGHT)

@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 
-import ChatData from '../common/bean/ChatData';
-import { ItemDirection } from '../common/bean/ItemDirection';
+import ChatData from '../viewmodel/ChatData';
+import { ItemDirection } from '../viewmodel/ItemDirection';
 import StyleConstants from '../common/constants/StyleConstants';
 
 /**
@@ -22,8 +22,8 @@ import StyleConstants from '../common/constants/StyleConstants';
  */
 @Component
 export default struct ChatItemComponent {
-  item: ChatData;
-  @Prop changeFontSize: number;
+  item: ChatData = new ChatData();
+  @Prop changeFontSize: number = 0;
 
   build() {
     Row() {
@@ -49,8 +49,8 @@ export default struct ChatItemComponent {
 
 @Component
 struct ChatContent {
-  item: ChatData;
-  @Prop changeFontSize: number;
+  item: ChatData = new ChatData();
+  @Prop changeFontSize: number = 0;
   @State isLineFeed: boolean = false;
 
   build() {

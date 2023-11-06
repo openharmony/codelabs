@@ -17,9 +17,10 @@ import common from '@ohos.app.ability.common';
 import deviceManager from '@ohos.distributedHardware.deviceManager';
 import prompt from '@ohos.promptAction';
 import CommonConstants from '../common/constants/CommonConstants';
-import Position from '../common/bean/Position';
+import Position from '../viewmodel/Position';
 
-@Extend(Text) function ButtonTextStyle() {
+@Extend(Text)
+function ButtonTextStyle() {
   .fontColor($r('app.color.button_text_color'))
   .fontSize($r('app.float.button_font_size'))
   .fontWeight(CommonConstants.FONT_WEIGHT_500)
@@ -30,9 +31,10 @@ export default struct DeviceListDialogComponent {
   @State selectedIndex: number = CommonConstants.INVALID_INDEX;
   @Link positionList: Position[];
   @Link deviceList: deviceManager.DeviceInfo[];
-  controller: CustomDialogController = null;
-  startAbility: (context: common.UIAbilityContext,device: deviceManager.DeviceInfo, positionList: Position[]) => void;
-  cancel: () => void;
+  controller?: CustomDialogController;
+  startAbility: (context: common.UIAbilityContext, device: deviceManager.DeviceInfo, positionList: Position[]) => void
+    = () => {};
+  cancel: () => void = () => {};
 
   build() {
     Column() {
@@ -112,7 +114,7 @@ export default struct DeviceListDialogComponent {
               }
             }
           }
-        }, (item) => item.deviceId )
+        }, (item: deviceManager.DeviceInfo) => item.deviceId)
       }
       .width(CommonConstants.FULL_PERCENT)
 
@@ -125,7 +127,9 @@ export default struct DeviceListDialogComponent {
         .justifyContent(FlexAlign.Center)
         .height($r('app.float.button_line_height'))
         .onClick(() => {
-          this.controller.close();
+          if (this.controller !== undefined) {
+            this.controller.close();
+          }
           this.cancel();
         })
 
@@ -148,7 +152,9 @@ export default struct DeviceListDialogComponent {
               message: $r('app.string.please_select_device')
             });
           } else {
-            this.controller.close();
+            if (this.controller !== undefined) {
+              this.controller.close();
+            }
             this.startAbility(getContext(this) as common.UIAbilityContext, this.deviceList[this.selectedIndex],
               this.positionList);
           }
@@ -170,7 +176,7 @@ export default struct DeviceListDialogComponent {
    * @param deviceType Device type.
    * @returns Icon resource.
    */
-  getDeviceTypeIcon(deviceType): Resource {
+  getDeviceTypeIcon(deviceType: deviceManager.DeviceType): Resource {
     if ((deviceType === deviceManager.DeviceType.PHONE) || (deviceType === deviceManager.DeviceType.UNKNOWN_TYPE)) {
       return $r('app.media.ic_public_devices_phone');
     } else if (deviceType === deviceManager.DeviceType.TV) {

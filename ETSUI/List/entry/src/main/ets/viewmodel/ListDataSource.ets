@@ -19,10 +19,10 @@ import { MAGNIFICATION,  MAX_DATA_LENGTH } from '../common/CommonConstants';
 /**
  * create a List range
  */
-const createListRange = () => {
-  let result = [];
+const createListRange = (): GoodsListItemType[] => {
+  let result = new Array<GoodsListItemType>();
   for (let i = 0; i < MAGNIFICATION; i++) {
-    result = [...result, ...goodsInitialList];
+    result = result.concat(goodsInitialList);
   }
   return result;
 }
@@ -37,7 +37,7 @@ class BasicDataSource implements IDataSource {
     return 0;
   }
 
-  public getData(index: number): GoodsListItemType {
+  public getData(index: number): GoodsListItemType | undefined {
     return undefined;
   }
 
@@ -98,7 +98,7 @@ export class ListDataSource extends BasicDataSource {
 
   public pushData(): void {
     if(this.listData.length <  MAX_DATA_LENGTH) {
-      this.listData = [...this.listData, ...goodsInitialList];
+      this.listData.concat(goodsInitialList);
       this.notifyDataAdd(this.listData.length - 1);
     }
   }

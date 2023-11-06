@@ -6,35 +6,46 @@
 
 1. 用户可以创建最多6个健康生活任务（早起，喝水，吃苹果，每日微笑，刷牙，早睡），并设置任务目标、是否开启提醒、提醒时间、每周任务频率。
 2. 用户可以在主页面对设置的健康生活任务进行打卡，其中早起、每日微笑、刷牙和早睡只需打卡一次即可完成任务，喝水、吃苹果需要根据任务目标量多次打卡完成。
+
 3. 主页可显示当天的健康生活任务完成进度，当天所有任务都打卡完成后，进度为100%，并且用户的连续打卡天数加一。
+
 4. 当用户连续打卡天数达到3、7、30、50、73、99天时，可以获得相应的成就。成就在获得时会以动画形式弹出，并可以在“成就”页面查看。
+
 5. 用户可以查看以前的健康生活任务完成情况。
 
 本应用的运行效果如下图所示：
+
 ![](figures/健康生活.gif)
 
 ### 相关概念
 
--   [@AppStorage](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-appstorage.md)：应用程序中的单例对象，为应用程序范围内的可变状态属性提供中央存储。
--   [@Observed 和 @ObjectLink](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-observed-and-objectlink.md)：@Observed适用于类，表示类中的数据变化由UI页面管理；@ObjectLink应用于被@Observed装饰类的对象。
--   [@Consume 和 @Provide](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-provide-and-consume.md)：@Provide作为数据提供者，可以更新子节点的数据，触发页面渲染。@Consume检测到@Provide数据更新后，会发起当前视图的重新渲染。
--   [Flex](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-flex.md)：一个功能强大的容器组件，支持横向布局，竖向布局，子组件均分和流式换行布局。
--   [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md)：List是很常用的滚动类容器组件之一，它按照水平或者竖直方向线性排列子组件， List的子组件必须是ListItem，它的宽度默认充满List的宽度。
--   [TimePicker](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-timepicker.md)：TimePicker是选择时间的滑动选择器组件，默认以00:00至23:59的时间区创建滑动选择器。
--   [Toggle](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-toggle.md)：组件提供勾选框样式、状态按钮样式及开关样式。
--   [关系型数据库（Relational Database，RDB）](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-data-rdb.md)：一种基于关系模型来管理数据的数据库。
+- [@Observed 和 @ObjectLink](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#observed%E5%92%8Cobjectlink%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86)：@Observed适用于类，表示类中的数据变化由UI页面管理；@ObjectLink应用于被@Observed装饰类的对象。
+
+- [@Consume 和 @Provide](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-state-mgmt-page-level.md#consume%E5%92%8Cprovide)：@Provide作为数据提供者，可以更新子节点的数据，触发页面渲染。@Consume检测到@Provide数据更新后，会发起当前视图的重新渲染。
+
+- [Flex](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-flex.md)：一个功能强大的容器组件，支持横向布局，竖向布局，子组件均分和流式换行布局。
+
+- [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md)：List是很常用的滚动类容器组件之一，它按照水平或者竖直方向线性排列子组件， List的子组件必须是ListItem，它的宽度默认充满List的宽度。
+
+- [TimePicker](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-timepicker.md)：TimePicker是选择时间的滑动选择器组件，默认以00:00至23:59的时间区创建滑动选择器。
+
+- [Toggle](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-toggle.md)：组件提供勾选框样式、状态按钮样式及开关样式。
+
+- [后台代理提醒](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-reminderAgentManager.md)：使用后台代理提醒能力后，应用可以被冻结或退出，计时和弹出提醒的功能将被后台系统服务代理。
+
+- [关系型数据库（Relational Database，RDB）](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-data-rdb.md)：一种基于关系模型来管理数据的数据库。
 
 ## 环境搭建
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -55,81 +66,92 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
-├──entry/src/main/ets                 // 代码区
-│  ├──common
-│  │  ├──bean
-│  │  │  ├──ColumnInfo.ets            // 数据表信息接口
-│  │  │  ├──DayInfo.ets               // 每日信息接口
-│  │  │  ├──GlobalInfo.ets            // 全局信息接口
-│  │  │  └──TaskInfo.ets              // 任务信息接口
-│  │  ├──constants
-│  │  │  └──CommonConstants.ets       // 公共常量
-│  │  ├──database
-│  │  │  ├──rdb                       // 数据库封装类
-│  │  │  │  ├──RdbHelper.ets
-│  │  │  │  ├──RdbHelperImp.ets
-│  │  │  │  ├──RdbUtils.ets
-│  │  │  │  └──TableHelper.ets
-│  │  │  └──tables                    // 数据表
-│  │  │     ├──DayInfoApi.ets
-│  │  │     ├──GlobalInfoApi.ets
-│  │  │     └──TaskInfoApi.ets
-│  │  └──utils
-│  │     ├──Logger.ets                // 日志类
-│  │     ├──BroadCast.ets             // 通知
-│  │     ├──HealthDataSrcMgr.ets      // 数据管理单例
-│  │     └──Utils.ets                 // 工具类
-│  ├──entryability
-│  │  └──EntryAbility.ts              // 程序入口类
-│  ├──model                           // model
-│  │  ├──AchieveModel.ets
-│  │  ├──DatabaseModel.ets            // 数据库model
-│  │  ├──Mine.ets
-│  │  ├──NavItemModel.ets             // 菜单栏model
-│  │  ├──RdbColumnModel.ets  
-│  │  ├──TaskInitList.ets
-│  │  └──WeekCalendarModel.ets        // 日历model
-│  ├──pages
-│  │  ├──AdvertisingPage.ets          // 广告页
-│  │  ├──MainPage.ets                 // 应用主页面
-│  │  ├──MinePage.ets                 // 我的页面
-│  │  ├──SplashPage.ets               // 启动页
-│  │  ├──TaskEditPage.ets             // 任务编辑页面
-│  │  └──TaskListPage.ets             // 任务列表页面
-│  ├──view
-│  │  ├──dialog                       // 弹窗组件
-│  │  │  ├──AchievementDialog.ets     // 成就弹窗
-│  │  │  ├──CustomDialogView.ets      // 自定义弹窗
-│  │  │  ├──TaskDetailDialog.ets      // 打卡弹窗
-│  │  │  ├──TaskDialogView.ets
-│  │  │  ├──TaskSettingDialog.ets     // 任务编辑相关弹窗
-│  │  │  └──UserPrivacyDialog.ets
-│  │  ├──home                         // 主页面相关组件
-│  │  │  ├──AddBtnComponent.ets       // 添加任务按钮组件
-│  │  │  ├──HomeTopComponent.ets      // 首页顶部组件
-│  │  │  ├──TaskCardComponent.ets     // 任务item组件件
-│  │  │  └──WeekCalendarComponent.ets // 日历组件
-│  │  ├──task                         // 任务相关组件
-│  │  │  ├──TaskDetailComponent.ets   // 任务编辑详情组件
-│  │  │  ├──TaskEditListItem.ets      // 任务编辑行内容
-│  │  │  └──TaskListComponent.ets     // 任务列表组件
-│  │  ├──AchievementComponent.ets     // 成就页面
-│  │  ├──BadgeCardComponent.ets       // 勋章卡片组件
-│  │  ├──BadgePanelComponent.ets      // 勋章面板组件
-│  │  ├──HealthTextComponent.ets      // 自定义text组件
-│  │  ├──HomeComponent.ets            // 首页页面
-│  │  ├──ListInfo.ets                 // 用户信息列表
-│  │  ├──TitleBarComponent.ets        // 成就标题组件
-│  │  └──UserBaseInfo.ets             // 用户基本信息
-│  └──viewmodel                       // viewmodel
-│     ├──AchievementViewModel.ets     // 成就相关模块
-│     ├──CalendarViewModel.ets        // 日历相关模块
-│     ├──HomeViewModel.ets            // 首页相关模块
-│     └──TaskViewModel.ets            // 任务设置相关模块
-└──entry/src/main/resources           // 资源文件夹
+├─entry/src/main/ets                 // 代码区
+│  ├─common
+│  │  ├─constants
+│  │  │  └─CommonConstants.ets       // 公共常量
+│  │  ├─database
+│  │  │  ├─rdb                       // 数据库
+│  │  │  │  ├─RdbHelper.ets
+│  │  │  │  ├─RdbHelperImp.ets
+│  │  │  │  ├─RdbUtil.ets
+│  │  │  │  └─TableHelper.ets
+│  │  │  └─tables                    // 数据库接口
+│  │  │     ├─DayInfoApi.ets
+│  │  │     ├─GlobalInfoApi.ets
+│  │  │     └─TaskInfoApi.ets
+│  │  └─utils
+│  │     ├─BroadCast.ets             // 通知
+│  │     ├─GlobalContext.ets         // 全局上下文
+│  │     ├─HealthDataSrcMgr.ets      // 数据管理单例
+│  │     ├─Logger.ets                // 日志类
+│  │     └─Utils.ets                 // 工具类
+│  ├─entryability
+│  │  └─EntryAbility.ets             // 程序入口类
+│  ├─model                           // model
+│  │  ├─AchieveModel.ets
+│  │  ├─DatabaseModel.ets            // 数据库model
+│  │  ├─Mine.ets
+│  │  ├─NavItemModel.ets             // 菜单栏model
+│  │  ├─RdbColumnModel.ets           // 数据库表数据
+│  │  ├─TaskInitList.ets
+│  │  └─WeekCalendarModel.ets        // 日历model
+│  ├─pages
+│  │  ├─AdvertisingPage.ets          // 广告页
+│  │  ├─MainPage.ets                 // 应用主页面
+│  │  ├─MinePage.ets                 // 我的页面
+│  │  ├─SplashPage.ets               // 启动页
+│  │  ├─TaskEditPage.ets             // 任务编辑页面
+│  │  └─TaskListPage.ets             // 任务列表页面
+│  ├─service
+│  │  └─ReminderAgent.ets            // 后台提醒
+│  ├─view
+│  │  ├─dialog                       // 弹窗组件
+│  │  │  ├─AchievementDialog.ets     // 成就弹窗
+│  │  │  ├─CustomDialogView.ets      // 自定义弹窗
+│  │  │  ├─TaskDetailDialog.ets      // 打卡弹窗
+│  │  │  ├─TaskDialogView.ets        // 任务对话框
+│  │  │  ├─TaskSettingDialog.ets     // 任务编辑相关弹窗
+│  │  │  └─UserPrivacyDialog.ets
+│  │  ├─home                         // 主页面相关组件
+│  │  │  ├─AddBtnComponent.ets       // 添加任务按钮组件
+│  │  │  ├─HomeTopComponent.ets      // 首页顶部组件
+│  │  │  ├─TaskCardComponent.ets     // 任务item组件件
+│  │  │  └─WeekCalendarComponent.ets // 日历组件
+│  │  ├─task                         // 任务相关组件
+│  │  │  ├─TaskDetailComponent.ets   // 任务编辑详情组件
+│  │  │  ├─TaskEditListItem.ets      // 任务编辑行内容
+│  │  │  └─TaskListComponent.ets     // 任务列表组件
+│  │  ├─AchievementComponent.ets     // 成就页面
+│  │  ├─BadgeCardComponent.ets       // 勋章卡片组件
+│  │  ├─BadgePanelComponent.ets      // 勋章面板组件
+│  │  ├─HealthTextComponent.ets      // 自定义text组件
+│  │  ├─HomeComponent.ets            // 首页页面
+│  │  ├─ListInfo.ets                 // 用户信息列表
+│  │  ├─TitleBarComponent.ets        // 成就标题组件
+│  │  └─UserBaseInfo.ets             // 用户基本信息
+│  └─viewmodel                       // viewmodel
+│     ├─AchievementInfo.ets          // 成就信息
+│     ├─AchievementMapInfo.ets       // 成就map信息
+│     ├─AchievementViewModel.ets     // 成就相关模块
+│     ├─BroadCastCallBackInfo.ets    // 通知回调信息
+│     ├─CalendarViewModel.ets        // 日历相关模块
+│     ├─CardInfo.ets                 // 成就卡片信息
+│     ├─ColumnInfo.ets               // 数据库表结构
+│     ├─CommonConstantsInfo.ets      // 公共常量信息
+│     ├─DayInfo.ets                  // 每日信息
+│     ├─GlobalInfo.ets               // 全局信息
+│     ├─HomeViewModel.ets            // 首页相关模块
+│     ├─PublishReminderInfo.ets      // 发布提醒信息
+│     ├─ReminderInfo.ets             // 提醒信息
+│     ├─TaskInfo.ets                 // 任务信息
+│     ├─TaskViewModel.ets            // 任务设置相关模块
+│     ├─WeekCalendarInfo.ets         // 日历信息
+│     └─WeekCalendarMethodInfo.ets   // 日历方法信息
+└─entry/src/main/resources           // 资源文件夹
 ```
 
 ## 应用架构分析
@@ -153,43 +175,40 @@
 通过修改/entry/src/main/ets/entryability里的loadContent路径可以改变应用的入口文件，我们需要把入口文件改为我们写的SplashPage启动页面。
 
 ```typescript
-windowStage.loadContent("pages/SplashPage", (err, data) => {    
+// EntryAbility.ets
+windowStage.loadContent('pages/SplashPage', (err, data) => {    
   if (err.code) {...}    
-  Logger.info('windowStage','Succeeded in loading the content. Data: ' + JSON.stringify(data))
+  Logger.info('windowStage','Succeeded in loading the content. Data: ' + JSON.stringify(data));
 });
 ```
 
 在SplashPage启动页的文件里通过首选项来实现是否需要弹“权限管理”的弹窗，如果需要弹窗的情况下，用户点击同意权限后通过首选项对用户的操作做持久化保存。相关代码如下：
 
 ```typescript
-// SplashIndex.ets
+// SplashPage.ets
 import data_preferences from '@ohos.data.preferences';
-
 onConfirm() {
-  let preferences = data_preferences.getPreferences(globalThis.abilityContext, H_STORE);
+  let preferences = data_preferences.getPreferences(this.context, H_STORE);
   preferences.then((res) => {
     res.put(IS_PRIVACY, true).then(() => {
       res.flush();
-      Logger.info('TaskInfoTable', 'isPrivacy is put success');
-    }).catch((err) => {
-      Logger.info('TaskInfoTable', 'isPrivacy put failed. Cause:' + err);
+      Logger.info('SplashPage','isPrivacy is put success');
+    }).catch((err: Error) => {
+      Logger.info('SplashPage','isPrivacy put failed. Cause:' + err);
     });
   })
   this.jumpAdPage();
 }
-
 exitApp() {
-  globalThis.abilityContext.terminateSelf();
+  this.context.terminateSelf();
 }
-
 jumpAdPage() {
   setTimeout(() => {
-    router.replace({ url: 'pages/AdvertisingPage' });
-  }, commonConst.LAUNCHER_DELAY_TIME);
+    router.replaceUrl({ url: 'pages/AdvertisingPage' });
+  }, Const.LAUNCHER_DELAY_TIME);
 }
-
 aboutToAppear() {
-  let preferences = data_preferences.getPreferences(globalThis.abilityContext, H_STORE);
+  let preferences = data_preferences.getPreferences(this.context, H_STORE);
   preferences.then((res) => {
     res.get(IS_PRIVACY, false).then((isPrivate) => {
       if (isPrivate === true) {
@@ -211,20 +230,24 @@ aboutToAppear() {
 本应用一共有首页（HomeIndex），成就（AchievementIndex）和我的（MineIndex）三个模块，分别对应Tabs组件的三个子组件TabContent。
 
 ```typescript
-Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {  
-  TabContent() {    
-    HomeIndex({ editedTaskInfo: $editedTaskInfo, editedTaskID: $editedTaskID })  
-  }
-  .tabBar(this.TabBuilder(TabId.HOME)) 
-  TabContent() {    
-    AchievementIndex()  
-  }
-  .tabBar(this.TabBuilder(TabId.ACHIEVEMENT))  
-  TabContent() {    
-    MineIndex()  
-  }
-  .tabBar(this.TabBuilder(TabId.MINE))
+// MainPage.ets
+TabContent() {
+  HomeIndex({ homeStore: $homeStore, editedTaskInfo: $editedTaskInfo, editedTaskID: $editedTaskID })
+    .borderWidth({ bottom: 1 })
+    .borderColor($r('app.color.primaryBgColor'))
 }
+.tabBar(this.TabBuilder(TabId.HOME))
+.align(Alignment.Start)
+TabContent() {
+  AchievementIndex()
+}
+.tabBar(this.TabBuilder(TabId.ACHIEVEMENT))
+TabContent() {
+  MineIndex()
+    .borderWidth({ bottom: 1 })
+    .borderColor($r('app.color.primaryBgColor'))
+}
+.tabBar(this.TabBuilder(TabId.MINE))
 ```
 
 ### 首页
@@ -240,13 +263,14 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
    Scroll滚动的过程中，在它的onScroll方法里我们通过计算它Y轴的偏移量来改变当前界面的@State修饰的naviAlpha变量值，进而改变顶部标题的背景色，代码实现如下：
 
    ```typescript
+   // HomeComponent.ets
    // 视图滚动的过程中处理导航栏的透明度
    onScrollAction() {  
-     let yOffset = this.scroller.currentOffset().yOffset;  
-     if (yOffset > commonConst.DEFAULT_56) {    
-       this.naviAlpha = 1;  
+     this.yOffset = this.scroller.currentOffset().yOffset;  
+     if (this.yOffset > Const.DEFAULT_56) {    
+       this.naviAlpha = 1; 
      } else {    
-       this.naviAlpha = yOffset / commonConst.DEFAULT_56;
+       this.naviAlpha = this.yOffset / Const.DEFAULT_56;
      }
    }
    ```
@@ -256,14 +280,15 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
 
    日历组件主要用到的是一个横向滑动的Scroll组件。
 
-   ```typescript
+```typescript
+// WeekCalendarComponent.ets
    build() {    
      Row() {      
        Column() {        
          Row() {...}             
          Scroll(this.scroller) {          
            Row() {            
-             ForEach(this.homeStore.dateArr, (item: WeekDateModel, index: number) => {              
+             ForEach(this.homeStore.dateArr, (item: WeekDateModel, index?: number) => {              
                Column() {                
                  Text(item.weekTitle)                  
                    .fontColor(sameDate(item.date, this.homeStore.showDate) ? $r('app.color.blueColor') : $r('app.color.titleColor'))                                 
@@ -271,49 +296,41 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
                    .color(sameDate(item.date, this.homeStore.showDate) ? $r('app.color.blueColor') : $r('app.color.white'))                
                  Image(this.getProgressImg(item))                               
                } 
-               .onClick(() => WeekCalendarMethods.calenderItemClickAction.call(this, item, index))            
+               .onClick(() => WeekCalendarMethods.calenderItemClickAction(item, index, this.homeStore))            
              })          
-            }       
-           }               
-           .onScrollEnd(() => WeekCalendarMethods.onScrollEndAction.call(this))        
-           .onScrollEdge(() => WeekCalendarMethods.onScrollEdgeAction.call(this))      
-         }...       
-       }...    
+           }       
+         }
+         ...               
+         .onScrollEdge((event) => this.onScrollEdgeAction(event))      
+       }
+       ...       
      }
+     ...    
    }
-   ```
+```
 
    手动滑动页面时，我们通过在onScrollEnd方法里计算Scroll的偏移量来实现分页的效果，同时Scroll有提供scrollPage\(\)方法可供我们点击左右按钮的时候来进行页面切换。
 
    ```typescript
+   // WeekCalendarComponent.ets
    import display from '@ohos.display';
    ...
    // scroll滚动停止时通过判断偏移量进行分页处理
-   function onScrollEndAction() {  
-     let scrollWidth = DEFAULT_SCROLL_WIDTH;  
-   
-     // 获取屏幕的宽度  
-     display.getDefaultDisplay((err, data) => {    
-       if (!err) {      
-         scrollWidth = data.width * DEFAULT_SCROLL_PERCENT;    
-       } else {...}  
-     })  
-   
-     // 区分是否是手动滑动，点击左右箭头按钮导致Scroll滑动时不作处理，不然会引起死循环
-     if (!this.isPageScroll) {    
-       let page = Math.round(this.scroller.currentOffset().xOffset / scrollWidth);   
-       page = this.isLoadMore ? page + 1 : page;    
-       if (this.scroller.currentOffset().xOffset % scrollWidth != 0 || this.isLoadMore) {      
-         let xOffset = page * scrollWidth;   
-      
-         // 滑动到指定位置
-         this.scroller.scrollTo({ xOffset, yOffset: 0 });      
-         this.isLoadMore = false;    
-       }  
-   
-       // 处理当前界面展示的数据  
-       ...
-     }  
+   onScrollEndAction() {
+     if (this.isPageScroll === false) {
+       let page = Math.round(this.scroller.currentOffset().xOffset / this.scrollWidth);
+       page = (this.isLoadMore === true) ? page + 1 : page;
+       if (this.scroller.currentOffset().xOffset % this.scrollWidth != 0 || this.isLoadMore === true) {
+         let xOffset = page * this.scrollWidth;
+         this.scroller.scrollTo({ xOffset, yOffset: 0 } as ScrollTo);
+         this.isLoadMore = false;
+       }
+       this.currentPage = this.homeStore.dateArr.length / Const.WEEK_DAY_NUM - page - 1;
+       Logger.info('HomeIndex', 'onScrollEnd: page ' + page + ', listLength ' + this.homeStore.dateArr.length);
+       let dayModel: WeekDateModel = this.homeStore.dateArr[Const.WEEK_DAY_NUM * page+this.homeStore.selectedDay];
+       Logger.info('HomeIndex', 'currentItem: ' + JSON.stringify(dayModel) + ', selectedDay  ' + this.homeStore.selectedDay);
+       this.homeStore!.setSelectedShowDate(dayModel!.date!.getTime());
+     }
      this.isPageScroll = false;
    }
    ```
@@ -321,14 +338,15 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
    我们在需要在Scroll滑动到左边边缘的时候去请求更多的历史数据以便Scroll能一直滑动，通过Scroll的onScrollEdge方法我们可以判断它是否已滑到边缘位置。
 
    ```typescript
-   function onScrollEdgeAction(side: Edge) {
-     if (side == Edge.Top && !this.isPageScroll) {
+   // WeekCalendarComponent.ets
+   onScrollEdgeAction(side: Edge) {
+     if (side === Edge.Top && this.isPageScroll === false) {
        Logger.info('HomeIndex', 'onScrollEdge: currentPage ' + this.currentPage);
-       if ((this.currentPage + LAZY_DATA_PAGE) * WEEK_DAY_NUM >= this.homeStore.dateArr.length) {
+       if ((this.currentPage + 2) * Const.WEEK_DAY_NUM >= this.homeStore.dateArr.length) {
          Logger.info('HomeIndex', 'onScrollEdge: load more data');
          let date: Date = new Date(this.homeStore.showDate);
-         date.setDate(date.getDate() - WEEK_DAY_NUM);
-         this.homeStore.getPreWeekData(date);
+         date.setDate(date.getDate() - Const.WEEK_DAY_NUM);
+         this.homeStore.getPreWeekData(date, () => {});
          this.isLoadMore = true;
        }
      }
@@ -338,15 +356,16 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
    homeStore主要是请求数据库的数据并对数据进行处理进而渲染到界面上。
 
    ```typescript
-   public getPreWeekData(date: Date) {
-     let [initArr, dateArr] = getPreviousWeek(date);
+   // HomeViewModel.ets
+   public getPreWeekData(date: Date, callback: Function) {
+     let weekCalendarInfo: WeekCalendarInfo = getPreviousWeek(date);
        
      // 请求数据库数据
-     this.dayInfoApi.queryList(dateArr, (res: DayInfo[]) => {
+     DayInfoApi.queryList(weekCalendarInfo.strArr, (res: DayInfo[]) => {
    
        // 数据处理
        ...  
-       this.dateArr = initArr.concat(...this.dateArr);
+       this.dateArr = weekCalendarInfo.arr.concat(...this.dateArr);
      })
    }
    ```
@@ -354,16 +373,18 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
    同时我们还需要知道怎么根据当天的日期计算出本周内的所有日期数据。
 
    ```typescript
-   export function getPreviousWeek(showDate: Date): [Array<WeekDateModel>, Array<string>] {
+   // WeekCalendarModel.ets
+   export function getPreviousWeek(showDate: Date): WeekCalendarInfo {
+     Logger.debug('WeekCalendarModel', 'get week date by date: ' + showDate.toDateString());
+     let weekCalendarInfo: WeekCalendarInfo = new WeekCalendarInfo();
      let arr: Array<WeekDateModel> = [];
-     let strArr: Array<string> = []; 
-   
+     let strArr: Array<string> = [];
+     let currentDay = showDate.getDay() - 1;
      // 由于date的getDay()方法返回的是0-6代表周日到周六，我们界面上展示的周一-周日为一周，所以这里要将getDay()数据偏移一天
      let currentDay = showDate.getDay() - 1;
-     if (showDate.getDay() == 0) {
+     if (showDate.getDay() === 0) {
        currentDay = 6;
      }
-   
      // 将日期设置为当前周第一天的数据（周一）
      showDate.setDate(showDate.getDate() - currentDay);
      for (let index = WEEK_DAY_NUM; index > 0; index--) {
@@ -373,7 +394,10 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
        strArr.push(dateStr);
        arr.push(new WeekDateModel(WEEK_TITLES[tempDate.getDay()], dateStr, tempDate));
      }
-     return [arr, strArr];
+     Logger.debug('WeekCalendarModel', JSON.stringify(arr));
+     weekCalendarInfo.arr = arr;
+     weekCalendarInfo.strArr = strArr;
+     return weekCalendarInfo;
    }
    ```
 
@@ -383,58 +407,80 @@ Tabs({ barPosition: BarPosition.End, controller: this.tabController }) {
    由于首页右下角有一个悬浮按钮，所以首页整体我们用了一个Stack组件，将右下角的悬浮按钮和顶部的title放在滚动组件层的上边。
 
    ```typescript
+   // HomeComponent.ets
    build() {  
      Stack() {    
        Scroll(this.scroller) {      
          Column() {     
            ...   // 上部界面组件
            Column() {          
-             ForEach(TaskList, (item: TaskInfo) => {            
-               TaskCard(...,
-                 clickAction: (isClick) => this.taskItemAction(item, isClick)) 
-             }, item => item.date + item.taskID)} 
-           }   
-         }
+             ForEach(this.homeStore.getTaskListOfDay(), (item: TaskInfo) => {            
+               TaskCard({
+                 taskInfoStr: JSON.stringify(item),
+                 clickAction: (isClick: boolean) => this.taskItemAction(item, isClick)
+               })
+               ...
+             }, (item: TaskInfo) => JSON.stringify(item))} 
+         }   
        }
-       .onScroll(this.onScrollAction.bind(this))
-        // 悬浮按钮
-        AddBtn()   
-        // 顶部title 
-        Row() {       
-          Text($r('app.string.MainAbility_label'))
-        }
-        .position({ x: 0, y: 0 })    
-        .backgroundColor(`rgba(${WHITE_COLOR_0X},${WHITE_COLOR_0X},${WHITE_COLOR_0X},${this.naviAlpha})`)    
-        CustomDialogView()  
-     }  
-     .allSize() 
-     .backgroundColor($r('app.color.primaryBgColor'))
-   }
+     }
+     .onScroll(() => {
+       this.onScrollAction()
+     })
+     // 悬浮按钮
+     AddBtn({ clickAction: () => {
+       this.editTaskAction()
+     } }) 
+     // 顶部title 
+     Row() {
+       Text($r('app.string.EntryAbility_label'))
+         .titleTextStyle()
+         .fontSize($r('app.float.default_24'))
+         .padding({ left: Const.THOUSANDTH_66 })
+     }
+     .width(Const.THOUSANDTH_1000)
+     .height(Const.DEFAULT_56)
+     .position({ x: 0, y: 0 })
+     .backgroundColor(`rgba(${WHITE_COLOR_0X},${WHITE_COLOR_0X},${WHITE_COLOR_0X},${this.naviAlpha})`)
+     CustomDialogView()
+   } 
+   .allSize() 
+   .backgroundColor($r('app.color.primaryBgColor'))
    ```
 
 
 4. 界面跳转及传参
-
+ 
    首页任务列表长按时需要跳转到对应的任务编辑界面，同时点击悬浮按钮时需要跳转到任务列表页面。
 
    页面跳转需要在头部引入router。
 
    ```typescript
+   // HomeComponent.ets
    import router from '@ohos.router';
    ```
-
+ 
    任务item的点击事件代码如下
 
    ```typescript
-   taskItemAction(item: TaskInfo, isClick: boolean) {  
+   // HomeComponent.ets
+   taskItemAction(item: TaskInfo, isClick: boolean): void {
+     if (!this.homeStore.checkCurrentDay()) {
+       return;
+     }
      if (isClick) {  
        // 点击任务打卡    
-       let callback: CustomDialogCallback = { confirmCallback: this.onConfirm.bind(this), cancelCallback: null };    
-       this.broadCast.emit(BroadCastType.SHOW_TASK_DETAIL_DIALOG, [item, callback]);  
+       let callback: CustomDialogCallback = { confirmCallback: (taskTemp: TaskInfo) => {
+         this.onConfirm(taskTemp)
+       }, cancelCallback: () => {
+       } };
+       this.broadCast.emit(BroadCastType.SHOW_TASK_DETAIL_DIALOG, [item, callback]); 
      } else {   
        // 长按编辑任务    
-       const editTask: ITaskItem = {...};   
-       router.push({ url: 'pages/task/TaskEdit', params: { params: JSON.stringify(editTask) } });  
+       let editTaskStr: string = JSON.stringify(TaskMapById[item.taskID - 1]);
+       let editTask: ITaskItem = JSON.parse(editTaskStr);
+       ...
+       router.pushUrl({ url: 'pages/TaskEditPage', params: { params: JSON.stringify(editTask) } });
      }
    }
    ```
@@ -470,51 +516,59 @@ Navigation() {
     // 页面中间的列表
     TaskList() 
   }
-  .width(THOUSANDTH_1000)
+  .width(Const.THOUSANDTH_1000)
   .justifyContent(FlexAlign.Center)
 }
-.size({ width: THOUSANDTH_1000, height: THOUSANDTH_1000 })
-.title(ADD_TASK_TITLE)
+.size({ width: Const.THOUSANDTH_1000, height: Const.THOUSANDTH_1000 })
+.title(Const.ADD_TASK_TITLE)
+.titleMode(NavigationTitleMode.Mini)
 ```
 
 列表右侧有一个判断是否开启的文字标识，点击某个列表需要跳转到对应的任务编辑页里。具体的列表实现如下：
 
 ```typescript
 // TaskListComponent.ets
-List({ space: commonConst.LIST_ITEM_SPACE }) {
-  ForEach(this.taskList, (item) => {
-    ListItem() {
-      Row() {
-        Row() {
-          Image(item?.icon)
-          Text(item?.taskName)
-            ...
-        }
-        .width(commonConst.THOUSANDTH_500)
 
-        // 状态显示
-        if (item?.isOpen) {
-          Text($r('app.string.already_open'))
+@Component
+export default struct TaskList {
+  ...
+  build() {
+    List({ space: Const.LIST_ITEM_SPACE }) {
+      ForEach(this.taskList, (item: ITaskItem) => {
+        ListItem() {
+          Row() {
+            Row() {
+              Image(item?.icon)
+                ...
+              Text(item?.taskName).fontSize(Const.DEFAULT_20).fontColor($r('app.color.titleColor'))
+            }.width(Const.THOUSANDTH_500)
+
+            Blank()
+              ...
+			// 状态改变
+            if (item?.isOpen) {
+              Text($r('app.string.already_open'))
+                ...
+            }
+            Image($r('app.media.ic_right_grey'))
+              ...
+          }
+          ...
         }
-        Image($rawfile('task/right_grey.png'))
-          .width(commonConst.DEFAULT_8)
-          .height(commonConst.DEFAULT_16)
-      }
-      ...
+        ...
+        .onClick(() => {
+          router.pushUrl({
+            url: 'pages/TaskEditPage',
+            params: {
+              params: formatParams(item),
+            }
+          })
+        })
+        ...
+      }, (item: ITaskItem) => JSON.stringify(item))
     }
-    ...
-
-    // 路由跳转到任务编辑页
-    .onClick(() => {
-      router.push({
-        url: 'pages/task/TaskEdit',
-        params: {
-          params: formatParams(item),
-        }
-      })
-    })
-    ...
-  })
+  ...
+  }
 }
 ```
 
@@ -534,18 +588,19 @@ Navigation() {
   Column() {
     TaskDetail()
   }
-  .width(THOUSANDTH_1000)
-  .height(THOUSANDTH_1000)
+  .width(Const.THOUSANDTH_1000)
+  .height(Const.THOUSANDTH_1000)
 }
-.size({ width: THOUSANDTH_1000, height: THOUSANDTH_1000 })
-.title(EDIT_TASK_TITLE)
+.size({ width: Const.THOUSANDTH_1000, height: Const.THOUSANDTH_1000 })
+.title(Const.EDIT_TASK_TITLE)
+.titleMode(NavigationTitleMode.Mini)
 ```
 
 自定义组件由List以及其子组件ListItem构成：
 
 ```typescript
 // TaskDetailComponent.ets
-List({ space: commonConst.LIST_ITEM_SPACE }) {
+List({ space: Const.LIST_ITEM_SPACE }) {
   ListItem() {
     TaskChooseItem()
   }
@@ -567,29 +622,33 @@ List({ space: commonConst.LIST_ITEM_SPACE }) {
   }
   ...
 }
-.width(commonConst.THOUSANDTH_940)
-.margin({ bottom: commonConst.THOUSANDTH_400 })
+.width(Const.THOUSANDTH_940)
 ```
 
 其中做了禁用判断，需要任务打开才可以点击编辑：
 
 ```typescript
-.enabled(this.settingParams?.isOpen)
+// TaskDetailComponent.ets
+.enabled(
+  this.settingParams?.isOpen
+)
 ```
 
 一些特殊情况的禁用，如每日微笑、每日刷牙的目标设置不可编辑：
 
 ```typescript
+// TaskDetailComponent.ets
 .enabled(
   this.settingParams?.isOpen
-  && (this.settingParams?.taskID !== taskType.smile)
-  && (this.settingParams?.taskID !== taskType.brushTeeth)
+    && this.settingParams?.taskID !== taskType.smile
+    && this.settingParams?.taskID !== taskType.brushTeeth
 )
 ```
 
 提醒时间在开启提醒打开之后才可以编辑：
 
 ```typescript
+// TaskDetailComponent.ets
 .enabled(this.settingParams?.isOpen && this.settingParams?.isAlarm)
 ```
 
@@ -597,34 +656,22 @@ List({ space: commonConst.LIST_ITEM_SPACE }) {
 
 ```typescript
 // TaskDetailComponent.ets
-addTask({
-
-  // 相关参数
-  ...
-})
-.then(res => {
-
+addTask(taskInfo, context).then((res: number) => {
+  GlobalContext.getContext().setObject('taskListChange', true);
   // 成功的状态，成功后跳转首页
   router.back({
-    url: 'pages/MainPage',
+    url: 'pages/MainPage', 
     params: {
-      editTask: this.isOpen === this.settingParams.isOpen ? {} :
-      formatParams({
-        ...this.settingParams,
-        isDone: true,
-        finValue: this.settingParams?.targetValue,
-      }),
+      editTask: this.backIndexParams(),
     }
   })
-  Logger.info('addTaskFinshed', resasstring);
-})
-.catch(res => {
-
+  Logger.info('addTaskFinished', JSON.stringify(res));
+}).catch((error: Error) => {
   // 失败的状态，失败后弹出提示，并打印错误日志
   prompt.showToast({
-    message: commonConst.SETTING_FINISH_FAILED_MESSAGE
+    message: Const.SETTING_FINISH_FAILED_MESSAGE
   })
-  Logger.error('addTaskFailed', res as string);
+  Logger.error('addTaskFailed', JSON.stringify(error));
 })
 ```
 
@@ -635,28 +682,28 @@ addTask({
 CustomDialogView引入实例并注册事件：
 
 ```typescript
-// TaskSettingDialog.ets
-targetSettingDialog = new CustomDialogController({
+// TaskDialogView.ets
+targetSettingDialog: CustomDialogController = new CustomDialogController({ 
   builder: TargetSettingDialog(),
   autoCancel: true,
   alignment: DialogAlignment.Bottom,
-  offset: { dx: ZERO, dy: MINUS_20 }
-})
+  offset: { dx: Const.ZERO, dy: Const.MINUS_20 }
+});
 ...
 
 // 注册事件
-this.broadCast.on(
-  BroadCastType.SHOW_TARGETSETTING_DIALOG,
-  function () {
-    self.targetSettingDialog.open();
-  })
+this.broadCast.on(BroadCastType.SHOW_TARGET_SETTING_DIALOG, () => {
+  this.targetSettingDialog.open();
+})
 ```
 
 点击对应的编辑项进行触发：
 
 ```typescript
+// TaskDetailComponent.ets
 .onClick(() => {
-  this.broadCast.emit(BroadCastType.SHOW_TARGETSETTING_DIALOG);
+  this.broadCast.emit(
+    BroadCastType.SHOW_TARGET_SETTING_DIALOG);
 })
 ```
 
@@ -678,17 +725,22 @@ this.broadCast.on(
 
 ```typescript
 // TaskSettingDialog.ets
-if ([taskType.getup, taskType.sleepEarly].indexOf(this.settingParams?.taskID) 
-    > commonConst.HAS_NO_INDEX) {
+if ([taskType.getup, taskType.sleepEarly].indexOf(this.settingParams?.taskID) > Const.HAS_NO_INDEX) {
   TimePicker({
-    selected: commonConst.DEFAULT_SELECTED_TIME,
+    selected: new Date(`${new Date().toDateString()} 8:00:00`),
   })
-  ...
+    .height(Const.THOUSANDTH_800)
+    .useMilitaryTime(true)
+    .onChange((value: TimePickerResult) => {
+      this.currentTime = formatTime(value);
+    })
 } else {
-  TextPicker({ range: this.settingParams?.taskID === taskType.drinkWater 
-    ? this.drinkRange 
-    : this.appleRange })
-  ...
+  TextPicker({ range: this.settingParams?.taskID === taskType.drinkWater ? this.drinkRange : this.appleRange })
+    .width(Const.THOUSANDTH_900,)
+    .height(Const.THOUSANDTH_800,)
+    .onChange((value) => {
+      this.currentValue = value?.split(' ')[0];
+    })
 }
 ```
 
@@ -696,30 +748,35 @@ if ([taskType.getup, taskType.sleepEarly].indexOf(this.settingParams?.taskID)
 
 ```typescript
 // TaskSettingDialog.ets
-
 // 校验规则
 compareTime(startTime: string, endTime: string) {
-  if (returnTimeStamp(this.currentTime) < returnTimeStamp(startTime) 
-      || returnTimeStamp(this.currentTime) > returnTimeStamp(endTime)) {
-
-    // 弹出提示
+  if (returnTimeStamp(this.currentTime) < returnTimeStamp(startTime) ||
+    returnTimeStamp(this.currentTime) > returnTimeStamp(endTime)) {
     prompt.showToast({
-      message: commonConst.CHOOSE_TIME_OUT_RANGE
+      message: Const.CHOOSE_TIME_OUT_RANGE
     })
     return false;
   }
   return true;
 }
-
 // 设置修改项
-if (this.settingParams?.taskID === taskType.sleepEarly) {
-  if (!this.compareTime(commonConst.SLEEP_EARLY_TIME, commonConst.SLEEP_LATE_TIME)) {
+setTargetValue() {
+  if (this.settingParams?.taskID === taskType.getup) {
+    if (!this.compareTime(Const.GET_UP_EARLY_TIME, Const.GET_UP_LATE_TIME)) {
+      return;
+    }
+    this.settingParams.targetValue = this.currentTime;
     return;
   }
-  this.settingParams.targetValue = this.currentTime;
-  return;
+  if (this.settingParams?.taskID === taskType.sleepEarly) {
+    if (!this.compareTime(Const.SLEEP_EARLY_TIME, Const.SLEEP_LATE_TIME)) {
+      return;
+    }
+    this.settingParams.targetValue = this.currentTime;
+    return;
+  }
+  this.settingParams.targetValue = this.currentValue;
 }
-this.settingParams.targetValue = this.currentValue;
 ```
 
 其余弹窗实现基本类似，这里不再赘述。
@@ -732,9 +789,10 @@ this.settingParams.targetValue = this.currentValue;
 >后台代理提醒接口需要在module.json5中申请ohos.permission.PUBLISH\_AGENT\_REMINDER权限，代码如下：
 
 ```typescript
+// module.json5
 "requestPermissions": [
   {
-   "name": "ohos.permission.PUBLISH_AGENT_REMINDER"
+    "name": "ohos.permission.PUBLISH_AGENT_REMINDER"
   }
 ]
 ```
@@ -742,73 +800,151 @@ this.settingParams.targetValue = this.currentValue;
 后台代理提醒entry\\src\\main\\ets\\service\\ReminderAgent.ts文件中提供了发布提醒任务、查询提醒任务、删除提醒任务三个接口供任务编辑页面调用，跟随任务提醒的开关增加、更改、删除相关后台代理提醒，代码如下：
 
 ```typescript
-import reminderAgentManager from'@ohos.reminderAgentManager';
-import Notification from '@ohos.notification';
-import { Logger } from '../utils/log/Logger';
+// ReminderAgent.ets
+import reminderAgent from '@ohos.reminderAgentManager';
+import notification from '@ohos.notificationManager';
+import preferences from '@ohos.data.preferences';
+import Logger from '../common/utils/Logger';
+import { CommonConstants as Const } from '../common/constants/CommonConstants';
+import ReminderInfo from '../viewmodel/ReminderInfo';
+import PublishReminderInfo from '../viewmodel/PublishReminderInfo';
 
-// publishReminder
-function publishReminder(params) {
-    if(!params) return;
-    let timer = fetchData(params);
-    reminderAgentManager.publishReminder(timer).then((reminderId) => {
-        Logger.info("reminderAgent", `promise, reminderId: ${reminderId}`);
-    }).catch((err) => {
-        Logger.error("reminderAgent", `publishReminder err: ${err}`);
-    })
-}
-
-// cancelReminder
-function cancelReminder(reminderId) {
-    if(!reminderId) return;
-    reminderAgentManager.cancelReminder(reminderId).then((data) => {
-        Logger.info("reminderAgent", `cancelReminder promise: ${data}`);
-    }).catch((err) => {
-        Logger.error("reminderAgent", `cancelReminder err: ${err}`);
-    })
-}
-
-// fetchData
-function fetchData(params): reminderAgentManager.ReminderRequestAlarm {
-    return {
-        reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_ALARM,
-        hour: params.hour || 0,
-        minute: params.minute || 0,
-        daysOfWeek: params.daysOfWeek || [],
-        wantAgent: {
-            pkgName: "com.example.exercisehealth",
-            abilityName: "MainAbility"
-        },
-        title: params.title || '',
-        content: params.content || '',
-        notificationId: params.notificationId || -1,
-        slotType: Notification.SlotType.SOCIAL_COMMUNICATION
+// 发布提醒
+function publishReminder(params: PublishReminderInfo, context: Context) {
+  if (!params) {
+    Logger.error(Const.REMINDER_AGENT_TAG, 'publishReminder params is empty');
+    return;
+  }
+  let notifyId: string = params.notificationId.toString();
+  hasPreferencesValue(context, notifyId, (preferences: preferences.Preferences, hasValue: boolean) => {
+    if (hasValue) {
+      preferences.get(notifyId, -1, (error: Error, value: preferences.ValueType) => {
+        if (typeof value !== 'number') {
+          return;
+        }
+        if (value >= 0) {
+          reminderAgent.cancelReminder(value).then(() => {
+            processReminderData(params, preferences, notifyId);
+          }).catch((err: Error) => {
+            Logger.error(Const.REMINDER_AGENT_TAG, `cancelReminder err: ${err}`);
+          });
+        } else {
+          Logger.error(Const.REMINDER_AGENT_TAG, 'preferences get value error ' + JSON.stringify(error));
+        }
+      });
+    } else {
+      processReminderData(params, preferences, notifyId);
     }
+  });
 }
 
-// hasNotificationId
-async function hasNotificationId(params: number) {
-    if(!params) return;
-    await reminderAgentManager.getValidReminders().then((reminders) => {
-        if (!reminders.length) {
-            return false;
-        }
-        let notificationIdList = [];
-        for (let i = 0; i < reminders.length; i++) {
-            notificationIdList.push(reminders[i].notificationId)
-        }
-        const flag = notificationIdList.indexOf(params);
+// 取消提醒
+function cancelReminder(reminderId: number, context: Context) {
+  if (!reminderId) {
+    Logger.error(Const.REMINDER_AGENT_TAG, 'cancelReminder reminderId is empty');
+    return;
+  }
+  let reminder: string = reminderId.toString();
+  hasPreferencesValue(context, reminder, (preferences: preferences.Preferences, hasValue: boolean) => {
+    if (!hasValue) {
+      Logger.error(Const.REMINDER_AGENT_TAG, 'cancelReminder preferences value is empty');
+      return;
+    }
+    getPreferencesValue(preferences, reminder);
+  });
+}
 
-        return flag === -1 ? false : true;
-    })
+// 可通知ID
+function hasNotificationId(params: number) {
+  if (!params) {
+    Logger.error(Const.REMINDER_AGENT_TAG, 'hasNotificationId params is undefined');
+    return;
+  }
+  return reminderAgent.getValidReminders().then((reminders) => {
+    if (!reminders.length) {
+      return false;
+    }
+    let notificationIdList: Array<number> = [];
+    for (let i = 0; i < reminders.length; i++) {
+      let notificationId = reminders[i].notificationId;
+      if (notificationId) {
+        notificationIdList.push(notificationId);
+      }
+    }
+    const flag = notificationIdList.indexOf(params);
+    return flag === -1 ? false : true;
+  });
+}
+
+function hasPreferencesValue(context: Context, hasKey: string, callback: Function) {
+  let preferencesPromise = preferences.getPreferences(context, Const.H_STORE);
+  preferencesPromise.then((preferences: preferences.Preferences) => {
+    preferences.has(hasKey).then((hasValue: boolean) => {
+      callback(preferences, hasValue);
+    });
+  });
+}
+
+// 进程提醒数据
+function processReminderData(params: PublishReminderInfo, preferences: preferences.Preferences, notifyId: string) {
+  let timer = fetchData(params);
+  reminderAgent.publishReminder(timer).then((reminderId: number) => {
+    putPreferencesValue(preferences, notifyId, reminderId);
+  }).catch((err: Error) => {
+    Logger.error(Const.REMINDER_AGENT_TAG, `publishReminder err: ${err}`);
+  });
+}
+
+// 获取数据
+function fetchData(params: PublishReminderInfo): reminderAgent.ReminderRequestAlarm {
+  return {
+    reminderType: reminderAgent.ReminderType.REMINDER_TYPE_ALARM,
+    hour: params.hour || 0,
+    minute: params.minute || 0,
+    daysOfWeek: params.daysOfWeek || [],
+    wantAgent: {
+      pkgName: Const.PACKAGE_NAME,
+      abilityName: Const.ENTRY_ABILITY
+    },
+    title: params.title || '',
+    content: params.content || '',
+    notificationId: params.notificationId || -1,
+    slotType: notification.SlotType.SOCIAL_COMMUNICATION
+  }
+}
+
+function putPreferencesValue(preferences: preferences.Preferences, putKey: string, putValue: number) {
+  preferences.put(putKey, putValue).then(() => {
+    preferences.flush();
+  }).catch((error: Error) => {
+    Logger.error(Const.REMINDER_AGENT_TAG, 'preferences put value error ' + JSON.stringify(error));
+  });
+}
+
+function getPreferencesValue(preferences: preferences.Preferences, getKey: string) {
+  preferences.get(getKey, -1).then((value: preferences.ValueType) => {
+    if (typeof value !== 'number') {
+      return;
+    }
+    if (value >= 0) {
+      reminderAgent.cancelReminder(value).then(() => {
+        Logger.info(Const.REMINDER_AGENT_TAG, 'cancelReminder promise success');
+      }).catch((err: Error) => {
+        Logger.error(Const.REMINDER_AGENT_TAG, `cancelReminder err: ${err}`);
+      });
+    }
+  }).catch((error: Error) => {
+    Logger.error(Const.REMINDER_AGENT_TAG, 'preferences get value error ' + JSON.stringify(error));
+  });
 }
 
 const reminder = {
-    publishReminder,
-    cancelReminder,
-    hasNotificationId
-}
+  publishReminder: publishReminder,
+  cancelReminder: cancelReminder,
+  hasNotificationId: hasNotificationId
+} as ReminderInfo
 
-export default reminder
+export default reminder;
 ```
 
 ## 实现打卡功能
@@ -822,17 +958,16 @@ export default reminder
 使用List组件展示用户当前已经开启的任务，每条任务对应一个TaskCard组件，clickAction包装了点击和长按事件，用户点击任务卡时会触发弹起打卡弹窗，从而进行打卡操作；长按任务卡时会跳转至任务编辑界面，对相应的任务进行编辑处理。代码如下：
 
 ```typescript
+// HomeComponent.ets
 // 任务列表
-List({ space: commonConstants.LIST_SPACE }) {
-  ForEach(this.homeStore.getTaskListOfDay(), (item: TaskInfo) => {
-    ListItem() {
-      TaskCard({
-        taskInfoStr: JSON.stringify(item),
-        clickAction: (isClick) => this.taskItemAction(item, isClick)
-      })
-    }
-  }, item => JSON.stringify(item))
-}
+ForEach(this.homeStore.getTaskListOfDay(), (item: TaskInfo) => {
+  TaskCard({
+    taskInfoStr: JSON.stringify(item),
+    clickAction: (isClick: boolean) => this.taskItemAction(item, isClick)
+  })
+  .margin({ bottom: Const.DEFAULT_12 })
+  .height($r('app.float.default_64'))
+}, (item: TaskInfo) => JSON.stringify(item))
 ...
 CustomDialogView() // 自定义弹窗中间件
 ```
@@ -842,29 +977,59 @@ CustomDialogView() // 自定义弹窗中间件
 在组件CustomDialogView的aboutToAppear生命周期中注册SHOW\_TASK\_DETAIL\_DIALOG的事件回调方法 ，当通过emit触发此事件时即触发回调方法执行。代码如下：
 
 ```typescript
+// CustomDialogView.ets
+export class CustomDialogCallback {
+  confirmCallback: Function = () => {};
+  cancelCallback: Function = () => {};
+}
+
 @Component
 export struct CustomDialogView {
+  @State isShow: boolean = false;
+  @Provide achievementLevel: number = 0;
   @Consume broadCast: BroadCast;
   @Provide currentTask: TaskInfo = TaskItem;
-  @Provide dialogCallBack: CustomDialogCallback = { confirmCallback: null, cancelCallback: null };
-  // 任务打卡弹窗
-  taskDialog = new CustomDialogController({
+  @Provide dialogCallBack: CustomDialogCallback = new CustomDialogCallback();
+
+  // 成就对话框
+  achievementDialog: CustomDialogController = new CustomDialogController({
+    builder: AchievementDialog(),
+    autoCancel: true,
+    customStyle: true
+  });
+
+  // 任务时钟对话框
+  taskDialog: CustomDialogController = new CustomDialogController({
     builder: TaskDetailDialog(),
     autoCancel: true,
     customStyle: true
-  })
+  });
+
   aboutToAppear() {
-    Logger.debug('CustomDialogView', 'aboutToAppear')
-    let self = this;
-    // 任务打卡弹窗  注册 “SHOW_TASK_DETAIL_DIALOG” 事件回调
-    this.broadCast.on(BroadCastType.SHOW_TASK_DETAIL_DIALOG, function (currentTask: TaskInfo, dialogCallBack: CustomDialogCallback) {
-      Logger.debug('CustomDialogView', 'SHOW_TASK_DETAIL_DIALOG')
-      self.currentTask = currentTask; // 接收当前任务参数 以Provide Consume 方式向子组件透传
-      self.dialogCallBack = dialogCallBack;  // 接收当前任务确认打卡回调 以Provide Consume 方式向子组件透传
-      self.taskDialog.open(); // 弹出打卡弹窗
-    })
+    Logger.debug('CustomDialogView', 'aboutToAppear');
+    // 成就对话框
+    this.broadCast.on(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, (achievementLevel: number) => {
+      Logger.debug('CustomDialogView', 'SHOW_ACHIEVEMENT_DIALOG');
+      this.achievementLevel = achievementLevel;
+      this.achievementDialog.open();
+    });
+
+    // 任务时钟对话框
+    this.broadCast.on(BroadCastType.SHOW_TASK_DETAIL_DIALOG,
+      (currentTask: TaskInfo, dialogCallBack: CustomDialogCallback) => {
+        Logger.debug('CustomDialogView', 'SHOW_TASK_DETAIL_DIALOG');
+        this.currentTask = currentTask || TaskItem;
+        this.dialogCallBack = dialogCallBack;
+        this.taskDialog.open();
+    });
   }
-  ...
+
+  aboutToDisappear() {
+    Logger.debug('CustomDialogView', 'aboutToDisappear');
+  }
+
+  build() {
+  }
 }
 ```
 
@@ -873,14 +1038,18 @@ export struct CustomDialogView {
 点击任务卡片会emit触发 “SHOW\_TASK\_DETAIL\_DIALOG” 事件，同时把当前任务，以及确认打卡回调方法传递下去。代码如下：
 
 ```typescript
+// HomeComponent.ets
 // 任务卡片事件
-taskItemAction(item: TaskInfo, isClick: boolean) {
+taskItemAction(item: TaskInfo, isClick: boolean): void {
   ...
   if (isClick) {
     // 点击任务打卡
-    let callback: CustomDialogCallback = { confirmCallback: this.onConfirm.bind(this), cancelCallback: null };
+     let callback: CustomDialogCallback = { confirmCallback: (taskTemp: TaskInfo) => {
+        this.onConfirm(taskTemp)
+     }, cancelCallback: () => {
+     } };
     // 触发弹出打卡弹窗事件  并透传当前任务参数（item） 以及确认打卡回调
-    this.broadCast.emit(BroadCastType.SHOW_TASK_DETAIL_DIALOG, [item, callback]);
+     this.broadCast.emit(BroadCastType.SHOW_TASK_DETAIL_DIALOG, [item, callback]);
   } else {
     // 长按编辑任务
     ...
@@ -888,11 +1057,16 @@ taskItemAction(item: TaskInfo, isClick: boolean) {
 }
 // 确认打卡
 onConfirm(task) {
-  this.homeStore.taskClock(task).then((res) => {
+  this.homeStore.taskClock(task).then((res: AchievementInfo) => {
     // 打卡成功后 根据连续打卡情况判断是否 弹出成就勋章  以及成就勋章级别
     if (res.showAchievement) {
       // 触发弹出成就勋章SHOW_ACHIEVEMENT_DIALOG 事件， 并透传勋章类型级别
-      this.broadCast.emit(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, [res.achievementLevel]);
+      let achievementLevel = res.achievementLevel;
+      if (achievementLevel) {
+        this.broadCast.emit(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, achievementLevel);
+      } else {
+        this.broadCast.emit(BroadCastType.SHOW_ACHIEVEMENT_DIALOG);
+      }
     }
   })
 }
@@ -905,15 +1079,16 @@ onConfirm(task) {
 打卡弹窗组件由两个小组件构成，代码如下：
 
 ```typescript
+// TaskDetailDialog.ets
 Column() {
   // 展示任务的基本信息
   TaskBaseInfo({
-    taskName: TaskMapById[this.currentTask?.taskID].taskName, // 根据当前任务ID获取任务名称
+    taskName: TaskMapById[this.currentTask?.taskID - 1].taskName  // 根据当前任务ID获取任务名称
   });
   // 打卡功能组件 （任务打卡、关闭弹窗）
   TaskClock({
     confirm: () => {
-      this.dialogCallBack.confirmCallback(this.currentTask); // 任务打卡确认回调执行 
+      this.dialogCallBack.confirmCallback(this.currentTask);
       this.controller.close();
     },
     cancel: () => {
@@ -928,43 +1103,58 @@ Column() {
 TaskBaseInfo组件代码如下：
 
 ```typescript
+// TaskDetailDialog.ets
 @Component
 struct TaskBaseInfo {
-  taskName: string | Resource;
+  taskName: string | Resource = '';
+
   build() {
-    Column({ space: DEFAULT_8 }) {
+    Column({ space: Const.DEFAULT_8 }) {
       Text(this.taskName)
-        ...
+        .fontSize($r('app.float.default_22'))
+        .fontWeight(FontWeight.Bold)
+        .fontFamily($r('app.string.HarmonyHeiTi_Bold'))
+        .taskTextStyle()
+        .margin({left: $r('app.float.default_12')})
     }
-    ...
+    .position({ y: $r('app.float.default_267') })
   }
 }
-
 ```
 
 TaskClock组件代码如下：
 
 ```typescript
+// TaskDetailDialog.ets
 @Component
 struct TaskClock {
-  confirm: () => void;
-  cancel: () => void;
+  confirm: Function = () => {};
+  cancel: Function = () => {};
   showButton: boolean = false;
+
   build() {
-    Column({ space: DEFAULT_12 }) {
+    Column({ space: Const.DEFAULT_12 }) {
       Button() {
-        Text($r('app.string.clock_in')) // 打卡
-          ...
+        Text($r('app.string.clock_in'))
+          .height($r('app.float.default_42'))
+          .fontSize($r('app.float.default_20'))
+          .fontWeight(FontWeight.Normal)
+          .textStyle()
       }
-      ...
+      .width($r('app.float.default_220'))
+      .borderRadius($r('app.float.default_24'))
+      .backgroundColor('rgba(255,255,255,0.40)')
       .onClick(() => {
-         this.confirm();
+        GlobalContext.getContext().setObject('taskListChange', true);
+        this.confirm();
       })
       .visibility(!this.showButton ? Visibility.None : Visibility.Visible)
-      Text($r('app.string.got_it')) // 知道了
-        ...
+      Text($r('app.string.got_it'))
+        .fontSize($r('app.float.default_14'))
+        .fontWeight(FontWeight.Regular)
+        .textStyle()
         .onClick(() => {
-           this.cancel();
+          this.cancel();
         })
     }
   }
@@ -974,56 +1164,63 @@ struct TaskClock {
 ### 打卡接口调用
 
 ```typescript
+// HomeViewModel.ets
 public async taskClock(taskInfo: TaskInfo) {
   let taskItem = await this.updateTask(taskInfo);
-  // 更新任务失败 
+  let dateStr = this.selectedDayInfo?.dateStr;
+  // 更新任务失败
   if (!taskItem) {
-    return Promise.resolve({
+    return {
       achievementLevel: 0,
       showAchievement: false
-    });
+    } as AchievementInfo;
   }
   // 更新当前时间的任务列表
-  this.selectedDayInfo.taskList = this.selectedDayInfo.taskList.map((item) => item.taskID == taskItem?.taskID ? taskItem : item);
-  let achievementLevel;
+  this.selectedDayInfo.taskList = this.selectedDayInfo.taskList.map((item) => {
+    return item.taskID === taskItem?.taskID ? taskItem : item;
+  });
+  let achievementLevel: number = 0;
   if(taskItem.isDone) {
     // 更新每日任务完成情况数据
     let dayInfo = await this.updateDayInfo();
-    ...
-    if(dayInfo) {
-      // 当日任务完成数量等于总任务数量时 累计连续打卡一天
-      if (dayInfo.finTaskNum === dayInfo?.targetTaskNum) {
-        // 更新成就勋章数据 判断是否弹出获得勋章弹出及勋章类型
-        achievementLevel = await this.updateAchievement(this.selectedDayInfo.dayInfo);
-      }
+    ... 
+    // 当日任务完成数量等于总任务数量时 累计连续打卡一天
+    // 更新成就勋章数据 判断是否弹出获得勋章弹出及勋章类型
+    if (dayInfo && dayInfo?.finTaskNum === dayInfo?.targetTaskNum) {
+      achievementLevel = await this.updateAchievement(this.selectedDayInfo.dayInfo);
     }
   }
   ...
-  return Promise.resolve({
+  return {
     achievementLevel: achievementLevel,
     showAchievement: ACHIEVEMENT_LEVEL_LIST.includes(achievementLevel)
-  });
+  } as AchievementInfo;
 }
 ```
 
 ```typescript
+// HomeViewModel.ets
 // 更新当天任务列表
 updateTask(task: TaskInfo): Promise<TaskInfo> {
   return new Promise((resolve, reject) => {
-    let {taskID, targetValue, finValue} = task;
-    let updateTask = Object.assign({}, task);
-    let step = TaskMapById[taskID].step; // 任务步长
+    let taskID = task.taskID;
+    let targetValue = task.targetValue;
+    let finValue = task.finValue;
+    let updateTask = new TaskInfo(task.id, task.date, taskID, targetValue, task.isAlarm, task.startTime,
+      task.endTime, task.frequency, task.isDone, finValue, task.isOpen);
+    let step = TaskMapById[taskID - 1].step; // 任务步长
+    let hasExceed = updateTask.isDone;
     if (step === 0) { // 任务步长为0 打卡一次即完成该任务
       updateTask.isDone = true; // 打卡一次即完成该任务
       updateTask.finValue = targetValue;
     } else {
       let value = Number(finValue) + step; // 任务步长非0 打卡一次 步长与上次打卡进度累加
-      updateTask.isDone = value >= Number(targetValue); // 判断任务是否完成
+      updateTask.isDone = updateTask.isDone || value >= Number(targetValue); // 判断任务是否完成
       updateTask.finValue = updateTask.isDone ? targetValue : `${value}`;
     }
-    TaskInfoTableApi.updateDataByDate(updateTask, (res) => { // 更新数据库
-      if (!res) {
-        Logger.error('taskClock-updateTask', res);
+    TaskInfoTableApi.updateDataByDate(updateTask, (res: number) => { // 更新数据库
+      if (!res || hasExceed) {
+        Logger.error('taskClock-updateTask', JSON.stringify(res));
         reject(res);
       }
       resolve(updateTask);
@@ -1038,7 +1235,7 @@ updateTask(task: TaskInfo): Promise<TaskInfo> {
 
 ### 功能概述
 
-成就页面展示用户可以获取的所有勋章，当用户满足一定的条件时，将点亮本页面对应的勋章，没有得到的成就勋章处于熄灭状态。共有六种勋章，当用户连续完成任务打卡3天、7天、30天、50天、73天、99天时，可以获得对应的 "连续xx天达成" 勋章。
+成就页面展示用户可以获取的所有勋章，当用户满足一定的条件时，将点亮本页面对应的勋章，没有得到的成就勋章处于熄灭状态。共有六种勋章，当用户连续完成任务打卡3天、7天、30天、50天、73天、99天时，可以获得对应的“连续xx天达成”勋章。
 
 ### 页面布局与 ArkTS 代码对应关系
 
@@ -1054,28 +1251,39 @@ updateTask(task: TaskInfo): Promise<TaskInfo> {
 export struct TitleBar {
   build() {
     Row() {
-      Text($r('app.string.achievement')) 
-      ... // 省略属性设置  
-    }.width(commonConst.FULL_WIDTH)
+      Text($r('app.string.achievement'))
+        .fontSize($r('app.float.default_24'))
+        .fontColor($r('app.color.white'))
+        .align(Alignment.Start)
+        .padding({left: Const.ACHIEVE_TITLE_BAR_LEFT,top: Const.ACHIEVE_TITLE_BAR_TOP})
+    }
+    .width(Const.FULL_WIDTH)
   }
 }
 ```
 
-每个勋章卡片BadgeCard是一个竖向容器Column一个图片子组件Image和一个文字子组件Text。
+每个勋章卡片BadgeCard是由一个竖向容器Column、一个图片子组件Image和一个文字子组件Text组成。
 
 ```typescript
-// BadegeCardComponent.ets
+// BadgeCardComponent.ets
 @Component
 export struct BadgeCard {
-  @Prop content: string;
-  @Prop imgSrc: string;
-  build() { 
-    Column({space: commonConst.DEFAULT_18}) {
-      Image($rawfile(this.imgSrc))
-      ... // 省略属性设置
-      Text($r('app.string.task_achievement_level', Number(this.content))) 
-      ... // 省略属性设置
+  @Prop content: string = '';
+  imgSrc: Resource = $r('app.string.empty');
+
+  build() {
+    Column({space: Const.DEFAULT_18}) {
+      Image(this.imgSrc)
+        .width(Const.FULL_WIDTH)
+        .height(Const.ACHIEVE_CARD_IMG_HEIGHT)
+        .objectFit(ImageFit.Contain)
+      Text($r('app.string.task_achievement_level', Number(this.content)))
+        .lineHeight($r('app.float.default_16'))
+        .fontSize($r('app.float.default_12'))
+        .fontColor($r('app.color.white'))
     }
+    .width(ratio2percent(Const.ACHIEVE_SPLIT_RATIO))
+    .padding({top: Const.ACHIEVE_CARD_TOP, bottom: Const.ACHIEVE_CARD_BOTTOM})
   }
 }
 ```
@@ -1087,15 +1295,19 @@ export struct BadgeCard {
 @Component
 export struct BadgePanel {
   @StorageProp(ACHIEVEMENT_LEVEL_KEY) successiveDays: number = 0;
+
   aboutToAppear() {
+    Logger.debug('BadgePanel','aboutToAppear');
     getAchievementLevel();
-  } 
-  build() {
-    Flex({ direction: FlexDirection.Row, wrap: FlexWrap.Wrap }) { 
-      ForEach(getBadgeCards(this.successiveDays), (item) => { 
-        BadgeCard({ content: item[0], imgSrc: item[1]})
-      })
-    }.width(commonConst.FULL_WIDTH)
+  }
+
+build() {
+  Flex({ direction: FlexDirection.Row, wrap: FlexWrap.Wrap }) {
+    ForEach(getBadgeCardItems(this.successiveDays), (item: CardInfo) => {
+      BadgeCard({ content: item.titleContent, imgSrc: item.achievement})
+    })
+  }
+  .width(Const.FULL_WIDTH)
   }
 }
 ```
@@ -1107,40 +1319,46 @@ export struct BadgePanel {
 ```typescript
 // BadgePanelComponent.ets
 aboutToAppear() {
+  Logger.debug('BadgePanel','aboutToAppear');
   getAchievementLevel();
-} 
+}
 
 // AchieveModel.ets
 export function getAchievementLevel() {
-  let globalInfoTable: GlobalInfoTable = new GlobalInfoTable();
-  globalInfoTable.query((res) => {
-    ... // 省略数据验证
+  GlobalInfoApi.query((res: GlobalInfo) => {
+    let globalInfo: GlobalInfo = res;
+    let achievementStr = globalInfo.achievements??'';
+    let achievements = achievementStr.split(',');
     if (achievements.length > 0) {
       AppStorage.Set<Number>(ACHIEVEMENT_LEVEL_KEY, Number(achievements[achievements.length - 1]));
     }
-  }
+  })
 }
 
 // BadgePanelComponent.ets
 @StorageProp(ACHIEVEMENT_LEVEL_KEY) successiveDays: number = 0;
 
-ForEach(getBadgeCards(this.successiveDays), (item) => { 
-  BadgeCard({ content: item[0], imgSrc: item[1]})
+ForEach(getBadgeCardItems(this.successiveDays), (item: CardInfo) => {
+  BadgeCard({ content: item.titleContent, imgSrc: item.achievement})
 })
 
 // AchievementViewModel.ets
-export function getBadgeCardsItems(successiveDays: number):[string, string][] {
+export function getBadgeCardItems(successiveDays: number): Array<CardInfo> {
   let badgeMileStones = ACHIEVEMENT_LEVEL_LIST;
-  let cardItems:[string, string][] = [];
-  for (let i = 0; i < badgeMileStones.length; i++) { 
-    ... // 省略数据拼装细节
-    cardItems.push(oneItem);
-  }    
+  let cardItems: Array<CardInfo> = [];
+  for (let i = 0; i < badgeMileStones.length; i++) {
+    let onOrOff = successiveDays >= badgeMileStones[i] ? 'on' : 'off';
+    let titleContent = String(badgeMileStones[i]);
+    let cardInfo: CardInfo = new CardInfo();
+    cardInfo.titleContent = titleContent;
+    cardInfo.achievement = getAchievement(`${ onOrOff }_${ badgeMileStones[i] }`);
+    cardItems.push(cardInfo);
+  }
   return cardItems;
 }
 ```
 
-## 搭建关系数据库
+## 搭建关系型数据库
 
 本节将介绍如何调用关系型数据库接口在本地搭建数据库，并读写相应的用户数据。
 
@@ -1151,12 +1369,12 @@ export function getBadgeCardsItems(successiveDays: number):[string, string][] {
 导入关系型数据库模块：
 
 ```typescript
-import dataRdb from '@ohos.data.relationalStore';
+import data_rdb from '@ohos.data.rdb';
 ```
 
 关系型数据库提供以下两个基本功能：
 
-![](figures/1.png)
+![](figures/zh-cn_image_0000001459867377.png)
 
 #### 获取RdbStore
 
@@ -1164,17 +1382,15 @@ import dataRdb from '@ohos.data.relationalStore';
 
 ```typescript
 // RdbHelperImp.ets
-getRdb(context: any): Promise<RdbHelper> {
-  Logger.info(`initRdb getRdb success`);
+getRdb(context: Context): Promise<RdbHelper> {
   this.storeConfig = {
-    // 配置数据库文件名、安全级别
     name: this.mDatabaseName, securityLevel: dataRdb.SecurityLevel.S1
   };
   return new Promise<RdbHelper>((success, error) => {
     dataRdb.getRdbStore(context, this.storeConfig).then(dbStore => {
-      this.rdbStore = dbStore;  // 获取RdbStore
+      this.rdbStore = dbStore;
       success(this);
-    }).catch(err => {
+    }).catch((err: Error) => {
       Logger.error(`initRdb err : ${JSON.stringify(err)}`);
       error(err);
     })
@@ -1189,30 +1405,32 @@ getRdb(context: any): Promise<RdbHelper> {
 ```typescript
 // RdbHelperImp.ets
 insert(tableName: string, values: dataRdb.ValuesBucket | Array<dataRdb.ValuesBucket>): Promise<number> {
-  return new Promise<any>((success, error) => {
+  return new Promise<number>((success, error) => {
     Logger.info(`insert tableName : ${tableName}, values : ${JSON.stringify(values)}`);
-    ...
-    if (Array.isArray(values)) {
-      // 如果插入一组数据，则批量插入
+    if (!values) {
+      Logger.info(`insert failed, values is undefined`);
+      error(0);
+      return;
+    }
+    if (values instanceof Array) {
       Logger.info(`insert values isArray = ${values.length}`);
       this.rdbStore.beginTransaction();
       this.saveArray(tableName, values).then(data => {
         Logger.info(`insert success, data : ${JSON.stringify(data)}`);
         success(data);
         this.rdbStore.commit();
-      }).catch(err => {
+      }).catch((err: Error) => {
         Logger.error(`insert failed, err : ${err}`);
         error(err);
         this.rdbStore.commit();
       })
     } else {
       this.rdbStore.insert(tableName, values).then(data => {
-        // 调用insert()接口插入数据
         Logger.info(`insert success id : ${data}`);
         success(data);
-        this.rdbStore.commit();
-      }).catch(err => {
-        Logger.error(`insert failed, err : ${err}`);
+        his.rdbStore.commit();
+      }).catch((err: Error) => {
+        Logger.error(`insert failed, err : ${JSON.stringify(err)}`);
         error(err);
         this.rdbStore.commit();
       })
@@ -1252,7 +1470,7 @@ query(rdbPredicates: dataRdb.RdbPredicates, columns?: Array<string>): Promise<da
 
 
 
-### 数据表定义
+### 数据库表结构
 
 根据健康生活APP的使用场景和业务逻辑，定义了三个数据对象，并使用三张数据表来存储，分别是健康任务信息表、每日信息表和全局信息表。
 
@@ -1260,23 +1478,23 @@ query(rdbPredicates: dataRdb.RdbPredicates, columns?: Array<string>): Promise<da
 
 目前健康生活应用提供了6个基本的健康任务，分别是早起、喝水、吃苹果、每日微笑、睡前刷牙和早睡。用户可以选择开启或关闭某个任务，开启的任务可以选择是否开启提醒，在指定的时间段内提醒用户进行打卡。任务也可以选择开启的频率，如只在周一到周五开启等。需要记录每项任务的目标值和实际完成值，在用户打卡后判断任务是否已经完成，并记录在数据库中。因此，需要创建一张存储每天的健康任务信息的表，表头如下：
 
-![](figures/2.png)
+![](figures/zh-cn_image_0000001409507612.png)
 
 #### 每日信息表
 
 在主页面，用户可以查看当天健康任务的完成进度，需要创建一张表记录当天开启的任务个数和已经完成的任务个数，表头如下：
 
-![](figures/3.png)
+![](figures/zh-cn_image_0000001409347632.png)
 
 #### 全局信息表
 
 用户连续多日打卡完成所有创建的任务可以获得相应的成就，因此，需要有一张表记录连续打卡天数和已达成的成就项。另外，考虑应用多日未打开的情况，需要记录应用第一次打开的日期和最后一次打开的日期以向数据库回填数据，表头如下：
 
-![](figures/4.png)
+![](figures/zh-cn_image_0000001409187812.png)
 
 ### 创建数据表
 
-根据上文设计的表结构，创建对应的数据表，实现对相应数据的读写操作。
+根据6.2中设计的表结构，创建对应的数据表，实现对相应数据的读写操作。
 
 #### 健康任务信息数据表
 
@@ -1302,7 +1520,7 @@ CREATE TABLE IF NOT EXISTS taskInfo(
 
 ```typescript
 // TaskInfoApi.ets
-insertData(taskInfo: TaskInfo, callback) {
+insertData(taskInfo: TaskInfo, callback: Function): void {
   // 根据输入数据创建待插入的数据行
   const valueBucket = generateBucket(taskInfo);
   RdbUtils.insert('taskInfo', valueBucket).then(result => {
@@ -1316,30 +1534,47 @@ insertData(taskInfo: TaskInfo, callback) {
 
 ```typescript
 // TaskInfoApi.ets
-function generateBucket(taskInfo: TaskInfo) {
-  let obj = {};
-  TASK_INFO.columns.forEach((item) => {
-    obj[item] = taskInfo[item];
+function generateBucket(taskInfo: TaskInfo): dataRdb.ValuesBucket {
+  let valueBucket = {} as dataRdb.ValuesBucket;
+  Const.TASK_INFO.columns?.forEach((item: string) => {
+    if (item !== 'id') {
+      switch (item) {
+        case 'date':
+          valueBucket[item] = taskInfo.date;
+          break;
+        case 'taskID':
+          valueBucket[item] = taskInfo.taskID;
+          break;
+        case 'targetValue':
+          valueBucket[item] = taskInfo.targetValue;
+          break;
+        case 'isAlarm':
+          valueBucket[item] = taskInfo.isAlarm;
+          break;
+        case 'startTime':
+          valueBucket[item] = taskInfo.startTime;
+          break;
+        case 'endTime':
+          valueBucket[item] = taskInfo.endTime;
+          break;
+        case 'frequency':
+          valueBucket[item] = taskInfo.frequency;
+          break;
+        case 'isDone':
+          valueBucket[item] = taskInfo.isDone;
+          break;
+        case 'finValue':
+          valueBucket[item] = taskInfo.finValue;
+          break;
+        case 'isOpen':
+          valueBucket[item] = taskInfo.isOpen;
+          break;
+        default:
+          break;
+      }
+    }
   });
-  return obj;
-}
-
-// CommonConstants.ets
-export const TASK_INFO = {
-  tableName: 'taskInfo',
-  columns: [
-    'id', 
-    'date', 
-    'taskID', 
-    'targetValue', 
-    'isAlarm', 
-    'startTime', 
-    'endTime', 
-    'frequency', 
-    'isDone', 
-    'finValue', 
-    'isOpen'
-  ]
+  return valueBucket;
 }
 ```
 
@@ -1347,13 +1582,16 @@ export const TASK_INFO = {
 
 ```typescript
 // TaskInfoApi.ets
-updateDataByDate(taskInfo: TaskInfo, callback) {
+updateDataByDate(taskInfo: TaskInfo, callback: Function): void {
   const valueBucket = generateBucket(taskInfo);
-  let predicates = new dataRdb.RdbPredicates(TASK_INFO.tableName);
-
+  let tableName = Const.TASK_INFO.tableName;
+  if (!tableName) {
+    return;
+  }
+  let predicates = new dataRdb.RdbPredicates(tableName);
   // 根据date和taskID匹配要更新的数据行
   predicates.equalTo('date', taskInfo.date).and().equalTo('taskID', taskInfo.taskID);
-  RdbUtils.update(valueBucket, predicates).then(result => {
+  RdbUtils.update(valueBucket, predicates).then((result: number) => {
     callback(result);
   });
   Logger.info('TaskInfoTable', `Update data {${taskInfo.date}:${taskInfo.taskID}} finished.`);
@@ -1364,35 +1602,46 @@ updateDataByDate(taskInfo: TaskInfo, callback) {
 
 ```typescript
 // TaskInfoApi.ets
-query(date: string, isOpen: boolean = true, callback) {
-  let predicates = new dataRdb.RdbPredicates(TASK_INFO.tableName);
+query(date: string, isOpen: boolean = true, callback: Function): void {
+  let tableName = Const.TASK_INFO.tableName;
+  if (!tableName) {
+    return;
+  }
+  let predicates = new dataRdb.RdbPredicates(tableName);
   predicates.equalTo('date', date);
-
-  // 如果isOpen为true，则只查找开启的任务
+  // 如果isOpen为true，则只查找开启的任务 
   if (isOpen) {
     predicates.equalTo('isOpen', true);
   }
   predicates.orderByAsc('taskID');  // 查找结果按taskID排序
-  RdbUtils.query(predicates, function(resultSet) {
+  RdbUtils.query(predicates).then(resultSet => {
     let count = resultSet.rowCount;
-    
     // 查找结果为空则返回空数组，否则返回查找结果数组
     if (count === 0 || typeof count === 'string') {
-      Logger.info('TaskInfoTable', `${date} query no results!`);
-      callback([]);
+      Logger.error('TaskInfoTable', `${date} query no results!`);
+      const result: TaskInfo[] = [];
+      callback(result);
     } else {
       resultSet.goToFirstRow();
-      const result = [];
+      const result: TaskInfo[] = [];
       for (let i = 0; i < count; i++) {
         let tmp = new TaskInfo(0, '', 0, '', false, '', '', '', false, '');
+        tmp.isOpen = resultSet.getDouble(resultSet.getColumnIndex('isOpen')) ? true : false;
         tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
-        ...  // 省略赋值代码
+        tmp.date = resultSet.getString(resultSet.getColumnIndex('date'));
+        tmp.taskID = resultSet.getDouble(resultSet.getColumnIndex('taskID'));
+        tmp.targetValue = resultSet.getString(resultSet.getColumnIndex('targetValue'));
+        tmp.isAlarm = resultSet.getDouble(resultSet.getColumnIndex('isAlarm')) ? true : false;
+        tmp.startTime = resultSet.getString(resultSet.getColumnIndex('startTime'));
+        tmp.endTime = resultSet.getString(resultSet.getColumnIndex('endTime'));
+        tmp.frequency = resultSet.getString(resultSet.getColumnIndex('frequency'));
+        tmp.isDone = resultSet.getDouble(resultSet.getColumnIndex('isDone')) ? true : false;
+        tmp.finValue = resultSet.getString(resultSet.getColumnIndex('finValue'));
         result[i] = tmp;
         resultSet.goToNextRow();
       }
       callback(result);
     }
-    return;
   });
 }
 ```
@@ -1415,27 +1664,28 @@ CREATE TABLE IF NOT EXISTS dayInfo(
 
 ```typescript
 // DayInfoApi.ets
-queryList(dates: string[], callback) {
-  let predicates = new dataRdb.RdbPredicates(DAY_INFO.tableName);
+queryList(dates: string[], callback: Function): void {
+  let predicates: dataRdb.RdbPredicates = new dataRdb.RdbPredicates(Const.DAY_INFO.tableName ? Const.DAY_INFO.tableName : '');
   predicates.in('date', dates);  // 匹配日期数组内的所有日期
-  RdbUtils.query(predicates, function(resultSet) {
+  RdbUtils.query(predicates).then(resultSet => {
     let count = resultSet.rowCount;
     if (count === 0) {
-      Logger.info('DayInfoTable','query no results.');
-      callback([]);
+      Logger.info('DayInfoTable', 'query no results.');
+      let result: DayInfo[] = [];
+      callback(result);
     } else {
       resultSet.goToFirstRow();
-      let result = [];
+      let result: DayInfo[] = [];
       for (let i = 0; i < count; i++) {
         let tmp = new DayInfo('', 0, 0);
         tmp.date = resultSet.getString(resultSet.getColumnIndex('date'));
-        ...  // 省略赋值代码
+        tmp.targetTaskNum = resultSet.getDouble(resultSet.getColumnIndex('targetTaskNum'));
+        tmp.finTaskNum = resultSet.getDouble(resultSet.getColumnIndex('finTaskNum'));
         result[i] = tmp;
         resultSet.goToNextRow();
       }
       callback(result);
     }
-    return;
   });
 }
 ```
@@ -1461,57 +1711,57 @@ CREATE TABLE IF NOT EXISTS globalInfo(
 
 ```typescript
 // DatabaseModel.ets
-query(date: string, callback) {
-  let result = [];
+query(date: string, callback: Function) {
+  let result: TaskInfo[] = [];
   let self = this;
-  GlobalInfoApi.query(function(globalResult) {
-    // 如果查不到全局信息，就写入全局信息
-    if (globalResult.length === 0) {
-      ...  // 插入健康任务信息、每日信息和全局信息
+  GlobalInfoApi.query((globalResult: GlobalInfo) => {
+    if (!globalResult.firstDate) { // 如果找不到全局信息，则写入
+      let globalInfo: GlobalInfo = new GlobalInfo(date, date, 0, '');
+      GlobalInfoApi.insertData(globalInfo, (isDone: number) => {
+        if (isDone) {
+          Logger.info('AppStart', 'Insert globalInfo success: ' + JSON.stringify(globalInfo));
+        }
+      });
+      self.insertGlobalTask();
+      let dayInfo: DayInfo = new DayInfo(date, 0, 0);
+      DayInfoApi.insertData(dayInfo, (isDone: number) => {
+        if (isDone) {
+          Logger.info('AppStart', 'Insert dayInfo success: ' + JSON.stringify(dayInfo));
+        }
+      })
+      self.insertTask(date);
       callback(result, dayInfo);
-    } else {
-      // 如果查到全局信息，那么查询当日任务信息
+    } else { // 如果找到全局信息，则查询当天的任务信息
       let newGlobalInfo = globalResult;
       let preDate = globalResult.lastDate;
       newGlobalInfo.lastDate = date;
-      ...  // 更新全局信息
-
-      // 查询当日任务信息
-      TaskInfoApi.query(date, false, (taskResult) => {
-        let dayInfo = new DayInfo(date, 0, 0);
-        // 如果查不到当日任务信息，就查询全局任务信息
-        if (taskResult.length === 0) {
-          ...
-          TaskInfoApi.query(GLOBAL_KEY, false, (globalTaskResult) => {
-            ...  // 回写没打开应用的时间段的健康任务信息和每日信息
-          })
-        } else {
-        // 计算当日健康任务的开启个数和完成数
-          let dayInfoList = self.calFinishNum(taskResult, result);
-          dayInfo.targetTaskNum = dayInfoList[0];
-          dayInfo.finTaskNum = dayInfoList[1];
-          callback(result, dayInfo);
+      GlobalInfoApi.updateData(newGlobalInfo, (isDone: number) => {
+        if (isDone) {
+          Logger.info('AppStart', 'update globalInfo success: ' + JSON.stringify(newGlobalInfo));
         }
       });
+      self.queryPreInfo(date, preDate, result, callback);
     }
   });
 }
 ```
 
-## 通用工具类
+## 编写通用工具类
 
 本节将介绍日志打印、时间换算等通用工具类的编写和使用，工具类可以简化应用代码编写和业务流程处理。
 
 ### 日志类
 
-日志类Logger旨在提供一个全局的日志打印、日志管理的地方，既可以规范整个应用的日志打印，也方便日后对日志工具类进行修改，而不需要去改动代码中每一个调用日志的地方，目前分info，debug，warn，error四个级别。
+日志类Logger旨在提供一个全局的日志打印、日志管理的地方，既可以规范整个应用的日志打印，也方便日后对日志工具类进行修改，而不需要去改动代码中每一个调用日志的地方，如切换具体的日志实现类（比如不使用Console而是HiLog），将日志记录到本地文件等。
+
+Logger对外的日志API全部使用静态方法，方便调用者使用，目前分verbose，debug，info，warn，error五个级别。
 
 使用方法如下：
 
 1. import Logger日志类：
 
    ```typescript
-   import Logger from '../../utils/Logger';
+   import { Logger } from '../utils/log/Logger';
    ```
 
 2. 调用对应级别的静态方法:
@@ -1520,23 +1770,43 @@ query(date: string, callback) {
    Logger.debug('MyAbilityStage', 'onCreate');
    ```
 
-   Logger目前在打印日志时会拼装本应用的唯一标识，方便筛选日志和调试：
+3、Logger类中包括debug、info、warn、error，具体内容如下：
 
-   ```typescript
-    // Logger.ets
-    class Logger {
-      private domain: number;
-      private prefix: string;
+```typescript
+// Logger.ets  
+import hilog from '@ohos.hilog';
 
-      constructor(prefix: string = '', domain: number = 0xFF00) {
-        this.prefix = prefix;
-        this.domain = domain;
-      }
-      ...
-    }
+const LOGGER_PREFIX: string = 'Healthy_life';
 
-    export default new Logger(LOGGER_PREFIX, 0xFF02);
-   ```
+class Logger {
+  private domain: number;
+  private prefix: string;
+
+  ...
+  constructor(prefix: string = '', domain: number = 0xFF00) {
+    this.prefix = prefix;
+    this.domain = domain;
+  }
+
+  debug(...args: string[]): void {
+    hilog.debug(this.domain, this.prefix, this.format, args);
+  }
+
+  info(...args: string[]): void {
+    hilog.info(this.domain, this.prefix, this.format, args);
+  }
+
+  warn(...args: string[]): void {
+    hilog.warn(this.domain, this.prefix, this.format, args);
+  }
+
+  error(...args: string[]): void {
+    hilog.error(this.domain, this.prefix, this.format, args);
+  }
+}
+
+export default new Logger(LOGGER_PREFIX, 0xFF02);
+```
 
 ### 时间工具
 
@@ -1544,25 +1814,29 @@ query(date: string, callback) {
 
 1. 常用时间相关常量：
 
-   ```typescript
-   const CHINESE_OF_WEEK: string[] = ['一', '二', '三', '四', '五', '六', '日'];
-   const YEAR: string = '年';
-   const MONTH: string = '月';
-   const DAY: string = '日';
-   const WEEK: string = '星期'; 
-   ```
+```typescript
+  // Utils.ets
+  const CHINESE_OF_WEEK: string[] = ['一', '二', '三', '四', '五', '六', '日'];
+  const YEAR: string = '年';
+  const MONTH: string = '月';
+  const DAY: string = '日';
+  const WEEK: string = '星期';
+  DAYS_OF_WEEK: number = 7;
+  const SUNDAY_FIRST_SHIFT: number = 6;
+```
 
 2. 时间函数示例（由时间常量衍生出星期一到星期日和数字 1-7 的字典映射）：
 
-   ```typescript
-   export const oneWeekDictFunc = () => {
-     const oneWeekDict = {};
-     CHINESE_OF_WEEK.forEach((item, index) => {
-       oneWeekDict[index + 1] = `${ WEEK }${ CHINESE_OF_WEEK[index] }`;
-     })
-     return oneWeekDict;
-   }
-   ```
+```typescript
+// Utils.ets
+export const oneWeekDictFunc = () => {
+  const oneWeekDict: Array<string> = [];
+  for (let index = 0;index < CHINESE_OF_WEEK.length; index++) {
+    oneWeekDict[index] = `${WEEK}${CHINESE_OF_WEEK[index]}`;
+  }
+  return oneWeekDict;
+}
+```
 
 ### 单位转换工具
 
@@ -1571,8 +1845,9 @@ query(date: string, callback) {
 例如成就页面，每一行平均分布三个徽章，可以先定义一个浮点数代表等分比例，再转换为百分比字符串。
 
 ```typescript
+// Utils.ets
 export function ratio2percent(ratio: number): string {
-  return `${ ratio * 100 }%`;
+  return `${ratio * 100}%`;
 }
 ```
 
@@ -1587,11 +1862,11 @@ export function ratio2percent(ratio: number): string {
 2. 引用工具方法 \( 例如成就页面，每个徽章占据屏幕宽度的三分之一 \) ：
 
    ```typescript
-   // 引用工具方法( 例如成就页面，每个徽章占据屏幕宽度的三分之一 ) :
-   Column({ space: commonConst.DEFAULT_18 }) { 
+   // BadgeCardComponent.ets
+   Column({space: commonConst.DEFAULT_18}) { 
      ...  // 省略徽章卡片的 UI 布局细节
    }
-   .width(ratio2percent(achieveConst.ACHIEVE_SPLIT_RATIO))
+   .width(ratio2percent(Const.ACHIEVE_SPLIT_RATIO)) // achieveConst.ACHIEVE_SPLIT_RATIO = 1 / 3
    ```
 
 ### 事件分发类
@@ -1603,7 +1878,7 @@ export function ratio2percent(ratio: number): string {
 获取事件分发实例：
 
 ```typescript
-// HomeIndex.ets
+// HomeComponent.ets
 @Provide broadCast: BroadCast = HealthDataSrcMgr.getInstance().getBroadCast();
 
 // HealthDataSrcMgr.ets
@@ -1617,84 +1892,126 @@ public getBroadCast(): BroadCast {
 ```typescript
 // CustomDialogView.ets
 aboutToAppear() {
-  ...
-  this.broadCast.on(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, function (achievementLevel: number) { 
-    ... // 省略回调细节
-  })
-  ...
+  Logger.debug('CustomDialogView', 'aboutToAppear'); 
+  // 成就对话
+  this.broadCast.on(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, (achievementLevel: number) => {
+    Logger.debug('CustomDialogView', 'SHOW_ACHIEVEMENT_DIALOG');
+    this.achievementLevel = achievementLevel;
+    this.achievementDialog.open();
+  });
+
+  // 任务时钟对话框
+  this.broadCast.on(BroadCastType.SHOW_TASK_DETAIL_DIALOG,
+    (currentTask: TaskInfo, dialogCallBack: CustomDialogCallback) => {
+      Logger.debug('CustomDialogView', 'SHOW_TASK_DETAIL_DIALOG');
+      this.currentTask = currentTask || TaskItem;
+      this.dialogCallBack = dialogCallBack;
+      this.taskDialog.open();
+    });
 }
   
 // BroadCast.ets
-public on(event, callback) {
-  (this.callBackArray[event] || (this.callBackArray[event] = [])).push(callback);
+public on(event: string, callback: Function) {
+  Logger.info(FILE_TAG, 'register broadcast with type '+ event);
+  switch (event) {
+    case BroadCastType.SHOW_ACHIEVEMENT_DIALOG:
+      this.callBackArray.showAchievementDialog = callback;
+      break;
+    case BroadCastType.SHOW_TASK_DETAIL_DIALOG:
+      this.callBackArray.showTaskDetailDialog = callback;
+      break;
+    case BroadCastType.SHOW_TARGET_SETTING_DIALOG:
+      this.callBackArray.showTargetSettingDialog = callback;
+      break;
+    case BroadCastType.SHOW_REMIND_TIME_DIALOG:
+      this.callBackArray.showRemindTimeDialog = callback;
+      break;
+    case BroadCastType.SHOW_FREQUENCY_DIALOG:
+      this.callBackArray.showFrequencyDialog = callback;
+      break;
+    default:
+      break;
+  }
 }
 ```
 
 取消事件注册：
 
 ```typescript
-// HomeIndex.ets
-aboutToDisappear() {
-  this.broadCast.off(null, null);
+// TaskDetailComponent.ets
+aboutToAppear() {
+  this.broadCast.off(BroadCastType.SHOW_TARGET_SETTING_DIALOG, () => {});
+  this.broadCast.off(BroadCastType.SHOW_REMIND_TIME_DIALOG, () => {});
+  this.broadCast.off(BroadCastType.SHOW_FREQUENCY_DIALOG, () => {});
 }
 
 // BroadCast.ets
-public off(event, callback) {
-  ... // 省略入参检查
-  const cbs = this.callBackArray[event];
+public off(event: string, callback: Function) {
+  if (event === null) {
+    Logger.info(FILE_TAG, 'cancel all broadcast');
+    this.callBackArray = callBackArrayTemp;
+  }
+  Logger.info(FILE_TAG, 'cancel broadcast with type '+ event);
+  const cbs = this.callBackArray;
   if (!cbs) {
     return;
   }
-  if (!callback) {
-    this.callBackArray[event] = null;
+  if (callback === null) {
+    switch (event) {
+      case BroadCastType.SHOW_ACHIEVEMENT_DIALOG:
+        this.callBackArray.showAchievementDialog = () => {};
+        break;
+      case BroadCastType.SHOW_TASK_DETAIL_DIALOG:
+        this.callBackArray.showTaskDetailDialog = () => {}; 
+        break;
+      case BroadCastType.SHOW_TARGET_SETTING_DIALOG:
+        this.callBackArray.showTargetSettingDialog = () => {};
+        break;
+      case BroadCastType.SHOW_REMIND_TIME_DIALOG: 
+        this.callBackArray.showRemindTimeDialog = () => {};
+        break;
+      case BroadCastType.SHOW_FREQUENCY_DIALOG:
+        this.callBackArray.showFrequencyDialog = () => {};
+        break;
+      default:
+        break;
+    }
   }
-  cbs.splice(cbs.indexOf(callback), 1);  
 }
 ```
 
 发送事件：
 
 ```typescript
-// HomeIndex.ets
-taskItemAction(item: TaskInfo, isClick: boolean) {
-  ...
+// HomeComponent.ets
+taskItemAction(item: TaskInfo, isClick: boolean): void {
+  if (!this.homeStore.checkCurrentDay()) {
+    return;
+  }
   if (isClick) {
-    // 点击任务打卡 
-    ...
+    // 点击时钟
+    let callback: CustomDialogCallback = { confirmCallback: (taskTemp: TaskInfo) => {
+      this.onConfirm(taskTemp)
+      }, cancelCallback: () => {
+      } };
     this.broadCast.emit(BroadCastType.SHOW_TASK_DETAIL_DIALOG, [item, callback]);
-  }
-  else {
-    ...
-  }
-}
-
-// BroadCast.ets
-public emit(event, args?: any[]) { 
-  ... // 省略入参检查
-  let cbs = [...this.callBackArray[event]];
-  if (cbs) {
-    let len = cbs.length;
-    for (let i = 0; i < len; i++) {
-      try {
-        cbs[i].apply(_self, args);
-      } catch (error) {
-        new Error(error);
-      }
-    }
+  } else {
+    // 编辑任务
+    let editTaskStr: string = JSON.stringify(TaskMapById[item.taskID - 1]);
+    let editTask: ITaskItem = JSON.parse(editTaskStr);
+    editTask.targetValue = item?.targetValue;
+    editTask.isAlarm = item.isAlarm;
+    editTask.startTime = item.startTime;
+    editTask.frequency = item.frequency;
+    editTask.isOpen = item.isOpen;
+    router.pushUrl({ url: 'pages/TaskEditPage', params: { params: JSON.stringify(editTask) } });
   }
 }
 ```
 
 ## 总结
 
-您已经完成了本次Codelab的学习，并了解到以下知识点：
-
-1. ArkUI基础组件、容器组件的使用。
-2. 使用页面路由跳转到指定页面并传递所需参数。
-3. 基于基础组件封装自定义组件，如日历、弹窗等。
-4. 数据驱动UI组件刷新。
-5. 使用首选项接口实现应用权限管理。
-6. 使用关系型数据库读写关系型数据。
+通过本次Codelab的学习，您应该已经掌握了页面跳转、自定义弹窗等UI方法，并学会了操作关系型数据库读写数据。
 
 ![](figures/彩带动效.gif)
 

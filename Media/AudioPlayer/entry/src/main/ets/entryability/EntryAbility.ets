@@ -18,41 +18,48 @@ import Window from '@ohos.window';
 import avSession from '@ohos.multimedia.avsession';
 import { AudioPlayerController } from '../controller/AudioPlayerControllerl';
 import Logger from '../common/utils/Logger';
+import { GlobalContext } from '../common/utils/GlobalContext';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 export default class EntryAbility extends UIAbility {
   onDestroy() {
     Logger.info('Ability onDestroy');
     // Release resources.
-    globalThis.AudioPlayerController.release();
-    globalThis.currentSession.off('play');
-    globalThis.currentSession.off('pause');
-    globalThis.currentSession.deactivate().then(() => {
-      globalThis.currentSession.destroy();
+    let audioPlayerController = GlobalContext.getContext().getObject('audioPlayerController') as AudioPlayerController;
+    audioPlayerController.release();
+
+    let currentSession = GlobalContext.getContext().getObject('currentSession') as avSession.AVSession;
+    currentSession.off('play');
+    currentSession.off('pause');
+    currentSession.deactivate().then(() => {
+      currentSession.destroy();
     });
   }
 
   onWindowStageCreate(windowStage: Window.WindowStage) {
     // Main window is created, set main page for this ability.
     let context = this.context;
-    globalThis.resourceManager = context.resourceManager;
+    let resourceManager = context.resourceManager;
+    GlobalContext.getContext().setObject('resourceManager', resourceManager);
 
     // Create an audioPlayer instance.
-    globalThis.AudioPlayerController = new AudioPlayerController();
+    let audioPlayerController = new AudioPlayerController(new PlayBarModel());
+    GlobalContext.getContext().setObject('audioPlayerController', audioPlayerController);
 
     // Creating an Audio Session.
     avSession.createAVSession(context, 'AudioAppSample', 'audio').then((session) => {
-      globalThis.currentSession = session;
-      globalThis.currentSession.activate(); // Activating a Session.
-    }).catch((err) => {
-      Logger.error(`createAVSession : ERROR : ${err.message}`);
+      session.activate();
+      GlobalContext.getContext().setObject('currentSession', session);
+    }).catch((err: Error) => {
+      Logger.error(`createAVSession fail, Cause: ${err}`);
     });
 
     windowStage.loadContent('pages/AudioStartUp', (err, data) => {
       if (err.code) {
-        Logger.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        Logger.error('testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
         return;
       }
-      Logger.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
+      Logger.info('testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
     });
   }
 }

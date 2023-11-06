@@ -13,32 +13,17 @@
  * limitations under the License.
  */
 
-export const SWIPER_VIDEOS: object[] = [
-  {
-    "image": $r("app.media.ic_banner1")
-  },
-  {
-    "image": $r("app.media.ic_banner2")
-  },
-  {
-    "image": $r("app.media.ic_banner3")
-  }
+import { HorizontalVideoItem } from './HorizontalVideoItem';
+import { SwiperVideoItem } from './SwiperVideoItem';
+
+export const SWIPER_VIDEOS: SwiperVideoItem[] = [
+  new SwiperVideoItem($r('app.media.ic_banner1')),
+  new SwiperVideoItem($r('app.media.ic_banner2')),
+  new SwiperVideoItem($r('app.media.ic_banner3'))
 ];
 
-export const HORIZONTAL_VIDEOS: object[] = [
-  {
-    "id": 1,
-    "image": $r("app.media.ic_video_list0"),
-    "name": '视频1'
-  },
-  {
-    "id": 2,
-    "image": $r("app.media.ic_video_list1"),
-    "name": '视频2'
-  },
-  {
-    "id": 3,
-    "image": $r("app.media.ic_video_list2"),
-    "name": '视频3'
-  }
+export const HORIZONTAL_VIDEOS: HorizontalVideoItem[] = [
+  new HorizontalVideoItem(1, $r('app.media.ic_video_list0'), '视频1'),
+  new HorizontalVideoItem(2, $r('app.media.ic_video_list1'), '视频2'),
+  new HorizontalVideoItem(3, $r('app.media.ic_video_list2'), '视频3')
 ];

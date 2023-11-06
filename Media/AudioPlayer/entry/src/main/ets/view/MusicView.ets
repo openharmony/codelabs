@@ -13,19 +13,19 @@
  * limitations under the License.
  */
 
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { CommonConstants } from '../common/constants/CommonConstants';
 
 @Component
 export struct MusicView {
-  private item: MusicItem;
+  private item: MusicItem = new MusicItem();
 
   build() {
     Column() {
       Row() {
         Image(this.item.image)
-          .height(CommonConstants.MUSIC_VIEW.IMAGE_HEIGHT)
-          .width(CommonConstants.MUSIC_VIEW.IMAGE_WIDTH)
+          .height(CommonConstants.MUSIC_IMAGE_HEIGHT)
+          .width(CommonConstants.IMAGE_WIDTH)
         Column() {
           Text(this.item.name)
             .fontSize($r('app.float.musicView_name'))
@@ -37,17 +37,17 @@ export struct MusicView {
             .fontWeight(CommonConstants.FONT_WEIGHT_BOLDER)
             .opacity($r('app.float.singer_opacity'))
         }
-        .margin({ left: CommonConstants.MUSIC_VIEW.ROW_MARGIN_LEFT })
+        .margin({ left: CommonConstants.ROW_MARGIN_LEFT })
         .alignItems(HorizontalAlign.Start)
       }
       .width(CommonConstants.FULL_WIDTH)
       .alignSelf(ItemAlign.Start)
     }
     .margin({
-      left: CommonConstants.MUSIC_VIEW.PAGE_MARGIN_LEFT,
-      top: CommonConstants.MUSIC_VIEW.PAGE_MARGIN_TOP,
-      right: CommonConstants.MUSIC_VIEW.PAGE_MARGIN_RIGHT,
-      bottom: CommonConstants.MUSIC_VIEW.PAGE_MARGIN_BUTTON
+      left: CommonConstants.PAGE_MARGIN_LEFT,
+      top: CommonConstants.MUSIC_MARGIN_TOP,
+      right: CommonConstants.PAGE_MARGIN_RIGHT,
+      bottom: CommonConstants.PAGE_MARGIN_BUTTON
     })
   }
 }

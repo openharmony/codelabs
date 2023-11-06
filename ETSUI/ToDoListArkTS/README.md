@@ -7,7 +7,7 @@
 
 ### 相关概念
 
--   [ArkTS语法](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-get-started.md)：ArkTS是OpenHarmony的主要应用开发语言。ArkTS基于TypeScript（简称TS）语言扩展而来，是TS的超集。
+-   [ArkTS语法](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-get-started.md)：ArkTS是HarmonyOS的主要应用开发语言。ArkTS基于TypeScript（简称TS）语言扩展而来，是TS的超集。
 -   [Text组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-text.md)：显示一段文本的组件。
 -   [Column组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-column.md)：沿垂直方向布局的容器。
 -   [Row组件](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-row.md)：沿水平方向布局的容器。
@@ -16,13 +16,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -58,7 +58,7 @@
 │  │  └──ToDoItem.ets                   // 自定义单项待办组件
 │  └──viewmodel
 │     └──DataModel.ets                  // 列表数据获取文件
-└──entry/src/main/resources	            // 资源文件目录
+└──entry/src/main/resources             // 资源文件目录
 ```
 ## 构建主界面
 
@@ -102,9 +102,9 @@ struct ToDoListPage {
     Column({ space: CommonConstants.COLUMN_SPACE }) {
       Text($r('app.string.page_title'))
         ...
-      ForEach(this.totalTasks, (item) => {
+      ForEach(this.totalTasks, (item: string) => {
         ToDoItem({ content: item })
-      }, item => JSON.stringify(item))
+      }, (item: string) => JSON.stringify(item))
     }
     ...
   }
@@ -119,10 +119,10 @@ struct ToDoListPage {
 ...
 @Component
 export default struct ToDoItem {
-  private content: string;
+  private content: string = '';
   @State isComplete: boolean = false;
   
- @Builder labelIcon(icon) {
+ @Builder labelIcon(icon: Resource) {
     Image(icon)
       ...
   }
@@ -154,9 +154,3 @@ export default struct ToDoItem {
 2.  Image、Text、Column、Row等基础组件的使用。
 
     ![](figures/zh-cn_image_0000001596934629.gif)
-
-
-
-
-
-

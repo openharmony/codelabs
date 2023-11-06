@@ -14,7 +14,7 @@
  */
 
 import matrix4 from '@ohos.matrix4';
-import PrizeData from '../common/bean/PrizeData';
+import PrizeData from '../viewmodel/PrizeData';
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
 
@@ -22,7 +22,7 @@ import CommonConstants from '../common/constants/CommonConstants';
 export default struct PrizeDialog {
   @Link prizeData: PrizeData;
   @Link enableFlag: boolean;
-  private controller: CustomDialogController;
+  private controller?: CustomDialogController;
 
   build() {
     Column() {
@@ -51,7 +51,7 @@ export default struct PrizeDialog {
         .fontSize($r('app.float.dialog_font_size'))
         .textAlign(TextAlign.Center)
         .onClick(() => {
-          this.controller.close();
+          this.controller?.close();
           this.enableFlag = !this.enableFlag;
         })
     }

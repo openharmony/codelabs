@@ -16,14 +16,13 @@
 import dataRdb from '@ohos.data.relationalStore';
 import CommonConstants from '../common/constants/CommonConstants';
 import Logger from '../common/utils/Logger';
-import { User } from '../common/bean/User';
+import { User } from '../viewmodel/User';
 
 export class RdbModel {
-  private rdbStore: dataRdb.RdbStore = null;
+  private rdbStore: dataRdb.RdbStore | null = null;
   private tableName: string = '';
   private sqlCreateTable: string = '';
   private columns: Array<string> = [];
-  private STORE_CONFIG = { name: CommonConstants.DATABASE_NAME, securityLevel: dataRdb.SecurityLevel.S1 };
 
   constructor(tableName: string, sqlCreateTable: string, columns: Array<string>) {
     this.tableName = tableName;
@@ -36,11 +35,11 @@ export class RdbModel {
    * Obtaining rdbStore.
    */
   getRdbStore() {
-    let getPromiseRdb = dataRdb.getRdbStore(getContext(), this.STORE_CONFIG);
+    let getPromiseRdb = dataRdb.getRdbStore(getContext(), { name: CommonConstants.DATABASE_NAME, securityLevel: dataRdb.SecurityLevel.S1 });
     getPromiseRdb.then(rdbStore => {
       this.rdbStore = rdbStore;
       this.rdbStore.executeSql(this.sqlCreateTable);
-    }).catch((err) => {
+    }).catch((err: Error) => {
       Logger.error(`getRdbStore err ${JSON.stringify(err)}`);
     });
   }
@@ -52,8 +51,7 @@ export class RdbModel {
    */
   insertData(user: User) {
     try {
-      let valueBucket = JSON.parse(JSON.stringify(user));
-      this.rdbStore.insert(this.tableName, valueBucket);
+      (this.rdbStore as dataRdb.RdbStore).insert(this.tableName, JSON.parse(JSON.stringify(user)));
     } catch (err) {
       Logger.error(`insert data failed due to ${JSON.stringify(err)}`);
     }
@@ -66,12 +64,12 @@ export class RdbModel {
    * @returns resultList Query result set.
    */
   async query(predicates: dataRdb.RdbPredicates): Promise<dataRdb.ResultSet>{
-    let resultList;
+    let resultList: null | dataRdb.ResultSet = null;
     try {
-      resultList = await this.rdbStore.query(predicates, this.columns);
+      resultList = await (this.rdbStore as dataRdb.RdbStore).query(predicates, this.columns);
     } catch (err) {
       Logger.error(`query data failed due to ${JSON.stringify(err)}`);
     }
-    return resultList;
+    return resultList as dataRdb.ResultSet;
   }
 }

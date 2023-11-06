@@ -13,71 +13,89 @@
  * limitations under the License.
  */
 
-import { FolderType, NotesInfoBean } from '../common/bean/NoteInfoBean';
-import { NoteIdBean } from '../common/bean/NoteIdBean';
+export class NoteIdBean {
+  noteId: string;
+
+  constructor(noteId: string) {
+    this.noteId = noteId;
+  }
+}
+
+/**
+ * Folder type enum.
+ */
+export enum FolderType {
+  All = 'all',
+  Work = 'work',
+  Personal = 'personal'
+}
+
+/**
+ * NotesInfo item information.
+ */
+export class NotesInfoBean {
+  /**
+   * Note Id.
+   */
+  noteId: string;
+
+  /**
+   * Note title.
+   */
+  title: string;
+
+  /**
+   * Folder type.
+   */
+  folder: FolderType;
+
+  /**
+   * Create time.
+   */
+  time: string;
+
+  /**
+   * Collect note.
+   */
+  isFavorite: boolean;
+
+  /**
+   * Note images.
+   */
+  imageArr: string[];
+
+  /**
+   * Note content.
+   */
+  content: string;
+
+  /**
+   * constructor.
+   */
+  constructor(noteId: string, title: string, folder: FolderType, time: string, isFavorite: boolean, imageArr: string[],
+              content: string) {
+    this.noteId = noteId;
+    this.title = title;
+    this.folder = folder;
+    this.time = time;
+    this.isFavorite = isFavorite;
+    this.imageArr = imageArr;
+    this.content = content;
+  }
+}
 
 export const notesItemArr: NotesInfoBean[] = [
-  {
-    'noteId': '1646121972443',
-    'title': '早晨锻炼身体',
-    'folder': FolderType.Personal,
-    'content': 'Long run 3 km',
-    'imageArr': ['cook_picture.png'],
-    'time': '7:30:58',
-    'isFavorite': true
-  },
-  {
-    'noteId': '1646121972444',
-    'title': 'Breakfast',
-    'folder': FolderType.Personal,
-    'content': 'Milk and bread',
-    'imageArr': ['dinner_food.png'],
-    'time': '8:00:12',
-    'isFavorite': false
-  },
-  {
-    'noteId': '1646121972445',
-    'title': 'Go to work',
-    'folder': FolderType.Work,
-    'content': 'Take the 11th bus',
-    'imageArr': ['drink_coffee.png'],
-    'time': '8:30:36',
-    'isFavorite': false
-  },
-  {
-    'noteId': '1646121972446',
-    'title': 'Lunches',
-    'folder': FolderType.Personal,
-    'content': 'Sweet and sour ribs potato shreds',
-    'imageArr': ['cook_picture.png'],
-    'time': '12:20:45',
-    'isFavorite': true
-  },
-  {
-    'noteId': '1646121972447',
-    'title': 'Computer Lessons',
-    'folder': FolderType.Work,
-    'content': 'Learning HarmonyOS',
-    'imageArr': ['dinner_food.png'],
-    'time': '3:30:06',
-    'isFavorite': true
-  }
+  new NotesInfoBean('1646121972443', '早晨锻炼身体', FolderType.Personal, '7:30:58', true, ['cook_picture.png'],
+    'Long run 3 km'),
+  new NotesInfoBean('1646121972444', 'Breakfast', FolderType.Personal, '8:00:12', false, ['dinner_food.png'],
+    'Milk and bread'),
+  new NotesInfoBean('1646121972445', 'Go to work', FolderType.Work, '8:30:36', false, ['drink_coffee.png'],
+    'Take the 11th bus'),
+  new NotesInfoBean('1646121972446', 'Lunches', FolderType.Personal, '12:20:45', true, ['cook_picture.png'],
+    'Sweet and sour ribs potato shreds'),
+  new NotesInfoBean('1646121972447', 'Computer Lessons', FolderType.Work, '3:30:06', true, ['dinner_food.png'],
+    'Learning HarmonyOS')
 ];
 
-export const noteIdArray: NoteIdBean[] = [
-  {
-    'noteId': '1646121972443'
-  },
-  {
-    'noteId': '1646121972444'
-  },
-  {
-    'noteId': '1646121972445'
-  },
-  {
-    'noteId': '1646121972446'
-  },
-  {
-    'noteId': '1646121972447'
-  }
-]
+export const noteIdArray: NoteIdBean[] = [new NoteIdBean('1646121972443'), new NoteIdBean('1646121972444'),
+  new NoteIdBean('1646121972445'), new NoteIdBean('1646121972446'), new NoteIdBean('1646121972447')];

@@ -16,7 +16,7 @@
 import reminderAgent from '@ohos.reminderAgentManager';
 import notification from '@ohos.notificationManager';
 import { CommonConstants } from '../common/constants/CommonConstants';
-import ReminderItem from '../common/bean/ReminderItemBean';
+import ReminderItem from '../viewmodel/ReminderItemBean';
 
 /**
  * Base on ohos reminder agent service
@@ -28,7 +28,7 @@ export default class ReminderService {
   public openNotificationPermission() {
     notification.requestEnableNotification().then(() => {
       console.info('Enable notification success');
-    }).catch((err) => {
+    }).catch((err: Error) => {
       console.error('Enable notification failed because ' + JSON.stringify(err));
     });
   }
@@ -39,7 +39,7 @@ export default class ReminderService {
    * @param alarmItem ReminderItem
    * @param callback callback
    */
-  public addReminder(alarmItem: ReminderItem, callback?) {
+  public addReminder(alarmItem: ReminderItem, callback?: (reminderId: number) => void) {
     let reminder = this.initReminder(alarmItem);
     reminderAgent.publishReminder(reminder, (err, reminderId) => {
       if (callback != null) {
@@ -78,8 +78,8 @@ export default class ReminderService {
         },
       ],
       wantAgent: {
-        pkgName: globalThis.bundleName,
-        abilityName: globalThis.abilityName
+        pkgName: CommonConstants.BUNDLE_NAME,
+        abilityName: CommonConstants.ABILITY_NAME
       },
       notificationId: item.notificationId,
       expiredContent: 'this reminder has expired',

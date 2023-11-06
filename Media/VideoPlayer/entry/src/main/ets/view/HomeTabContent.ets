@@ -13,20 +13,22 @@
  * limitations under the License.
  */
 
-import { VideoBean } from '../common/bean/VideoBean';
 import { HomeTabContentList } from './HomeTabContentList';
 import { HomeTabContentButton } from './HomeTabContentButton';
 import { CommonConstants } from '../common/constants/CommonConstants';
+import { HomeDialogModel } from '../viewmodel/HomeDialogModel';
+import { HomeTabModel } from '../common/model/HomeTabModel';
 
 @Component
 export struct HomeTabContent {
-  private currIndex: number;
-  @Provide videoList: Array<VideoBean> = [];
+  private currIndex: number = 0;
+  @Provide homeTabModel: HomeTabModel = new HomeTabModel();
+  homeDialogModel: HomeDialogModel = new HomeDialogModel(this.homeTabModel);
 
   build() {
     Column() {
-      HomeTabContentList({currIndex: this.currIndex});
-      HomeTabContentButton({currIndex: this.currIndex});
+      HomeTabContentList({ currIndex: this.currIndex});
+      HomeTabContentButton({ currIndex: this.currIndex, homeDialogModel: this.homeDialogModel });
     }
     .width(CommonConstants.FULL_PERCENT)
     .height(CommonConstants.FULL_PERCENT)

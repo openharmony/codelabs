@@ -16,10 +16,11 @@
 
 import router from '@ohos.router';
 import prompt from '@system.prompt';
+import common from '@ohos.app.ability.common';
 import { ITaskItem } from '../../model/TaskInitList';
 import Logger from '../../common/utils/Logger';
-import * as commonConst from '../../common/constants/CommonConstants';
-import { taskType } from '../../common/bean/TaskInfo';
+import { CommonConstants as Const } from '../../common/constants/CommonConstants';
+import TaskInfo, { taskType } from '../../viewmodel/TaskInfo';
 import {
   TaskChooseItem,
   TargetSetItem,
@@ -31,12 +32,13 @@ import { BroadCast, BroadCastType } from '../../common/utils/BroadCast';
 import { HealthDataSrcMgr } from '../../common/utils/HealthDataSrcMgr';
 import { initFrequencyString, addTask, formatParams } from '../../viewmodel/TaskViewModel';
 import { TaskDialogView } from '../dialog/TaskDialogView';
+import { GlobalContext } from '../../common/utils/GlobalContext';
 
 @Styles function listItemStyle() {
   .backgroundColor($r('app.color.white'))
-  .height(commonConst.DEFAULT_56)
-  .borderRadius(commonConst.DEFAULT_10)
-  .padding({ left: commonConst.DEFAULT_12, right: commonConst.DEFAULT_12 })
+  .height(Const.DEFAULT_56)
+  .borderRadius(Const.DEFAULT_10)
+  .padding({ left: Const.DEFAULT_12, right: Const.DEFAULT_12 })
 }
 
 @Component
@@ -47,7 +49,8 @@ export default struct TaskDetail {
   private isChanged: boolean = false;
 
   parseRouterParams() {
-    const routerParams: ITaskItem = JSON.parse(router.getParams()['params']);
+    let params = router.getParams() as Record<string, Object>;
+    const routerParams: ITaskItem = JSON.parse(params.params as string);
     return routerParams;
   }
 
@@ -55,55 +58,48 @@ export default struct TaskDetail {
     this.isChanged = true;
   }
 
-  backIndexParams() {
-    return formatParams({
-      ...this.settingParams,
-      isDone: true,
-      finValue: this.settingParams?.targetValue,
-    });
+  backIndexParams(): string {
+    return formatParams(this.settingParams);
   }
 
   finishTaskEdit() {
     if (this.isChanged) {
-      addTask({
-        id: commonConst.ZERO,
-        date: commonConst.GLOBAL_KEY,
-        ...this.settingParams,
-        isDone: false,
-        finValue: '',
+      let context: Context = getContext(this) as common.Context;
+      let taskInfo: TaskInfo = new TaskInfo(Const.ZERO, Const.GLOBAL_KEY, this.settingParams.taskID,
+        this.settingParams.targetValue, this.settingParams.isAlarm, this.settingParams.startTime,
+        this.settingParams.endTime, this.settingParams.frequency, false, '', this.settingParams.isOpen);
+      addTask(taskInfo, context).then((res: number) => {
+        GlobalContext.getContext().setObject('taskListChange', true);
+        router.back({
+          url: 'pages/MainPage',
+          params: {
+            editTask: this.backIndexParams(),
+          }
+        })
+        Logger.info('addTaskFinished', JSON.stringify(res));
+      }).catch((error: Error) => {
+        prompt.showToast({
+          message: Const.SETTING_FINISH_FAILED_MESSAGE
+        })
+        Logger.error('addTaskFailed', JSON.stringify(error));
       })
-        .then(res => {
-          router.back({
-            url: 'pages/MainPage',
-            params: {
-              editTask: this.backIndexParams(),
-            }
-          })
-          Logger.info('addTaskFinished', JSON.stringify(res));
-        })
-        .catch(error => {
-          prompt.showToast({
-            message: commonConst.SETTING_FINISH_FAILED_MESSAGE
-          })
-          Logger.error('addTaskFailed', JSON.stringify(error));
-        })
       return;
     }
     router.back({
       url: 'pages/MainPage',
-    })
+    });
   }
 
   aboutToAppear() {
-    this.broadCast.off(BroadCastType.SHOW_TARGET_SETTING_DIALOG, null);
-    this.broadCast.off(BroadCastType.SHOW_REMIND_TIME_DIALOG, null);
-    this.broadCast.off(BroadCastType.SHOW_FREQUENCY_DIALOG, null);
+    this.broadCast.off(BroadCastType.SHOW_TARGET_SETTING_DIALOG, () => {});
+    this.broadCast.off(BroadCastType.SHOW_REMIND_TIME_DIALOG, () => {});
+    this.broadCast.off(BroadCastType.SHOW_FREQUENCY_DIALOG, () => {});
   }
 
   build() {
     Row() {
       Column() {
-        List({ space: commonConst.LIST_ITEM_SPACE }) {
+        List({ space: Const.LIST_ITEM_SPACE }) {
           ListItem() {
             TaskChooseItem()
           }
@@ -115,12 +111,12 @@ export default struct TaskDetail {
           .listItemStyle()
           .enabled(
             this.settingParams?.isOpen
-            && this.settingParams?.taskID !== taskType.smile
-            && this.settingParams?.taskID !== taskType.brushTeeth
+              && this.settingParams?.taskID !== taskType.smile
+              && this.settingParams?.taskID !== taskType.brushTeeth
           )
           .onClick(() => {
             this.broadCast.emit(
-            BroadCastType.SHOW_TARGET_SETTING_DIALOG);
+              BroadCastType.SHOW_TARGET_SETTING_DIALOG);
           })
 
           ListItem() {
@@ -142,31 +138,31 @@ export default struct TaskDetail {
             FrequencyItem()
           }
           .listItemStyle()
-          .enabled(this.settingParams?.isOpen)
+          .enabled(this.settingParams?.isOpen && this.settingParams?.isAlarm)
           .onClick(() => {
             this.broadCast.emit(BroadCastType.SHOW_FREQUENCY_DIALOG);
           })
 
         }
-        .width(commonConst.THOUSANDTH_940)
+        .width(Const.THOUSANDTH_940)
 
         Button() {
           Text($r('app.string.complete')).fontSize($r('app.float.default_20')).fontColor($r('app.color.blueColor'))
         }
-        .width(commonConst.THOUSANDTH_800)
-        .height(commonConst.DEFAULT_48)
+        .width(Const.THOUSANDTH_800)
+        .height(Const.DEFAULT_48)
         .backgroundColor($r('app.color.borderColor'))
         .onClick(() => {
           this.finishTaskEdit();
         })
         .position({
-          x: commonConst.THOUSANDTH_100,
-          y: commonConst.THOUSANDTH_800
+          x: Const.THOUSANDTH_100,
+          y: Const.THOUSANDTH_800
         })
 
         TaskDialogView()
       }
-      .width(commonConst.THOUSANDTH_1000)
+      .width(Const.THOUSANDTH_1000)
     }
   }
 }

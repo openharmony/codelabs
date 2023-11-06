@@ -15,15 +15,18 @@
 
 import { CommonConstants } from '../../../common/constants/CommonConstants';
 import { DetailConstant } from '../../../common/constants/DetailConstant';
-import AlarmItem from '../../../common/bean/AlarmItemBean';
+import AlarmItem from '../../../viewmodel/AlarmItemBean';
 import CommonDialog from './CommonDialog';
 import DimensionUtil from '../../../common/utils/DimensionUtil';
 
 @CustomDialog
 export default struct RenameDialog {
   @Consume(DetailConstant.DEFAULT_PROVIDER_KEY) alarmItem: AlarmItem;
-  private name: string;
-  controller: CustomDialogController;
+  private name: string = '';
+  controller: CustomDialogController = new CustomDialogController({
+    builder: RenameDialog(),
+    autoCancel: true
+  });
 
   build() {
     Flex() {

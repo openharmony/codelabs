@@ -5,16 +5,11 @@
     "description": "$string:module_desc",
     "mainElement": "EntryAbility",
     "deviceTypes": [
-	  "default",
-      "tablet"
-     ],
+      "default"
+    ],
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",
-    "metadata": [{
-      "name": "ArkTSPartialUpdate",
-      "value": "true"
-    }],
     "abilities": [
       {
         "name": "EntryAbility",
@@ -40,10 +35,10 @@
     "requestPermissions": [
       {
         "name": "ohos.permission.INTERNET",
-        "reason": "$string:reason",
+        "reason": "$string:dependency_reason",
         "usedScene": {
           "abilities": [
-            "EntryAbility"    
+            "EntryAbility"
           ],
           "when": "inuse"
         }

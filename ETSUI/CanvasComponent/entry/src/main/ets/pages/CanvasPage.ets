@@ -17,10 +17,9 @@ import window from '@ohos.window';
 import Logger from '../common/utils/Logger';
 import DrawModel from '../viewmodel/DrawModel';
 import PrizeDialog from '../view/PrizeDialog';
-import PrizeData from '../common/bean/PrizeData';
+import PrizeData from '../viewmodel//PrizeData';
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
-import { startAnimator } from '../viewmodel/DrawModel';
 
 // Get context.
 let context = getContext(this);
@@ -52,7 +51,7 @@ struct CanvasPage {
         this.screenWidth = px2vp(windowProperties.windowRect.width);
         this.screenHeight = px2vp(windowProperties.windowRect.height);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         Logger.error('Failed to obtain the window size. Cause: ' + JSON.stringify(error));
       })
   }
@@ -80,7 +79,7 @@ struct CanvasPage {
         .enabled(this.enableFlag)
         .onClick(() => {
           this.enableFlag = !this.enableFlag;
-          startAnimator.call(this);
+          this.startAnimator();
         })
     }
     .width(StyleConstants.FULL_PERCENT)
@@ -89,6 +88,31 @@ struct CanvasPage {
     .backgroundImageSize({
       width: StyleConstants.FULL_PERCENT,
       height: StyleConstants.BACKGROUND_IMAGE_SIZE
+    })
+  }
+
+  /**
+   * Start animator.
+   */
+  startAnimator() {
+    let randomAngle = Math.round(Math.random() * CommonConstants.CIRCLE);
+    // Obtaining prize information.
+    this.prizeData = this.drawModel.showPrizeData(randomAngle);
+
+    animateTo({
+      duration: CommonConstants.DURATION,
+      curve: Curve.Ease,
+      delay: 0,
+      iterations: 1,
+      playMode: PlayMode.Normal,
+      onFinish: () => {
+        this.rotateDegree = CommonConstants.ANGLE - randomAngle;
+        // Display prize information pop-up window.
+        this.dialogController.open();
+      }
+    }, () => {
+      this.rotateDegree = CommonConstants.CIRCLE * CommonConstants.FIVE +
+        CommonConstants.ANGLE - randomAngle;
     })
   }
 }

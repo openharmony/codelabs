@@ -14,16 +14,16 @@
  */
 
 import {
-    TODAY,
-    DRINK_STEP,
-    DRINK_MAX_RANGE,
-    EAT_APPLE_RANGE,
-    TIMES_100
+  TODAY,
+  DRINK_STEP,
+  DRINK_MAX_RANGE,
+  EAT_APPLE_RANGE,
+  TIMES_100
 } from '../common/constants/CommonConstant';
 import { padTo2Digits } from './FrequencySetting';
 
-export const formatParams = (params) => {
-    return JSON.stringify(params)
+export const formatParams = (params: Object) => {
+  return JSON.stringify(params)
 }
 
 /**
@@ -32,16 +32,16 @@ export const formatParams = (params) => {
  * @return timestamp
  */
 export const returnTimeStamp = (currentTime: string) => {
-    const timeString = `${TODAY} ${currentTime}`;
-    return new Date(timeString).getTime();
+  const timeString = `${TODAY} ${currentTime}`;
+  return new Date(timeString).getTime();
 }
 
 /**
  * @description It is used for formatting time and displayed in the form of HH: mm
  * @param value
  */
-export const formatTime = (value) => {
-    return `${padTo2Digits(value?.hour)}:${padTo2Digits(value?.minute)}`;
+export const formatTime = (value: TimePickerResult) => {
+  return `${padTo2Digits(value?.hour ?? 0)}:${padTo2Digits(value?.minute ?? 0)}`;
 }
 
 /**
@@ -49,11 +49,11 @@ export const formatTime = (value) => {
  * @return Array<string>
  */
 export const createDrinkRange = () => {
-    const drinkRangeArr = []
-    for (let i = DRINK_STEP; i <= DRINK_MAX_RANGE; i += DRINK_STEP) {
-        drinkRangeArr.push(`${i / TIMES_100} L`);
-    }
-    return drinkRangeArr;
+  const drinkRangeArr: string[] = []
+  for (let i = DRINK_STEP; i <= DRINK_MAX_RANGE; i += DRINK_STEP) {
+    drinkRangeArr.push(`${i / TIMES_100} L`);
+  }
+  return drinkRangeArr;
 }
 
 /**
@@ -61,9 +61,9 @@ export const createDrinkRange = () => {
  * @return Array<string>
  */
 export const createAppleRange = () => {
-    const appleRangeArr = []
-    for (let i = 1; i <= EAT_APPLE_RANGE; i++) {
-        appleRangeArr.push(`${i} 个`);
-    }
-    return appleRangeArr;
+  const appleRangeArr: string[] = []
+  for (let i = 1; i <= EAT_APPLE_RANGE; i++) {
+    appleRangeArr.push(`${i} 个`);
+  }
+  return appleRangeArr;
 }

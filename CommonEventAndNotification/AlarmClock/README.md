@@ -22,20 +22,14 @@
 
 ### 相关权限
 
-本篇Codelab使用了后台代理提醒，需要在配置文件module.json5文件里添加权限：ohos.permission.PUBLISH_AGENT_REMINDER。
+本篇Codelab需要在module.json5中配置如下权限：
 
 ```
-{
-  "module": {
-    "name": "entry",
-    ...
-    "requestPermissions": [
-      {
-        "name": "ohos.permission.PUBLISH_AGENT_REMINDER"
-      }
-    ]
+"requestPermissions": [
+  {
+    "name": "ohos.permission.PUBLISH_AGENT_REMINDER"
   }
-}
+]
 ```
 
 ## 环境搭建
@@ -43,13 +37,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -77,10 +71,6 @@
 ```
 ├──entry/src/main/ets                       // 代码区    
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──AlarmItemBean.ets               // 闹钟属性类
-│  │  │  ├──AlarmSettingBean.ets            // 闹钟设置属性类
-│  │  │  └──ReminderItemBean.ets            // 后台提醒属性类
 │  │  ├──constants
 │  │  │  ├──AlarmSettingType.ets            // 闹钟设置类型枚举
 │  │  │  ├──CommonConstants.ets             // 公共常量类
@@ -88,7 +78,8 @@
 │  │  │  └──MainConstant.ets                // 首页常量类
 │  │  └──utils
 │  │     ├──DataTypeUtils.ets               // 数据类型工具类
-│  │     └──DimensionUtil.ets               // 屏幕适配工具类
+│  │     ├──DimensionUtil.ets               // 屏幕适配工具类
+│  │     └──GlobalContext.ets               // 全局变量工具类
 │  ├──entryability
 │  │  └──EntryAbility.ets                   // 程序入口类
 │  ├──model
@@ -115,8 +106,12 @@
 │  │  │  └──ClockArea.ets                   // 主页时钟组件
 │  │  └──BackContainer.ets                  // 自定义头部组件
 │  └──viewmodel
+│     ├──AlarmItemBean.ets                  // 闹钟属性类
+│     ├──AlarmSettingBean.ets               // 闹钟设置属性类
+│     ├──DayDateBean.ets                    // 日期属性类
 │     ├──DetailViewModel.ets                // 详情模块逻辑功能类   
-│     └──MainViewModel.ets                  // 主页逻辑功能类   
+│     ├──MainViewModel.ets                  // 主页逻辑功能类
+│     └──ReminderItemBean.ets               // 后台提醒属性类
 └──entry/src/main/resources                 // 资源文件目录
 ```
 
@@ -143,6 +138,7 @@
 // ClockArea.ets
 @Component
 export default struct ClockArea {
+  ...
   build() {
     Canvas(this.renderContext)
       .width(this.canvasSize)
@@ -156,7 +152,6 @@ export default struct ClockArea {
         this.showClock = !this.showClock;
       })
   }
-  ...
   // 启动绘画任务
   private startDrawTask() {
     let that = this;
@@ -168,6 +163,7 @@ export default struct ClockArea {
       that.drawClockArea();
     }, MainConstant.DEFAULT_ONE_SECOND_MS);
   }
+  ...      
 }
 ```
 
@@ -180,8 +176,8 @@ export default struct ClockArea {
 private drawClockArea(): void{
   this.renderContext.clearRect(
     -this.canvasSize,
-    -this.canvasSize / Constants.DEFAULT_DOUBLE,
-    this.canvasSize * Constants.DEFAULT_DOUBLE,
+    -this.canvasSize / CommonConstants.DEFAULT_DOUBLE,
+    this.canvasSize * CommonConstants.DEFAULT_DOUBLE,
     this.canvasSize);
   let date = new Date();
   let hours = date.getHours();
@@ -203,11 +199,12 @@ private drawClockArea(): void{
 public queryAlarmsTasker(callback: (alarms: Array<AlarmItem>) => void) {
   let that = this;
   that.queryDatabaseAlarms(callback);
-  globalThis.preference.addPreferencesListener({
+  let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+  preference.addPreferencesListener({
     onDataChanged() {
       that.queryDatabaseAlarms(callback);
     }
-  })
+  } as PreferencesListener)
 }
 ```
 
@@ -227,8 +224,7 @@ export default struct AlarmList {
         }.onClick(() => {
           router.pushUrl({ url: "pages/DetailIndex", params: { alarmItem: item } });
         })
-      },
-        item => item.id.toString())
+      }, (item: AlarmItem) => JSON.stringify(item))
     }
     .padding({
       left: DimensionUtil.getVp($r('app.float.alarm_list_content_distance')),
@@ -285,7 +281,8 @@ public openAlarm(id: number, isOpen: boolean) {
       } else {
         this.reminderService.deleteReminder(this.alarms[i].id);
       }
-      globalThis.preference.set(ALARM_KEY, JSON.stringify(this.alarms));
+      let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+      preference.set(CommonConstants.ALARM_KEY, JSON.stringify(this.alarms));
       break;
     }
   }
@@ -311,18 +308,28 @@ public openAlarm(id: number, isOpen: boolean) {
 
 ```typescript
 // DetailIndex.ets
-build() {
-  Row() {
+build()
+{
+  Column() {
+    ...
     Button() {
-      Image(this.backImgRes == null ? $r('app.media.ic_public_back') : this.backImgRes).objectFit(ImageFit.Fill)
+      Image($r('app.media.ic_confirm')).objectFit(ImageFit.Fill)
     }
     .backgroundColor($r('app.color.trans_parent'))
     .width(DimensionUtil.getVp($r('app.float.title_button_size')))
     .height(DimensionUtil.getVp($r('app.float.title_button_size')))
     .onClick(() => {
-        this.backFunc ? this.backFunc() : router.back();
+      this.viewModel.setAlarmRemind(this.alarmItem);
+      router.back();
     })
+    ...
+  }
+}
 
+// BackContainer.ets
+build() {
+  Row() {
+    ...
     Text(this.header)
       .fontSize(DimensionUtil.getFp($r('app.float.detail_title_font_size')))
       .lineHeight(DimensionUtil.getVp($r('app.float.title_line_height')))
@@ -353,14 +360,14 @@ export default struct DatePickArea {
   build() {
     Stack({ alignContent: Alignment.Center }) {
       Row() {
-        ForEach(DetailConstant.DAY_DATA, (item) => {
+        ForEach(DetailConstant.DAY_DATA, (item: DayDataBean) => {
           TextPicker({ range: item.data, selected: item.delSelect })
             .layoutWeight(CommonConstants.DEFAULT_LAYOUT_WEIGHT)
             .backgroundColor($r('app.color.grey_light'))
             .onChange((value: string, index: number) => {
               item.delSelect = index;
             })
-        }, item => item.timeType)
+        }, (item: DayDataBean) => JSON.stringify(item))
       }
     }
     .height(DimensionUtil.getVp($r('app.float.date_picker_height')))
@@ -380,7 +387,7 @@ export default struct DatePickArea {
 // SettingItem.ets
 build() {
   Column() {
-    ForEach(this.settingInfo, (item: SettingInfo, index: number) => {
+    ForEach(this.settingInfo, (item: AlarmSettingBean, index: number | undefined) => {
       Divider()
       ...
       Row() {
@@ -392,7 +399,7 @@ build() {
       .onClick(() => {
         this.showSettingDialog(item.sType);
       })
-    }, (item, index) => JSON.stringify(item) + index)
+    }, (item: AlarmSettingBean, index: number | undefined) => JSON.stringify(item) + index)
   }
   ...
 }
@@ -405,33 +412,33 @@ build() {
 ```typescript
 // DetailViewModel.ets
 public async setAlarmRemind(alarmItem: AlarmItem) {
-  alarmItem.hour = this.getAlarmTime(Constants.DEFAULT_SINGLE);
-  alarmItem.minute = this.getAlarmTime(Constants.DEFAULT_DATA_PICKER_HOUR_SELECTION);
+  alarmItem.hour = this.getAlarmTime(CommonConstants.DEFAULT_SINGLE);
+  alarmItem.minute = this.getAlarmTime(CommonConstants.DEFAULT_DATA_PICKER_HOUR_SELECTION);
   let index = await this.findAlarmWithId(alarmItem.id);
-  if (index !== Constants.DEFAULT_NUMBER_NEGATIVE) { 
-    // 已存在，删除原有提醒
+  if (index !== CommonConstants.DEFAULT_NUMBER_NEGATIVE) { // 已存在，删除原有提醒
     this.reminderService.deleteReminder(alarmItem.id);
-  } else { 
-    // 不存在，以数据长度为notificationId新增闹钟数据
+  } else { // 不存在，以数据长度为notificationId新增闹钟数据
     index = this.alarms.length;
     alarmItem.notificationId = index;
     this.alarms.push(alarmItem);
   }
-  this.reminderService.addReminder(alarmItem, (newId) => {
+  this.reminderService.addReminder(alarmItem, (newId: number) => {
     alarmItem.id = newId;
     alarmItem.isOpen = true;
     this.alarms[index] = alarmItem;
-    globalThis.preference.set(ALARM_KEY, JSON.stringify(this.alarms));
+    let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+    preference.set(CommonConstants.ALARM_KEY, JSON.stringify(this.alarms));
   })
 }
 
 public async removeAlarmRemind(id: number) {
   this.reminderService.deleteReminder(id);
   let index = await this.findAlarmWithId(id);
-  if (index !== Constants.DEFAULT_NUMBER_NEGATIVE) {
-    this.alarms.splice(index, Constants.DEFAULT_SINGLE);
+  if (index !== CommonConstants.DEFAULT_NUMBER_NEGATIVE) {
+    this.alarms.splice(index, CommonConstants.DEFAULT_SINGLE);
   }
-  globalThis.preference.set(ALARM_KEY, JSON.stringify(this.alarms));
+  let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+  preference.set(CommonConstants.ALARM_KEY, JSON.stringify(this.alarms));
 }
 ```
 

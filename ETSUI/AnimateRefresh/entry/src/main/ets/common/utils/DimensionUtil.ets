@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import display from '@ohos.display';
+import { GlobalContext } from './GlobalContext';
 
 let context = getContext(this);
 const DESIGN_WIDTH = 360;
@@ -22,7 +24,7 @@ const DESIGN_HEIGHT = 780;
  */
 export default class DimensionUtil {
   static adaptDimension(value: number): number {
-    let deviceDisplay = globalThis.display;
+    let deviceDisplay: display.Display = GlobalContext.getContext().getObject('display') as display.Display;
     let widthScale = deviceDisplay.width / DESIGN_WIDTH;
     let virtualHeight = widthScale * DESIGN_HEIGHT;
     let designDim = Math.sqrt(DESIGN_WIDTH * DESIGN_WIDTH + DESIGN_HEIGHT * DESIGN_HEIGHT);
@@ -35,7 +37,7 @@ export default class DimensionUtil {
    */
   static getPx(value: Resource): number {
     let beforeVp = context.resourceManager.getNumber(value.id);
-    return this.adaptDimension(beforeVp);
+    return DimensionUtil.adaptDimension(beforeVp);
   }
 
   /**
@@ -43,7 +45,7 @@ export default class DimensionUtil {
    */
   static getVp(value: Resource): number {
     let beforeVp = context.resourceManager.getNumber(value.id);
-    return px2vp(this.adaptDimension(beforeVp));
+    return px2vp(DimensionUtil.adaptDimension(beforeVp));
   }
 
   /**
@@ -51,6 +53,6 @@ export default class DimensionUtil {
    */
   static getFp(value: Resource): number {
     let beforeFp = context.resourceManager.getNumber(value.id);
-    return px2fp(this.adaptDimension(beforeFp));
+    return px2fp(DimensionUtil.adaptDimension(beforeFp));
   }
 }

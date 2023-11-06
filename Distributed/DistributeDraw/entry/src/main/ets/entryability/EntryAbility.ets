@@ -19,19 +19,19 @@ import Want from '@ohos.app.ability.Want';
 import window from '@ohos.window';
 import bundleManager from '@ohos.bundle.bundleManager';
 import abilityAccessCtrl, { Permissions } from '@ohos.abilityAccessCtrl';
+import common from '@ohos.app.ability.common';
 import Logger from '../common/utils/Logger';
 import remoteDeviceModel from '../common/utils/RemoteDeviceUtil';
-import Position from '../common/bean/Position';
+import Position from '../viewmodel/Position';
 
 const permissions: Array<Permissions> = ['ohos.permission.DISTRIBUTED_DATASYNC'];
 
 export default class EntryAbility extends UIAbility {
   storage: LocalStorage = new LocalStorage();
-  want: Want;
+  want?: Want;
 
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
     this.want = want;
-    globalThis.context = this.context;
     Logger.info('EntryAbility',
       `onCreate want=${JSON.stringify(this.want)}, launchParam=${JSON.stringify(launchParam)}`);
     remoteDeviceModel.createDeviceManager();
@@ -57,12 +57,12 @@ export default class EntryAbility extends UIAbility {
   onWindowStageCreate(windowStage: window.WindowStage) {
     Logger.info('EntryAbility', 'onWindowStageCreate start');
 
-    if (this.want?.parameters?.positionList) {
+    if (this?.want?.parameters?.positionList) {
       let positionList: Position[] = JSON.parse((this.want.parameters.positionList) as string);
       this.storage.setOrCreate('positionList', positionList);
     }
 
-    checkPermissions();
+    checkPermissions(this.context);
 
     try {
       windowStage.loadContent('pages/Index', this.storage, (err) => {
@@ -74,8 +74,7 @@ export default class EntryAbility extends UIAbility {
         Logger.info('EntryAbility', 'onWindowStageCreate Succeeded in loading the content');
       });
     } catch (error) {
-      Logger.error('EntryAbility',
-        `onWindowStageCreate failed. code=${error.code}, msg=${JSON.stringify(error.message)}`);
+      Logger.error('EntryAbility', `onWindowStageCreate failed. err=${JSON.stringify(error)}`);
     }
   }
 }
@@ -83,12 +82,12 @@ export default class EntryAbility extends UIAbility {
 /**
  * Check the permission status.
  */
-async function checkPermissions() {
+async function checkPermissions(context: common.UIAbilityContext) {
   let grantStatus: abilityAccessCtrl.GrantStatus = await checkAccessToken();
   if (grantStatus !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) {
     // Applying for the distributed data synchronization permission.
     let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
-    atManager.requestPermissionsFromUser(globalThis.context, permissions).then((data) => {
+    atManager.requestPermissionsFromUser(context, permissions).then((data) => {
       let grantStatus: Array<number> = data.authResults;
       let length: number = grantStatus.length;
       for (let i: number = 0; i < length; i++) {
@@ -100,9 +99,9 @@ async function checkPermissions() {
           return;
         }
       }
-    }).catch((err) => {
+    }).catch((err: Error) => {
       Logger.error('EntryAbility',
-        `checkPermissions request permissions failed, code=${err.code}, msg=${JSON.stringify(err.message)}`);
+        `checkPermissions request permissions failed, err=${JSON.stringify(err)}`);
     })
   }
 }
@@ -114,7 +113,7 @@ async function checkPermissions() {
  */
 async function checkAccessToken() {
   let atManager = abilityAccessCtrl.createAtManager();
-  let tokenId: number;
+  let tokenId: number = 0;
   try {
     let bundleInfo: bundleManager.BundleInfo = await bundleManager
       .getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
@@ -122,7 +121,7 @@ async function checkAccessToken() {
     tokenId = appInfo.accessTokenId;
   } catch (err) {
     Logger.error('EntryAbility',
-      `checkAccessToken Failed to get bundle info for self. code is ${err.code}, message is ${err.message}`);
+      `checkAccessToken Failed to get bundle info for self. err=${JSON.stringify(err)}`);
   }
 
   let grantStatus: abilityAccessCtrl.GrantStatus = abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
@@ -130,7 +129,7 @@ async function checkAccessToken() {
     grantStatus = await atManager.checkAccessToken(tokenId, 'ohos.permission.DISTRIBUTED_DATASYNC');
   } catch (err) {
     Logger.error('EntryAbility',
-      `checkAccessToken Failed to check access token. code is ${err.code}, message is ${err.message}`);
+      `checkAccessToken Failed to check access token. err=${JSON.stringify(err)}`);
   }
 
   return grantStatus;

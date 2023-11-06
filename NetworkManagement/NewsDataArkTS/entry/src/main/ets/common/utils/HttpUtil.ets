@@ -14,7 +14,8 @@
  */
 
 import http from '@ohos.net.http';
-import { HTTP_READ_TIMEOUT, HTTP_CODE_200, SERVER_CODE_SUCCESS } from '../constant/CommonConstant';
+import { ResponseResult } from '../../viewmodel/NewsViewModel';
+import { CommonConstant as Const, ContentType } from '../constant/CommonConstant';
 
 /**
  * Initiates an HTTP request to a given URL.
@@ -22,35 +23,30 @@ import { HTTP_READ_TIMEOUT, HTTP_CODE_200, SERVER_CODE_SUCCESS } from '../consta
  * @param url URL for initiating an HTTP request.
  * @param params Params for initiating an HTTP request.
  */
-export function httpRequestGet(url: string, params: any) {
-  if (params) {
-    url = `${url}?${'currentPage'}=${params.currentPage}&${'pageSize'}=${params.pageSize}`
-    + `&${'currentIndex'}=${params.currentIndex}`;
-  }
+export function httpRequestGet(url: string): Promise<ResponseResult> {
   let httpRequest = http.createHttp();
   let responseResult = httpRequest.request(url, {
     method: http.RequestMethod.GET,
-    readTimeout: HTTP_READ_TIMEOUT,
-    connectTimeout: HTTP_READ_TIMEOUT
+    readTimeout: Const.HTTP_READ_TIMEOUT,
+    header: {
+      'Content-Type': ContentType.JSON
+    },
+    connectTimeout: Const.HTTP_READ_TIMEOUT,
+    extraData: {}
   });
-  let serverData: {
-    code,
-    data: any,
-    msg: string | Resource
-  } = { code: 0, data: '', msg: '' };
+  let serverData: ResponseResult = new ResponseResult();
   // Processes the data and returns.
-  return responseResult.then((value) => {
-    if (value.responseCode === HTTP_CODE_200) {
+  return responseResult.then((value: http.HttpResponse) => {
+    if (value.responseCode === Const.HTTP_CODE_200) {
       // Obtains the returned data.
       let result = `${value.result}`;
-      let resultJson = JSON.parse(result);
-      if (resultJson.code === SERVER_CODE_SUCCESS) {
+      let resultJson: ResponseResult = JSON.parse(result);
+      if (resultJson.code === Const.SERVER_CODE_SUCCESS) {
         serverData.data = resultJson.data;
       }
       serverData.code = resultJson.code;
       serverData.msg = resultJson.msg;
     } else {
-      serverData.code = value.responseCode;
       serverData.msg = `${$r('app.string.http_error_message')}&${value.responseCode}`;
     }
     return serverData;
@@ -59,4 +55,3 @@ export function httpRequestGet(url: string, params: any) {
     return serverData;
   })
 }
-

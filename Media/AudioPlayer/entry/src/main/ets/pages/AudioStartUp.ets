@@ -20,7 +20,7 @@ import { CommonConstants } from '../common/constants/CommonConstants';
 @Entry
 @Component
 struct AudioStartUp {
-  private timeId: number;
+  private timeId: number = -1;
 
   aboutToAppear() {
     // The play list page is automatically displayed 1s later.
@@ -28,7 +28,7 @@ struct AudioStartUp {
       router.pushUrl({
         url: CommonConstants.PAGE_MUSIC_LIST,
         params: {}
-      }).catch(err => {
+      }).catch((err: Error) => {
         Logger.error('push url fail: ' + err);
       })
     }, CommonConstants.DELAY_TIME)
@@ -43,14 +43,15 @@ struct AudioStartUp {
     Column() {
       Column() {
         Image($r('app.media.icon'))
-          .width(CommonConstants.START_UP_PAGE.IMAGE_WIDTH)
-          .height(CommonConstants.START_UP_PAGE.IMAGE_HEIGHT)
+          .width(CommonConstants.START_IMAGE_WIDTH)
+          .height(CommonConstants.START_IMAGE_HEIGHT)
           .objectFit(ImageFit.Contain)
       }
-      .height(CommonConstants.START_UP_PAGE.IMAGE_CONTAINER)
+      .height(CommonConstants.START_IMAGE_CONTAINER)
       .width(CommonConstants.FULL_WIDTH)
       .alignItems(HorizontalAlign.Center)
       .justifyContent(FlexAlign.Center)
+
       Text($r('app.string.app_name'))
         .fontSize($r("app.float.start_title"))
         .textAlign(TextAlign.Center)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -20,11 +20,20 @@ import { CardStyle } from '../common/constants/Constants';
  */
 @Component
 export default struct CardComponent {
-  @BuilderParam children: () => void;
-  paddingValue: Padding | Length;
-  marginValue: Margin | Length;
-  colorValue: ResourceColor;
-  radiusValue: Length;
+  @BuilderParam children: () => void = () => {};
+  paddingValue: Padding | Length = {
+    top: CardStyle.CARD_PADDING_VERTICAL,
+    bottom: CardStyle.CARD_PADDING_VERTICAL,
+    left: CardStyle.CARD_PADDING_HORIZONTAL,
+    right: CardStyle.CARD_PADDING_HORIZONTAL
+  };
+  marginValue: Margin | Length = {
+    top: CardStyle.CARD_MARGIN_TOP,
+    left: CardStyle.CARD_MARGIN_HORIZONTAL,
+    right: CardStyle.CARD_MARGIN_HORIZONTAL
+  };
+  colorValue: ResourceColor = $r('app.color.background1');
+  radiusValue: Length = CardStyle.CARD_RADIUS;
 
   build() {
     Column() {

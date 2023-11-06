@@ -16,18 +16,18 @@
 import CommonConstants from '../common/constants/CommonConstants';
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonUtils from '../common/utils/CommonUtils';
-import MovieDataBean from '../common/bean/MovieDataBean';
+import MovieDataBean from '../viewmodel/MovieDataBean';
 import StarsWidget from './StarsWidget';
 import Logger from '../common/utils/Logger';
 
 @Component
 export default struct MovieDetailsTitle {
-  private movieDetail: MovieDataBean;
-  private movieImage: Resource;
-  private title: string;
-  private rating: string;
-  private stars: Resource[];
-  private describe: string;
+  private movieDetail: MovieDataBean = new MovieDataBean();
+  private movieImage: Resource = $r('app.media.ic_movie_one');
+  private title: string = '';
+  private rating: string = '';
+  private stars: Resource[] = [];
+  private describe: string = '';
 
   aboutToAppear() {
     if (CommonUtils.isEmpty(this.movieDetail)) {

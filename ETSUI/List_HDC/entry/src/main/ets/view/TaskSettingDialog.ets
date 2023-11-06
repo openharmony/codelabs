@@ -30,11 +30,10 @@ export struct TargetSettingDialog {
   currentValue: string = this.settingParams.taskID === taskType.drinkWater ? commonConst.DEFAULT_TEXT :
     commonConst.DEFAULT_APPLE;
   currentTime: string = commonConst.DEFAULT_TIME;
-  private tip: string = '';
 
   compareTime(startTime: string, endTime: string) {
     if (returnTimeStamp(this.currentTime) < returnTimeStamp(startTime) ||
-    returnTimeStamp(this.currentTime) > returnTimeStamp(endTime)) {
+      returnTimeStamp(this.currentTime) > returnTimeStamp(endTime)) {
       prompt.showToast({
         message: commonConst.CHOOSE_TIME_OUT_RANGE
       })
@@ -210,7 +209,7 @@ export struct FrequencyDialog {
       .width(commonConst.THOUSANDTH_900)
 
       List() {
-        ForEach(this.frequencyChooseRange, (item) => {
+        ForEach(this.frequencyChooseRange, (item: FrequencyContentType) => {
           ListItem() {
             Row() {
               Text(item?.label).fontSize(commonConst.DEFAULT_20)

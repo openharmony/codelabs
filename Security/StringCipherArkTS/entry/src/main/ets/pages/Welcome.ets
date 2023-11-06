@@ -16,10 +16,13 @@
 import router from '@ohos.router';
 import CommonConstants from '../common/constants/CommonConstants';
 
+class c1 {
+  username: string | null = null
+}
 @Entry
 @Component
 struct Welcome {
-  @State username: string = router.getParams()['username'];
+  @State username: string = (router.getParams() as c1).username as string;
   @State message: Resource = $r('app.string.message_login_success');
 
   build() {

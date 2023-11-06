@@ -15,7 +15,7 @@
 
 import CommonConstants from '../common/constants/CommonConstants';
 import mainViewModel from '../viewmodel/MainViewModel';
-import ItemData from '../common/bean/ItemData';
+import ItemData from '../viewmodel/ItemData';
 
 /**
  * Home tab content
@@ -40,7 +40,7 @@ export default struct Home {
         Swiper(this.swiperController) {
           ForEach(mainViewModel.getSwiperImages(), (img: Resource) => {
             Image(img).borderRadius($r('app.float.home_swiper_borderRadius'))
-          }, img => img.id)
+          }, (img: Resource) => JSON.stringify(img.id))
         }
         .margin({ top: $r('app.float.home_swiper_margin') })
         .autoPlay(true)
@@ -57,7 +57,7 @@ export default struct Home {
                   .margin({ top: $r('app.float.home_homeCell_margin') })
               }
             }
-          }, item => JSON.stringify(item))
+          }, (item: ItemData) => JSON.stringify(item))
         }
         .columnsTemplate('1fr 1fr 1fr 1fr')
         .rowsTemplate('1fr 1fr')
@@ -95,7 +95,7 @@ export default struct Home {
             .backgroundImageSize(ImageSize.Cover)
             .width(CommonConstants.FULL_PARENT)
             .height(CommonConstants.FULL_PARENT)
-          }, secondItem => JSON.stringify(secondItem))
+          }, (secondItem: ItemData) => JSON.stringify(secondItem))
         }
         .width(CommonConstants.FULL_PARENT)
         .height($r('app.float.home_secondGrid_height'))

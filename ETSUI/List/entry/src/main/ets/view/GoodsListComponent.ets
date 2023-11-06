@@ -14,6 +14,7 @@
  */
 
 import * as commonConst from '../common/CommonConstants';
+import { GoodsListItemType } from '../viewmodel/InitialData';
 import { ListDataSource } from '../viewmodel/ListDataSource';
 
 @Component
@@ -25,7 +26,7 @@ export default struct GoodsList {
   build() {
     Row() {
       List({ space: commonConst.LIST_ITEM_SPACE }) {
-        LazyForEach(this.goodsListData, (item) => {
+        LazyForEach(this.goodsListData, (item: GoodsListItemType) => {
           ListItem() {
             Row() {
               Column() {
@@ -61,7 +62,10 @@ export default struct GoodsList {
             .height(commonConst.GOODS_LIST_HEIGHT)
             .width(commonConst.LAYOUT_WIDTH_OR_HEIGHT)
           }
-          .onTouch((event: TouchEvent) => {
+          .onTouch((event?: TouchEvent) => {
+            if (event === undefined) {
+              return;
+            }
             switch (event.type) {
               case TouchType.Down:
                 this.startTouchOffsetY = event.touches[0].y;

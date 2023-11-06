@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,13 +17,13 @@ import { BalanceStyle } from '../common/constants/Constants';
 
 /*
  * BalanceComponent
- * right: The right component align start.
+ *  right: The right component align start.
  *  left: The left component align end.
  */
 @Component
 export default struct BalanceComponent {
-  @BuilderParam right: any;
-  @BuilderParam left: any;
+  @BuilderParam right: () => void = () => {};
+  @BuilderParam left: () => void = () => {};
 
   build() {
     Row() {
@@ -38,7 +38,6 @@ export default struct BalanceComponent {
       }
       .layoutWeight(BalanceStyle.LAYOUT_WEIGHT)
       .justifyContent(FlexAlign.End)
-
     }
   }
 }

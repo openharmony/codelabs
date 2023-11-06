@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,8 +17,8 @@ import { FontSize, ListHeaderStyle } from '../common/constants/Constants';
 
 @Component
 export struct ListHeaderComponent {
-  paddingValue: Padding | Length;
-  widthValue: Length;
+  paddingValue: Padding | Length = 0;
+  widthValue: Length = 0;
 
   build() {
     Row() {

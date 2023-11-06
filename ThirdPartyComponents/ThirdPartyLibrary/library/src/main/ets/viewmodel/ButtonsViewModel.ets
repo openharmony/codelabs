@@ -14,27 +14,27 @@
  */
 
 class ButtonViewModel {
-  fetchType(shape) {
+  fetchType(shape: string) {
     let ret: ButtonType;
     switch (shape) {
       case 'capsule':
         ret = ButtonType.Capsule;
-        break
+        break;
       case 'circle':
         ret = ButtonType.Circle;
-        break
+        break;
       case 'normal':
         ret = ButtonType.Normal;
-        break
+        break;
       default:
         ret = ButtonType.Capsule;
-        break
+        break;
     }
-    return ret
+    return ret;
   }
 
-  fetchBackgroundColor(type) {
-    let ret;
+  fetchBackgroundColor(type: string) {
+    let ret: Resource;
     switch (type) {
       case 'success':
         ret = $r('app.color.success');

@@ -20,7 +20,8 @@ import { CommonConstants } from '../../common/constants/CommonConstant';
  * @param fontSize Font size.
  * @param fonWeight Font weight.
  */
-@Extend(Text) function textStyle(fontSize: Resource, fonWeight: number) {
+@Extend(Text)
+function textStyle(fontSize: Resource, fonWeight: number) {
   .fontSize(fontSize)
   .fontWeight(fonWeight)
   .fontColor($r('app.color.start_window_background'))

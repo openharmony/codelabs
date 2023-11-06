@@ -17,7 +17,7 @@ import common from '@ohos.app.ability.common';
 import distributedKVStore from '@ohos.data.distributedKVStore';
 import deviceManager from '@ohos.distributedHardware.deviceManager';
 import CommonConstants from '../common/constants/CommonConstants';
-import Position from '../common/bean/Position';
+import Position from '../viewmodel/Position';
 import KvStoreModel from '../viewmodel/KvStoreModel';
 import remoteDeviceModel from '../common/utils/RemoteDeviceUtil';
 import DeviceListDialogComponent from '../view/CustomDialogComponent';
@@ -34,7 +34,7 @@ struct Index {
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private canvasContext: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private kvStoreModel: KvStoreModel = new KvStoreModel();
-  private context: common.UIAbilityContext = null;
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
   private dialogController: CustomDialogController = new CustomDialogController({
     builder: DeviceListDialogComponent({
       startAbility: this.startAbilityContinuation,
@@ -119,7 +119,6 @@ struct Index {
    * Create a distributed key-value database.
    */
   createKVStore(): void {
-    this.context = getContext(this) as common.UIAbilityContext;
     this.kvStoreModel.createKvStore(this.context, (data: distributedKVStore.ChangeNotification) => {
       this.positionList = [];
       let entries: distributedKVStore.Entry[] = data.insertEntries.length > 0 ? data.insertEntries : data.updateEntries;
@@ -166,8 +165,8 @@ struct Index {
     }
 
     for (let i: number = this.positionList.length - 1; i >= 0; i--) {
-      let position: Position = this.positionList.pop();
-      if (position.isFirstPosition) {
+      let position: Position | undefined = this.positionList.pop();
+      if (position !== undefined && position.isFirstPosition) {
         break;
       }
     }
@@ -181,8 +180,8 @@ struct Index {
    * @param event Touch event.
    */
   onTouchEvent(event: TouchEvent): void {
-    let positionX:number = event.touches[0].x;
-    let positionY:number = event.touches[0].y;
+    let positionX: number = event.touches[0].x;
+    let positionY: number = event.touches[0].y;
     switch (event.type) {
       case TouchType.Down: {
         this.canvasContext.beginPath();
@@ -217,7 +216,7 @@ struct Index {
    * @param positionX Horizontal coordinate information.
    * @param positionY Indicates the vertical coordinate information.
    */
-  pushData(isFirstPosition: boolean, isEndPosition, positionX: number, positionY: number): void {
+  pushData(isFirstPosition: boolean, isEndPosition: boolean, positionX: number, positionY: number): void {
     let position = new Position(isFirstPosition, isEndPosition, positionX, positionY);
     this.positionList.push(position);
     if (position.isEndPosition) {

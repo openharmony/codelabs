@@ -14,7 +14,7 @@
  */
 
 import AccountTable from '../common/database/tables/AccountTable';
-import AccountData from '../common/bean/AccountData';
+import AccountData from '../viewmodel/AccountData';
 import CommonConstants from '../common/constants/CommonConstants';
 import { ImageList } from '../viewmodel/AccountList';
 import { DialogComponent } from '../view/DialogComponent';
@@ -29,21 +29,24 @@ struct MainPage {
   @State isInsert: boolean = false;
   @State newAccount: AccountData = { id: 0, accountType: 0, typeText: '', amount: 0 };
   @State index: number = -1;
-
   private AccountTable = new AccountTable();
   private deleteList: Array<AccountData> = [];
 
   searchController: SearchController = new SearchController();
   dialogController: CustomDialogController = new CustomDialogController({
-    builder: DialogComponent({ isInsert: this.isInsert, newAccount: this.newAccount, confirm: this.accept.bind(this) }),
+    builder: DialogComponent({
+      isInsert: this.isInsert,
+      newAccount: this.newAccount,
+      confirm: (isInsert: boolean, newAccount: AccountData) => this.accept(isInsert, newAccount)
+    }),
     customStyle: true,
     alignment: DialogAlignment.Bottom
   });
 
-  accept(isInsert: boolean, newAccount: AccountData) {
+  accept(isInsert: boolean, newAccount: AccountData): void {
     if (isInsert) {
       Logger.verbose(`${CommonConstants.INDEX_TAG}`, 'The account inserted is: ' + JSON.stringify(newAccount));
-      this.AccountTable.insertData(newAccount, (id) => {
+      this.AccountTable.insertData(newAccount, (id: number) => {
         newAccount.id = id;
         this.accounts.push(newAccount);
       });
@@ -59,7 +62,7 @@ struct MainPage {
 
   aboutToAppear() {
     this.AccountTable.getRdbStore(() => {
-      this.AccountTable.query(0, (result) => {
+      this.AccountTable.query(0, (result: AccountData[]) => {
         this.accounts = result;
       }, true);
     });
@@ -108,7 +111,11 @@ struct MainPage {
         .margin({ top: $r('app.float.edge_size_M'), bottom: $r('app.float.edge_size_MM') })
 
         Row() {
-          Search({ value: this.searchText, placeholder: CommonConstants.SEARCH_TEXT, controller: this.searchController })
+          Search({
+            value: this.searchText,
+            placeholder: CommonConstants.SEARCH_TEXT,
+            controller: this.searchController
+          })
             .width(CommonConstants.FULL_WIDTH)
             .borderRadius($r('app.float.radius_size_M'))
             .borderWidth($r('app.float.border_size_S'))
@@ -121,11 +128,11 @@ struct MainPage {
             })
             .onSubmit((searchValue: string) => {
               if (searchValue === '') {
-                this.AccountTable.query(0, (result) => {
+                this.AccountTable.query(0, (result: AccountData[]) => {
                   this.accounts = result;
                 }, true);
               } else {
-                this.AccountTable.query(parseInt(searchValue), (result) => {
+                this.AccountTable.query(Number(searchValue), (result: AccountData[]) => {
                   this.accounts = result;
                 }, false);
               }
@@ -153,9 +160,9 @@ struct MainPage {
                     .layoutWeight(1)
 
                   if (!this.isEdit) {
-                    Text(item.accountType === 0 ? '-' + item.amount.toString(): '+' + item.amount.toString())
+                    Text(item.accountType === 0 ? '-' + item.amount.toString() : '+' + item.amount.toString())
                       .fontSize($r('app.float.font_size_M'))
-                      .fontColor(item.accountType === 0 ? $r('app.color.pay_color'): $r('app.color.main_color'))
+                      .fontColor(item.accountType === 0 ? $r('app.color.pay_color') : $r('app.color.main_color'))
                       .align(Alignment.End)
                       .flexGrow(CommonConstants.FULL_SIZE)
                   } else {
@@ -208,7 +215,7 @@ struct MainPage {
         .position({ x: CommonConstants.EDIT_POSITION_X, y: CommonConstants.EDIT_POSITION_Y })
         .onClick(() => {
           this.isInsert = true;
-          this.newAccount = { id: 0, accountType:0, typeText: '', amount: 0 };
+          this.newAccount = { id: 0, accountType: 0, typeText: '', amount: 0 };
           this.dialogController.open();
         })
       }
@@ -220,7 +227,7 @@ struct MainPage {
         .width($r('app.float.component_size_MP'))
         .height($r('app.float.component_size_MP'))
         .backgroundColor($r('app.color.background_color'))
-        .markAnchor({ x: $r('app.float.mark_anchor'), y: CommonConstants.MINIMUM_SIZE})
+        .markAnchor({ x: $r('app.float.mark_anchor'), y: CommonConstants.MINIMUM_SIZE })
         .position({ x: CommonConstants.DELETE_POSITION_X, y: CommonConstants.DELETE_POSITION_Y })
         .onClick(() => {
           this.deleteListItem();

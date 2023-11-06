@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,9 +21,9 @@ import SearchComponent from './SearchComponent';
 import MenusComponent from './MenusComponent';
 import BannerComponent from './BannerComponent';
 import GoodsComponent from './GoodsComponent';
-import BannerData from '../../common/bean/BannerData';
-import MenuData from '../../common/bean/MenuData';
-import GoodsData from '../../common/bean/GoodsData';
+import BannerData from '../../viewmodel/BannerData';
+import MenuData from '../../viewmodel/MenuData';
+import GoodsData from '../../viewmodel/GoodsData';
 import { HomePageStyle, PERCENTAGE_100 } from '../../common/constants/Constants';
 
 let viewModel: HomeViewModel = new HomeViewModel();
@@ -60,7 +60,7 @@ export default struct HomePage {
         MenusComponent({ menus: this.menus })
         // Goods list view
         GoodsComponent({ goodsList: this.goodsList, startPage: (index) => {
-          let handler = getContext(this) as AppContext.Context;
+          let handler = getContext(this) as AppContext.UIAbilityContext;
           viewModel.startDetailsAbility(handler, index);
         } })
       }

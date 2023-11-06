@@ -15,13 +15,13 @@
 ## 环境搭建
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -47,13 +47,11 @@
 ```
 ├──entry/src/main/ets                   // ArkTS代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──TaskItemBean.ets            // 任务进展实体类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets         // 公共常量类
 │  │  └──utils
 │  │     ├──DateUtil.ets                // 获取格式化日期工具
-│  │     └──Logger.ts                   // 日志打印工具类
+│  │     └──Logger.ets                  // 日志打印工具类
 │  ├──entryability
 │  │  └──EntryAbility.ts                // 程序入口类
 │  ├──pages
@@ -66,10 +64,8 @@
 │  │  └──TargetListItem.ets             // 工作目标列表子项
 │  └──viewmodel
 │     ├──DataModel.ets                  // 工作目标数据操作类
-│     ├──MainPageModel.ets              // 主页面业务处理文件
-│     ├──TaskListItemModel              // 工作目标列表子项业务处理文件
-│     └──TaskListViewModel.ets          // 工作目标列表业务处理文件
-└──entry/src/main/resources	            // 资源文件目录
+│     └──TaskItemViewModel.ets          // 任务进展实体类
+└──entry/src/main/resources             // 资源文件目录
 ```
 ## 构建主界面
 
@@ -93,7 +89,7 @@ MainPage主要维护五个参数：子目标数组targetData、子目标总数to
 @Component
 struct MainPage {
   // 子目标数组
-  @State targetData: Array<TaskItemBean> = DataModel.getData();
+  @State targetData: Array<TaskItemViewModel> = DataModel.getData();
   // 子目标总数
   @State totalTasksNumber: number = 0;
   // 已完成子目标数
@@ -101,7 +97,7 @@ struct MainPage {
   // 最近更新时间
   @State latestUpdateDate: string = CommonConstants.DEFAULT_PROGRESS_VALUE;
   // 监听数据变化的参数
-  @Provide @Watch('onProgressChanged') overAllProgressChanged: boolean = false;		
+  @Provide @Watch('onProgressChanged') overAllProgressChanged: boolean = false;	
   ...
 
   /**
@@ -128,7 +124,7 @@ struct MainPage {
       // 子目标列表
       TargetList({
         targetData: $targetData,
-        onAddClick: () => this.dialogController.open()
+        onAddClick: () :void  => this.dialogController.open()
       })
         ...
     }
@@ -157,7 +153,7 @@ struct MainPage {
 struct MainPage {
   dialogController: CustomDialogController = new CustomDialogController({
     builder: AddTargetDialog({
-      onClickOk: saveTask.bind(this)
+      onClickOk: (value: string): void => this.saveTask(value)
     }),
     alignment: DialogAlignment.Bottom,
     offset: {
@@ -177,24 +173,28 @@ struct MainPage {
 @CustomDialog
 export default struct AddTargetDialog {
   ...
-  private controller: CustomDialogController;
-  onClickOk: (value: string) => void;
+  private controller?: CustomDialogController;
+  onClickOk?: (value: string) => void;
 
   build() {
     Column() {
       ...
-      TextArea({ placeholder: $r('app.string.input_target_name')})
-        ...
-        .onChange((value: string) => {
-          this.subtaskName = value;
-        })
+      Text($r('app.string.add_task_dialog'))
+      ...
+      TextInput({ placeholder: $r('app.string.input_target_name')})
+      ...
+      .onChange((value: string) => {
+        this.subtaskName = value;
+      })
       Blank()
       Row() {
         ...
         Button($r('app.string.confirm_button'))
           .dialogButtonStyle()
           .onClick(() => {
-            this.onClickOk(this.subtaskName);
+            if (this.onClickOk !== undefined) {
+              this.onClickOk(this.subtaskName);
+            }
           })
       }
       ...
@@ -204,11 +204,11 @@ export default struct AddTargetDialog {
 }
 ```
 
-在MainPageModel.ets中，实现saveTask方法：保存数据至DataModel中，并更新targetData的值，完成添加子目标功能。
+在MainPage.ets中，实现saveTask方法：保存数据至DataModel中，并更新targetData的值，完成添加子目标功能。
 
 ```typescript
-// MainPageModel.ets
-export function saveTask(taskName: string) {
+// MainPage.ets
+saveTask(taskName: string) {
   if (taskName === '') {
     promptAction.showToast({
       message: $r('app.string.cannot_input_empty'),
@@ -217,10 +217,9 @@ export function saveTask(taskName: string) {
     });
     return;
   }
-  // 保存数据
-  DataModel.addData(new TaskItemBean(taskName, 0, getCurrentTime()));
-  // 更新targetData刷新页面
+  DataModel.addData(new TaskItemViewModel(taskName, 0, getCurrentTime()));
   this.targetData = DataModel.getData();
+  this.overAllProgressChanged = !this.overAllProgressChanged;
   this.dialogController.close();
 }
 ```
@@ -247,8 +246,8 @@ export function saveTask(taskName: string) {
 // TargetListItem.ets
 @Component
 export default struct TargetListItem {
-  @State latestProgress: number = 0;
-  @Watch('onClickIndexChanged') @Link clickIndex: number;
+  @State latestProgress?: number = 0;
+  @Link @Watch('onClickIndexChanged') clickIndex: number;
   @State isExpanded: boolean = false;
   ...
   // clickIndex改变的回调方法
@@ -256,7 +255,7 @@ export default struct TargetListItem {
     if (this.clickIndex !== this.index) {
       this.isExpanded = false;
     }
-  }
+}
 
   build() {
     ...
@@ -268,7 +267,15 @@ export default struct TargetListItem {
         ProgressEditPanel({
           slidingProgress: this.latestProgress,
           onCancel: () => this.isExpanded = false,
-          onClickOK: changeProgress.bind(this),
+          onClickOK: (progress: number): void => {
+              this.latestProgress = progress;
+              this.updateDate = getCurrentTime();
+              let result = DataModel.updateProgress(this.index, this.latestProgress, this.updateDate);
+              if (result) {
+                this.overAllProgressChanged = !this.overAllProgressChanged;
+              }
+              this.isExpanded = false;
+            },
           sliderMode: $sliderMode
         })
         ...
@@ -300,9 +307,10 @@ export default struct TargetListItem {
 // ProgressEditPanel.ets
 @Component
 export default struct ProgressEditPanel {
-  @Prop slidingProgress: number;
-  onCancel: () => void;
-  onClickOK: (progress: number) => void;
+  @Link sliderMode: number;
+  @Prop slidingProgress: number = 0;
+  onCancel?: () => void;
+  onClickOK?: (progress: number) => void;
 
   build() {
     Column() {
@@ -311,36 +319,36 @@ export default struct ProgressEditPanel {
         CustomButton({
           buttonText: $r('app.string.cancel_button')
         })
-          .onClick(() => this.onCancel())
-        CustomButton({
-          buttonText: $r('app.string.confirm_button')
-        })
-          .onClick(() => this.onClickOK(this.slidingProgress))
+          .onClick(() => {
+            if (this.onCancel !== undefined) {
+              this.onCancel();
+            }
+          })
+       CustomButton({
+          buttonText: $r('app.string.cancel_button')
+       })
+          .onClick(() => {
+            if (this.onClickOK !== undefined) {
+              this.onClickOK(this.slidingProgress);
+            }
+          })
       }
     }
   }
 }
 ```
 
-在TaskListItemModel.ets中，编写changeProgress方法。此方法是onClickOK方法的实现，将依次完成以下步骤：
-
-1.  重新渲染TargetListItem的进度值和最近更新时间。
-2.  更新缓存的数据。
-3.  修改overAllProgressChanged的值，通知主页刷新整体进展详情TargetInformation。
+在DataModel.ets中，编写updateProgress方法。该方法根据索引和进度值以及更新日期更新数据。
 
 ```typescript
-// TaskListItemModel.ets
-export function changeProgress(progress: number) {
-  // 更新TargetListItem的进度值
-  this.latestProgress = progress;
-  // 更新TargetListItem的最近更新时间
-  this.updateDate = getCurrentTime();
-  // 更新缓存的数据
-  let result = DataModel.updateProgress(this.index, this.latestProgress, this.updateDate);
-  if (result) {
-    this.overAllProgressChanged = !this.overAllProgressChanged;
+// DataModel.ets
+updateProgress(index: number, updateValue: number, updateDate: string): boolean {
+  if (!this.targetData[index]) {
+    return false;
   }
-  this.isExpanded = false;
+  this.targetData[index].progressValue = updateValue;
+  this.targetData[index].updateDate = updateDate;
+  return true;
 }
 ```
 ### 实现列表多选
@@ -367,9 +375,9 @@ export default struct TargetList {
         Text($r('app.string.cancel_button'))
           ...
           .onClick(() => {
-            ...
-            this.isEditMode = false;
-            selectAllOrCancel.call(this, false);
+             this.selectAll = false;
+             this.isEditMode = false;
+             this.selectAllOrCancel(false);
           })
         ...
         // 全选按钮
@@ -377,7 +385,7 @@ export default struct TargetList {
           ...
           .onClick(() => {
             ...
-            selectAllOrCancel.call(this, this.selectAll);
+            this.selectAllOrCancel(this.selectAll);
           })
       } else {
         // 编辑按钮
@@ -385,7 +393,7 @@ export default struct TargetList {
           ...
           .onClick(() => {
             this.isEditMode = true;
-            selectAllOrCancel.call(this, false);
+            this.selectAllOrCancel(false);
           })
       }
       ...
@@ -397,9 +405,9 @@ export default struct TargetList {
 点击全选Checkbox，将selectArray数组的值全赋值true或false，重新渲染列表为全选或者取消全选状态。
 
 ```typescript
-// TaskListViewModel.ets
-export function selectAllOrCancel(selectStatus: boolean) {
-  let newSelectArray = [];
+// TargetList.ets
+selectAllOrCancel(selectStatus: boolean) {
+  let newSelectArray: Array<boolean> = [];
   this.targetData.forEach(() => {
     newSelectArray.push(selectStatus);
   });
@@ -419,7 +427,7 @@ export default struct TargetListItem {
 
   ...
   @Link selectArr: Array<boolean>;
-  private index: number;
+  public index: number = 0;
   
   build() {
     Stack({ alignContent: Alignment.Start }) {
@@ -442,22 +450,18 @@ export default struct TargetListItem {
 ```
 ### 实现删除选中列表项
 
-当点击“删除”时，调用TaskListViewModel.ets的deleteSelected方法，实现以下步骤完成列表项删除功能：
+当点击“删除”时，TargetList.ets的deleteSelected方法，实现以下步骤完成列表项删除功能：
 
 1.  调用DataModel的deleteData方法删除数据。
 2.  更新targetData的数据重新渲染列表。
 3.  修改overAllProgressChanged的值，通知主页刷新整体进展详情TargetInformation。
 
 ```typescript
-// TaskListViewModel.ets
-export function deleteSelected() {
-  // 删除数据
+// TargetList.ets
+deleteSelected() {
   DataModel.deleteData(this.selectArray);
-  // 更新targetData
   this.targetData = DataModel.getData();
-  // 刷新整体进展详情
   this.overAllProgressChanged = !this.overAllProgressChanged;
-  // 退出编辑模式
   this.isEditMode = false;
 }
 ```
@@ -472,13 +476,14 @@ export class DataModel {
     if (!selectArr) {
       Logger.error(TAG, 'Failed to delete data because selectArr is ' + selectArr);
     }
-    for (let i = this.recordData.length - CommonConstants.TWO_RECORD; i >= 0; i--) {
+    let dataLen = this.targetData.length - CommonConstants.ONE_TASK;
+    for (let i = dataLen; i >= 0; i--) {
       if (selectArr[i]) {
-        this.recordData.splice(i, CommonConstants.ONE_RECORD);
+        this.targetData.splice(i, CommonConstants.ONE_TASK);
       }
     }
   }
-  getData(): Array<TaskItemBean> {
+  getData(): Array<TaskItemViewModel> {
     return this.targetData;
   }
   ...

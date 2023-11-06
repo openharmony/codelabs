@@ -18,10 +18,12 @@ import DimensionUtil from '../../../common/utils/DimensionUtil';
 
 @Component
 export default struct CommonDialog {
-  private title: string | Resource;
-  private controller: CustomDialogController;
-  private onConfirm: () => void;
-  @BuilderParam closer: () => void;
+  private title?: string | Resource;
+  private controller?: CustomDialogController;
+  private onConfirm: () => void = () => {
+  };
+  @BuilderParam closer: () => void = () => {
+  };
 
   build() {
     Column() {
@@ -35,11 +37,17 @@ export default struct CommonDialog {
       this.closer()
       Row() {
         Button($r('app.string.cancel')).actionBtnStyle().onClick(() => {
+          if (!this.controller) {
+            return;
+          }
           this.controller.close();
         })
         if (this.onConfirm) {
           Button($r('app.string.confirm')).actionBtnStyle().onClick(() => {
             this.onConfirm();
+            if (!this.controller) {
+              return;
+            }
             this.controller.close();
           })
         }

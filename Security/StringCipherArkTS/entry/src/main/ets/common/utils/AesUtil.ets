@@ -17,11 +17,11 @@ import cryptoFramework from '@ohos.security.cryptoFramework';
 import CommonConstants from '../constants/CommonConstants';
 import DataTransformUtil from '../utils/DataTransformUtil';
 import Logger from '../utils/Logger';
-import { User } from '../bean/User';
+import { User } from '../../viewmodel/User';
 
 class AesUtil {
-  private globalCipher: cryptoFramework.Cipher = null;
-  private globalKey: cryptoFramework.SymKey = null;
+  private globalCipher: cryptoFramework.Cipher = cryptoFramework.createCipher(CommonConstants.GENERATOR_NAME);
+  private globalKey: cryptoFramework.SymKey | null = null;
 
   /**
    * Constructor initialization to generate a key.
@@ -42,7 +42,7 @@ class AesUtil {
       try {
         this.globalCipher = cryptoFramework.createCipher(cipherAlgName);
       } catch (error) {
-        Logger.error(`createCipher failed, ${error.code}, ${error.message}`);
+        Logger.error(`createCipher failed, error is ${JSON.stringify(err)}`);
       }
     });
   }
@@ -71,7 +71,7 @@ class AesUtil {
       iv: ivBlob,
       aad: aadBlob,
       authTag: tagBlob,
-      algName: "GcmParamsSpec"
+      algName: `GcmParamsSpec`
     };
     return gcmParamsSpec;
   }
@@ -87,7 +87,7 @@ class AesUtil {
     let mode = cryptoFramework.CryptoMode.ENCRYPT_MODE;
     let gcmParams = await this.genGcmParamsSpec();
     await this.globalCipher.init(mode, this.globalKey, gcmParams);
-    let plainTextBlob = {
+    let plainTextBlob: cryptoFramework.DataBlob = {
       data: DataTransformUtil.stringToUint8Array(content)
     };
     let updateOutput: cryptoFramework.DataBlob = await this.globalCipher.update(plainTextBlob);
@@ -97,7 +97,7 @@ class AesUtil {
     let authTag: cryptoFramework.DataBlob = await this.globalCipher.doFinal(null);
     let encryptContent: string = DataTransformUtil.uint8ArrayToBase64(updateOutput.data);
     let authTagContent: string = DataTransformUtil.uint8ArrayToBase64(authTag.data);
-    let user = new User(null, null, encryptContent, authTagContent);
+    let user = new User(null, ``, encryptContent, authTagContent);
     return user;
   }
 

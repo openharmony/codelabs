@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -27,7 +27,7 @@ import ServicesComponent from '../view/details/ServicesComponent';
 import BalanceComponent from '../view/BalanceComponent';
 import CardComponent from '../view/CardComponent';
 import PreviewerComponent from '../view/details/PreviewerComponent';
-import GoodsData from '../common/bean/GoodsData';
+import GoodsData from '../viewmodel/GoodsData';
 import DetailsViewModel from '../viewmodel/DetailsViewModel';
 
 let viewModel: DetailsViewModel = new DetailsViewModel();
@@ -42,10 +42,12 @@ let position = AppStorage.Get<number>(KEY);
 @Entry
 @Component
 struct DetailsPage {
-  private goodsDetails: GoodsData;
+  private goodsDetails: GoodsData = new GoodsData();
 
   aboutToAppear() {
-    this.goodsDetails = viewModel.loadDetails(position);
+    if (position !== undefined) {
+      this.goodsDetails = viewModel.loadDetails(position);
+    }
   }
 
   onBackPress() {
@@ -93,7 +95,7 @@ struct DetailsPage {
   }
 
   @Builder TopBarLayout() {
-    BalanceComponent({ left: this.BackLayout(), right: this.ShareLayout() })
+    BalanceComponent({ left: this.BackLayout, right: this.ShareLayout })
       .width(PERCENTAGE_100)
       .padding(DetailsPageStyle.MARGIN_TOP_LAYOUT)
   }

@@ -12,9 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import resourceManager from '@ohos.resourceManager';
 
 import Logger from '../utils/Logger';
-import { CommonUtil } from './CommonUtil';
+import { GlobalContext } from './GlobalContext';
 
 const TAG = '[ResourceManagerUtil]';
 
@@ -22,7 +23,6 @@ const TAG = '[ResourceManagerUtil]';
  * Resource management tool class.
  */
 export class ResourceManagerUtil {
-
   /**
    * Obtains the description of a media file.
    *
@@ -30,12 +30,14 @@ export class ResourceManagerUtil {
    * @param callback Callback function.
    */
   public static getSrcPath(path: string, callback: Function) {
-    if (CommonUtil.isEmpty(callback)) {
+    if (callback === undefined) {
       Logger.error(TAG, 'getSrcPath fail,callback is empty.');
       return;
     }
     try {
-      globalThis.resourceManager.getRawFd(path, (error, value) => {
+      let resourceManager = GlobalContext.getContext()
+        .getObject('resourceManager') as resourceManager.ResourceManager;
+      resourceManager.getRawFd(path, (error, value) => {
         if (error != null) {
           Logger.error(TAG, `callback getRawFd failed error code: ${error.code}, message: ${error.message}.`);
         } else {
