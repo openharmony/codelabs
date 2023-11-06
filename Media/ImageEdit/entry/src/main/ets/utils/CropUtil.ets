@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { RegionItem } from '../common/bean/RegionItem';
+import { RegionItem } from '../viewmodel/RegionItem';
 import { CommonConstants } from '../common/constant/CommonConstants';
 
 /**
@@ -59,7 +59,8 @@ export async function cropCommon(pixelMap: PixelMap, cropWidth: number, cropHeig
       width: cropWidth,
       height: cropHeight
     },
-    ...cropPosition
+    x: cropPosition.x,
+    y: cropPosition.y
   });
 }
 
@@ -74,7 +75,7 @@ export async function banner(pixelMap: PixelMap, width: number, height: number) 
   if (width <= height) {
     const cropWidth = width;
     const cropHeight = Math.floor(width * CommonConstants.CROP_RATE_4_3);
-    const cropPosition = {
+    const cropPosition: RegionItem = {
       x: 0,
       y: Math.floor((height - cropHeight) / CommonConstants.AVERAGE_WEIGHT_WIDTH)
     };
@@ -84,7 +85,7 @@ export async function banner(pixelMap: PixelMap, width: number, height: number) 
   if (width * CommonConstants.CROP_RATE_4_3 >= height) {
     const cropWidth = Math.floor(height / CommonConstants.CROP_RATE_4_3);
     const cropHeight = height;
-    const cropPosition = {
+    const cropPosition: RegionItem = {
       x: Math.floor((width - cropWidth) / CommonConstants.AVERAGE_WEIGHT_WIDTH),
       y: 0
     };
@@ -94,7 +95,7 @@ export async function banner(pixelMap: PixelMap, width: number, height: number) 
 
   const cropWidth = width;
   const cropHeight = Math.floor(width * CommonConstants.CROP_RATE_4_3);
-  const cropPosition = {
+  const cropPosition: RegionItem = {
     x: 0,
     y: Math.floor((height - cropHeight) / CommonConstants.AVERAGE_WEIGHT_WIDTH)
   }
@@ -112,7 +113,7 @@ export async function rectangle(pixelMap: PixelMap, width: number, height: numbe
   if (width <= height) {
     const cropWidth = width;
     const cropHeight = Math.floor(width * (CommonConstants.CROP_RATE_9_16));
-    const cropPosition = {
+    const cropPosition: RegionItem = {
       x: 0,
       y: Math.floor((height - cropHeight) / CommonConstants.AVERAGE_WEIGHT_WIDTH)
     };
@@ -122,7 +123,7 @@ export async function rectangle(pixelMap: PixelMap, width: number, height: numbe
   if (width * (CommonConstants.CROP_RATE_9_16) >= height) {
     const cropWidth = Math.floor(height / (CommonConstants.CROP_RATE_9_16));
     const cropHeight = height;
-    const cropPosition = {
+    const cropPosition: RegionItem = {
       x: Math.floor((width - cropWidth) / CommonConstants.AVERAGE_WEIGHT_WIDTH),
       y: 0
     };
@@ -132,7 +133,7 @@ export async function rectangle(pixelMap: PixelMap, width: number, height: numbe
 
   const cropWidth = width;
   const cropHeight = Math.floor(width * (CommonConstants.CROP_RATE_9_16));
-  const cropPosition = {
+  const cropPosition: RegionItem = {
     x: 0,
     y: Math.floor((height - cropHeight) / CommonConstants.AVERAGE_WEIGHT_WIDTH)
   };
