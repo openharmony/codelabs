@@ -16,7 +16,7 @@
 import util from '@ohos.util';
 
 class DataTransformUtil {
-  private base64Helper: util.Base64Helper = null;
+  private base64Helper: util.Base64Helper | null= null;
 
   constructor() {
     this.base64Helper = new util.Base64Helper();
@@ -29,7 +29,7 @@ class DataTransformUtil {
    * @returns Uint8Array data.
    */
   base64ToUint8Array(content: string): Uint8Array {
-    let uint8ArrayData: Uint8Array = this.base64Helper.decodeSync(content);
+    let uint8ArrayData: Uint8Array = (this.base64Helper as util.Base64Helper).decodeSync(content);
     return uint8ArrayData;
   }
 
@@ -40,7 +40,7 @@ class DataTransformUtil {
    * @returns Base64 data.
    */
   uint8ArrayToBase64(content: Uint8Array): string {
-    let base64Data: string = this.base64Helper.encodeToStringSync(content);
+    let base64Data: string = (this.base64Helper as util.Base64Helper).encodeToStringSync(content);
     return base64Data;
   }
 
@@ -51,7 +51,7 @@ class DataTransformUtil {
    * @returns Uint8Array data.
    */
   stringToUint8Array(content: string): Uint8Array {
-    let arr = [];
+    let arr: number[] = [];
     for (let i = 0, j = content.length; i < j; ++i) {
       arr.push(content.charCodeAt(i));
     }
