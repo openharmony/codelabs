@@ -63,7 +63,7 @@ export struct DriveTabs {
                 .margin({ bottom: $r('app.float.drive_text_margin') })
             }
           }
-        }, item => JSON.stringify(item))
+        }, (item: DriveTabsItem) => JSON.stringify(item))
       }
     }
     .width(Const.FULL_SIZE)

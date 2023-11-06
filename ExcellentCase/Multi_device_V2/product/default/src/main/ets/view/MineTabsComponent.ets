@@ -67,7 +67,7 @@ export struct MineTabs {
                   }
                   .width(Const.FULL_SIZE)
                   .height($r('app.float.mine_list_height'))
-                }, item => JSON.stringify(item))
+                }, (item: MineTabsItem) => JSON.stringify(item))
               }
               .width(Const.FULL_SIZE)
               .height(Const.FULL_SIZE)
