@@ -14,14 +14,14 @@
  */
 
 /**
- * TopBar entity class.
+ * Video entity class.
  */
-export class TopBarItem {
-  id: number;
-  name: string;
-
-  constructor(id: number, name: string) {
-    this.id = id;
-    this.name = name;
-  }
+@Observed
+export class VideoItem {
+  id: string = '1';
+  src: Resource = $rawfile('video1.mp4');
+  likesCount: number = 0;
+  isLikes: boolean = false;
+  comment: number = 102;
+  shareTimes: number = 666;
 }

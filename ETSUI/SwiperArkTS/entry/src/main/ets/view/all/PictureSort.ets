@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { PictureItem } from '../../common/bean/PictureItem';
+import { PictureItem } from '../../viewmodel/PictureItem';
 import { initializePictures } from '../../viewmodel/PictureViewModel';
 import { PictureView } from '../common/PictureView';
 import { PictureType } from '../../common/constants/PictureConstants';
@@ -25,7 +25,8 @@ import { CommonConstants } from '../../common/constants/CommonConstant';
  * @param fontSize Font size.
  * @param fontWeight Font weight.
  */
-@Extend(Text) function textStyle(fontSize: Resource, fontWeight: number) {
+@Extend(Text)
+function textStyle(fontSize: Resource, fontWeight: number) {
   .fontSize(fontSize)
   .fontWeight(fontWeight)
   .fontColor($r('app.color.font_black'))
@@ -71,7 +72,7 @@ export struct PictureSort {
           GridItem() {
             PictureView({ photos: item });
           }
-        }, item => JSON.stringify(item))
+        }, (item: PictureItem) => JSON.stringify(item))
       }
       .columnsTemplate(CommonConstants.TWO_COLUMNS)
       .rowsTemplate(CommonConstants.TWO_ROWS)

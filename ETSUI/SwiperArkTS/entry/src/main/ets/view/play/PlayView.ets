@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 
-import { VideoItem } from '../../common/bean/VideoItem';
-import { needPageShow } from '../../viewmodel/VideoViewModel';
+import { VideoItem } from '../../viewmodel/VideoItem';
 import { CommonConstants } from '../../common/constants/CommonConstant';
 import { PlayState } from '../../common/constants/VideoConstants';
 import { NavigationView } from './NavigationView';
@@ -30,8 +29,8 @@ export struct PlayView {
   // Change the video playing state according to the index and pageShow changes.
   @Link @Watch("needPageShow") index: number;
   @Link @Watch("needPageShow") pageShow: boolean;
-  private barPosition: number;
-  @State item: VideoItem = null;
+  private barPosition: number = 0;
+  @State item: VideoItem = new VideoItem();
   @State private playState: number = PlayState.STOP;
   private videoController: VideoController = new VideoController();
 
@@ -42,7 +41,7 @@ export struct PlayView {
         controller: this.videoController
       })
         .controls(false)
-        .autoPlay(this.playState === PlayState.START ? true : false) // Auto play in the first visible state.
+        .autoPlay(this.playState === PlayState.START ? true : false)
         .objectFit(ImageFit.Fill)
         .loop(true)
         .height(CommonConstants.WIDTH_VIDEO)
@@ -66,8 +65,34 @@ export struct PlayView {
     .height(CommonConstants.FULL_HEIGHT)
   }
 
-  needPageShow() {
-    let needPlay = needPageShow.bind(this);
-    needPlay();
+  onPageSwiperShow(): void {
+    if (this.playState != PlayState.START) {
+      this.playState = PlayState.START;
+      this.videoController.start();
+    }
+  }
+
+  onPageSwiperHide(): void {
+    if (this.playState != PlayState.STOP) {
+      this.playState = PlayState.STOP;
+      this.videoController.stop();
+    }
+  }
+
+  needPageShow(): void {
+    if (this.pageShow === true) {
+      if (this.barPosition === this.index) {
+        this.isShow = true;
+        this.onPageSwiperShow();
+      } else {
+        if (this.isShow === true) {
+          this.isShow = false;
+          this.onPageSwiperHide();
+        }
+      }
+    } else {
+      this.isShow = false;
+      this.onPageSwiperHide();
+    }
   }
 }

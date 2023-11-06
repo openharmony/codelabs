@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { TopBarItem } from '../common/bean/TopBarItem';
+import { TopBarItem } from './TopBarItem';
 import { TOP_BAR_DATA } from '../common/constants/TopBarConstants';
 
 /**
@@ -22,7 +22,7 @@ import { TOP_BAR_DATA } from '../common/constants/TopBarConstants';
 export function initializeOnStartup(): Array<TopBarItem> {
   let tabDataArray: Array<TopBarItem> = []
   TOP_BAR_DATA.forEach(item => {
-    tabDataArray.push(new TopBarItem(item.id, item.name));
+    tabDataArray.push(item);
   })
   return tabDataArray;
 }
