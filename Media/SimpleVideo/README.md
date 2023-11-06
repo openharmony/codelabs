@@ -16,23 +16,23 @@
 
 ### 相关概念
 
--   [Swiper](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-swiper.md)组件：滑动容器，提供切换子组件显示的能力。
--   [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md)组件：列表包含一系列相同宽度的列表项。适合连续、多行呈现同类数据，例如图片和文本。
--   [Video](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-media-components-video.md)组件：用于播放视频文件并控制其播放状态的组件。
--   [Navigator](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-navigator.md)组件：路由容器组件，提供路由跳转能力。
--   [ForEach](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control-foreach.md)组件：基于数组类型数据执行循环渲染。
+- [Swiper](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-swiper.md)组件：滑动容器，提供切换子组件显示的能力。
+- [List](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-list.md)组件：列表包含一系列相同宽度的列表项。适合连续、多行呈现同类数据，例如图片和文本。
+- [Video](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-media-components-video.md)组件：用于播放视频文件并控制其播放状态的组件。
+- [Navigator](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-container-navigator.md)组件：路由容器组件，提供路由跳转能力。
+- [ForEach](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-rendering-control-foreach.md)组件：基于数组类型数据执行循环渲染。
 
 ## 环境搭建
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+- OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
--   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+- 开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
+- OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -44,39 +44,42 @@
 
 2. 搭建烧录环境。
 
-   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
-   2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
+   1. [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
+   2. [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
 3. 搭建开发环境。
 
-   1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
-   3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
+   1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+   2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
+   3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
 
 本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
-├──entry/src/main/ets	        // 代码区
+├──entry/src/main/ets             // 代码区
 │  ├──common
 │  │  └──constants
-│  │     └──CommonConstants.ets	// 样式常量类
+│  │     └──CommonConstants.ets   // 样式常量类
 │  ├──entryability
-│  │  └──EntryAbility.ts	    // 程序入口类
+│  │  └──EntryAbility.ts          // 程序入口类
 │  ├──model
-│  │  └──VideoControll.ets	    // 视频播放控制相关方法类
+│  │  └──VideoControll.ets        // 视频播放控制相关方法类
 │  ├──pages
-│  │  ├──SimpleVideoIndex.ets   // 主界面
-│  │  └──SimpleVideoPlay.ets    // 视频播放界面
+│  │  ├──SimpleVideoIndex.ets     // 主界面
+│  │  └──SimpleVideoPlay.ets      // 视频播放界面
 │  ├──view
-│  │  ├──IndexModule.ets        // 自定义首页List模块组件文件
-│  │  ├──IndexSwiper.ets        // 自定义首页Swiper组件文件
-│  │  ├──VideoPlayer.ets        // 自定义播放界面视频组件文件
-│  │  └──VideoPlaySlider.ets    // 自定义播放界面视频进度条组件文件
+│  │  ├──IndexModule.ets          // 自定义首页List模块组件文件
+│  │  ├──IndexSwiper.ets          // 自定义首页Swiper组件文件
+│  │  ├──VideoPlayer.ets          // 自定义播放界面视频组件文件
+│  │  └──VideoPlaySlider.ets      // 自定义播放界面视频进度条组件文件
 │  └──viewmodel
-│     └──VideoData.ets          // 首页相关数据
-└──entry/src/main/resource      // 应用静态资源目录
+│     ├──HorizontalVideoItem.ets  // 水平视频类
+│     ├──ParamItem.ets            // 参数类
+│     ├──SwiperVideoItem.ets      // 自定义播放界面视频组件文件
+│     └──VideoData.ets            // 首页相关数据
+└──entry/src/main/resource        // 应用静态资源目录
 ```
 
 ## 构建主界面
@@ -89,34 +92,19 @@ VideoData.ets中定义的视频轮播图数组SWIPER_VIDEOS和视频列表图片
 
 ```typescript
 // VideoData.ets
-export const SWIPER_VIDEOS: object[] = [
-  {
-    "image": $r("app.media.ic_banner1")
-  },
-  {
-    "image": $r("app.media.ic_banner2")
-  },
-  {
-    "image": $r("app.media.ic_banner3")
-  }
+import { HorizontalVideoItem } from './HorizontalVideoItem';
+import { SwiperVideoItem } from './SwiperVideoItem';
+
+export const SWIPER_VIDEOS: SwiperVideoItem[] = [
+  new SwiperVideoItem($r('app.media.ic_banner1')),
+  new SwiperVideoItem($r('app.media.ic_banner2')),
+  new SwiperVideoItem($r('app.media.ic_banner3'))
 ];
 
-export const HORIZONTAL_VIDEOS: object[] = [
-  {
-    "id": 1,
-    "image": $r("app.media.ic_video_list0"),
-    "name": '视频1'
-  },
-  {
-    "id": 2,
-    "image": $r("app.media.ic_video_list1"),
-    "name": '视频2'
-  },
-  {
-    "id": 3,
-    "image": $r("app.media.ic_video_list2"),
-    "name": '视频3'
-  }
+export const HORIZONTAL_VIDEOS: HorizontalVideoItem[] = [
+  new HorizontalVideoItem(1, $r('app.media.ic_video_list0'), '视频1'),
+  new HorizontalVideoItem(2, $r('app.media.ic_video_list1'), '视频2'),
+  new HorizontalVideoItem(3, $r('app.media.ic_video_list2'), '视频3')
 ];
 ```
 
@@ -125,16 +113,15 @@ IndexSwiper.ets文件中定义的轮播图子组件SwiperVideo，点击轮播图
 ![](figures/3.png)
 
 ```typescript
-//IndexSwiper.ets
+// IndexSwiper.ets
 @Component
 export struct SwiperVideo {
-
   build() {
     Column() {
       Swiper() {
-        ForEach(SWIPER_VIDEOS, item => {
+        ForEach(SWIPER_VIDEOS, (item: SwiperVideoItem) => {
           SwiperItem({ imageSrc: item.image, source: $rawfile('videoTest.mp4') })
-        }, item => JSON.stringify(item))
+        }, (item: SwiperVideoItem) => JSON.stringify(item))
       }
       .autoPlay(true)
     }
@@ -145,16 +132,17 @@ export struct SwiperVideo {
 
 @Component
 struct SwiperItem {
-  private imageSrc: Resource;
-  private source: Resource;
-
+  private imageSrc: Resource = $r('app.string.empty');
+  private source: Resource = $r('app.string.empty');
+  private paramItem: ParamItem = new ParamItem();
+  ...
   build() {
     // 跳转一：使用Navigator组件跳转到视频播放界面
     Navigator({ target: SECOND_PAGE, type: NavigationType.Push }) {
       Image(this.imageSrc)
         .borderRadius(MARGIN_FONT_SIZE.FIRST_MARGIN)
     }
-    .params({ source: this.source })
+    .params(this.paramItem)
   }
 }
 ```
@@ -167,7 +155,7 @@ IndexModule.ets文件中定义的视频列表图片子组件VideoModule，点击
 // IndexModule.ets
 @Component
 export struct VideoModule {
-  private moduleName: string;
+  private moduleName: string = '';
 
   build() {
     Column() {
@@ -175,7 +163,7 @@ export struct VideoModule {
       ...
       // 视频列表组件
       List({ space: MARGIN_FONT_SIZE.FIRST_MARGIN }) {
-        ForEach(HORIZONTAL_VIDEOS, item => {
+        ForEach(HORIZONTAL_VIDEOS, (item: HorizontalVideoItem) => {
           ListItem() {
             HorizontalItem({
               imageSrc: item.image,
@@ -183,7 +171,7 @@ export struct VideoModule {
               videoName: item.name
             })
           }
-        }, item => JSON.stringify(item))
+        }, (item: HorizontalVideoItem) => JSON.stringify(item))
       }
       // 设置列表横向排列
       .listDirection(Axis.Horizontal)
@@ -195,9 +183,9 @@ export struct VideoModule {
 
 @Component
 struct HorizontalItem {
-  private imageSrc: Resource;
-  private source: string;
-  private videoName: string;
+  private imageSrc: Resource = $r('app.string.empty');
+  private source: string = '';
+  private videoName: string = '';
 
   build() {
     // 跳转二：使用route跳转到视频播放界面
@@ -230,12 +218,12 @@ struct SimpleVideoIndex {
       // 视频轮播组件
       SwiperVideo()
       List() {
-        ForEach(LIST, (item) => {
+        ForEach(LIST, (item: string) => {
           ListItem() {
             VideoModule({ moduleName: item })
               .margin({ top: MARGIN_FONT_SIZE.FIRST_MARGIN })
           }
-        }, item => JSON.stringify(item))
+        }, (item: string) => JSON.stringify(item))
       }
       .listDirection(Axis.Vertical)
       .margin({ top: MARGIN_FONT_SIZE.THIRD_MARGIN })
@@ -253,15 +241,15 @@ VideoPlayer.ets其中定义了视频播放子组件VideoPlayer ，onPrepared回�
 // VideoPlayer.ets
 @Component
 export struct VideoPlayer {
-  private source: String | Resource;
-  private controller: VideoController;
-  private previewUris: Resource = $r('app.media.ic_preview');
+  private source: string | Resource = '';
+  private controller: VideoController = new VideoController();
+  private previewUris: Resource = $r('app.media.preview');
   @Provide currentTime: number = 0;
   @Provide durationTime: number = 0;
   @Provide durationStringTime: string = START_TIME;
   @Provide currentStringTime: string = START_TIME;
   @Consume isPlay: boolean;
-  @Consume isOpacity: boolean ;
+  @Consume isOpacity: boolean;
   @Consume flag: boolean;
   @Consume isLoading: boolean;
   @Consume progressVal: number;
@@ -280,14 +268,16 @@ export struct VideoPlayer {
         .objectFit(ImageFit.Contain)
         .loop(false)
         .onUpdate((event) => {
-          this.currentTime = event.time;
-          this.currentStringTime = changeSliderTime(this.currentTime);
-         })
+          if (event) {
+            this.currentTime = event.time;
+            this.currentStringTime = changeSliderTime(this.currentTime);
+          }
+        })
         .onPrepared((event) => {
-          prepared.call(this, event);
+          this.prepared(event?.duration);
         })
         .onFinish(() => {
-          finish.call(this);
+          this.finish();
         })
         .onError(() => {
           prompt.showToast({
@@ -298,6 +288,7 @@ export struct VideoPlayer {
       VideoSlider({ controller: this.controller })
     }
   }
+  ...
 }
 ```
 
@@ -310,9 +301,9 @@ export struct VideoPlayer {
 @Component
 export struct VideoSlider {
   @Consume isOpacity: boolean;
-  private controller: VideoController;
-  @Consume  currentStringTime: string;
-  @Consume  currentTime: number;
+  private controller: VideoController = new VideoController();
+  @Consume currentStringTime: string;
+  @Consume currentTime: number;
   @Consume durationTime: number;
   @Consume durationStringTime: string;
   @Consume isPlay: boolean;
@@ -330,7 +321,7 @@ export struct VideoSlider {
         step: 1,
         style: SliderStyle.OutSet
       })
-        .blockColor($r("app.color.white"))
+        .blockColor($r('app.color.white'))
         .width(STRING_PERCENT.SLIDER_WITH)
         .trackColor(Color.Gray)
         .selectedColor($r("app.color.white"))
@@ -338,14 +329,14 @@ export struct VideoSlider {
         .showTips(true)
         .trackThickness(this.isOpacity ? SMALL_TRACK_THICK_NESS : BIG_TRACK_THICK_NESS)
         .onChange((value: number, mode: SliderChangeMode) => {
-          sliderOnchange.call(this, value, mode);
+          this.sliderOnchange(value, mode);
         })
       ...
-
     }
     .opacity(this.isOpacity ? DEFAULT_OPACITY : 1)
-    .width(ALL_PERCENT)
-   }
+    ...
+  }
+  ...
 }
 ```
 
@@ -353,81 +344,13 @@ export struct VideoSlider {
 
 ```typescript
 // VideoControll.ets
-export function prepared(event) {
-  // 获取视频资源时长，单位（秒）
-  this.durationTime = event.duration;
-  // 转成mm:ss类型，计算其mm 和 ss
-  let second: number = event.duration % COMMON_NUM_MINUTE;
-  let min: number = parseInt((event.duration / COMMON_NUM_MINUTE).toString());
-  let head = min < COMMON_NUM_DOUBLE ? `${ZERO_STR}${min}` : min;
-  let end = second < COMMON_NUM_DOUBLE ? `${ZERO_STR}${second}` : second;
-  this.durationStringTime = `${head}${SPLIT}${end}`;
-  this.flag = true;
-}
-
-export function finish() {
-  // 结束播放后修改isPlay 重新渲染控制图标,控制图标显形
-  this.isPlay = false;
-  this.isOpacity = false;
-}
-
-export function sliderOnchange(value: number, mode: SliderChangeMode) {
-  this.currentTime = parseInt(value.toString());
-  this.controller.setCurrentTime(parseInt(value.toString()), SeekMode.Accurate);
-  if (mode === SliderChangeMode.Begin) {
-    this.isOpacity = false;
-  }
-  if (mode === SliderChangeMode.Moving) {
-    this.isOpacity = false;
-  }
-  if (mode === SliderChangeMode.End) {
-    this.isOpacity = true;
-  }
-};
-
 export function changeSliderTime(value: number): string {
   let second: number = value % COMMON_NUM_MINUTE;
-  let min: number = parseInt((value / COMMON_NUM_MINUTE).toString());
+  let min: number = Number.parseInt((value / COMMON_NUM_MINUTE).toString());
   let head = min < COMMON_NUM_DOUBLE ? `${ZERO_STR}${min}` : min;
   let end = second < COMMON_NUM_DOUBLE ? `${ZERO_STR}${second}` : second;
   let nowTime = `${head}${SPLIT}${end}`;
   return nowTime;
-}
-
-export function iconOnclick() {
-  if (this.isPlay) {
-    this.controller.pause()
-    this.isPlay = false;
-    this.isOpacity = false;
-    return;
-  }
-  if(this.flag) {
-    this.controller.start();
-    this.isPlay = true;
-    this.isOpacity = true;
-  } else {
-    let that = this;
-    that.isLoading = true;
-    // 视频加载未完成。显示加载动作
-    let intervalLoading = setInterval(function() {
-      if (that.progressVal >= STACK_STYLE.PROGRESS_TOTAL) {
-        that.progressVal = 0;
-      } else {
-        that.progressVal += STACK_STYLE.PROGRESS_STEP;
-      }
-    }, STACK_STYLE.MILLI_SECONDS)
-    // 定时任务判断视频加载是否完成
-    let intervalFlag = setInterval(function() {
-      if (that.flag) {
-        that.controller.start();
-        that.isPlay = true;
-        that.isOpacity = true;
-        that.isLoading = false;
-        clearInterval(intervalFlag);
-        clearInterval(intervalLoading);
-      }
-    }, STACK_STYLE.MILLI_SECONDS);
-  }
 }
 ```
 
@@ -441,16 +364,17 @@ export function iconOnclick() {
 @Component
 struct Play {
   // 取到Index页面跳转来时携带的source对应的数据。
-  private source: string = router.getParams()['source'];
+  private source: string = (router.getParams() as Record<string, Object>).source as string;
   private startIconResource: Resource = $r('app.media.ic_public_play');
   private backIconResource: Resource = $r('app.media.ic_back');
   @Provide isPlay: boolean = false;
-  @Provide isOpacity: boolean = false ;
+  @Provide isOpacity: boolean = false;
   controller: VideoController = new VideoController();
   @Provide isLoading: boolean = false;
   @Provide progressVal: number = 0;
   @Provide flag: boolean = false;
 
+  ...
   onPageHide() {
     this.controller.pause();
   }
@@ -473,17 +397,17 @@ struct Play {
             value: STACK_STYLE.PROGRESS_VALUE,
             total: STACK_STYLE.PROGRESS_TOTAL,
             type: ProgressType.ScaleRing
-        })
-          .color(Color.Grey)
-          .value(this.progressVal)
-          .width(STACK_STYLE.PROGRESS_WIDTH)
-          .style({
-            strokeWidth: STACK_STYLE.PROGRESS_STROKE_WIDTH,
-            scaleCount: STACK_STYLE.PROGRESS_SCALE_COUNT,
-            scaleWidth: STACK_STYLE.PROGRESS_SCALE_WIDTH
           })
-          .zIndex(STACK_STYLE.PROGRESS_Z_INDEX)
-       }
+            .color(Color.Grey)
+            .value(this.progressVal)
+            .width(STACK_STYLE.PROGRESS_WIDTH)
+            .style({
+              strokeWidth: STACK_STYLE.PROGRESS_STROKE_WIDTH,
+              scaleCount: STACK_STYLE.PROGRESS_SCALE_COUNT,
+              scaleWidth: STACK_STYLE.PROGRESS_SCALE_WIDTH
+            })
+            .zIndex(STACK_STYLE.PROGRESS_Z_INDEX)
+        }
         VideoPlayer({
           source: this.source,
           controller: this.controller
@@ -501,11 +425,10 @@ struct Play {
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
-1.  Swiper组件的使用。
-2.  List组件的使用。
-3.  Video组件的使用。
-4.  Slider组件的使用。
-5.  如何实现自定义视频控制器。
-
+1. Swiper组件的使用。
+2. List组件的使用。
+3. Video组件的使用。
+4. Slider组件的使用。
+5. 如何实现自定义视频控制器。
 
 ![](figures/彩带动效.gif)

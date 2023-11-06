@@ -22,7 +22,11 @@
     },
     {
       "name": "back",
-      "value": "视频"
+      "value": "video"
+    },
+    {
+      "name": "empty",
+      "value": "empty"
     }
   ]
 }
