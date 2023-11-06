@@ -14,7 +14,7 @@
  */
 
 import Constants from '../common/constants/Constants';
-import ConversionItem from '../common/bean/ConversionItem';
+import ConversionItem from '../viewmodel/ConversionItem';
 
 @Extend(Text) function descTextStyle() {
   .fontColor($r('app.color.title_font'))
@@ -41,30 +41,30 @@ import ConversionItem from '../common/bean/ConversionItem';
 
 @Component
 export default struct ConversionItemComponent {
-  model: ConversionItem;
+  model?: ConversionItem;
 
   build() {
     Column() {
-      Text(this.model.title)
+      Text(this.model?.title)
         .titleTextStyle()
         .margin({ top: $r('app.float.title_margin_top') })
-      Text(this.model.subTitle)
+      Text(this.model?.subTitle)
         .descTextStyle()
         .opacity($r('app.float.label_opacity'))
       Row()
         .blueStyle()
-        .width(this.model.value)
-      Text(this.model.conversionTitle)
+        .width(this.model?.value)
+      Text(this.model?.conversionTitle)
         .titleTextStyle()
         .margin({ top: $r('app.float.item_margin_top') })
-      Text(this.model.conversionSubTitle)
+      Text(this.model?.conversionSubTitle)
         .descTextStyle()
         .opacity($r('app.float.label_opacity'))
       Row()
         .blueStyle()
-        .width(this.model.conversionValue)
-      if (this.model.notice) {
-        Text(this.model.notice)
+        .width(this.model?.conversionValue)
+      if (this.model?.notice) {
+        Text(this.model?.notice)
           .descTextStyle()
           .fontColor($r('app.color.notice_font'))
       }
