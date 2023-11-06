@@ -13,34 +13,24 @@
  * limitations under the License.
  */
 
-import PointStyle from './PointStyle';
-
 /**
- * Chart point entity class.
+ * Chart point style entity class.
  */
-export default class ChartPoint {
+export default class PointStyle {
   /**
-   * Step value.
+   * The shape of the point.
    */
-  value: number;
-
+  shape: string = '';
   /**
-   * Style of chart points.
+   * Fill color.
    */
-  pointStyle: PointStyle;
-
+  fillColor: string = '';
   /**
-   * Description of icon points.
+   * Border color.
    */
-  description: string;
-
+  strokeColor: string = '';
   /**
-   * Chart text position.
+   * Size of high bright spots.
    */
-  textLocation: string;
-
-  /**
-   * Chart text color.
-   */
-  textColor: string;
+  size: number = 0;
 }

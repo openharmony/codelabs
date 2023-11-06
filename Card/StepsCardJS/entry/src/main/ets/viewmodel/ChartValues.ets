@@ -13,27 +13,26 @@
  * limitations under the License.
  */
 
+import ChartPoint from './ChartPoint';
+
 /**
- * Chart point style entity class.
+ * Chart value entity class.
  */
-export default class PointStyle {
+export default class ChartValues {
   /**
-   * The shape of the point.
+   * Chart fill color.
    */
-  shape: string;
-
+  fillColor: string = '';
   /**
-   * Fill color.
+   * Chart line color.
    */
-  fillColor: string;
-
+  strokeColor: string = '';
   /**
-   * Border color.
+   * Sets whether to display the fill gradient color.
    */
-  strokeColor: string;
-
+  gradient: boolean = false;
   /**
-   * Size of high bright spots.
+   * Draw a set of points in a line type chart.
    */
-  size: number;
+  data: Array<ChartPoint> = [];
 }
