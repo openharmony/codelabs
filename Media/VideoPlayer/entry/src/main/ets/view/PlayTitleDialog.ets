@@ -12,14 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import { VideoSpeed } from '../viewmodel/VideoSpeed';
+import { VideoController } from '../controller/VideoController';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { PlayConstants } from '../common/constants/PlayConstants';
 
 @CustomDialog
 export struct PlayTitleDialog {
-  @Link playSpeed: number;
-  controller: CustomDialogController;
+  private playVideoModel?: VideoController;
+  controller?: CustomDialogController;
 
   build() {
     Column() {
@@ -27,12 +28,12 @@ export struct PlayTitleDialog {
         Text($r('app.string.speed_play'))
           .fontSize($r('app.float.title_font_size'))
       }
-      .height(PlayConstants.PLAY_TITLE_DIALOG.ROW_HEIGHT)
-      .width(PlayConstants.PLAY_TITLE_DIALOG.ROW_WIDTH)
+      .height(PlayConstants.TITLE_DIALOG_ROW_HEIGHT)
+      .width(PlayConstants.TITLE_DIALOG_ROW_WIDTH)
 
       Column() {
         Grid() {
-          ForEach(CommonConstants.SPEED_ARRAY, (item) => {
+          ForEach(CommonConstants.SPEED_ARRAY, (item: VideoSpeed) => {
             GridItem() {
               Text(item.text)
                 .fontSize($r('app.float.title_dialog_font_size'))
@@ -43,16 +44,16 @@ export struct PlayTitleDialog {
                 .borderRadius($r('app.float.text_border_radius'))
             }
             .onClick(() => {
-              this.playSpeed = item.value;
-              this.controller.close();
+              this.playVideoModel!.setSpeed(item.value);
+              this.controller!.close();
             })
-          }, item => JSON.stringify(item))
+          }, (item: VideoSpeed) => JSON.stringify(item))
         }
-        .columnsTemplate(PlayConstants.PLAY_TITLE_DIALOG.COLUMNS_TEMPLATE)
-        .rowsTemplate(PlayConstants.PLAY_TITLE_DIALOG.ROWS_TEMPLATE)
-        .columnsGap(PlayConstants.PLAY_TITLE_DIALOG.COLUMNS_GAP)
-        .rowsGap(PlayConstants.PLAY_TITLE_DIALOG.ROWS_GAP)
-        .width(PlayConstants.PLAY_TITLE_DIALOG.ROW_WIDTH)
+        .columnsTemplate(PlayConstants.TITLE_DIALOG_COLUMNS_TEMPLATE)
+        .rowsTemplate(PlayConstants.TITLE_DIALOG_ROWS_TEMPLATE)
+        .columnsGap(PlayConstants.TITLE_DIALOG_COLUMNS_GAP)
+        .rowsGap(PlayConstants.TITLE_DIALOG_ROWS_GAP)
+        .width(PlayConstants.TITLE_DIALOG_ROW_WIDTH)
         .height(CommonConstants.FULL_PERCENT)
       }
       .height(CommonConstants.FIFTY_PERCENT)
@@ -62,14 +63,14 @@ export struct PlayTitleDialog {
           .fontColor($r('app.color.index_tab_selected_font_color'))
           .fontSize($r('app.float.title_dialog_font_size'))
       }
-      .height(PlayConstants.PLAY_TITLE_DIALOG.ROW_HEIGHT)
-      .width(PlayConstants.PLAY_TITLE_DIALOG.ROW_WIDTH)
+      .height(PlayConstants.TITLE_DIALOG_ROW_HEIGHT)
+      .width(PlayConstants.TITLE_DIALOG_ROW_WIDTH)
       .justifyContent(FlexAlign.Center)
       .onClick(() => {
-        this.controller.close();
+        this.controller!.close();
       })
     }
-    .height(PlayConstants.PLAY_TITLE_DIALOG.COLUMN_WIDTH)
+    .height(PlayConstants.TITLE_DIALOG_COLUMN_WIDTH)
     .width(CommonConstants.FULL_PERCENT)
     .backgroundColor(Color.White)
   }

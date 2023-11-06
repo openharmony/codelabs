@@ -17,58 +17,66 @@ import media from '@ohos.multimedia.media';
 import prompt from '@ohos.promptAction';
 import Logger from '../common/util/Logger';
 import DateFormatUtil from '../common/util/DateFormatUtil';
-import { CommonConstants, AvplayerStatus, Events } from '../common/constants/CommonConstants';
+import { CommonConstants, AvplayerStatus, Events, SliderMode } from '../common/constants/CommonConstants';
 import { PlayConstants } from '../common/constants/PlayConstants';
+import { GlobalContext } from '../common/util/GlobalContext';
+import window from '@ohos.window';
+import { VideoItem } from '../viewmodel/VideoItem';
+import resourceManager from '@ohos.resourceManager';
+import { PlayerModel } from '../common/model/PlayerModel';
 
 @Observed
 export class VideoController {
-  private avPlayer;
-  private duration: number;
-  private status: number;
+  public playerModel: PlayerModel;
+  private avPlayer: media.AVPlayer | null = null;
+  private duration: number = 0;
+  private status: number = -1;
   private loop: boolean = false;
-  private index: number;
-  private url: string;
-  private surfaceId: number;
-  private playSpeed: number = PlayConstants.PLAY_PAGE.PLAY_SPEED;
-  private seekTime: number = PlayConstants.PLAY_PROGRESS.SEEK_TIME;
-  private progressThis;
-  private playerThis;
-  private playPageThis;
-  private positionX: number = PlayConstants.PLAY_PAGE.POSITION_X;
-  private positionY: number = PlayConstants.PLAY_PAGE.POSITION_Y;
+  private index: number = 0;
+  private url?: resourceManager.RawFileDescriptor = {} as resourceManager.RawFileDescriptor;
+  private iUrl: string = '';
+  private surfaceId: string = '';
+  private seekTime: number = PlayConstants.PROGRESS_SEEK_TIME;
+  private positionX: number = PlayConstants.POSITION_X;
+  private positionY: number = PlayConstants.POSITION_Y;
 
-  constructor() {
+  constructor(playerModel: PlayerModel) {
+    this.playerModel = playerModel;
     this.createAVPlayer();
   }
 
   /**
    * Creates a videoPlayer object.
    */
-  createAVPlayer() {
-    media.createAVPlayer().then((avPlayer) => {
-      if (avPlayer) {
-        this.avPlayer = avPlayer;
-        this.bindState();
-      } else {
-        Logger.error('[PlayVideoModel] createAvPlayer fail!');
-      }
-    });
+  async createAVPlayer() {
+    let avPlayer: media.AVPlayer = await media.createAVPlayer();
+    this.avPlayer = avPlayer;
+    this.bindState();
   }
 
   /**
    * AVPlayer binding event.
    */
-  bindState() {
-    this.avPlayer.on(Events.STATE_CHANGE, async (state) => {
-      switch (state) {
+  async bindState() {
+    if (this.avPlayer === null) {
+      return;
+    }
+    this.avPlayer.on(Events.STATE_CHANGE, async (state: media.AVPlayerState) => {
+      let avplayerStatus: string = state;
+      if (this.avPlayer === null) {
+        return;
+      }
+      switch (avplayerStatus) {
         case AvplayerStatus.IDLE:
           this.resetProgress();
-          this.avPlayer.url = this.url;
+          if (this.iUrl) {
+            this.avPlayer.url = this.iUrl;
+          } else {
+            this.avPlayer.fdSrc = this.url;
+          }
           break;
         case AvplayerStatus.INITIALIZED:
-          if (!this.avPlayer.surfaceId) {
-            this.avPlayer.surfaceId = this.surfaceId;
-          }
+          this.avPlayer.surfaceId = this.surfaceId;
           this.avPlayer.prepare();
           break;
         case AvplayerStatus.PREPARED:
@@ -78,7 +86,7 @@ export class VideoController {
           this.duration = this.avPlayer.duration;
           break;
         case AvplayerStatus.PLAYING:
-          this.avPlayer.setVolume(this.playerThis.volume);
+          this.avPlayer.setVolume(this.playerModel.volume);
           this.setBright();
           this.status = CommonConstants.STATUS_START;
           this.watchStatus();
@@ -88,23 +96,25 @@ export class VideoController {
           this.watchStatus();
           break;
         case AvplayerStatus.COMPLETED:
-          this.duration = PlayConstants.PLAY_PLAYER.DURATION;
+          this.playerModel.playSpeed = PlayConstants.PLAY_SPEED;
+          this.duration = PlayConstants.PLAYER_DURATION;
           if (!this.loop) {
-            let curIndex = this.index + PlayConstants.PLAY_PLAYER.NEXT;
-            this.index = (curIndex === globalThis.videoList.length) ?
-              PlayConstants.PLAY_PLAYER.FIRST : curIndex;
-            this.url = globalThis.videoList[this.index].src;
-          } else {
-            this.url = this.avPlayer.url;
+            let curIndex = this.index + PlayConstants.PLAYER_NEXT;
+            let globalVideoList = GlobalContext.getContext().getObject('globalVideoList') as VideoItem[];
+            this.index = (curIndex === globalVideoList.length) ?
+            PlayConstants.PLAYER_FIRST : curIndex;
+            if (this.iUrl) {
+              this.iUrl = globalVideoList[this.index].iSrc;
+            } else {
+              this.url = globalVideoList[this.index].src;
+            }
           }
           this.avPlayer.reset();
           break;
-        case AvplayerStatus.STOPPED:
-          this.avPlayer.released();
+        case AvplayerStatus.RELEASED:
+          this.avPlayer.release();
           this.status = CommonConstants.STATUS_STOP;
           this.watchStatus();
-          break;
-        case AvplayerStatus.RELEASED:
           Logger.info('[PlayVideoModel] state released called')
           break;
         default:
@@ -115,7 +125,7 @@ export class VideoController {
     this.avPlayer.on(Events.TIME_UPDATE, (time: number) => {
       this.initProgress(time);
     });
-    this.avPlayer.on(Events.ERROR, (error) => {
+    this.avPlayer.on(Events.ERROR, () => {
       this.playError();
     })
   }
@@ -127,22 +137,39 @@ export class VideoController {
    * @param url Playback Path.
    * @param surfaceId Indicates the surface ID of the surfaceId.
    */
-  firstPlay(index: number, url: string, surfaceId: number) {
+  async firstPlay(index: number, url: resourceManager.RawFileDescriptor, iUrl: string, surfaceId: string) {
     this.index = index;
     this.url = url;
+    this.iUrl = iUrl;
     this.surfaceId = surfaceId;
-    this.avPlayer.url = this.url;
+    if (this.avPlayer === null) {
+      await this.createAVPlayer();
+    }
+    if (this.avPlayer !== null) {
+      if (this.iUrl) {
+        this.avPlayer.url = this.iUrl;
+      } else {
+        this.avPlayer.fdSrc = this.url;
+      }
+    }
   }
 
   /**
-   * Stop Playing.
+   * Release the video player.
    */
-  stop() {
-    if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
+  release() {
+    if (this.avPlayer !== null) {
       this.avPlayer.release();
-      return;
     }
-    this.avPlayer.stop();
+  }
+
+  /**
+   * Pause Playing.
+   */
+  pause() {
+    if (this.avPlayer !== null) {
+      this.avPlayer.pause();
+    }
   }
 
   /**
@@ -158,21 +185,36 @@ export class VideoController {
    * @param playSpeed Current playback speed.
    */
   setSpeed(playSpeed: number) {
-    this.playSpeed = playSpeed;
-    this.avPlayer.setSpeed(this.playSpeed);
+    if (this.avPlayer === null) {
+      return;
+    }
+    if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
+      return;
+    }
+    this.playerModel.playSpeed = playSpeed;
+    this.avPlayer.setSpeed(this.playerModel.playSpeed);
   }
 
   /**
    * Previous video.
    */
   previousVideo() {
+    if (this.avPlayer === null) {
+      return;
+    }
     if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
       return;
     }
-    let curIndex = this.index - PlayConstants.PLAY_CONTROL.NEXT;
-    this.index = (curIndex === -PlayConstants.PLAY_CONTROL.NEXT) ?
-      (globalThis.videoList.length - PlayConstants.PLAY_CONTROL.NEXT) : curIndex;
-    this.url = globalThis.videoList[this.index].src;
+    this.playerModel.playSpeed = PlayConstants.PLAY_SPEED;
+    let globalVideoList = GlobalContext.getContext().getObject('globalVideoList') as VideoItem[];
+    let curIndex = this.index - PlayConstants.CONTROL_NEXT;
+    this.index = (curIndex === -PlayConstants.CONTROL_NEXT) ?
+      (globalVideoList.length - PlayConstants.CONTROL_NEXT) : curIndex;
+    if (this.iUrl) {
+      this.iUrl = globalVideoList[this.index].iSrc;
+    } else {
+      this.url = globalVideoList[this.index].src;
+    }
     this.avPlayer.reset();
   }
 
@@ -180,13 +222,22 @@ export class VideoController {
    * Next video.
    */
   nextVideo() {
+    if (this.avPlayer === null) {
+      return;
+    }
     if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
       return;
     }
-    let curIndex = this.index + PlayConstants.PLAY_CONTROL.NEXT;
-    this.index = (curIndex === globalThis.videoList.length) ?
-      PlayConstants.PLAY_CONTROL.FIRST : curIndex;
-    this.url = globalThis.videoList[this.index].src;
+    this.playerModel.playSpeed = PlayConstants.PLAY_SPEED;
+    let globalVideoList = GlobalContext.getContext().getObject('globalVideoList') as VideoItem[];
+    let curIndex = this.index + PlayConstants.CONTROL_NEXT;
+    this.index = (curIndex === globalVideoList.length) ?
+    PlayConstants.CONTROL_FIRST : curIndex;
+    if (this.iUrl) {
+      this.iUrl = globalVideoList[this.index].iSrc;
+    } else {
+      this.url = globalVideoList[this.index].src;
+    }
     this.avPlayer.reset();
   }
 
@@ -194,6 +245,9 @@ export class VideoController {
    * Switching Between Video Play and Pause.
    */
   switchPlayOrPause() {
+    if (this.avPlayer === null) {
+      return;
+    }
     if (this.status === CommonConstants.STATUS_START) {
       this.avPlayer.pause();
     } else {
@@ -208,15 +262,16 @@ export class VideoController {
    * @param mode Slider component change event.
    */
   setSeekTime(value: number, mode: SliderChangeMode) {
-    if (mode === SliderChangeMode.Moving) {
-      // The current time is changed during dragging, and other parameters remain unchanged.
-      this.progressThis.progressVal = value;
-      this.progressThis.currentTime = DateFormatUtil.secondToTime(Math.floor(value * this.duration /
-        CommonConstants.ONE_HUNDRED / CommonConstants.A_THOUSAND));
+    if (mode === Number(SliderMode.MOVING)) {
+      this.playerModel.progressVal = value;
+      this.playerModel.currentTime = DateFormatUtil.secondToTime(Math.floor(value * this.duration /
+      CommonConstants.ONE_HUNDRED / CommonConstants.A_THOUSAND));
     }
-    if (mode === SliderChangeMode.End) {
+    if (mode === Number(SliderMode.END) || mode === Number(SliderMode.CLICK)) {
       this.seekTime = value * this.duration / CommonConstants.ONE_HUNDRED;
-      this.avPlayer.seek(this.seekTime, media.SeekMode.SEEK_PREV_SYNC);
+      if (this.avPlayer !== null) {
+        this.avPlayer.seek(this.seekTime, media.SeekMode.SEEK_PREV_SYNC);
+      }
     }
   }
 
@@ -224,7 +279,8 @@ export class VideoController {
    * Setting the brightness.
    */
   setBright() {
-    globalThis.windowClass.setWindowBrightness(this.playerThis.bright)
+    let windowClass = GlobalContext.getContext().getObject('windowClass') as window.Window;
+    windowClass.setWindowBrightness(this.playerModel.bright);
   }
 
   /**
@@ -235,24 +291,6 @@ export class VideoController {
   }
 
   /**
-   * Transfer this on the playProgress page.
-   *
-   * @param progressThis PlayProgress this object.
-   */
-  initProgressThis(progressThis) {
-    this.progressThis = progressThis;
-  }
-
-  /**
-   * Pass this on the playback page.
-   *
-   * @param playerThis PlayPlayer this object.
-   */
-  initPlayerThis(playerThis) {
-    this.playerThis = playerThis;
-  }
-
-  /**
    * Initialization progress bar.
    *
    * @param time Current video playback time.
@@ -260,18 +298,18 @@ export class VideoController {
   initProgress(time: number) {
     let nowSeconds = Math.floor(time / CommonConstants.A_THOUSAND);
     let totalSeconds = Math.floor(this.duration / CommonConstants.A_THOUSAND);
-    this.progressThis.currentTime = DateFormatUtil.secondToTime(nowSeconds);
-    this.progressThis.totalTime = DateFormatUtil.secondToTime(totalSeconds);
-    this.progressThis.progressVal = Math.floor(nowSeconds * CommonConstants.ONE_HUNDRED / totalSeconds);
+    this.playerModel.currentTime = DateFormatUtil.secondToTime(nowSeconds);
+    this.playerModel.totalTime = DateFormatUtil.secondToTime(totalSeconds);
+    this.playerModel.progressVal = Math.floor(nowSeconds * CommonConstants.ONE_HUNDRED / totalSeconds);
   }
 
   /**
    * Reset progress bar data.
    */
   resetProgress() {
-    this.seekTime = PlayConstants.PLAY_PROGRESS.SEEK_TIME;
-    this.progressThis.currentTime = PlayConstants.PLAY_PROGRESS.CURRENT_TIME;
-    this.progressThis.progressVal = PlayConstants.PLAY_PROGRESS.PROGRESS_VAL;
+    this.seekTime = PlayConstants.PROGRESS_SEEK_TIME;
+    this.playerModel.currentTime = PlayConstants.PROGRESS_CURRENT_TIME;
+    this.playerModel.progressVal = PlayConstants.PROGRESS_PROGRESS_VAL;
   }
 
   /**
@@ -279,7 +317,10 @@ export class VideoController {
    *
    * @param event Gesture event.
    */
-  onVolumeActionStart(event: GestureEvent) {
+  onVolumeActionStart(event?: GestureEvent) {
+    if (!event) {
+      return;
+    }
     this.positionX = event.offsetX;
   }
 
@@ -288,7 +329,10 @@ export class VideoController {
    *
    * @param event Gesture event.
    */
-  onBrightActionStart(event: GestureEvent) {
+  onBrightActionStart(event?: GestureEvent) {
+    if (!event) {
+      return;
+    }
     this.positionY = event.offsetY;
   }
 
@@ -297,36 +341,50 @@ export class VideoController {
    *
    * @param event Gesture event.
    */
-  onVolumeActionUpdate(event: GestureEvent) {
+  onVolumeActionUpdate(event?: GestureEvent) {
+    if (!event) {
+      return;
+    }
+    if (this.avPlayer === null) {
+      return;
+    }
     if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
       return;
     }
-    if (!this.playerThis.brightShow) {
-      this.playerThis.volumeShow = true;
-      let changeVolume = (event.offsetX - this.positionX) / globalThis.screenWidth;
-      let currentVolume = this.playerThis.volume + changeVolume;
-      let volumeMinFlag = currentVolume <= PlayConstants.PLAY_PAGE.MIN_VALUE;
-      let volumeMaxFlag = currentVolume > PlayConstants.PLAY_PAGE.MAX_VALUE;
-      this.playerThis.volume = volumeMinFlag ? PlayConstants.PLAY_PAGE.MIN_VALUE :
-        (volumeMaxFlag ? PlayConstants.PLAY_PAGE.MAX_VALUE : currentVolume);
-      this.avPlayer.setVolume(this.playerThis.volume);
+    if (this.playerModel.brightShow === false) {
+      this.playerModel.volumeShow = true;
+      let screenWidth = GlobalContext.getContext().getObject('screenWidth') as number;
+      let changeVolume = (event.offsetX - this.positionX) / screenWidth;
+      let volume: number = this.playerModel.volume;
+      let currentVolume = volume + changeVolume;
+      let volumeMinFlag = currentVolume <= PlayConstants.MIN_VALUE;
+      let volumeMaxFlag = currentVolume > PlayConstants.MAX_VALUE;
+      this.playerModel.volume = volumeMinFlag ? PlayConstants.MIN_VALUE :
+        (volumeMaxFlag ? PlayConstants.MAX_VALUE : currentVolume);
+      this.avPlayer.setVolume(this.playerModel.volume);
       this.positionX = event.offsetX;
     }
   }
+
   /**
    * Gesture method onActionUpdate.
    *
    * @param event Gesture event.
    */
-  onBrightActionUpdate(event: GestureEvent) {
-    if (!this.playerThis.volumeShow) {
-      this.playerThis.brightShow = true;
-      let changeBright = (this.positionY - event.offsetY) / globalThis.screenHeight;
-      let currentBright = this.playerThis.bright + changeBright;
-      let brightMinFlag = currentBright <= PlayConstants.PLAY_PAGE.MIN_VALUE;
-      let brightMaxFlag = currentBright > PlayConstants.PLAY_PAGE.MAX_VALUE;
-      this.playerThis.bright = brightMinFlag ? PlayConstants.PLAY_PAGE.MIN_VALUE :
-        (brightMaxFlag ? PlayConstants.PLAY_PAGE.MAX_VALUE : currentBright);
+  onBrightActionUpdate(event?: GestureEvent) {
+    if (!event) {
+      return;
+    }
+    if (this.playerModel.volumeShow === false) {
+      this.playerModel.brightShow = true;
+      let screenHeight = GlobalContext.getContext().getObject('screenHeight') as number;
+      let changeBright = (this.positionY - event.offsetY) / screenHeight;
+      let bright: number = this.playerModel.bright;
+      let currentBright = bright + changeBright;
+      let brightMinFlag = currentBright <= PlayConstants.MIN_VALUE;
+      let brightMaxFlag = currentBright > PlayConstants.MAX_VALUE;
+      this.playerModel.bright = brightMinFlag ? PlayConstants.MIN_VALUE :
+        (brightMaxFlag ? PlayConstants.MAX_VALUE : currentBright);
       this.setBright();
       this.positionY = event.offsetY;
     }
@@ -337,21 +395,22 @@ export class VideoController {
    */
   onActionEnd() {
     setTimeout(() => {
-      this.playerThis.volumeShow = false;
-      this.playerThis.brightShow = false;
-      this.positionX = PlayConstants.PLAY_PAGE.POSITION_X;
-      this.positionY = PlayConstants.PLAY_PAGE.POSITION_Y;
-    }, PlayConstants.PLAY_PAGE.DISAPPEAR_TIME);
+      this.playerModel.volumeShow = false;
+      this.playerModel.brightShow = false;
+      this.positionX = PlayConstants.POSITION_X;
+      this.positionY = PlayConstants.POSITION_Y;
+    }, PlayConstants.DISAPPEAR_TIME);
   }
 
   /**
    * Sets whether the screen is a constant based on the playback status.
    */
   watchStatus() {
+    let windowClass = GlobalContext.getContext().getObject('windowClass') as window.Window;
     if (this.status === CommonConstants.STATUS_START) {
-      globalThis.windowClass.setWindowKeepScreenOn(true);
+      windowClass.setWindowKeepScreenOn(true);
     } else {
-      globalThis.windowClass.setWindowKeepScreenOn(false);
+      windowClass.setWindowKeepScreenOn(false);
     }
   }
 
@@ -359,26 +418,20 @@ export class VideoController {
    * Sets the playback page size based on the video size.
    */
   setVideoSize() {
-    if (this.avPlayer.height > this.avPlayer.width) {
-      this.playPageThis.videoWidth = PlayConstants.PLAY_PAGE.PLAY_PLAYER_HEIGHT_FULL;
-      this.playPageThis.videoHeight = PlayConstants.PLAY_PAGE.PLAY_PLAYER_HEIGHT_FULL;
-      this.playPageThis.videoPosition = FlexAlign.Start;
-      this.playPageThis.videoMargin = PlayConstants.PLAY_PAGE.HEIGHT;
-    } else {
-      this.playPageThis.videoWidth = CommonConstants.FULL_PERCENT;
-      this.playPageThis.videoHeight = PlayConstants.PLAY_PAGE.PLAY_PLAYER_HEIGHT;
-      this.playPageThis.videoPosition = FlexAlign.Center;
-      this.playPageThis.videoMargin =  PlayConstants.PLAY_PAGE.MARGIN_ZERO;
+    if (this.avPlayer === null) {
+      return;
     }
-  }
-
-  /**
-   * Obtains the this object of the PlayPage.
-   *
-   * @param playPageThis This object of PlayPage.
-   */
-  initPlayPageThis(playPageThis) {
-    this.playPageThis = playPageThis;
+    if (this.avPlayer.height > this.avPlayer.width) {
+      this.playerModel.videoWidth = PlayConstants.PLAY_PLAYER_HEIGHT_FULL;
+      this.playerModel.videoHeight = PlayConstants.PLAY_PLAYER_HEIGHT_FULL;
+      this.playerModel.videoPosition = FlexAlign.Start;
+      this.playerModel.videoMargin = PlayConstants.HEIGHT;
+    } else {
+      this.playerModel.videoWidth = CommonConstants.FULL_PERCENT;
+      this.playerModel.videoHeight = PlayConstants.PLAY_PLAYER_HEIGHT;
+      this.playerModel.videoPosition = FlexAlign.Center;
+      this.playerModel.videoMargin = PlayConstants.MARGIN_ZERO;
+    }
   }
 
   /**
