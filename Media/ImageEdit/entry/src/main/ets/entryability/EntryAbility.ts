@@ -24,9 +24,11 @@ export default class EntryAbility extends UIAbility {
         hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
         window.getLastWindow(this.context, (err, window) => {
             if (err) {
-                hilog.error(0x0000, 'testTag', '%{public}s',`window loading has error: ${JSON.stringify(err)}`);
+                hilog.error(0x0000, 'testTag', '%{public}s', `window loading has error: ${JSON.stringify(err)}`);
             }
-            globalThis.statusBar = window.getWindowProperties().windowRect?.top;
+            // AppStorage.SetOrCreate('statusBar', window.getWindowProperties().windowRect?.top);
+            // AppStorage.SetOrCreate('statusBar', 72);
+            AppStorage.SetOrCreate('statusBar', 56);
         });
     }
 

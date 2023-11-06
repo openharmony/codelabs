@@ -13,17 +13,18 @@
  * limitations under the License.
  */
 
-import worker, { MessageEvents} from '@ohos.worker';
+import worker, { MessageEvents } from '@ohos.worker';
 import { adjustIconList, IconStatus } from '../viewModel/IconListViewModel';
 import { adjustOpacity } from '../utils/OpacityUtil';
 import { CommonConstants } from '../common/constant/CommonConstants';
 import { AdjustId } from '../viewModel/OptionViewModel';
-import { MessageItem } from '../common/bean/MessageItem'
+import { MessageItem } from '../viewmodel/MessageItem'
 import Logger from '../utils/LoggerUtil';
 
 @Component
 export default struct AdjustContentView {
-  @Builder TabBuilder(index: number, name: string | Resource) {
+  @Builder
+  TabBuilder(index: number, name: string | Resource) {
     Column() {
       Image(this.currentAdjustIndex === index ? this.AdjustIconList[index]?.chosen : this.AdjustIconList[index]?.normal)
         .width($r('app.float.adjust_icon_width'))
@@ -89,7 +90,6 @@ struct SliderCustom {
   @Consume pixelMap: PixelMap;
   @Consume isPixelMapChange: boolean;
   private postState: boolean = true;
-  workerInstance: worker.ThreadWorker = undefined;
   saturationLastSlider: number = CommonConstants.SLIDER_MAX;
   brightnessLastSlider: number = CommonConstants.SLIDER_MAX;
   deviceListDialogController: CustomDialogController = new CustomDialogController({
@@ -115,7 +115,9 @@ struct SliderCustom {
           .trackColor(Color.White)
           .width(CommonConstants.SLIDER_WIDTH)
           .showSteps(true)
-          .onChange(this.sliderChange.bind(this))
+          .onChange((value: number, mode: SliderChangeMode) => {
+            this.sliderChange(value, mode);
+          })
       }
       .width(CommonConstants.LAYOUT_FULL_SCREEN)
       .justifyContent(FlexAlign.Center)
@@ -158,7 +160,9 @@ struct SliderCustom {
           this.deviceListDialogController.open();
         }
         this.postState = false;
-        workerInstance.onmessage = this.updatePixelMap.bind(this);
+        workerInstance.onmessage = (event: MessageEvents) => {
+          this.updatePixelMap(event)
+        };
         if (type === AdjustId.BRIGHTNESS) {
           this.brightnessLastSlider = Math.round(value);
         } else {
@@ -171,7 +175,7 @@ struct SliderCustom {
         }
       });
     } catch (error) {
-      Logger.error(`Create work instance fail, error message: ${JSON.stringify(error)}`)
+      Logger.error(`Create work instance fail, error message: ${JSON.stringify(error)}`);
     }
   }
 
