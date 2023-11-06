@@ -13,38 +13,39 @@
  * limitations under the License.
  */
 
-import common from '@ohos.app.ability.common';
 import router from '@ohos.router';
 import HealthText from './HealthTextComponent';
 import AddBtn from '../view/home/AddBtnComponent';
 import { TaskCard } from '../view/home//TaskCardComponent';
 import HomeTopView from '../view/home/HomeTopComponent';
 import { CustomDialogView, CustomDialogCallback } from '../view/dialog/CustomDialogView';
-import TaskInfo from '../common/bean/TaskInfo';
-import GlobalInfoApi from '../common/database/tables/GlobalInfoApi';
+import TaskInfo from '../viewmodel/TaskInfo';
 import { HomeStore } from '../viewmodel/HomeViewModel';
 import { ITaskItem, TaskMapById } from '../model/TaskInitList';
 import { HealthDataSrcMgr } from '../common/utils/HealthDataSrcMgr';
 import { BroadCast, BroadCastType } from '../common/utils/BroadCast';
-import * as commonConst from '../common/constants/CommonConstants';
+import { CommonConstants as Const } from '../common/constants/CommonConstants';
+import AchievementInfo from '../viewmodel/AchievementInfo';
 
 const WHITE_COLOR_0X = 255;
 
-@Styles function allSize() {
-  .width(commonConst.THOUSANDTH_1000)
-  .height(commonConst.THOUSANDTH_1000)
+@Styles
+function allSize() {
+  .width(Const.THOUSANDTH_1000)
+  .height(Const.THOUSANDTH_1000)
 }
 
-@Extend(Text) function titleTextStyle() {
+@Extend(Text)
+function titleTextStyle() {
   .fontSize($r('app.float.default_16'))
-  .fontWeight(commonConst.FONT_WEIGHT_500)
-  .width(commonConst.THOUSANDTH_1000)
+  .fontWeight(Const.FONT_WEIGHT_500)
+  .width(Const.THOUSANDTH_1000)
   .fontFamily($r('app.string.HarmonyHeiTi_Medium'))
   .fontColor($r(`app.element.color.titleColor`))
   .padding({
-    top: commonConst.THOUSANDTH_15,
-    bottom: commonConst.THOUSANDTH_15,
-    left: commonConst.THOUSANDTH_33
+    top: Const.THOUSANDTH_15,
+    bottom: Const.THOUSANDTH_15,
+    left: Const.THOUSANDTH_33
   })
 }
 
@@ -56,79 +57,57 @@ export default struct HomeIndex {
   @Link editedTaskInfo: ITaskItem;
   @Link @Watch('taskChange') editedTaskID: string;
   private scroller: Scroller = new Scroller();
-
-  async aboutToAppear() {
-    GlobalInfoApi.query((result) => {
-      let predate = new Date(result.lastDate);
-      let date = new Date();
-      if (result.length !== 0 && date.getTime() < predate.getTime()) {
-        AlertDialog.show(
-          {
-            title: $r('app.string.alert'),
-            message: $r('app.string.alert_message'),
-            autoCancel: false,
-            alignment: DialogAlignment.Bottom,
-            offset: { dx: 0, dy: -20 },
-            gridCount: 3,
-            confirm: {
-              value: $r('app.string.alert_button'),
-              action: () => {
-                (getContext(this) as common.UIAbilityContext).terminateSelf()
-                console.info('Button-clicking callback')
-              }
-            },
-            cancel: () => {
-              console.info('Closed callbacks')
-            }
-          })
-      } else {
-        this.homeStore.initData();
-      }
-    });
-  }
+  private yOffset: number = 0;
 
   taskChange() {
     this.homeStore.updateTaskInfoList(this.editedTaskInfo);
   }
 
-  taskItemAction(item: TaskInfo, isClick: boolean) {
+  taskItemAction(item: TaskInfo, isClick: boolean): void {
     if (!this.homeStore.checkCurrentDay()) {
       return;
     }
     if (isClick) {
       // click to clock
-      let callback: CustomDialogCallback = { confirmCallback: this.onConfirm.bind(this), cancelCallback: null };
+      let callback: CustomDialogCallback = { confirmCallback: (taskTemp: TaskInfo) => {
+        this.onConfirm(taskTemp)
+      }, cancelCallback: () => {
+      } };
       this.broadCast.emit(BroadCastType.SHOW_TASK_DETAIL_DIALOG, [item, callback]);
     } else {
       // edit task
-      const editTask: ITaskItem = {
-        ...TaskMapById[item.taskID],
-        targetValue: item?.targetValue,
-        isAlarm: item.isAlarm,
-        startTime: item.startTime,
-        frequency: item.frequency,
-        isOpen: item.isOpen,
-      };
+      let editTaskStr: string = JSON.stringify(TaskMapById[item.taskID - 1]);
+      let editTask: ITaskItem = JSON.parse(editTaskStr);
+      editTask.targetValue = item?.targetValue;
+      editTask.isAlarm = item.isAlarm;
+      editTask.startTime = item.startTime;
+      editTask.frequency = item.frequency;
+      editTask.isOpen = item.isOpen;
       router.pushUrl({ url: 'pages/TaskEditPage', params: { params: JSON.stringify(editTask) } });
     }
   }
 
   //confirm clockL
-  onConfirm(task) {
-    this.homeStore.taskClock(task).then((res) => {
+  onConfirm(task: TaskInfo) {
+    this.homeStore.taskClock(task).then((res: AchievementInfo) => {
       if (res.showAchievement) {
-        this.broadCast.emit(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, [res.achievementLevel]);
+        let achievementLevel = res.achievementLevel;
+        if (achievementLevel) {
+          this.broadCast.emit(BroadCastType.SHOW_ACHIEVEMENT_DIALOG, achievementLevel);
+        } else {
+          this.broadCast.emit(BroadCastType.SHOW_ACHIEVEMENT_DIALOG);
+        }
       }
     })
   }
 
   // change navigator alpha when scrolling the Scroll component
   onScrollAction() {
-    let yOffset = this.scroller.currentOffset().yOffset;
-    if (yOffset > commonConst.DEFAULT_56) {
+    this.yOffset = this.scroller.currentOffset().yOffset;
+    if (this.yOffset > Const.DEFAULT_56) {
       this.naviAlpha = 1;
     } else {
-      this.naviAlpha = yOffset / commonConst.DEFAULT_56;
+      this.naviAlpha = this.yOffset / Const.DEFAULT_56;
     }
   }
 
@@ -145,48 +124,55 @@ export default struct HomeIndex {
           HomeTopView({ homeStore: $homeStore })
           Text($r('app.string.task_list')).titleTextStyle()
           if (this.homeStore.getTaskListOfDay().length > 0) {
-            Column({ space: commonConst.DEFAULT_8 }) {
+            Column({ space: Const.DEFAULT_8 }) {
               ForEach(this.homeStore.getTaskListOfDay(), (item: TaskInfo) => {
                 TaskCard({
                   taskInfoStr: JSON.stringify(item),
-                  clickAction: (isClick) => this.taskItemAction(item, isClick)
+                  clickAction: (isClick: boolean) => this.taskItemAction(item, isClick)
                 })
-                  .margin({ bottom: commonConst.DEFAULT_12 })
+                  .margin({ bottom: Const.DEFAULT_12 })
                   .height($r('app.float.default_64'))
-              }, item => JSON.stringify(item))
+              }, (item: TaskInfo) => JSON.stringify(item))
             }
-            .padding({
-              top: commonConst.THOUSANDTH_15,
-              left: commonConst.THOUSANDTH_33,
-              right: commonConst.THOUSANDTH_33
+            .onAppear(() => {
+              this.scroller.scrollTo({ xOffset: 0, yOffset: this.yOffset });
             })
-            .width(commonConst.THOUSANDTH_1000)
+            .padding({
+              top: Const.THOUSANDTH_15,
+              left: Const.THOUSANDTH_33,
+              right: Const.THOUSANDTH_33
+            })
+            .width(Const.THOUSANDTH_1000)
           } else {
-            Column({ space: commonConst.DEFAULT_8 }) {
+            Column({ space: Const.DEFAULT_8 }) {
               Image($r('app.media.ic_no_data'))
                 .width($r('app.float.default_132'))
                 .height($r('app.float.default_100'));
               HealthText({ title: '', titleResource: $r('app.string.no_task'), fontSize: $r('app.float.default_14') })
-                .opacity(commonConst.OPACITY_4)
+                .opacity(Const.OPACITY_4)
             }
-            .margin({ top: commonConst.DEFAULT_48 })
+            .margin({ top: Const.DEFAULT_48 })
           }
         }
       }
       .scrollBar(BarState.Off)
       .allSize()
-      .onScroll(this.onScrollAction.bind(this))
+      .onScroll(() => {
+        this.onScrollAction()
+      })
       .align(Alignment.TopStart)
 
-      AddBtn({ clickAction: this.editTaskAction.bind(this) })
+      AddBtn({ clickAction: () => {
+        this.editTaskAction()
+      } })
       Row() {
-        Text($r('app.string.MainAbility_label'))
+        Text($r('app.string.EntryAbility_label'))
           .titleTextStyle()
           .fontSize($r('app.float.default_24'))
-          .padding({ left: commonConst.THOUSANDTH_66 })
+          .padding({ left: Const.THOUSANDTH_66 })
       }
-      .width(commonConst.THOUSANDTH_1000)
-      .height(commonConst.DEFAULT_56)
+      .width(Const.THOUSANDTH_1000)
+      .height(Const.DEFAULT_56)
       .position({ x: 0, y: 0 })
       .backgroundColor(`rgba(${WHITE_COLOR_0X},${WHITE_COLOR_0X},${WHITE_COLOR_0X},${this.naviAlpha})`)
 

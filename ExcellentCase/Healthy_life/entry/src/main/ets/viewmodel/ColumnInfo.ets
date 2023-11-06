@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License,Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,18 +12,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { CommonConstants as Const } from '../common/constants/CommonConstants';
 
-@Component
-export struct TitleBar {
-  build() {
-    Row() {
-      Text($r('app.string.achievement'))
-        .fontSize($r('app.float.default_24'))
-        .fontColor($r('app.color.white'))
-        .align(Alignment.Start)
-        .padding({left: Const.ACHIEVE_TITLE_BAR_LEFT,top: Const.ACHIEVE_TITLE_BAR_TOP})
-    }
-    .width(Const.FULL_WIDTH)
+/**
+ * Column Info.
+ *
+ */
+export default class ColumnInfo {
+  name: string;
+  type: string;
+  length?: number;
+  nullable?: boolean;
+  primary?: boolean;
+  autoincrement?: boolean;
+
+  constructor(name: string, type: string, length?: number, nullable?: boolean,
+              primary?: boolean, autoincrement?: boolean) {
+    this.name = name;
+    this.type = type;
+    this.primary = primary;
+    this.length = length;
+    this.nullable = nullable;
+    this.autoincrement = autoincrement;
   }
 }
+
+
