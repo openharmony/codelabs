@@ -14,13 +14,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -41,14 +41,11 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets               // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──AccountData.ets         // 账目类接口
-│  │  │  └──AccountItem.ets         // 账目资源类接口
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets     // 公共常量
 │  │  ├──database
@@ -67,7 +64,10 @@
 │  ├──view
 │  │  └──DialogComponent.ets        // 自定义弹窗
 │  └──viewmodel
-│     └──AccountList.ets            // 账目类型model
+│     ├──AccountData.ets            // 账目类接口
+│     ├──AccountItem.ets            // 账目资源类接口
+│     ├──AccountList.ets            // 账目类型model
+│     └──ConstantsInterface.ets     // 常量接口
 └──entry/src/main/resources         // 资源文件夹
 ```
 
@@ -78,7 +78,7 @@
 导入关系型数据库模块：
 
 ```typescript
-import data_rdb from '@ohos.data.rdb';
+import relationalStore from '@ohos.data.relationalStore';
 ```
 
 关系型数据库提供以下两个基本功能：
@@ -88,17 +88,19 @@ import data_rdb from '@ohos.data.rdb';
 首先要获取一个RdbStore实例来操作关系型数据库，代码如下：
 
 ```typescript
-getRdbStore(callback) {
+// Rdb.ets
+getRdbStore(callback: Function = () => {
+}) {
   // 如果已经获取到RdbStore则不做操作
-  if (this.rdbStore != null) {
-    Logger.verbose(`${RDB_TAG}`, 'The rdbStore exists.');
-    callback();
+  if (!callback || typeof callback == 'undefined' || callback == undefined) {
+    Logger.verbose(`${CommonConstants.RDB_TAG}`, 'getRdbStore() has no callback!');
     return;
   }
+  
 
   // 应用上下文，本Codelab使用API9 Stage模型的Context
   let context: Context = getContext(this) as Context;
-  data_rdb.getRdbStore(context, STORE_CONFIG, 1, (err, rdb) => {
+  relationalStore.getRdbStore(context, CommonConstants.STORE_CONFIG, (err, rdb) => {
     if (err) {
       Logger.error(`${RDB_TAG}`, 'gerRdbStore() failed, err: ' + err);
       return;
@@ -116,68 +118,101 @@ getRdbStore(callback) {
 关系型数据库接口提供的增、删、改、查操作均有callback和Promise两种异步回调方式，本Codelab使用了callback异步回调，其中插入数据使用了insert\(\)接口，实现代码如下：
 
 ```typescript
-insertData(data, callback) {
-  let resFlag: boolean = false;  // 用于记录插入是否成功的flag
-  const valueBucket = data;  // 存储键值对的类型，表示要插入到表中的数据行
-  this.rdbStore.insert(this.tableName, valueBucket, function (err, ret) {
-    if (err) {
-      Logger.error(`${RDB_TAG}`, 'insertData() failed, err: ' + err);
-      callback(resFlag);
-      return;
-    }
-    callback(!resFlag);
-  });
+// Rdb.ets
+insertData(data: relationalStore.ValuesBucket, callback: Function = () => {
+}) {
+  if (!callback || typeof callback == 'undefined' || callback == undefined) {
+    Logger.verbose(`${CommonConstants.RDB_TAG}`, 'insertData() has no callback!');
+    return;
+  }
+  let resFlag: boolean = false;
+  const valueBucket: relationalStore.ValuesBucket = data;
+  if (this.rdbStore) {
+    this.rdbStore.insert(this.tableName, valueBucket, (err, ret) => {
+      if (err) {
+        Logger.error(`${CommonConstants.RDB_TAG}`, 'insertData() failed, err: ' + err);
+        callback(resFlag);
+        return;
+      }
+      Logger.verbose(`${CommonConstants.RDB_TAG}`, 'insertData() finished: ' + ret);
+      callback(ret);
+    });
+  }
 }
 ```
 
 删除数据使用了delete\(\)接口，实现代码如下：
 
 ```typescript
-deleteData(predicates, callback) {
+// Rdb.ets
+deleteData(predicates: relationalStore.RdbPredicates, callback: Function = () => {
+}) {
+  if (!callback || typeof callback == 'undefined' || callback == undefined) {
+    Logger.verbose(`${CommonConstants.RDB_TAG}`, 'deleteData() has no callback!');
+    return;
+  }
   let resFlag: boolean = false;
-
-  // predicates表示待删除数据的操作条件
-  this.rdbStore.delete(predicates, function (err, ret) {
-    if (err) {
-      Logger.error(`${RDB_TAG}`, 'deleteData() failed, err: ' + err);
-      callback(resFlag);
-      return;
-    }
-    callback(!resFlag);
-  });
+  if (this.rdbStore) {
+    this.rdbStore.delete(predicates, (err, ret) => {
+      if (err) {
+        Logger.error(`${CommonConstants.RDB_TAG}`, 'deleteData() failed, err: ' + err);
+        callback(resFlag);
+        return;
+      }
+      Logger.verbose(`${CommonConstants.RDB_TAG}`, 'deleteData() finished: ' + ret);
+      callback(!resFlag);
+    });
+  }
 }
 ```
 
 更新数据使用了update\(\)接口，实现代码如下：
 
 ```typescript
-updateData(predicates, data, callback) {
+// Rdb.ets
+updateData(predicates: relationalStore.RdbPredicates, data: relationalStore.ValuesBucket, callback: Function = () => {
+}) {
+  if (!callback || typeof callback == 'undefined' || callback == undefined) {
+    Logger.verbose(`${CommonConstants.RDB_TAG}`, 'updateDate() has no callback!');
+    return;
+  }
   let resFlag: boolean = false;
-  const valueBucket = data;
-  this.rdbStore.update(valueBucket, predicates, function (err, ret) {
-    if (err) {
-      Logger.error(`${RDB_TAG}`, 'updateData() failed, err: ' + err);
-      callback(resFlag);
-      return;
-    }
-    callback(!resFlag);
-  });
+  const valueBucket: relationalStore.ValuesBucket = data;
+  if (this.rdbStore) {
+    this.rdbStore.update(valueBucket, predicates, (err, ret) => {
+      if (err) {
+        Logger.error(`${CommonConstants.RDB_TAG}`, 'updateData() failed, err: ' + err);
+        callback(resFlag);
+        return;
+      }
+      Logger.verbose(`${CommonConstants.RDB_TAG}`, 'updateData() finished: ' + ret);
+      callback(!resFlag);
+    });
+  }
 }
 ```
 
 查找数据使用了query\(\)接口，实现代码如下：
 
 ```typescript
-query(predicates, callback){
-  // columns表示要查询的列，如果为空则表示查询所有列
-  this.rdbStore.query(predicates, this.columns, function (err, resultSet) {
-    if (err) {
-      Logger.error(`${RDB_TAG}`, 'query() failed, err: ' + err);
-      return;
-    }
-    callback(resultSet);  // 如果查找成功则返回resultSet结果集
-    resultSet.close();  // 操作完成后关闭结果集
-  });
+// Rdb.ets
+query(predicates: relationalStore.RdbPredicates, callback: Function = () => {
+}) {
+  if (!callback || typeof callback == 'undefined' || callback == undefined) {
+    Logger.verbose(`${CommonConstants.RDB_TAG}`, 'query() has no callback!');
+    return;
+  }
+  if (this.rdbStore) {
+    this.rdbStore.query(predicates, this.columns, (err, resultSet) => {
+      if (err) {
+        Logger.error(`${CommonConstants.RDB_TAG}`, 'query() failed, err: ' + err);
+        return;
+      }
+      Logger.verbose(`${CommonConstants.RDB_TAG}`, 'query() finished.');
+      callback(resultSet);
+      resultSet.close();
+    });
+  }
 }
 ```
 
@@ -199,16 +234,17 @@ CREATE TABLE IF NOT EXISTS accountTable(
 该表需要封装增、删、改、查接口，代码如下：
 
 ```typescript
+// AccountTable.ets
 // 插入数据
-insertData(account: Account, callback) {
+insertData(account: AccountData, callback: Function) {
   // 根据输入数据创建待插入的数据行
-  const valueBucket = generateBucket(account);
+  const valueBucket: relationalStore.ValuesBucket = generateBucket(account);
   this.accountTable.insertData(valueBucket, callback);
 }
 
 // 删除数据
-deleteData(account: Account, callback) {
-  let predicates = new data_rdb.RdbPredicates(ACCOUNT_TABLE.tableName);
+deleteData(account: AccountData, callback: Function) {
+  let predicates = new relationalStore.RdbPredicates(CommonConstants.ACCOUNT_TABLE.tableName);
   
   // 根据id匹配待删除的数据行
   predicates.equalTo('id', account.id);
@@ -216,9 +252,9 @@ deleteData(account: Account, callback) {
 }
 
 // 修改数据
-updateData(account: Account, callback) {
-  const valueBucket = generateBucket(account);
-  let predicates = new data_rdb.RdbPredicates(ACCOUNT_TABLE.tableName);
+updateData(account: AccountData, callback: Function) {
+  const valueBucket: relationalStore.ValuesBucket = generateBucket(account);
+  let predicates = new relationalStore.RdbPredicates(CommonConstants.ACCOUNT_TABLE.tableName);
 
   // 根据id匹配待删除的数据行
   predicates.equalTo('id', account.id);
@@ -226,32 +262,30 @@ updateData(account: Account, callback) {
 }
 
 // 查找数据
-query(amount: number, callback, isAll: boolean = true){
-  let predicates = new data_rdb.RdbPredicates(ACCOUNT_TABLE.tableName);
-
-  // 是否查找全部数据
+query(amount: number, callback: Function, isAll: boolean = true) {
+  let predicates = new relationalStore.RdbPredicates(CommonConstants.ACCOUNT_TABLE.tableName);
   if (!isAll) {
-    predicates.equalTo('amount', amount);  // 根据金额匹配要查找的数据行
+    predicates.equalTo('amount', amount);
   }
-  this.accountTable.query(predicates, function(resultSet) {
-    let count = resultSet.rowCount;
-
-    // 查找结果为空则返回空数组，否则返回查找结果数组
+  this.accountTable.query(predicates, (resultSet: relationalStore.ResultSet) => {
+    let count: number = resultSet.rowCount;
     if (count === 0 || typeof count === 'string') {
-      Logger.verbose(`${TABLE_TAG}`， 'query no results!');
+      console.log(`${CommonConstants.TABLE_TAG}` + 'Query no results!');
       callback([]);
     } else {
       resultSet.goToFirstRow();
-      const result = [];
+      const result: AccountData[] = [];
       for (let i = 0; i < count; i++) {
-        let tmp = new Account(0, 0, '', 0);
+        let tmp: AccountData = { id: 0, accountType: 0, typeText: '', amount: 0 };
         tmp.id = resultSet.getDouble(resultSet.getColumnIndex('id'));
-        ...  // 省略赋值代码
+        tmp.accountType = resultSet.getDouble(resultSet.getColumnIndex('accountType'));
+        tmp.typeText = resultSet.getString(resultSet.getColumnIndex('typeText'));
+        tmp.amount = resultSet.getDouble(resultSet.getColumnIndex('amount'));
         result[i] = tmp;
         resultSet.goToNextRow();
       }
       callback(result);
-      }
+    }
   });
 }
 ```
@@ -265,9 +299,10 @@ query(amount: number, callback, isAll: boolean = true){
 在打开应用时，需要查询数据库中存储的账目并显示在主页面，因此生命周期函数aboutToAppear\(\)应写为：
 
 ```typescript
+// Mainpage.ets
 aboutToAppear() {
   this.AccountTable.getRdbStore(() => {  // 获取数据库
-    this.AccountTable.query(0, (result) => {  // 查询数据库中的全部账目
+    this.AccountTable.query(0, (result: AccountData[]) => {  // 查询数据库中的全部账目
       this.accounts = result;
     }, true);
   });
@@ -281,7 +316,8 @@ aboutToAppear() {
 可以选中需要删除的账目，点击下方“删除”图标后删除对应账目，对应代码如下：
 
 ```typescript
-.onClick(() => {
+// Mainpage.ets
+deleteListItem() {
   for (let i = 0; i < this.deleteList.length; i++) {  // 删除每一项选中的账目并更新页面上的账目清单
     let index = this.accounts.indexOf(this.deleteList[i]);
     this.accounts.splice(index, 1);
@@ -289,19 +325,20 @@ aboutToAppear() {
   }
   this.deleteList = [];
   this.isEdit = false;
-})
+}
 ```
 
 搜索栏在键入文本并回车时，实现搜索功能：
 
 ```typescript
-.onSubmit((val: string) => {
-  if (val === '') {  // 如果搜索栏为空，查找全部账目
-    this.AccountTable.query(0, (result) => {
+// Mainpage.ets
+.onSubmit((searchValue: string) => {
+  if (searchValue === '') {  // 如果搜索栏为空，查找全部账目
+    this.AccountTable.query(0, (result: AccountData[]) => {
       this.accounts = result;
     }, true);
   } else {
-    this.AccountTable.query(parseInt(val), (result) => {  // 查找金额为val的账目
+    this.AccountTable.query(Number(searchValue), (result: AccountData[]) => {  // 查找金额为val的账目
       this.accounts = result;
     }, false);
   }
@@ -311,9 +348,10 @@ aboutToAppear() {
 右下角的“添加”按钮可以打开一个自定义弹窗，并在弹窗里新建账目信息：
 
 ```typescript
+// Mainpage.ets
 .onClick(() => {
   this.isInsert = true;  // 插入模式
-  this.newAccount = new Account(0, 0, '', 0);
+  this.newAccount = { id: 0, accountType: 0, typeText: '', amount: 0 };
   this.dialogController.open();
 })
 ```
@@ -321,12 +359,17 @@ aboutToAppear() {
 点击账目清单中的某个账目，也可以打开自定义弹窗，并修改账目信息：
 
 ```typescript
-.onClick(() => {
+// Mainpage.ets
+selectListItem(item: AccountData) {
   this.isInsert = false;  // 编辑模式
   this.index = this.accounts.indexOf(item);
-  this.newAccount = new Account(item.id, item.accountType, item.typeText, item.amount);
-  this.dialogController.open();
-})
+  this.newAccount = {
+    id: item.id,
+    accountType: item.accountType,
+    typeText: item.typeText,
+    amount: item.amount
+  };
+}
 ```
 
 自定义弹窗由使用Tabs组件创建的账目类别、使用TextInput组件创建的输入栏和确定按钮组成，如下图所示：
@@ -336,10 +379,11 @@ aboutToAppear() {
 点击“确定”按钮会调用accept\(\)函数，根据isInsert的值来进行账目的添加或修改，代码如下：
 
 ```typescript
-accept(isInsert: boolean, newAccount: Account) {
+// Mainpage.ets
+accept(isInsert: boolean, newAccount: AccountData): void {
   if (isInsert) {  // 插入模式，往数据库插入一个新账目
-    Logger.verbose(`${INDEX_TAG}`, 'The account inserted is: ' + JSON.stringify(newAccount));
-    this.AccountTable.insertData(newAccount, (id) => {
+    Logger.verbose(`${CommonConstants.INDEX_TAG}`, 'The account inserted is: ' + JSON.stringify(newAccount));
+    this.AccountTable.insertData(newAccount, (id: number) => {
       newAccount.id = id;
       this.accounts.push(newAccount);
     });
