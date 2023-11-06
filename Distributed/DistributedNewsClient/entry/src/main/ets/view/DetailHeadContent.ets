@@ -15,7 +15,7 @@
 
 import router from '@ohos.router';
 import CommonConstants from '../common/constants/CommonConstants';
-import { NewsData } from '../common/bean/NewsData';
+import { NewsData } from '../viewmodel/NewsDataModel';
 
 @Extend(Text) function textStyle() {
   .fontSize($r('app.float.small_font_size'))
