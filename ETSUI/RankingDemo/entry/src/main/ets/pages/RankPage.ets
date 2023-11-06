@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
 
 import prompt from '@ohos.promptAction';
 import { RankViewModel } from '../viewmodel/RankViewModel';
-import { RankData } from '../common/bean/RankData';
+import { RankData } from '../viewmodel/RankData';
 import { ListHeaderComponent } from '../view/ListHeaderComponent';
 import { TitleComponent } from '../view/TitleComponent';
 import { ListItemComponent } from '../view/ListItemComponent';
@@ -39,12 +39,11 @@ struct RankPage {
   }
 
   onBackPress() {
-    let options = {
-      message: $r('app.string.prompt_text'),
-      duration: TIME
-    }
     if (this.isShowToast()) {
-      prompt.showToast(options);
+      prompt.showToast({
+        message: $r('app.string.prompt_text'),
+        duration: TIME
+      });
       this.clickBackTimeRecord = new Date().getTime();
       return true;
     }
@@ -67,10 +66,10 @@ struct RankPage {
         },
         widthValue: Style.CONTENT_WIDTH
       })
-        .margin({
-          top: Style.HEADER_MARGIN_TOP,
-          bottom: Style.HEADER_MARGIN_BOTTOM
-        })
+      .margin({
+        top: Style.HEADER_MARGIN_TOP,
+        bottom: Style.HEADER_MARGIN_BOTTOM
+      })
       // The style of List component.
       this.RankList(Style.CONTENT_WIDTH)
     }
@@ -83,13 +82,13 @@ struct RankPage {
     Column() {
       List() {
         ForEach(this.isSwitchDataSource ? this.dataSource1 : this.dataSource2,
-          (item, index) => {
+          (item: RankData, index?: number) => {
             ListItem() {
-              ListItemComponent({ index: index + 1, name: item.name, vote: item.vote,
+              ListItemComponent({ index: (Number(index) + 1), name: item.name, vote: item.vote,
                 isSwitchDataSource: this.isSwitchDataSource
               })
             }
-          }, item => JSON.stringify(item))
+          }, (item: RankData) => JSON.stringify(item))
       }
       .width(WEIGHT)
       .height(Style.LIST_HEIGHT)
@@ -105,4 +104,3 @@ struct RankPage {
     .backgroundColor(Color.White)
   }
 }
-

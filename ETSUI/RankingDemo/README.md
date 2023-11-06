@@ -1,6 +1,6 @@
 # ArkTS基础知识（ArkTS）
 ## 介绍
-本课程使用声明式语法和组件化基础知识，搭建一个可刷新的排行榜页面。在排行榜页面中，使用循环渲染控制语法来实现列表数据渲染，使用@Builder创建排行列表布局内容，使用装饰器@State、@Prop、@Link来管理组件状态。最后我们点击系统返回按键，来学习自定义组件生命周期函数。完成效果如下图所示：
+本课程使用声明式语法和组件化基础知识，搭建一个可刷新的排行榜页面。在排行榜页面中，使用循环渲染控制语法来实现列表数据渲染，使用@Builder创建排行列表布局内容，使用装饰器@State、@Prop、@Link来管理组件状态。最后我们点击系统返回按键，来学习自定义组件生命周期函数。效果如图所示：
 
 ![](figures/gif320.gif)
 
@@ -37,13 +37,13 @@ ForEach(
 -   [@Link](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-link.md)装饰的变量可以和父组件的@State变量建立双向数据绑定，需要注意的是：@Link变量不能在组件内部进行初始化。
 -   [@Builder](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-builder.md)装饰的方法用于定义组件的声明式UI描述，在一个自定义组件内快速生成多个布局内容。
 
-@State、@Prop、@Link三者关系如下图所示：
+@State、@Prop、@Link三者关系如图所示：
 
 ![](figures/image5.png)
 
 3.组件生命周期函数：
 
-[自定义组件的生命周期函数](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/ui/js-framework-lifecycle.md)用于通知用户该自定义组件的生命周期，这些回调函数是私有的，在运行时由开发框架在特定的时间进行调用，不能从应用程序中手动调用这些回调函数。 右图是自定义组件生命周期的简化图示：
+[自定义组件的生命周期函数](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-page-custom-components-lifecycle.md)用于通知用户该自定义组件的生命周期，这些回调函数是私有的，在运行时由开发框架在特定的时间进行调用，不能从应用程序中手动调用这些回调函数。 右图是自定义组件生命周期的简化图示：
 
 ![](figures/image6.png)
 
@@ -54,13 +54,13 @@ ForEach(
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -79,13 +79,10 @@ ForEach(
     2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 ## 代码结构解读
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
-
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 ```
 ├──entry/src/main/ets               // 代码区    
 │  ├──common                        // 公共文件目录
-│  │  ├──bean                       
-│  │  │  └──RankData.ets            // 实体类
 │  │  └──constants                  
 │  │     └──Constants.ets           // 常量
 │  ├──entryability
@@ -98,15 +95,17 @@ ForEach(
 │  │  ├──ListHeaderComponent.ets
 │  │  ├──ListItemComponent.ets
 │  │  └──TitleComponent.ets
-│  └──viewmodel                     
-│     └──RankViewModel.ets         // 视图业务逻辑类
-└──entry/src/main/resources	       // 资源文件目录
+│  └──viewmodel         
+│     ├──RankData.ets               // 实体类            
+│     └──RankViewModel.ets          // 视图业务逻辑类
+└──entry/src/main/resources         // 资源文件目录
 ```
 ## 使用@Link封装标题组件
 
 在TitleComponent文件中，首先使用struct对象创建自定义组件，然后使用@Link修饰器管理TitleComponent组件内的状态变量isRefreshData，状态变量isRefreshData值发生改变后，通过@Link装饰器通知页面刷新List中的数据。代码如下：
 
 ```typescript
+// TitleComponent.ets
 ...
 @Component
 export struct TitleComponent {
@@ -133,7 +132,7 @@ export struct TitleComponent {
 }
 ```
 
-实现效果如下：
+效果如图所示：
 
 ![](figures/titlebar.png)
 
@@ -142,11 +141,12 @@ export struct TitleComponent {
 在ListHeaderComponent文件中，我们使用常规成员变量来设置自定义组件ListHeaderComponent的widthValue和paddingValue，代码如下：
 
 ```typescript
+// ListHeaderComponent.ets
 ...
 @Component
 export struct ListHeaderComponent {
-  paddingValue: Padding | Length;
-  widthValue: Length;
+  paddingValue: Padding | Length = 0;
+  widthValue: Length = 0;
 
   build() {
     Row() {
@@ -172,7 +172,7 @@ export struct ListHeaderComponent {
 }
 ```
 
-实现效果如下：
+效果如图所示：
 
 ![](figures/image3.png)
 
@@ -183,13 +183,14 @@ export struct ListHeaderComponent {
 在代码中，我们使用@State管理ListItemComponent中的 isChange 状态，当用户点击ListItemComponent时，ListItemComponent组件中的文本颜色发生变化。我们使用条件渲染控制语句，创建的圆型文本组件。
 
 ```typescript
+// ListItemComponent.ets
 ...
 @Component
 export struct ListItemComponent {
-  index: number;
-  private name: Resource;
-  @Prop vote: string;
-  @Prop isSwitchDataSource: boolean;
+  index?: number;
+  private name?: Resource;
+  @Prop vote: string = '';
+  @Prop isSwitchDataSource: boolean = false;
   // 判断是否改变ListItemComponent字体颜色
   @State isChange: boolean = false;
 
@@ -197,9 +198,11 @@ export struct ListItemComponent {
     Row() {
       Column() {
         if (this.isRenderCircleText()) {
-          this.CircleText(this.index);
+          if (this.index !== undefined) {
+            this.CircleText(this.index);
+          }
         } else {
-          Text(this.index.toString())
+          Text(this.index?.toString())
             .lineHeight(ItemStyle.TEXT_LAYOUT_SIZE)
             .textAlign(TextAlign.Center)
             .width(ItemStyle.TEXT_LAYOUT_SIZE)
@@ -241,6 +244,7 @@ export struct ListItemComponent {
 为了简化代码，提高代码的可读性，我们使用@Builder描述排行列表布局内容，使用循环渲染组件ForEach创建ListItem。代码如下：
 
 ```typescript
+// RankPage.ets
 ...
   build() {
     Column() {
@@ -248,11 +252,16 @@ export struct ListItemComponent {
       TitleComponent({ isRefreshData: $isSwitchDataSource, title: TITLE })
       // 列表头部样式
       ListHeaderComponent({
-        paddingValue: { left: Style.RANK_PADDING,
-          right: Style.RANK_PADDING },
+        paddingValue: {
+          left: Style.RANK_PADDING,
+          right: Style.RANK_PADDING
+        },
         widthValue: Style.CONTENT_WIDTH
-      }).margin({ top: Style.HEADER_MARGIN_TOP,
-        bottom: Style.HEADER_MARGIN_BOTTOM })
+      })
+      .margin({
+        top: Style.HEADER_MARGIN_TOP,
+        bottom: Style.HEADER_MARGIN_BOTTOM
+      })
       // 列表区域
       this.RankList(Style.CONTENT_WIDTH)
     }
@@ -265,20 +274,22 @@ export struct ListItemComponent {
     Column() {
       List() {
         ForEach(this.isSwitchDataSource ? this.dataSource1 : this.dataSource2,
-          (item, index) => {
+          (item: RankData, index?: number) => {
             ListItem() {
-              ListItemComponent({ index: index + 1, name: item.name, vote: item.vote,
+              ListItemComponent({ index: (Number(index) + 1), name: item.name, vote: item.vote,
                 isSwitchDataSource: this.isSwitchDataSource
               })
             }
-          }, (item, index) => item.id)
+          }, (item: RankData) => JSON.stringify(item))
       }
       .width(WEIGHT)
       .height(Style.LIST_HEIGHT)
       .divider({ strokeWidth: Style.STROKE_WIDTH })
     }
-    .padding({ left: Style.RANK_PADDING,
-      right: Style.RANK_PADDING })
+    .padding({
+      left: Style.RANK_PADDING,
+      right: Style.RANK_PADDING
+    })
     .borderRadius(Style.BORDER_RADIUS)
     .width(widthValue)
     .alignItems(HorizontalAlign.Center)
@@ -287,7 +298,7 @@ export struct ListItemComponent {
 ...
 ```
 
-布局效果如下：
+效果如图所示：
 
 ![](figures/image1.png)
 
@@ -296,6 +307,7 @@ export struct ListItemComponent {
 我们通过点击系统导航返回按钮来演示onBackPress回调方法的使用，在指定的时间段内，如果满足退出条件，onBackPress将返回false，系统默认关闭当前页面。否则，提示用户需要再点击一次才能退出，同时onBackPress返回true，表示用户自己处理导航返回事件。代码如下：
 
 ```typescript
+// RankPage.ets
 ... 
 @Entry
 @Component
@@ -303,7 +315,10 @@ struct RankPage {
   ...
   onBackPress() {
     if (this.isShowToast()) {
-      prompt.showToast({ message: $r('app.string.prompt_text'), duration: TIME });
+      prompt.showToast({
+        message: $r('app.string.prompt_text'),
+        duration: TIME
+      });
       this.clickBackTimeRecord = new Date().getTime();
       return true;
     }
@@ -322,10 +337,3 @@ struct RankPage {
 4. 自定义组件生命周期函数onBackPress的调用。
 
 ![](figures/finished.gif)
-
-
-
-
-
-
-
