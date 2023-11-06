@@ -34,7 +34,7 @@ export default class Position {
    */
   positionY: number;
 
-  constructor(isFirstPosition: boolean, isEndPosition, positionX: number, positionY: number) {
+  constructor(isFirstPosition: boolean, isEndPosition: boolean, positionX: number, positionY: number) {
     this.isFirstPosition = isFirstPosition;
     this.isEndPosition = isEndPosition;
     this.positionX = positionX;

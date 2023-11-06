@@ -17,15 +17,21 @@ import deviceManager from '@ohos.distributedHardware.deviceManager';
 import common from '@ohos.app.ability.common';
 import Want from '@ohos.app.ability.Want';
 import CommonConstants from '../constants/CommonConstants';
-import Position from '../bean/Position';
+import { DeviceInfoInterface, AuthExtraInfoInterface } from '../constants/CommonConstants';
+import Position from '../../viewmodel/Position';
 import Logger from './Logger';
 
-class RemoteDeviceModel {
-  private static dmInstance: RemoteDeviceModel = null;
-  private myDeviceManager: deviceManager.DeviceManager = null;
+interface RejectError {
+  code: number;
+  message: string;
+}
+
+class RemoteDeviceUtil {
+  private static dmInstance: RemoteDeviceUtil | undefined = undefined;
+  private myDeviceManager?: deviceManager.DeviceManager;
+  private localDevice?: deviceManager.DeviceInfo;
   private deviceList: deviceManager.DeviceInfo[] = [];
   private trustedDeviceList: deviceManager.DeviceInfo[] = [];
-  private localDevice: deviceManager.DeviceInfo = null;
   private discoverList: deviceManager.DeviceInfo[] = [];
   private subscribeId: number = Math.floor(CommonConstants.SUBSCRIBE_ID_RANGE * Math.random());
 
@@ -34,42 +40,43 @@ class RemoteDeviceModel {
    *
    * @returns Class instance.
    */
-  static getInstance(): RemoteDeviceModel {
-    if (this.dmInstance === null) {
-      this.dmInstance = new RemoteDeviceModel();
+  static getInstance(): RemoteDeviceUtil {
+    if (RemoteDeviceUtil.dmInstance === undefined) {
+      RemoteDeviceUtil.dmInstance = new RemoteDeviceUtil();
     }
-    return this.dmInstance;
+    return RemoteDeviceUtil.dmInstance;
   }
 
   /**
    * Create a device manager.
    */
   async createDeviceManager() {
-    if (this.myDeviceManager !== null) {
+    if (this.myDeviceManager !== undefined) {
       Logger.info('RemoteDeviceModel', 'createDeviceManager myDeviceManager exist');
       return;
     }
 
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve: (value: Object | PromiseLike<Object>) => void, reject: ((reason?: RejectError) => void)) => {
       try {
-        deviceManager.createDeviceManager(CommonConstants.BUNDLE_NAME, (error, value) => {
-          if (error) {
-            reject(error);
-            Logger.error('RemoteDeviceModel',
-              `createDeviceManager failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
-            return;
-          }
-          this.myDeviceManager = value;
-          // Registered trusted device online and offline listening.
-          this.registerDeviceStateListener();
-          this.getLocalDeviceInfo();
-          this.getTrustedDeviceList();
-          this.initDeviceList();
-          resolve(value);
-        });
+        deviceManager.createDeviceManager(CommonConstants.BUNDLE_NAME,
+          (error, value: deviceManager.DeviceManager) => {
+            if (error) {
+              reject(error);
+              Logger.error('RemoteDeviceModel',
+                `createDeviceManager failed, error=${JSON.stringify(error)}`);
+              return;
+            }
+            this.myDeviceManager = value;
+            // Registered trusted device online and offline listening.
+            this.registerDeviceStateListener();
+            this.getLocalDeviceInfo();
+            this.getTrustedDeviceList();
+            this.initDeviceList();
+            resolve(value);
+          });
       } catch (error) {
         Logger.error('RemoteDeviceModel',
-          `createDeviceManager failed, error code=${error.code}, msg=${JSON.stringify(error.message)}`);
+          `createDeviceManager failed, error=${JSON.stringify(error)}`);
       }
     });
   }
@@ -78,7 +85,7 @@ class RemoteDeviceModel {
    * Obtains local device information.
    */
   getLocalDeviceInfo(): void {
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'getLocalDeviceInfo deviceManager has not initialized');
       return;
     }
@@ -88,7 +95,7 @@ class RemoteDeviceModel {
       this.localDevice.deviceName = CommonConstants.LOCALHOST_NAME;
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `getLocalDeviceInfo failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `getLocalDeviceInfo failed, error=${JSON.stringify(error)}`);
     }
   }
 
@@ -96,7 +103,7 @@ class RemoteDeviceModel {
    * Obtain the list of trusted devices.
    */
   getTrustedDeviceList(): void {
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'getTrustedDeviceList deviceManager has not initialized');
       return;
     }
@@ -105,7 +112,7 @@ class RemoteDeviceModel {
       this.trustedDeviceList = this.myDeviceManager.getTrustedDeviceListSync();
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `getTrustedDeviceList failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `getTrustedDeviceList failed error=${JSON.stringify(error)}`);
     }
   }
 
@@ -114,7 +121,9 @@ class RemoteDeviceModel {
    */
   initDeviceList(): void {
     this.deviceList = [];
-    this.addToDeviceList(this.localDevice)
+    if (this.localDevice !== undefined) {
+      this.addToDeviceList(this.localDevice)
+    }
     this.trustedDeviceList.forEach((item: deviceManager.DeviceInfo) => {
       this.addToDeviceList(item);
     })
@@ -124,7 +133,7 @@ class RemoteDeviceModel {
    * Register the device status listener.
    */
   registerDeviceStateListener(): void {
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'registerDeviceStateListener deviceManager has not initialized');
       return;
     }
@@ -151,7 +160,7 @@ class RemoteDeviceModel {
       });
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `registerDeviceStateListener on('deviceStateChange') failed, code=${error.code}, msg=${error.message}`);
+        `registerDeviceStateListener on('deviceStateChange') failed, error=${JSON.stringify(error)}`);
     }
   }
 
@@ -186,7 +195,7 @@ class RemoteDeviceModel {
    * Disabling the listening event.
    */
   unregisterDeviceListCallback(): void {
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'unregisterDeviceListCallback deviceManager has not initialized');
       return;
     }
@@ -196,7 +205,7 @@ class RemoteDeviceModel {
       this.myDeviceManager.release();
     } catch (err) {
       Logger.error('RemoteDeviceModel',
-        `unregisterDeviceListCallback stopDeviceDiscovery failed, code=${err.code}, msg=${err.message}`);
+        `unregisterDeviceListCallback stopDeviceDiscovery failed, error=${JSON.stringify(err)}`);
     }
   }
 
@@ -218,23 +227,23 @@ class RemoteDeviceModel {
       return;
     }
 
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'authenticateDevice deviceManager has not initialized');
       return;
     }
 
-    let extraInfo = {
-      'targetPkgName': context.abilityInfo.bundleName,
-      'appName': context.abilityInfo.applicationInfo.name,
-      'appDescription': CommonConstants.APP_DESCRIPTION,
-      'business': CommonConstants.BUSINESS_TYPE
+    let extraInfo: AuthExtraInfoInterface = {
+      targetPkgName: context.abilityInfo.bundleName,
+      appName: context.abilityInfo.applicationInfo.name,
+      appDescription: CommonConstants.APP_DESCRIPTION,
+      business: CommonConstants.BUSINESS_TYPE
     };
     let authParam: deviceManager.AuthParam = {
       'authType': CommonConstants.AUTH_TYPE,
       'extraInfo': extraInfo
     };
     try {
-      this.myDeviceManager.authenticateDevice(device, authParam, (err, data) => {
+      this.myDeviceManager.authenticateDevice(device, authParam, (err) => {
         if (err) {
           Logger.error('RemoteDeviceModel',
             `authenticateDevice error code=${err.code}, msg=${JSON.stringify(err.message)}`);
@@ -243,7 +252,7 @@ class RemoteDeviceModel {
       })
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `authenticateDevice failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `authenticateDevice failed error=${JSON.stringify(error)}`);
     }
   }
 
@@ -266,8 +275,8 @@ class RemoteDeviceModel {
 
     context.startAbility(wantValue).then(() => {
       Logger.info('RemoteDeviceModel', `startAbility finished wantValue=${JSON.stringify(wantValue)}`);
-    }).catch((error) => {
-      Logger.error('RemoteDeviceModel', `startAbility failed,code=${error.code},msg=${JSON.stringify(error.message)}`);
+    }).catch((error: Error) => {
+      Logger.error('RemoteDeviceModel', `startAbility failed, error=${JSON.stringify(error)}`);
     })
   }
 
@@ -276,7 +285,7 @@ class RemoteDeviceModel {
    *
    * @param data Device information.
    */
-  deviceFound(data): void {
+  deviceFound(data: DeviceInfoInterface): void {
     for (let i: number = 0; i < this.discoverList.length; i++) {
       if (this.discoverList[i].deviceId === data.device.deviceId) {
         Logger.info('RemoteDeviceModel', `deviceFound device exist=${JSON.stringify(data)}`);
@@ -293,7 +302,7 @@ class RemoteDeviceModel {
   startDeviceDiscovery(): void {
     this.discoverList = [];
     this.initDeviceList();
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'startDeviceDiscovery deviceManager has not initialized');
       return;
     }
@@ -326,7 +335,7 @@ class RemoteDeviceModel {
       this.myDeviceManager.startDeviceDiscovery(info);
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `startDeviceDiscovery failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `startDeviceDiscovery failed error=${JSON.stringify(error)}`);
     }
   }
 
@@ -334,7 +343,7 @@ class RemoteDeviceModel {
    * Stop discovering devices.
    */
   stopDeviceDiscovery(): void {
-    if (this.myDeviceManager === null) {
+    if (this.myDeviceManager === undefined) {
       Logger.error('RemoteDeviceModel', 'stopDeviceDiscovery deviceManager has not initialized');
       return;
     }
@@ -345,7 +354,7 @@ class RemoteDeviceModel {
       this.myDeviceManager.off('discoverFail');
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `stopDeviceDiscovery failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `stopDeviceDiscovery failed error=${JSON.stringify(error)}`);
     }
   }
 
@@ -386,4 +395,4 @@ class RemoteDeviceModel {
   }
 }
 
-export default RemoteDeviceModel.getInstance();
+export default RemoteDeviceUtil.getInstance();

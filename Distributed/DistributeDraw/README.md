@@ -4,58 +4,58 @@
 
 本篇Codelab使用设备管理及分布式键值数据库能力，实现多设备之间手写板应用拉起及同步书写内容的功能。操作流程：
 
-1.  设备连接同一无线网络，安装分布式手写板应用。进入应用，点击允许使用多设备协同，点击主页上查询设备按钮，显示附近设备。
-2.  选择设备确认，若已建立连接，启动对方设备上的手写板应用，否则提示建立连接。输入PIN码建立连接后再次点击查询设备按钮，选择设备提交，启动对方设备应用。
-3.  建立连接前绘制的内容在启动对方设备后同步，此时设备上绘制的内容会在另一端同步绘制。
-4.  点击撤销按钮，两侧设备绘制内容同步撤销。
+1. 设备连接同一无线网络，安装分布式手写板应用。进入应用，点击允许使用多设备协同，点击主页上查询设备按钮，显示附近设备。
+2. 选择设备确认，若已建立连接，启动对方设备上的手写板应用，否则提示建立连接。输入PIN码建立连接后再次点击查询设备按钮，选择设备提交，启动对方设备应用。
+3. 建立连接前绘制的内容在启动对方设备后同步，此时设备上绘制的内容会在另一端同步绘制。
+4. 点击撤销按钮，两侧设备绘制内容同步撤销。
 
 ![](figures/zh-cn_image_0000001569348576.gif)
 
 ### 相关概念
 
--   [设备管理](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-device-manager.md)：模块提供分布式设备管理能力。
--   [分布式键值数据库](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-distributedKVStore.md)：分布式键值数据库为应用程序提供不同设备间数据库的分布式协同能力。
+- [设备管理](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-device-manager.md)：模块提供分布式设备管理能力。
+- [分布式键值数据库](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-distributedKVStore.md)：分布式键值数据库为应用程序提供不同设备间数据库的分布式协同能力。
 
 ### 相关权限
 
 本篇Codelab使用了设备管理及分布式键值数据库能力，需要手动替换full-SDK，并在配置文件module.json5文件requestPermissions属性中添加如下权限：
 
--   [分布式设备认证组网权限](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/permission-list.md#ohospermissionaccess_service_dm)：ohos.permission.ACCESS\_SERVICE\_DM。
--   [设备间的数据交换权限](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/permission-list.md#ohospermissiondistributed_datasync)：ohos.permission.DISTRIBUTED\_DATASYNC。
+- [分布式设备认证组网权限](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/permission-list.md#ohospermissionaccess_service_dm)：ohos.permission.ACCESS\_SERVICE\_DM。
+- [设备间的数据交换权限](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/permission-list.md#ohospermissiondistributed_datasync)：ohos.permission.DISTRIBUTED\_DATASYNC。
 
 ### 约束与限制
 
-1.  本篇Codelab部分能力依赖于系统API，需下载full-SDK并替换DevEco Studio自动下载的public-SDK。具体操作可参考指南[《如何替换full-SDK》](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/faqs/full-sdk-switch-guide.md)。
-2.  本篇Codelab使用的部分API仅系统应用可用，需要提升应用等级。具体可参考指南[《访问控制授权申请指导》](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-overview.md#%E5%BA%94%E7%94%A8apl%E7%AD%89%E7%BA%A7%E8%AF%B4%E6%98%8E)。
+1. 本篇Codelab部分能力依赖于系统API，需下载full-SDK并替换DevEco Studio自动下载的public-SDK。具体操作可参考指南[《如何替换full-SDK》](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/faqs/full-sdk-switch-guide.md)。
+2. 本篇Codelab使用的部分API仅系统应用可用，需要提升应用等级。具体可参考指南[《访问控制授权申请指导》](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-overview.md#%E5%BA%94%E7%94%A8apl%E7%AD%89%E7%BA%A7%E8%AF%B4%E6%98%8E)。
 
 ## 环境搭建
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 10及以上版本。
+- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 4.0 Beta2。
+- OpenHarmony SDK版本：API version 10。
 
 ### 硬件要求
 
--   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：4.0 Beta1及以上版本。
+- 开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
+- OpenHarmony系统：4.0 Release。
 
 ### 环境搭建
 
 完成本篇Codelab我们首先要完成开发环境的搭建，本示例以**RK3568**开发板为例，参照以下步骤进行：
 
-1.  [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以4.0 Beta1版本为例：
+1. [获取OpenHarmony系统版本](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以4.0 Release版本为例：
 
     ![](figures/zh-cn_image_0000001621561354.png)
 
-2.  搭建烧录环境。
-    1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
-    2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
+2. 搭建烧录环境。
+    1. [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
+    2. [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
-3.  搭建开发环境。
-    1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-    2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建arkts工程)创建工程（模板选择“Empty Ability”）。
-    3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
+3. 搭建开发环境。
+    1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+    2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建arkts工程)创建工程（模板选择“Empty Ability”）。
+    3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
 
@@ -64,8 +64,6 @@
 ```
 ├──entry/src/main/ets                 // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──Position.ets              // 绘制位置信息类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets       // 公共常量类
 │  │  └──utils
@@ -78,7 +76,8 @@
 │  ├──view
 │  │  └──CustomDialogComponent.ets    // 自定义弹窗组件类
 │  └──viewmodel
-│     └──KvStoreModel.ets             // 分布式键值数据库管理类
+│     ├──KvStoreModel.ets             // 分布式键值数据库管理类
+│     └──Position.ets                 // 绘制位置信息类
 └──entry/src/main/resources           // 资源文件目录
 ```
 
@@ -90,7 +89,7 @@
 
 ``` typescript
 // Index.ets
-let storage = LocalStorage.GetShared();
+let storage = LocalStorage.getShared();
 @Entry(storage)
 @Component
 struct Index {
@@ -102,11 +101,13 @@ struct Index {
         Image($r('app.media.ic_back'))
           .width($r('app.float.ic_back_width'))
           .height($r('app.float.ic_back_height'))
+          ...
         Blank()
         // 查找设备按钮
         Image($r('app.media.ic_hop'))
           .width($r('app.float.ic_hop_width'))
           .height($r('app.float.ic_hop_height'))
+          ...
       }
       .width(CommonConstants.FULL_PERCENT)
       .height(CommonConstants.TITLE_HEIGHT)
@@ -116,7 +117,9 @@ struct Index {
         Canvas(this.canvasContext)
           .width(CommonConstants.FULL_PERCENT)
           .height(CommonConstants.FULL_PERCENT)
+          ...
       }
+      ...
       .width(CommonConstants.FULL_PERCENT)
       .layoutWeight(CommonConstants.NUMBER_ONE)
     }
@@ -134,32 +137,33 @@ struct Index {
 创建设备管理器。设备管理器创建完成后注册设备上线离线监听，信任设备上线离线时触发。执行获取本地设备信息，获取信任设备列表，初始化展示设备列表等方法。其中deviceManager类需使用full-SDK。
 
 ``` typescript
-// RemoteDeviceModel.ets
+// RemoteDeviceUtil.ets
 import deviceManager from '@ohos.distributedHardware.deviceManager';
 
-class RemoteDeviceModel {
+class RemoteDeviceUtil {
   ...
-  async createDeviceManager(): Promise<void> {
+  async createDeviceManager() {
     ...
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve: (value: Object | PromiseLike<Object>) => void, reject: ((reason?: RejectError) => void)) => {
       try {
         // 创建设备管理器
-        deviceManager.createDeviceManager(CommonConstants.BUNDLE_NAME, (error, value) => {
-          ...
-          this.myDeviceManager = value;
-          // 注册信任设备上线离线监听
-          this.registerDeviceStateListener();
-          // 获取本地设备信息
-          this.getLocalDeviceInfo();
-          // 获取信任设备列表
-          this.getTrustedDeviceList();
-          // 初始化展示设备列表
-          this.initDeviceList();
-          resolve();
+        deviceManager.createDeviceManager(CommonConstants.BUNDLE_NAME,
+          (error, value: deviceManager.DeviceManager) => {
+            ...
+            this.myDeviceManager = value;
+            // 注册信任设备上线离线监听
+            this.registerDeviceStateListener();
+            // 获取本地设备信息
+            this.getLocalDeviceInfo();
+            // 获取信任设备列表
+            this.getTrustedDeviceList();
+            // 初始化展示设备列表
+            this.initDeviceList();
+            resolve(value);
         });
       } catch (error) {
         Logger.error('RemoteDeviceModel',
-          `createDeviceManager failed, error code=${error.code}, msg=${JSON.stringify(error.message)}`);
+          `createDeviceManager failed, error=${JSON.stringify(error)}`);
       }
     });
   }
@@ -170,8 +174,8 @@ class RemoteDeviceModel {
 注册设备状态监听。已验证设备上线或有新设备验证通过时状态类型为ONLINE，将设备添加至信任设备列表。设备离线时状态类型为OFFLINE，将设备从信任列表中移除。
 
 ``` typescript
-// RemoteDeviceModel.ets
-class RemoteDeviceModel {
+// RemoteDeviceUtil.ets
+class RemoteDeviceUtil {
   ...
   // 注册设备状态改变监听
   registerDeviceStateListener(): void {
@@ -196,7 +200,7 @@ class RemoteDeviceModel {
       });
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `registerDeviceStateListener on('deviceStateChange') failed, code=${error.code}, msg=${error.message}`);
+        `registerDeviceStateListener on('deviceStateChange') failed, error=${JSON.stringify(error)}`);
     }
   }
 
@@ -229,29 +233,11 @@ class RemoteDeviceModel {
 ![](figures/zh-cn_image_0000001635987786.png)
 
 ``` typescript
-// RemoteDeviceModel.ets
-class RemoteDeviceModel {
+// RemoteDeviceUtil.ets
+class RemoteDeviceUtil {
   ...
-  startDeviceDiscovery(): void {
-    ...
-    try {
-      // 注册发现设备监听
-      this.myDeviceManager.on('deviceFound', (data) => {
-        ...
-        // 处理发现的设备
-        this.deviceFound(data);
-      });
-      ...
-      // 发现周边设备
-      this.myDeviceManager.startDeviceDiscovery(info);
-    } catch (error) {
-      Logger.error('RemoteDeviceModel',
-        `startDeviceDiscovery failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
-    }
-  }
-
   // 处理新发现的设备
-  deviceFound(data): void {
+  deviceFound(data: DeviceInfoInterface): void {
     for (let i: number = 0; i < this.discoverList.length; i++) {
       if (this.discoverList[i].deviceId === data.device.deviceId) {
         Logger.info('RemoteDeviceModel', `deviceFound device exist=${JSON.stringify(data)}`);
@@ -262,6 +248,33 @@ class RemoteDeviceModel {
     this.addToDeviceList(data.device);
   }
 
+  startDeviceDiscovery(): void {
+    ...
+    try {
+      // 注册发现设备监听
+      this.myDeviceManager.on('deviceFound', (data) => {
+        ...
+        // 处理发现的设备
+        this.deviceFound(data);
+      });
+      ...
+      let info: deviceManager.SubscribeInfo = {
+        subscribeId: this.subscribeId,
+        mode: CommonConstants.SUBSCRIBE_MODE,
+        medium: CommonConstants.SUBSCRIBE_MEDIUM,
+        freq: CommonConstants.SUBSCRIBE_FREQ,
+        isSameAccount: false,
+        isWakeRemote: true,
+        capability: CommonConstants.SUBSCRIBE_CAPABILITY
+      };
+      // 发现周边设备
+      this.myDeviceManager.startDeviceDiscovery(info);
+    } catch (error) {
+      Logger.error('RemoteDeviceModel',
+        `startDeviceDiscovery failed error=${JSON.stringify(error)}`);
+    }
+  }
+
   // 停止发现设备
   stopDeviceDiscovery(): void {
     ...
@@ -270,13 +283,15 @@ class RemoteDeviceModel {
       this.myDeviceManager.stopDeviceDiscovery(this.subscribeId);
       // 注销监听任务
       this.myDeviceManager.off('deviceFound');
+      this.myDeviceManager.off('discoverFail');
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `stopDeviceDiscovery failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `stopDeviceDiscovery failed error=${JSON.stringify(error)}`);
     }
   }
   ...
 }
+
 ```
 
 选择弹窗内的设备项提交后，执行设备验证。
@@ -285,11 +300,15 @@ class RemoteDeviceModel {
 2. 若设备不是信任设备，执行authenticateDevice()方法启动验证。此时连接设备提示是否接受，接收连接后连接设备展示PIN码，本地设备输入PIN码确认后连接成功。再次点击查询设备按钮，选择已连接设备，点击确认启动连接设备上的应用。
 
 ``` typescript
-// RemoteDeviceModel.ets
-class RemoteDeviceModel {
+// RemoteDeviceUtil.ets
+class RemoteDeviceUtil {
   ...
   // 设备验证
-  authenticateDevice(context: common.UIAbilityContext, device: deviceManager.DeviceInfo, positionList: Position[]): void {
+  authenticateDevice(
+    context: common.UIAbilityContext,
+    device: deviceManager.DeviceInfo,
+    positionList: Position[]
+  ): void {
     // 设备为信任设备，启动连接设备上的应用
     let tmpList = this.trustedDeviceList.filter((item: deviceManager.DeviceInfo) => device.deviceId === item.deviceId);
     if (tmpList.length > 0) {
@@ -299,12 +318,12 @@ class RemoteDeviceModel {
     ...
     try {
       // 执行设备认证，启动验证相关弹窗，接受信任，显示PIN码，输入PIN码等
-      this.myDeviceManager.authenticateDevice(device, authParam, (err, data) => {
+      this.myDeviceManager.authenticateDevice(device, authParam, (err) => {
         ...
       })
     } catch (error) {
       Logger.error('RemoteDeviceModel',
-        `authenticateDevice failed code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `authenticateDevice failed error=${JSON.stringify(error)}`);
     }
   }
 
@@ -314,8 +333,8 @@ class RemoteDeviceModel {
     // 启动连接设备上的应用
     context.startAbility(wantValue).then(() => {
       Logger.info('RemoteDeviceModel', `startAbility finished wantValue=${JSON.stringify(wantValue)}`);
-    }).catch((error) => {
-      Logger.error('RemoteDeviceModel', `startAbility failed,code=${error.code},msg=${JSON.stringify(error.message)}`);
+    }).catch((error: Error) => {
+      Logger.error('RemoteDeviceModel', `startAbility failed, error=${JSON.stringify(error)}`);
     })
   }
   ...
@@ -327,8 +346,8 @@ class RemoteDeviceModel {
 程序关闭时，注销设备状态监听任务，并释放DeviceManager实例。
 
 ``` typescript
-// RemoteDeviceModel.ets
-class RemoteDeviceModel {
+// RemoteDeviceUtil.ets
+class RemoteDeviceUtil {
   ...
   // 注销监听任务
   unregisterDeviceListCallback(): void {
@@ -340,7 +359,7 @@ class RemoteDeviceModel {
       this.myDeviceManager.release();
     } catch (err) {
       Logger.error('RemoteDeviceModel',
-        `unregisterDeviceListCallback stopDeviceDiscovery failed, code=${err.code}, msg=${err.message}`);
+        `unregisterDeviceListCallback stopDeviceDiscovery failed, error=${JSON.stringify(err)}`);
     }
   }
   ...
@@ -363,17 +382,20 @@ struct Index {
       ...
       Row() {
         Canvas(this.canvasContext)
+          ...
       }
       .onTouch((event: TouchEvent) => {
         this.onTouchEvent(event);
       })
+      ...
     }
+    ...
   }
 
   // 绘制事件
   onTouchEvent(event: TouchEvent): void {
-    let positionX:number = event.touches[0].x;
-    let positionY:number = event.touches[0].y;
+    let positionX: number = event.touches[0].x;
+    let positionY: number = event.touches[0].y;
     switch (event.type) {
       // 手指按下
       case TouchType.Down: {
@@ -381,7 +403,7 @@ struct Index {
         this.canvasContext.lineWidth = CommonConstants.CANVAS_LINE_WIDTH;
         this.canvasContext.lineJoin = CommonConstants.CANVAS_LINE_JOIN;
         this.canvasContext.moveTo(positionX, positionY);
-        this.pushData(false, false, positionX, positionY);
+        this.pushData(true, false, positionX, positionY);
         break;
       }
       // 手指移动
@@ -403,7 +425,7 @@ struct Index {
     }
   }
 
-  pushData(isFirstPosition: boolean, isEndPosition, positionX: number, positionY: number): void {
+  pushData(isFirstPosition: boolean, isEndPosition: boolean, positionX: number, positionY: number): void {
     let position = new Position(isFirstPosition, isEndPosition, positionX, positionY);
     // 存入位置信息列表
     this.positionList.push(position);
@@ -412,6 +434,7 @@ struct Index {
       this.kvStoreModel.put(CommonConstants.CHANGE_POSITION, JSON.stringify(this.positionList));
     }
   }
+  ...
 }
 ```
 
@@ -425,7 +448,9 @@ let storage = LocalStorage.getShared();
 @Entry(storage)
 @Component
 struct Index {
+  ...
   @LocalStorageProp('positionList') positionList: Position[] = [];
+  ...
   build() {
     Column() {
       Row() {
@@ -444,29 +469,13 @@ struct Index {
       ...
   }
 
-  // 撤回上一笔绘制
-  goBack() {
-    if (this.positionList.length === 0) {
-      return;
-    }
-    // 移除位置信息直到位置起始位置
-    for (let i: number = this.positionList.length - 1; i >= 0; i--) {
-      if (this.positionList[i].isFirstPosition) {
-        this.positionList.pop();
-        break;
-      } else {
-        this.positionList.pop();
-      }
-    }
-    this.redraw();
-    this.kvStoreModel.put(CommonConstants.CHANGE_POSITION, JSON.stringify(this.positionList));
-  }
-
-  redraw() {
+  ...
+  redraw(): void {
     // 删除画布内的绘制内容
     this.canvasContext.clearRect(0, 0, this.canvasContext.width, this.canvasContext.height);
     // 使用当前记录的位置信息，重新绘制
     this.positionList.forEach((position) => {
+      ...
       if (position.isFirstPosition) {
         this.canvasContext.beginPath();
         this.canvasContext.lineWidth = CommonConstants.CANVAS_LINE_WIDTH;
@@ -480,6 +489,24 @@ struct Index {
       }
     });
   }
+
+
+  // 撤回上一笔绘制
+  goBack(): void {
+    if (this.positionList.length === 0) {
+      return;
+    }
+    // 移除位置信息直到位置起始位置
+    for (let i: number = this.positionList.length - 1; i >= 0; i--) {
+      let position: Position | undefined = this.positionList.pop();
+      if (position !== undefined && position.isFirstPosition) {
+        break;
+      }
+    }
+    this.redraw();
+    this.kvStoreModel.put(CommonConstants.CHANGE_POSITION, JSON.stringify(this.positionList));
+  }
+  ...
 }
 ```
 
@@ -491,19 +518,23 @@ struct Index {
 
 ``` typescript
 // Index.ets
+...
 import KvStoreModel from '../viewmodel/KvStoreModel';
+...
 let storage = LocalStorage.getShared();
 @Entry(storage)
 @Component
 struct Index {
+  ...
   private kvStoreModel: KvStoreModel = new KvStoreModel();
   ...
   aboutToAppear() {
+    ...
     this.createKVStore();
   }
 
+  ...
   createKVStore(): void {
-    this.context = getContext(this) as common.UIAbilityContext;
     // 创建分布式键值数据库
     this.kvStoreModel.createKvStore(this.context, (data: distributedKVStore.ChangeNotification) => {
       // 使用分布式键值数据库内的内容重置位置信息列表
@@ -527,16 +558,20 @@ struct Index {
 ``` typescript
 // KvStoreModel.ets
 export default class KvStoreModel {
-  kvStore: distributedKVStore.SingleKVStore;
   ...
-  createKvStore(context: common.UIAbilityContext, callback: (data: distributedKVStore.ChangeNotification) => void): void {
+  kvStore?: distributedKVStore.SingleKVStore;
+  ...
+  createKvStore(
+    context: common.UIAbilityContext,
+    callback: (data: distributedKVStore.ChangeNotification) => void
+  ): void {
     ...
     try {
       // 创建一个KVManager对象实例，用于管理数据库对象
       this.kvManager = distributedKVStore.createKVManager(config);
     } catch (error) {
       Logger.error('KvStoreModel',
-        `createKvStore createKVManager failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `createKvStore createKVManager failed, err=${JSON.stringify(error)}`);
       return;
     }
 
@@ -544,6 +579,7 @@ export default class KvStoreModel {
     let options: distributedKVStore.Options = {
       ...
       kvStoreType: distributedKVStore.KVStoreType.SINGLE_VERSION
+      ...
     };
 
     // 获取分布式键值数据库
@@ -551,12 +587,16 @@ export default class KvStoreModel {
       ...
       this.kvStore = store;
       // 开启同步
-      this.kvStore.enableSync(true);
-      // 订阅数据变更通知
+      this.kvStore.enableSync(true).then(() => {
+        Logger.info('KvStoreModel', 'createKvStore enableSync success');
+      }).catch((error: Error) => {
+        Logger.error('KvStoreModel',
+          `createKvStore enableSync fail, error=${JSON.stringify(error)}`);
+      });
       this.setDataChangeListener(callback);
-    }).catch((error) => {
+    }).catch((error: Error) => {
       Logger.error('getKVStore',
-        `createKvStore getKVStore failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `createKvStore getKVStore failed, error=${JSON.stringify(error)}`);
     })
   }
   ...
@@ -568,7 +608,8 @@ export default class KvStoreModel {
 ``` typescript
 // KvStoreModel.ets
 export default class KvStoreModel {
-  kvStore: distributedKVStore.SingleKVStore;
+  ...
+  kvStore?: distributedKVStore.SingleKVStore;
   ...
   setDataChangeListener(callback: (data: distributedKVStore.ChangeNotification) => void): void {
     ...
@@ -582,7 +623,7 @@ export default class KvStoreModel {
         });
     } catch (error) {
       Logger.error('KvStoreModel',
-        `setDataChangeListener on('dataChange') failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `setDataChangeListener on('dataChange') failed, err=${JSON.stringify(error)}`);
     }
   }
   ...
@@ -593,11 +634,14 @@ export default class KvStoreModel {
 
 ``` typescript
 // Index.ets
+...
 import KvStoreModel from '../viewmodel/KvStoreModel';
+...
 let storage = LocalStorage.getShared();
 @Entry(storage)
 @Component
 struct Index {
+  ...
   private kvStoreModel: KvStoreModel = new KvStoreModel();
   ...
   aboutToDisappear() {
@@ -608,7 +652,8 @@ struct Index {
 
 // KvStoreModel.ets
 export default class KvStoreModel {
-  kvStore: distributedKVStore.SingleKVStore;
+  ...
+  kvStore?: distributedKVStore.SingleKVStore;
   ...
   removeDataChangeListener(): void {
     ...
@@ -617,20 +662,20 @@ export default class KvStoreModel {
       this.kvStore.off('dataChange');
     } catch (error) {
       Logger.error('KvStoreModel',
-        `removeDataChangeListener off('dataChange') failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `removeDataChangeListener off('dataChange') failed, err=${JSON.stringify(error)}`);
     }
   }
-  ...}
+  ...
+}
 ```
 
 ## 总结
 
 您已经完成了本次Codelab的学习，并了解到以下知识点：
 
-1.  申请分布式相关权限的流程。
-2.  建立分布式连接的方法。
-3.  Canvas组件的使用。
-4.  分布式键值数据库的使用。
+1. 申请分布式相关权限的流程。
+2. 建立分布式连接的方法。
+3. Canvas组件的使用。
+4. 分布式键值数据库的使用。
 
 ![](figures/zh-cn_image_0000001635972445.gif)
-
