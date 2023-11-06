@@ -15,8 +15,7 @@
 
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
-import { notesItemArr } from '../viewmodel/NotesInfoViewModel';
-import { FolderType, NotesInfoBean } from '../common/bean/NoteInfoBean';
+import { FolderType, NotesInfoBean, notesItemArr } from '../viewmodel/NotesInfoViewModel';
 
 @Component
 export default struct MemoItem {
