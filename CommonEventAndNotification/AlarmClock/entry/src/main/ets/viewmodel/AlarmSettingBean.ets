@@ -13,44 +13,30 @@
  * limitations under the License.
  */
 
-import ReminderItem from './ReminderItemBean';
+import { AlarmSettingType } from '../common/constants/AlarmSettingType';
 
 /**
- * Alarm item description.
+ * Alarm setting bean information.
  */
-@Observed export default class AlarmItemBean extends ReminderItem {
+export default class AlarmSettingBean {
   /**
-   * Custom alarm name.
+   * Alarm setting title.
    */
-  name = '闹钟';
+  public title: string;
 
   /**
-   * Custom alarm is open.
+   * Alarm setting content.
    */
-  isOpen: boolean = true;
+  public content: string;
 
   /**
-   * Custom alarm is repeat.
+   * Alarm setting type.
    */
-  isRepeat: boolean = false;
+  public sType: AlarmSettingType;
 
-  /**
-   * Custom alarm duration.
-   */
-  duration: number = 5;
-
-  /**
-   * Custom alarm interval minute.
-   */
-  intervalMinute: number = 10;
-
-  /**
-   * Custom alarm interval times.
-   */
-  intervalTimes: number = 3;
-
-  /**
-   * Custom alarm notification id.
-   */
-  notificationId: number;
+  constructor(title: string, content: string, sType: AlarmSettingType){
+    this.title = title;
+    this.content = content;
+    this.sType = sType;
+  }
 }

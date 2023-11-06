@@ -14,16 +14,18 @@
  */
 
 import { DetailConstant } from '../common/constants/DetailConstant';
-import { ALARM_KEY, CommonConstants } from '../common/constants/CommonConstants';
-import AlarmItem from '../common/bean/AlarmItemBean';
+import { CommonConstants, WeekDays  } from '../common/constants/CommonConstants';
+import AlarmItem from './AlarmItemBean';
 import ReminderService from '../model/ReminderService';
 import DataTypeUtils from '../common/utils/DataTypeUtils';
+import { GlobalContext } from '../common/utils/GlobalContext';
+import PreferencesHandler from '../model/database/PreferencesHandler';
 
 /**
  * Detail page view model description
  */
 export default class DetailViewModel {
-  private static instant;
+  static instant: DetailViewModel = new DetailViewModel();
   private reminderService: ReminderService;
   private alarms: Array<AlarmItem>;
 
@@ -37,12 +39,12 @@ export default class DetailViewModel {
    *
    * @return instance
    */
-  public static getInstant() {
-    if (this.instant == null) {
-      this.instant = new DetailViewModel();
-    }
-    return this.instant;
-  }
+  // public static getInstant() {
+  //   if (this.instant == null) {
+  //     this.instant = new DetailViewModel();
+  //   }
+  //   return this.instant;
+  // }
 
   /**
    * Conversion alarm repeat day content
@@ -51,27 +53,27 @@ export default class DetailViewModel {
    * @return repeatContent string
    */
   public transAlarmRepeatDayContent(repeatDay: number): string{
-    let repeatContent;
+    let repeatContent: string = CommonConstants.DEFAULT_STRING_MONDAY;;
     switch (repeatDay) {
-      case CommonConstants.DEFAULT_NUMBER_MONDAY:
+      case WeekDays.DEFAULT_NUMBER_MONDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_MONDAY;
         break;
-      case CommonConstants.DEFAULT_NUMBER_TUESDAY:
+      case WeekDays.DEFAULT_NUMBER_TUESDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_TUESDAY;
         break;
-      case CommonConstants.DEFAULT_NUMBER_WEDNESDAY:
+      case WeekDays.DEFAULT_NUMBER_WEDNESDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_WEDNESDAY;
         break;
-      case CommonConstants.DEFAULT_NUMBER_THURSDAY:
+      case WeekDays.DEFAULT_NUMBER_THURSDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_THURSDAY;
         break;
-      case CommonConstants.DEFAULT_NUMBER_FRIDAY:
+      case WeekDays.DEFAULT_NUMBER_FRIDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_FRIDAY;
         break;
-      case CommonConstants.DEFAULT_NUMBER_SATURDAY:
+      case WeekDays.DEFAULT_NUMBER_SATURDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_SATURDAY;
         break;
-      case CommonConstants.DEFAULT_NUMBER_SUNDAY:
+      case WeekDays.DEFAULT_NUMBER_SUNDAY:
         repeatContent = CommonConstants.DEFAULT_STRING_SUNDAY;
         break;
       default:
@@ -86,8 +88,8 @@ export default class DetailViewModel {
    * @param alarmItem AlarmItem
    */
   public setAlarmDefaultTime(alarmItem?: AlarmItem) {
-    let hour;
-    let minute;
+    let hour: number;
+    let minute: number;
     if (alarmItem == null) {
       let date = new Date();
       hour = date.getHours();
@@ -123,11 +125,12 @@ export default class DetailViewModel {
       alarmItem.notificationId = index;
       this.alarms.push(alarmItem);
     }
-    this.reminderService.addReminder(alarmItem, (newId) => {
+    this.reminderService.addReminder(alarmItem, (newId: number) => {
       alarmItem.id = newId;
       alarmItem.isOpen = true;
       this.alarms[index] = alarmItem;
-      globalThis.preference.set(ALARM_KEY, JSON.stringify(this.alarms));
+      let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+      preference.set(CommonConstants.ALARM_KEY, JSON.stringify(this.alarms));
     })
   }
 
@@ -142,7 +145,8 @@ export default class DetailViewModel {
     if (index !== CommonConstants.DEFAULT_NUMBER_NEGATIVE) {
       this.alarms.splice(index, CommonConstants.DEFAULT_SINGLE);
     }
-    globalThis.preference.set(ALARM_KEY, JSON.stringify(this.alarms));
+    let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+    preference.set(CommonConstants.ALARM_KEY, JSON.stringify(this.alarms));
   }
 
   private getAlarmTime(aType: number): number{
@@ -159,7 +163,8 @@ export default class DetailViewModel {
   }
 
   private async findAlarmWithId(id: number) {
-    let data = await globalThis.preference.get(ALARM_KEY);
+    let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+    let data = await preference.get(CommonConstants.ALARM_KEY);
     if (!DataTypeUtils.isNull(data)) {
       this.alarms = JSON.parse(data);
       for (let i = 0;i < this.alarms.length; i++) {

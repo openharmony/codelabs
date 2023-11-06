@@ -16,19 +16,40 @@
 import display from '@ohos.display';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import PreferencesHandler from '../model/database/PreferencesHandler';
+import window from '@ohos.window';
+import { GlobalContext } from '../common/utils/GlobalContext';
+import hilog from '@ohos.hilog';
 
 export default class EntryAbility extends UIAbility {
-  onCreate(want) {
-    let abilityInfo = this.context.abilityInfo;
-    globalThis.bundleName = abilityInfo.bundleName;
-    globalThis.abilityName = abilityInfo.name;
-    globalThis.abilityWant = want;
-    globalThis.preference = PreferencesHandler.getInstance();
+  onCreate() {
+    GlobalContext.getContext().setObject('preference', PreferencesHandler.instance);
   }
 
-  async onWindowStageCreate(windowStage) {
-    globalThis.display = await display.getDefaultDisplay();
-    await globalThis.preference.configure(this.context.getApplicationContext());
-    windowStage.setUIContent(this.context, "pages/MainIndex", null);
+  async onWindowStageCreate(windowStage: window.WindowStage) {
+    // Main window is created, set main page for this ability
+    let globalDisplay: display.Display = display.getDefaultDisplaySync();
+    GlobalContext.getContext().setObject('globalDisplay', globalDisplay);
+    let preference = GlobalContext.getContext().getObject('preference') as PreferencesHandler;
+    await preference.configure(this.context.getApplicationContext());
+    // windowStage.setUIContent(this.context, "pages/MainIndex", null);
+
+    let windowClass: window.Window | null = null;
+    windowStage.getMainWindow((_err, data) => {
+      let isLayoutFullScreen = false;
+      windowClass = data;
+      windowClass.setWindowLayoutFullScreen(isLayoutFullScreen, (err) => {
+        if (err.code) {
+          return;
+        }
+      });
+    })
+
+    windowStage.loadContent('pages/MainIndex', (err, data) => {
+      if (err.code) {
+        hilog.error(0x0000, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err) ?? '');
+        return;
+      }
+      hilog.info(0x0000, 'testTag', 'Succeeded in loading the content. Data: %{public}s', JSON.stringify(data) ?? '');
+    });
   }
 }
