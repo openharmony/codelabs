@@ -13,10 +13,12 @@
  * limitations under the License.
  */
 
+import display from '@ohos.display';
 import RefreshComponent from '../view/RefreshComponent';
 import { RefreshHeaderStyle, RefreshState, RefreshConstants } from '../common/constants/RefreshConstants';
 import CommonConstants from '../common/constants/CommonConstants';
 import DimensionUtil from '../common/utils/DimensionUtil';
+import { GlobalContext } from '../common/utils/GlobalContext';
 
 /**
  * File Management Entry.
@@ -24,6 +26,7 @@ import DimensionUtil from '../common/utils/DimensionUtil';
 @Component
 export default struct FileManagerIndex {
   @Provide(RefreshConstants.REFRESH_STATE_TAG) state: number = RefreshState.REFRESHING;
+  private deviceDisplay: display.Display = GlobalContext.getContext().getObject('display') as display.Display;
 
   @Builder ContentBody() {
     Image($r('app.media.bg_content'))
@@ -44,9 +47,9 @@ export default struct FileManagerIndex {
         .zIndex(CommonConstants.FILE_MANAGER_Z_INDEX)
       RefreshComponent({
         headerStyle: RefreshHeaderStyle.CLOUD,
-        itemLayout: () => this.ContentBody(),
+        itemLayout: (): void => this.ContentBody(),
         displayHeight: (
-          px2vp(globalThis.display.height) - DimensionUtil.getVp($r('app.float.file_index_title_height'))),
+          px2vp(this.deviceDisplay.height) - DimensionUtil.getVp($r('app.float.file_index_title_height'))),
         onRefresh: () => {
           setTimeout(() => {
             this.state = RefreshState.COMPLETE;

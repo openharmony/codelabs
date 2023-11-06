@@ -21,9 +21,9 @@ import { RefreshConstants, RefreshState, RefreshHeaderStyle } from '../common/co
 @Component
 export default struct RefreshComponent {
   private headerStyle: RefreshHeaderStyle = RefreshHeaderStyle.DEFAULT;
-  private displayHeight: number;
+  private displayHeight: number = 0;
   private listController: Scroller = new Scroller();
-  private onRefresh: () => void;
+  private onRefresh?: () => void;
   @State headerOffset: number = 0;
   @Consume(RefreshConstants.REFRESH_STATE_TAG) @Watch('onStateChanged') state: number;
   @BuilderParam itemLayout: () => void;
@@ -31,7 +31,7 @@ export default struct RefreshComponent {
   private onStateChanged() {
     switch (this.state) {
       case RefreshState.REFRESHING:
-        if (this.onRefresh !== null) {
+        if (this.onRefresh !== undefined) {
           this.onRefresh();
         }
         break;
@@ -84,7 +84,10 @@ export default struct RefreshComponent {
         }
       }
     })
-    .onTouch((event) => {
+    .onTouch((event?: TouchEvent) => {
+      if (!event) {
+        return;
+      }
       switch (event.type) {
         case TouchType.Down:
           if (this.state === RefreshState.IDLE) {
