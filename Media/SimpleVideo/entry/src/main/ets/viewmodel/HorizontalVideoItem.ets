@@ -13,17 +13,18 @@
  * limitations under the License.
  */
 
-import { HorizontalVideoItem } from './HorizontalVideoItem';
-import { SwiperVideoItem } from './SwiperVideoItem';
+/**
+ * Horizontal picture class.
+ */
+@Observed
+export class HorizontalVideoItem {
+  id: number;
+  image: Resource;
+  name: string;
 
-export const SWIPER_VIDEOS: SwiperVideoItem[] = [
-  new SwiperVideoItem($r('app.media.ic_banner1')),
-  new SwiperVideoItem($r('app.media.ic_banner2')),
-  new SwiperVideoItem($r('app.media.ic_banner3'))
-];
-
-export const HORIZONTAL_VIDEOS: HorizontalVideoItem[] = [
-  new HorizontalVideoItem(1, $r('app.media.ic_video_list0'), '视频1'),
-  new HorizontalVideoItem(2, $r('app.media.ic_video_list1'), '视频2'),
-  new HorizontalVideoItem(3, $r('app.media.ic_video_list2'), '视频3')
-];
+  constructor(id: number, image: Resource, name: string) {
+    this.id = id;
+    this.image = image;
+    this.name = name;
+  }
+}
