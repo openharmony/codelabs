@@ -22,8 +22,9 @@ import StyleConstants from '../common/constants/StyleConstants';
 @Entry
 @Component
 struct Second {
-  @State src: string = router?.getParams()?.['src'] ?? '-';
-  @State count: number = router?.getParams()?.['count'] ?? 0;
+  params = router?.getParams()
+  @State src: string = this.params == undefined ? '-' : (this.params as Record<string,Object>)['src'] as string
+  @State count: number = this.params == undefined ? 0 : (this.params as Record<string,Object>)['count'] as number
 
   build() {
     Column() {

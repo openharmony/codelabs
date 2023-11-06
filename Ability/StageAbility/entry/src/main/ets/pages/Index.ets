@@ -16,11 +16,12 @@
 import ButtonClickMethod from '../model/ButtonClickMethod';
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
+import common from '@ohos.app.ability.common';
 
 /**
  * Get context.
  */
-let context = getContext(this);
+let context = getContext(this) as common.UIAbilityContext;
 
 /**
  * The Index Page of EntryAbility.
@@ -95,8 +96,8 @@ struct Index {
           ButtonClickMethod.toSecondAbilitySecond(context, (abilityResult) => {
             // Obtain abilityResult passed on when SecondAbility is destroyed.
             if (abilityResult.resultCode === CommonConstants.RESULT_CODE) {
-              let src: string = abilityResult?.want?.parameters?.src ?? '-';
-              let count: number = abilityResult?.want?.parameters?.count ?? 0;
+              let src: string = abilityResult?.want?.parameters?.src as string ?? '-';
+              let count: number = abilityResult?.want?.parameters?.count as number ?? 0;
               this.text = `${src}：${count}`;
               this.bottomMargin = StyleConstants.BUTTON_MARGIN_BOTTOM;
             }

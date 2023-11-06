@@ -17,6 +17,7 @@
 -   [UIAbility组件概述](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/application-models/uiability-overview.md)：UIAbility组件是一种包含UI界面的应用组件，主要用于和用户交互。UIAbility组件是系统调度的基本单元，为应用提供绘制界面的窗口。一个应用可以包含一个或多个UIAbility组件。
 -   [UIAbilityContext](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-inner-application-uiAbilityContext.md)：UIAbilityContext是[UIAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-ability-uiAbility.md)的上下文环境，继承自[Context](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-inner-application-context.md)，提供UIAbility的相关配置信息以及操作UIAbility和ServiceExtensionAbility的方法。
 -   [页面路由](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-router.md)：提供通过不同的url访问不同的页面，包括跳转到应用内的指定页面、用应用内的某个页面替换当前页面、返回上一页面或指定的页面等。
+
 -   [Text](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-text.md)：文本组件，用于呈现一段文本信息。
 -   [Button](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-button.md)：按钮组件，可快速创建不同样式的按钮。
 
@@ -24,13 +25,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -53,30 +54,31 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──device/src/main/ets              // device模块的代码区
 │  ├──pages
-│  │  ├──Index.ets			        // SecondAbility的Index页面
+│  │  ├──Index.ets                  // SecondAbility的Index页面
 │  │  └──Second.ets                 // SecondAbility的Second页面
-│  └──secondability
-│     └──SecondAbility.ts           // 程序入口类
+│  ├──secondability
+│  │  └──SecondAbility.ets          // 程序入口类
 ├──device/src/main/resources        // device模块的资源文件目录
 ├──entry/src/main/ets               // entry模块的代码区
 │  ├──common
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets     // 公共常量类
-│  │  │  └──StyleConstants.ets		// 样式常量类
-│  │  └──utils
-│  │     └──Logger.ets			    // 日志打印类
+│  │  │  └──StyleConstants.ets	    // 样式常量类
+│  │  ├──utils
+│  │  │  ├──GlobalContext.ets       // 全局变量控制类
+│  │  │  └──Logger.ets	            // 日志打印类
 │  ├──entryability
 │  │  └──EntryAbility.ts            // 程序入口类
 │  ├──model
 │  │  └──ButtonClickMethod.ets      // 按钮点击后调用的方法类
-│  └──pages
-│     ├──Index.ets                  // EntryAbility的Index页面
-│     └──Second.ets                 // EntryAbility的Second页面
+│  ├──pages
+│  │  ├──Index.ets                  // EntryAbility的Index页面
+│  │  └──Second.ets                 // EntryAbility的Second页面
 └──entry/src/main/resources         // entry模块的资源文件目录
 ```
 
@@ -183,8 +185,9 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
    struct Second {
      ...
      // 获取Index页面传递过来的自定义参数
-     @State src: string = router?.getParams()?.['src'] ?? '-';
-     @State count: number = router?.getParams()?.['count'] ?? 0;
+     params = router?.getParams();
+     @State src: string = this.params == undefined ? '-' : (this.params as Record<string,Object>)['src'] as string;
+     @State count: number = this.params == undefined ? 0 : (this.params as Record<string,Object>)['count'] as number;
      
      build() {
        Column() {
@@ -222,7 +225,7 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
 
 1. 在本章节中，实现跳转到指定UIAbility的首页，我们需要新建一个模块。在“Project”窗口，右键点击“entry 文件夹”，选择“New \> Module \> Empty Ability \> Next”，在“Module  name”中给新建的模块命名为“device”，点击“Next”，在“Ability  name”中给新建模块的Ability命名为“SecondAbility”，点击“Finish”。可以看到文件目录结构如下：
 
-   ![](figures/zh-cn_image_0000001407656688.png)
+   ![](figures/zh-cn_image_0000001682837654.png)
 
 2. 构建SecondAbility的首页。在“Project”窗口，点击“device \> src \> main \> ets  \> pages”，打开“Index.ets”文件，可以看到SecondAbility的Index页面由一个Image组件、两个Text组件、一个Button组件组成。“Index.ets”文件的示例代码如下：
 
@@ -258,7 +261,7 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
 
      ```typescript
      // 获取UIAbilityContext
-     let context = getContext(this);
+     let context = getContext(this) as common.UIAbilityContext;
      ```
      
      >![](public_sys-resources/icon-note.gif) **说明：** 如果需要使用UIAbilityContext中的方法，需要在对应的页面获取相应的UIAbilityContext。
@@ -266,8 +269,8 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
 
      ```typescript
      // 导航到SecondAbility的Index Page
-     toSecondAbilityIndex(context) {
-       let want = {
+     toSecondAbilityIndex(context: common.UIAbilityContext) {
+       let want: Want = {
          'deviceId': '',
          'bundleName': CommonConstants.BUNDLE_NAME,
          'abilityName': CommonConstants.SECOND_ABILITY_NAME,
@@ -279,8 +282,8 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
        };
        context.startAbility(want).then(() => {
          Logger.info(CommonConstants.TAG, `start second ability index page succeed with ${JSON.stringify(want)}`);
-       }).catch((error) => {
-         Logger.error(CommonConstants.TAG, `start second ability index page failedwith ${error.code}`);
+       }).catch((error: Error) => {
+         Logger.error(CommonConstants.TAG, `start second ability index page failedwith ${error}`);
        });
      }
      ```
@@ -292,8 +295,9 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
      @Component
      struct Index {
        // 获取从EntryAbility的Index页面传递过来的自定义参数
-       @State src: string = globalThis?.secondAbilityWant?.parameters?.src ?? '-';
-       @State count: number = globalThis?.secondAbilityWant?.parameters?.count ?? 0;
+       secondAbilityWant?: Want = GlobalContext.getContext().getObject('secondAbilityWant');
+       @State src: string = this.secondAbilityWant?.parameters?.src as string ?? '-';
+       @State count: number = this.secondAbilityWant?.parameters?.count as number ?? 0;
      
        build() {
          Column() {
@@ -320,11 +324,11 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
 
    ```typescript
    // 停止SecondAbility自身
-   terminateSecondAbility(context) {
+   terminateSecondAbility(context: common.UIAbilityContext) {
      context.terminateSelf().then(() => {
        Logger.info(CommonConstants.TAG, 'terminate second ability self succeed');
-     }).catch((error) => {
-       Logger.error(CommonConstants.TAG, `terminate second ability self failed with ${error.code}`);
+     }).catch((error: Error) => {
+       Logger.error(CommonConstants.TAG, `terminate second ability self failed with ${error}`);
      });
    }
    ```
@@ -350,8 +354,9 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
    @Component
    struct Second {
      // 用来接收parameters参数传过来的值
-     @State src: string = globalThis?.secondAbilityWant?.parameters?.src ?? '-';
-     @State count: number = globalThis?.secondAbilityWant?.parameters?.count ?? 0;
+     secondAbilityWant?: Want = GlobalContext.getContext().getObject('secondAbilityWant');
+     @State src: string = this.secondAbilityWant?.parameters?.src as string ?? '-';
+     @State count: number = this.secondAbilityWant?.parameters?.count as number ?? 0;
    
      build() {
        Column() {
@@ -379,8 +384,8 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
 
      ```typescript
      // 导航到SecondAbility的Second Page
-     toSecondAbilitySecond(context, callback) {
-       let want = {
+     toSecondAbilitySecond(context: common.UIAbilityContext, callback: (abilityResult: common.AbilityResult) => void) {
+       let want: Want = {
          'deviceId': '',
          'bundleName': CommonConstants.BUNDLE_NAME,
          'abilityName': CommonConstants.SECOND_ABILITY_NAME,
@@ -396,20 +401,20 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
        context.startAbilityForResult(want).then((result) => {
          callback(result);
          Logger.info(CommonConstants.TAG, `start second ability second page succeed with ${JSON.stringify(want)}`);
-       }).catch((error) => {
-         Logger.error(CommonConstants.TAG, `start second ability second page failed with ${error.code}`);
+       }).catch((error: Error) => {
+         Logger.error(CommonConstants.TAG, `start second ability second page failed with ${error}`);
        });
      }
      ```
 
-   - 在“Project”窗口，点击“device \> src \> main \> ets \> SecondAbility”，打开“SecondAbility.ts”文件，在onWindowStageCreate的生命周期回调函数中获取拉起方的意图，展示SecondAbility的指定页面到界面。示例代码如下：
+   - 在“Project”窗口，点击“device \> src \> main \> ets \> SecondAbility”，打开“SecondAbility.ets”文件，在onWindowStageCreate的生命周期回调函数中获取拉起方的意图，展示SecondAbility的指定页面到界面。示例代码如下：
 
      ```typescript
      onWindowStageCreate(windowStage: Window.WindowStage) {
        ...
-     
-       let url = globalThis?.secondAbilityWant?.parameters?.url ?
-         globalThis.secondAbilityWant.parameters.url : 'pages/Index';
+       let parameters: Record<string, Object> = (GlobalContext.getContext().getObject('secondAbilityWant') as Want)?.parameters as Record<string, Object>;
+       let url = parameters?.url ?
+         parameters.url as string : 'pages/Index';
        windowStage.loadContent(url, (err, data) => {
          ...
        });
@@ -420,8 +425,8 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
 
    ```typescript
    // 停止SecondAbility自身并返回结果
-   terminateSecondAbilityForResult(context) {
-     let abilityResult = {
+   terminateSecondAbilityForResult(context: common.UIAbilityContext) {
+     let abilityResult: common.AbilityResult = {
        resultCode: CommonConstants.RESULT_CODE,
        want: {
          'deviceId': '',
@@ -439,9 +444,9 @@ entry模块中，EntryAbility内页面的跳转可以通过页面路由router来
      context.terminateSelfWithResult(abilityResult).then(() => {
        Logger.info(CommonConstants.TAG, `terminate second ability self with
          result succeed with ${JSON.stringify(abilityResult)}`);
-     }).catch((error) => {
+     }).catch((error: Error) => {
        Logger.error(CommonConstants.TAG, `terminate second ability self with
-         result failed with ${error.code}`);
+         result failed with ${error}`);
      });
    }
    ```

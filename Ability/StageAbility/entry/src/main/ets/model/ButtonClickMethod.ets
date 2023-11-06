@@ -16,6 +16,8 @@
 import router from '@ohos.router';
 import Logger from '../common/utils/Logger';
 import CommonConstants from '../common/constants/CommonConstants';
+import Want from '@ohos.app.ability.Want';
+import common from '@ohos.app.ability.common';
 
 /**
  * Get the context.
@@ -46,8 +48,8 @@ class ButtonClickMethod {
    *
    * @param context Context of EntryAbility.
    */
-  toSecondAbilityIndex(context) {
-    let want = {
+  toSecondAbilityIndex(context: common.UIAbilityContext) {
+    let want: Want = {
       'deviceId': '',
       'bundleName': CommonConstants.BUNDLE_NAME,
       'abilityName': CommonConstants.SECOND_ABILITY_NAME,
@@ -59,8 +61,8 @@ class ButtonClickMethod {
     };
     context.startAbility(want).then(() => {
       Logger.info(CommonConstants.TAG, `start second ability index page succeed with ${JSON.stringify(want)}`);
-    }).catch((error) => {
-      Logger.error(CommonConstants.TAG, `start second ability index page failedwith ${error.code}`);
+    }).catch((error: Error) => {
+      Logger.error(CommonConstants.TAG, `start second ability index page failedwith ${error}`);
     });
   }
 
@@ -70,8 +72,8 @@ class ButtonClickMethod {
    * @param context Context of EntryAbility.
    * @param callback Execute the result callback function.
    */
-  toSecondAbilitySecond(context, callback) {
-    let want = {
+  toSecondAbilitySecond(context: common.UIAbilityContext, callback: (abilityResult: common.AbilityResult) => void) {
+    let want: Want = {
       'deviceId': '',
       'bundleName': CommonConstants.BUNDLE_NAME,
       'abilityName': CommonConstants.SECOND_ABILITY_NAME,
@@ -91,8 +93,8 @@ class ButtonClickMethod {
     context.startAbilityForResult(want).then((result) => {
       callback(result);
       Logger.info(CommonConstants.TAG, `start second ability second page succeed with ${JSON.stringify(want)}`);
-    }).catch((error) => {
-      Logger.error(CommonConstants.TAG, `start second ability second page failed with ${error.code}`);
+    }).catch((error: Error) => {
+      Logger.error(CommonConstants.TAG, `start second ability second page failed with ${error}`);
     });
   }
 
@@ -101,11 +103,11 @@ class ButtonClickMethod {
    *
    * @param context Context of SecondAbility.
    */
-  terminateSecondAbility(context) {
+  terminateSecondAbility(context: common.UIAbilityContext) {
     context.terminateSelf().then(() => {
       Logger.info(CommonConstants.TAG, 'terminate second ability self succeed');
-    }).catch((error) => {
-      Logger.error(CommonConstants.TAG, `terminate second ability self failed with ${error.code}`);
+    }).catch((error: Error) => {
+      Logger.error(CommonConstants.TAG, `terminate second ability self failed with ${error}`);
     });
   }
 
@@ -114,8 +116,8 @@ class ButtonClickMethod {
    *
    * @param context Context of SecondAbility.
    */
-  terminateSecondAbilityForResult(context) {
-    let abilityResult = {
+  terminateSecondAbilityForResult(context: common.UIAbilityContext) {
+    let abilityResult: common.AbilityResult = {
       resultCode: CommonConstants.RESULT_CODE,
       want: {
         'deviceId': '',
@@ -132,8 +134,8 @@ class ButtonClickMethod {
     // Stop SecondAbility itself and return abilityResult to the startAbilityForResult interface caller
     context.terminateSelfWithResult(abilityResult).then(() => {
       Logger.info(CommonConstants.TAG, `terminate second ability self succeed with ${JSON.stringify(abilityResult)}`);
-    }).catch((error) => {
-      Logger.error(CommonConstants.TAG, `terminate second ability self failed with ${error.code}`);
+    }).catch((error: Error) => {
+      Logger.error(CommonConstants.TAG, `terminate second ability self failed with ${error}`);
     });
   }
 }
