@@ -67,9 +67,9 @@ export default class Constants {
    * index page img arr
    */
   static readonly IMG_ARR: Resource[][] = [
-    [...Constants.SCENE_LIST, ...Constants.LIFE_LIST, ...Constants.MEN_LIST, ...Constants.FOOD_LIST, ...Constants.BANNER_IMG_LIST],
+    [...Constants.SCENE_LIST, ...Constants.LIFE_LIST, ...Constants.MEN_LIST, ...Constants.FOOD_LIST],
     [...Constants.MEN_LIST, ...Constants.LIFE_LIST, ...Constants.SCENE_LIST],
-    [...Constants.FOOD_LIST, ...Constants.SCENE_LIST, ...Constants.SCENE_LIST],
+    [...Constants.FOOD_LIST, ...Constants.SCENE_LIST, ...Constants.LIFE_LIST],
     [...Constants.LIFE_LIST, ...Constants.FOOD_LIST, ...Constants.MEN_LIST]
   ];
 
@@ -122,11 +122,6 @@ export default class Constants {
    *  router param
    */
   static readonly PARAM_PHOTO_ARR_KEY: string = 'photoArr';
-
-  /**
-   *  selected index
-   */
-  static readonly SELECTED_INDEX_KEY: string = 'selectedIndex';
 
   /**
    * grid column template

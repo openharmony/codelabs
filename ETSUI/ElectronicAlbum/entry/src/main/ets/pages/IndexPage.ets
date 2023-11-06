@@ -49,7 +49,7 @@ struct IndexPage {
           }
           .width(Constants.FULL_PERCENT)
           .aspectRatio(Constants.BANNER_ASPECT_RATIO)
-        }, (item, index) => JSON.stringify(item) + index)
+        }, (item: Resource, index: number) => JSON.stringify(item) + index)
       }
       .autoPlay(true)
       .loop(true)
@@ -70,11 +70,11 @@ struct IndexPage {
             router.pushUrl({
               url: Constants.URL_LIST_PAGE,
               params: { photoArr: photoArr }
-            }).catch((error) => {
+            }).catch((error: Error) => {
               Logger.error(Constants.TAG_INDEX_PAGE, JSON.stringify(error));
             });
           })
-        }, (item, index) => JSON.stringify(item) + index)
+        }, (item: Array<Resource>, index: number) => JSON.stringify(item) + index)
       }
       .columnsTemplate(Constants.INDEX_COLUMNS_TEMPLATE)
       .columnsGap($r('app.float.grid_padding'))
