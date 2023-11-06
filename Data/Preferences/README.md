@@ -2,12 +2,14 @@
 
 ## 介绍
 
-本篇Codelab是基于OpenHarmony的首选项能力实现的一个简单示例。实现如下功能：
+本篇Codelab是基于HarmonyOS的首选项能力实现的一个简单示例。实现如下功能：
 
 1.  创建首选项数据文件。
 2.  将用户输入的水果名称和数量，写入到首选项数据库。
 3.  读取首选项数据库中的数据。
 4.  删除首选项数据文件。
+
+最终效果图如下：
 
 ![](figures/zh-cn_image_0000001459130725.gif)
 
@@ -21,13 +23,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -50,14 +52,11 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets              // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──ButtonItemData.ets     // 按钮数据实体类
-│  │  │  └──Fruit.ets              // 水果实体类
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets    // 公共常量类
 │  │  │  └──StyleConstants.ets     // 样式常量类 
@@ -69,9 +68,12 @@
 │  │  └──PreferenceModel.ets       // 首选项相关方法类
 │  ├──pages
 │  │  └──Index.ets                 // 主界面	
-│  └──view
-│     ├──ButtonComponent.ets       // 自定义Button组件类
-│     └──TextItemComponent.ets     // 自定义Text组件类
+│  ├──view
+│  │  ├──ButtonComponent.ets       // 自定义Button组件类
+│  │  └──TextItemComponent.ets     // 自定义Text组件类
+│  └──viewmodel
+│     ├──ButtonItemData.ets        // 按钮数据类
+│     └──Fruit.ets                 // 水果数据类
 └──entry/src/main/resources        // 资源文件目录
 ```
 
@@ -94,16 +96,17 @@
    具体代码如下：
 
    ```typescript
+   // TextItemComponent.ets
    @Component
    export default struct TextItemComponent {
-     private textResource: Resource; // 按钮文本资源
-     private placeholderResource: Resource; // placeholder文本资源
-     private marginBottom: string;
-     private marginTop: string;
-     private textInputType: InputType; // 输入框输入数据类型
-     private textFlag: number; // 文本框标记
+     private textResource: Resource = $r('app.string.empty'); // 按钮文本资源
+     private placeholderResource: Resource = $r('app.string.empty'); // placeholder文本资源
+     private marginBottom: string = '';
+     private marginTop: string = '';
+     private textInputType: InputType = InputType.Normal; // 输入框输入数据类型
+     private textFlag: number = 0; // 文本框标记
      @Link fruit: Fruit; // 水果数据
-     private textInputCallBack: (value: string) => void; // TextInput的回调
+     private textInputCallBack = (value: string) => {}; // TextInput的回调
    
      build() {
        Column() {
@@ -150,6 +153,7 @@
    具体代码如下：
 
    ```typescript
+   // ButtonComponent.ets
    @Component
    export default struct ButtonComponent {
      private buttonItemValues: Array<ButtonItemData> = this.getButtonItemValues();
@@ -157,7 +161,7 @@
    
      build() {
        Column() {
-         ForEach(this.buttonItemValues, (item) => {
+         ForEach(this.buttonItemValues, (item: ButtonItemData) => {
            Button(item.resource, { type: ButtonType.Capsule, stateEffect: true })
              .backgroundColor($r('app.color.button_background_color'))
              .width(StyleConstants.BUTTON_WIDTH)
@@ -168,7 +172,7 @@
              .onClick(() => {
                item.clickMethod();
              })
-         }, item => item.toString())
+         }, (item: ButtonItemData) => JSON.stringify(item))
        }
      }
    }
@@ -177,6 +181,7 @@
 4. 在Index.ets主界面中引用TextItemComponent和ButtonComponent子组件，具体代码如下：
 
    ```typescript
+   // Index.ets
    Column() {
      // 水果名称输入框
      TextItemComponent({
@@ -184,7 +189,7 @@
        placeholderResource: $r('app.string.fruit_placeholder'),
        textFlag: CommonConstants.FRUIT_FLAG,
        fruit: $fruit,
-       textInputCallBack: (value) => {
+       textInputCallBack: (value: string) => {
          this.fruit.fruitName = value;
        }
      })
@@ -195,7 +200,7 @@
        placeholderResource: $r('app.string.number_placeholder'),
        textFlag: CommonConstants.NUMBER_FLAG,
        fruit: $fruit,
-       textInputCallBack: (value) => {
+       textInputCallBack: (value: string) => {
          this.fruit.fruitNum = value;
        }
      })
@@ -218,11 +223,13 @@
 Preferences的数据存储在文件中，因此需要指定存储的文件名PREFERENCES\_NAME。再通过Preferences提供的方法进行数据库的相关操作。具体代码如下：
 
 ```typescript
+// PreferenceModel.ets
 // 导入dataPreferences模块
 import dataPreferences from '@ohos.data.preferences';
 
 let context = getContext(this);
-let preference: dataPreferences.Preferences = null;
+let preference: dataPreferences.Preferences;
+let preferenceTemp: dataPreferences.Preferences;
 
 // 调用getPreferences方法读取指定首选项持久化文件，将数据加载到Preferences实例，用于数据操作
 async getPreferencesFromStorage() {
@@ -239,6 +246,7 @@ async getPreferencesFromStorage() {
 获取Preferences实例后，使用Preferences的put方法，将用户输入的水果名称和水果数量数据，保存到缓存的实例中。再通过Preferences的flush方法将Preferences实例异步存储到首选项持久化文件中。具体代码如下：
 
 ```typescript
+// PreferenceModel.ets
 async putPreference(fruit: Fruit) {
   ...
   try {
@@ -257,11 +265,12 @@ async putPreference(fruit: Fruit) {
 使用Preferences的get方法读取数据。如果键不存在，则返回默认值。例如获取下面代码中fruit的值，如果fruit的键KEY\_NAME不存在，则会返回空字符串。通过默认值的设置，来避免程序出现异常。具体代码如下：
 
 ```typescript
+// PreferenceModel.ets
 async getPreference() {
   let fruit = '';
   ...
   try {
-    fruit = <string> await preference.get(CommonConstants.KEY_NAME, '');
+    fruit = (await preference.get(CommonConstants.KEY_NAME, '')).toString();
   } catch (err) {
     Logger.error(CommonConstants.TAG, `Failed to get value, Cause: ${err}`);
   }
@@ -274,6 +283,7 @@ async getPreference() {
 通过dataPreferences模块的deletePreferences\(context, name\)方法从内存中移除指定文件对应的Preferences单实例。移除Preferences单实例时，应用不允许再使用该实例进行数据操作，否则会出现数据一致性问题。具体代码如下：
 
 ```typescript
+// PreferenceModel.ets
 async deletePreferences() {
   try {
     await dataPreferences.deletePreferences(context, CommonConstants.PREFERENCES_NAME);
