@@ -14,16 +14,16 @@
  */
 
 /**
- * Hobby info bean.
+ * Hobby info model.
  */
-export default class HobbyBean {
+export default class HobbyModel {
   /**
    * Hobby title
    */
-  label: string;
+  label: string = '';
 
   /**
    * Hobby check status
    */
-  isChecked: boolean;
+  isChecked: boolean = false;
 }

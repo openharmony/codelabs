@@ -18,13 +18,13 @@ import CommonConstants from '../common/constants/CommonConstants';
 @Component
 export default struct TextCommonWidget {
   @Link content: string;
-  private textImage: Resource;
-  private title: Resource;
-  onItemClick: () => void;
+  private textImage?: Resource;
+  private title?: Resource;
+  onItemClick: () => void = () => {};
 
   build() {
     Row() {
-      Image(this.textImage)
+      Image(this.textImage as Resource)
         .width($r('app.float.text_image_size'))
         .height($r('app.float.text_image_size'))
         .margin({ left: $r('app.float.image_left_distance') })
