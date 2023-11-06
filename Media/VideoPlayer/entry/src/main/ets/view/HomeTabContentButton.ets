@@ -14,39 +14,42 @@
  */
 
 import { HomeTabContentDialog } from './HomeTabContentDialog';
-import { VideoBean } from '../common/bean/VideoBean';
+import { VideoItem } from '../viewmodel/VideoItem';
 import HomeVideoListModel from '../viewmodel/HomeVideoListModel';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { HomeConstants } from '../common/constants/HomeConstants';
+import { GlobalContext } from '../common/util/GlobalContext';
+import { HomeTabModel } from '../common/model/HomeTabModel';
+import { HomeDialogModel } from '../viewmodel/HomeDialogModel';
 
 @Component
 export struct HomeTabContentButton {
-  private currIndex: number;
-  @Consume videoList: Array<VideoBean>;
-  @State name: string = '';
-  @State src: string = '';
+  private currIndex: number = 0;
+  private homeDialogModel: HomeDialogModel | null = null;
+  @Consume homeTabModel: HomeTabModel;
   dialogController: CustomDialogController = new CustomDialogController({
-    builder: HomeTabContentDialog({
-      confirm: this.confirm,
-      name: $name,
-      src: $src,
-      videoList: $videoList
+    builder:HomeTabContentDialog({
+      homeDialogModel: this.homeDialogModel!
     }),
     autoCancel: true,
     alignment: DialogAlignment.Default,
     offset: {
-      dx: HomeConstants.INTERNET_ADD_DIALOG.OFFSET_DX,
-      dy: HomeConstants.INTERNET_ADD_DIALOG.OFFSET_DY
+      dx: HomeConstants.OFFSET_DX,
+      dy: HomeConstants.OFFSET_DY
     },
-    gridCount: HomeConstants.INTERNET_ADD_DIALOG.GRID_COUNT,
+    gridCount: HomeConstants.GRID_COUNT,
     customStyle: false
   });
 
-  confirm() {
-    HomeVideoListModel.setInternetVideo(this.name, this.src);
-    this.videoList = globalThis.videoInternetList;
-    this.src = '';
-    this.name = '';
+  aboutToAppear(){
+    this.homeTabModel.confirm = () =>{
+      HomeVideoListModel.setInternetVideo(this.homeTabModel.name, this.homeTabModel.src);
+      let videoInternetList = GlobalContext.getContext().getObject('videoInternetList') as VideoItem[];
+      this.homeTabModel.videoList = videoInternetList;
+      this.homeTabModel.src = '';
+      this.homeTabModel.name = '';
+    };
+    this.homeTabModel.controller = this.dialogController;
   }
 
   build() {
@@ -57,18 +60,18 @@ export struct HomeTabContentButton {
       })
         .borderRadius($r('app.float.tab_border_radius'))
         .fontSize($r('app.float.button_font_size'))
-        .height(HomeConstants.HOME_TAB_BUTTON.HEIGHT)
+        .height(HomeConstants.TAB_BUTTON_HEIGHT)
         .backgroundColor($r('app.color.button_back_ground_color'))
         .onClick(async () => {
           if (this.currIndex === 0) {
-            this.videoList = await HomeVideoListModel.getLocalVideo();
+            this.homeTabModel.videoList = await HomeVideoListModel.getLocalVideo();
           } else {
             this.dialogController.open();
           }
         })
     }
     .width(CommonConstants.FULL_PERCENT)
-    .height(HomeConstants.HOME_TAB_BUTTON.COLUMN_HEIGHT)
+    .height(HomeConstants.TAB_COLUMN_HEIGHT)
     .justifyContent(FlexAlign.Center)
   }
 }

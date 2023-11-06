@@ -13,46 +13,42 @@
  * limitations under the License.
  */
 
-import { VideoBean } from '../common/bean/VideoBean';
 import { HomeDialogModel } from '../viewmodel/HomeDialogModel';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { HomeConstants } from '../common/constants/HomeConstants';
+import { HomeTabModel } from '../common/model/HomeTabModel';
 
 @CustomDialog
 export struct HomeTabContentDialog {
-  private dialogModel: HomeDialogModel = new HomeDialogModel(this);
-  @State linkCheck: Resource = $r('app.string.link_check');
-  @State confirmAdd: Resource = $r('app.string.confirm_add');
-  @State loadColor: Resource = $r('app.color.index_tab_selected_font_color');
-  @Link name: string;
-  @Link src: string;
-  @Link videoList: Array<VideoBean>;
-  controller: CustomDialogController;
-  confirm: () => void;
+  private homeDialogModel?: HomeDialogModel | null = null;;
+  @Consume homeTabModel: HomeTabModel;
+  controller: CustomDialogController = new CustomDialogController({
+    builder:HomeTabContentDialog({homeDialogModel:this.homeDialogModel!})
+  });
 
   build() {
     Column() {
-      TextInput({ placeholder: $r('app.string.link_placeholder'), text: this.src })
-        .height(HomeConstants.INTERNET_ADD_DIALOG.TEXT_HEIGHT)
+      TextInput({ placeholder: $r('app.string.link_placeholder'), text: this.homeTabModel.src })
+        .height(HomeConstants.TEXT_HEIGHT)
         .width(CommonConstants.NINETY_PERCENT)
-        .margin({ top: HomeConstants.INTERNET_ADD_DIALOG.TEXT_MARGIN_TOP })
+        .margin({ top: HomeConstants.TEXT_MARGIN_TOP })
         .onChange((value: string) => {
-          this.src = value;
+          this.homeTabModel.src = value;
         })
-      TextInput({ placeholder: $r('app.string.name_placeholder'), text: this.name })
-        .height(HomeConstants.INTERNET_ADD_DIALOG.TEXT_HEIGHT)
+      TextInput({ placeholder: $r('app.string.name_placeholder'), text: this.homeTabModel.name })
+        .height(HomeConstants.TEXT_HEIGHT)
         .width(CommonConstants.NINETY_PERCENT)
-        .margin({ top: HomeConstants.INTERNET_ADD_DIALOG.TEXT_MARGIN_TOP })
+        .margin({ top: HomeConstants.TEXT_MARGIN_TOP })
         .onChange((value: string) => {
-          this.name = value;
+          this.homeTabModel.name = value;
         })
       Flex({ justifyContent: FlexAlign.SpaceAround }) {
-        Text(this.linkCheck)
+        Text(this.homeTabModel.linkCheck)
           .fontSize($r('app.float.dialog_font_size'))
-          .fontColor(this.loadColor)
+          .fontColor(this.homeTabModel.loadColor)
           .onClick(() => {
-            if (this.dialogModel.checkSrcNull()) {
-              this.dialogModel.checkSrcValidity(0);
+            if (this.homeDialogModel!.checkSrcNull()) {
+              this.homeDialogModel!.checkSrcValidity(0);
             }
           })
         Divider()
@@ -64,12 +60,12 @@ export struct HomeTabContentDialog {
             left: $r('app.float.dialog_divider_margin_left'),
             right: $r('app.float.dialog_divider_margin_left')
           })
-        Text(this.confirmAdd)
+        Text(this.homeTabModel.confirmAdd)
           .fontSize($r('app.float.dialog_font_size'))
-          .fontColor(this.loadColor)
+          .fontColor(this.homeTabModel.loadColor)
           .onClick(() => {
-            if (this.dialogModel.checkSrcNull() && this.dialogModel.checkNameNull()) {
-              this.dialogModel.checkSrcValidity(1);
+            if (this.homeDialogModel!.checkSrcNull() && this.homeDialogModel!.checkNameNull()) {
+              this.homeDialogModel!.checkSrcValidity(1);
             }
           })
       }

@@ -88,15 +88,15 @@
       "name": "place_holder_name",
       "value": "请输入文件名称"
     },
-	{
+    {
       "name": "reason_read",
       "value": "本地媒体读取权限"
     },
-	{
+    {
       "name": "reason_location",
       "value": "获取本地视频"
     },
-	{
+    {
       "name": "reason_internet",
       "value": "获取网络权限"
     }

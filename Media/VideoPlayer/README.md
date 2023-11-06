@@ -24,13 +24,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -58,20 +58,22 @@
 ```
 ├──entry/src/main/ets	                   // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──VideoBean.ets	               // 视频bean对象
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets	           // 公共常量类
 │  │  │  ├──HomeConstants.ets	           // 首页常量类
 │  │  │  └──PlayConstants.ets	           // 视频播放页面常量类
+│  │  ├──constants
+│  │  │  ├──HomeTabModel.ets	           // 首页参数模型
+│  │  │  └──PlayerModel.ets	               // 播放参数模型
 │  │  └──util
 │  │     ├──DateFormatUtil.ets	           // 日期工具类
+│  │     ├──GlobalContext.ets	           // 全局工具类
 │  │     ├──Logger.ets	                   // 日志工具类
-│  │     └──ScreenUtil.ets	               // 屏幕工具类
+│  │     └──ScreenUtil.ets                 // 屏幕工具类
 │  ├──controller
-│  │  └──VideoController	               // 视频控制类
+│  │  └──VideoController.ets	           // 视频控制类
 │  ├──entryability
-│  │  └──EntryAbility.ts	               // 程序入口类
+│  │  └──EntryAbility.ts                   // 程序入口类
 │  ├──pages
 │  │  ├──HomePage.ets                      // 首页页面
 │  │  └──PlayPage.ets                      // 视频播放页面
@@ -88,7 +90,9 @@
 │  │  └──PlayTitleDialog.ets               // 播放速度设置子组件
 │  └──viewmodel
 │     ├──HomeDialogModel.ets         	   // 添加网络视频弹框类
-│     └──HomeVideoListModel.ets            // 获取视频列表数据类
+│     ├──HomeVideoListModel.ets            // 获取视频列表数据类
+│     ├──VideoItem.ets         	           // 视频对象
+│     └──VideoSpeed.ets                    // 播放速度类
 └──entry/src/main/resource                 // 应用静态资源目录
 ```
 
@@ -98,7 +102,7 @@
 
 ![](figures/2.gif)
 
-获取本地视频，通过resourceManager.ResourceManager对象获取rawfile文件夹中的视频对象videoBean，再通过“fd://${videoBean.fd}”组装视频地址。
+获取本地视频，通过resourceManager.getRawFd方法获取rawfile文件夹中的视频资源文件描述符，构造本地视频对象。
 
 ```typescript
 // HomeVideoListModel.ets
@@ -106,17 +110,17 @@
 async getLocalVideo() {
   this.videoLocalList = [];
   await this.assemblingVideoBean();
-  globalThis.videoLocalList = this.videoLocalList;
+  GlobalContext.getContext().setObject('videoLocalList', this.videoLocalList);
   return this.videoLocalList;
 }
 
 // HomeVideoListModel.ets
 // 组装本地视频对象
-async assemblingVideoBean () {
-   VIDEO_DATA.forEach(async (item: VideoBean) => {
-    let videoBean =  await globalThis.resourceManager.getRawFd(item.src);
-    let uri = `fd://${videoBean.fd}`;
-    this.videoLocalList.push(new VideoBean(item.name, uri));
+async assemblingVideoBean() {
+  VIDEO_DATA.forEach(async (item: VideoItem) => {
+    let videoBean = await getContext().resourceManager.getRawFd(item.iSrc);
+    let uri = videoBean;
+    this.videoLocalList.push(new VideoItem(item.name, uri, ''));
   });
 }
 ```
@@ -131,8 +135,8 @@ async checkSrcValidity(checkFlag: number) {
     return;
   }
   this.isLoading = true;
-  this.context.linkCheck = $r('app.string.link_checking');
-  this.context.loadColor = $r('app.color.index_tab_unselected_font_color');
+  this.homeTabModel.linkCheck = $r('app.string.link_checking');
+  this.homeTabModel.loadColor = $r('app.color.index_tab_unselected_font_color');
   this.checkFlag = checkFlag;
   this.createAvPlayer();
 }
@@ -140,24 +144,24 @@ async checkSrcValidity(checkFlag: number) {
 // 校验链接有效性
 checkUrlValidity() {
   this.isLoading = false;
-  this.context.linkCheck = $r('app.string.link_check');
-  this.context.loadColor = $r('app.color.index_tab_selected_font_color');
-  this.avPlayer.release();
-  if (this.duration === HomeConstants.INTERNET_ADD_DIALOG.DURATION_TWO) {
-    // 链接校验失败
+  this.homeTabModel.linkCheck = $r('app.string.link_check');
+  this.homeTabModel.loadColor = $r('app.color.index_tab_selected_font_color');
+  if (this.avPlayer !== null) {
+    this.avPlayer.release();
+  }
+  if (this.duration === HomeConstants.DURATION_TWO) {
+    // Failed to verify the link
     this.showPrompt($r('app.string.link_check_fail'));
-    this.context.result = false;
-  } else if (this.duration === HomeConstants.INTERNET_ADD_DIALOG.DURATION_ONE) {
-    // 地址不正确或无网络可用
+  } else if (this.duration === HomeConstants.DURATION_ONE) {
+    // The address is incorrect or no network is available
     this.showPrompt($r('app.string.link_check_address_internet'));
-    this.context.result = false;
   } else {
     this.duration = 0;
     if (this.checkFlag === 0) {
       this.showPrompt($r('app.string.link_check_success'));
     } else {
-      this.context.confirm();
-      this.context.controller.close();
+      this.homeTabModel!.confirm();
+      this.homeTabModel!.controller!.close();
     }
   }
 }
@@ -193,21 +197,23 @@ XComponent({
 
 ```typescript
 // VideoController.ets
-createAVPlayer() {
-  media.createAVPlayer().then((avPlayer) => {
-    if (avPlayer) {
-      this.avPlayer = avPlayer;
-      this.bindState();
-    } else {
-      ...
-    }
-  });
+async createAVPlayer() {
+  let avPlayer: media.AVPlayer = await media.createAVPlayer();
+  this.avPlayer = avPlayer;
+  this.bindState();
 }
 
 // VideoController.ets
-bindState() {
-  this.avPlayer.on(Events.STATE_CHANGE, async (state) => {
-    switch (state) {
+async bindState() {
+  if (this.avPlayer === null) {
+    return;
+  }
+  this.avPlayer.on(Events.STATE_CHANGE, async (state: media.AVPlayerState) => {
+    let avplayerStatus: string = state;
+    if (this.avPlayer === null) {
+      return;
+    }
+    switch (avplayerStatus) {
       case AvplayerStatus.IDLE:
         ...
       case AvplayerStatus.INITIALIZED:
@@ -220,10 +226,8 @@ bindState() {
         ...
       case AvplayerStatus.COMPLETED:
         ...
-      case AvplayerStatus.STOPPED:
-       ...
       case AvplayerStatus.RELEASED:
-       ...
+        ...
       default:
         ...
     }
@@ -231,7 +235,7 @@ bindState() {
   this.avPlayer.on(Events.TIME_UPDATE, (time: number) => {
     this.initProgress(time);
   });
-  this.avPlayer.on(Events.ERROR, (error) => {
+  this.avPlayer.on(Events.ERROR, () => {
     this.playError();
   })
 }
@@ -241,22 +245,36 @@ AVPlayer实例需设置播放路径和XComponent中获取的surfaceID，设置�
 
 ```typescript
 // VideoController.ets
-firstPlay(index: number, url: string, surfaceId: number) {
+async firstPlay(index: number, url: resourceManager.RawFileDescriptor, iUrl: string, surfaceId: string) {
   this.index = index;
   this.url = url;
+  this.iUrl = iUrl;
   this.surfaceId = surfaceId;
-  this.avPlayer.url = this.url;
+  if (this.avPlayer === null) {
+    await this.createAVPlayer();
+  }
+  if (this.avPlayer !== null) {
+    if (this.iUrl) {
+      this.avPlayer.url = this.iUrl;
+    } else {
+      this.avPlayer.fdSrc = this.url;
+    }
+  }
 }
 
 // VideoController.ets
-bindState() {
-  this.avPlayer.on(Events.STATE_CHANGE, async (state) => {
-    switch (state) {
-      ...
+async bindState() {
+  ...
+  this.avPlayer.on(Events.STATE_CHANGE, async (state: media.AVPlayerState) => {
+    let avplayerStatus: string = state;
+    if (this.avPlayer === null) {
+      return;
+    }
+    switch (avplayerStatus) {
+      case AvplayerStatus.IDLE:
+        ...
       case AvplayerStatus.INITIALIZED:
-        if (!this.avPlayer.surfaceId) {
-          this.avPlayer.surfaceId = this.surfaceId;
-        }
+        this.avPlayer.surfaceId = this.surfaceId;
         this.avPlayer.prepare();
         break;
       ...
@@ -270,9 +288,11 @@ bindState() {
 
 ```typescript
 // VideoController.ets
-bindState() {
-  this.avPlayer.on(Events.STATE_CHANGE, async (state) => {
-    switch (state) {
+async bindState() {
+  ...
+  this.avPlayer.on(Events.STATE_CHANGE, async (state: media.AVPlayerState) => {
+    ...
+    switch (avplayerStatus) {
       ...
       case AvplayerStatus.PREPARED:
         this.avPlayer.videoScaleType = 0;
@@ -292,6 +312,9 @@ bindState() {
 ```typescript
 // VideoController.ets
 switchPlayOrPause() {
+  if (this.avPlayer === null) {
+    return;
+  }
   if (this.status === CommonConstants.STATUS_START) {
     this.avPlayer.pause();
   } else {
@@ -300,18 +323,16 @@ switchPlayOrPause() {
 }
 
 // VideoController.ets
-bindState() {
-  this.avPlayer.on(Events.STATE_CHANGE, async (state) => {
-    switch (state) {
+async bindState() {
+  ...
+  this.avPlayer.on(Events.STATE_CHANGE, async (state: media.AVPlayerState) => {
+    ...
+    switch (avplayerStatus) {
       ...
       case AvplayerStatus.PLAYING:
-        this.avPlayer.setVolume(this.playerThis.volume);
+        this.avPlayer.setVolume(this.playerModel.volume);
         this.setBright();
         this.status = CommonConstants.STATUS_START;
-        this.watchStatus();
-        break;
-      case AvplayerStatus.PAUSED:
-        this.status = CommonConstants.STATUS_PAUSE;
         this.watchStatus();
         break;
       ...
@@ -327,29 +348,42 @@ bindState() {
 // VideoController.ets
 // 设置当前播放位置
 setSeekTime(value: number, mode: SliderChangeMode) {
-  if (mode === SliderChangeMode.Moving) {
-    this.progressThis.progressVal = value;
-    this.progressThis.currentTime = DateFormatUtil.secondToTime(Math.floor(value * this.duration /
-      CommonConstants.ONE_HUNDRED / CommonConstants.A_THOUSAND));
+  if (mode === Number(SliderMode.MOVING)) {
+    this.playerModel.progressVal = value;
+    this.playerModel.currentTime = DateFormatUtil.secondToTime(Math.floor(value * this.duration /
+    CommonConstants.ONE_HUNDRED / CommonConstants.A_THOUSAND));
   }
-  if (mode === SliderChangeMode.End) {
+  if (mode === Number(SliderMode.END) || mode === Number(SliderMode.CLICK)) {
     this.seekTime = value * this.duration / CommonConstants.ONE_HUNDRED;
-    this.avPlayer.seek(this.seekTime, media.SeekMode.SEEK_PREV_SYNC);
+    if (this.avPlayer !== null) {
+      this.avPlayer.seek(this.seekTime, media.SeekMode.SEEK_PREV_SYNC);
+    }
   }
 }
 
 // VideoController.ets
 // 设置播放音量
-onVolumeActionUpdate(event: GestureEvent) {
-  if (!this.playerThis.brightShow) {
-    this.playerThis.volumeShow = true;
-    let changeVolume = (event.offsetX - this.positionX) / globalThis.screenWidth;
-    let currentVolume = this.playerThis.volume + changeVolume;
-    let volumeMinFlag = currentVolume <= PlayConstants.PLAY_PAGE.MIN_VALUE;
-    let volumeMaxFlag = currentVolume > PlayConstants.PLAY_PAGE.MAX_VALUE;
-    this.playerThis.volume = volumeMinFlag ? PlayConstants.PLAY_PAGE.MIN_VALUE :
-      (volumeMaxFlag ? PlayConstants.PLAY_PAGE.MAX_VALUE : currentVolume);
-    this.avPlayer.setVolume(this.playerThis.volume);
+onVolumeActionUpdate(event?: GestureEvent) {
+  if (!event) {
+    return;
+  }
+  if (this.avPlayer === null) {
+    return;
+  }
+  if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
+    return;
+  }
+  if (this.playerModel.brightShow === false) {
+    this.playerModel.volumeShow = true;
+    let screenWidth = GlobalContext.getContext().getObject('screenWidth') as number;
+    let changeVolume = (event.offsetX - this.positionX) / screenWidth;
+    let volume: number = this.playerModel.volume;
+    let currentVolume = volume + changeVolume;
+    let volumeMinFlag = currentVolume <= PlayConstants.MIN_VALUE;
+    let volumeMaxFlag = currentVolume > PlayConstants.MAX_VALUE;
+    this.playerModel.volume = volumeMinFlag ? PlayConstants.MIN_VALUE :
+      (volumeMaxFlag ? PlayConstants.MAX_VALUE : currentVolume);
+    this.avPlayer.setVolume(this.playerModel.volume);
     this.positionX = event.offsetX;
   }
 }
@@ -357,24 +391,37 @@ onVolumeActionUpdate(event: GestureEvent) {
 // VideoController.ets
 // 设置播放速度
 setSpeed(playSpeed: number) {
-  this.playSpeed = playSpeed;
-  this.avPlayer.setSpeed(this.playSpeed);
+  if (this.avPlayer === null) {
+    return;
+  }
+  if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
+    return;
+  }
+  this.playerModel.playSpeed = playSpeed;
+  this.avPlayer.setSpeed(this.playerModel.playSpeed);
 }
 ```
 
 视频播放完成之后，进入completed状态，需调用reset\(\)对视频进行重置，此时变为idle转态，在idle状态下设置下一个视频的播放地址，又会进入initialized状态。
 
 ```typescript
-// VideoController.ets
-bindState() {
-  this.avPlayer.on(Events.STATE_CHANGE, async (state) => {
-    switch (state) {
+// VideoController.ets 
+sync bindState() {
+  ...
+  this.avPlayer.on(Events.STATE_CHANGE, async (state: media.AVPlayerState) => {
+    let avplayerStatus: string = state;
+    ...
+    switch (avplayerStatus) {
       case AvplayerStatus.IDLE:
-        ...
-        this.avPlayer.url = this.url;
+        this.resetProgress();
+        if (this.iUrl) {
+          this.avPlayer.url = this.iUrl;
+        } else {
+          this.avPlayer.fdSrc = this.url;
+        }
         break;
       case AvplayerStatus.INITIALIZED:
-        ...
+        this.avPlayer.surfaceId = this.surfaceId;
         this.avPlayer.prepare();
         break;
       ...
@@ -403,10 +450,10 @@ Column() {
     ...
     .gesture(
       PanGesture(this.panOptionBright)
-        .onActionStart((event: GestureEvent) => {
+        .onActionStart((event?: GestureEvent) => {
           this.playVideoModel.onBrightActionStart(event);
         })
-        .onActionUpdate((event: GestureEvent) => {
+        .onActionUpdate((event?: GestureEvent) => {
           this.playVideoModel.onBrightActionUpdate(event);
         })
         .onActionEnd(() => {
@@ -418,10 +465,10 @@ Column() {
     ...
     .gesture(
       PanGesture(this.panOptionVolume)
-        .onActionStart((event: GestureEvent) => {
+        .onActionStart((event?: GestureEvent) => {
           this.playVideoModel.onVolumeActionStart(event);
         })
-        .onActionUpdate((event: GestureEvent) => {
+        .onActionUpdate((event?: GestureEvent) => {
           this.playVideoModel.onVolumeActionUpdate(event);
         })
         .onActionEnd(() => {
@@ -437,30 +484,39 @@ Column() {
 
 ```typescript
 // VideoController.ets
-...
 // 手指触摸到音量调节区域
-onVolumeActionStart(event: GestureEvent) {
+onVolumeActionStart(event?: GestureEvent) {
+  if (!event) {
+    return;
+  }
   this.positionX = event.offsetX;
 }
-...
+
 // 手指在音量调节区域水平滑动
-onVolumeActionUpdate(event: GestureEvent) {
+onVolumeActionUpdate(event?: GestureEvent) {
+  if (!event) {
+    return;
+  }
+  if (this.avPlayer === null) {
+    return;
+  }
   if (CommonConstants.OPERATE_STATE.indexOf(this.avPlayer.state) === -1) {
     return;
   }
-  if (!this.playerThis.brightShow) {
-    this.playerThis.volumeShow = true;
-    let changeVolume = (event.offsetX - this.positionX) / globalThis.screenWidth;
-    let currentVolume = this.playerThis.volume + changeVolume;
-    let volumeMinFlag = currentVolume <= PlayConstants.PLAY_PAGE.MIN_VALUE;
-    let volumeMaxFlag = currentVolume > PlayConstants.PLAY_PAGE.MAX_VALUE;
-    this.playerThis.volume = volumeMinFlag ? PlayConstants.PLAY_PAGE.MIN_VALUE :
-      (volumeMaxFlag ? PlayConstants.PLAY_PAGE.MAX_VALUE : currentVolume);
-    this.avPlayer.setVolume(this.playerThis.volume);
+  if (this.playerModel.brightShow === false) {
+    this.playerModel.volumeShow = true;
+    let screenWidth = GlobalContext.getContext().getObject('screenWidth') as number;
+    let changeVolume = (event.offsetX - this.positionX) / screenWidth;
+    let volume: number = this.playerModel.volume;
+    let currentVolume = volume + changeVolume;
+    let volumeMinFlag = currentVolume <= PlayConstants.MIN_VALUE;
+    let volumeMaxFlag = currentVolume > PlayConstants.MAX_VALUE;
+    this.playerModel.volume = volumeMinFlag ? PlayConstants.MIN_VALUE :
+      (volumeMaxFlag ? PlayConstants.MAX_VALUE : currentVolume);
+    this.avPlayer.setVolume(this.playerModel.volume);
     this.positionX = event.offsetX;
   }
 }
-...
 ```
 
 ## 总结
