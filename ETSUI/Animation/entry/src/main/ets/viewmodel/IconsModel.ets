@@ -14,8 +14,8 @@
  */
 
 import Common from '../common/constants/Const';
-import IconItem from '../common/bean/IconItem';
-import Point from '../common/bean/Point';
+import IconItem from './IconItem';
+import Point from './Point';
 
 const TWO_PI: number = 2 * Math.PI;
 
@@ -25,12 +25,12 @@ export class IconsModel {
   private num: number = Common.IMAGES_MIN;
   private radius: number;
 
-  constructor(num: number, radius) {
+  constructor(num: number, radius: number) {
     this.radius = radius;
     this.addImage(num);
   }
 
-  public addImage(num) {
+  public addImage(num: number) {
     this.num = num;
     if (this.imagerArr.length == num) {
       return;
@@ -47,7 +47,7 @@ export class IconsModel {
     this.refreshPoint(num);
   }
 
-  public refreshPoint(num) {
+  public refreshPoint(num: number) {
     for (let i = 0; i < num; i++) {
       this.imagerArr[i].point = this.genPointByIndex(i);
     }

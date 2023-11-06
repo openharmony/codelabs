@@ -8,21 +8,23 @@
 
 ### 相关概念
 
--   [显式动画](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-explicit-animation.md)：提供全局animateTo显式动画接口来指定有闭包代码导致的状态变化插入过渡动画效果。
--   [属性动画](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-animatorproperty.md)：组件的通用属性发生变化时，可以创建属性动画进行渐变，提升用户体验。
--   [Slider](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-slider.md)：滑动条组件，用来快速调节设置值，如音量、亮度等。
+- [显式动画](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-explicit-animation.md)：提供全局animateTo显式动画接口来指定有闭包代码导致的状态变化插入过渡动画效果。
+
+- [属性动画](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-animatorproperty.md)：组件的通用属性发生变化时，可以创建属性动画进行渐变，提升用户体验。
+
+- [Slider](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-basic-components-slider.md)：滑动条组件，用来快速调节设置值，如音量、亮度等。
 
 ## 环境搭建
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -44,14 +46,11 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets                // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  |  ├──IconItem.ets             // 图标类
-│  │  │  └──Point.ets                // 图标坐标类
 │  │  └──constants
 │  │     └──Const.ets                // 常量类
 │  ├──entryability
@@ -63,8 +62,9 @@
 │  │  ├──CountController.ets         // 图标数量控制组件
 │  │  └──IconAnimation.ets           // 图标属性动画组件
 │  └──viewmodel
-│     ├──AxisModel.ets               // 坐标计算数据模型
-│     └──IconsModel.ets              // 图标数据模型
+│     ├──IconItem.ets                // 图标类
+│     ├──IconsModel.ets              // 图标数据模型
+│     └──Point.ets                   // 图标坐标类
 └──entry/src/main/resources          // 资源文件
 ```
 
@@ -75,27 +75,25 @@
 其中CountController通过Slider滑动控制quantity（动效图标数量）；AnimationWidgets根据quantity展示相应数量的图标，点击组件按钮后通过在animateTo的event闭包函数中改变mainFlag状态，跟mainFlag相关的样式属性的变化都会产生动画效果，代码如下所示：
 
 ```typescript
+// Index.ets
 @Entry
 @Component
 struct Index {
   @State quantity: number = Common.IMAGES_MIN;
-  @State axis: AxisModel = new AxisModel(Common.OFFSET_RADIUS, this.quantity);
-  @State iconModel: IconsModel = new IconsModel(this.quantity);
+  @Provide iconModel: IconsModel = new IconsModel(this.quantity, Common.OFFSET_RADIUS);
 
   build() {
     Column() {
       // 动画组件
       AnimationWidgets({
-        quantity: $quantity,
-        axis: $axis,
-        iconModel: $iconModel
+        quantity: $quantity
       })
       // 图标数量控制组件
       CountController({
         quantity: $quantity
       })
     }
-    ...
+...
   }
 }
 ```
@@ -103,6 +101,7 @@ struct Index {
 CountController组件通过Slilder滑动控制动效图标的数量，最少3个图标，最多6个图标，示例代码如下所示：
 
 ```typescript
+// CountController.ets
 @Component
 export struct CountController {
   @Link quantity: number;
@@ -148,21 +147,26 @@ export struct CountController {
 在animationTo的回调中修改mainFlag状态，所有跟mainFlag状态相关的属性变化都会产生过渡动画效果。代码如下所示：
 
 ```typescript
+// AnimationWidgets.ets
+import { IconsModel } from '../viewmodel/IconsModel';
+import { IconAnimation } from './IconAnimation';
+import Common from '../common/constants/Const';
+import IconItem from '../viewmodel/IconItem';
+
+@Component
 export struct AnimationWidgets {
   @State mainFlag: boolean = false;
   @Link @Watch('onQuantityChange') quantity: number;
-  @Link axis: AxisModel;
-  @Link iconModel: IconsModel;
+  @Consume iconModel: IconsModel;
 
-  onQuantityChange() { // 监听图标数量的变化，并修改图标数据以及对应的坐标位置
+  onQuantityChange() {
     this.iconModel.addImage(this.quantity);
-    this.axis.addPoints(this.quantity);
   }
 
   aboutToAppear() {
     this.onQuantityChange();
   }
-
+    
   animate() {
     animateTo(
       {
@@ -173,45 +177,58 @@ export struct AnimationWidgets {
         curve: Curve.Smooth,
         playMode: PlayMode.Normal
       }, () => {
-      this.mainFlag = !this.mainFlag;
-    })
-  }
-
+        this.mainFlag = !this.mainFlag;
+      })
+    }
+    
   build() {
     Stack() {
       Stack() {
         ForEach(this.iconModel.imagerArr, (item: IconItem) => {
           IconAnimation({
             item: item,
-            point: this.axis.points[item.index],
             mainFlag: $mainFlag
           })
-        }, item => JSON.stringify(item))
+        }, (item: IconItem) => JSON.stringify(item.index))
       }
+      .width(Common.DEFAULT_FULL_WIDTH)
+      .height(Common.DEFAULT_FULL_HEIGHT)
       .rotate({
         x: 0,
         y: 0,
         z: 1,
         angle: this.mainFlag ? Common.ROTATE_ANGLE_360 : 0
       })
-
-      ...
-
-      Image(
-        this.mainFlag
-          ? $r("app.media.imgActive")
-          : $r("app.media.imgInit")
-      )
-        .scale({
-          x: this.mainFlag ? Common.INIT_SCALE : 1,
-          y: this.mainFlag ? Common.INIT_SCALE : 1
-        })
-        .onClick(() => {
-          this.iconModel.reset(); //  重置图标激活状态
-          this.animate(); // 启动显式动画
-        })
-      ...
+    
+    Image(
+      this.mainFlag
+        ? $r("app.media.imgActive")
+        : $r("app.media.imgInit")
+    )
+    .width($r('app.float.size_64'))
+    .height($r('app.float.size_64'))
+    .objectFit(ImageFit.Contain)
+    .scale({
+      x: this.mainFlag ? Common.INIT_SCALE : 1,
+      y: this.mainFlag ? Common.INIT_SCALE : 1
+    })
+    .onClick(() => {
+      this.iconModel.reset();
+      this.animate();
+    })
+    
+    Text($r('app.string.please_click_button'))
+      .fontSize($r('app.float.size_16'))
+      .opacity(Common.OPACITY_06)
+      .fontColor($r('app.color.fontGrayColor'))
+      .fontWeight(Common.FONT_WEIGHT_500)
+      .margin({
+        top: $r('app.float.size_100')
+      })
     }
+    .width(Common.DEFAULT_FULL_WIDTH)
+    .layoutWeight(1)
+    
   }
 }
 ```
@@ -225,10 +242,10 @@ export struct AnimationWidgets {
 当组件由animation动画属性修饰时，如果自身属性发生变化会产生过渡动画效果。本示例中当点击小图标时会触发自身clicked状态的变化，所有跟clicked相关的属性变化（如translate、rotate、scale、opacity）都会被增加动画效果。代码如下所示：
 
 ```typescript
+// IconAnimation.ets
 export struct IconAnimation {
   @Link mainFlag: boolean;
-  @State point: Point = new Point(0, 0);
-  @State item: IconItem = new IconItem(0, $r('app.media.badge1'), false);
+  @ObjectLink item: IconItem;
 
   build() {
     Image(this.item.image)
@@ -236,9 +253,9 @@ export struct IconAnimation {
       .height(Common.ICON_HEIGHT)
       .objectFit(ImageFit.Contain)
       .translate(
-        this.mainFlag
-          ? { x: this.point.x, y: this.point.y }
-          : { x: 0, y: 0 }
+          this.mainFlag
+            ? { x: this.item.point.x, y: this.item.point.y }
+            : { x: 0, y: 0 }
       )
       .rotate({
         x: 0,
@@ -247,7 +264,7 @@ export struct IconAnimation {
         angle: this.item.clicked ? Common.ROTATE_ANGLE_360 : 0
       })
       .scale(
-        this.item.clicked
+          this.item.clicked
           ? { x: Common.SCALE_RATIO, y: Common.SCALE_RATIO }
           : { x: 1, y: 1 }
       )
@@ -271,25 +288,58 @@ export struct IconAnimation {
 根据图标数量计算图标位置代码如下所示：
 
 ```typescript
+// IconsModel.ets
+import Common from '../common/constants/Const';
+import IconItem from './IconItem';
+import Point from './Point';
+
 const TWO_PI: number = 2 * Math.PI;
 
-export class AxisModel {
+@Observed
+export class IconsModel {
+  public imagerArr: Array<IconItem> = [];
+  private num: number = Common.IMAGES_MIN;
   private radius: number;
-  private num: number;
-  public points: Point[] = [];
 
-  constructor(radius: number, num: number) {
+  constructor(num: number, radius: number) {
     this.radius = radius;
-    this.addPoints(num);
+    this.addImage(num);
   }
 
-  addPoints(num: number) {
-    this.points = [];
+  public addImage(num: number) {
     this.num = num;
+    if (this.imagerArr.length == num) {
+      return;
+    }
+    if (this.imagerArr.length > num) {
+      this.imagerArr.splice(num, this.imagerArr.length - num);
+    } else {
+      for (let i = this.imagerArr.length; i < num; i++) {
+        const point = this.genPointByIndex(i);
+        this.imagerArr.push(new IconItem(i, Common.IMAGE_RESOURCE[i], false, point));
+      }
+    }
+
+    this.refreshPoint(num);
+  }
+
+  public refreshPoint(num: number) {
     for (let i = 0; i < num; i++) {
-      let x = this.radius * Math.cos(TWO_PI * i / this.num);
-      let y = this.radius * Math.sin(TWO_PI * i / this.num);
-      this.points.push(new Point(x, y));
+      this.imagerArr[i].point = this.genPointByIndex(i);
+    }
+  }
+
+  public genPointByIndex(index: number): Point {
+    const x = this.radius * Math.cos(TWO_PI * index / this.num);
+    const y = this.radius * Math.sin(TWO_PI * index / this.num);
+    return new Point(x, y);
+  }
+
+  public reset() {
+    for (let i = 0; i < this.num; i++) {
+      if (this.imagerArr[i].clicked) {
+        this.imagerArr[i].clicked = false;
+      }
     }
   }
 }
