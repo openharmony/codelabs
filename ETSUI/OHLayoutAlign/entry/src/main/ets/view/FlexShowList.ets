@@ -14,7 +14,7 @@
  */
 
 import { CommonItem } from './CommonComponent';
-import { MARGIN_FONT_SIZE_SPACE, SHOW_LIST_HEIGHT_PERCENT,ALL_PERCENT } from '../common/Constants/CommonConstants';
+import { MARGIN_FONT_SIZE_SPACE, SHOW_LIST_HEIGHT_PERCENT, ALL_PERCENT } from '../common/Constants/CommonConstants';
 import { FlexAxisAlignRadioList } from './FlexAxisAlignRadioList';
 import { FlexMainAlignRadioList } from './FlexMainAlignRadioList';
 import { FlexMainDirectionRadioList } from './FlexMainDirectionRadioList';
@@ -33,7 +33,6 @@ export struct FlexShowList {
 
   build() {
     Column() {
-      // Flex中元素对齐方式布局
       Flex({
         alignItems: this.currentFlexAlignItems,
         direction: this.currentFlexDirection,
@@ -41,9 +40,9 @@ export struct FlexShowList {
         wrap: this.currentFlexWrap,
         alignContent: this.currentFlexAlignContent
       }) {
-        ForEach(this.list, (item) => {
+        ForEach(this.list, (item: number) => {
           CommonItem({ item: item })
-        }, item => JSON.stringify(item))
+        }, (item: number) => JSON.stringify(item))
       }
       .padding(MARGIN_FONT_SIZE_SPACE.COMMON_PADDING)
       .width(ALL_PERCENT)
@@ -52,25 +51,17 @@ export struct FlexShowList {
       .margin({ top: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN })
 
       // set main direction
-      FlexMainDirectionRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+      FlexMainDirectionRadioList()
+        .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
       // set main align
-      FlexMainAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+      FlexMainAlignRadioList()
+        .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
       // set axis align
-      FlexAxisAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+      FlexAxisAlignRadioList()
+        .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
     }
     .layoutWeight(1)
     .height(ALL_PERCENT)
     .width(ALL_PERCENT)
-
   }
 }
-
-
-
-
-
-
-
-
-
-
