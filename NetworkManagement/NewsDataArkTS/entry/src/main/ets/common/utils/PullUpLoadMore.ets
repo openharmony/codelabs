@@ -14,46 +14,51 @@
  */
 
 import promptAction from '@ohos.promptAction';
-import { getTabData } from '../utils/DataUtils';
-import { DELAY_TIME, ANIMATION_DURATION, Y_OFF_SET_COEFFICIENT } from '../constant/CommonConstant';
+import { CommonConstant as Const } from '../constant/CommonConstant';
+import NewsViewModel, { NewsData } from '../../viewmodel/NewsViewModel';
+import NewsModel from '../../viewmodel/NewsModel';
 
-export function touchMoveLoadMore(event: TouchEvent) {
-  if (this.endIndex === this.newsData.length - 1 || this.endIndex === this.newsData.length) {
-    this.offsetY = event.touches[0].y - this.downY;
-    if (Math.abs(this.offsetY) > vp2px(this.pullUpLoadHeight) / 2) {
-      this.isCanLoadMore = true;
-      this.isVisiblePullUpLoad = true;
-      this.offsetY = -vp2px(this.pullUpLoadHeight) + this.offsetY * Y_OFF_SET_COEFFICIENT;
+export function touchMoveLoadMore(newsModel: NewsModel, event: TouchEvent) {
+  if (newsModel.endIndex === newsModel.newsData.length - 1 || newsModel.endIndex === newsModel.newsData.length) {
+    newsModel.offsetY = event.touches[0].y - newsModel.downY;
+    if (Math.abs(newsModel.offsetY) > vp2px(newsModel.pullUpLoadHeight) / 2) {
+      newsModel.isCanLoadMore = true;
+      newsModel.isVisiblePullUpLoad = true;
+      newsModel.offsetY = -vp2px(newsModel.pullUpLoadHeight) + newsModel.offsetY * Const.Y_OFF_SET_COEFFICIENT;
     }
   }
 }
 
-export function touchUpLoadMore() {
-  let self = this;
+export function touchUpLoadMore(newsModel: NewsModel) {
+  let self: NewsModel = newsModel;
   animateTo({
-    duration: ANIMATION_DURATION,
+    duration: Const.ANIMATION_DURATION,
   }, () => {
     self.offsetY = 0;
   })
-  if (self.isCanLoadMore) {
+  if ((self.isCanLoadMore === true) && (self.hasMore === true)) {
     self.isLoading = true;
     setTimeout(() => {
-      closeLoadMore.call(this);
-      getTabData(self.currentPage, self.pageSize, self.currentIndex, {
-        onSuccess: (value) => {
-          self.currentPage = parseInt(value.currentPage.toString());
-          self.newsData = self.newsData.concat(value.newsPageData);
-        },
-        onFail: (msg) => promptAction.showToast({ message: msg })
-      });
-    }, DELAY_TIME);
+      closeLoadMore(newsModel);
+      NewsViewModel.getNewsList(self.currentPage, self.pageSize, Const.GET_NEWS_LIST).then((data: NewsData[]) => {
+        if (data.length === self.pageSize) {
+          self.currentPage++;
+          self.hasMore = true;
+        } else {
+          self.hasMore = false;
+        }
+        self.newsData = self.newsData.concat(data);
+      }).catch((err: string | Resource) => {
+        promptAction.showToast({ message: err });
+      })
+    }, Const.DELAY_TIME);
   } else {
-    closeLoadMore.call(this);
+    closeLoadMore(self);
   }
 }
 
-export function closeLoadMore() {
-  this.isCanLoadMore = false;
-  this.isLoading = false;
-  this.isVisiblePullUpLoad = false;
+export function closeLoadMore(newsModel: NewsModel) {
+  newsModel.isCanLoadMore = false;
+  newsModel.isLoading = false;
+  newsModel.isVisiblePullUpLoad = false;
 }

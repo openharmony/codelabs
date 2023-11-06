@@ -13,58 +13,45 @@
  * limitations under the License.
  */
 
+import promptAction from '@ohos.promptAction';
+import { CommonConstant, CommonConstant as Const, PageState } from '../common/constant/CommonConstant';
 import NewsItem from './NewsItem';
 import LoadMoreLayout from './LoadMoreLayout';
 import RefreshLayout from './RefreshLayout';
 import CustomRefreshLoadLayout from './CustomRefreshLoadLayout';
-import { getTabData } from '../common/utils/DataUtils';
-import { CustomRefreshLoadLayoutClass } from '../common/bean/NewsData';
 import { listTouchEvent } from '../common/utils/PullDownRefresh';
-import {
-  CUSTOM_LAYOUT_HEIGHT,
-  NewsListConstant,
-  FULL_WIDTH,
-  FULL_HEIGHT,
-  PageState
-} from '../common/constant/CommonConstant';
+import NewsViewModel, { CustomRefreshLoadLayoutClass, NewsData } from '../viewmodel/NewsViewModel';
+import NoMoreLayout from './NoMoreLayout';
+import NewsModel from '../viewmodel/NewsModel';
 
 /**
  * The news list component.
  */
 @Component
 export default struct NewsList {
+  @State newsModel: NewsModel = new NewsModel();
   @Watch('changeCategory') @Link currentIndex: number;
-  @State newsData: Array<any> = [];
-  @State currentPage: number = 1;
-  @State pageSize: number = 10;
-  @State pullDownRefreshText: Resource = $r('app.string.pull_down_refresh_text');
-  @State pullDownRefreshImage: Resource = $r('app.media.ic_pull_down_refresh');
-  @State pullDownRefreshHeight: number = CUSTOM_LAYOUT_HEIGHT;
-  @State isVisiblePullDown: boolean = false;
-  @State pullUpLoadText: Resource = $r('app.string.pull_up_load_text');
-  @State pullUpLoadImage: Resource = $r('app.media.ic_pull_up_load');
-  @State pullUpLoadHeight: number = CUSTOM_LAYOUT_HEIGHT;
-  @State isVisiblePullUpLoad: boolean = false;
-  private startIndex = 0;
-  private endIndex = 0;
-  @State offsetY: number = 0;
-  private downY = 0;
-  private lastMoveY = 0;
-  private isRefreshing: boolean = false;
-  private isCanRefresh = false;
-  private isPullRefreshOperation = false;
-  private isLoading: boolean = false;
-  private isCanLoadMore = false;
-  @State pageState: number = PageState.Loading;
 
   changeCategory() {
-    getTabData(this.currentPage - 1, this.pageSize, this.currentIndex, {
-      onSuccess: (value) => {
-        this.pageState = PageState.Success;
-        this.newsData = value.newsPageData;
-      },
-      onFail: () => this.pageState = PageState.Fail
-    })
+    this.newsModel.currentPage = 1;
+    NewsViewModel.getNewsList(this.newsModel.currentPage, this.newsModel.pageSize, Const.GET_NEWS_LIST)
+      .then((data: NewsData[]) => {
+        this.newsModel.pageState = PageState.Success;
+        if (data.length === this.newsModel.pageSize) {
+          this.newsModel.currentPage++;
+          this.newsModel.hasMore = true;
+        } else {
+          this.newsModel.hasMore = false;
+        }
+        this.newsModel.newsData = data;
+      })
+      .catch((err: string | Resource) => {
+        promptAction.showToast({
+          message: err,
+          duration: Const.ANIMATION_DURATION
+        });
+        this.newsModel.pageState = PageState.Fail;
+      });
   }
 
   aboutToAppear() {
@@ -74,82 +61,88 @@ export default struct NewsList {
 
   build() {
     Column() {
-      if (this.pageState === PageState.Loading) {
-        this.LoadingLayout()
-      } else if (this.pageState === PageState.Success) {
+      if (this.newsModel.pageState === PageState.Success) {
         this.ListLayout()
+      } else if (this.newsModel.pageState === PageState.Loading) {
+        this.LoadingLayout()
       } else {
         this.FailLayout()
       }
     }
-    .width(FULL_WIDTH)
-    .height(FULL_HEIGHT)
+    .width(Const.FULL_WIDTH)
+    .height(Const.FULL_HEIGHT)
     .justifyContent(FlexAlign.Center)
-    .onTouch((event) => {
-      if (this.pageState === PageState.Success) {
-        listTouchEvent.call(this, event);
+    .onTouch((event: TouchEvent | undefined) => {
+      if (event) {
+        if (this.newsModel.pageState === PageState.Success) {
+          listTouchEvent(this.newsModel, event);
+        }
       }
     })
   }
 
   @Builder LoadingLayout() {
     CustomRefreshLoadLayout({ customRefreshLoadClass: new CustomRefreshLoadLayoutClass(true,
-      $r('app.media.ic_pull_up_load'), $r('app.string.pull_up_load_text'), this.pullDownRefreshHeight) })
+      $r('app.media.ic_pull_up_load'), $r('app.string.pull_up_load_text'), this.newsModel.pullDownRefreshHeight) })
   }
 
   @Builder ListLayout() {
     List() {
       ListItem() {
         RefreshLayout({
-          refreshLayoutClass: new CustomRefreshLoadLayoutClass(this.isVisiblePullDown, this.pullDownRefreshImage,
-            this.pullDownRefreshText, this.pullDownRefreshHeight)
+          refreshLayoutClass: new CustomRefreshLoadLayoutClass(this.newsModel.isVisiblePullDown, this.newsModel.pullDownRefreshImage,
+            this.newsModel.pullDownRefreshText, this.newsModel.pullDownRefreshHeight)
         })
       }
 
-      ForEach(this.newsData, item => {
+      ForEach(this.newsModel.newsData, (item: NewsData) => {
         ListItem() {
           NewsItem({ newsData: item })
         }
-        .height(NewsListConstant.ITEM_HEIGHT)
+        .height($r('app.float.news_list_height'))
         .backgroundColor($r('app.color.white'))
-        .margin({ top: NewsListConstant.ITEM_MARGIN_TOP})
-        .borderRadius(NewsListConstant.ITEM_BORDER_RADIUS)
-      }, (item, index) => JSON.stringify(item) + index.toString())
+        .margin({ top: $r('app.float.news_list_margin_top') })
+        .borderRadius(Const.NewsListConstant_ITEM_BORDER_RADIUS)
+      }, (item: NewsData, index?: number) => JSON.stringify(item) + index)
+
       ListItem() {
-        LoadMoreLayout({
-          loadMoreLayoutClass: new CustomRefreshLoadLayoutClass(this.isVisiblePullUpLoad, this.pullUpLoadImage,
-            this.pullUpLoadText, this.pullUpLoadHeight)
-        })
+        if (this.newsModel.hasMore) {
+          LoadMoreLayout({
+            loadMoreLayoutClass: new CustomRefreshLoadLayoutClass(this.newsModel.isVisiblePullUpLoad, this.newsModel.pullUpLoadImage,
+              this.newsModel.pullUpLoadText, this.newsModel.pullUpLoadHeight)
+          })
+        } else {
+          NoMoreLayout()
+        }
       }
     }
-    .width(NewsListConstant.LIST_WIDTH)
-    .height(FULL_HEIGHT)
-    .margin({ left: NewsListConstant.LIST_MARGIN_LEFT, right: NewsListConstant.LIST_MARGIN_RIGHT })
+    .width(Const.NewsListConstant_LIST_WIDTH)
+    .height(Const.FULL_HEIGHT)
+    .margin({ left: Const.NewsListConstant_LIST_MARGIN_LEFT, right: Const.NewsListConstant_LIST_MARGIN_RIGHT })
     .backgroundColor($r('app.color.listColor'))
     .divider({
       color: $r('app.color.dividerColor'),
-      strokeWidth: NewsListConstant.LIST_DIVIDER_STROKE_WIDTH,
-      endMargin: NewsListConstant.LIST_MARGIN_RIGHT
+      strokeWidth: Const.NewsListConstant_LIST_DIVIDER_STROKE_WIDTH,
+      endMargin: Const.NewsListConstant_LIST_MARGIN_RIGHT
     })
     // Remove the rebound effect.
     .edgeEffect(EdgeEffect.None)
-    .offset({ x: 0, y: `${this.offsetY}px` })
-    .onScrollIndex((start, end) => {
+    .offset({ x: 0, y: `${this.newsModel.offsetY}${CommonConstant.LIST_OFFSET_UNIT}` })
+    .onScrollIndex((start: number, end: number) => {
       // Listen to the first index of the current list.
-      this.startIndex = start;
-      this.endIndex = end;
+      this.newsModel.startIndex = start;
+      this.newsModel.endIndex = end;
     })
   }
 
   @Builder FailLayout() {
     Image($r('app.media.none'))
-      .height(NewsListConstant.NONE_IMAGE_SIZE)
-      .width(NewsListConstant.NONE_IMAGE_SIZE)
+      .height(Const.NewsListConstant_NONE_IMAGE_SIZE)
+      .width(Const.NewsListConstant_NONE_IMAGE_SIZE)
     Text($r('app.string.page_none_msg'))
-      .opacity(NewsListConstant.NONE_TEXT_opacity)
-      .fontSize(NewsListConstant.NONE_TEXT_size)
+      .opacity(Const.NewsListConstant_NONE_TEXT_opacity)
+      .fontSize(Const.NewsListConstant_NONE_TEXT_size)
       .fontColor($r('app.color.fontColor_text3'))
-      .margin({ top: NewsListConstant.NONE_TEXT_margin })
+      .margin({ top: Const.NewsListConstant_NONE_TEXT_margin })
   }
 }
-
