@@ -18,19 +18,18 @@ import image from '@ohos.multimedia.image';
 import AreaScreenshot from '../view/AreaScreenshot';
 import Logger from '../common/utils/Logger';
 import ScreenshotDialog from '../view/ScreenshotDialog';
-import CommonConstant from '../common/utils/CommonConstaint';
 import CommonConstants from '../common/utils/CommonConstaint';
+import { ScaleInterface } from '../common/utils/CommonConstaint';
 
 @Entry
 @Component
 struct GestureScreenshot {
-  @State pixelMap: image.PixelMap = undefined;
+  @State pixelMap: image.PixelMap| undefined = undefined;
   @State showScreen: boolean = false;
-  @State scaleNum: Object = {
-    x: CommonConstant.NO_SCALE_DOWN,
-    y: CommonConstant.NO_SCALE_DOWN
+  @State scaleNum: ScaleInterface = {
+    x: CommonConstants.NO_SCALE_DOWN,
+    y: CommonConstants.NO_SCALE_DOWN
   };
-
   dialogController: CustomDialogController = new CustomDialogController({
     builder: ScreenshotDialog({ pixelMap: this.pixelMap }),
     alignment: DialogAlignment.BottomEnd,
@@ -42,7 +41,7 @@ struct GestureScreenshot {
       Column() {
         Text($r('app.string.title_content'))
           .fontSize($r('app.float.title_font_size'))
-          .fontWeight(CommonConstant.TITLE_FONT_WEIGHT)
+          .fontWeight(CommonConstants.TITLE_FONT_WEIGHT)
           .width(CommonConstants.FULL_PARAM)
           .textAlign(TextAlign.Start)
         Image($r('app.media.ic_mountain'))
@@ -56,24 +55,27 @@ struct GestureScreenshot {
           .lineHeight($r('app.float.text_height'))
       }
       .backgroundColor($r('app.color.main_area'))
-      .width(CommonConstant.FULL_PARAM)
-      .height(CommonConstant.FULL_PARAM)
+      .width(CommonConstants.FULL_PARAM)
+      .height(CommonConstants.FULL_PARAM)
       .padding({
         left: $r('app.float.main_margin_size'),
         right: $r('app.float.main_margin_size')
       })
       .gesture(
         // fingers：The number of Trigger Fingers,direction：Triggering direction,distance:Trigger sliding distance.
-        PanGesture({ fingers: 1, direction: PanDirection.Down, distance: CommonConstants.MINIMUM_FINGER_DISTANCE })
-          // Trigger Start Callback.
+        PanGesture({
+          fingers: 1,
+          direction: PanDirection.Down,
+          distance: CommonConstants.MINIMUM_FINGER_DISTANCE
+        })// Trigger Start Callback.
           .onActionStart(() => {
             // Screenshot Parameters and APIs.
-            let ScreenshotOptions = {
+            let screenshotOptions: screenshot.ScreenshotOptions = {
               rotation: 0
             };
-            screenshot.save(ScreenshotOptions, (err, data: image.PixelMap) => {
+            screenshot.save(screenshotOptions, (err: Error, data: image.PixelMap) => {
               if (err) {
-                Logger.error(`Failed to save the screenshot. Error:${ JSON.stringify(err) }`);
+                Logger.error(`Failed to save the screenshot. Error:${JSON.stringify(err)}`);
               }
               if (this.pixelMap !== undefined) {
                 this.pixelMap.release();
@@ -85,7 +87,7 @@ struct GestureScreenshot {
       )
       .scale(this.scaleNum)
 
-      AreaScreenshot({ showScreen: $showScreen, pixelMap: $pixelMap, scaleNum: $scaleNum })
+      AreaScreenshot({ showScreen: this.showScreen, pixelMap: this.pixelMap, scaleNum: this.scaleNum })
     }
     .backgroundColor($r('app.color.black_area'))
     .gesture(
@@ -93,8 +95,8 @@ struct GestureScreenshot {
         .onAction(() => {
           this.showScreen = true;
           this.scaleNum = {
-            x: CommonConstant.X_SCALE_DOWN,
-            y: CommonConstant.Y_SCALE_DOWN
+            x: CommonConstants.X_SCALE_DOWN,
+            y: CommonConstants.Y_SCALE_DOWN
           }
         })
     )
