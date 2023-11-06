@@ -19,8 +19,8 @@ import CommonConstants from '../common/constants//CommonConstants';
 import Logger from '../common/utils/Logger';
 
 export default class KvStoreModel {
-  kvManager: distributedKVStore.KVManager = null;
-  kvStore: distributedKVStore.SingleKVStore = null;
+  kvManager?: distributedKVStore.KVManager;
+  kvStore?: distributedKVStore.SingleKVStore;
 
   /**
    * Create a distributed key-value database.
@@ -32,7 +32,7 @@ export default class KvStoreModel {
     context: common.UIAbilityContext,
     callback: (data: distributedKVStore.ChangeNotification) => void
   ): void {
-    if (this.kvStore !== null) {
+    if (this.kvStore !== undefined) {
       Logger.info('KvStoreModel', 'createKvStore KVManager is exist');
       return;
     }
@@ -45,7 +45,7 @@ export default class KvStoreModel {
       this.kvManager = distributedKVStore.createKVManager(config);
     } catch (error) {
       Logger.error('KvStoreModel',
-        `createKvStore createKVManager failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `createKvStore createKVManager failed, err=${JSON.stringify(error)}`);
       return;
     }
 
@@ -66,14 +66,14 @@ export default class KvStoreModel {
       this.kvStore = store;
       this.kvStore.enableSync(true).then(() => {
         Logger.info('KvStoreModel', 'createKvStore enableSync success');
-      }).catch((error) => {
+      }).catch((error: Error) => {
         Logger.error('KvStoreModel',
-          `createKvStore enableSync fail, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+          `createKvStore enableSync fail, error=${JSON.stringify(error)}`);
       });
       this.setDataChangeListener(callback);
-    }).catch((error) => {
+    }).catch((error: Error) => {
       Logger.error('getKVStore',
-        `createKvStore getKVStore failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `createKvStore getKVStore failed, error=${JSON.stringify(error)}`);
     })
   }
 
@@ -84,15 +84,15 @@ export default class KvStoreModel {
    * @param value Store value.
    */
   put(key: string, value: string): void {
-    if (this.kvStore === null) {
+    if (this.kvStore === undefined) {
       return;
     }
 
     this.kvStore.put(key, value).then(() => {
       Logger.info('KvStoreModel', `kvStore.put key=${key} finished}`);
-    }).catch((error) => {
+    }).catch((error: Error) => {
       Logger.error('KvStoreModel',
-        `kvStore.put key=${key} failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `kvStore.put key=${key} failed, error=${JSON.stringify(error)}`);
     });
   }
 
@@ -102,7 +102,7 @@ export default class KvStoreModel {
    * @param callback Callback.
    */
   setDataChangeListener(callback: (data: distributedKVStore.ChangeNotification) => void): void {
-    if (this.kvStore === null) {
+    if (this.kvStore === undefined) {
       Logger.error('KvStoreModel', 'setDataChangeListener kvStore is null');
       return;
     }
@@ -116,7 +116,7 @@ export default class KvStoreModel {
         });
     } catch (error) {
       Logger.error('KvStoreModel',
-        `setDataChangeListener on('dataChange') failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `setDataChangeListener on('dataChange') failed, err=${JSON.stringify(error)}`);
     }
   }
 
@@ -124,7 +124,7 @@ export default class KvStoreModel {
    * Remove the data change listener.
    */
   removeDataChangeListener(): void {
-    if (this.kvStore === null) {
+    if (this.kvStore === undefined) {
       return;
     }
 
@@ -132,7 +132,7 @@ export default class KvStoreModel {
       this.kvStore.off('dataChange');
     } catch (error) {
       Logger.error('KvStoreModel',
-        `removeDataChangeListener off('dataChange') failed, code=${error.code}, msg=${JSON.stringify(error.message)}`);
+        `removeDataChangeListener off('dataChange') failed, err=${JSON.stringify(error)}`);
     }
   }
 }
