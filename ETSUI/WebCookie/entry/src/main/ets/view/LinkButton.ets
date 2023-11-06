@@ -24,8 +24,8 @@ import Logger from '../common/utils/Logger';
  */
 @Component
 export struct LinkButton {
-  buttonType: string;
-  isNeedDivider: boolean;
+  buttonType: string = '';
+  isNeedDivider: boolean = false;
 
   build() {
     Row() {
@@ -73,8 +73,8 @@ export struct LinkButton {
       case CookieOperation.VERIFY_COOKIE:
         router.pushUrl({
           url: CommonConstants.PAGE_VERIFY
-        }).catch(err => {
-          Logger.error('[LinkButton] push url fail: ' + err);
+        }).catch((err: Error) => {
+          Logger.error('[LinkButton] push url fail: ' + JSON.stringify(err));
         });
         break;
       default:
