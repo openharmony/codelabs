@@ -17,12 +17,11 @@ import { CommonConstants, Symbol } from '../common/constants/CommonConstants';
 import CalculateUtil from '../common/util/CalculateUtil';
 import CheckEmptyUtil from '../common/util/CheckEmptyUtil';
 import Logger from '../common/util/Logger';
-
+import {IContext} from '../viewmodel/PressKeysBean';
 export class CalculateModel {
   private expressions: Array<string> = [];
   private context;
-
-  constructor(context) {
+  constructor(context: IContext) {
     this.context = context;
   }
 
@@ -225,12 +224,7 @@ export class CalculateModel {
    * @return deep copy expression.
    */
   deepCopy(): Array<string> {
-    let that = this;
-    let copyExpressions = Object.create(Object.getPrototypeOf(this.expressions));
-    Object.getOwnPropertyNames(this.expressions).forEach((items: string) => {
-      let item = Object.getOwnPropertyDescriptor(that.expressions, items);
-      Object.defineProperty(copyExpressions, items, item);
-    })
+    let copyExpressions: Array<string> = Array.from(this.expressions);
     return copyExpressions;
   }
 
@@ -241,7 +235,7 @@ export class CalculateModel {
    */
   async getResult() {
     let calResult = CalculateUtil.parseExpression(this.deepCopy());
-    if (isNaN(calResult)) {
+    if (calResult === 'NaN') {
       this.context.calValue = this.resourceToString($r('app.string.error'));
       return false;
     }
@@ -256,7 +250,7 @@ export class CalculateModel {
    * @return Thousand percentile data.
    */
   resultFormat(value: string) {
-    let reg = (value.indexOf('.') > -1) ? /(\d)(?=(\d{3})+\.)/g : /(\d)(?=(?:\d{3})+$)/g;
+    let reg = (value.indexOf('.') > -1) ? new RegExp("/(\d)(?=(\d{3})+\.)/g") : new RegExp("/(\d)(?=(?:\d{3})+$)/g");
     return value.replace(reg, '$1,');
   }
 
@@ -283,7 +277,7 @@ export class CalculateModel {
    * Thousands in the formatting result.
    */
   formatInputValue() {
-    let deepExpressions = [];
+    let deepExpressions: Array<string> = [];
     this.deepCopy().forEach((item: string, index: number) => {
       deepExpressions[index] = this.resultFormat(item);
     });

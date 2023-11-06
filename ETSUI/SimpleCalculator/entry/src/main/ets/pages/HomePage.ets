@@ -15,8 +15,8 @@
 
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { CalculateModel } from '../model/CalculateModel';
-import { PressKeysBean } from '../common/bean/PressKeysBean';
-import keysModel from '../viewmodel/PresskeysBeanViewModel';
+import { PressKeysItem } from '../viewmodel/PressKeysItem';
+import keysModel from '../viewmodel/PresskeysViewModel';
 
 @Entry
 @Component
@@ -24,7 +24,6 @@ struct HomePage {
   private model: CalculateModel = new CalculateModel(this);
   @State inputValue: string = '';
   @State calValue: string = '';
-
   build() {
     Column() {
       Column() {
@@ -62,13 +61,13 @@ struct HomePage {
 
       Column() {
         Row() {
-          ForEach(keysModel.getPressKeys(), (columnItem: Array<PressKeysBean>, columnItemIndex: number) => {
+          ForEach(keysModel.getPressKeys(), (columnItem: Array<PressKeysItem>, columnItemIndex?: number) => {
             Column() {
-              ForEach(columnItem, (keyItem: PressKeysBean, keyItemIndex: number) => {
+              ForEach(columnItem, (keyItem: PressKeysItem, keyItemIndex?: number) => {
                 Column() {
                   Column() {
                     if (keyItem.flag === 0) {
-                      Image(keyItem.source)
+                      Image(keyItem.source !== undefined ? keyItem.source : '')
                         .width(keyItem.width)
                         .height(keyItem.height)
                     } else {
@@ -111,10 +110,10 @@ struct HomePage {
                 )
                 .width(CommonConstants.FULL_PERCENT)
                 .justifyContent(FlexAlign.Center)
-              }, keyItem => JSON.stringify(keyItem))
+              }, (keyItem: PressKeysItem) => JSON.stringify(keyItem))
             }
             .layoutWeight(1)
-          }, item => JSON.stringify(item))
+          }, (item: Array<Array<PressKeysItem>>) => JSON.stringify(item))
         }
         .height(CommonConstants.FULL_PERCENT)
         .alignItems(VerticalAlign.Top)

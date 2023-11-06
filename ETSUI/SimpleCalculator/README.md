@@ -8,8 +8,10 @@
 
 >![](public_sys-resources/icon-note.gif) **说明：** 
 >由于数字都是双精度浮点数，在计算机中是二进制存储数据的，因此小数和非安全整数（超过整数的安全范围[-Math.pow(2, 53)，Math.pow(2, 53)]的数据）在计算过程中会存在精度丢失的情况。
->1. 小数运算时：“0.2 + 2.22 = 2.4200000000000004”，当前示例的解决方法是将小数扩展到整数进行计算，计算完成之后再将结果缩小，计算过程为“(0.2 * 100 + 2.22 * 100) / 100 = 2.42”。
->2. 非安全整数运算时：“9007199254740992 + 1 = 9.007199254740992”，当前示例中将长度超过15位的数字转换成科学计数法，计算结果为“9007199254740992 + 1 = 9.007199254740993e15”。
+>
+>1、小数运算时：“0.2 + 2.22 = 2.4200000000000004”，当前示例的解决方法是将小数扩展到整数进行计算，计算完成之后再将结果缩小，计算过程为“(0.2 * 100 + 2.22 * 100) / 100 = 2.42”。
+>
+>2、非安全整数运算时：“9007199254740992 + 1 = 9.007199254740992”，当前示例中将长度超过15位的数字转换成科学计数法，计算结果为“9007199254740992 + 1 = 9.007199254740993e15”。
 
 ### 相关概念
 
@@ -21,13 +23,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -55,8 +57,6 @@
 ```
 ├──entry/src/main/ets	                   // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──PressKeysBean.ets              // 按键bean类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets            // 公共常量类
 │  │  └──util
@@ -70,7 +70,8 @@
 │  ├──pages
 │  │  └──HomePage.ets                      // 计算器页面
 │  └──viewmodel    
-│     └──PresskeysBeanViewModel.ets        // 计算器页面键盘数据
+│     ├──PressKeysItem.ets                 // 按键信息类
+│     └──PresskeysViewModel.ets            // 计算器页面键盘数据
 └──entry/src/main/resource                 // 应用静态资源目录
 ```
 
@@ -124,11 +125,11 @@ Column() {
 
 ```typescript
 // HomePage.ets
-ForEach(columnItem, (keyItem: PressKeysBean, keyItemIndex: number) => {
+ForEach(columnItem, (keyItem: PressKeysItem, keyItemIndex?: number) => {
   Column() {
     Column() {
       if (keyItem.flag === 0) {
-        Image(keyItem.source)
+        Image(keyItem.source !== undefined ? keyItem.source : '')
           .width(keyItem.width)
           .height(keyItem.height)
       } else {
@@ -160,7 +161,7 @@ ForEach(columnItem, (keyItem: PressKeysBean, keyItemIndex: number) => {
       (keyItemIndex === (columnItem.length - 1))) ? CommonConstants.TWO : 1
   )
   ...
-}, keyItem => JSON.stringify(keyItem))
+}, (keyItem: PressKeysItem) => JSON.stringify(keyItem))
 ```
 
 ## 组装计算表达式
@@ -169,7 +170,7 @@ ForEach(columnItem, (keyItem: PressKeysBean, keyItemIndex: number) => {
 
 ```typescript
 // HomePage.ets
-ForEach(columnItem, (keyItem: PressKeysBean, keyItemIndex: number) => {
+ForEach(columnItem, (keyItem: PressKeysItem, keyItemIndex?: number) => {
   Column() {
     Column() {
       ...
@@ -186,7 +187,7 @@ ForEach(columnItem, (keyItem: PressKeysBean, keyItemIndex: number) => {
   ...
   )
   ...
-}, keyItem => JSON.stringify(keyItem))
+}, (keyItem: PressKeysItem) => JSON.stringify(keyItem))
 ```
 
 >![](public_sys-resources/icon-note.gif) **说明：** 
@@ -369,7 +370,7 @@ inputOperators(len: number, value: string) {
 
 ```typescript
 // CalculateUtil.ets
-parseExpression(expressions: Array<string>) {
+parseExpression(expressions: Array<string>): string {
   ...
   let len = expressions.length;
   ...
@@ -396,19 +397,24 @@ parseExpression(expressions: Array<string>) {
 
 ```typescript
 // CalculateUtil.ets
-parseExpression(expressions: Array<string>) {
+parseExpression(expressions: Array<string>): string {
   ...
   while (expressions.length > 0) {
     let current = expressions.shift();
-    if (this.isSymbol(current)) {
-      while (outputStack.length > 0 &&
-        this.comparePriority(current, outputStack[outputStack.length - 1])) {
-        outputQueue.push(outputStack.pop());
-      }
-      outputStack.push(current);
-    } else {
-      outputQueue.push(current);
-    }
+     if (current !== undefined) {
+        if (this.isSymbol(current)) {
+           while (outputStack.length > 0 &&
+           this.comparePriority(current, outputStack[outputStack.length - 1])) {
+              let popValue: string | undefined = outputStack.pop();
+              if (popValue !== undefined) {
+                 outputQueue.push(popValue);
+              }
+           }
+           outputStack.push(current);
+        } else {
+           outputQueue.push(current);
+        }
+     }
   }
   while (outputStack.length > 0) {
     outputQueue.push(outputStack.pop());
@@ -427,24 +433,29 @@ parseExpression(expressions: Array<string>) {
 // CalculateUtil.ets
 dealQueue(queue: Array<string>) {
   ...
-  let outputStack = [];
-  while (queue.length > 0) {
-    let current = queue.shift();
-    if (!this.isSymbol(current)) {
-      outputStack.push(current);
-    } else {
-      let second = outputStack.pop();
-      let first = outputStack.pop();
-      outputStack.push(this.calResult(first, second, current));
-    }
-  }
-  if (outputStack.length !== 1) {
-    return NaN;
-  } else {
-    let end = outputStack[0].endsWith(CommonConstants.DOTS) ?
+  let outputStack: string[] = [];
+   while (queue.length > 0) {
+      let current: string | undefined = queue.shift();
+      if (current !== undefined) {
+         if (!this.isSymbol(current)) {
+            outputStack.push(current);
+         } else {
+            let second: string | undefined = outputStack.pop();
+            let first: string | undefined = outputStack.pop();
+            if (first !== undefined && second !== undefined) {
+               let calResultValue: string = this.calResult(first, second, current)
+               outputStack.push(calResultValue);
+            }
+         }
+      }
+   }
+   if (outputStack.length !== 1) {
+      return 'NaN';
+   } else {
+      let end = outputStack[0].endsWith(CommonConstants.DOTS) ?
       outputStack[0].substring(0,  outputStack[0].length - 1) : outputStack[0];
-    return end;
-  }
+      return end;
+   }
 }
 ```
 

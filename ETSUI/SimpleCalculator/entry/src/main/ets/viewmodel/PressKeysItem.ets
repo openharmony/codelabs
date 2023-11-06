@@ -13,18 +13,28 @@
  * limitations under the License.
  */
 
-export class PressKeysBean {
+export class PressKeysItem {
   flag: number;
   width: string;
   height: string;
   value: string;
   source?: Resource;
 
-  constructor(flag, width, height, value, source) {
+  constructor(flag: number, width: string, height: string, value: string, source?: Resource) {
     this.flag = flag;
     this.width = width;
     this.height = height;
     this.value = value;
     this.source = source;
+  }
+}
+export class IContext{
+  build: () => void;
+  inputValue: string;
+  calValue: string;
+  constructor(inputValue: string, calValue: string, build: () => void) {
+    this.calValue = calValue;
+    this.inputValue = inputValue;
+    this.build = build;
   }
 }
