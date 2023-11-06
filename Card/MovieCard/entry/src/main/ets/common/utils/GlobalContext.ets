@@ -13,27 +13,25 @@
  * limitations under the License.
  */
 
-/**
- * Classes required for LazyForEach loading.
- */
-export default class DataSource<T> implements IDataSource {
-  private listData: T[];
-
-  constructor(listData: T[]) {
-    this.listData = listData;
+export class GlobalContext {
+  private constructor() {
   }
 
-  totalCount() {
-    return this.listData.length;
+  private static instance: GlobalContext;
+  private _objects = new Map<string, Object>();
+
+  public static getContext(): GlobalContext {
+    if (!GlobalContext.instance) {
+      GlobalContext.instance = new GlobalContext();
+    }
+    return GlobalContext.instance;
   }
 
-  getData(index: number) {
-    return this.listData[index];
+  getObject(value: string): Object | undefined {
+    return this._objects.get(value);
   }
 
-  registerDataChangeListener() {
-  }
-
-  unregisterDataChangeListener() {
+  setObject(key: string, objectClass: Object): void {
+    this._objects.set(key, objectClass);
   }
 }
