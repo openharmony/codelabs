@@ -14,10 +14,12 @@
  */
 
 import deviceManager from '@ohos.distributedHardware.deviceManager';
-import { NewsData } from '../common/bean/NewsData';
+import common from '@ohos.app.ability.common';
 import CommonConstants from '../common/constants/CommonConstants';
 import RemoteDeviceModel from '../model/RemoteDeviceModel';
 import { DeviceListDialog } from './DeviceListDialog';
+import Logger from '../common/utils/Logger';
+import { NewsData } from '../viewmodel/NewsDataModel';
 
 @Extend(Image) function imageStyle() {
   .width($r('app.float.footer_icon_size'))
@@ -30,7 +32,8 @@ export default struct DetailFooter {
   @StorageLink('trustedDeviceList') trustedDeviceList: deviceManager.DeviceInfo[] = [];
   @Consume newsData: NewsData;
   @Provide currentBreakpoint: string = CommonConstants.BREAKPOINT_SM;
-  private dialogController: CustomDialogController;
+  private dialogController?: CustomDialogController;
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
 
   build() {
     Column() {
@@ -112,6 +115,10 @@ export default struct DetailFooter {
                 .onClick(() => {
                   // Discover devices.
                   RemoteDeviceModel.startDeviceDiscovery();
+                  if (this.dialogController === undefined) {
+                    Logger.error(`DialogController is undefined`);
+                    return;
+                  }
                   this.dialogController.open();
                 })
             }
@@ -138,7 +145,7 @@ export default struct DetailFooter {
           builder: DeviceListDialog({
             confirm: (device: deviceManager.DeviceInfo) => {
               // Connect the device.
-              RemoteDeviceModel.authenticateDevice(device, globalThis.context);
+              RemoteDeviceModel.authenticateDevice(device, this.context);
               RemoteDeviceModel.stopDeviceDiscovery();
             }
           }),

@@ -36,13 +36,13 @@
 
 ### 软件要求
 
-- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
-- OpenHarmony SDK版本：API version 10及以上版本。
+- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 4.0 Beta2。
+- OpenHarmony SDK版本：API version 10。
 
 ### 硬件要求
 
 - 开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
-- OpenHarmony系统：4.0 Beta1及以上版本。
+- OpenHarmony系统：4.0 Beta1。
 
 ### 环境搭建
 
@@ -68,13 +68,10 @@
 ```txt
 ├──entry/src/main/ets                   // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──NewsData.ets                // 新闻数据类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets         // 常量类
 │  │  └──utils
-│  │     ├──Logger.ets                  // 日志工具类
-│  │     └──PromptUtil.ets              // 弹窗工具类
+│  │     └──Logger.ets                  // 日志工具类
 │  ├──entryability
 │  │  └──EntryAbility.ets               // 程序入口类
 │  ├──model
@@ -105,7 +102,7 @@
 export default struct NewsTab {
   @State currentIndex: number = 0;
   @State currentBreakpoint: string = CommonConstants.BREAKPOINT_SM;
-  private newsItems: NewsData[];
+  private newsItems: NewsData[] = [];
 
   // 自定义页签栏
   @Builder TabBuilder(title: Resource, index: number) {
@@ -133,7 +130,7 @@ export default struct NewsTab {
           NewsList({ newsItems: NewsDataModel.getNewsByType(this.newsItems, title) })
         }
         .tabBar(this.TabBuilder(NewsDataModel.getTypeByStr(title), index))
-      }, (title, index) => index + JSON.stringify(title))
+      }, (title: string, index: number) => index + JSON.stringify(title))
     }
     .barHeight($r('app.float.news_tab_bar_height'))
     .barWidth(CommonConstants.FULL_COMPONENT)
@@ -148,7 +145,7 @@ export default struct NewsTab {
 // NewsList.ets
 @Component
 export default struct NewsList {
-  private newsItems: NewsData[];
+  private newsItems: NewsData[] = [];
 
   build() {
     List() {
@@ -186,7 +183,7 @@ export default struct NewsList {
             }
           }
         }
-      }, (item, index) => index + JSON.stringify(item))
+      }, (item: NewsData, index: number) => index + JSON.stringify(item))
     }
     .height(CommonConstants.FULL_COMPONENT)
   }
@@ -262,7 +259,7 @@ build() {
       .color($r('app.color.detail_divider_color'))
       .width(CommonConstants.FULL_COMPONENT)
 
-    //栅格布局
+    // 栅格布局
     GridRow({
       columns: {
         sm: CommonConstants.FOUR_COLUMN,
@@ -335,7 +332,7 @@ build() {
         ListItem() {
           ...
         }
-      }, (item, index) => index + JSON.stringify(item))
+      }, (item: deviceManager.DeviceInfo) => JSON.stringify(item.deviceId))
     }
 
     Row() {
@@ -354,7 +351,7 @@ build() {
         ListItem() {
           ...
         }
-      }, (item, index) => index + JSON.stringify(item))
+      }, (item: deviceManager.DeviceInfo) => JSON.stringify(item.deviceId))
     }
 
     Row() {
@@ -383,19 +380,20 @@ build() {
 
 ```typescript
 // EntryAbility.ets
-onCreate(want) {
+onCreate(want: Want) {
   ...
   // 创建设备管理器
-  RemoteDeviceModel.createDeviceManager();
+  RemoteDeviceModel.createDeviceManager(this.context);
 }
 
 // RemoteDeviceModel.ets
-async createDeviceManager(): Promise<void> {
+async createDeviceManager(context: common.UIAbilityContext): Promise<void> {
   if (this.deviceManager !== undefined) {
     return;
   }
-  await new Promise((resolve, reject) => {
-    deviceManager.createDeviceManager(this.context.abilityInfo.bundleName, (err, value) => {
+  await new Promise((resolve: (value: Object | PromiseLike<Object>) => void, reject:
+    ((reason?: RejectError) => void)) => {
+    deviceManager.createDeviceManager(context.abilityInfo.bundleName, (err, value) => {
       if (err) {
         reject(err);
         logger.error('createDeviceManager failed.');
@@ -449,12 +447,12 @@ startDeviceDiscovery(): void {
   };
   // 添加设备至发现列表
   this.discoverList = [];
-  AppStorage.SetOrCreate(CommonConstants.DISCOVER_DEVICE_LIST, this.discoverList);
+  AppStorage.setOrCreate(CommonConstants.DISCOVER_DEVICE_LIST, this.discoverList);
 
   try {
     this.deviceManager.startDeviceDiscovery(info);
   } catch (err) {
-    logger.error(`startDeviceDiscovery failed. Code is ${err.code}, message is ${err.message}`);
+    logger.error(`startDeviceDiscovery failed error = ${JSON.stringify(err)}`);
   }
 }
 ```
@@ -476,11 +474,11 @@ authenticateDevice(device: deviceManager.DeviceInfo, context: common.UIAbilityCo
     if (this.discoverList[i].deviceId !== device.deviceId) {
       continue;
     }
-    let extraInfo: any = {
-      'targetPkgName': context.abilityInfo.bundleName,
-      'appName': context.applicationInfo.name,
-      'appDescription': context.applicationInfo.description,
-      'business': CommonConstants.ZERO
+    let extraInfo: AuthExtraInfoInterface = {
+      targetPkgName: context.abilityInfo.bundleName,
+      appName: context.applicationInfo.name,
+      appDescription: context.applicationInfo.description,
+      business: CommonConstants.ZERO
     };
     let authParam: deviceManager.AuthParam = {
       'authType': CommonConstants.ONE,
@@ -495,7 +493,7 @@ authenticateDevice(device: deviceManager.DeviceInfo, context: common.UIAbilityCo
         }
       })
     } catch (err) {
-      logger.error(`authenticateDevice failed. Code is ${err.code}, message is ${err.message}`);
+      logger.error(`authenticateDevice failed error = ${JSON.stringify(err)}`);
     }
   }
 }
@@ -513,13 +511,12 @@ function startAbilityContinuation(deviceId: string, newsId: string, context: com
     bundleName: context.abilityInfo.bundleName,
     abilityName: CommonConstants.ABILITY_NAME,
     parameters: {
-      'url': CommonConstants.NEWS_DETAIL_PAGE,
-      'newsId': newsId
+      newsId: newsId
     }
   };
   // 拉起应用
-  globalThis.context.startAbility(want).catch((err) => {
-    Logger.error(`startAbilityContinuation error. Code is ${err.code}, message is ${err.message}`);
+  context.startAbility(want).catch((err: Error) => {
+    Logger.error(`startAbilityContinuation failed error = ${JSON.stringify(err)}`);
     prompt.showToast({
       message: $r('app.string.start_ability_continuation_error')
     });
@@ -528,15 +525,13 @@ function startAbilityContinuation(deviceId: string, newsId: string, context: com
 
 // NewsDetail.ets
 aboutToAppear() {
-  const params: any = router.getParams();
-  if (params) {
-    ...
-  } else {
-    // 读取跨设备传递的参数信息
-    const want = globalThis.newWant;
-    const newsId = want.parameters.newsId;
-    this.newsData = this.newsItems.filter(item => (item.newsId === newsId))[0];
+  let newsId: string | undefined = AppStorage.get<string>('wantNewsId');
+  if (newsId === undefined) {
+    this.newsData = (router.getParams() as Record<string, NewsData>)['newsItem'];
+    return;
   }
+  // 读取跨设备传递的参数信息
+  this.newsData = this.newsItems.filter((item: NewsData) => (item.newsId === newsId))[0];
 }
 ```
 

@@ -17,19 +17,31 @@ import UIAbility from '@ohos.app.ability.UIAbility';
 import window from '@ohos.window';
 import abilityAccessCtrl, { Permissions } from '@ohos.abilityAccessCtrl';
 import bundleManager from '@ohos.bundle.bundleManager';
+import Want from '@ohos.app.ability.Want';
+import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import RemoteDeviceModel from '../model/RemoteDeviceModel';
 import logger from '../common/utils/Logger';
+import common from '@ohos.app.ability.common';
+
+const permissions: Array<Permissions> = ['ohos.permission.DISTRIBUTED_DATASYNC'];
 
 export default class EntryAbility extends UIAbility {
-  onNewWant(want, launchParams) {
-    globalThis.newWant = want;
-    logger.info(` onNewWant launchParam: ${JSON.stringify(launchParams) ?? ''}`);
-    this.onWindowStageCreate(globalThis.windowStage);
+  private want: Want | undefined = undefined;
+  private windowStage?: window.WindowStage;
+
+  onNewWant(want: Want, launchParams: AbilityConstant.LaunchParam) {
+    this.want = want;
+    AppStorage.setOrCreate<string>('wantNewsId', (want.parameters as Record<string, string>)['newsId']);
+    logger.info(`onNewWant launchParam: ${JSON.stringify(launchParams) ?? ''}`);
+    if (this.windowStage === undefined) {
+      return;
+    }
+    this.onWindowStageCreate(this.windowStage);
   }
 
-  onCreate(want) {
-    globalThis.newWant = want;
-    globalThis.context = this.context;
+  onCreate(want: Want) {
+    this.want = want;
+    AppStorage.setOrCreate<string>('wantNewsId', (want.parameters as Record<string, string>)['newsId']);
     logger.info('Ability onCreate');
     RemoteDeviceModel.createDeviceManager(this.context);
   }
@@ -40,28 +52,30 @@ export default class EntryAbility extends UIAbility {
   }
 
   onWindowStageCreate(windowStage: window.WindowStage) {
-    globalThis.windowStage = windowStage;
     // Main window is created, set main page for this ability.
     logger.info('Ability onWindowStageCreate');
+    this.windowStage = windowStage;
 
-    if (globalThis.newWant?.parameters?.url) {
-      windowStage.loadContent(globalThis.newWant.parameters.url, (err, data) => {
+    if (this.want === undefined) {
+      return;
+    }
+    if (this.want.parameters?.newsId) {
+      windowStage.loadContent('pages/NewsDetail', (err: Error) => {
         if (err) {
-          logger.error(`Failed to load the content. Code is ${err.code}, message is ${err.message}`);
+          logger.error(`Failed to load the content. Cause: + ${JSON.stringify(err)}`);
           return;
         }
-        logger.info(`Succeeded in loading the content. Data: ${JSON.stringify(data) ?? ''}`);
+        console.info('Succeeded in loading the content.');
       });
       return;
     }
-    windowStage.loadContent('pages/Index', (err, data) => {
+    windowStage.loadContent('pages/Index', (err: Error) => {
       if (err) {
-        logger.error(`Failed to load the content. Cause: Code is ${err.code}, message is ${err.message}`);
+        logger.error(`Failed to load the content. Cause: ${JSON.stringify(err)}`);
         return;
       }
-      logger.info(`Succeeded in loading the content. Data: ${JSON.stringify(data) ?? ''}`);
     });
-    checkPermissions();
+    checkPermissions(this.context);
   }
 
   onWindowStageDestroy() {
@@ -80,38 +94,51 @@ export default class EntryAbility extends UIAbility {
   }
 }
 
-async function checkPermissions(): Promise<void> {
+async function checkPermissions(context: common.UIAbilityContext): Promise<void> {
   let grantStatus: abilityAccessCtrl.GrantStatus = await checkAccessToken();
 
   if (grantStatus !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) {
     // Applying for the distributed data synchronization permission.
-    let atManager = abilityAccessCtrl.createAtManager();
-    let permissions: Array<Permissions> = ['ohos.permission.DISTRIBUTED_DATASYNC'];
-    try {
-      atManager.requestPermissionsFromUser(globalThis.context, permissions);
-    } catch (err) {
-      logger.error(`Failed to request permissions from user. Code is ${err.code}, message is ${err.message}`);
-    }
+    let atManager: abilityAccessCtrl.AtManager = abilityAccessCtrl.createAtManager();
+    atManager.requestPermissionsFromUser(context, permissions).then((data) => {
+      let grantStatus: Array<number> = data.authResults;
+      let length: number = grantStatus.length;
+      for (let i: number = 0; i < length; i++) {
+        if (grantStatus[i] === 0) {
+          logger.info('EntryAbility', `checkPermissions request permission ${permissions[i]} success`);
+        } else {
+          logger.error('EntryAbility',
+            `checkPermissions request fail permission=${permissions[i]}, grantStatus=${grantStatus[i]}`);
+          return;
+        }
+      }
+    }).catch((err: Error) => {
+      logger.error('EntryAbility',
+        `checkPermissions request permissions failed, err=${JSON.stringify(err)}`);
+    })
   }
 }
 
 async function checkAccessToken() {
   let atManager = abilityAccessCtrl.createAtManager();
-  let grantStatus: abilityAccessCtrl.GrantStatus;
-  let tokenId: number;
+  let tokenId: number = 0;
   try {
     let bundleInfo: bundleManager.BundleInfo = await bundleManager
       .getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
     let appInfo: bundleManager.ApplicationInfo = bundleInfo.appInfo;
     tokenId = appInfo.accessTokenId;
   } catch (err) {
-    logger.error(`Failed to get bundle info for self. Code is ${err.code}, message is ${err.message}`);
+    logger.error('EntryAbility',
+      `checkAccessToken Failed to get bundle info for self. err=${JSON.stringify(err)}`);
   }
 
+  let grantStatus: abilityAccessCtrl.GrantStatus = abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
   try {
     grantStatus = await atManager.checkAccessToken(tokenId, 'ohos.permission.DISTRIBUTED_DATASYNC');
   } catch (err) {
-    logger.error(`Failed to check access token. Code is ${err.code}, message is ${err.message}`);
+    logger.error('EntryAbility',
+      `checkAccessToken Failed to check access token. err=${JSON.stringify(err)}`);
   }
+
   return grantStatus;
 }

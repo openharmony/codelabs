@@ -22,17 +22,34 @@ import logger from '../common/utils/Logger';
 // the value is in scope [0, 65535]
 const SUBSCRIBE_ID = 100;
 
+interface RejectError {
+  code: number;
+  message: string;
+}
+
+export interface DeviceInfoInterface {
+  subscribeId: number,
+  device: deviceManager.DeviceInfo
+}
+
+export interface AuthExtraInfoInterface {
+  targetPkgName: string,
+  appName: string,
+  appDescription: string,
+  business: string
+}
+
 class RemoteDeviceModel {
-  private static dmInstance: RemoteDeviceModel = undefined;
+  private static dmInstance: RemoteDeviceModel | undefined = undefined;
   private trustedDeviceList: deviceManager.DeviceInfo[] = [];
   private discoverList: deviceManager.DeviceInfo[] = [];
-  private deviceManager: deviceManager.DeviceManager;
+  private deviceManager?: deviceManager.DeviceManager;
 
   static getInstance(): RemoteDeviceModel {
-    if (this.dmInstance === undefined) {
-      this.dmInstance = new RemoteDeviceModel();
+    if (RemoteDeviceModel.dmInstance === undefined) {
+      RemoteDeviceModel.dmInstance = new RemoteDeviceModel();
     }
-    return this.dmInstance;
+    return RemoteDeviceModel.dmInstance;
   }
 
   showToast(message: Resource): void {
@@ -45,7 +62,8 @@ class RemoteDeviceModel {
     if (this.deviceManager !== undefined) {
       return;
     }
-    await new Promise((resolve, reject) => {
+    await new Promise((resolve: (value: Object | PromiseLike<Object>) => void, reject:
+      ((reason?: RejectError) => void)) => {
       deviceManager.createDeviceManager(context.abilityInfo.bundleName, (err, value) => {
         if (err) {
           reject(err);
@@ -69,9 +87,9 @@ class RemoteDeviceModel {
 
     try {
       this.trustedDeviceList = this.deviceManager.getTrustedDeviceListSync();
-      AppStorage.SetOrCreate(CommonConstants.TRUSTED_DEVICE_LIST, this.trustedDeviceList);
+      AppStorage.setOrCreate(CommonConstants.TRUSTED_DEVICE_LIST, this.trustedDeviceList);
     } catch (err) {
-      logger.error(`getTrustedDeviceList error. Code is ${err.code}, message is ${err.message}`);
+      logger.error(`getTrustedDeviceList failed error = ${JSON.stringify(err)}`);
       this.showToast($r('app.string.get_trusted_device_list_failed'));
     }
   }
@@ -84,7 +102,7 @@ class RemoteDeviceModel {
         break;
       }
     }
-    AppStorage.SetOrCreate(CommonConstants.TRUSTED_DEVICE_LIST, this.trustedDeviceList);
+    AppStorage.setOrCreate(CommonConstants.TRUSTED_DEVICE_LIST, this.trustedDeviceList);
   }
 
   deviceStateChangeActionOffline(device: deviceManager.DeviceInfo): void {
@@ -95,7 +113,7 @@ class RemoteDeviceModel {
       }
     }
     this.trustedDeviceList = list;
-    AppStorage.SetOrCreate(CommonConstants.TRUSTED_DEVICE_LIST, this.trustedDeviceList);
+    AppStorage.setOrCreate(CommonConstants.TRUSTED_DEVICE_LIST, this.trustedDeviceList);
   }
 
   registerDeviceStateListener(): void {
@@ -122,14 +140,14 @@ class RemoteDeviceModel {
     })
   }
 
-  deviceFound(data): void {
+  deviceFound(data: DeviceInfoInterface): void {
     for (let i: number = 0; i < this.discoverList.length; i++) {
       if (this.discoverList[i].deviceId === data.device.deviceId) {
         return;
       }
     }
     this.discoverList[this.discoverList.length] = data.device;
-    AppStorage.SetOrCreate(CommonConstants.DISCOVER_DEVICE_LIST, this.discoverList);
+    AppStorage.setOrCreate(CommonConstants.DISCOVER_DEVICE_LIST, this.discoverList);
   }
 
   startDeviceDiscovery(): void {
@@ -161,12 +179,12 @@ class RemoteDeviceModel {
       capability: 0
     };
     this.discoverList = [];
-    AppStorage.SetOrCreate(CommonConstants.DISCOVER_DEVICE_LIST, this.discoverList);
+    AppStorage.setOrCreate(CommonConstants.DISCOVER_DEVICE_LIST, this.discoverList);
 
     try {
       this.deviceManager.startDeviceDiscovery(info);
     } catch (err) {
-      logger.error(`startDeviceDiscovery failed. Code is ${err.code}, message is ${err.message}`);
+      logger.error(`startDeviceDiscovery failed error = ${JSON.stringify(err)}`);
     }
   }
 
@@ -181,7 +199,7 @@ class RemoteDeviceModel {
       this.deviceManager.off('deviceFound');
       this.deviceManager.off('discoverFail');
     } catch (err) {
-      logger.error(`stopDeviceDiscovery failed. Code is ${err.code}, message is ${err.message}`);
+      logger.error(`stopDeviceDiscovery failed error = ${JSON.stringify(err)}`);
     }
   }
 
@@ -198,7 +216,7 @@ class RemoteDeviceModel {
       this.trustedDeviceList = [];
       this.discoverList = [];
     } catch (err)  {
-      logger.error(`stopDeviceDiscovery failed. Code is ${err.code}, message is ${err.message}` );
+      logger.error(`stopDeviceDiscovery failed error = ${JSON.stringify(err)}` );
     }
   }
 
@@ -213,11 +231,11 @@ class RemoteDeviceModel {
       if (this.discoverList[i].deviceId !== device.deviceId) {
         continue;
       }
-      let extraInfo: any = {
-        'targetPkgName': context.abilityInfo.bundleName,
-        'appName': context.applicationInfo.name,
-        'appDescription': context.applicationInfo.description,
-        'business': CommonConstants.ZERO
+      let extraInfo: AuthExtraInfoInterface = {
+        targetPkgName: context.abilityInfo.bundleName,
+        appName: context.applicationInfo.name,
+        appDescription: context.applicationInfo.description,
+        business: CommonConstants.ZERO
       };
       let authParam: deviceManager.AuthParam = {
         'authType': CommonConstants.ONE,
@@ -231,7 +249,7 @@ class RemoteDeviceModel {
           }
         })
       } catch (err) {
-        logger.error(`authenticateDevice failed. Code is ${err.code}, message is ${err.message}`);
+        logger.error(`authenticateDevice failed error = ${JSON.stringify(err)}`);
       }
     }
   }
