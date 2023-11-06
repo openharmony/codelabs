@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { DeviceBean } from '../common/bean/DeviceBean';
+import { DeviceBean } from '../viewmodel/DeviceBean';
 import { DeviceListUtil }  from '../common/util/DeviceListUtil';
 import { DeviceItem } from './DeviceItem';
-import { CommonConstants } from '../common/constants/CommonConstants';
+import { CommonConstants, DeviceInfoInterface } from '../common/constants/CommonConstants';
 
 @CustomDialog
 export struct DeviceListDialog {
@@ -25,10 +25,10 @@ export struct DeviceListDialog {
   controller: CustomDialogController;
 
   aboutToAppear() {
-    this.deviceListUtil.initDmInstance((data) => {
+    this.deviceListUtil.initDmInstance((data: DeviceInfoInterface) => {
       this.deviceList.push(new DeviceBean(this.deviceListUtil.dealDeviceId(data.device.deviceId),
         data.device.deviceName));
-      const map = new Map();
+      const map: Map<string, number> = new Map();
       this.deviceList = this.deviceList.filter(
         (item: DeviceBean) => (!map.has(item.deviceId) && map.set(item.deviceId, 1)));
     });
@@ -58,7 +58,7 @@ export struct DeviceListDialog {
                 ListItem() {
                   DeviceItem({item: item, index: index});
                 }
-              }, item => JSON.stringify(item))
+              }, (item: DeviceBean) => JSON.stringify(item))
             }
             .width(CommonConstants.FULL_PERCENT)
             .height(this.deviceList.length > 1 ?

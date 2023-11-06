@@ -14,7 +14,7 @@
  */
 
 import deviceManager from '@ohos.distributedHardware.deviceManager';
-import { CommonConstants } from '../constants/CommonConstants';
+import { CommonConstants, SubscribeInfoInterface } from '../constants/CommonConstants';
 import Logger from './Logger';
 
 /**
@@ -23,9 +23,9 @@ import Logger from './Logger';
 const TAG = '[DeviceListUtil]';
 
 export class DeviceListUtil {
-  private dmInstance;
+  private dmInstance?: deviceManager.DeviceManager;
   private subscribeId: number = 0;
-  private dealDeviceInfo: Function;
+  private dealDeviceInfo?: Function;
 
   /**
    * Initializing Device Management Objects.
@@ -43,7 +43,7 @@ export class DeviceListUtil {
         this.startDeviceDiscovery();
       });
     } catch (err) {
-      Logger.error(TAG, 'createDeviceManager errCode:' + err.code + ',errMessage:' + err.message);
+      Logger.error(TAG, 'createDeviceManager err=' + JSON.stringify(err));
     }
   }
 
@@ -52,19 +52,21 @@ export class DeviceListUtil {
    */
   startDeviceDiscovery() {
     this.subscribeId = Math.floor(Math.random() * CommonConstants.RANDOM_ONE + CommonConstants.RANDOM_TWO);
-    let subscribeInfo = {
-      'subscribeId': this.subscribeId,
-      'mode': CommonConstants.MODE,
-      'medium': 0,
-      'freq': CommonConstants.FREQ,
-      'isSameAccount': false,
-      'isWakeRemote': true,
-      'capability': 1
+    let subscribeInfo: SubscribeInfoInterface = {
+      subscribeId: this.subscribeId,
+      mode: CommonConstants.MODE,
+      medium: 0,
+      freq: CommonConstants.FREQ,
+      isSameAccount: false,
+      isWakeRemote: true,
+      capability: 1
     };
     try {
-      this.dmInstance.startDeviceDiscovery(subscribeInfo);
+      if (this.dmInstance !== undefined) {
+        this.dmInstance.startDeviceDiscovery(subscribeInfo);
+      }
     } catch (err) {
-      Logger.error(TAG, 'startDeviceDiscovery errCode:' + err.code + ',errMessage:' + err.message);
+      Logger.error(TAG, 'startDeviceDiscovery err:' + JSON.stringify(err));
     }
   }
 
@@ -73,11 +75,15 @@ export class DeviceListUtil {
    */
   deviceFoundOn() {
     try {
-      this.dmInstance.on(CommonConstants.DEVICE_FOUND, (data) => {
-        this.dealDeviceInfo(data);
-      });
+      if (this.dmInstance !== undefined) {
+        this.dmInstance.on('deviceFound', (data) => {
+          if (this.dealDeviceInfo !== undefined) {
+            this.dealDeviceInfo(data);
+          }
+        });
+      }
     } catch (err) {
-      Logger.error(TAG, 'deviceFoundOn errCode:' + err.code + ',errMessage:' + err.message);
+      Logger.error(TAG, 'deviceFoundOn err:' + JSON.stringify(err));
     }
   }
 
@@ -86,9 +92,11 @@ export class DeviceListUtil {
    */
   stopDeviceDiscovery() {
     try {
-      this.dmInstance.stopDeviceDiscovery(this.subscribeId);
+      if (this.dmInstance !== undefined) {
+        this.dmInstance.stopDeviceDiscovery(this.subscribeId);
+      }
     } catch (err) {
-      Logger.error(TAG, 'stopDeviceDiscovery errCode:' + err.code + ',errMessage:' + err.message);
+      Logger.error(TAG, 'stopDeviceDiscovery err:' + JSON.stringify(err));
     }
   }
 
