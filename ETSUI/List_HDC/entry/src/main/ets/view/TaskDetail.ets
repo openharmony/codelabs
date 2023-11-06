@@ -29,7 +29,8 @@ import { BroadCast, BroadCastType } from '../common/utils/BroadCast';
 import { EventSourceManager } from '../model/EventSourceManager';
 import { CustomDialogView } from './CustomDialogView';
 
-@Styles function listItemStyle() {
+@Styles
+function listItemStyle() {
   .backgroundColor($r('app.color.white'))
   .height(commonConst.DEFAULT_56)
   .borderRadius(commonConst.DEFAULT_10)
@@ -38,12 +39,12 @@ import { CustomDialogView } from './CustomDialogView';
 
 @Component
 export default struct TaskDetail {
-  @Provide broadCast: BroadCast = EventSourceManager.getInstance().getBroadCast();
+  @Provide broadCast: BroadCast | undefined = EventSourceManager?.getInstance()?.getBroadCast();
   @Provide settingParams: TaskListItem = this.parseRouterParams();
   @Provide frequency: string = commonConst.EVERYDAY;
 
-  parseRouterParams() {
-    const routerParams: TaskListItem = JSON.parse(router.getParams()['params']);
+  parseRouterParams(): TaskListItem {
+    const routerParams: TaskListItem = JSON.parse((router.getParams() as Record<string, string>).params as string);
     return routerParams;
   }
 
@@ -54,7 +55,9 @@ export default struct TaskDetail {
   }
 
   aboutToAppear() {
-    this.broadCast.off(null, null);
+    if (this.broadCast !== undefined) {
+      this.broadCast.off(null, () => {});
+    }
   }
 
   build() {
@@ -71,12 +74,14 @@ export default struct TaskDetail {
         .listItemStyle()
         .enabled(
           this.settingParams?.isOpen
-          && (this.settingParams?.taskID !== taskType.smile)
-          && (this.settingParams?.taskID !== taskType.brushTeeth)
+            && (this.settingParams?.taskID !== taskType.smile)
+            && (this.settingParams?.taskID !== taskType.brushTeeth)
         )
         .onClick(() => {
-          this.broadCast.emit(
-          BroadCastType.SHOW_TARGET_SETTING_DIALOG);
+          if (this.broadCast !== undefined) {
+            this.broadCast.emit(
+              BroadCastType.SHOW_TARGET_SETTING_DIALOG);
+          }
         })
 
         ListItem() {
@@ -91,9 +96,11 @@ export default struct TaskDetail {
         .listItemStyle()
         .enabled(this.settingParams?.isOpen && this.settingParams?.isAlarm)
         .onClick(() => {
-          this.broadCast.emit(
-          BroadCastType.SHOW_REMIND_TIME_DIALOG
-          );
+          if (this.broadCast !== undefined) {
+            this.broadCast.emit(
+              BroadCastType.SHOW_REMIND_TIME_DIALOG
+            );
+          }
         })
 
         ListItem() {
@@ -102,9 +109,11 @@ export default struct TaskDetail {
         .listItemStyle()
         .enabled(this.settingParams?.isOpen)
         .onClick(() => {
-          this.broadCast.emit(
-          BroadCastType.SHOW_FREQUENCY_DIALOG,
-          );
+          if (this.broadCast !== undefined) {
+            this.broadCast.emit(
+              BroadCastType.SHOW_FREQUENCY_DIALOG,
+            );
+          }
         })
 
       }
