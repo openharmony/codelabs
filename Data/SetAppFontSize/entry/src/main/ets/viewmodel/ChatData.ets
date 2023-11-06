@@ -13,17 +13,19 @@
  * limitations under the License.
  */
 
+import { ItemDirection } from './ItemDirection';
+
 /**
- * Setting list item info.
+ * Chat list item info.
  */
-export default class SettingData {
+export default class ChatData {
   /**
-   * Setting list item name.
+   * Chat list item direction.
    */
-  settingName: Resource;
+  itemDirection: ItemDirection = ItemDirection.LEFT;
 
   /**
-   * Setting list item image.
+   * Chat list item content.
    */
-  settingImage: Resource;
+  content: Resource = $r('app.string.empty');
 }
