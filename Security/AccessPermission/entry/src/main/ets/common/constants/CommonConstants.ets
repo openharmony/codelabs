@@ -13,7 +13,13 @@
  * limitations under the License.
  */
 
+import deviceManager from '@ohos.distributedHardware.deviceManager';
 import { Permissions } from '@ohos.abilityAccessCtrl';
+
+export interface DeviceInfoInterface {
+  subscribeId: number,
+  device: deviceManager.DeviceInfo
+}
 
 /**
  * Common constants for all features.
@@ -134,4 +140,14 @@ export class CommonConstants {
    * Maximum height of the device list.
    */
   static readonly LIST_MAX_HEIGHT: string = '50%';
+}
+
+export interface SubscribeInfoInterface {
+  subscribeId: number,
+  mode: number,
+  medium: number,
+  freq: number,
+  isSameAccount: boolean,
+  isWakeRemote: boolean,
+  capability: number
 }

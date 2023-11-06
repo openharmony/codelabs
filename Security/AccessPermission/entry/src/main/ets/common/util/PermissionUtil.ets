@@ -48,7 +48,7 @@ export class PermissionUtil {
   async checkPermission() {
     let atManager = abilityAccessCtrl.createAtManager();
     let grantStatus: abilityAccessCtrl.GrantStatus =  abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
-    let tokenId: number;
+    let tokenId: number = 0;
     try {
       let bundleInfo: bundleManager.BundleInfo =
         await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
