@@ -14,31 +14,24 @@
  */
 
 import router from '@ohos.router';
-import prompt from '@system.prompt';
-import dataStorage from '@ohos.data.preferences'
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
 import ConfirmDialog from '../view/ConfirmDialog';
-import { noteIdArray } from '../viewmodel/NotesInfoViewModel';
-import { FolderType, NotesInfoBean } from '../common/bean/NoteInfoBean';
-import { NoteIdBean } from '../common/bean/NoteIdBean';
+import { FolderType, noteIdArray, NoteIdBean, NotesInfoBean } from '../viewmodel/NotesInfoViewModel';
 import formatTime from '../common/utils/Format';
 import BottomBar from '../view/BottomBar';
 
 @Entry
 @Component
 struct NotesDetail {
-  @State notesInfo: NotesInfoBean = router.getParams()['notesInfo'];
-  @State operationType: string = router.getParams()['operationType'];
-  @State imageSrc: string = '';
+  @State notesInfo: NotesInfoBean = (router.getParams() as Record<string, NotesInfoBean>)['notesInfo'];
+  @State operationType: string = (router.getParams() as Record<string, string>)['operationType'];
   @State imageArr: string[] = this.notesInfo.imageArr;
   @State noteIdArray: NoteIdBean[] = noteIdArray;
-  @State notesFolder: FolderType = this.notesInfo.folder;
   @State @Watch('onChangeCollect') isFavorite: boolean = this.notesInfo.isFavorite;
-  @State collectImgSrc: string = this.isFavorite ? 'ic_bottom_star_selected.svg' : 'ic_bottom_star_normal.svg';
+  @State notesFolder: FolderType = this.notesInfo.folder;
   @State isDataChanged: boolean = false;
   @State isCollectChange: boolean = false;
-  @State imageUrls: string[] = ['cook_picture.png', 'dinner_food.png', 'drink_coffee.png'];
 
   @Builder MyMenu() {
     Menu() {
@@ -55,19 +48,10 @@ struct NotesDetail {
   scroller: Scroller = new Scroller();
   saveDialogController: CustomDialogController = new CustomDialogController({
     builder: ConfirmDialog({
-      cancel: this.onCancel,
-      confirm: this.onAcceptSave.bind(this),
+      notesInfo: $notesInfo,
+      operationType: $operationType,
+      noteIdArray: $noteIdArray,
       type: CommonConstants.SAVE_DIALOG
-    }),
-    autoCancel: true,
-    alignment: DialogAlignment.Bottom,
-    offset: { dx: $r('app.float.dialog_offset_x'), dy: $r('app.float.dialog_margin_bottom') }
-  });
-  deleteDialogController: CustomDialogController = new CustomDialogController({
-    builder: ConfirmDialog({
-      cancel: this.onCancel,
-      confirm: this.onAcceptDelete.bind(this),
-      type: CommonConstants.DELETE_DIALOG
     }),
     autoCancel: true,
     alignment: DialogAlignment.Bottom,
@@ -165,7 +149,7 @@ struct NotesDetail {
                 .width(StyleConstants.CONTENT_WIDTH)
                 .objectFit(ImageFit.Fill)
                 .margin({ top: $r('app.float.image_Space') })
-            }, item => JSON.stringify(item))
+            }, (item: string) => JSON.stringify(item))
           }
         }
         .scrollable(ScrollDirection.Vertical)
@@ -176,10 +160,12 @@ struct NotesDetail {
         .margin({ bottom: $r('app.float.top_bar_container_height') })
 
         BottomBar({
-          collectImgSrc: this.collectImgSrc,
-          clickCollect: this.clickCollect.bind(this),
-          clickDelete: this.clickDelete.bind(this),
-          clickAddPicture: this.clickAddPicture.bind(this)
+          imageArr: $imageArr,
+          notesInfo: $notesInfo,
+          operationType: $operationType,
+          noteIdArray: $noteIdArray,
+          isDataChanged: $isDataChanged,
+          isFavorite: $isFavorite
         })
       }
       .width(StyleConstants.FULL_WIDTH)
@@ -191,94 +177,12 @@ struct NotesDetail {
     .backgroundColor($r('app.color.white_color'))
   }
 
-  async saveNoteIdArray() {
-    let preferences = await dataStorage.getPreferences(globalThis.context,
-      CommonConstants.PREFERENCE_INSTANCE_NAME);
-    if (this.operationType === CommonConstants.ADD_NOTE) {
-      this.noteIdArray.push({ 'noteId': this.notesInfo.noteId });
-      preferences.put(CommonConstants.PREFERENCE_NOTE_KEY, JSON.stringify(this.noteIdArray));
-      preferences.flush();
-    }
-    let newNotes = new NotesInfoBean(this.notesInfo);
-    await preferences.put(this.notesInfo.noteId, JSON.stringify(newNotes));
-    await preferences.flush();
-    router.replaceUrl({
-      url: 'pages/NoteHomePage'
-    });
-  }
-
-  async deleteNoteIdArray() {
-    let preferences = await dataStorage.getPreferences(globalThis.context,
-      CommonConstants.PREFERENCE_INSTANCE_NAME);
-    await preferences.delete(this.notesInfo.noteId);
-    await preferences.flush();
-    router.replaceUrl({
-      url: 'pages/NoteHomePage'
-    });
-  }
-
   onPageShow() {
     this.notesInfo.time = formatTime();
   }
 
-  clickCollect() {
-    this.notesInfo.isFavorite = !this.notesInfo.isFavorite;
-    this.isFavorite = !this.isFavorite;
-    this.collectImgSrc = this.notesInfo.isFavorite ?
-      'ic_bottom_star_selected.svg' : 'ic_bottom_star_normal.svg';
-  }
-
-  clickDelete() {
-    if (this.operationType === CommonConstants.MODIFY_NOTE) {
-      this.deleteDialogController.open();
-    } else {
-      prompt.showToast({
-        message: 'The addition operation cannot be deleted'
-      });
-    }
-  }
-
-  clickAddPicture() {
-    this.imageSrc = this.chooseImage();
-    if (this.imageSrc === '') {
-      prompt.showToast({
-        message: 'Not anymore pictures'
-      });
-    } else {
-      this.imageArr = this.notesInfo.imageArr;
-      this.imageArr.push(this.imageSrc);
-      this.isDataChanged = true;
-    }
-  }
-
   onChangeCollect() {
     this.isCollectChange = !this.isCollectChange;
-  }
-
-  onCancel() {
-    router.replaceUrl({
-      url: 'pages/NoteHomePage'
-    });
-  }
-
-  onAcceptSave() {
-    this.saveNoteIdArray();
-  }
-
-  onAcceptDelete() {
-    this.deleteNoteIdArray();
-  }
-
-  chooseImage() {
-    for (let i = 0;i < this.imageUrls.length; i++) {
-      if (this.imageArr.length === 0) {
-        return this.imageUrls[i];
-      }
-      if (!this.imageArr.includes(this.imageUrls[i])) {
-        return this.imageUrls[i];
-      }
-    }
-    return '';
   }
 
   onBackPress() {
