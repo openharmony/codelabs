@@ -17,9 +17,11 @@ import StyleConstants from '../common/constants/StyleConstants';
 
 @CustomDialog
 export default struct ConfirmDialog {
-  controller: CustomDialogController;
-  cancel: () => void;
-  confirm: () => void;
+  controller?: CustomDialogController;
+  cancel: () => void = () => {
+  };
+  confirm: () => void = () => {
+  };
 
   build() {
     Column() {
@@ -33,6 +35,9 @@ export default struct ConfirmDialog {
       Flex({ justifyContent: FlexAlign.SpaceAround, alignItems: ItemAlign.Center }) {
         Button($r('app.string.cancel_txt'))
           .onClick(() => {
+            if (!this.controller) {
+              return;
+            }
             this.controller.close();
             this.cancel();
           })
@@ -46,6 +51,9 @@ export default struct ConfirmDialog {
           .height($r('app.float.diver_height'))
         Button($r('app.string.custom_dialog_confirm_txt'))
           .onClick(() => {
+            if (!this.controller) {
+              return;
+            }
             this.controller.close();
             this.confirm();
           })
