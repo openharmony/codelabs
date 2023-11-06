@@ -28,27 +28,27 @@ export class Logger {
     this.domain = 0xFF00;
   }
 
-  debug(...args: any[]) {
+  debug(...args: string[]): void {
     hilog.debug(this.domain, this.prefix, this.format, args);
   }
 
-  info(...args: any[]) {
+  info(...args: string[]): void {
     hilog.info(this.domain, this.prefix, this.format, args);
   }
 
-  warn(...args: any[]) {
+  warn(...args: string[]): void {
     hilog.warn(this.domain, this.prefix, this.format, args);
   }
 
-  error(...args: any[]) {
+  error(...args: string[]): void {
     hilog.error(this.domain, this.prefix, this.format, args);
   }
 
-  fatal(...args: any[]) {
+  fatal(...args: string[]): void {
     hilog.fatal(this.domain, this.prefix, this.format, args);
   }
 
-  isLoggable(level: number) {
+  isLoggable(level: number): void {
     hilog.isLoggable(this.domain, this.prefix, level);
   }
 }
