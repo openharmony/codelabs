@@ -15,11 +15,14 @@
 
 import ButtonClickMethod from '../../../../../entry/src/main/ets/model/ButtonClickMethod';
 import StyleConstants from '../../../../../entry/src/main/ets/common/constants/StyleConstants';
+import common from '@ohos.app.ability.common';
+import Want from '@ohos.app.ability.Want';
+import { GlobalContext } from '../../../../../entry/src/main/ets/common/utils/GlobalContext'
 
 /**
  * Get context.
  */
-let context = getContext(this);
+let context = getContext(this) as common.UIAbilityContext;
 
 /**
  * The Index Page of SecondAbility.
@@ -27,8 +30,9 @@ let context = getContext(this);
 @Entry
 @Component
 struct Index {
-  @State src: string = globalThis?.secondAbilityWant?.parameters?.src ?? '-';
-  @State count: number = globalThis?.secondAbilityWant?.parameters?.count ?? 0;
+  secondAbilityWant?: Want = GlobalContext.getContext().getObject('secondAbilityWant')
+  @State src: string = this.secondAbilityWant?.parameters?.src as string ?? '-';
+  @State count: number = this.secondAbilityWant?.parameters?.count as number ?? 0;
 
   build() {
     Column() {

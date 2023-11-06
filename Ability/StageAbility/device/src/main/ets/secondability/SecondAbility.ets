@@ -1,14 +1,17 @@
 import hilog from '@ohos.hilog';
 import Ability from '@ohos.app.ability.UIAbility';
 import Window from '@ohos.window';
+import AbilityConstant from '@ohos.app.ability.AbilityConstant';
+import Want from '@ohos.app.ability.Want';
+import { GlobalContext } from '../../../../../entry/src/main/ets/common/utils/GlobalContext';
 
 export default class SecondAbility extends Ability {
-  onCreate(want, launchParam) {
+  onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
     hilog.isLoggable(0x0000, 'testTag', hilog.LogLevel.INFO);
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onCreate');
     hilog.info(0x0000, 'testTag', '%{public}s', 'want param:' + JSON.stringify(want) ?? '');
     hilog.info(0x0000, 'testTag', '%{public}s', 'launchParam:' + JSON.stringify(launchParam) ?? '');
-    globalThis.secondAbilityWant = want;
+    GlobalContext.getContext().setObject("secondAbilityWant", want)
   }
 
   onDestroy() {
@@ -20,9 +23,9 @@ export default class SecondAbility extends Ability {
     // Main window is created, set main page for this ability
     hilog.isLoggable(0x0000, 'testTag', hilog.LogLevel.INFO);
     hilog.info(0x0000, 'testTag', '%{public}s', 'Ability onWindowStageCreate');
-
-    let url = globalThis?.secondAbilityWant?.parameters?.url ?
-      globalThis.secondAbilityWant.parameters.url : 'pages/Index';
+    let parameters: Record<string, Object> = (GlobalContext.getContext().getObject('secondAbilityWant') as Want)?.parameters as Record<string, Object>
+    let url = parameters?.url ?
+      parameters.url as string : 'pages/Index';
     windowStage.loadContent(url, (err, data) => {
       if (err.code) {
         hilog.isLoggable(0x0000, 'testTag', hilog.LogLevel.ERROR);
