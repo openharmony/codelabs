@@ -14,20 +14,20 @@
  */
 
 import dataRdb from '@ohos.data.relationalStore';
-import DayInfo from '../../bean/DayInfo';
-import { DAY_INFO } from '../../constants/CommonConstants'
+import DayInfo from '../../../viewmodel/DayInfo';
+import { CommonConstants as Const } from '../../constants/CommonConstants'
 import RdbUtils from '../Rdb/RdbUtils';
 import Logger from '../../utils/Logger';
 
 class DayInfoApi {
 
   /**
-   * insert dayInfo
+   * Insert dayInfo.
    *
    * @param dayInfo
    * @param callback
    */
-  insertData(dayInfo: DayInfo, callback: Function) {
+  insertData(dayInfo: DayInfo, callback: Function): void {
     const valueBucket = generateBucket(dayInfo);
     RdbUtils.insert('dayInfo', valueBucket).then(result => {
       callback(result);
@@ -36,35 +36,36 @@ class DayInfoApi {
   }
 
   /**
-   * update dayInfo
+   * Update dayInfo.
    *
    * @param dayInfo
    * @param callback
    */
-  updateData(dayInfo: DayInfo, callback: Function) {
+  updateData(dayInfo: DayInfo, callback: Function): void {
     const valueBucket = generateBucket(dayInfo);
-    let predicates = new dataRdb.RdbPredicates(DAY_INFO.tableName);
+    let predicates: dataRdb.RdbPredicates = new dataRdb.RdbPredicates(Const.DAY_INFO.tableName ? Const.DAY_INFO.tableName : '');
     predicates.equalTo('date', dayInfo.date);
-    RdbUtils.update(valueBucket, predicates).then(result => {
+    RdbUtils.update(valueBucket, predicates).then((result: number) => {
       callback(result);
     });
     Logger.info('DayInfoTable', 'Update dayInfo finished.');
   }
 
   /**
-   * query dayInfo
+   * Query dayInfo.
    *
    * @param date
    * @param callback
    */
-  query(date: string, callback: Function) {
-    let predicates = new dataRdb.RdbPredicates(DAY_INFO.tableName);
+  query(date: string, callback: Function): void {
+    let predicates: dataRdb.RdbPredicates = new dataRdb.RdbPredicates(Const.DAY_INFO.tableName ? Const.DAY_INFO.tableName : '');
     predicates.equalTo('date', date);
     RdbUtils.query(predicates).then(resultSet => {
       let count = resultSet.rowCount;
       if (count === 0) {
         Logger.info('DayInfoTable', 'query no results.');
-        callback([]);
+        let result = new DayInfo('', 0, 0);
+        callback(result);
       } else {
         let result = new DayInfo('', 0, 0);
         resultSet.goToFirstRow();
@@ -78,22 +79,23 @@ class DayInfoApi {
   }
 
   /**
-   * query dayInfo list
+   * Query dayInfo list.
    *
    * @param date
    * @param callback
    */
-  queryList(dates: string[], callback: Function) {
-    let predicates = new dataRdb.RdbPredicates(DAY_INFO.tableName);
+  queryList(dates: string[], callback: Function): void {
+    let predicates: dataRdb.RdbPredicates = new dataRdb.RdbPredicates(Const.DAY_INFO.tableName ? Const.DAY_INFO.tableName : '');
     predicates.in('date', dates);
     RdbUtils.query(predicates).then(resultSet => {
       let count = resultSet.rowCount;
       if (count === 0) {
         Logger.info('DayInfoTable', 'query no results.');
-        callback([]);
+        let result: DayInfo[] = [];
+        callback(result);
       } else {
         resultSet.goToFirstRow();
-        let result = [];
+        let result: DayInfo[] = [];
         for (let i = 0; i < count; i++) {
           let tmp = new DayInfo('', 0, 0);
           tmp.date = resultSet.getString(resultSet.getColumnIndex('date'));
@@ -104,15 +106,26 @@ class DayInfoApi {
         }
         callback(result);
       }
-      return;
     });
   }
 }
 
-function generateBucket(dayInfo: DayInfo) {
-  let valueBucket = {};
-  DAY_INFO.columns.forEach((item) => {
-    valueBucket[item] = dayInfo[item];
+function generateBucket(dayInfo: DayInfo): dataRdb.ValuesBucket {
+  let valueBucket = {} as dataRdb.ValuesBucket;
+  Const.DAY_INFO.columns?.forEach((item: string) => {
+    switch (item) {
+      case 'date':
+        valueBucket.date = dayInfo.date;
+        break;
+      case 'targetTaskNum':
+        valueBucket.targetTaskNum = dayInfo.targetTaskNum;
+        break;
+      case 'finTaskNum':
+        valueBucket.finTaskNum = dayInfo.finTaskNum;
+        break;
+      default:
+        break;
+    }
   });
   return valueBucket;
 }

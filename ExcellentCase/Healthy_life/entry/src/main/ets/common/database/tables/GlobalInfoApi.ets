@@ -14,20 +14,20 @@
  */
 
 import dataRdb from '@ohos.data.relationalStore';
-import GlobalInfo from '../../bean/GlobalInfo';
-import { GLOBAL_INFO } from '../../constants/CommonConstants'
+import GlobalInfo from '../../../viewmodel/GlobalInfo';
+import { CommonConstants as Const } from '../../constants/CommonConstants'
 import RdbUtils from '../Rdb/RdbUtils';
 import Logger from '../../utils/Logger';
 
 class GlobalInfoApi {
 
   /**
-   * insert globalInfo
+   * Insert globalInfo.
    *
    * @param globalInfo
    * @param callback
    */
-  insertData(globalInfo: GlobalInfo, callback) {
+  insertData(globalInfo: GlobalInfo, callback: Function): void {
     const valueBucket = generateBucket(globalInfo);
     RdbUtils.insert('GlobalInfo', valueBucket).then(result => {
       callback(result);
@@ -36,34 +36,35 @@ class GlobalInfoApi {
   }
 
   /**
-   * update globalInfo
+   * Update globalInfo.
    *
    * @param globalInfo
    * @param callback
    */
-  updateData(globalInfo: GlobalInfo, callback) {
+  updateData(globalInfo: GlobalInfo, callback: Function): void {
     const valueBucket = generateBucket(globalInfo);
-    let predicates = new dataRdb.RdbPredicates(GLOBAL_INFO.tableName);
+    let predicates = new dataRdb.RdbPredicates(Const.GLOBAL_INFO.tableName ? Const.GLOBAL_INFO.tableName : '');
     predicates.equalTo('id', 0);
-    RdbUtils.update(valueBucket, predicates).then(result => {
+    RdbUtils.update(valueBucket, predicates).then((result: number) => {
       callback(result);
     });
     Logger.info('GlobalInfoTable', 'Update globalInfo finished.');
   }
 
   /**
-   * query globalInfo
+   * Query globalInfo.
    *
    * @param callback
    */
-  query(callback) {
-    let predicates = new dataRdb.RdbPredicates(GLOBAL_INFO.tableName);
+  query(callback: Function): void {
+    let predicates = new dataRdb.RdbPredicates(Const.GLOBAL_INFO.tableName ? Const.GLOBAL_INFO.tableName : '');
     predicates.equalTo('id', 0);
     RdbUtils.query(predicates).then(resultSet => {
       let count = resultSet.rowCount;
       if (count === 0) {
         Logger.info('GlobalInfoTable', 'query no results!');
-        callback([]);
+        let result = new GlobalInfo('', '', 0, '');
+        callback(result);
       } else {
         let result = new GlobalInfo('', '', 0, '');
         resultSet.goToFirstRow();
@@ -73,18 +74,32 @@ class GlobalInfoApi {
         result.achievements = resultSet.getString(resultSet.getColumnIndex('achievements'));
         callback(result);
       }
-      return;
     });
   }
 }
 
-function generateBucket(globalInfo: GlobalInfo) {
-  let valueBucket = {};
-  GLOBAL_INFO.columns.forEach((item) => {
+function generateBucket(globalInfo: GlobalInfo): dataRdb.ValuesBucket {
+  let valueBucket = {} as dataRdb.ValuesBucket;
+  Const.GLOBAL_INFO.columns?.forEach((item: string) => {
     if (item === 'id') {
       valueBucket[item] = 0;
     } else {
-      valueBucket[item] = globalInfo[item];
+      switch (item) {
+        case 'firstDate':
+          valueBucket[item] = globalInfo.firstDate;
+          break;
+        case 'lastDate':
+          valueBucket[item] = globalInfo.lastDate;
+          break;
+        case 'checkInDays':
+          valueBucket[item] = globalInfo.checkInDays;
+          break;
+        case 'achievements':
+          valueBucket[item] = globalInfo.achievements;
+          break;
+        default:
+          break;
+      }
     }
   });
   return valueBucket;

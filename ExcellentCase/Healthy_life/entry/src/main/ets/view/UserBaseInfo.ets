@@ -15,13 +15,13 @@
 
 @Component
 export struct UserBaseInfo {
-  @Prop nickname: string;
-  @Prop signature: string;
+  @Prop nickname: string = '';
+  @Prop signature: string = '';
 
   build() {
     Column() {
       // userIcon
-      Image($r("app.media.ic_user"))
+      Image($r('app.media.ic_user'))
         .objectFit(ImageFit.Contain)
         .height($r('app.float.default_66'))
         .width($r('app.float.default_66'))
