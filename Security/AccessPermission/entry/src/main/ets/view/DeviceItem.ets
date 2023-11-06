@@ -13,13 +13,13 @@
  * limitations under the License.
  */
 
-import { DeviceBean } from '../common/bean/DeviceBean';
+import { DeviceBean } from '../viewmodel/DeviceBean';
 import { CommonConstants } from '../common/constants/CommonConstants';
 
 @Component
 export struct DeviceItem {
-  private item: DeviceBean;
-  private index: number;
+  private item: DeviceBean = new DeviceBean('', '');
+  private index: number = 0;
 
   build() {
     Column() {

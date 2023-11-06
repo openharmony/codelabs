@@ -14,17 +14,17 @@
  */
 
 import CommonConstants from '../common/constants/CommonConstants';
-import ChatData from '../common/bean/ChatData';
-import { ItemDirection } from '../common/bean/ItemDirection';
+import ChatData from '../viewmodel/ChatData';
+import { ItemDirection } from '../viewmodel/ItemDirection';
 
 /**
  * Set view model, providing page display data.
  */
 export class SetViewModel {
-  chatArr: Array<ChatData> = null;
+  chatArr: Array<ChatData> = [];
 
   initChatData(): Array<ChatData> {
-    if (this.chatArr === null) {
+    if (this.chatArr.length === 0) {
       this.chatArr = new Array();
       let chatData = new ChatData();
       chatData.itemDirection = ItemDirection.RIGHT;

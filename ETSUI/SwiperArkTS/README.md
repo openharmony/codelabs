@@ -19,13 +19,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -53,10 +53,6 @@
 ```
 ├──entry/src/main/ets                 // 代码区
 │  ├──common                          
-│  │  ├──bean                          
-│  │  │  ├──PictureItem.ets           // 图片bean 
-│  │  │  ├──TopBarItem.ets            // 顶部导航bean
-│  │  │  └──VideoItem.ets             // 视频bean
 │  │  └──constants                    
 │  │     ├──CommonConstant.ets        // 公共常量 
 │  │     ├──PictureConstants.ets      // 图片所使用的常量
@@ -89,9 +85,12 @@
 │  │     ├──PageMovie.ets             // 电影tab页
 │  │     └──PageTV.ets                // 电视tab页                        
 │  └──viewmodel                        
-│     ├──PictureViewModel.ets         // 图片model 
-│     ├──TopBarViewModel.ets          // 顶部导航model     
-│     └──VideoViewModel.ets           // 视频model
+│     ├──PictureItem.ets              // 图片对象 
+│     ├──PictureViewModel.ets         // 图片模型
+│     ├──TopBarItem.ets               // 顶部导航对象  
+│     ├──TopBarViewModel.ets          // 顶部导航模型  
+│     ├──VideoItem.ets                // 视频对象     
+│     └──VideoViewModel.ets           // 视频模型
 └──entry/src/main/resources           // 应用资源目录
 ```
 
@@ -107,8 +106,6 @@
 
 ```typescript
 // SwiperIndex.ets
-@Entry
-@Component
 struct SwiperIndex {
   // 索引值双向绑定 实现联动效果.
   @State index: number = 0;
@@ -140,7 +137,6 @@ struct SwiperIndex {
 
 ```typescript
 // TopBar.ets
-@Component
 export struct TopBar {
   // 索引值双向绑定 实现联动效果
   @Link index: number;
@@ -158,7 +154,7 @@ export struct TopBar {
             .onClick(() => {
               this.index = item.id;
             })
-        }, item => JSON.stringify(item))
+        }, (item: TopBarItem) => JSON.stringify(item))
     }
     .margin({ left: CommonConstants.ADS_LEFT })
     .width(CommonConstants.FULL_WIDTH)
@@ -201,7 +197,7 @@ export function startPlay(swiperController: SwiperController) {
 // Banner.ets
 build() {
   Swiper(this.swiperController) {
-    ForEach(this.imageArray, item => {
+    ForEach(this.imageArray, (item: PictureItem) => {
       Stack({ alignContent: Alignment.TopStart }) {
         Image(item.image)
           ...
@@ -216,7 +212,7 @@ build() {
       }
       .height(CommonConstants.FULL_HEIGHT)
       .width(CommonConstants.FULL_WIDTH)
-    }, item => JSON.stringify(item))
+    }, (item: PictureItem) => JSON.stringify(item))
   }
   ...
 }
@@ -242,7 +238,7 @@ build() {
           item: item,
           barPosition: index
         });
-      }, item => JSON.stringify(item))
+      }, (item: VideoItem) => JSON.stringify(item))
     }
     .width(CommonConstants.FULL_WIDTH)
     .height(CommonConstants.FULL_HEIGHT)
@@ -267,7 +263,7 @@ build() {
       controller: this.videoController
     })
       .controls(false)
-      .autoPlay(this.playState === PlayState.START ? true : false) // 首次可见状态自动播放
+      .autoPlay(this.playState === PlayState.START ? true : false)
       .objectFit(ImageFit.Fill)
       .loop(true)
       .height(CommonConstants.WIDTH_VIDEO)

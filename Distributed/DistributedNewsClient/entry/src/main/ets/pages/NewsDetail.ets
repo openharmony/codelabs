@@ -14,8 +14,7 @@
  */
 
 import router from '@ohos.router';
-import { NewsData } from '../common/bean/NewsData';
-import { NewsDataModel } from '../viewmodel/NewsDataModel';
+import { NewsData, NewsDataModel } from '../viewmodel/NewsDataModel';
 import CommonConstants from '../common/constants/CommonConstants';
 import DetailHeadContent from '../view/DetailHeadContent';
 import DetailFooter from '../view/DetailFooter';
@@ -23,7 +22,7 @@ import DetailFooter from '../view/DetailFooter';
 @Entry
 @Component
 struct NewsDetail {
-  @Provide newsData: NewsData = null;
+  @Provide newsData: NewsData | undefined = undefined;
   private newsItems: NewsData[] = NewsDataModel.getNewsComposition();
 
   build() {
@@ -41,13 +40,11 @@ struct NewsDetail {
   }
 
   aboutToAppear() {
-    const params: any = router.getParams();
-    if (params) {
-      this.newsData = params.newsItem;
-    } else {
-      const want = globalThis.newWant;
-      const newsId = want.parameters.newsId;
-      this.newsData = this.newsItems.filter(item => (item.newsId === newsId))[0];
+    let newsId: string | undefined = AppStorage.get<string>('wantNewsId');
+    if (newsId === undefined) {
+      this.newsData = (router.getParams() as Record<string, NewsData>)['newsItem'];
+      return;
     }
+    this.newsData = this.newsItems.filter((item: NewsData) => (item.newsId === newsId))[0];
   }
 }

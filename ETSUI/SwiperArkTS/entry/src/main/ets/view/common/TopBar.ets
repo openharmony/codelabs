@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { TopBarItem } from '../../common/bean/TopBarItem';
+import { TopBarItem } from '../../viewmodel/TopBarItem';
 import { initializeOnStartup } from '../../viewmodel/TopBarViewModel';
 import { CommonConstants } from '../../common/constants/CommonConstant';
 
@@ -38,7 +38,7 @@ export struct TopBar {
             .onClick(() => {
               this.index = item.id;
             })
-        }, item => JSON.stringify(item))
+        }, (item: TopBarItem) => JSON.stringify(item))
     }
     .margin({ left: CommonConstants.ADS_LEFT })
     .width(CommonConstants.FULL_WIDTH)

@@ -15,7 +15,7 @@
 
 import { CommonConstants } from '../../common/constants/CommonConstants';
 import { AlarmSettingType } from '../../common/constants/AlarmSettingType';
-import AlarmSettingBean from '../../common/bean/AlarmSettingBean';
+import AlarmSettingBean from '../../viewmodel/AlarmSettingBean';
 import DimensionUtil from '../../common/utils/DimensionUtil';
 import IntervalDialog from './dialog/IntervalDialog';
 import DurationDialog from './dialog/DurationDialog';
@@ -63,7 +63,7 @@ export default struct SettingItem {
 
   build() {
     Column() {
-      ForEach(this.settingInfo, (item: AlarmSettingBean, index: number) => {
+      ForEach(this.settingInfo, (item: AlarmSettingBean, index: number | undefined) => {
         Divider()
           .visibility(index === 0 ? Visibility.Hidden : Visibility.Visible)
           .opacity($r('app.float.divider_opacity'))
@@ -101,7 +101,7 @@ export default struct SettingItem {
         .onClick(() => {
           this.showSettingDialog(item.sType);
         })
-      }, (item, index) => JSON.stringify(item) + index)
+      }, (item: AlarmSettingBean, index: number | undefined) => JSON.stringify(item) + index)
     }
     .margin({
       bottom: DimensionUtil.getVp($r('app.float.setting_item_interval')),

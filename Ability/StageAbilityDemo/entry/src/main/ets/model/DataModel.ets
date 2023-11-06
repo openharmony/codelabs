@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-import BannerData from '../common/bean/BannerData';
-import MenuData from '../common/bean/MenuData';
-import GoodsData from '../common/bean/GoodsData';
-import ToolBarData from '../common/bean/ToolBarData';
-import GoodsServiceData from '../common/bean/GoodsServiceData';
+import BannerData from '../viewmodel/BannerData';
+import MenuData from '../viewmodel/MenuData';
+import GoodsData from '../viewmodel/GoodsData';
+import ToolBarData from '../viewmodel/ToolBarData';
+import GoodsServiceData from '../viewmodel/GoodsServiceData';
 
 /*
  * The DataModel file instead of network data.
@@ -38,6 +38,9 @@ export default class DataModel {
     },
     {
       imgSrc: $rawfile('index/banner2.png')
+    },
+    {
+      imgSrc: $rawfile('index/banner3.png')
     }
   ];
   public static readonly HOME_MENU: MenuData[] = [
@@ -130,4 +133,3 @@ export default class DataModel {
     }
   ];
 }
-

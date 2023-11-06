@@ -14,7 +14,12 @@
  */
 
 import { CommonItem } from './CommonComponent';
-import { MARGIN_FONT_SIZE_SPACE, LIST, SHOW_LIST_HEIGHT_PERCENT,ALL_PERCENT } from '../common/Constants/CommonConstants';
+import {
+  MARGIN_FONT_SIZE_SPACE,
+  LIST,
+  SHOW_LIST_HEIGHT_PERCENT,
+  ALL_PERCENT
+} from '../common/Constants/CommonConstants';
 import { RowAxisAlignRadioList } from './RowAxisAlignRadioList';
 import { RowMainAlignRadioList } from './RowMainAlignRadioList';
 
@@ -28,18 +33,17 @@ export struct RowShowList {
 
   build() {
     Column() {
-      // Row中元素对齐方式布局
       Row() {
-        ForEach(LIST, (item) => {
+        ForEach(LIST, (item: number) => {
           CommonItem({ item: item })
-        }, item => JSON.stringify(item))
+        }, (item: number) => JSON.stringify(item))
       }
       .alignItems(this.currentRowAlignItems)
       .justifyContent(this.currentRowJustifyContent)
       .padding(MARGIN_FONT_SIZE_SPACE.COMMON_PADDING)
       .width(ALL_PERCENT)
       .height(SHOW_LIST_HEIGHT_PERCENT.COLUMN_ROW_SHOW_LIST_HEIGHT)
-      .backgroundColor($r("app.color.show_list_backgroundColor"))
+      .backgroundColor($r('app.color.show_list_backgroundColor'))
       .margin({ top: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN })
 
       // set main align
@@ -52,11 +56,5 @@ export struct RowShowList {
     .layoutWeight(1)
     .height(ALL_PERCENT)
     .width(ALL_PERCENT)
-
   }
 }
-
-
-
-
-

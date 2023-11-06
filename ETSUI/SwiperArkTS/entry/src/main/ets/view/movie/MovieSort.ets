@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { PictureItem } from '../../common/bean/PictureItem';
+import { PictureItem } from '../../viewmodel/PictureItem';
 import { initializePictures } from '../../viewmodel/PictureViewModel';
 import { PictureType } from '../../common/constants/PictureConstants';
 import { PictureView } from '../common/PictureView';
@@ -40,7 +40,7 @@ export struct MovieSort {
           GridItem() {
             PictureView({ photos: item })
           }
-        }, item => JSON.stringify(item))
+        }, (item: PictureItem) => JSON.stringify(item))
       }
       .columnsTemplate(CommonConstants.THREE_COLUMNS)
       .rowsTemplate(CommonConstants.THREE_ROWS)

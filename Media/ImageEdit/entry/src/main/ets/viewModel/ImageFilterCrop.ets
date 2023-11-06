@@ -13,28 +13,26 @@
  * limitations under the License.
  */
 
-import { RectF } from '../common/bean/Rect';
-import { PixelMapWrapper } from '../common/bean/PixelMapWrapper';
+import { RectF } from './Rect';
+import { PixelMapWrapper } from './PixelMapWrapper';
 import { MathUtils } from '../utils/MathUtils';
 
 export class ImageFilterCrop {
-  private cropRect: RectF = undefined;
+  private cropRect: RectF = new RectF();
 
-  constructor() {
-    this.cropRect = new RectF();
-  }
-
-  cropImage(pixelMap: PixelMapWrapper, realCropRect: RectF, callback) {
+  cropImage(pixelMap: PixelMapWrapper, realCropRect: RectF, callback: () => void) {
     let offWidth = realCropRect.getWidth();
     let offHeight = realCropRect.getHeight();
-    pixelMap.pixelMap.crop({
-      size:{ height: vp2px(offHeight), width: vp2px(offWidth) },
-      x: vp2px(realCropRect.left),
-      y: vp2px(realCropRect.top)
-    }, callback);
+    if (pixelMap.pixelMap!== undefined) {
+      pixelMap.pixelMap.crop({
+        size: { height: vp2px(offHeight), width: vp2px(offWidth) },
+        x: vp2px(realCropRect.left),
+        y: vp2px(realCropRect.top)
+      }, callback);
+    }
   }
 
-  readerNew(pixelMap: PixelMapWrapper, callback) {
+  readerNew(pixelMap: PixelMapWrapper, callback: () => void) {
     let width = pixelMap.width;
     let height = pixelMap.height;
     let realCropRect = new RectF();

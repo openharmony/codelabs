@@ -15,7 +15,7 @@
 
 import router from '@ohos.router';
 import { CommonConstants } from '../../common/constants/CommonConstants';
-import AlarmItem from '../../common/bean/AlarmItemBean';
+import AlarmItem from '../../viewmodel/AlarmItemBean';
 import AlarmListItem from '../Main/AlarmListItem';
 import DimensionUtil from '../../common/utils/DimensionUtil';
 
@@ -31,7 +31,7 @@ export default struct AlarmList {
         }.onClick(() => {
           router.pushUrl({ url: "pages/DetailIndex", params: { alarmItem: item } });
         })
-      }, item => JSON.stringify(item))
+      }, (item: AlarmItem) => JSON.stringify(item))
     }
     .padding({
       left: DimensionUtil.getVp($r('app.float.alarm_list_content_distance')),

@@ -2,7 +2,7 @@
 
 ## 介绍
 
-基于ArkTS的声明式开发范式及OpenHarmony系统的转场动画接口，实现一系列页面动画切换的功能。在本教程中，我们将会通过一个简单的样例，学习如何基于ArkTS的声明式开发范式开发转场动画。其中包含页面间转场、组件内转场以及共享元素转场，效果如图所示：
+在本教程中，我们将会通过一个简单的样例，学习如何基于ArkTS的声明式开发范式开发转场动画。其中包含页面间转场、组件内转场以及共享元素转场。效果如图所示：
 
 ![](figures/TransitionAnimation.gif)
 
@@ -12,20 +12,22 @@
 ### 相关概念
 
 - [页面间转场](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-page-transition-animation.md)：页面转场通过在全局pageTransition方法内配置页面入场组件和页面退场组件来自定义页面转场动效。
+
 - [组件内转场](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-transition-animation-component.md)：组件转场主要通过transition属性进行配置转场参数，在组件插入和删除时进行过渡动效，主要用于容器组件子组件插入删除时提升用户体验（需要配合animateTo才能生效，动效时长、曲线、延时跟随animateTo中的配置）。
+
 - [共享元素转场](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/arkui-ts/ts-transition-animation-shared-elements.md)：通过修改共享元素的sharedTransition属性设置元素在不同页面之间过渡动效。例如，如果两个页面使用相同的图片（但位置和大小不同），图片就会在这两个页面之间流畅地平移和缩放。
 
 ## 环境搭建
 
 ### 软件要求
 
-- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
-- OpenHarmony SDK版本：API version 9及以上版本。
+- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+- OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 - 开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
-- OpenHarmony系统：3.2 Release及以上版本。
+- OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -48,7 +50,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets                      // 代码区
@@ -56,9 +58,10 @@
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets            // 公共常量类
 │  │  └──utils           
-│  │     └──DimensionUtil.ets              // 屏幕适配工具类
+│  │     ├──DimensionUtil.ets              // 屏幕适配工具类
+│  │     └──GlobalContext.ets              // 全局上下文工具类
 │  ├──entryability
-│  │  └──EntryAbility.ts                   // 程序入口类
+│  │  └──EntryAbility.ets                  // 程序入口类
 │  ├──pages
 │  │  ├──BottomTransition.ets              // 底部滑出页面
 │  │  ├──ComponentTransition.ets           // 移动动画转场页面
@@ -67,9 +70,11 @@
 │  │  ├──Index.ets                         // 应用首页
 │  │  ├──ShareItem.ets                     // 共享元素转场部件
 │  │  └──SharePage.ets                     // 共享元素转场页面
-│  └──view
-│     ├──BackContainer.ets                 // 自定义头部返回组件
-│     └──TransitionElement.ets             // 自定义动画元素
+│  ├──view
+│  │  ├──BackContainer.ets                 // 自定义头部返回组件
+│  │  └──TransitionElement.ets             // 自定义动画元素
+│  └──viewmodel
+│     └──AnimationModel.ets                // 动画封装的model类
 └──entry/src/main/resources                // 资源文件目录
 ```
 
@@ -88,27 +93,26 @@
 2. 在Index.ets中引入首页所需要图片和路由信息，声明子组件的UI布局并添加样式，使用ForEach方法循环渲染首页列表常量数据“INDEX\_ANIMATION\_MODE”，其中imgRes是设置按钮的背景图片，url用于设置页面路由的地址。
 
    ```typescript
-   export const INDEX_ANIMATION_MODE = [
-     { imgRes: $r('app.media.bg_bottom_anim_transition'), url: 'pages/BottomTransition' },
-     { imgRes: $r('app.media.bg_custom1_anim_transition'), url: 'pages/CustomTransition' },
-     { imgRes: $r('app.media.bg_custom2_anim_transition'), url: 'pages/FullCustomTransition' },
-     { imgRes: $r('app.media.bg_element_anim_transition'), url: 'pages/ComponentTransition' },
-     { imgRes: $r('app.media.bg_share_anim_transition'), url: 'pages/ShareItem' }
-   ];
+   // Index.ets
+   import { INDEX_ANIMATION_MODE } from '../common/constants/CommonConstants';
    
    Column() {
-     ForEach(INDEX_ANIMATION_MODE, ({ imgRes , url }) => {
-       Button()
-         .backgroundImage(imgRes)
+     ForEach(INDEX_ANIMATION_MODE, (item: AnimationModel) => {
+       Row()
+         .backgroundImage(item.imgRes)
          .backgroundImageSize(ImageSize.Cover)
          .backgroundColor($r('app.color.trans_parent'))
          .height(DimensionUtil.getVp($r('app.float.main_page_body_height')))
          .margin({ bottom: DimensionUtil.getVp($r('app.float.main_page_body_margin')) })
          .width(FULL_LENGTH)
+         .borderRadius(BORDER_RADIUS)
          .onClick(() => {
-           router.push({ url: url });
+           router.pushUrl({ url: item.url })
+             .catch((err: Error) => {
+               hilog.error(DOMAIN, PREFIX, FORMAT, err);
+             });
          })
-     }, item => item.toString())
+     }, (item: AnimationModel) => JSON.stringify(item))
    }
    ```
 
@@ -123,6 +127,7 @@
 通过设置PageTransitionEnter和PageTransitionExit的slide属性为SlideEffect.Bottom，来实现BottomTransition入场时从底部滑入，退场时从底部滑出。
 
 ```typescript
+// BottomTransition.ets
 @Entry
 @Component
 struct BottomTransition {
@@ -154,6 +159,7 @@ struct BottomTransition {
 在CustomTransition.ets的Column组件中添加TransitionElement组件，并且定义pageTransition方法。
 
 ```typescript
+// CustomTransition.ets
 @Entry
 @Component
 struct CustomTransition {
@@ -191,6 +197,7 @@ struct CustomTransition {
 在FullCustomTransition.ets的Column组件中添加TransitionElement组件，并且定义pageTransition方法。给Stack组件添加opacity、scale、rotate属性，定义变量animValue用来控制Stack组件的动效，在PageTransitionEnter和PageTransitionExit组件中动态改变myProgress的值。
 
 ```typescript
+// FullCustomTransition.ets
 @Entry
 @Component
 struct FullCustomTransition {
@@ -216,12 +223,18 @@ struct FullCustomTransition {
    */
   pageTransition() {
     PageTransitionEnter({ duration: TRANSITION_ANIMATION_DURATION, curve: Curve.Smooth })
-      .onEnter((type: RouteType, progress: number) => {
-        this.animValue = progress
+      .onEnter((type?: RouteType, progress?: number) => {
+        if (!progress) {
+          return;
+        }
+        this.animValue = progress;
       });
     PageTransitionExit({ duration: TRANSITION_ANIMATION_DURATION, curve: Curve.Smooth })
-      .onExit((type: RouteType, progress: number) => {
-        this.animValue = FULL_CUSTOM_TRANSITION_DEFAULT_ANIM_VALUE - progress
+      .onExit((type?: RouteType, progress?: number) => {
+        if (!progress) {
+          return;
+        }
+        this.animValue = FULL_CUSTOM_TRANSITION_DEFAULT_ANIM_VALUE - progress;
       });
   }
 }
@@ -238,6 +251,7 @@ struct FullCustomTransition {
 1. 在ComponentTransition.ets文件中，新建Image子组件，并添加两个transition属性，分别用于定义组件的添加动效和移除动效。
 
    ```typescript
+   // ComponentTransition.ets
    Image($r('app.media.bg_element'))
      .TransitionEleStyles()
      .transition({
@@ -252,9 +266,10 @@ struct FullCustomTransition {
      })
    ```
 
-2. 在ComponentTransition组件定义一个变量，用于控制ComponentItem的添加和移除，在Button组件的onClick事件中添加animateTo方法，来使ComponentItem子组件动效生效。
+2. 在ComponentTransition代码中，定义一个isShow变量，用于控制Image子组件的添加和移除，在Button组件的onClick事件中添加animateTo方法，来使Image子组件子组件动效生效。
 
    ```typescript
+   // ComponentTransition.ets
    @State isShow: boolean = false;
    
    Button($r('app.string.Component_transition_toggle'))
@@ -280,6 +295,7 @@ struct FullCustomTransition {
 1. 在ShareItem.ets中给Image组件设置sharedTransition属性，组件转场id设置为“SHARE\_TRANSITION\_ID”。
 
    ```typescript
+   // ShareItem.ets
    Image($r('app.media.bg_transition'))
      .width(FULL_LENGTH)
      .height(DimensionUtil.getVp($r('app.float.share_item_element_height')))
@@ -291,13 +307,17 @@ struct FullCustomTransition {
        delay: SHARE_ITEM_ANIMATION_DELAY
      })
      .onClick(() => {
-       router.push({ url: SHARE_PAGE_URL });
+       router.pushUrl({ url: SHARE_PAGE_URL })
+         .catch((err: Error) => {
+           hilog.error(DOMAIN, PREFIX, FORMAT, err);
+         });
      })
    ```
 
 2. 在SharePage.ets中给Image组件设置sharedTransition属性，组件转场id设置为“SHARE\_TRANSITION\_ID”。
 
    ```typescript
+   // SharePage.ets
    @Entry
    @Component
    struct SharePage {

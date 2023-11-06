@@ -21,13 +21,15 @@ import {
   SECOND_PAGE,
   NET
 } from '../common/constants/CommonConstants';
+import { HorizontalVideoItem } from '../viewmodel/HorizontalVideoItem';
+
 
 /**
  * The modules in index
  */
 @Component
 export struct VideoModule {
-  private moduleName: string;
+  private moduleName: string = '';
 
   build() {
     Column() {
@@ -36,12 +38,14 @@ export struct VideoModule {
           .fontSize(MARGIN_FONT_SIZE.THIRD_MARGIN)
           .fontWeight(FontWeight.Bolder)
       }
-      .margin({ left: STRING_PERCENT.INDEX_SWIPER_LEFT_RIGHT_MARGIN,
+      .margin({
+        left: STRING_PERCENT.INDEX_SWIPER_LEFT_RIGHT_MARGIN,
         bottom: MARGIN_FONT_SIZE.FIRST_MARGIN,
-        top: MARGIN_FONT_SIZE.FIRST_MARGIN })
+        top: MARGIN_FONT_SIZE.FIRST_MARGIN
+      })
 
       List({ space: MARGIN_FONT_SIZE.FIRST_MARGIN }) {
-        ForEach(HORIZONTAL_VIDEOS, item => {
+        ForEach(HORIZONTAL_VIDEOS, (item: HorizontalVideoItem) => {
           ListItem() {
             HorizontalItem({
               imageSrc: item.image,
@@ -49,7 +53,7 @@ export struct VideoModule {
               videoName: item.name
             })
           }
-        }, item => JSON.stringify(item))
+        }, (item: HorizontalVideoItem) => JSON.stringify(item))
       }
       .listDirection(Axis.Horizontal)
     }
@@ -69,9 +73,9 @@ export struct VideoModule {
 
 @Component
 struct HorizontalItem {
-  private imageSrc: Resource;
-  private source: string;
-  private videoName: string;
+  private imageSrc: Resource = $r('app.string.empty');
+  private source: string = '';
+  private videoName: string = '';
 
   build() {
     Column() {

@@ -21,62 +21,68 @@ import { PlayProgress } from '../view/PlayProgress';
 import { VideoController } from '../controller/VideoController';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { PlayConstants } from '../common/constants/PlayConstants';
+import resourceManager from '@ohos.resourceManager';
+import { PlayerModel } from '../common/model/PlayerModel';
 
 @Entry
 @Component
 struct PlayPage {
-  @State videoHeight: string = PlayConstants.PLAY_PAGE.PLAY_PLAYER_HEIGHT;
-  @State videoWidth: string = CommonConstants.FULL_PERCENT;
-  @State videoMargin: string = PlayConstants.PLAY_PAGE.MARGIN_ZERO;
-  @State videoPosition: FlexAlign  = FlexAlign.Center;
-  private playVideoModel: VideoController = new VideoController();
-  @Provide src: string = router.getParams()['src'];
-  @Provide index: number = router.getParams()['index'];
-  @Provide type: number = router.getParams()['type'];
+  @Provide playerModel: PlayerModel = new PlayerModel();
+  @Provide src: resourceManager.RawFileDescriptor = {} as resourceManager.RawFileDescriptor;
+  @Provide iSrc: string = '';
+  @Provide index: number = 0;
+  @Provide type: number = 0;
   @Provide status: number = CommonConstants.STATUS_START;
+  playVideoModel: VideoController = new VideoController(this.playerModel);
   private panOptionBright: PanGestureOptions = new PanGestureOptions({ direction: PanDirection.Vertical });
   private panOptionVolume: PanGestureOptions = new PanGestureOptions({ direction: PanDirection.Horizontal });
 
+  aboutToAppear() {
+    let params = router.getParams() as Record<string, Object>;
+    this.src = params.src as resourceManager.RawFileDescriptor;
+    this.iSrc = params.iSrc as string;
+    this.index = params.index as number;
+    this.type = params.type as number;
+  }
+
+  aboutToDisappear() {
+    this.playVideoModel.release();
+  }
+
   onPageHide() {
     this.status = CommonConstants.STATUS_PAUSE;
-    globalThis.windowClass.setWindowKeepScreenOn(false);
-  }
-
-  aboutToAppear() {
-    this.playVideoModel.initPlayPageThis(this);
-  }
-
-  onBackPress() {
-    this.playVideoModel.stop();
+    this.playVideoModel.pause();
   }
 
   build() {
     Stack() {
-      Column () {
-        Column(){
+      Column() {
+        Column() {
         }
-        .height(this.videoMargin)
+        .height(this.playerModel.videoMargin)
+
         PlayPlayer({ playVideoModel: this.playVideoModel })
-          .width(this.videoWidth)
-          .height(this.videoHeight)
+          .width(this.playerModel.videoWidth)
+          .height(this.playerModel.videoHeight)
       }
       .height(CommonConstants.FULL_PERCENT)
       .width(CommonConstants.FULL_PERCENT)
-      .justifyContent(this.videoPosition)
+      .justifyContent(this.playerModel.videoPosition)
       .zIndex(0)
+
       Column() {
         PlayTitle({ playVideoModel: this.playVideoModel })
           .width(CommonConstants.FULL_PERCENT)
-          .height(PlayConstants.PLAY_PAGE.HEIGHT)
+          .height(PlayConstants.HEIGHT)
         Column()
           .width(CommonConstants.FULL_PERCENT)
-          .height(PlayConstants.PLAY_PAGE.COLUMN_HEIGHT_ONE)
+          .height(PlayConstants.COLUMN_HEIGHT_ONE)
           .gesture(
             PanGesture(this.panOptionBright)
-              .onActionStart((event: GestureEvent) => {
+              .onActionStart((event?: GestureEvent) => {
                 this.playVideoModel.onBrightActionStart(event);
               })
-              .onActionUpdate((event: GestureEvent) => {
+              .onActionUpdate((event?: GestureEvent) => {
                 this.playVideoModel.onBrightActionUpdate(event);
               })
               .onActionEnd(() => {
@@ -86,16 +92,17 @@ struct PlayPage {
         Column() {
         }
         .width(CommonConstants.FULL_PERCENT)
-        .height(PlayConstants.PLAY_PAGE.PLAY_PLAYER_HEIGHT)
+        .height(PlayConstants.PLAY_PLAYER_HEIGHT)
+
         Column()
           .width(CommonConstants.FULL_PERCENT)
-          .height(PlayConstants.PLAY_PAGE.COLUMN_HEIGHT_TWO)
+          .height(PlayConstants.COLUMN_HEIGHT_TWO)
           .gesture(
             PanGesture(this.panOptionVolume)
-              .onActionStart((event: GestureEvent) => {
+              .onActionStart((event?: GestureEvent) => {
                 this.playVideoModel.onVolumeActionStart(event);
               })
-              .onActionUpdate((event: GestureEvent) => {
+              .onActionUpdate((event?: GestureEvent) => {
                 this.playVideoModel.onVolumeActionUpdate(event);
               })
               .onActionEnd(() => {
@@ -104,10 +111,10 @@ struct PlayPage {
           )
         PlayControl({ playVideoModel: this.playVideoModel })
           .width(CommonConstants.FULL_PERCENT)
-          .height(PlayConstants.PLAY_PAGE.HEIGHT)
+          .height(PlayConstants.HEIGHT)
         PlayProgress({ playVideoModel: this.playVideoModel })
           .width(CommonConstants.FULL_PERCENT)
-          .height(PlayConstants.PLAY_PAGE.PLAY_PROGRESS_HEIGHT)
+          .height(PlayConstants.PLAY_PROGRESS_HEIGHT)
       }
       .height(CommonConstants.FULL_PERCENT)
       .width(CommonConstants.FULL_PERCENT)

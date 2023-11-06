@@ -54,16 +54,16 @@ export class CommonUtils {
   /**
    * Date dialog dialog
    */
-  datePickerDialog(dateCallback) {
+  datePickerDialog(dateCallback: (birthValue: string) => void) {
     DatePickerDialog.show({
       start: new Date(CommonConstants.START_TIME),
       end: new Date(),
       selected: new Date(CommonConstants.SELECT_TIME),
       lunar: false,
       onAccept: (value: DatePickerResult) => {
-        let year = value.year;
-        let month = value.month + CommonConstants.PLUS_ONE;
-        let day = value.day;
+        let year = value.year as number;
+        let month = value.month as number + CommonConstants.PLUS_ONE;
+        let day = value.day as number;
         let birthdate: string = this.getBirthDateValue(year, month, day);
         dateCallback(birthdate);
       }
@@ -73,7 +73,7 @@ export class CommonUtils {
   /**
    * Text dialog dialog
    */
-  textPickerDialog(sexArray: Resource, sexCallback) {
+  textPickerDialog(sexArray: Resource, sexCallback: (sexValue: string) => void) {
     if (this.isEmptyArr(sexArray)) {
       Logger.error(CommonConstants.TAG_COMMON_UTILS, 'sex is null');
       return;
@@ -110,7 +110,7 @@ export class CommonUtils {
    * @param {object} obj
    * @return {boolean} true(empty)
    */
-  isEmpty(obj): boolean {
+  isEmpty(obj: Object): boolean {
     return obj === undefined || obj === null || obj === '';
   }
 
@@ -120,8 +120,8 @@ export class CommonUtils {
    * @param {Array}array
    * @return {boolean} true(empty)
    */
-  isEmptyArr(array): boolean {
-    return this.isEmpty(array) || array.length === 0;
+  isEmptyArr(array: Object | Object[]): boolean {
+    return this.isEmpty(array) || (array as Object[]).length === 0;
   }
 }
 

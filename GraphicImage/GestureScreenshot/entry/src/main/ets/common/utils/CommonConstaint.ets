@@ -13,10 +13,22 @@
  * limitations under the License.
  */
 
+interface XLocationEnumInterface {
+  XLeft: number,
+  XRight: number,
+  noChange: number
+}
+
+interface YLocationEnumInterface {
+  YTop: number,
+  YBottom: number,
+  noChange: number
+}
+
 /**
  * The x location to be changed.
  */
-export const XLocationEnum = {
+export const XLocationEnum: XLocationEnumInterface = {
   XLeft: 0,
   XRight: 1,
   noChange: -1
@@ -25,10 +37,15 @@ export const XLocationEnum = {
 /**
  * The y location to be changed.
  */
-export const YLocationEnum = {
+export const YLocationEnum: YLocationEnumInterface = {
   YTop: 0,
   YBottom: 1,
   noChange: -1
+}
+
+export interface ScaleInterface {
+  x: number,
+  y: number
 }
 
 /**

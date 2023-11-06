@@ -19,7 +19,7 @@
     "abilities": [
       {
         "name": "SecondAbility",
-        "srcEntry": "./ets/secondability/SecondAbility.ts",
+        "srcEntry": "./ets/secondability/SecondAbility.ets",
         "description": "$string:SecondAbility_desc",
         "icon": "$media:icon",
         "label": "$string:SecondAbility_label",

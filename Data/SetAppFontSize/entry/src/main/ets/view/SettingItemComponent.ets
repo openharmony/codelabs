@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import SettingData from '../common/bean/SettingData';
+import SettingData from '../viewmodel/SettingData';
 import StyleConstants from '../common/constants/StyleConstants';
 
 /**
@@ -21,9 +21,10 @@ import StyleConstants from '../common/constants/StyleConstants';
  */
 @Component
 export default struct SettingItemComponent {
-  setting: SettingData;
-  @Prop changeFontSize: number;
-  itemClick: () => void;
+  setting: SettingData = new SettingData();
+  @Prop changeFontSize: number = 0;
+  itemClick: Function = () => {
+  };
 
   build() {
     Row() {

@@ -1,6 +1,19 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "material": {
+          "certpath": "C:\\Users\\l30044346\\.ohos\\config\\openharmony\\auto_ohos_default_AccessPermission_com.example.accesspermission.cer",
+          "storePassword": "0000001A0A543B3A6295297D75D9EA8C7941AA529DB818E408B45917302F440EE319F95F61ED7F5D38D6",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A773E0C52BAC726F6A37928CEB541B1ECD0FBCBAD59D91F8D0BD31C4897B1D3542D134A1D3192",
+          "profile": "C:\\Users\\l30044346\\.ohos\\config\\openharmony\\auto_ohos_default_AccessPermission_com.example.accesspermission.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\l30044346\\.ohos\\config\\openharmony\\auto_ohos_default_AccessPermission_com.example.accesspermission.p12"
+        }
+      }
+    ],
     "compileSdkVersion": 9,
     "compatibleSdkVersion": 9,
     "products": [

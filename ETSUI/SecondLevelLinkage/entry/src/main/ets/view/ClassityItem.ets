@@ -17,9 +17,9 @@ import Constants from '../common/constants/Constants';
 
 @Component
 export default struct ClassifyItem {
-  classifyName: string;
+  classifyName: string = '';
   @Prop isSelected: boolean;
-  onClickAction: () => void;
+  onClickAction?: () => void;
 
   build() {
     Text(this.classifyName)

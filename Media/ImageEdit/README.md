@@ -20,13 +20,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -53,16 +53,6 @@
 ```
 ├──entry/src/main/ets                            // 代码区
 │  ├──common                         
-│  │  ├──bean 
-│  │  │  ├──CropType.ets                         // 按比例选取图片
-│  │  │  ├──ImageSizeItem.ets                    // 图片尺寸
-│  │  │  ├──Line.ets                             // 线封装类
-│  │  │  ├──MessageItem.ets                      // 多线程封装消息
-│  │  │  ├──PixelMapWrapper.ets                  // PixelMap封装类
-│  │  │  ├──Point.ets                            // 点封装类
-│  │  │  ├──Ratio.ets                            // 比例封装类
-│  │  │  ├──Rect.ets                             // 矩形封装类
-│  │  │  └──RegionItem.ets                       // 区域封装类
 │  │  └──constant
 │  │     └──CommonConstant.ets                   // 常量类
 │  ├──entryability
@@ -81,12 +71,21 @@
 │  ├──view
 │  │  ├──AdjustContentView.ets                   // 色域调整视图     
 │  │  └──ImageSelect.ets                         // Canvas选择框实现类   
-│  │──viewmodel
+│  ├──viewmodel
 │  │  ├──CropShow.ets                            // 选择框显示控制类
+│  │  ├──CropType.ets                            // 按比例选取图片
 │  │  ├──IconListViewModel.ets                   // icon数据
 │  │  ├──ImageEditCrop.ets                       // 图片编辑操作类
 │  │  ├──ImageFilterCrop.ets                     // 图片操作收集类
+│  │  ├──ImageSizeItem.ets                       // 图片尺寸
+│  │  ├──Line.ets                                // 线封装类
+│  │  ├──MessageItem.ets                         // 多线程封装消息
 │  │  ├──OptionViewModel.ets                     // 图片处理封装类
+│  │  ├──PixelMapWrapper.ets                     // PixelMap封装类
+│  │  ├──Point.ets                               // 点封装类
+│  │  ├──Ratio.ets                               // 比例封装类
+│  │  ├──Rect.ets                                // 矩形封装类
+│  │  ├──RegionItem.ets                          // 区域封装类
 │  │  └──ScreenManager.ts                        // 屏幕尺寸计算工具类
 │  └──workers
 │     ├──AdjustBrightnessWork.ts                 // 亮度异步调节
@@ -110,14 +109,39 @@
 // HomePage.ets
 aboutToAppear() {
   this.pixelInit();
+  ...
 }
 
-// DecodeUtil.ets
-async function getResourceFd(filename: string) {
+build() {
+  Column() {
+    ...
+    Column() {
+      if (this.isCrop && this.showCanvas && this.statusBar > 0) {
+        if (this.isSaveFresh) {
+          ImageSelect({
+            statusBar: this.statusBar
+          })
+        }
+        ...
+      } else {
+        if (this.isPixelMapChange) {
+          Image(this.pixelMap)
+            .scale({ x: this.imageScale, y: this.imageScale, z: 1 })
+            .objectFit(ImageFit.None)
+        }
+        ...
+      }
+    }
+    ...
+  }
+  ...
+}
+
+async getResourceFd(filename: string) {
   const resourceMgr = getContext(this).resourceManager;
   const context = getContext(this);
   if (filename === CommonConstants.RAW_FILE_NAME) {
-    let imageBuffer = await resourceMgr.getMediaContent($r('app.media.ic_low'));
+    let imageBuffer = await resourceMgr.getMediaContent($r("app.media.ic_low"))
     let filePath = context.cacheDir + '/' + filename;
     let file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
     let writeLen = fs.writeSync(file.fd, imageBuffer.buffer);
@@ -130,9 +154,8 @@ async function getResourceFd(filename: string) {
   }
 }
 
-//DecodeUtil.ets
-export async function getPixelMap(fileName: string) {
-  const fd = await getResourceFd(fileName);
+async getPixelMap(fileName: string) {
+  const fd = await this.getResourceFd(fileName);
   const imageSourceApi = image.createImageSource(fd);
   if (!imageSourceApi) {
     Logger.error(TAG, 'imageSourceAPI created failed!');
@@ -142,26 +165,6 @@ export async function getPixelMap(fileName: string) {
     editable: true
   });
   return pixelMap;
-}
-
-// HomePage.ets
-build() {
-  Column() {
-    ...
-    Column() {
-        if (this.isCrop && this.showCanvas && this.statusBar > 0) {
-          ImageSelect({
-            statusBar: this.statusBar
-          })
-        } else {
-          Image(this.pixelMap)
-            .scale({ x: this.imageScale, y: this.imageScale, z: 1 })
-            .objectFit(ImageFit.None)
-        }
-    }
-    ...
-  }
-  ...
 }
 ```
 
@@ -270,7 +273,7 @@ function hsv2rgb(hue: number, saturation: number, value: number) {
 2. 确定裁剪的方式，当前裁剪默认有自由选取、1:1选取、4:3选取、16:9选取。
 3. 通过pixelMap调用接口crop\(\)进行裁剪操作。
 
->![](public_sys-resources/icon-note.gif) **说明：** 
+>![](/public_sys-resources/icon-note.gif) **说明：** 
 >当前裁剪功能采用pixelMap裁剪能力直接做切割，会有叠加效果，后续会通过增加选取框对当前功能进行优化。
 
 ![](figures/zh-cn_image_0000001542044862.gif)
@@ -291,6 +294,7 @@ cropImage(index: CropType) {
       break;
     case CropType.RECTANGLE:
       this.cropRatio = CropRatioType.RATIO_TYPE_16_9;
+      break;
     default:
       this.cropRatio = CropRatioType.RATIO_TYPE_FREE;
       break;
@@ -298,14 +302,16 @@ cropImage(index: CropType) {
 }
 
 // ImageFilterCrop.ets
-cropImage(pixelMap: PixelMapWrapper, realCropRect: RectF, callback) {
+cropImage(pixelMap: PixelMapWrapper, realCropRect: RectF, callback: () => void) {
   let offWidth = realCropRect.getWidth();
   let offHeight = realCropRect.getHeight();
-  pixelMap.pixelMap.crop({
-    size:{ height: vp2px(offHeight), width: vp2px(offWidth) },
-    x: vp2px(realCropRect.left),
-    y: vp2px(realCropRect.top)
-  }, callback);
+  if (pixelMap.pixelMap!== undefined) {
+    pixelMap.pixelMap.crop({
+      size:{ height: vp2px(offHeight), width: vp2px(offWidth) },
+      x: vp2px(realCropRect.left),
+      y: vp2px(realCropRect.top)
+    }, callback);
+  }
 }
 ```
 
@@ -319,22 +325,26 @@ cropImage(pixelMap: PixelMapWrapper, realCropRect: RectF, callback) {
 ```typescript
 // HomePage.ets
 rotateImage(rotateType: RotateType) {
-  if (rotateType === RotateType.ClockWise) {
+  if (rotateType === RotateType.CLOCKWISE) {
     try {
-      this.pixelMap.rotate(commonConstant.CLOCK_WISE)
-        .then(() => {
-          this.flushPixelMap();
-        })
+      if (this.pixelMap !== undefined) {
+        this.pixelMap.rotate(CommonConstants.CLOCK_WISE)
+          .then(() => {
+            this.flushPixelMapNew();
+          })
+      }
     } catch (error) {
       Logger.error(TAG, `there is a error in rotate process with ${error?.code}`);
     }
   }
-  if (rotateType === RotateType.Anti_clock) {
+  if (rotateType === RotateType.ANTI_CLOCK) {
     try {
-      this.pixelMap.rotate(commonConstant.ANTI_CLOCK)
-        .then(() => {
-          this.flushPixelMap();
-        })
+      if (this.pixelMap !== undefined) {
+        this.pixelMap.rotate(CommonConstants.ANTI_CLOCK)
+          .then(() => {
+            this.flushPixelMapNew();
+          })
+      }
     } catch (error) {
       Logger.error(TAG, `there is a error in rotate process with ${error?.code}`);
     }
@@ -350,37 +360,43 @@ rotateImage(rotateType: RotateType) {
 4.  将计算好的ArrayBuffer发送回主线程。
 5.  将ArrayBuffer写入pixelMap，刷新UI。
 
->![](public_sys-resources/icon-note.gif) **说明：** 
+>![](/public_sys-resources/icon-note.gif) **说明：** 
 >当前亮度调节是在UI层面实现的，未实现细节优化算法，只做简单示例。调节后的图片会有色彩上的失真。
 
 ![](figures/zh-cn_image_0000001542044962.gif)
 
 ```typescript
 // AdjustContentView.ets
-// 转化成pixelMap及发送buffer到worker，返回数据刷新UI
+// 转化成pixelMap及发送buffer到worker，返回数据刷新ui
 postToWorker(type: AdjustId, value: number, workerName: string) {
   let sliderValue = type === AdjustId.BRIGHTNESS ? this.brightnessLastSlider : this.saturationLastSlider;
-  let workerInstance = new worker.ThreadWorker(workerName);
-  const bufferArray = new ArrayBuffer(this.pixelMap.getPixelBytesNumber());
-  this.pixelMap.readPixelsToBuffer(bufferArray).then(() => {
-    let message = new MessageItem(bufferArray, sliderValue, value);
-    workerInstance.postMessage(message);
-    if (this.postState) {
-      this.deviceListDialogController.open();
-    }
-    this.postState = false;
-    workerInstance.onmessage = this.updatePixelMap.bind(this);
-    if (type === AdjustId.BRIGHTNESS) {
-      this.brightnessLastSlider = Math.round(value);
-    } else {
-      this.saturationLastSlider = Math.round(value);
-    }
-    workerInstance.onexit = () => {
-      if (workerInstance !== undefined) {
-        workerInstance.terminate();
+  try {
+    let workerInstance = new worker.ThreadWorker(workerName);
+    const bufferArray = new ArrayBuffer(this.pixelMap.getPixelBytesNumber());
+    this.pixelMap.readPixelsToBuffer(bufferArray).then(() => {
+      let message = new MessageItem(bufferArray, sliderValue, value);
+      workerInstance.postMessage(message);
+      if (this.postState) {
+        this.deviceListDialogController.open();
       }
-    }
-  });
+      this.postState = false;
+      workerInstance.onmessage = (event: MessageEvents) => {
+        this.updatePixelMap(event)
+      };
+      if (type === AdjustId.BRIGHTNESS) {
+        this.brightnessLastSlider = Math.round(value);
+      } else {
+        this.saturationLastSlider = Math.round(value);
+      }
+      workerInstance.onexit = () => {
+        if (workerInstance !== undefined) {
+          workerInstance.terminate();
+        }
+      }
+    });
+  } catch (error) {
+    Logger.error(`Create work instance fail, error message: ${JSON.stringify(error)}`)
+  }
 }
 
 // AdjustBrightnessWork.ts
@@ -415,11 +431,7 @@ export async function adjustOpacity(pixelMap: PixelMap, value: number) {
     return;
   }
   const newPixelMap = pixelMap;
-  newPixelMap.opacity(value / CommonConstants.SLIDER_MAX, err => {
-    if (err) {
-      Logger.error(TAG, `Failed adjust opacity with ${err}`);
-    }
-  })
+  await newPixelMap.opacity(value / CommonConstants.SLIDER_MAX);
   return newPixelMap;
 }
 ```
@@ -432,46 +444,52 @@ export async function adjustOpacity(pixelMap: PixelMap, value: number) {
 4.  将计算好的ArrayBuffer发送回主线程。
 5.  将ArrayBuffer写入pixelMap，刷新UI。
 
->![](public_sys-resources/icon-note.gif) **说明：** 
+>![](/public_sys-resources/icon-note.gif) **说明：** 
 > 当前饱和度调节是在UI层面实现的，未实现细节优化算法，只做简单示例。调节后的图片会有色彩上的失真。
 
 ![](figures/zh-cn_image_0000001592604569.gif)
 
 ```typescript
 // AdjustContentView.ets
-// 转化成pixelMap及发送buffer到worker，返回数据刷新UI
+// 转化成pixelMap及发送buffer到worker，返回数据刷新ui
 postToWorker(type: AdjustId, value: number, workerName: string) {
   let sliderValue = type === AdjustId.BRIGHTNESS ? this.brightnessLastSlider : this.saturationLastSlider;
-  let workerInstance = new worker.ThreadWorker(workerName);
-  const bufferArray = new ArrayBuffer(this.pixelMap.getPixelBytesNumber());
-  this.pixelMap.readPixelsToBuffer(bufferArray).then(() => {
-    let message = new MessageItem(bufferArray, sliderValue, value);
-    workerInstance.postMessage(message);
-    if (this.postState) {
-      this.deviceListDialogController.open();
-    }
-    this.postState = false;
-    workerInstance.onmessage = this.updatePixelMap.bind(this);
-    if (type === AdjustId.BRIGHTNESS) {
-      this.brightnessLastSlider = Math.round(value);
-    } else {
-      this.saturationLastSlider = Math.round(value);
-    }
-    workerInstance.onexit = () => {
-      if (workerInstance !== undefined) {
-        workerInstance.terminate();
+  try {
+    let workerInstance = new worker.ThreadWorker(workerName);
+    const bufferArray = new ArrayBuffer(this.pixelMap.getPixelBytesNumber());
+    this.pixelMap.readPixelsToBuffer(bufferArray).then(() => {
+      let message = new MessageItem(bufferArray, sliderValue, value);
+      workerInstance.postMessage(message);
+      if (this.postState) {
+        this.deviceListDialogController.open();
       }
-    }
-  });
+      this.postState = false;
+      workerInstance.onmessage = (event: MessageEvents) => {
+        this.updatePixelMap(event)
+      };
+      if (type === AdjustId.BRIGHTNESS) {
+        this.brightnessLastSlider = Math.round(value);
+      } else {
+        this.saturationLastSlider = Math.round(value);
+      }
+      workerInstance.onexit = () => {
+        if (workerInstance !== undefined) {
+          workerInstance.terminate();
+        }
+      }
+    });
+  } catch (error) {
+    Logger.error(`Create work instance fail, error message: ${JSON.stringify(error)}`);
+  }
 }
 
-// AdjustBrightnessWork.ts
+// AdjustSaturationWork.ts
 // worker线程处理部分
 workerPort.onmessage = function(event : MessageEvents) {
   let bufferArray = event.data.buf;
   let last = event.data.last;
   let cur = event.data.cur;
-  let buffer = adjustImageValue(bufferArray, last, cur);
+  let buffer = adjustSaturation(bufferArray, last, cur)
   workerPort.postMessage(buffer);
   workerPort.close();
 }
@@ -495,10 +513,14 @@ export function adjustSaturation(bufferArray: ArrayBuffer, last: number, cur: nu
 6.  使用fs将打包好的图片数据写入到媒体文件asset中。
 
 ```typescript
-// EncodeUtil.ets
-export async function encode(pixelMap: PixelMap) {
+// ImageSelect.ets
+async encode(pixelMap: PixelMap | undefined) {
+  if (pixelMap === undefined) {
+    return;
+  }
+
   const newPixelMap = pixelMap;
-  // packing image.
+  // 打包图片
   const imagePackerApi = image.createImagePacker();
   const packOptions: image.PackingOption = {
     format: CommonConstants.ENCODE_FORMAT,
@@ -506,12 +528,12 @@ export async function encode(pixelMap: PixelMap) {
   }
   const imageData = await imagePackerApi.packing(newPixelMap, packOptions);
   Logger.info(TAG, `imageData's length is ${imageData.byteLength}`);
-  // get album's path.
+  // 获取相册路径
   const context = getContext(this);
   const media = mediaLibrary.getMediaLibrary(context);
   const publicPath = await media.getPublicDirectory(mediaLibrary.DirectoryType.DIR_IMAGE);
   const currentTime = new Date().getTime();
-  // create image asset.
+  // 创建图片资源
   const imageAssetInfo = await media.createAsset(
     mediaLibrary.MediaType.IMAGE,
     `${CommonConstants.IMAGE_PREFIX}_${currentTime}${CommonConstants.IMAGE_FORMAT}`,
@@ -519,7 +541,7 @@ export async function encode(pixelMap: PixelMap) {
   );
   const imageFd = await imageAssetInfo.open(CommonConstants.ENCODE_FILE_PERMISSION);
   await fs.write(imageFd, imageData);
-  // image resource release.
+  // 释放资源
   await imageAssetInfo.close(imageFd);
   imagePackerApi.release();
   await media.release();

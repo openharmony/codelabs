@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,7 +15,7 @@
 
 import HomePage from '../view/home/HomePage';
 import NavViewModel from '../viewmodel/NavViewModel';
-import ToolBarData from '../common/bean/ToolBarData';
+import ToolBarData from '../viewmodel/ToolBarData';
 import ToolBarComponent from '../view/ToolBarComponent';
 import { AppFontSize, NavPageStyle, PERCENTAGE_100 } from '../common/constants/Constants';
 
@@ -47,7 +47,7 @@ struct NavPage {
   build() {
     Navigation() {
       Tabs({ barPosition: BarPosition.Start, controller: this.controller }) {
-        ForEach(this.toolBarConfigs, (item: ToolBarData, index) => {
+        ForEach(this.toolBarConfigs, (item: ToolBarData, index?: number) => {
           TabContent() {
             if (index === HOME) {
               HomePage()
@@ -55,7 +55,7 @@ struct NavPage {
               this.HolderPage(item?.text)
             }
           }
-        }, item => JSON.stringify(item))
+        }, (item: ToolBarData) => JSON.stringify(item))
       }.setTabStyle()
     }
     .toolBar(this.ToolBarBuilder())

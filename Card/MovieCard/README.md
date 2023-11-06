@@ -20,13 +20,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -52,9 +52,6 @@
 ```
 ├──entry/src/main/ets            // 代码区     
 │  ├──common  
-│  │  ├──bean
-│  │  │  ├──FormBean.ets         // 卡片对象
-│  │  │  └──MovieDataBean.ets    // 电影详情bean类
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets  // 常量类
 │  │  │  └──StyleConstants.ets   // 格式常量类
@@ -63,6 +60,7 @@
 │  │  │  └──MovieListData.ets    // 电影列表数据 
 │  │  └──utils
 │  │     ├──CommonUtils.ets      // 数据操作工具类  
+│  │     ├──GlobalContext.ets    // 全局上下文工具类
 │  │     └──Logger.ets           // 日志打印工具类
 │  ├──detailsability
 │  │  └──EntryDetailsAbility.ets // 电影详情入口类
@@ -73,13 +71,17 @@
 │  ├──pages
 │  │  ├──MovieDetailsPage.ets    // 电影详情页
 │  │  └──MovieListPage.ets       // 主页面
-│  └──view
-│     ├──MovieDetailsTitle.ets   // 电影详情头部组件
-│     ├──MovieItem.ets           // 列表item组件
-│     ├──MovieStarring.ets       // 电影主演组件
-│     ├──MovieStills.ets         // 电影剧照组件
-│     ├──StarsWidget.ets         // 电影评分组件
-│     └──StoryIntroduce.ets      // 电影简介组件
+│  ├──view
+│  │  ├──MovieDetailsTitle.ets   // 电影详情头部组件
+│  │  ├──MovieItem.ets           // 列表item组件
+│  │  ├──MovieStarring.ets       // 电影主演组件
+│  │  ├──MovieStills.ets         // 电影剧照组件
+│  │  ├──StarsWidget.ets         // 电影评分组件
+│  │  └──StoryIntroduce.ets      // 电影简介组件
+│  └──viewmodel
+│     ├──FormBean.ets            // 卡片对象
+│     ├──FormDataBean.ets        // 卡片数据对象
+│     └──MovieDataBean.ets       // 电影数据对象
 ├──entry/src/main/js             // js代码区
 │  ├──card2x2                    // 2x2卡片目录
 │  ├──card2x4                    // 2x4卡片目录
@@ -114,22 +116,19 @@
    
    // CommonUtils.ets
    import relationalStore from '@ohos.data.relationalStore';
+   
    async createRdbStore(context: Context) {
-     if (this.isEmpty(globalThis.rdbStore)) {
-       await relationalStore.getRdbStore(context, CommonConstants.STORE_CONFIG)
-         .then((rdbStore: relationalStore.RdbStore) => {
-           if (!this.isEmpty(rdbStore)) {
-             // 创建卡片表
-             rdbStore.executeSql(CommonConstants.CREATE_TABLE_FORM).catch((error) => {
-               Logger.error(CommonConstants.TAG_COMMON_UTILS, 'executeSql error ' + JSON.stringify(error));
-             });
-             globalThis.rdbStore = rdbStore;
-           }
-         }).catch((error) => {
-           Logger.error(CommonConstants.TAG_COMMON_UTILS, 'createRdbStore error ' + JSON.stringify(error));
+     let rdbStore = GlobalContext.getContext().getObject('rdbStore') as relationalStore.RdbStore;
+     if (this.isEmpty(rdbStore)) {
+       rdbStore = await relationalStore.getRdbStore(context, CommonConstants.STORE_CONFIG);
+       if (!this.isEmpty(rdbStore)) {
+         rdbStore.executeSql(CommonConstants.CREATE_TABLE_FORM).catch((error: Error) => {
+           Logger.error(CommonConstants.TAG_COMMON_UTILS, 'executeSql error ' + JSON.stringify(error));
          });
+         GlobalContext.getContext().setObject('rdbStore', rdbStore);
+       }
      }
-     return globalThis.rdbStore;
+     return rdbStore;
    }
    ```
 
@@ -154,7 +153,7 @@ build() {
           // 电影item
           MovieItem({ movieItem: item });
         }
-      }, item => JSON.stringify(item))
+      }, (item: MovieDataBean) => JSON.stringify(item))
     }
     ...
   }
@@ -183,7 +182,7 @@ build() {
           params: {
             index: this.sort
           }
-        }).catch((error) => {
+        }).catch((error: Error) => {
           ...
         });
       })
@@ -201,20 +200,21 @@ build() {
 ```typescript
 // MovieDetailPage.ets
 aboutToAppear() {
-  let index: number = 0;
-  if (!CommonUtils.isEmpty(router.getParams())) {
-    // 获取从电影列表页面传过来的索引
-    index = router.getParams()[CommonConstants.INDEX_KEY] ?? 0;
-  } 
-  ...
-  let listData: MovieDataBean[] = CommonUtils.getListData();
-  if (CommonUtils.isEmptyArr(listData)) {
-    Logger.error(CommonConstants.TAG_DETAILS_PAGE, 'listData is 0');
-    return;
-  }
-  // 获取当前电影信息
-  this.movieData = listData[index];
-  ...
+   let index: number = 0;
+   let params = router.getParams() as Record<string, Object>;
+   if (!CommonUtils.isEmpty(params)) {
+      index = params.index as number;
+   } else {
+      let position = GlobalContext.getContext().getObject('position') as number;
+      index = position ?? 0;
+   }
+   let listData: MovieDataBean[] = CommonUtils.getListData();
+   if (CommonUtils.isEmptyArr(listData)) {
+      Logger.error(CommonConstants.TAG_DETAILS_PAGE, 'listData is 0');
+      return;
+   }
+   this.movieData = listData[index];
+   this.introduction = listData[index].introduction;
 }
 
 build() {
@@ -271,24 +271,24 @@ build() {
 ```typescript
 // EntryFormAbility.ets
 onAddForm(want: Want) {
-  let formId: string = want.parameters[CommonConstants.IDENTITY_KEY] as string;
-  let formName: string = want.parameters[CommonConstants.NAME_KEY] as string;
-  let dimensionFlag: number = want.parameters[CommonConstants.DIMENSION_KEY] as number;
-  // 创建数据库
-  CommonUtils.createRdbStore(this.context).then((rdbStore: relationalStore.RdbStore) => {
-    let form: Form = new Form();
-    form.formId = formId;
-    form.formName = formName;
-    form.dimension = dimensionFlag;
-    // 插入卡片信息
-    CommonUtils.insertForm(form, rdbStore);
-  }).catch((error) => {
-    ...
-  });
-  ...
-  let listData: MovieDataBean[] = CommonUtils.getListData();
-  let formData = CommonUtils.getFormData(listData);
-  return formBindingData.createFormBindingData(formData);
+   if (want.parameters === undefined) {
+      return formBindingData.createFormBindingData();
+   }
+   let formId: string = want.parameters[CommonConstants.IDENTITY_KEY] as string;
+   let formName: string = want.parameters[CommonConstants.NAME_KEY] as string;
+   let dimensionFlag: number = want.parameters[CommonConstants.DIMENSION_KEY] as number;
+   CommonUtils.createRdbStore(this.context).then((rdbStore: relationalStore.RdbStore) => {
+      let form: FormBean = new FormBean();
+      form.formId = formId;
+      form.formName = formName;
+      form.dimension = dimensionFlag;
+      CommonUtils.insertForm(form, rdbStore);
+   }).catch((error: Error) => {
+      Logger.error(CommonConstants.TAG_FORM_ABILITY, 'onAddForm create rdb error ' + JSON.stringify(error));
+   });
+   let listData: MovieDataBean[] = CommonUtils.getListData();
+   let formData = CommonUtils.getFormData(listData);
+   return formBindingData.createFormBindingData(formData);
 }
 ```
 
@@ -306,60 +306,45 @@ onAddForm(want: Want) {
    
    // CommonUtils.ets
    startTimer() {
-     if (this.isEmpty(globalThis.intervalId)) {
-       globalThis.intervalId = setInterval(() => {
-         this.updateMovieCardData(globalThis.rdbStore);
+     let intervalId = GlobalContext.getContext().getObject('intervalId') as number;
+     if (this.isEmpty(intervalId)) {
+       intervalId = setInterval(() => {
+         let rdbStore = GlobalContext.getContext().getObject('rdbStore') as relationalStore.RdbStore;
+         this.updateMovieCardData(rdbStore);
        }, CommonConstants.INTERVAL_DELAY_TIME);
      }
+     GlobalContext.getContext().setObject('intervalId', intervalId);
    }
    
    // 更新电影卡片数据
    updateMovieCardData(rdbStore: relationalStore.RdbStore) {
-     ...
-     let predicates: relationalStore.RdbPredicates =
-       new relationalStore.RdbPredicates(CommonConstants.TABLE_NAME);
-     rdbStore.query(predicates).then((resultSet: relationalStore.ResultSet) => {
-       ...
-       let listData: MovieDataBean[] = this.getListData();
-       resultSet.goToFirstRow();
-       do {
-         let formData = this.getFormData(listData);
-         let formId: string = resultSet.getString(resultSet.getColumnIndex(CommonConstants.FORM_ID));
-         formProvider.updateForm(formId, formBindingData.createFormBindingData(formData))
-           .catch((error) => {
-             ...
-           });
-       } while (resultSet.goToNextRow());
-       resultSet.close();
-     }).catch((error) => {
-       ...
-     });
-   }
+    if (this.isEmpty(rdbStore)) {
+      Logger.error(CommonConstants.TAG_COMMON_UTILS, 'rdbStore is null');
+      return;
+    }
+    let predicates: relationalStore.RdbPredicates = new relationalStore.RdbPredicates(CommonConstants.TABLE_NAME);
+    rdbStore.query(predicates).then((resultSet: relationalStore.ResultSet) => {
+      if (resultSet.rowCount <= 0) {
+        Logger.error(CommonConstants.TAG_COMMON_UTILS, 'updateCardMovieData rowCount <= 0');
+        return;
+      }
+      let listData: MovieDataBean[] = this.getListData();
+      resultSet.goToFirstRow();
+      do {
+        let formData = this.getFormData(listData);
+        let formId: string = resultSet.getString(resultSet.getColumnIndex(CommonConstants.FORM_ID));
+        formProvider.updateForm(formId, formBindingData.createFormBindingData(formData))
+          .catch((error: Error) => {
+            Logger.error(CommonConstants.TAG_COMMON_UTILS, 'updateForm error ' + JSON.stringify(error));
+          });
+      } while (resultSet.goToNextRow());
+      resultSet.close();
+    }).catch((error: Error) => {
+      Logger.error(CommonConstants.TAG_COMMON_UTILS, 'updateCardMovieData error ' + JSON.stringify(error));
+    });
    ```
 
-2. 卡片添加到桌面后，在EntryFormAbility的onAddForm方法中，调用formProvider.setFormNextRefreshTime方法设置倒计时。时间到了则通过CommonUtils.updateMovieCardData方法更新电影卡片数据。
-
-   ```typescript
-   // EntryFormAbility.ets
-   onAddForm(want: Want) {
-     ...
-     // 五分钟倒计时
-     formProvider.setFormNextRefreshTime(formId, CommonConstants.FIVE_MINUTES, (error, data) => {
-       ...
-     });
-   }
-   
-   onUpdateForm(formId: string) {
-     CommonUtils.createRdbStore(this.context).then((rdbStore: relationalStore.RdbStore) => {
-       CommonUtils.updateMovieCardData(rdbStore);
-     }).catch((error) => {
-       ...
-     });
-     ...
-   }
-   ```
-
-3. 通过src/main/resources/base/profile/form_config.json配置文件，根据updateDuration或者scheduledUpdateTime字段配置刷新时间。updateDuration优先级高于scheduledUpdateTime，两者同时配置时，以updateDuration配置的刷新时间为准。当配置的刷新时间到了，系统调用onUpdateForm方法进行更新。
+2. 通过src/main/resources/base/profile/form_config.json配置文件，根据updateDuration或者scheduledUpdateTime字段配置刷新时间。updateDuration优先级高于scheduledUpdateTime，两者同时配置时，以updateDuration配置的刷新时间为准。当配置的刷新时间到了，系统调用onUpdateForm方法进行更新。
 
    ```typescript
    // form_config.json
@@ -398,7 +383,7 @@ onAddForm(want: Want) {
    onUpdateForm(formId: string) {
      CommonUtils.createRdbStore(this.context).then((rdbStore: relationalStore.RdbStore) => {
        CommonUtils.updateMovieCardData(rdbStore);
-     }).catch((error) => {
+     }).catch((error: Error) => {
        ...
      });
      ...
@@ -415,7 +400,7 @@ onRemoveForm(formId: string) {
   CommonUtils.createRdbStore(this.context).then((rdbStore: relationalStore.RdbStore) => {
     // 从数据库中删除电影卡片信息
     CommonUtils.deleteFormData(formId, rdbStore);
-  }).catch((error) => {
+  }).catch((error: Error) => {
     ...
   });
 }
@@ -423,10 +408,9 @@ onRemoveForm(formId: string) {
 // CommonUtils.ets
 deleteFormData(formId: string, rdbStore: relationalStore.RdbStore) {
   ...
-  let predicates: relationalStore.RdbPredicates = 
-  new relationalStore.RdbPredicates(CommonConstants.TABLE_NAME);
+  let predicates: relationalStore.RdbPredicates = new relationalStore.RdbPredicates(CommonConstants.TABLE_NAME);
   predicates.equalTo(CommonConstants.FORM_ID, formId);
-  rdbStore.delete(predicates).catch((error) => {
+  rdbStore.delete(predicates).catch((error: Error) => {
     ...
   });
 }

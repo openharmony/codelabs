@@ -13,34 +13,34 @@
  * limitations under the License.
  */
 
-import { MusicItem } from '../common/bean/MusicItem';
 import { CommonConstants } from '../common/constants/CommonConstants';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 @Component
 export struct MusicCardView {
-  @Link musicItem: MusicItem;
+  @Consume playBarModel: PlayBarModel;
 
   build() {
     Column() {
       Image($r('app.media.ic_play_icon'))
         .width(CommonConstants.FULL_WIDTH)
-        .height(CommonConstants.MUSIC_CARD_VIEW.IMAGE_HEIGHT)
-      Text(this.musicItem.name)
+        .height(CommonConstants.IMAGE_HEIGHT)
+      Text(this.playBarModel.musicItem!.name)
         .fontSize($r('app.float.music_name'))
         .fontColor($r("app.color.music_card_color"))
         .fontWeight(CommonConstants.FONT_WEIGHT_BOLDER)
-        .margin({ top: CommonConstants.MUSIC_CARD_VIEW.NAME_MARGIN_TOP })
-      Text(this.musicItem.singer)
+        .margin({ top: CommonConstants.NAME_MARGIN_TOP })
+      Text(this.playBarModel.musicItem!.singer)
         .fontSize($r('app.float.music_singer'))
         .fontColor($r("app.color.music_card_color"))
         .fontWeight(FontWeight.Normal)
-        .margin({ top: CommonConstants.MUSIC_CARD_VIEW.SINGER_MARGIN_TOP })
-      Text($r('app.string.lyrics', this.musicItem.lyrics))
+        .margin({ top: CommonConstants.SINGER_MARGIN_TOP })
+      Text($r('app.string.lyrics', this.playBarModel.musicItem!.lyrics))
         .fontSize($r('app.float.music_lyrics'))
         .fontColor($r("app.color.music_card_color"))
         .fontWeight(FontWeight.Normal)
         .opacity($r('app.float.lyrics_opacity'))
-        .margin({ top: CommonConstants.MUSIC_CARD_VIEW.LYRICS_MARGIN_TOP })
+        .margin({ top: CommonConstants.LYRICS_MARGIN_TOP })
     }
     .alignItems(HorizontalAlign.Start)
   }

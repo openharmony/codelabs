@@ -14,7 +14,7 @@
  */
 
 import router from '@ohos.router';
-import { User } from '../common/bean/User';
+import { User } from '../viewmodel/User';
 import { UserTableApi } from '../model/UserTableApi';
 import PromptUtil from '../common/utils/PromptUtil';
 import AesUtil from '../common/utils/AesUtil';
@@ -124,9 +124,9 @@ struct Index {
         .onClick(() => {
           router.pushUrl({
             url: CommonConstants.ROUTER_REGISTER_URL
-          }).catch(err => {
-              Logger.error(`Failed router to register page, code is ${err.code}, message is ${err.message}`);
-            });
+          }).catch((err: Error) => {
+            Logger.error(`Failed router to register page, ${err}`);
+          });
         })
     }
     .backgroundColor($r('app.color.background'))
@@ -185,7 +185,7 @@ struct Index {
     AesUtil.decrypt(this.userList[0]?.password, this.userList[0]?.authTag).then((data) => {
       this.decryptPassword = data;
       this.login();
-    }).catch(err => {
+    }).catch((err: Error) => {
       Logger.error(`AesDecrypt err cause ${JSON.stringify(err)}`);
       PromptUtil.promptMessage($r('app.string.message_sys_err'), CommonConstants.PROMPT_TIME);
     })
@@ -202,8 +202,8 @@ struct Index {
       router.replaceUrl({
         url: CommonConstants.ROUTER_WELCOME_URL,
         params: { 'username': user.username }
-      }).catch(err => {
-        Logger.error(`Failed router to welcome page, code is ${err.code}, message is ${err.message}`);
+      }).catch((err: Error) => {
+        Logger.error(`Failed router to welcome page, ${err}`);
       });
     } else {
       PromptUtil.promptMessage($r('app.string.message_password_err'), CommonConstants.PROMPT_TIME);

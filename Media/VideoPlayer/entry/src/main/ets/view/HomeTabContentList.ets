@@ -15,54 +15,59 @@
 
 import router from '@ohos.router';
 import Logger from '../common/util/Logger';
-import { VideoBean } from '../common/bean/VideoBean';
+import { VideoItem } from '../viewmodel/VideoItem';
 import HomeVideoListModel from '../viewmodel/HomeVideoListModel';
 import { HomeConstants } from '../common/constants/HomeConstants';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { HomeTabContentListItem } from './HomeTabContentListItem';
+import { GlobalContext } from '../common/util/GlobalContext';
+import resourceManager from '@ohos.resourceManager';
+import { HomeTabModel } from '../common/model/HomeTabModel';
 
 @Component
 export struct HomeTabContentList {
-  private currIndex: number;
-  @Consume videoList: Array<VideoBean>;
-  @State item: VideoBean = undefined;
+  private currIndex: number = 0;
+  @Consume homeTabModel: HomeTabModel;
+  @State item: VideoItem = new VideoItem('video1', {} as resourceManager.RawFileDescriptor, 'video1.mp4');
 
   async aboutToAppear() {
     if (this.currIndex === CommonConstants.TYPE_LOCAL) {
-      this.videoList = await HomeVideoListModel.getLocalVideo();
+      this.homeTabModel.videoList = await HomeVideoListModel.getLocalVideo();
     } else {
-      this.videoList = globalThis.videoInternetList;
+      let videoInternetList = GlobalContext.getContext().getObject('videoInternetList') as VideoItem[];
+      this.homeTabModel.videoList = videoInternetList;
     }
   }
 
   build() {
     Column() {
       List({
-        space: HomeConstants.HOME_TAB_LIST.LIST_SPACE,
-        initialIndex: HomeConstants.HOME_TAB_LIST.LIST_INITIAL_INDEX
+        space: HomeConstants.LIST_SPACE,
+        initialIndex: HomeConstants.LIST_INITIAL_INDEX
       }) {
-        ForEach(this.videoList, (item: VideoBean, index: number) => {
+        ForEach(this.homeTabModel.videoList, (item: VideoItem, index?: number) => {
           ListItem() {
-            HomeTabContentListItem({item: item});
+            HomeTabContentListItem({ item: item });
           }.onClick(() => {
-            globalThis.videoList = this.videoList;
+            GlobalContext.getContext().setObject('globalVideoList', this.homeTabModel.videoList);
             router.pushUrl({
               url: CommonConstants.PAGE,
               params: {
                 src: item.src,
+                iSrc: item.iSrc,
                 index: index,
                 type: this.currIndex
               }
-            }).catch(err => {
+            }).catch((err: Error) => {
               Logger.error('[IndexTabLocalList] router error: ' + JSON.stringify(err))
             });
           })
-        }, item => JSON.stringify(item))
+        }, (item: VideoItem) => JSON.stringify(item))
       }
       .backgroundColor(Color.White)
       .borderRadius($r('app.float.list_border_radius'))
     }
-    .width(HomeConstants.HOME_TAB_LIST.COLUMN_WIDTH)
+    .width(HomeConstants.COLUMN_WIDTH)
     .height(CommonConstants.NINETY_PERCENT)
   }
 }

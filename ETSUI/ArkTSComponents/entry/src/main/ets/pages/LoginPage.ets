@@ -48,7 +48,7 @@ struct LoginPage {
   @State account: string = '';
   @State password: string = '';
   @State isShowProgress: boolean = false;
-  private timeOutId = null;
+  private timeOutId: number = -1;
 
   @Builder imageButton(src: Resource) {
     Button({ type: ButtonType.Circle, stateEffect: true }) {
@@ -66,10 +66,10 @@ struct LoginPage {
       })
     } else {
       this.isShowProgress = true;
-      if (this.timeOutId === null) {
+      if (this.timeOutId === -1) {
         this.timeOutId = setTimeout(() => {
           this.isShowProgress = false;
-          this.timeOutId = null;
+          this.timeOutId = -1;
           router.replaceUrl({ url: 'pages/MainPage' });
         }, CommonConstants.LOGIN_DELAY_TIME);
       }
@@ -78,7 +78,7 @@ struct LoginPage {
 
   aboutToDisappear() {
     clearTimeout(this.timeOutId);
-    this.timeOutId = null;
+    this.timeOutId = -1;
   }
 
   build() {

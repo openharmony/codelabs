@@ -14,18 +14,16 @@
  */
 
 import image from '@ohos.multimedia.image';
-import window from '@ohos.window';
+import fs from '@ohos.file.fs';
 import { IconStatus } from '../viewModel/IconListViewModel';
 import AdjustContentView from '../view/AdjustContentView';
 import { cropIconChangeList, menuIconList } from '../viewModel/IconListViewModel';
 import Logger from '../utils/LoggerUtil';
 import { RotateType, CropType, MainTabId } from '../viewModel/OptionViewModel';
-import { encode } from '../utils/EncodeUtil';
-import { getPixelMap } from '../utils/DecodeUtil';
 import { CommonConstants } from '../common/constant/CommonConstants';
 import { ImageSelect } from '../view/ImageSelect';
-import { ImageSizeItem } from '../common/bean/ImageSizeItem';
-import { CropRatioType } from '../common/bean/CropType';
+import { ImageSizeItem } from '../viewmodel/ImageSizeItem';
+import { CropRatioType } from '../viewmodel/CropType';
 
 const TAG: string = 'imageEdit';
 
@@ -34,8 +32,8 @@ const TAG: string = 'imageEdit';
 struct HomePage {
   @State @Watch('listenCropChange') currentIndex: number = 0;
   @State currentCropIndex: number = 0;
-  @Provide pixelMap: image.PixelMap = undefined;
-  @Provide imageInfo: image.ImageInfo = undefined;
+  @Provide pixelMap: image.PixelMap | undefined = undefined;
+  @Provide imageInfo: image.ImageInfo | undefined = undefined;
   @Provide currentAdjustData: Array<number> = CommonConstants.ADJUST_SLIDER_VALUE.map((item) => item);
   @Provide resetShow: boolean = true;
   @Provide showCanvas: boolean = false;
@@ -56,13 +54,8 @@ struct HomePage {
   @Provide isSaveFresh: boolean = false;
 
   aboutToAppear() {
+    this.statusBar = AppStorage.Get('statusBar') as number;
     this.pixelInit();
-    window.getLastWindow(getContext(this), (err, window) => {
-      if (err) {
-        Logger.error(0x0000, 'testTag', '%{public}s',`window loading has error: ${JSON.stringify(err)}`);
-      }
-      this.statusBar = window.getWindowProperties().windowRect?.top;
-    });
   }
 
   build() {
@@ -167,7 +160,7 @@ struct HomePage {
                   .onClick(() => {
                     this.cropImage(index);
                   })
-              }, index => index)
+              }, (item: IconStatus) => JSON.stringify(item))
             }
             .width(CommonConstants.LAYOUT_FULL_SCREEN)
             .height(CommonConstants.LAYOUT_FULL_SCREEN)
@@ -217,7 +210,8 @@ struct HomePage {
     .backgroundColor(Color.Black)
   }
 
-  @Builder TabBuilderMenu(index: number, name: string | Resource) {
+  @Builder
+  TabBuilderMenu(index: number, name: string | Resource) {
     Column() {
       Image(this.currentIndex === index ? this.menuIconChangeList[index]?.chosen :
         this.menuIconChangeList[index]?.normal)
@@ -256,20 +250,25 @@ struct HomePage {
   rotateImage(rotateType: RotateType) {
     if (rotateType === RotateType.CLOCKWISE) {
       try {
-        this.pixelMap.rotate(CommonConstants.CLOCK_WISE)
-          .then(() => {
-            this.flushPixelMapNew();
-          })
+        if (this.pixelMap !== undefined) {
+          this.pixelMap.rotate(CommonConstants.CLOCK_WISE)
+            .then(() => {
+              this.flushPixelMapNew();
+            })
+        }
       } catch (error) {
         Logger.error(TAG, `there is a error in rotate process with ${error?.code}`);
       }
     }
     if (rotateType === RotateType.ANTI_CLOCK) {
       try {
-        this.pixelMap.rotate(CommonConstants.ANTI_CLOCK)
-          .then(() => {
-            this.flushPixelMapNew();
-          })
+        if (this.pixelMap !== undefined) {
+
+          this.pixelMap.rotate(CommonConstants.ANTI_CLOCK)
+            .then(() => {
+              this.flushPixelMapNew();
+            })
+        }
       } catch (error) {
         Logger.error(TAG, `there is a error in rotate process with ${error?.code}`);
       }
@@ -288,18 +287,20 @@ struct HomePage {
     this.updateImageInfo();
   }
 
-  updateImageInfo() {
-    this.pixelMap.getImageInfo().then((imageInfo) => {
-      this.imageInfo = imageInfo;
-      this.imageWidth = px2vp(this.imageInfo.size.width);
-      this.imageHeight = px2vp(this.imageInfo.size.height);
-      this.imageOldSize = {
-        width: this.imageWidth,
-        height: this.imageHeight
-      }
-      this.showCanvas = true;
-      this.calcScale();
-    });
+  async updateImageInfo() {
+    if (this.pixelMap !== undefined) {
+      await this.pixelMap.getImageInfo().then((imageInfo) => {
+        this.imageInfo = imageInfo;
+        this.imageWidth = px2vp(this.imageInfo.size.width);
+        this.imageHeight = px2vp(this.imageInfo.size.height);
+        this.imageOldSize = {
+          width: this.imageWidth,
+          height: this.imageHeight
+        }
+        this.showCanvas = true;
+        this.calcScale();
+      });
+    }
   }
 
   calcScale() {
@@ -312,7 +313,7 @@ struct HomePage {
 
   pixelInit() {
     this.showCanvas = false;
-    getPixelMap(CommonConstants.RAW_FILE_NAME).then(pixelMap => {
+    this.getPixelMap(CommonConstants.RAW_FILE_NAME).then(pixelMap => {
       this.pixelMap = pixelMap;
       this.currentCropIndex = 0;
       this.currentAdjustData = CommonConstants.ADJUST_SLIDER_VALUE.map((item) => item);
@@ -329,4 +330,45 @@ struct HomePage {
       this.resetShow = false;
     }
   }
+
+  /**
+   * Async get resource fd.
+   *
+   * @return file fd.
+   */
+  async getResourceFd(filename: string) {
+    const resourceMgr = getContext(this).resourceManager;
+    const context = getContext(this);
+    if (filename === CommonConstants.RAW_FILE_NAME) {
+      let imageBuffer = await resourceMgr.getMediaContent($r("app.media.ic_low"))
+      let filePath = context.cacheDir + '/' + filename;
+      let file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+      let writeLen = fs.writeSync(file.fd, imageBuffer.buffer);
+      fs.copyFileSync(filePath, context.cacheDir + '/' + CommonConstants.RAW_FILE_NAME_TEST);
+      return file.fd;
+    } else {
+      let filePath = context.cacheDir + '/' + filename;
+      let file = fs.openSync(filePath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE);
+      return file.fd;
+    }
+  }
+
+  /**
+   * Async create pixel map.
+   *
+   * @return pixelMa.
+   */
+  async getPixelMap(fileName: string) {
+    const fd = await this.getResourceFd(fileName);
+    const imageSourceApi = image.createImageSource(fd);
+    if (!imageSourceApi) {
+      Logger.error(TAG, 'imageSourceAPI created failed!');
+      return;
+    }
+    const pixelMap = await imageSourceApi.createPixelMap({
+      editable: true
+    });
+    return pixelMap;
+  }
 }
+

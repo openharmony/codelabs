@@ -13,27 +13,27 @@
  * limitations under the License.
  */
 
-import { VideoItem } from '../bean/VideoItem';
+import { VideoItem } from '../../viewmodel/VideoItem';
 
 /**
  * Data of video.
  */
 export const VIDEO_DATA: VideoItem[] = [
   {
-    'id': '1',
-    'src': $rawfile('video1.mp4'),
-    'likesCount': 0,
-    'isLikes': false,
-    'comment': 102,
-    'shareTimes': 666
+    id: '1',
+    src: $rawfile('video1.mp4'),
+    likesCount: 0,
+    isLikes: false,
+    comment: 102,
+    shareTimes: 666
   },
   {
-    'id': '2',
-    'src': $rawfile('video2.mp4'),
-    'likesCount': 8654,
-    'isLikes': true,
-    'comment': 0,
-    'shareTimes': 0
+    id: '2',
+    src: $rawfile('video2.mp4'),
+    likesCount: 8654,
+    isLikes: true,
+    comment: 0,
+    shareTimes: 0
   }
 ];
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,15 +13,15 @@
  * limitations under the License.
  */
 
-import ToolBarData from '../common/bean/ToolBarData';
+import ToolBarData from '../viewmodel/ToolBarData';
 import { AppFontSize, AppFontWeight, PERCENTAGE_100, ToolBarStyle } from '../common/constants/Constants';
 import { NavPageStyle } from '../common/constants/Constants';
 
 @Component
 export default struct ToolBarComponent {
   @State navCurrentPosition: number = NavPageStyle.POSITION_INITIAL;
-  toolBarConfigs: ToolBarData[];
-  controller: TabsController;
+  toolBarConfigs: ToolBarData[] = [];
+  controller: TabsController = new TabsController();
 
   build() {
     Column() {
@@ -30,7 +30,7 @@ export default struct ToolBarComponent {
         .height(ToolBarStyle.DIVIDER_HEIGHT)
         .opacity(ToolBarStyle.DIVIDER_OPACITY)
       Row() {
-        ForEach(this.toolBarConfigs, (item, index) => {
+        ForEach(this.toolBarConfigs, (item: ToolBarData, index?: number) => {
           Column() {
             Image(this.navCurrentPosition === index ? item?.icon_after : item?.icon)
               .height(ToolBarStyle.IMAGE_SIZE)
@@ -47,9 +47,8 @@ export default struct ToolBarComponent {
             this.navCurrentPosition = item.num
             this.controller.changeIndex(this.navCurrentPosition)
           })
-        }, item => JSON.stringify(item))
+        }, (item: ToolBarData) => JSON.stringify(item))
       }
     }
   }
 }
-

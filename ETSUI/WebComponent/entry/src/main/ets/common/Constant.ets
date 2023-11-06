@@ -17,51 +17,67 @@ export const WEB_PAGE_URI: string = 'pages/WebPage';
 
 export const LOCAL_PATH: Resource = $rawfile('index.html');
 
-// 运行时需要修改为自己服务器的地址
-export const CLOUD_PATH: string = 'http://***/index.html';
+/**
+ * The host address of the server.
+ */
+export const CLOUD_PATH: string = 'http://xxx.xxx.xxx.xxx:9588/index.html';
 
 export const WEB_ALERT_DIALOG_TEXT_VALUE: string = '恭喜您抽中:';
 
-export const WebConstant = {
-  FULL_WIDTH: '100%',
-  FULL_HEIGHT: '100%',
-  WIDTH: '93.3%',
-  HEIGHT: '55.9%',
-  MARGIN_TOP: '7.1%',
-  MARGIN_LEFT: '3.3%',
-  MARGIN_RIGHT: '3.3%',
-  TOP_ROW_HEIGHT: '7.2%',
-  IMAGE_WIDTH: '5.6%',
-  IMAGE_HEIGHT: '32%',
-  IMAGE_MARGIN_LEFT: '7.2%',
-  TEXT_VALUE_WIDTH: '35.6%',
-  TEXT_VALUE_HEIGHT: '3.1%',
-  TEXT_VALUE_MARGIN_TOP: '3.1%',
-  TEXT_VALUE_FONT_SIZE: 18,
-  TEXT_VALUE_FONT_WEIGHT: 500,
-  TIP_TEXT_VALUE_WIDTH: '15.6%',
-  TIP_TEXT_VALUE_HEIGHT: '2.4%',
-  TIP_TEXT_VALUE_FONT_SIZE: 14,
-  TIP_TEXT_VALUE_MARGIN_TOP: '0.9%',
-  TIP_TEXT_VALUE_OPACITY: 0.6,
-  TOP_TEXT_WIDTH: '82.2%',
-  TOP_TEXT_HEIGHT: '50%',
-  TOP_TEXT_MARGIN_LEFT: '5%',
-  TOP_TEXT_FONT_SIZE: 20,
-  BUTTON_WIDTH: '86.7%',
-  BUTTON_HEIGHT: '5.1%',
-  BUTTON_MARGIN_TOP: '10%',
-  BUTTON_BORDER_RADIUS: '20',
-  BUTTON_FONT_SIZE: 16,
+export class WebConstant {
+  static readonly FULL_WIDTH: string = '100%'
+  static readonly FULL_HEIGHT: string = '100%'
+  static readonly WIDTH: string = '93.3%'
+  static readonly HEIGHT: string = '55.9%'
+  static readonly MARGIN_TOP: string = '7.1%'
+  static readonly MARGIN_LEFT: string = '3.3%'
+  static readonly MARGIN_RIGHT: string = '3.3%'
+  static readonly TOP_ROW_HEIGHT: string = '7.2%'
+  static readonly IMAGE_WIDTH: string = '5.6%'
+  static readonly IMAGE_HEIGHT: string = '32%'
+  static readonly IMAGE_MARGIN_LEFT: string = '7.2%'
+  static readonly TEXT_VALUE_WIDTH: string = '35.6%'
+  static readonly TEXT_VALUE_HEIGHT: string = '3.1%'
+  static readonly TEXT_VALUE_MARGIN_TOP: string = '3.1%'
+  static readonly TEXT_VALUE_FONT_SIZE: number = 18
+  static readonly TEXT_VALUE_FONT_WEIGHT: number = 500
+  static readonly TIP_TEXT_VALUE_WIDTH: string = '15.6%'
+  static readonly TIP_TEXT_VALUE_HEIGHT: string = '2.4%'
+  static readonly TIP_TEXT_VALUE_FONT_SIZE: number = 14
+  static readonly TIP_TEXT_VALUE_MARGIN_TOP: string = '0.9%'
+  static readonly TIP_TEXT_VALUE_OPACITY: number = 0.6
+  static readonly TOP_TEXT_WIDTH: string = '82.2%'
+  static readonly TOP_TEXT_HEIGHT: string = '50%'
+  static readonly TOP_TEXT_MARGIN_LEFT: string = '5%'
+  static readonly TOP_TEXT_FONT_SIZE: number = 20
+  static readonly BUTTON_WIDTH: string = '86.7%'
+  static readonly BUTTON_HEIGHT: string = '5.1%'
+  static readonly BUTTON_MARGIN_TOP: string = '10%'
+  static readonly BUTTON_BORDER_RADIUS: string = '20'
+  static readonly BUTTON_FONT_SIZE: number = 16
+  static readonly DURATION: number = 3000
+  static readonly PROGRESS_MIN: number = 0
+  static readonly PROGRESS_MAX: number = 100
+  static readonly PROGRESS_STEP: number = 6.67
+  static readonly MILLI_SECONDS: number = 100
+  static readonly PROGRESS_STROKE_WIDTH: number = 15
+  static readonly PROGRESS_SCALE_COUNT: number = 15
+  static readonly PROGRESS_SCALE_WIDTH: number = 5
+  static readonly PROGRESS_WIDTH: number = 80
+  static readonly PROGRESS_POSITION_X: string = '40%'
+  static readonly PROGRESS_POSITION_Y: string = '35%'
 }
 
-export const MainConstant = {
-  FULL_HEIGHT: '100%',
-  IMAGE_HEIGHT: '38.7%',
-  BUTTON_MARGIN_TOP_BUTTON: '3.1%',
-  BUTTON_HEIGHT: '5.1%',
-  BUTTON_MARGIN_TOP: '4.6%',
-  BUTTON_WIDTH: '86.7%',
-  BUTTON_BORDER_RADIUS: 20,
-  BUTTON_FONT_SIZE: 16
+export class MainConstant {
+  static readonly FULL_HEIGHT: string = '100%'
+  static readonly IMAGE_HEIGHT: string = '38.7%'
+  static readonly BUTTON_MARGIN_TOP_BUTTON: string = '3.1%'
+  static readonly BUTTON_HEIGHT: string = '5.1%'
+  static readonly BUTTON_MARGIN_TOP: string = '4.6%'
+  static readonly BUTTON_WIDTH: string = '86.7%'
+  static readonly BUTTON_BORDER_RADIUS: number = 20
+  static readonly BUTTON_FONT_SIZE: number = 16
 }
+
+
+

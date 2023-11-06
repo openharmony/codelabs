@@ -13,36 +13,38 @@
  * limitations under the License.
  */
 
-import { noteIdArray, notesItemArr } from '../viewmodel/NotesInfoViewModel';
-import { FolderType, NotesInfoBean } from '../common/bean/NoteInfoBean';
+import common from '@ohos.app.ability.common';
 import dataStorage from '@ohos.data.preferences';
+import { FolderType, noteIdArray, NotesInfoBean, notesItemArr } from '../viewmodel/NotesInfoViewModel';
 import Logger from '../common/utils/Logger';
 import CommonConstants from '../common/constants/CommonConstants';
 
 class NotesDataModel {
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+
   /**
    * Put the data in preferences.
    */
   async saveDefaultData() {
     try {
-      let preferences = await dataStorage.getPreferences(globalThis.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
+      let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
       let isExist = await preferences.has(CommonConstants.PREFERENCE_NOTE_KEY);
       if (!isExist) {
         preferences.put(CommonConstants.PREFERENCE_NOTE_KEY, JSON.stringify(noteIdArray));
         preferences.flush();
         notesItemArr.forEach((item: NotesInfoBean) => {
-          let notes = new NotesInfoBean(item);
+          let notes: NotesInfoBean = item;
           let res = preferences.put(item.noteId, JSON.stringify(notes));
           preferences.flush();
           res.then(() => {
             Logger.info('Put the value successfully.' + item.noteId);
-          }).catch((err) => {
-            Logger.error('Put the value failed with err:', err);
+          }).catch((err: Error) => {
+            Logger.error(`Put the value failed with err: ${err}`);
           })
         })
       }
     } catch (err) {
-      Logger.error('Failed to get preferences. code = ', err.code + ', message =' + err.message);
+      Logger.error(`Failed to get preferences. Error = ${err}`);
     }
   }
 

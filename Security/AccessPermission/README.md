@@ -6,16 +6,16 @@
 
 ![](figures/1.gif)
 
->![](public_sys-resources/icon-note.gif) **说明：** 
+>![](public_sys-resources/icon-note.gif) **说明：**
 >查询周边不可信设备之前，请确保本设备与周边设备未进行配对。如果已配对，则恢复出厂设置之后重新查询。
 
 ### 相关概念
 
--   [访问控制权限申请](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-guidelines.md#访问控制授权申请)：应用的APL（Ability Privilege Level）等级分为normal、system_basic和system_core三个等级，默认情况下，应用的APL等级都为normal等级。权限类型分为system_grant和user_grant两种类型。应用可申请的权限项参见应用权限列表。
--   [权限类型说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-overview.md#权限类型说明)：根据授权方式的不同，权限类型可分为system_grant（系统授权）和user_grant（用户授权）。
--   [应用ALP等级说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-overview.md#%E5%BA%94%E7%94%A8apl%E7%AD%89%E7%BA%A7%E8%AF%B4%E6%98%8E)：元能力权限等级APL（Ability Privilege Level）指的是应用的权限申请优先级的定义，不同APL等级的应用能够申请的权限等级不同。
--   [应用权限列表](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/permission-list.md)：在申请目标权限前，建议开发者先阅读访问控制开发概述-权限的工作流程。对权限的工作流程有基本的了解后，再结合以下权限的具体说明，判断应用能否申请目标权限，提高开发效率。
--   [设备管理实例](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-device-manager.md#devicemanager)：用于获取可信设备和本地设备的相关信息。在调用DeviceManager的方法前，需要先通过createDeviceManager构建一个DeviceManager实例dmInstance。
+- [访问控制权限申请](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-guidelines.md#访问控制授权申请)：应用的APL（Ability Privilege Level）等级分为normal、system_basic和system_core三个等级，默认情况下，应用的APL等级都为normal等级。权限类型分为system_grant和user_grant两种类型。应用可申请的权限项参见应用权限列表。
+- [权限类型说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-overview.md#权限类型说明)：根据授权方式的不同，权限类型可分为system_grant（系统授权）和user_grant（用户授权）。
+- [应用ALP等级说明](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/accesstoken-overview.md#%E5%BA%94%E7%94%A8apl%E7%AD%89%E7%BA%A7%E8%AF%B4%E6%98%8E)：元能力权限等级APL（Ability Privilege Level）指的是应用的权限申请优先级的定义，不同APL等级的应用能够申请的权限等级不同。
+- [应用权限列表](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/security/permission-list.md)：在申请目标权限前，建议开发者先阅读访问控制开发概述-权限的工作流程。对权限的工作流程有基本的了解后，再结合以下权限的具体说明，判断应用能否申请目标权限，提高开发效率。
+- [设备管理实例](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-device-manager.md#devicemanager)：用于获取可信设备和本地设备的相关信息。在调用DeviceManager的方法前，需要先通过createDeviceManager构建一个DeviceManager实例dmInstance。
 
 ### 约束与限制
 
@@ -29,13 +29,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+- OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
--   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+- 开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
+- OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -47,24 +47,22 @@
 
 2. 搭建烧录环境。
 
-   1.  [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
-   2.  [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
+   1. [完成DevEco Device Tool的安装](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-env-win.md)
+   2. [完成RK3568开发板的烧录](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-ide-3568-burn.md)
 
 3. 搭建开发环境。
 
-   1.  开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
-   2.  开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
-   3.  工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
+   1. 开始前请参考[工具准备](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)，完成DevEco Studio的安装和开发环境配置。
+   2. 开发环境配置完成后，请参考[使用工程向导](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
+   3. 工程创建完成后，选择使用[真机进行调测](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 
 ## 代码结构解读
 
 本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
 
 ```
-├──entry/src/main/ets	                   // 代码区
+├──entry/src/main/ets                      // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  └──DeviceBean.ets                 // 设备信息类
 │  │  ├──constants
 │  │  │  └──CommonConstants.ets            // 公共常量类
 │  │  └──util
@@ -72,10 +70,11 @@
 │  │     ├──Logger.ets                     // 日志管理工具类
 │  │     └──PermissionUtil.ets             // 权限申请工具类
 │  ├──entryability
-│  │  └──EntryAbility.ts	               // 程序入口类
+│  │  └──EntryAbility.ts                   // 程序入口类
 │  ├──pages
 │  │  └──HomePage.ets                      // 主页面
-│  └──view   
+│  └──view
+│     ├──DeviceBean.ets                    // 设备信息类
 │     ├──DeviceItem.ets                    // 设备信息对象
 │     ├──DeviceListDialog.ets              // 设备列表展示弹框
 │     └──NoPermissionDialog.ets            // 无权限弹框
@@ -134,7 +133,7 @@ struct HomePage {
 ![](figures/2.gif)
 
 ```typescript
-// DeviceListDialog.ets
+// NoPermissionDialog.ets
 @CustomDialog
 export struct NoPermissionDialog {
   controller: CustomDialogController;
@@ -143,7 +142,6 @@ export struct NoPermissionDialog {
     Column() {
       Text($r('app.string.no_permission_title'))
         ...
-        .margin({ top: CommonConstants.PERMISSION_TEXT_TOP })
       Text($r('app.string.clear_permission'))
         ...
       Text($r('app.string.dialog_confirm'))
@@ -163,8 +161,9 @@ export struct NoPermissionDialog {
 
 ```typescript
 // DeviceListDialog.ets
+@CustomDialog
 export struct DeviceListDialog {
-  @State deviceListUtil: DeviceListUtil = new DeviceListUtil();
+  private deviceListUtil: DeviceListUtil = new DeviceListUtil();
   @State deviceList: Array<DeviceBean> = [];
   controller: CustomDialogController;
   ...
@@ -183,7 +182,7 @@ export struct DeviceListDialog {
                 ListItem() {
                   DeviceItem({item: item, index: index});
                 }
-              }, item => JSON.stringify(item))
+              }, (item: DeviceBean) => JSON.stringify(item))
             }
           }
           ...
@@ -200,6 +199,7 @@ export struct DeviceListDialog {
     ...
   }
 }
+
 ```
 
 ## 权限申请
@@ -266,7 +266,7 @@ struct HomePage {
 async checkPermission() {
   let atManager = abilityAccessCtrl.createAtManager();
   let grantStatus: abilityAccessCtrl.GrantStatus =  abilityAccessCtrl.GrantStatus.PERMISSION_DENIED;
-  let tokenId: number;
+  let tokenId: number = 0;
   try {
     let bundleInfo: bundleManager.BundleInfo =
       await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
@@ -293,7 +293,7 @@ async checkPermission() {
 export struct DeviceListDialog {
   ...
   aboutToAppear() {
-    this.deviceListUtil.initDmInstance((data) => {
+    this.deviceListUtil.initDmInstance((data: DeviceInfoInterface) => {
       ...
     });
   }
@@ -315,7 +315,7 @@ initDmInstance(dealDeviceInfo: Function) {
       this.startDeviceDiscovery();
     });
   } catch (err) {
-    Logger.error(TAG, 'createDeviceManager errCode:' + err.code + ',errMessage:' + err.message);
+    Logger.error(TAG, 'createDeviceManager err=' + JSON.stringify(err));
   }
 }
 
@@ -323,11 +323,15 @@ initDmInstance(dealDeviceInfo: Function) {
 // 注册发现设备回调方法
 deviceFoundOn() {
   try {
-    this.dmInstance.on(CommonConstants.DEVICE_FOUND, (data) => {
-      this.dealDeviceInfo(data);
-    });
+    if (this.dmInstance !== undefined) {
+      this.dmInstance.on('deviceFound', (data) => {
+        if (this.dealDeviceInfo !== undefined) {
+          this.dealDeviceInfo(data);
+        }
+      });
+    }
   } catch (err) {
-    Logger.error(TAG, 'deviceFoundOn errCode:' + err.code + ',errMessage:' + err.message);
+    Logger.error(TAG, 'deviceFoundOn err:' + JSON.stringify(err));
   }
 }
 
@@ -335,19 +339,21 @@ deviceFoundOn() {
 // 发现周边设备方法
 startDeviceDiscovery() {
   this.subscribeId = Math.floor(Math.random() * CommonConstants.RANDOM_ONE + CommonConstants.RANDOM_TWO);
-  let subscribeInfo = {
-    'subscribeId': this.subscribeId,
-    'mode': CommonConstants.MODE,
-    'medium': 0,
-    'freq': CommonConstants.FREQ,
-    'isSameAccount': false,
-    'isWakeRemote': true,
-    'capability': 1
+  let subscribeInfo: SubscribeInfoInterface = {
+    subscribeId: this.subscribeId,
+    mode: CommonConstants.MODE,
+    medium: 0,
+    freq: CommonConstants.FREQ,
+    isSameAccount: false,
+    isWakeRemote: true,
+    capability: 1
   };
   try {
-    this.dmInstance.startDeviceDiscovery(subscribeInfo);
+    if (this.dmInstance !== undefined) {
+      this.dmInstance.startDeviceDiscovery(subscribeInfo);
+    }
   } catch (err) {
-    Logger.error(TAG, 'startDeviceDiscovery errCode:' + err.code + ',errMessage:' + err.message);
+    Logger.error(TAG, 'startDeviceDiscovery err:' + JSON.stringify(err));
   }
 }
 ```
@@ -359,6 +365,5 @@ startDeviceDiscovery() {
 1. 访问控制授权申请。
 2. 权限类型说明。
 3. 如何获取周边设备。
-
 
 ![](figures/彩带动效.gif)

@@ -13,29 +13,32 @@
  * limitations under the License.
  */
 
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { CommonConstants } from '../common/constants/CommonConstants';
+import { PlayBarModel } from '../common/model/PlayBarModel';
 
 @Component
 export struct PlayListMusicView {
-  @Link musicItem: MusicItem;
-  private item: MusicItem;
+  @Consume playBarModel: PlayBarModel;
+  private item: MusicItem = new MusicItem();
 
   build() {
     Column() {
       Text(this.item.name)
         .fontSize($r('app.float.dialog_name'))
-        .fontColor(this.musicItem.id === this.item.id ? $r("app.color.font_color_pink") : $r("app.color.dialog_name_color"))
+        .fontColor(this.playBarModel!.musicItem!.id === this.item.id ? $r('app.color.font_color_pink') :
+          $r('app.color.dialog_name_color'))
         .fontWeight(FontWeight.Normal)
-        .lineHeight(CommonConstants.LIST_DIALOG_MUSIC.LINE_HEIGHT)
+        .lineHeight(CommonConstants.LINE_HEIGHT)
       Row() {
         Image(this.item.isVip ? $r('app.media.ic_vip') : $r('app.media.ic_hd'))
-          .width(CommonConstants.LIST_DIALOG_MUSIC.IMAGE_WIDTH)
-          .height(CommonConstants.LIST_DIALOG_MUSIC.IMAGE_HEIGHT)
-          .margin({ right: CommonConstants.LIST_DIALOG_MUSIC.IMAGE_MARGIN_RIGHT })
+          .width(CommonConstants.LIST_IMAGE_WIDTH)
+          .height(CommonConstants.LIST_IMAGE_HEIGHT)
+          .margin({ right: CommonConstants.LIST_MARGIN_RIGHT })
         Text(this.item.singer)
           .fontSize($r('app.float.dialog_singer'))
-          .fontColor(this.musicItem.id === this.item.id ? $r("app.color.font_color_pink") : $r("app.color.dialog_singer_color"))
+          .fontColor(this.playBarModel!.musicItem!.id === this.item.id ? $r('app.color.font_color_pink') :
+            $r('app.color.dialog_singer_color'))
           .fontWeight(FontWeight.Normal)
       }
       .width(CommonConstants.FULL_WIDTH)
@@ -44,8 +47,8 @@ export struct PlayListMusicView {
     .alignItems(HorizontalAlign.Start)
     .width(CommonConstants.FULL_WIDTH)
     .margin({
-      top: CommonConstants.LIST_DIALOG_MUSIC.MUSIC_MARGIN_TOP,
-      bottom: CommonConstants.LIST_DIALOG_MUSIC.MUSIC_MARGIN_BOTTOM
+      top: CommonConstants.LIST_MARGIN_TOP,
+      bottom: CommonConstants.MUSIC_MARGIN_BOTTOM
     })
   }
 }

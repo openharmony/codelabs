@@ -15,13 +15,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -49,9 +49,6 @@
 ```
 ├──entry/src/main/ets           // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──NoteIdBean.ets      // 备忘录id类型
-│  │  │  └──NoteInfoBean.ets    // 备忘录数据类型
 │  │  ├──constants
 │  │  │  ├──CommonConstants.ets // 常量类 
 │  │  │  └──StyleConstants.ets  // 样式常量类 
@@ -65,12 +62,12 @@
 │  ├──pages
 │  │  ├──NoteHomePage.ets       // 备忘录主页面（列表页）
 │  │  └──NotesDetail.ets        // 备忘录详情页	
-│  ├──viewmodel
-│  │  └──NotesInfoViewModel.ets // 备忘录默认数据实体	
-│  └──view
-│     ├──BottomBar.ets          // 备忘录编辑页底部栏
-│     ├──ConfirmDialog.ets      // 自定义弹窗
-│     └──MemoItem.ets           // 自定义备忘录列表组件
+│  ├──view
+│  │  ├──BottomBar.ets          // 备忘录编辑页底部栏
+│  │  ├──ConfirmDialog.ets      // 自定义弹窗
+│  │  └──MemoItem.ets           // 自定义备忘录列表组件
+│  └──viewmodel
+│     └──NotesInfoViewModel.ets // 备忘录默认数据实体	
 └──entry/src/main/resources     // 资源文件目录
 ```
 
@@ -87,29 +84,31 @@
 import dataStorage from '@ohos.data.preferences';
 ...
 class NotesDataModel {
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+
   /**
    * 写入备忘录数据.
    */
   async saveDefaultData() {
     try {
-      let preferences = await dataStorage.getPreferences(globalThis.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
+      let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
       let isExist = await preferences.has(CommonConstants.PREFERENCE_NOTE_KEY);
       if (!isExist) {
         preferences.put(CommonConstants.PREFERENCE_NOTE_KEY, JSON.stringify(noteIdArray));
         preferences.flush();
         notesItemArr.forEach((item: NotesInfoBean) => {
-          let notes = new NotesInfoBean(item);
+          let notes: NotesInfoBean = item;
           let res = preferences.put(item.noteId, JSON.stringify(notes));
           preferences.flush();
           res.then(() => {
             Logger.info('Put the value successfully.' + item.noteId);
-          }).catch((err) => {
-            Logger.error('Put the value failed with err:', err);
+          }).catch((err: Error) => {
+            Logger.error(`Put the value failed with err: ${err}`);
           })
         })
       }
     } catch (err) {
-      Logger.error('Failed to get preferences. code = ', err.code + ', message =' + err.message);
+      Logger.error(`Failed to get preferences. Error = ${err}`);
     }
   }
 
@@ -132,14 +131,14 @@ class NotesDataModel {
 // NoteHomePage.ets
 import dataStorage from '@ohos.data.preferences';
 ...
-
 @Entry
 @Component
 struct NoteHomePage {
   @State folderType: Resource = $r('app.string.notes_all');
   @State allNotes: Array<NotesInfoBean> = [];
   @State selectNotes: Array<NotesInfoBean> = this.allNotes.sort();
-
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+  ...
   build() {
     Column() {
       ...
@@ -148,10 +147,11 @@ struct NoteHomePage {
           ListItem() {
             MemoItem({ noteItem: item })
           }
-        }, item => JSON.stringify(item))
+        }, (item: NotesInfoBean) => JSON.stringify(item))
       }
       .margin({ top: $r('app.float.list_container_margin') })
       .height(StyleConstants.NOTE_CONTENT_HEIGHT)
+      .width(StyleConstants.FULL_WIDTH)
     }
     .backgroundColor($r('app.color.page_background'))
     .height(StyleConstants.FULL_HEIGHT)
@@ -164,15 +164,14 @@ struct NoteHomePage {
   async getAllNotes() {
     await NotesDataModel.saveDefaultData();
     try {
-      let preferences = await dataStorage.getPreferences(globalThis.context,
-        CommonConstants.PREFERENCE_INSTANCE_NAME);
+      let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
       let noteIds = await preferences.get(CommonConstants.PREFERENCE_NOTE_KEY, '');
       while (this.allNotes.length >= 1) {
         this.allNotes.pop();
       }
       JSON.parse(noteIds.toString()).forEach(async (item: NotesInfoBean) => {
         let note = await preferences.get(item.noteId, '');
-        this.allNotes.push(new NotesInfoBean(JSON.parse(note.toString())));
+        this.allNotes.push(JSON.parse(note.toString()));
       })
     } catch (err) {
       Logger.error('Get the value of noteIdArr failed with err:', err);
@@ -191,124 +190,85 @@ struct NoteHomePage {
 
 ```typescript
 // NoteHomePage.ets
-@Entry
-@Component
-struct NoteHomePage {
-  @State folderType: Resource = $r('app.string.notes_all');
-  @State allNotes: Array<NotesInfoBean> = [];
-  @State selectNotes: Array<NotesInfoBean> = this.allNotes.sort();
-  ...
-  build() {
-    Column() {
-      Flex({ justifyContent: FlexAlign.SpaceBetween, alignItems: ItemAlign.Center }) {
-        Column() {
-          Row() {
-            ...
-            Navigator({ target: 'pages/NotesDetail', type: NavigationType.Replace }) {
-              Row() {
-                Image($rawfile('ic_title_add.svg'))
-                  ...
-              }
-              .margin({ right: $r('app.float.note_add_margin') })
-            }
-            .params({
-              notesInfo: {
-                'noteId': new Date().getTime().toString(),
-                'title': '',
-                'folder': FolderType.Personal,
-                'content': '',
-                'imageArr': [],
-                'time': new Date().toTimeString().split(' ')[0],
-                'isFavorite': false
-              },
-              operationType: CommonConstants.ADD_NOTE
-            })
-          }
-          ...
-        }
-        ...
-      }
+Navigator({ target: 'pages/NotesDetail', type: NavigationType.Replace }) {
+  Row() {
+    Image($rawfile('ic_title_add.svg'))
       ...
-    }
-    .backgroundColor($r('app.color.page_background'))
-    .height(StyleConstants.FULL_HEIGHT)
   }
-  ...
+  .margin({ right: $r('app.float.note_add_margin') })
 }
+.params({
+  notesInfo: {
+    'noteId': new Date().getTime().toString(),
+    'title': '',
+    'folder': FolderType.Personal,
+    'content': '',
+    'imageArr': [],
+    'time': new Date().toTimeString().split(' ')[0],
+    'isFavorite': false
+  },
+  operationType: CommonConstants.ADD_NOTE
+})
 ```
 
 进入编辑页NotesDetail.ets后可以输入标题、内容以及选择对应的笔记类型等，确认保存后备忘录数据实时更新。
 
 ```typescript
 // NotesDetail.ets
-@Entry
-@Component
-struct NotesDetail {
-  @State isDataChange: boolean = false;
-  @State @Watch('onChangeCollect') isFavorite: boolean = this.notesInfo.isFavorite;
-  @State isCollectChange: boolean = false;
+build() {
   ...
-  build() {
-    Column() {
-      ...
-      Stack({ alignContent: Alignment.Bottom }) {
-        Scroll(this.scroller) {
-          Column() {
-            TextInput({
-              ...
-            })
-              ...
-              .onChange((value: string) => {
-                if (value !== this.notesInfo.title) {
-                  this.notesInfo.title = value;
-                  this.isDataChange = true;
-                }
-              })
-            TextArea({
-              text: this.notesInfo.content != '' ? this.notesInfo.content : '',
-              placeholder: this.notesInfo.content != '' ? '' : $r('app.string.note_content_placeholder')
-            })
-              ...
-              .onChange((value: string) => {
-                if (value !== this.notesInfo.content) {
-                   this.notesInfo.content = value;
-                   this.isDataChange = true;
-                }
-              })
-          }
-        }
-        ...
+  TextInput({
+    text: this.notesInfo.title != '' ? this.notesInfo.title : '',
+    placeholder: this.notesInfo.title != '' ? '' : $r('app.string.note_title_placeholder')
+  })
+    ...
+    .onChange((value: string) => {
+      if (value !== this.notesInfo.title) {
+        this.notesInfo.title = value;
+        this.isDataChanged = true;
       }
-    }
-    .height(StyleConstants.FULL_HEIGHT)
-    .backgroundColor($r('app.color.white_color'))
-  }
+    })
+  ...
+  TextArea({
+    text: this.notesInfo.content !== '' ? this.notesInfo.content : '',
+    placeholder: this.notesInfo.content !== '' ? '' : $r('app.string.note_content_placeholder')
+  })
+    .onChange((value: string) => {
+      if (value !== this.notesInfo.content) {
+        this.notesInfo.content = value;
+        this.isDataChanged = true;
+      }
+    })
+  ...
+}
 
-  async saveNoteIdArray() {
-    let preferences = await data_preferences.getPreferences(globalThis.context,
-      CommonConstants.PREFERENCE_INSTANCE_NAME);
+onBackPress() {
+  if (this.isDataChanged || this.notesFolder !== this.notesInfo.folder || this.isCollectChange) {
+    this.saveDialogController.open();
+  } else {
+    router.replaceUrl({
+      url: 'pages/NoteHomePage'
+    });
+  }
+  return true;
+}
+
+// ConfirmDialog.ets
+if (this.type === CommonConstants.SAVE_DIALOG) {
+  this.confirm = async () => {
+    let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
+    // 保存备忘录数据实时更新
     if (this.operationType === CommonConstants.ADD_NOTE) {
-      this.noteIdArray.push({ 'noteId': this.notesInfo.noteId });
-      preferences.put('noteIdArr', JSON.stringify(this.noteIdArray));
+      this.noteIdArray.push(new NoteIdBean(this.notesInfo.noteId));
+      preferences.put(CommonConstants.PREFERENCE_NOTE_KEY, JSON.stringify(this.noteIdArray));
       preferences.flush();
     }
-    let newNotes = new NotesInfoBean(this.notesInfo);
+    let newNotes = this.notesInfo;
     await preferences.put(this.notesInfo.noteId, JSON.stringify(newNotes));
     await preferences.flush();
     router.replaceUrl({
       url: 'pages/NoteHomePage'
     });
-  }
-
-  onBackPress() {
-    if (this.isDataChanged || this.notesFolder !== this.notesInfo.folder || this.isCollectChange) {
-       this.saveDialogController.open();
-    } else {
-      router.replaceUrl({
-        url: 'pages/NoteHomePage'
-      });
-    }
-    return true;
   }
 }
 ```
@@ -323,102 +283,102 @@ struct NotesDetail {
 
 ```typescript
 // NotesDetail.ets
-@Entry
-@Component
-struct NotesDetail {
-  @State isDataChange: boolean = false;
-  @State @Watch('onChangeCollect') isFavorite: boolean = this.notesInfo.isFavorite;
-  @State isCollectChange: boolean = false;
-  ...
-  build() {
-    Column() {
-      ...
-      Stack({ alignContent: Alignment.Bottom }) {
-        Scroll(this.scroller) {
-          Column() {
-            TextInput({
-              ...
+build() {
+  Column() {
+    ...
+    Stack({ alignContent: Alignment.Bottom }) {
+      Scroll(this.scroller) {
+        Column() {
+          TextInput({
+            text: this.notesInfo.title != '' ? this.notesInfo.title : '',
+            placeholder: this.notesInfo.title != '' ? '' : $r('app.string.note_title_placeholder')
+          })
+            ...
+            .onChange((value: string) => {
+              if (value !== this.notesInfo.title) {
+                this.notesInfo.title = value;
+                this.isDataChanged = true;
+              }
             })
-              ...
-              .onChange((value: string) => {
-                if (value !== this.notesInfo.title) {
-                  this.notesInfo.title = value;
-                  this.isDataChange = true;
-                }
-              })
-            TextArea({
-              text: this.notesInfo.content != '' ? this.notesInfo.content : '',
-              placeholder: this.notesInfo.content != '' ? '' : $r('app.string.note_content_placeholder')
-            })
-              ...
-              .onChange((value: string) => {
-                if (value !== this.notesInfo.content) {
-                   this.notesInfo.content = value;
-                   this.isDataChange = true;
-                }
-              })
-          }
-        }
-        
-        BottomBar({
           ...
-          clickCollect: this.clickCollect.bind(this),
-          clickAddPicture: this.clickAddPicture.bind(this)
-        })
+          TextArea({
+            text: this.notesInfo.content !== '' ? this.notesInfo.content : '',
+            placeholder: this.notesInfo.content !== '' ? '' : $r('app.string.note_content_placeholder')
+          })
+            .onChange((value: string) => {
+              if (value !== this.notesInfo.content) {
+                this.notesInfo.content = value;
+                this.isDataChanged = true;
+              }
+            })
+          ...
+        }
       }
       ...
+      BottomBar({
+        imageArr: $imageArr,
+        notesInfo: $notesInfo,
+        operationType: $operationType,
+        noteIdArray: $noteIdArray,
+        isDataChanged: $isDataChanged
+      })
     }
-    .height(StyleConstants.FULL_HEIGHT)
-    .backgroundColor($r('app.color.white_color'))
+    ...
   }
+  .height(StyleConstants.FULL_HEIGHT)
+  .backgroundColor($r('app.color.white_color'))
+}
+...
+onBackPress() {
+  if (this.isDataChanged || this.notesFolder !== this.notesInfo.folder || this.isCollectChange) {
+    this.saveDialogController.open();
+  } else {
+    router.replaceUrl({
+      url: 'pages/NoteHomePage'
+    });
+  }
+  return true;
+}
 
-  clickCollect() {
-    this.notesInfo.isFavorite = !this.notesInfo.isFavorite;
-    this.isFavorite = !this.isFavorite;
-    this.collectImgSrc = this.notesInfo.isFavorite ?
-      'ic_bottom_star_selected.svg' : 'ic_bottom_star_normal.svg';
+// BottomBar.ets
+// 点击收藏
+this.clickCollect = () => {
+  this.notesInfo.isFavorite = !this.notesInfo.isFavorite;
+  this.isFavorite = !this.isFavorite;
+  this.collectImgSrc = this.notesInfo.isFavorite ?
+    'ic_bottom_star_selected.svg' : 'ic_bottom_star_normal.svg';
+}
+...
+// 点击插入图片
+this.clickAddPicture = () => {
+  this.imageSrc = this.chooseImage();
+  if (this.imageSrc === '') {
+    prompt.showToast({
+      message: 'Not anymore pictures'
+    });
+  } else {
+    this.imageArr = this.notesInfo.imageArr;
+    this.imageArr.push(this.imageSrc);
+    this.isDataChanged = true;
   }
-  
-  
-  onChangeCollect() {
-    this.isCollectChange = !this.isCollectChange;
-  }
+}
 
-  clickAddPicture() {
-    this.imageSrc = this.chooseImage();
-    if (this.imageSrc === '') {
-      ...
-    } else {
-      ...
-      this.isDataChanged = true;
-    }
-  }
-  
-  async saveNoteIdArray() {
-    let preferences = await data_preferences.getPreferences(globalThis.context,
-      CommonConstants.PREFERENCE_INSTANCE_NAME);
+// ConfirmDialog.ets
+if (this.type === CommonConstants.SAVE_DIALOG) {
+  this.confirm = async () => {
+    let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
     if (this.operationType === CommonConstants.ADD_NOTE) {
-      this.noteIdArray.push({ 'noteId': this.notesInfo.noteId });
-      preferences.put('noteIdArr', JSON.stringify(this.noteIdArray));
+      this.noteIdArray.push(new NoteIdBean(this.notesInfo.noteId));
+      preferences.put(CommonConstants.PREFERENCE_NOTE_KEY, JSON.stringify(this.noteIdArray));
       preferences.flush();
     }
-    let newNotes = new NotesInfoBean(this.notesInfo);
+    // 保存备忘录数据实时更新
+    let newNotes = this.notesInfo;
     await preferences.put(this.notesInfo.noteId, JSON.stringify(newNotes));
     await preferences.flush();
     router.replaceUrl({
       url: 'pages/NoteHomePage'
     });
-  }
-
-  onBackPress() {
-    if (this.isDataChanged || this.notesFolder !== this.notesInfo.folder || this.isCollectChange) {
-       this.saveDialogController.open();
-    } else {
-      router.replaceUrl({
-        url: 'pages/NoteHomePage'
-      });
-    }
-    return true;
   }
 }
 ```
@@ -429,69 +389,67 @@ struct NotesDetail {
 
 ![](figures/3.gif)
 
-在NotesDetail.ets中添加删除逻辑，删除操作会调用preferences实例的delete方法，将对应noteId的备忘录数据从数据库中删除，最后执行实例的flush方法实现持久化。
+在BottomBar.ets中点击删除按钮，弹出自定义弹窗选择“是否删除”。在ConfirmDialog.ets中添加删除逻辑，删除操作会调用preferences实例的delete方法，将对应noteId的备忘录数据从数据库中删除，最后执行实例的flush方法实现持久化。
 
 ```typescript
-// NotesDetail.ets
-@Entry
-@Component
-struct NotesDetail {
+// BottomBar.ets
+export default struct BottomBar {
   ...
   deleteDialogController: CustomDialogController = new CustomDialogController({
     builder: ConfirmDialog({
-      cancel: this.onCancel,
-      confirm: this.onAcceptDelete.bind(this),
+      notesInfo: $notesInfo,
+      operationType: $operationType,
+      noteIdArray: $noteIdArray,
       type: CommonConstants.DELETE_DIALOG
     }),
     autoCancel: true,
     alignment: DialogAlignment.Bottom,
     offset: { dx: $r('app.float.dialog_offset_x'), dy: $r('app.float.dialog_margin_bottom') }
   });
-
+  ...
   build() {
+    ...
     Column() {
-      Stack({ alignContent: Alignment.Bottom }) {
-        ...
-        BottomBar({
-          ...
-          clickDelete: this.clickDelete.bind(this),
-          ...
-        })
-      }
+      Image($r('app.media.ic_bottom_delete'))
+        .width($r('app.float.ic_bottom_picture_size'))
+        .aspectRatio(1)
+      Text($r('app.string.delete_note'))
+        .fontSize($r('app.float.font_size_smallest'))
+        .margin({ top: $r('app.float.bottom_txt_margin') })
     }
+    .onClick(() => {
+      this.clickDelete = () => {
+        if (this.operationType === CommonConstants.MODIFY_NOTE) {
+          this.deleteDialogController.open();
+        } else {
+          prompt.showToast({
+            message: 'The addition operation cannot be deleted'
+          });
+        }
+      }
+      this.clickDelete();
+    })
     ...
   }
+  ...
+}
 
-  clickDelete() {
-    if (this.operationType === CommonConstants.MODIFY_NOTE) {
-      this.deleteDialogController.open();
-    } else {
-      prompt.showToast({
-        message: 'The addition operation cannot be deleted'
-      });
-    }
-  }
-
-  async deleteNoteIdArray() {
-    let preferences = await dataStorage.getPreferences(globalThis.context,
-      CommonConstants.PREFERENCE_INSTANCE_NAME);
+// ConfirmDialog.ets
+if (this.type === CommonConstants.SAVE_DIALOG) {
+  ...
+} else {
+  // 删除备忘录数据
+  this.confirm = async () => {
+    let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
     await preferences.delete(this.notesInfo.noteId);
     await preferences.flush();
     router.replaceUrl({
-       url: 'pages/NoteHomePage'
+      url: 'pages/NoteHomePage'
     });
-  }
-
-  onCancel() {
-    router.replaceUrl({
-       url: 'pages/NoteHomePage'
-    });
-  }
-
-  onAcceptDelete() {
-    this.deleteNoteIdArray();
   }
 }
+this.confirm();
+})
 ```
 
 ## 总结

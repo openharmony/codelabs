@@ -51,7 +51,7 @@ export const ALL_PERCENT: string = '100%';
 /**
  * opacity of text
  */
-export const ATTRIBUTE_OPACITY: number = parseFloat('0.6');
+export const ATTRIBUTE_OPACITY: number = Number.parseFloat('0.6');
 
 /**
  * title font weight

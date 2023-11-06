@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -70,25 +70,24 @@ struct SliderPage {
           style: SliderStyle.InSet
         }
       })
-        .margin({
-          bottom: Constants.PANEL_MARGIN_BOTTOM,
-          top: Constants.PANEL_MARGIN_TOP
-        });
+      .margin({
+        bottom: Constants.PANEL_MARGIN_BOTTOM,
+        top: Constants.PANEL_MARGIN_TOP
+      });
     }
     .justifyContent(FlexAlign.End)
     .height(Constants.PERCENTAGE_100)
     .backgroundColor($r('app.color.background_color'))
   }
 
-  speedChange() {
-    let that = this;
+  speedChange(): void {
     this.angle = Constants.ANGLE;
-    this.interval = setInterval(function () {
-      that.angle += that.speed;
+    this.interval = setInterval(() => {
+      this.angle += this.speed;
     }, Constants.DELAY_TIME)
   }
 
-  onPageShow() {
+  onPageShow(): void {
     clearInterval(this.interval);
     this.speedChange();
   }

@@ -14,8 +14,8 @@
  */
 
 import Constants from '../common/constants/Constants';
-import ClassifyModel from '../common/bean/ClassifyModel';
-import CourseModel from '../common/bean/CourseModel';
+import ClassifyModel from '../viewmodel/ClassifyModel';
+import CourseModel from '../viewmodel/CourseModel';
 import CourseItem from '../view/CourseItem';
 import ClassifyItem from '../view/ClassityItem';
 import ClassifyViewModel from '../viewmodel/ClassifyViewModel';
@@ -51,7 +51,7 @@ struct IndexPage {
     .backgroundColor($r('app.color.base_background'))
   }
 
-  classifyChangeAction(index: number, isClassify: boolean) {
+  classifyChangeAction(index: number, isClassify: boolean) : void {
     if (this.currentClassify !== index) {
       // change the classify status.
       this.currentClassify = index;
@@ -74,7 +74,7 @@ struct IndexPage {
               ClassifyItem({
                 classifyName: item.classifyName,
                 isSelected: this.currentClassify === index,
-                onClickAction: this.classifyChangeAction.bind(this, index, true)
+                onClickAction: () => this.classifyChangeAction(index, true)
               })
             }
           }, (item: ClassifyModel) => item.classifyName + this.currentClassify)

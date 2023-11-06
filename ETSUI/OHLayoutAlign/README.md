@@ -4,6 +4,8 @@
 
 基于ArkTS扩展的声明式开发范式，实现Flex、Column、Row和Stack四种常用布局容器对齐方式。
 
+效果图如下：
+
 ![](figures/zh-cn_image_0000001409408710.gif)
 
 ### 相关概念
@@ -19,13 +21,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -48,18 +50,15 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets	                // 代码区
 │  ├──common
-│  │  ├──bean
-│  │  │  ├──ContainerModuleItem.ets     // 属性模块对象
-│  │  │  └──IndexListItem.ets           // 首页列表数据对象
 │  │  └──constants
 │  │     └──CommonConstants.ets	        // 样式常量类
 │  ├──entryability
-│  │  └──EntryAbility.ts	            // 程序入口类
+│  │  └──EntryAbility.ts                // 程序入口类
 │  ├──pages
 │  │  ├──LayoutAlignIndex.ets           // 主界面
 │  │  └──Second.ets                     // 视频播放界面		
@@ -79,7 +78,9 @@
 │  │  └──StackComponent.ets             // 自定义Stack容器子元素文件
 │  └──viewmodel
 │     ├──AttributeModuleData.ets        // 属性模块数据
-│     └──IndexData.ets                  // 首页数据
+│     ├──ContainerModuleItem.ets        // 属性模块对象
+│     ├──IndexData.ets                  // 首页数据
+│     └──IndexListItem.ets              // 首页数据对象
 └──entry/src/main/resource              // 应用静态资源目录
 ```
 
@@ -96,34 +97,36 @@
 2.  在LayoutAlignIndex.ets主界面中包含显示四种容器对齐方式的入口。
 
     ```typescript
+    // LayoutAlignIndex.ets
     @Entry
     @Component
     struct LayoutAlignIndex {
       private indexList: IndexListItem[] = getIndexList();
+    
       build() {
         Column() {
-          // 标题
           Text($r('app.string.index_title'))
             ...
-    
           List() {
-            ForEach(this.indexList, (item) => {
+            ForEach(this.indexList, (item: IndexListItem) => {
               ListItem() {
                 ListItemComp({ item: item })
                   .margin({ top: MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN })
               }
-            }, item => JSON.stringify(item))
+            }, (item: IndexListItem) => JSON.stringify(item))
           }
+          .height(ALL_PERCENT)
+          .width(ALL_PERCENT)
           .listDirection(Axis.Vertical)
           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
         }
-       ...
+        ...
       }
     }
     
     @Component
     struct ListItemComp {
-       ...
+      ...
     }
     ```
 
@@ -142,6 +145,7 @@
    具体代码如下：
 
    ```typescript
+   // ColumnShowList.ets
    @Component
    export struct ColumnShowList {
      @Consume currentColumnJustifyContent: FlexAlign;
@@ -149,27 +153,24 @@
    
      build() {
        Column() {
-         // Column中元素对齐方式布局
          Column() {
-           ForEach(LIST, (item) => {
+           ForEach(LIST, (item: number) => {
              CommonItem({ item: item })
-           }, item => JSON.stringify(item))
+           }, (item: number) => JSON.stringify(item))
          }
          ...
          // 设置主轴对齐方式
          ColumnMainAlignRadioList()
-           .margin({ top:MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
          // 设置交叉轴对齐方式
          ColumnAxisAlignRadioList()
-           .margin({ top:MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
        }
-       .layoutWeight(1)
-       .height(ALL_PERCENT)
-       .width(ALL_PERCENT)
+       ...
      }
    }
    ```
-
+   
    其中ColumnMainAlignRadioList子组件和ColumnAxisAlignRadioList子组件分别是设置主轴对齐方式单选框列表和设置交叉轴对齐方式单选框列表，并且在FlexShowList，RowShowList和StackComponent中都存在代码结构类似的子组件，只是设置的属性和参数单选框列表不同，后面不在重复其详细代码，这里选择其中一个单选框列表子组件来显示。
 
    ![](figures/zh-cn_image_0000001408157208.png)
@@ -177,13 +178,14 @@
    具体代码如下：
 
    ```typescript
+// ColumnMainAlignRadioList.ets
    @Component
    export struct ColumnMainAlignRadioList {
      ...
    
      build() {
        Column({ space: MARGIN_FONT_SIZE_SPACE.FIRST_MARGIN }) {
-   　　　　// 单选框列表模块名称
+   	  // 单选框列表模块名称
          Row() {
            Text(this.moduleName)
              .fontSize(MARGIN_FONT_SIZE_SPACE.FOURTH_MARGIN)
@@ -192,16 +194,15 @@
    
          Flex({
            direction: FlexDirection.Row,
-           justifyContent: FlexAlign.SpaceBetween ,
-           wrap:  FlexWrap.NoWrap
+           justifyContent: FlexAlign.SpaceBetween,
+           wrap: FlexWrap.NoWrap
          }) {
-           ForEach(this.radioList, (item, index) => {
-             MainAlignRadioItem({ textName: item, groupName: this.groupName, 
-               isChecked: index === 0 ? true : false })
+           ForEach(this.radioList, (item: string, index?: number) => {
+             MainAlignRadioItem({ textName: item, groupName: this.groupName, isChecked: index === 0 ? true : false })
                .margin({ right: MARGIN_FONT_SIZE_SPACE.COMMON_MARGIN })
-           }, item => JSON.stringify(item))
+           }, (item: string) => JSON.stringify(item))
          }
-        ...
+         ...
        }
        ...
      }
@@ -214,7 +215,9 @@
      build() {
        Row() {
          Radio({ value: this.textName, group: this.groupName })
-           ...
+           .checked(this.isChecked)
+           .height((MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN))
+           .width((MARGIN_FONT_SIZE_SPACE.SECOND_MARGIN))
            .onClick(() => {
              switch (this.textName) {
                case ATTRIBUTE.START:
@@ -243,6 +246,7 @@
    具体代码如下：
 
    ```typescript
+   // FlexShowList.ets
    @Component
    export struct FlexShowList {
      @Consume list: number[];
@@ -254,26 +258,26 @@
    
      build() {
        Column() {
-         // Flex中元素对齐方式布局
          Flex({
-           // 参数设置
-            ...
+   	    // 参数设置
+           ...
          }) {
-           ForEach(this.list, (item) => {
+           ForEach(this.list, (item: number) => {
              CommonItem({ item: item })
-           }, item => JSON.stringify(item))
+           }, (item: number) => JSON.stringify(item))
          }
          ...
          // 设置主轴方向
-         FlexMainDirectionRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
-         // 设置主轴对齐方式
-         FlexMainAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         FlexMainDirectionRadioList()
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         // 设置主轴方向
+         FlexMainAlignRadioList()
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
          // 设置交叉轴对齐方式
-         FlexAxisAlignRadioList().margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
+         FlexAxisAlignRadioList()
+           .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
        }
-       .layoutWeight(1)
-       .height(ALL_PERCENT)
-       .width(ALL_PERCENT)
+       ...
      }
    }
    ```
@@ -285,6 +289,7 @@
    代码如下：
 
    ```typescript
+   // RowShowList.ets
    @Component
    export struct RowShowList {
      @Consume currentRowJustifyContent: FlexAlign;
@@ -292,11 +297,10 @@
    
      build() {
        Column() {
-         // Row中元素对齐方式布局
          Row() {
-           ForEach(LIST, (item) => {
+           ForEach(LIST, (item: number) => {
              CommonItem({ item: item })
-           }, item => JSON.stringify(item))
+           }, (item: number) => JSON.stringify(item))
          }
          ...
          // 设置主轴对齐方式
@@ -306,13 +310,11 @@
          RowAxisAlignRadioList()
            .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
        }
-       .layoutWeight(1)
-       .height(ALL_PERCENT)
-       .width(ALL_PERCENT)
+       ...
      }
    }
    ```
-
+   
 5. 在StackComponent.ets中，自定组件StackComponent主要效果是在Stack布局容器中，设置不同对齐方式属性时，容器内堆叠元素的对齐方式。
 
    ![](figures/zh-cn_image_0000001407837816.png)
@@ -320,15 +322,13 @@
    代码如下：
 
    ```typescript
+   // StackComponent.ets
    @Component
    export struct StackComponent {
-     @Consume currentStackAlignContent: Alignment;
-     @Consume message: string ;
-     @State textAl: TextAlign = TextAlign.Center;
+     ...
    
      build() {
        Column() {
-         // Stack中元素对齐方式布局
          Stack({ alignContent: this.currentStackAlignContent }) {
            Text('')
              .width(ALL_PERCENT)
@@ -345,46 +345,51 @@
          StackAlignRadioList()
            .margin({ top: MARGIN_FONT_SIZE_SPACE.EIGHTH_MARGIN })
        }
-       .layoutWeight(1)
-       .height(ALL_PERCENT)
-       .width(ALL_PERCENT)
+       ...
      }
    }
    ```
+   
+6. 在CommonComponent.ets中，自定义组件CommonItem，代码如下：
 
-6.  在CommonComponent.ets中，自定义组件CommonItem，代码如下：
-
-    ```typescript
-    @Component
-    export struct CommonItem {
-      private item: number;
-    
-      build() {
-        Text(this.item.toString())
-          .fontSize(MARGIN_FONT_SIZE_SPACE.FIFTH_MARGIN)
-          .width(MARGIN_FONT_SIZE_SPACE.NINTH_MARGIN)
-          .height(MARGIN_FONT_SIZE_SPACE.NINTH_MARGIN)
-          .fontColor($r("app.color.show_list_fontColor"))
-          .textAlign(TextAlign.Center)
-          .align(Alignment.Center)
-          .backgroundColor($r("app.color.white"))
-          .borderRadius(MARGIN_FONT_SIZE_SPACE.COMMON_PADDING)
-          .margin(MARGIN_FONT_SIZE_SPACE.COMMON_PADDING)
-      }
-    }
-    ```
+   ```typescript
+   // CommonComponent.ets
+   @Component
+   export struct CommonItem {
+     private item: number = 0;
+   
+     build() {
+       Text(this.item.toString())
+         .fontSize(MARGIN_FONT_SIZE_SPACE.FIFTH_MARGIN)
+         .width(MARGIN_FONT_SIZE_SPACE.NINTH_MARGIN)
+         .height(MARGIN_FONT_SIZE_SPACE.NINTH_MARGIN)
+         .fontColor($r("app.color.show_list_fontColor"))
+         .textAlign(TextAlign.Center)
+         .align(Alignment.Center)
+         .backgroundColor($r("app.color.white"))
+         .borderRadius(MARGIN_FONT_SIZE_SPACE.COMMON_PADDING)
+         .margin(MARGIN_FONT_SIZE_SPACE.COMMON_PADDING)
+     }
+   }
+   ```
 
 7.  在Second.ets页面，根据首页跳转时的参数，渲染顶部不同的容器名称和条件渲染不同的子组件。
 
     代码如下：
 
     ```typescript
+    // Second.ets
     @Entry
     @Component
     struct Second {
-      private moduleList: any[] = router.getParams()[MODULE_LIST];
-      private componentName: string = router.getParams()[COMPONENT_NAME];
       ...
+    
+      aboutToAppear() {
+        let params = router.getParams() as Record<string, Object>;
+        this.moduleList = params.moduleList as ContainerModuleItem[];
+        this.componentName = params.componentName as string;
+        this.containerType = params.containerType as number;
+      }
     
       build() {
         Row() {
@@ -410,10 +415,9 @@
       }
     }
     
-    // 顶部子组件
     @Component
     struct BackComp {
-       ...
+      ...
     }
     ```
 

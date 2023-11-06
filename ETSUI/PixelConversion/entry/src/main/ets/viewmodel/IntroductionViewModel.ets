@@ -14,7 +14,7 @@
  */
 
 import Constants from '../common/constants/Constants';
-import IntroductionItem from '../common/bean/IntroductionItem';
+import IntroductionItem from './IntroductionItem';
 
 class IntroductionViewModel {
   /**
@@ -32,7 +32,6 @@ const INTRODUCE_LIST: IntroductionItem[] = [
   {
     name: 'px',
     title: $r('app.string.px_unit'),
-    subTitle: null,
     value: Constants.PIXEL_WIDTH + 'px',
     smallFontSize: 0,
     largeFontSize: 0
@@ -48,7 +47,6 @@ const INTRODUCE_LIST: IntroductionItem[] = [
   {
     name: 'lpx',
     title: $r('app.string.lpx_unit'),
-    subTitle: null,
     value: Constants.PIXEL_WIDTH + 'lpx',
     smallFontSize: 0,
     largeFontSize: 0

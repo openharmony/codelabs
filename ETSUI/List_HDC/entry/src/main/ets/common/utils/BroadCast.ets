@@ -14,55 +14,55 @@
  */
 
 export class BroadCast {
-    private callBackArray = [];
+  private callBackArray: Array<Array<() => void>> = [];
 
-    public on(event, callback) {
-        (this.callBackArray[event] || (this.callBackArray[event] = [])).push(callback);
-    }
+  public on(event: BroadCastType, callback: () => void) {
+    (this.callBackArray[event] || (this.callBackArray[event] = [])).push(callback);
+  }
 
-    public off(event, callback) {
-        if (event == null) {
-            this.callBackArray = [];
-        }
-        const cbs = this.callBackArray[event];
-        if (!cbs) {
-            return;
-        }
-        if (callback == null) {
-            this.callBackArray[event] = null;
-        }
-        let cb;
-        let len = cbs.length;
-        for (let i = 0; i < len; i++) {
-            cb = cbs[i];
-            if (cb === callback || cb.fn === callback) {
-                cbs.splice(i, 1);
-                break;
-            }
-        }
+  public off(event: BroadCastType | null, callback: () => void) {
+    if (event === null) {
+      this.callBackArray = [];
+      return;
     }
+    const cbs: Array<() => void> = this.callBackArray[event];
+    if (!cbs) {
+      return;
+    }
+    if (callback === null) {
+      this.callBackArray[event] = null;
+    }
+    let cb: () => void;
+    let len = cbs.length;
+    for (let i = 0; i < len; i++) {
+      cb = cbs[i];
+      if (cb === callback) {
+        cbs.splice(i, 1);
+        break;
+      }
+    }
+  }
 
-    public emit(event, args?: any[]) {
-        let _self = this;
-        if (!this.callBackArray[event]) {
-            return;
-        }
-        let cbs = [...this.callBackArray[event]];
-        if (cbs) {
-            let len = cbs.length;
-            for (let i = 0; i < len; i++) {
-                try {
-                    cbs[i].apply(_self, args);
-                } catch (e) {
-                    new Error(e);
-                }
-            }
-        }
+  public emit(event: BroadCastType) {
+    if (!this.callBackArray[event]) {
+      return;
     }
+    let cbs: Array<() => void> = this.callBackArray[event];
+    if (cbs) {
+      let len = cbs.length;
+      for (let i = 0; i < len; i++) {
+        try {
+          cbs[i]();
+        } catch (e) {
+          new Error(e);
+        }
+      }
+    }
+  }
 }
 
 export enum BroadCastType {
-    SHOW_TARGET_SETTING_DIALOG = 'showTargetSettingDialog',
-    SHOW_REMIND_TIME_DIALOG = 'showRemindTimeDialog',
-    SHOW_FREQUENCY_DIALOG = 'showFrequencyDialog'
+  SHOW_TARGET_SETTING_DIALOG = 'showTargetSettingDialog',
+  SHOW_REMIND_TIME_DIALOG = 'showRemindTimeDialog',
+  SHOW_FREQUENCY_DIALOG = 'showFrequencyDialog'
 }

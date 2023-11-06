@@ -15,7 +15,7 @@
 
 import router from '@ohos.router';
 import AesUtil from '../common/utils/AesUtil';
-import { User } from '../common/bean/User';
+import { User } from '../viewmodel/User';
 import { UserTableApi } from '../model/UserTableApi';
 import CommonConstants from '../common/constants/CommonConstants';
 import PromptUtil from '../common/utils/PromptUtil';
@@ -196,7 +196,7 @@ struct Register {
   aesEncrypt() {
     AesUtil.encrypt(this.password).then((data: User) => {
       this.insertUser(data.password, data.authTag);
-    }).catch(err => {
+    }).catch((err: Error) => {
       Logger.error(`AesEecrypt err cause ${err}`);
       PromptUtil.promptMessage($r('app.string.message_sys_err'), CommonConstants.PROMPT_TIME)
     });

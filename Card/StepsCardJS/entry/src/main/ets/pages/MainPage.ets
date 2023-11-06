@@ -13,12 +13,14 @@
  * limitations under the License.
  */
 
+import DataRdb from '@ohos.data.relationalStore';
 import Notification from '@ohos.notificationManager';
 import DatabaseUtils from '../common/utils/DatabaseUtils';
 import DateUtils from '../common/utils/DateUtils';
 import Logger from "../common/utils/Logger"
 import SensorData from '../common/database/SensorData';
 import CommonConstants from '../common/constants/CommonConstants';
+import { GlobalContext } from '../common/utils/GlobalContext';
 
 /**
  * The MainPage is the entry point of the application and shows how to develop the MainPage.
@@ -31,25 +33,24 @@ import CommonConstants from '../common/constants/CommonConstants';
 struct MainPage {
   @State stepsValue: number = 0;
   private intervalId: number = 0;
-  private notificationId: number = 0;
   private iconStepsBackground: Resource = $r('app.media.icon_steps_background');
 
   aboutToAppear() {
+    let rdbStoreValue: DataRdb.RdbStore = GlobalContext.getContext().getObject('rdbStore') as DataRdb.RdbStore;
     this.requestNotification();
-    DatabaseUtils.getSensorData(globalThis.rdbStore, DateUtils.getDate(0))
+    DatabaseUtils.getSensorData(rdbStoreValue, DateUtils.getDate(0))
       .then((sensorData: SensorData) => {
         if (sensorData) {
           this.stepsValue = sensorData.stepsValue;
         }
         // Start the timer.
         this.intervalId = setInterval(() => {
-          this.notificationId += CommonConstants.ID_VALUE;
           this.stepsValue += CommonConstants.INTERVAL_STEPS_VALUE;
-          DatabaseUtils.insertValues(this.stepsValue, globalThis.rdbStore);
-          DatabaseUtils.updateForms(this.stepsValue, globalThis.rdbStore);
-          DatabaseUtils.sendNotifications(this.stepsValue.toString(), this.notificationId);
+          DatabaseUtils.insertValues(this.stepsValue, rdbStoreValue);
+          DatabaseUtils.updateForms(this.stepsValue, rdbStoreValue);
+          DatabaseUtils.sendNotifications(this.stepsValue.toString());
         }, CommonConstants.INTERVAL_DELAY_TIME);
-      }).catch((error) => {
+      }).catch((error: Error) => {
       Logger.error(CommonConstants.MAIN_PAGE_TAG, 'getSensorData error ' + JSON.stringify(error));
     });
   }
@@ -66,7 +67,7 @@ struct MainPage {
   requestNotification() {
     Notification.requestEnableNotification().then(() => {
       Logger.info(CommonConstants.MAIN_PAGE_TAG, 'requestEnableNotification success');
-    }).catch((err) => {
+    }).catch((err: Error) => {
       Logger.error(CommonConstants.MAIN_PAGE_TAG, 'requestEnableNotification failed : ' + JSON.stringify(err));
     });
   }
@@ -101,7 +102,8 @@ struct MainPage {
 }
 
 // Steps text common style.
-@Extend(Text) function progressTextStyle(styleFontSize: number, styleFontWeight: number) {
+@Extend(Text)
+function progressTextStyle(styleFontSize: number, styleFontWeight: number) {
   .fontColor(Color.White)
   .fontSize(styleFontSize)
   .fontWeight(styleFontWeight)

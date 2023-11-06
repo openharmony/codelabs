@@ -14,48 +14,47 @@
  */
 
 import promptAction from '@ohos.promptAction';
-import { getTabData } from './DataUtils';
 import { touchMoveLoadMore, touchUpLoadMore } from './PullUpLoadMore';
 import {
-  DELAY_TIME,
-  DELAY_ANIMATION_DURATION,
-  Y_OFF_SET_COEFFICIENT,
-  RefreshState,
-  RefreshConstant
+  CommonConstant as Const,
+  RefreshState
 } from '../constant/CommonConstant';
+import NewsViewModel, { NewsData } from '../../viewmodel/NewsViewModel';
+import NewsModel from '../../viewmodel/NewsModel';
 
-export function listTouchEvent(event: TouchEvent) {
+export function listTouchEvent(newsModel: NewsModel, event: TouchEvent) {
   switch (event.type) {
     case TouchType.Down:
-      this.downY = event.touches[0].y;
-      this.lastMoveY = event.touches[0].y;
+      newsModel.downY = event.touches[0].y;
+      newsModel.lastMoveY = event.touches[0].y;
       break;
     case TouchType.Move:
-      if (this.isRefreshing || this.isLoading) {
+      if ((newsModel.isRefreshing === true) || (newsModel.isLoading === true)) {
         return;
       }
-      let isDownPull = event.touches[0].y - this.lastMoveY > 0;
-      if ((isDownPull || this.isPullRefreshOperation) && !this.isCanLoadMore) {
+      let isDownPull = event.touches[0].y - newsModel.lastMoveY > 0;
+      if (((isDownPull === true) || (newsModel.isPullRefreshOperation === true)) && (newsModel.isCanLoadMore === false))
+      {
         // Finger movement, processing pull-down refresh.
-        touchMovePullRefresh.call(this, event);
+        touchMovePullRefresh(newsModel, event);
       } else {
         // Finger movement, processing load more.
-        touchMoveLoadMore.call(this, event);
+        touchMoveLoadMore(newsModel, event);
       }
-      this.lastMoveY = event.touches[0].y;
+      newsModel.lastMoveY = event.touches[0].y;
       break;
     case TouchType.Cancel:
       break;
     case TouchType.Up:
-      if (this.isRefreshing || this.isLoading) {
+      if ((newsModel.isRefreshing === true) || (newsModel.isLoading === true)) {
         return;
       }
-      if (this.isPullRefreshOperation) {
+      if ((newsModel.isPullRefreshOperation === true)) {
         // Lift your finger and pull down to refresh.
-        touchUpPullRefresh.call(this);
+        touchUpPullRefresh(newsModel);
       } else {
         // Fingers up, handle loading more.
-        touchUpLoadMore.call(this);
+        touchUpLoadMore(newsModel);
       }
       break;
     default:
@@ -63,105 +62,109 @@ export function listTouchEvent(event: TouchEvent) {
   }
 }
 
-export function touchMovePullRefresh(event: TouchEvent) {
-  if (this.startIndex === 0) {
-    this.isPullRefreshOperation = true;
-    let height = vp2px(this.pullDownRefreshHeight);
-    this.offsetY = event.touches[0].y - this.downY;
+export function touchMovePullRefresh(newsModel: NewsModel, event: TouchEvent) {
+  if (newsModel.startIndex === 0) {
+    newsModel.isPullRefreshOperation = true;
+    let height = vp2px(newsModel.pullDownRefreshHeight);
+    newsModel.offsetY = event.touches[0].y - newsModel.downY;
     // The sliding offset is greater than the pull-down refresh layout height, and the refresh condition is met.
-    if (this.offsetY >= height) {
-      pullRefreshState.call(this, RefreshState.Release);
-      this.offsetY = height + this.offsetY * Y_OFF_SET_COEFFICIENT;
+    if (newsModel.offsetY >= height) {
+      pullRefreshState(newsModel, RefreshState.Release);
+      newsModel.offsetY = height + newsModel.offsetY * Const.Y_OFF_SET_COEFFICIENT;
     } else {
-      pullRefreshState.call(this, RefreshState.DropDown);
+      pullRefreshState(newsModel, RefreshState.DropDown);
     }
-    if (this.offsetY < 0) {
-      this.offsetY = 0;
-      this.isPullRefreshOperation = false;
+    if (newsModel.offsetY < 0) {
+      newsModel.offsetY = 0;
+      newsModel.isPullRefreshOperation = false;
     }
   }
 }
 
-export function touchUpPullRefresh() {
-  if (this.isCanRefresh) {
-    this.offsetY = vp2px(this.pullDownRefreshHeight);
-    pullRefreshState.call(this, RefreshState.Refreshing);
+export function touchUpPullRefresh(newsModel: NewsModel) {
+  if (newsModel.isCanRefresh === true) {
+    newsModel.offsetY = vp2px(newsModel.pullDownRefreshHeight);
+    pullRefreshState(newsModel, RefreshState.Refreshing);
+    newsModel.currentPage = 1;
     setTimeout(() => {
-      let self = this;
-      getTabData(self.currentPage, self.pageSize, self.currentIndex, {
-        onSuccess: (value) => {
-          self.currentPage = parseInt(value.currentPage.toString());
-          self.newsData = value.newsPageData;
-          closeRefresh.call(self, true);
-        },
-        onFail: (msg) => {
-          promptAction.showToast({ message: msg });
-          closeRefresh.call(self, false);
+      let self: NewsModel = newsModel;
+      NewsViewModel.getNewsList(newsModel.currentPage, newsModel.pageSize, Const.GET_NEWS_LIST).then((data:
+        NewsData[]) => {
+        if (data.length === newsModel.pageSize) {
+          self.hasMore = true;
+          self.currentPage++;
+        } else {
+          self.hasMore = false;
         }
+        self.newsData = data;
+        closeRefresh(self, true);
+      }).catch((err: string | Resource) => {
+        promptAction.showToast({ message: err });
+        closeRefresh(self, false);
       });
-    }, DELAY_TIME);
+    }, Const.DELAY_TIME);
   } else {
-    closeRefresh.call(this, false);
+    closeRefresh(newsModel, false);
   }
 }
 
-export function pullRefreshState(state: number) {
+export function pullRefreshState(newsModel: NewsModel, state: number) {
   switch (state) {
     case RefreshState.DropDown:
-      this.pullDownRefreshText = $r('app.string.pull_down_refresh_text');
-      this.pullDownRefreshImage = $r("app.media.ic_pull_down_refresh");
-      this.isCanRefresh = false;
-      this.isRefreshing = false;
-      this.isVisiblePullDown = true;
+      newsModel.pullDownRefreshText = $r('app.string.pull_down_refresh_text');
+      newsModel.pullDownRefreshImage = $r('app.media.ic_pull_down_refresh');
+      newsModel.isCanRefresh = false;
+      newsModel.isRefreshing = false;
+      newsModel.isVisiblePullDown = true;
       break;
     case RefreshState.Release:
-      this.pullDownRefreshText = $r('app.string.release_refresh_text');
-      this.pullDownRefreshImage = $r("app.media.ic_pull_up_refresh");
-      this.isCanRefresh = true;
-      this.isRefreshing = false;
+      newsModel.pullDownRefreshText = $r('app.string.release_refresh_text');
+      newsModel.pullDownRefreshImage = $r('app.media.ic_pull_up_refresh');
+      newsModel.isCanRefresh = true;
+      newsModel.isRefreshing = false;
       break;
     case RefreshState.Refreshing:
-      this.offsetY = vp2px(this.pullDownRefreshHeight);
-      this.pullDownRefreshText = $r('app.string.refreshing_text');
-      this.pullDownRefreshImage = $r("app.media.ic_pull_up_load");
-      this.isCanRefresh = true;
-      this.isRefreshing = true;
+      newsModel.offsetY = vp2px(newsModel.pullDownRefreshHeight);
+      newsModel.pullDownRefreshText = $r('app.string.refreshing_text');
+      newsModel.pullDownRefreshImage = $r('app.media.ic_pull_up_load');
+      newsModel.isCanRefresh = true;
+      newsModel.isRefreshing = true;
       break;
     case RefreshState.Success:
-      this.pullDownRefreshText = $r('app.string.refresh_success_text');
-      this.pullDownRefreshImage = $r("app.media.ic_succeed_refresh");
-      this.isCanRefresh = true;
-      this.isRefreshing = true;
+      newsModel.pullDownRefreshText = $r('app.string.refresh_success_text');
+      newsModel.pullDownRefreshImage = $r('app.media.ic_succeed_refresh');
+      newsModel.isCanRefresh = true;
+      newsModel.isRefreshing = true;
       break;
     case RefreshState.Fail:
-      this.pullDownRefreshText = $r('app.string.refresh_fail_text');
-      this.pullDownRefreshImage = $r("app.media.ic_fail_refresh");
-      this.isCanRefresh = true;
-      this.isRefreshing = true;
+      newsModel.pullDownRefreshText = $r('app.string.refresh_fail_text');
+      newsModel.pullDownRefreshImage = $r('app.media.ic_fail_refresh');
+      newsModel.isCanRefresh = true;
+      newsModel.isRefreshing = true;
       break;
     default:
       break;
   }
 }
 
-export function closeRefresh(isRefreshSuccess: boolean) {
-  let self = this;
+export function closeRefresh(newsModel: NewsModel, isRefreshSuccess: boolean) {
+  let self = newsModel;
   setTimeout(() => {
-    let delay = RefreshConstant.DELAY_PULL_DOWN_REFRESH;
-    if (self.isCanRefresh) {
-      pullRefreshState.call(this, isRefreshSuccess ? RefreshState.Success : RefreshState.Fail);
-      delay = RefreshConstant.DELAY_SHRINK_ANIMATION_TIME;
+    let delay = Const.RefreshConstant_DELAY_PULL_DOWN_REFRESH;
+    if (self.isCanRefresh === true) {
+      pullRefreshState(newsModel, isRefreshSuccess ? RefreshState.Success : RefreshState.Fail);
+      delay = Const.RefreshConstant_DELAY_SHRINK_ANIMATION_TIME;
     }
     animateTo({
-      duration: RefreshConstant.CLOSE_PULL_DOWN_REFRESH_TIME,
+      duration: Const.RefreshConstant_CLOSE_PULL_DOWN_REFRESH_TIME,
       delay: delay,
       onFinish: () => {
-        pullRefreshState.call(this, RefreshState.DropDown);
+        pullRefreshState(newsModel, RefreshState.DropDown);
         self.isVisiblePullDown = false;
         self.isPullRefreshOperation = false;
       }
     }, () => {
       self.offsetY = 0;
     })
-  }, self.isCanRefresh ? DELAY_ANIMATION_DURATION : 0);
+  }, self.isCanRefresh ? Const.DELAY_ANIMATION_DURATION : 0);
 }

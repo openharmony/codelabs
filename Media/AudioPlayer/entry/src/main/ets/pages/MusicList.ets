@@ -15,7 +15,7 @@
 
 import router from '@ohos.router';
 import Logger from '../common/utils/Logger';
-import { MusicItem } from '../common/bean/MusicItem';
+import { MusicItem } from '../viewmodel/MusicItem';
 import { MusicView } from '../view/MusicView';
 import { CommonConstants } from '../common/constants/CommonConstants';
 import { initializeMusic } from '../viewmodel/MusicViewModel';
@@ -34,13 +34,13 @@ struct MusicList {
     Column() {
       Text($r('app.string.hot_music'))
         .fontSize($r('app.float.musicList_title'))
-        .width(CommonConstants.MUSIC_LIST_PAGE.TEXT_WIDTH)
-        .height(CommonConstants.MUSIC_LIST_PAGE.TEXT_HEIGHT)
+        .width(CommonConstants.TEXT_WIDTH)
+        .height(CommonConstants.TEXT_HEIGHT)
         .margin({
-          left: CommonConstants.MUSIC_LIST_PAGE.TEXT_MARGIN_LEFT,
-          top: CommonConstants.MUSIC_LIST_PAGE.TEXT_MARGIN_TOP,
-          right: CommonConstants.MUSIC_LIST_PAGE.TEXT_MARGIN_RIGHT,
-          bottom: CommonConstants.MUSIC_LIST_PAGE.TEXT_MARGIN_BOTTOM
+          left: CommonConstants.TEXT_MARGIN_LEFT,
+          top: CommonConstants.TEXT_MARGIN_TOP,
+          right: CommonConstants.TEXT_MARGIN_RIGHT,
+          bottom: CommonConstants.TEXT_MARGIN_BOTTOM
         })
       ForEach(this.musicData, (item: MusicItem) => {
         MusicView({ item: item })
@@ -48,11 +48,11 @@ struct MusicList {
             router.pushUrl({
               url: CommonConstants.PAGE_PLAY,
               params: { 'item': item }
-            }).catch((error) => {
+            }).catch((error: Error) => {
               Logger.error(`go to play list fail,error: ${error}`);
             })
           })
-      }, item => JSON.stringify(item))
+      }, (item: MusicItem) => JSON.stringify(item))
     }
   }
 }

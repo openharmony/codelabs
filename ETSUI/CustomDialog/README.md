@@ -15,13 +15,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -51,6 +51,8 @@
 │  ├──common
 │  │  └──constants
 │  │     └──StyleConstants.ets      // 抽离样式
+│  │  └──utils
+│  │     └──Logger.ets              // 日志工具类
 │  ├──entryability
 │  │  └──EntryAbility.ts            // 程序入口类
 │  ├──pages
@@ -69,15 +71,15 @@
 
 ### 公共弹窗组件
 
-首先创建Index.ets作为主界面，公共弹窗组件直接使用AlertDialog的show方法拉起，效果如图所示：
+首先创建DialogPage.ets作为主界面，公共弹窗组件直接使用AlertDialog的show方法拉起，效果如图所示：
 
 ![](figures/自定义弹窗1.gif)
 
 ```typescript
-// Index.ets
+// DialogPage.ets
 @Entry
 @Component
-struct Index {
+struct DialogPage {
   ...
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {
@@ -98,7 +100,7 @@ struct Index {
                 Logger.info('Closed callbacks');
               }
             }
-          )
+          );
         })
         .height(StyleConstants.BUTTON_HEIGHT)
         .width(StyleConstants.BUTTON_WIDTH)
@@ -117,7 +119,7 @@ struct Index {
 // DialogPage.ets
 @Entry
 @Component
-struct Index {
+struct DialogPage {
   dialogControllerExample: CustomDialogController = new CustomDialogController({
     builder: ConfirmDialog({ cancel: this.onCancel, confirm: this.onAccept }),
     cancel: this.existApp,
@@ -125,7 +127,7 @@ struct Index {
     alignment: DialogAlignment.Bottom,
     customStyle: true,
     offset: { dx: $r('app.float.dialog_offset_x'), dy: $r('app.float.dialog_offset_y') }
-  })；
+  });
   dialogControllerAlert: CustomDialogController = new CustomDialogController({
     builder: CustomAlertDialog({ cancel: this.onCancel, confirm: this.onAccept }),
     cancel: this.existApp,
@@ -133,7 +135,7 @@ struct Index {
     alignment: DialogAlignment.Bottom,
     customStyle: true,
     offset: { dx: $r('app.float.dialog_offset_x'), dy: $r('app.float.dialog_offset_y') }
-  })；
+  });
   ...
   build() {
     Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Center }) {

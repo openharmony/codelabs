@@ -13,16 +13,16 @@
  * limitations under the License.
  */
 
-import { TopBarItem } from '../bean/TopBarItem';
+import { TopBarItem } from '../../viewmodel/TopBarItem';
 
 /**
  * Data of top bar.
  */
 export const TOP_BAR_DATA: TopBarItem[] = [
-  { 'id': 0, 'name': '全部' },
-  { 'id': 1, 'name': '电影' },
-  { 'id': 2, 'name': '电视剧' },
-  { 'id': 3, 'name': '综艺' },
-  { 'id': 4, 'name': '直播' },
-  { 'id': 5, 'name': '游戏' }
+  { id: 0, name: '全部' },
+  { id: 1, name: '电影' },
+  { id: 2, name: '电视剧' },
+  { id: 3, name: '综艺' },
+  { id: 4, name: '直播' },
+  { id: 5, name: '游戏' }
 ]

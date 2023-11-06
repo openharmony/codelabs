@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { RectF } from '../common/bean/Rect';
+import { RectF } from '../viewmodel/Rect';
 import { MathUtils } from './MathUtils';
 import { CommonConstants } from '../common/constant/CommonConstants';
 
@@ -76,7 +76,7 @@ export abstract class DrawingUtils {
    * @param split
    * @param isShow
    */
-  static drawSplitLine(ctx: CanvasRenderingContext2D, crop: RectF, split, isShow: boolean) {
+  static drawSplitLine(ctx: CanvasRenderingContext2D, crop: RectF, split: number, isShow: boolean) {
     if (!isShow) {
       return;
     }

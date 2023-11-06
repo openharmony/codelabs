@@ -15,7 +15,7 @@
 
 import { CommonConstants } from '../../../common/constants/CommonConstants';
 import { DetailConstant } from '../../../common/constants/DetailConstant';
-import AlarmItem from '../../../common/bean/AlarmItemBean';
+import AlarmItem from '../../../viewmodel/AlarmItemBean';
 import CommonDialog from './CommonDialog';
 import DimensionUtil from '../../../common/utils/DimensionUtil';
 
@@ -24,7 +24,7 @@ export default struct IntervalDialog {
   @Consume(DetailConstant.DEFAULT_PROVIDER_KEY) alarmItem: AlarmItem;
   @State intervalMinuteSelect: number = 0;
   @State intervalTimesSelect: number = 0;
-  controller: CustomDialogController;
+  controller?: CustomDialogController;
 
   aboutToAppear(): void{
     this.intervalMinuteSelect = this.alarmItem.intervalMinute;

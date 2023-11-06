@@ -16,14 +16,14 @@
 import router from '@ohos.router';
 import { APPLE, SMILE, BRUSH_TEETH, SLEEP, DRINK, GET_UP } from '../common/Const';
 
-class TaskInfo {
+interface TaskInfo {
   taskID: number;
   taskName: string;
   icon: string;
   targetValue: string;
 }
 
-const TASK_LIST = [
+const TASK_LIST: TaskInfo[] = [
   {
     taskID: 1,
     taskName: GET_UP,

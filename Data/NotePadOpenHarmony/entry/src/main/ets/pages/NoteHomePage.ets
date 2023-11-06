@@ -13,13 +13,14 @@
  * limitations under the License.
  */
 
+import common from '@ohos.app.ability.common';
 import dataStorage from '@ohos.data.preferences';
-import { FolderType, NotesInfoBean } from '../common/bean/NoteInfoBean';
 import StyleConstants from '../common/constants/StyleConstants';
 import CommonConstants from '../common/constants/CommonConstants';
 import MemoItem from '../view/MemoItem';
 import NotesDataModel from '../model/NotesDataModel';
 import Logger from '../common/utils/Logger';
+import { FolderType, NotesInfoBean } from '../viewmodel/NotesInfoViewModel';
 
 @Entry
 @Component
@@ -27,6 +28,8 @@ struct NoteHomePage {
   @State folderType: Resource = $r('app.string.notes_all');
   @State allNotes: Array<NotesInfoBean> = [];
   @State selectNotes: Array<NotesInfoBean> = this.allNotes.sort();
+  private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+
   @Builder MyMenu(){
     Menu() {
       MenuItem({ content: $r('app.string.notes_all') })
@@ -104,7 +107,7 @@ struct NoteHomePage {
           ListItem() {
             MemoItem({ noteItem: item })
           }
-        }, item => JSON.stringify(item))
+        }, (item: NotesInfoBean) => JSON.stringify(item))
       }
       .margin({ top: $r('app.float.list_container_margin') })
       .height(StyleConstants.NOTE_CONTENT_HEIGHT)
@@ -121,15 +124,14 @@ struct NoteHomePage {
   async getAllNotes() {
     await NotesDataModel.saveDefaultData();
     try {
-      let preferences = await dataStorage.getPreferences(globalThis.context,
-        CommonConstants.PREFERENCE_INSTANCE_NAME);
+      let preferences = await dataStorage.getPreferences(this.context, CommonConstants.PREFERENCE_INSTANCE_NAME);
       let noteIds = await preferences.get(CommonConstants.PREFERENCE_NOTE_KEY, '');
       while (this.allNotes.length >= 1) {
         this.allNotes.pop();
       }
       JSON.parse(noteIds.toString()).forEach(async (item: NotesInfoBean) => {
         let note = await preferences.get(item.noteId, '');
-        this.allNotes.push(new NotesInfoBean(JSON.parse(note.toString())));
+        this.allNotes.push(JSON.parse(note.toString()));
       })
     } catch (err) {
       Logger.error('Get the value of noteIdArr failed with err:', err);

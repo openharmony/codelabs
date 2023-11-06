@@ -2,7 +2,7 @@
 
 ## 介绍
 
-基于ArkTS的声明式开发范式，使用OpenHarmony属性动画实现自定义下拉刷新动画组件的示例。本篇Codelab主要介绍组件动画animation属性设置。自定义属性动画头部组件结合下拉刷新场景，丰富下拉刷新样式，通过属性动画中的动画时长、动画速率和播放模式等相关属性的设置，效果如图所示：
+本篇Codelab主要介绍组件动画animation属性设置。当组件的某些通用属性变化时，可以通过属性动画实现渐变效果，提升用户体验。效果如图所示：
 
 ![](figures/AnimateRefresh.gif)
 
@@ -17,13 +17,13 @@
 
 ### 软件要求
 
-- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
-- OpenHarmony SDK版本：API version 9及以上版本。
+- [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+- OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 - 开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
-- OpenHarmony系统：3.2 Release及以上版本。
+- OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -46,7 +46,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 
 ```
 ├──entry/src/main/ets                      // 代码区           
@@ -55,16 +55,20 @@
 │  │  │  ├──CommonConstants.ets            // 公共常量类
 │  │  │  └──RefreshConstants.ets           // 下拉刷新常量类
 │  │  └──utils                 
-│  │     └──DimensionUtil.ets              // 屏幕适配工具类
+│  │     ├──DimensionUtil.ets              // 屏幕适配工具类
+│  │     └──GlobalContext.ets              // 全局上下文工具类
 │  ├──entryability
 │  │  └──EntryAbility.ts                   // 程序入口类
 │  ├──pages
 │  │  ├──FileManagerIndex.ets              // 文件管理Tab页
 │  │  └──TabIndex.ets                      // Tab管理页
-│  └──view
-│     ├──RefreshAnimHeader.ets             // 动画刷新组件
-│     ├──RefreshComponent.ets              // 下拉刷新组件
-│     └──RefreshDefaultHeader.ets          // 默认刷新组件
+│  ├──view
+│  │  ├──RefreshAnimHeader.ets             // 动画刷新组件
+│  │  ├──RefreshComponent.ets              // 下拉刷新组件
+│  │  └──RefreshDefaultHeader.ets          // 默认刷新组件
+│  └──viewmodel
+│     ├──AnimationModel.ets                // 动画封装模型
+│     └──CardModel.ets                     // 页签封装模型
 └──entry/src/main/resources                // 资源文件目录
 ```
 
@@ -73,9 +77,12 @@
 自定义下拉刷新通过自定义List组件RefreshComponent实现。在List容器中添加自定义刷新头部组件和其它的需要刷新部件，RefreshComponent提供了头部样式设置，刷新部件样式设置和刷新回调方法设置。
 
 ```typescript
+// FileManagerIndex.ets
 RefreshComponent({
   headerStyle: RefreshHeaderStyle.CLOUD, // 头部样式设置
   itemLayout: () => this.ContentBody(), // 刷新部件样式
+  displayHeight: (
+    px2vp(this.deviceDisplay.height) - DimensionUtil.getVp($r('app.float.file_index_title_height'))),
   onRefresh: () => { // 刷新回调方法
     ......
   }
@@ -87,6 +94,7 @@ RefreshComponent({
   本Codelab提供了DEFAULT默认刷新样式和CLOUD云朵动画刷新样式设置，在RefreshComponent组件初始化时，判断当前刷新样式进行渲染。
 
   ```typescript
+  // RefreshComponent.ets
   if (this.headerStyle === RefreshHeaderStyle.DEFAULT) {
     RefreshDefaultHeader().height(RefreshConstants.REFRESH_HEADER_HEIGHT)
   } else if (this.headerStyle === RefreshHeaderStyle.CLOUD) {
@@ -99,6 +107,7 @@ RefreshComponent({
   刷新部件样式itemLayout为嵌入RefreshComponent组件中的元素，通过@BuilderParam装饰符定义，可根据具体业务需求，当前为默认的Image组件样式。
 
   ```typescript
+  // FileManagerIndex.ets
   @Builder ContentBody() {
     Image($r('app.media.bg_content'))
       .width(CommonConstants.FULL_LENGTH)
@@ -114,7 +123,9 @@ RefreshComponent({
   1.设置RefreshComponent刷新组件state状态的更新。
 
   ```typescript
+  // RefreshComponent.ets
   @Consume(RefreshConstants.REFRESH_STATE_TAG) @Watch('onStateChanged') state: RefreshState;
+  @BuilderParam itemLayout: () => void;
   
   private onStateChanged() {
     switch (this.state) {
@@ -131,6 +142,7 @@ RefreshComponent({
   2.监听RefreshComponent组件的触摸事件，当手指松开且List组件下拉距离超出可刷新距离时，修改当前状态为REFRESHING，回调“onStateChanged”方法触发外部传入的onRefresh事件。
 
   ```typescript
+  // RefreshComponent.ets
   case TouchType.Move:
     if (this.state === RefreshState.DRAGGING
     && this.listController.currentOffset().yOffset <= -RefreshConstants.REFRESH_EFFECTIVE_HEIGHT) {
@@ -148,6 +160,7 @@ RefreshComponent({
   3.本Codelab中onRefresh事件没有做相关刷新动作，只做了模拟延时操作，开发者可以自行加入真实网络加载动作。
 
   ```typescript
+  // RefreshComponent.ets
   onRefresh: () => {
     setTimeout(() => {
       this.state = RefreshState.COMPLETE;
@@ -162,7 +175,8 @@ RefreshComponent({
 1. 每个Image通过iconItem参数分别设置各自的x轴偏移量和延时播放的属性动画效果。
 
    ```typescript
-   @Builder AttrAnimIcons(iconItem) {
+   // RefreshAnimHeader.ets
+   @Builder AttrAnimIcons(iconItem: ClassifyModel) {
      Image(iconItem.imgRes)
        .width(px2vp(DimensionUtil.adaptDimension(this.iconWidth)))
        .position({ x: iconItem.posX })
@@ -173,7 +187,7 @@ RefreshComponent({
          delay: iconItem.delay,
          curve: Curve.Linear,
          playMode: PlayMode.Alternate,
-         iterations: CommonConstants.REFRESH_HEADER_ITEM_ANIM_ITERATIONS,
+         iterations: CommonConstants.REFRESH_HEADER_ITEM_ANIM_ITERATIONS
        })
    }
    ```
@@ -181,7 +195,9 @@ RefreshComponent({
 2. 监听RefreshComponent刷新组件state状态的变化，当前状态为REFRESHING状态时，启动动画效果。
 
    ```typescript
+   // RefreshAnimHeader.ets
    @Consume(RefreshConstants.REFRESH_STATE_TAG) @Watch('onStateCheck') state: RefreshState;
+   @State iconWidth: number = CommonConstants.REFRESH_HEADER_ITEM_DEFAULT_WIDTH;
    
    private onStateCheck() {
      if (this.state === RefreshState.REFRESHING) {

@@ -1,13 +1,14 @@
 # Stage模型下Ability的创建和使用（ArkTS）
 
 ## 介绍
-本篇Codelab基于Stage模型，对Ability的创建和使用进行讲解。首先在课程中我们将带领大家使用DevEco Studio创建一个Stage模型Ability，并使用AbilityContext启动另一个Ability，然后借助通信接口Want，在Ability之间传递参数，最后我们使用HiLog打印Ability的生命周期。效果图如下：
+本篇Codelab基于Stage模型，对Ability的创建和使用进行讲解。首先在课程中我们将带领大家使用DevEco Studio创建一个Stage模型Ability，并使用UIAbilityContext启动另一个Ability，然后借助Want，在Ability之间传递参数，最后我们使用HiLog打印Ability的生命周期。效果如图所示：
 
 ![](figures/gif1.gif)
 
 ### 相关概念
 
 -   [UIAbility](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-ability-uiAbility.md)：UIAbility组件是系统调度的基本单元，为应用提供绘制界面的窗口；一个UIAbility组件中可以通过多个页面来实现一个功能模块。每一个UIAbility组件实例，都对应于一个最近任务列表中的任务。
+
 -   [UIAbilityContext](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-inner-application-uiAbilityContext.md)：UIAbilityContext是UIAbility的上下文环境，继承自Context，提供UIAbility的相关配置信息以及操作UIAbility和ServiceExtensionAbility的方法，如启动UIAbility，停止当前UIAbilityContext所属的UIAbility，启动、停止、连接、断开连接ServiceExtensionAbility等。
 -   [Want](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-app-ability-want.md)：Want是对象间信息传递的载体, 可以用于应用组件间的信息传递。 Want的使用场景之一是作为startAbility的参数, 其包含了指定的启动目标, 以及启动时需携带的相关数据。
 -   [HiLog](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-hilog.md)：HiLog日志系统，让应用可以按照指定类型、指定级别、指定格式字符串输出日志内容，帮助开发者了解应用的运行状态，更好地调试程序。
@@ -16,13 +17,13 @@
 
 ### 软件要求
 
--   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release及以上版本。
--   OpenHarmony SDK版本：API version 9及以上版本。
+-   [DevEco Studio](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 3.1 Release。
+-   OpenHarmony SDK版本：API version 9。
 
 ### 硬件要求
 
 -   开发板类型：[润和RK3568开发板](https://gitee.com/openharmony/docs/blob/master/zh-cn/device-dev/quick-start/quickstart-appendix-rk3568.md)。
--   OpenHarmony系统：3.2 Release及以上版本。
+-   OpenHarmony系统：3.2 Release。
 
 ### 环境搭建
 
@@ -43,7 +44,7 @@
 
 
 ## 代码结构解读
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
 ```
 ├──entry/src/main/ets             // 代码区
 │  ├──common                      // 公共资源目录
@@ -69,14 +70,17 @@
 -   创建完Ability后，需要我们为Ability设置page页面，选中pages目录，单击鼠标右键，选择New \> Page，在对话框中修改名字后，即可创建相关的Page页面。示例代码如下：
 
     ```typescript
+    // DetailsPage.ets
     ...
     @Entry
     @Component
     struct DetailsPage {
-      private goodsDetails: GoodsData;
+      private goodsDetails: GoodsData = new GoodsData();
     
       aboutToAppear() {
-        this.goodsDetails = viewModel.loadDetails(position);
+        if (position !== undefined) {
+          this.goodsDetails = viewModel.loadDetails(position);
+        }
       }
     
       build() {
@@ -108,28 +112,29 @@
     ```
 
 
--   使用windowStage.loadContent为指定Ability设置相关的Page页面，由于配置流程一样，我们在这里只展示为DetailsAbility配置页面的核心代码：
+- 使用windowStage.loadContent为指定Ability设置相关的Page页面，由于配置流程一样，我们在这里只展示为DetailsAbility配置页面的核心代码：
 
-    ```typescript
-    ...
-    export default class DetailsAbility extends Ability {
-        ...
-        onWindowStageCreate(windowStage) {
-            ...
-            windowStage.loadContent('pages/DetailsPage', (err, data) => {
-                if (err.code) {
-                    hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed. Cause: %{public}s', JSON.stringify(err) ?? '');
-                    return;
-                }
-                hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded. Data: %{public}s', JSON.stringify(data) ?? '');
-            });
+  ```typescript
+  // DetailsAbility.ts
+  ...
+  export default class DetailsAbility extends UIAbility {
+  ...
+    onWindowStageCreate(windowStage: window.WindowStage): void {
+      ...
+      windowStage.loadContent('pages/DetailsPage', (err, data) => {
+        if (err.code) {
+          hilog.error(DETAIL_ABILITY_DOMAIN, TAG, 'Failed. Cause: %{public}s', JSON.stringify(err) ?? '');
+          return;
         }
-        ...
-    };
-    ```
+        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, 'Succeeded. Data: %{public}s', JSON.stringify(data) ?? '');
+      });
+    }
+    ...
+  };
+  ```
 
 
-界面效果：
+效果如图所示：
 
 ![](figures/Screenshot_20221121111346864.png)
 
@@ -142,6 +147,7 @@ UIAbilityContext是UIAbility的上下文环境，继承自Context，提供UIAbil
 在购物应用中，我们点击首页商品列表中的某一项商品，即可跳转到商品的详情页面。此处使用到UIAbilityContext模块的启动Ability的能力。关于[获取UIAbilityContext的方法](https://gitee.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis/js-apis-inner-application-uiAbilityContext.md)，推荐使用getContext(this)方式来获取UIAbilityContext。
 
 ```typescript
+// HomePage.ets
 ...
   build() {
     Column() {
@@ -161,10 +167,11 @@ UIAbilityContext是UIAbility的上下文环境，继承自Context，提供UIAbil
         MenusComponent({ menus: this.menus })
         // 商品列表组件
         GoodsComponent({ goodsList: this.goodsList, startPage: (index) => {
-          let handler = getContext(this) as AppContext.AbilityContext;
+          let handler = getContext(this) as AppContext.UIAbilityContext;
           viewModel.startDetailsAbility(handler, index);
         } })
-      }.width(PERCENTAGE_100)
+      }
+      .width(PERCENTAGE_100)
     }
     .height(PERCENTAGE_100)
     .backgroundImage($rawfile('index/index_background.png'), ImageRepeat.NoRepeat)
@@ -176,11 +183,12 @@ UIAbilityContext是UIAbility的上下文环境，继承自Context，提供UIAbil
 startDetailsAbility方法调用了UIAbilityContext模块启动Ability的能力。
 
 ```typescript
+// HomeViewModel.ets
 ... 
- public startDetailsAbility(context, index: number): void {
-    const want = {
-      bundleName: 'com.example.StageAbilityDemo',
-      abilityName: 'DetailsAbility',
+  public startDetailsAbility(context: common.UIAbilityContext, index: number): void {
+    const want: Want = {
+      bundleName: getContext(context).applicationInfo.name,
+      abilityName: DETAILS_ABILITY_NAME,
       parameters: {
         position: index
       }
@@ -202,20 +210,22 @@ startDetailsAbility方法调用了UIAbilityContext模块启动Ability的能力�
 在DetailsAbility中通过AppStorage来存储detailWant对象。
 
 ```typescript
+// DetailsAbility.ts
 ...
-export default class DetailsAbility extends Ability {
-    onCreate(want, launchParam) {
-        let index: number = want?.parameters?.position;
-        AppStorage.SetOrCreate(KEY, index);
-        hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onCreate');
-    }
-    ...
+export default class DetailsAbility extends UIAbility {
+  onCreate(want, launchParam): void {
+    let index: number = want?.parameters?.position;
+    AppStorage.SetOrCreate(KEY, index);
+    hilog.info(DETAIL_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onCreate');
+  }
+  ...
 };
 ```
 
 在对应的DetailsPage页面，使用AppStorage来获取detailWant对象，解析detailWant对象中的商品信息参数，调用loadDetails方法来展示商品详情。
 
 ```typescript
+// DetailsPage.ets
 ...
 let viewModel: DetailsViewModel = new DetailsViewModel();
 const KEY: string = 'GoodsPosition';
@@ -224,16 +234,18 @@ let position = AppStorage.Get<number>(KEY);
 @Entry
 @Component
 struct DetailsPage {
-  private goodsDetails: GoodsData;
+  private goodsDetails: GoodsData = new GoodsData();
 
   aboutToAppear() {
-    this.goodsDetails = viewModel.loadDetails(position);
+    if (position !== undefined) {
+      this.goodsDetails = viewModel.loadDetails(position);
+    }
   }
  ...
 }
 ```
 
-最终实现效果如下：
+效果如图所示：
 
 ![](figures/gif2.gif)
 
@@ -253,14 +265,15 @@ HiLog提供了debug、info、warn、error以及fatal接口，在购物应用中�
 下面我们在EntryAbility中演示如何使用hilog对象打印Ability的生命周期函数 onBackground，代码如下：
 
 ```typescript
+// EntryAbility.ts
 ...
-export default class EntryAbility extends Ability {
-    ...
-    onBackground() {
-        // Ability has back to background
-        hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
-        hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onBackground');
-    }
+export default class EntryAbility extends UIAbility {
+  ...
+  onBackground(): void {
+    // Ability has back to background
+    hilog.isLoggable(ENTRY_ABILITY_DOMAIN, TAG, hilog.LogLevel.INFO);
+    hilog.info(ENTRY_ABILITY_DOMAIN, TAG, '%{public}s', 'Ability onBackground');
+  }
 }
 ```
 
@@ -276,7 +289,3 @@ export default class EntryAbility extends Ability {
 4. Ability相关生命周期函数的调用。
 
 ![](figures/finished.gif)
-
-
-
-

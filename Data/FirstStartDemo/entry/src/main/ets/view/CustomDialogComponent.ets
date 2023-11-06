@@ -22,9 +22,11 @@ import CommonConstants from '../common/constants/CommonConstants';
  */
 @CustomDialog
 export default struct CustomDialogComponent {
-  controller: CustomDialogController;
-  cancel: () => void;
-  confirm: () => void;
+  controller: CustomDialogController = new CustomDialogController({ 'builder': '' });
+  cancel: Function = () => {
+  }
+  confirm: Function = () => {
+  }
 
   build() {
     Column() {
@@ -48,7 +50,7 @@ export default struct CustomDialogComponent {
         .onClick(() => {
           router.pushUrl({
             url: CommonConstants.PRIVACY_PAGE_URL
-          }).catch((error) => {
+          }).catch((error: Error) => {
             Logger.error(CommonConstants.CUSTOM_DIALOG_TAG, 'CustomDialog pushUrl error ' + JSON.stringify(error));
           });
         })
@@ -85,7 +87,8 @@ export default struct CustomDialogComponent {
 }
 
 // Common text styles.
-@Extend(Text) function fancy () {
+@Extend(Text)
+function fancy() {
   .fontColor($r("app.color.dialog_fancy_text_color"))
   .fontSize($r("app.float.dialog_fancy_text_size"))
   .textAlign(TextAlign.Center)

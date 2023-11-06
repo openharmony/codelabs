@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Huawei Device Co., Ltd.
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -17,10 +17,10 @@ import { FontSize, FontWeight, ItemStyle, WEIGHT } from '../common/constants/Con
 
 @Component
 export struct ListItemComponent {
-  index: number;
-  private name: Resource;
-  @Prop vote: string;
-  @Prop isSwitchDataSource: boolean;
+  index?: number;
+  private name?: Resource;
+  @Prop vote: string = '';
+  @Prop isSwitchDataSource: boolean = false;
   // The state is related to the font color of ListItemComponent.
   @State isChange: boolean = false;
 
@@ -28,9 +28,11 @@ export struct ListItemComponent {
     Row() {
       Column() {
         if (this.isRenderCircleText()) {
-          this.CircleText(this.index);
+          if (this.index !== undefined) {
+            this.CircleText(this.index);
+          }
         } else {
-          Text(this.index.toString())
+          Text(this.index?.toString())
             .lineHeight(ItemStyle.TEXT_LAYOUT_SIZE)
             .textAlign(TextAlign.Center)
             .width(ItemStyle.TEXT_LAYOUT_SIZE)
@@ -62,15 +64,17 @@ export struct ListItemComponent {
 
   @Builder CircleText(index: number) {
     Row() {
-      Text(this.index.toString())
+      Text(this.index?.toString())
         .fontWeight(FontWeight.BOLD)
         .fontSize(FontSize.SMALL)
         .fontColor(Color.White);
     }
     .justifyContent(FlexAlign.Center)
     .borderRadius(ItemStyle.CIRCLE_TEXT_BORDER_RADIUS)
-    .size({ width: ItemStyle.CIRCLE_TEXT_SIZE,
-      height: ItemStyle.CIRCLE_TEXT_SIZE })
+    .size({
+      width: ItemStyle.CIRCLE_TEXT_SIZE,
+      height: ItemStyle.CIRCLE_TEXT_SIZE
+    })
     .backgroundColor($r('app.color.circle_text_background'))
   }
 

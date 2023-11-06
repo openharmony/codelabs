@@ -15,7 +15,7 @@
 
 import { Buttons } from '@ohos/library';
 import InnerViewModel from '../viewmodel/InnerViewModel'
-import { ButtonList } from '../common/bean/ButtonList';
+import { ButtonList } from '../viewmodel/ButtonList';
 import { CommonConstants } from '../common/constants/CommonConst';
 
 @Component
@@ -26,7 +26,7 @@ export struct Inner {
   build() {
     Scroll(this.scroller) {
       Column({ space: CommonConstants.SPACE_12 }) {
-        ForEach(this.buttonList, (item) => {
+        ForEach(this.buttonList,  (item: ButtonList) => {
           Column() {
             Flex({
               direction: FlexDirection.Column,

@@ -43,7 +43,7 @@ export default struct TabBar {
     .justifyContent(FlexAlign.Center)
   }
 
-  @Builder otherTabBar(content, index) {
+  @Builder otherTabBar(content: Resource, index: number) {
     Column() {
       Text(content)
         .fontSize(this.tabsIndex === index + 1 ? BIGGER_FONT_SIZE : NORMAL_FONT_SIZE)
@@ -54,7 +54,10 @@ export default struct TabBar {
     .justifyContent(FlexAlign.Center)
   }
 
-  putDownRefresh(event: TouchEvent) {
+  putDownRefresh(event?: TouchEvent): void {
+    if (event === undefined) {
+      return;
+    }
     switch (event.type) {
       case TouchType.Down:
         this.currentOffsetY = event.touches[0].y;
@@ -65,7 +68,6 @@ export default struct TabBar {
       case TouchType.Cancel:
         break;
       case TouchType.Up:
-
         // Only simulation effect, no data request
         this.timer = setTimeout(() => {
           this.refreshStatus = false;
@@ -95,13 +97,13 @@ export default struct TabBar {
         .edgeEffect(EdgeEffect.Spring)
         .width(LAYOUT_WIDTH_OR_HEIGHT)
         .height(LAYOUT_WIDTH_OR_HEIGHT)
-        .onTouch((event) => {
+        .onTouch((event?: TouchEvent) => {
           this.putDownRefresh(event);
         })
       }
       .tabBar(this.firstTabBar)
 
-      ForEach(initTabBarData, (item, index) => {
+      ForEach(initTabBarData, (item: Resource, index?: number) => {
         TabContent() {
           Column() {
             Text(item).fontSize(MAX_FONT_SIZE)
@@ -110,7 +112,7 @@ export default struct TabBar {
           .width(LAYOUT_WIDTH_OR_HEIGHT)
           .height(LAYOUT_WIDTH_OR_HEIGHT)
         }
-        .tabBar(this.otherTabBar(item, index))
+        .tabBar(this.otherTabBar(item, index !== undefined ? index : 0))
       })
     }
     .onChange((index: number) => {

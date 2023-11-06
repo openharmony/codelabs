@@ -14,7 +14,7 @@
  */
 
 import Constants from '../common/constants/Constants';
-import IntroductionItem from '../common/bean/IntroductionItem';
+import IntroductionItem from '../viewmodel/IntroductionItem';
 
 @Extend(Text) function titleTextStyle() {
   .fontColor($r('app.color.title_font'))
@@ -24,22 +24,22 @@ import IntroductionItem from '../common/bean/IntroductionItem';
 
 @Component
 export default struct IntroduceItemComponent {
-  model: IntroductionItem;
+  model?: IntroductionItem;
 
   build() {
     Column() {
-      Text(this.model.name)
+      Text(this.model?.name)
         .titleTextStyle()
         .fontSize($r('app.float.name_font_size'))
-      Text(this.model.title)
+      Text(this.model?.title)
         .titleTextStyle()
         .fontSize($r('app.float.title_font_size'))
         .fontFamily($r('app.string.HarmonyHeiTi'))
         .lineHeight($r('app.float.desc_line_height'))
         .margin({ top: $r('app.float.desc_margin_top') })
         .fontWeight(Constants.LABEL_FONT_WEIGHT)
-      if (this.model.subTitle) {
-        Text(this.model.subTitle)
+      if (this.model?.subTitle) {
+        Text(this.model?.subTitle)
           .titleTextStyle()
           .opacity($r('app.float.label_opacity'))
           .lineHeight($r('app.float.subtitle_line_height'))
@@ -48,25 +48,25 @@ export default struct IntroduceItemComponent {
           .margin({ top: $r('app.float.subtitle_margin_top') })
           .fontWeight(Constants.LABEL_FONT_WEIGHT)
       }
-      if (this.model.value.length > 0) {
-        Text(this.model.value)
+      if (this.model !== undefined && this.model?.value.length > 0) {
+        Text(this.model?.value)
           .titleTextStyle()
           .fontColor($r('app.color.item_background'))
           .fontSize($r('app.float.name_font_size'))
           .textAlign(TextAlign.Center)
           .backgroundColor($r('app.color.blue_background'))
           .height($r('app.float.value_height'))
-          .width(this.model.value)
+          .width(this.model?.value)
           .borderRadius($r('app.float.value_border_radius'))
           .margin({ top: $r('app.float.item_padding') })
       } else {
         Column() {
-          Text($r('app.string.font_desc', this.model.smallFontSize))
+          Text($r('app.string.font_desc', this.model?.smallFontSize))
             .titleTextStyle()
-            .fontSize(this.model.smallFontSize)
-          Text($r('app.string.font_desc', this.model.largeFontSize))
+            .fontSize(this.model?.smallFontSize)
+          Text($r('app.string.font_desc', this.model?.largeFontSize))
             .titleTextStyle()
-            .fontSize(this.model.largeFontSize)
+            .fontSize(this.model?.largeFontSize)
             .margin({ top: $r('app.float.title_margin_top') })
         }
         .alignItems(HorizontalAlign.Start)

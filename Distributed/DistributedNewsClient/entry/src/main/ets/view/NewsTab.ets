@@ -15,14 +15,13 @@
 
 import NewsList from './NewsList';
 import CommonConstants from '../common/constants/CommonConstants';
-import { NewsData } from '../common/bean/NewsData';
-import { NewsDataModel } from '../viewmodel/NewsDataModel';
+import { NewsData, NewsDataModel } from '../viewmodel/NewsDataModel';
 
 @Component
 export default struct NewsTab {
   @State currentIndex: number = 0;
   @State currentBreakpoint: string = CommonConstants.BREAKPOINT_SM;
-  private newsItems: NewsData[];
+  private newsItems: NewsData[] = [];
 
   @Builder TabBuilder(title: Resource, index: number) {
     Row() {
@@ -74,7 +73,7 @@ export default struct NewsTab {
               NewsList({ newsItems: NewsDataModel.getNewsByType(this.newsItems, title) })
             }
             .tabBar(this.TabBuilder(NewsDataModel.getTypeByStr(title), index))
-          }, (title, index) => index + JSON.stringify(title))
+          }, (title: string, index: number) => index + JSON.stringify(title))
         }
         .barHeight($r('app.float.news_tab_bar_height'))
         .barWidth(CommonConstants.FULL_COMPONENT)

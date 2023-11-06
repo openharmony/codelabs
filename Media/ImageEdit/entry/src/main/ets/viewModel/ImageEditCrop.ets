@@ -13,30 +13,30 @@
  * limitations under the License.
  */
 
-import { Point } from '../common/bean/Point';
-import { RectF } from '../common/bean/Rect';
-import { CropAngle, CropRatioType, CropTouchState } from '../common/bean/CropType';
+import { Point } from './Point';
+import { RectF } from './Rect';
+import { CropAngle, CropRatioType, CropTouchState } from './CropType';
 import { ImageFilterCrop } from './ImageFilterCrop';
 import { CropShow } from './CropShow';
 import { MathUtils } from '../utils/MathUtils';
 import { DrawingUtils } from '../utils/DrawingUtils';
-import type { PixelMapWrapper } from '../common/bean/PixelMapWrapper';
+import { PixelMapWrapper } from './PixelMapWrapper';
 import Logger from '../utils/LoggerUtil';
 import { CommonConstants } from '../common/constant/CommonConstants';
 
 const TAG: string = 'editor_ImageEditCrop';
 
 export class ImageEditCrop {
-  private filter: ImageFilterCrop = undefined;
-  private input: PixelMapWrapper = undefined;
+  private filter: ImageFilterCrop | undefined = undefined;
+  private input: PixelMapWrapper | undefined = undefined;
   private isFlipHorizontal: boolean = false;
   private isFlipVertically: boolean = false;
   private rotationAngle: number = 0;
   private sliderAngle: number = 0;
   private cropRatio: CropRatioType = CropRatioType.RATIO_TYPE_FREE;
-  private cropShow: CropShow = undefined;
+  private cropShow: CropShow;
   private isCropShowInitialized: boolean = false;
-  private ctx: CanvasRenderingContext2D = undefined;
+  private ctx: CanvasRenderingContext2D | undefined = undefined;
   private displayWidth: number = 0;
   private displayHeight: number = 0;
   private marginW: number = CommonConstants.DEFAULT_MARGIN_LENGTH;
@@ -46,8 +46,8 @@ export class ImageEditCrop {
   private timeoutId: number = 0;
   private timeout: number = CommonConstants.DEFAULT_TIMEOUT_MILLISECOND_1000;
   private isWaitingRefresh: boolean = false;
-  private touchPoint: Point = undefined;
-  private pinchPoint: Point = undefined;
+  private touchPoint: Point;
+  private pinchPoint: Point;
   private state: CropTouchState = CropTouchState.NONE;
   private splitFraction: number = CommonConstants.DEFAULT_SPLIT_FRACTION;
   private canvasReady: boolean = false;
@@ -79,7 +79,7 @@ export class ImageEditCrop {
    * Image edit model exit.
    * @returns
    */
-  exit(): ImageFilterCrop {
+  exit(): ImageFilterCrop | undefined {
     Logger.info(TAG, 'exit');
     this.saveFinalOperation();
     this.isCropShowInitialized = false;
@@ -134,7 +134,9 @@ export class ImageEditCrop {
    * Clear canvas content.
    */
   clearCanvas(): void {
-    this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
+    if (this.ctx !== undefined) {
+      this.ctx.clearRect(0, 0, this.displayWidth, this.displayHeight);
+    }
   }
 
   /**
@@ -345,10 +347,10 @@ export class ImageEditCrop {
     MathUtils.roundOutRect(image);
     if (
       this.isFlipHorizontal !== false ||
-      this.isFlipVertically !== false ||
-      this.rotationAngle !== 0 || this.sliderAngle !== 0 ||
-      this.cropRatio !== CropRatioType.RATIO_TYPE_FREE ||
-      !MathUtils.areRectsSame(crop, image)
+        this.isFlipVertically !== false ||
+        this.rotationAngle !== 0 || this.sliderAngle !== 0 ||
+        this.cropRatio !== CropRatioType.RATIO_TYPE_FREE ||
+        !MathUtils.areRectsSame(crop, image)
     ) {
       return true;
     }
@@ -370,7 +372,9 @@ export class ImageEditCrop {
    * Init and clear old content.
    */
   private initialize(): void {
-    this.imageRatio = this.input.width / this.input.height;
+    if (this.input !== undefined) {
+      this.imageRatio = this.input.width / this.input.height;
+    }
     this.determineMaxScaleFactor();
     this.clear();
   }
@@ -389,7 +393,7 @@ export class ImageEditCrop {
    * Calc max scale factor.
    */
   private determineMaxScaleFactor(): void {
-    if (this.input == null) {
+    if (this.input == undefined) {
       return;
     }
     let scaleFactorW = this.input.width / px2vp(CommonConstants.DEFAULT_MIN_SIDE_LENGTH_EDIT);
@@ -405,7 +409,9 @@ export class ImageEditCrop {
     let image = this.cropShow.getImageRect();
     crop.move(-image.left, -image.top);
     MathUtils.normalizeRect(crop, image.getWidth(), image.getHeight());
-    this.filter.setCropRect(crop);
+    if (this.filter !== undefined) {
+      this.filter.setCropRect(crop);
+    }
   }
 
   /**
@@ -455,25 +461,29 @@ export class ImageEditCrop {
    * Draw image.
    */
   private drawImage(): void {
-    this.ctx.save();
-    this.clearCanvas();
+    if (this.ctx !== undefined) {
+      this.ctx.save();
+      this.clearCanvas();
 
-    let x = this.displayWidth / 2;
-    let y = this.displayHeight / 2;
-    this.ctx.translate(this.isFlipHorizontal ? 2 * x : 0, this.isFlipVertically ? 2 * y : 0);
+      let x = this.displayWidth / 2;
+      let y = this.displayHeight / 2;
+      this.ctx.translate(this.isFlipHorizontal ? 2 * x : 0, this.isFlipVertically ? 2 * y : 0);
 
-    let tX = this.isFlipHorizontal ? -1 : 1;
-    let tY = this.isFlipVertically ? -1 : 1;
-    this.ctx.scale(tX, tY);
+      let tX = this.isFlipHorizontal ? -1 : 1;
+      let tY = this.isFlipVertically ? -1 : 1;
+      this.ctx.scale(tX, tY);
 
-    this.ctx.translate(x, y);
-    this.ctx.rotate(MathUtils.formulaAngle(this.rotationAngle * tX * tY + this.sliderAngle));
-    this.ctx.translate(-x, -y);
+      this.ctx.translate(x, y);
+      this.ctx.rotate(MathUtils.formulaAngle(this.rotationAngle * tX * tY + this.sliderAngle));
+      this.ctx.translate(-x, -y);
 
-    let image = this.cropShow.getImageRect();
-    MathUtils.roundOutRect(image);
-    this.ctx.drawImage(this.input.pixelMap, image.left, image.top, image.getWidth(), image.getHeight());
-    this.ctx.restore();
+      let image = this.cropShow.getImageRect();
+      MathUtils.roundOutRect(image);
+      if (this.input !== undefined) {
+        this.ctx.drawImage(this.input.pixelMap, image.left, image.top, image.getWidth(), image.getHeight());
+      }
+      this.ctx.restore();
+    }
   }
 
   /**
@@ -484,12 +494,14 @@ export class ImageEditCrop {
     MathUtils.roundOutRect(crop);
     let display = new RectF();
     display.set(0, 0, this.displayWidth, this.displayHeight);
-    DrawingUtils.drawMask(this.ctx, display, crop, this.splitLineShow);
-    if (this.splitLineShow) {
-      DrawingUtils.drawSplitLine(this.ctx, crop, this.splitFraction, this.splitLineShow);
+    if (this.ctx !== undefined) {
+      DrawingUtils.drawMask(this.ctx, display, crop, this.splitLineShow);
+      if (this.splitLineShow) {
+        DrawingUtils.drawSplitLine(this.ctx, crop, this.splitFraction, this.splitLineShow);
+      }
+      DrawingUtils.drawRect(this.ctx, crop);
+      DrawingUtils.drawCropButton(this.ctx, crop);
     }
-    DrawingUtils.drawRect(this.ctx, crop);
-    DrawingUtils.drawCropButton(this.ctx, crop);
   }
 
   /**
