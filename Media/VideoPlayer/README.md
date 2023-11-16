@@ -62,7 +62,7 @@
 │  │  │  ├──CommonConstants.ets	           // 公共常量类
 │  │  │  ├──HomeConstants.ets	           // 首页常量类
 │  │  │  └──PlayConstants.ets	           // 视频播放页面常量类
-│  │  ├──constants
+│  │  ├──model
 │  │  │  ├──HomeTabModel.ets	           // 首页参数模型
 │  │  │  └──PlayerModel.ets	               // 播放参数模型
 │  │  └──util
