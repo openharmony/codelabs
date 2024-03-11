@@ -17,7 +17,7 @@ import { CommonConstants, Symbol } from '../common/constants/CommonConstants';
 import CalculateUtil from '../common/util/CalculateUtil';
 import CheckEmptyUtil from '../common/util/CheckEmptyUtil';
 import Logger from '../common/util/Logger';
-import {IContext} from '../viewmodel/PressKeysBean';
+import {IContext} from '../viewmodel/PressKeysItem';
 export class CalculateModel {
   private expressions: Array<string> = [];
   private context;
