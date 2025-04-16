@@ -1,0 +1,42 @@
+{
+  "lockVersion": "1.0",
+  "settings": {
+    "resolveConflict": true,
+    "resolveConflictStrict": false,
+    "installAll": true
+  },
+  "overrides": {},
+  "overrideDependencyMap": {},
+  "modules": {
+    ".": {
+      "name": "",
+      "dependencies": {},
+      "devDependencies": {
+        "@ohos/hypium": {
+          "specifier": "1.0.21",
+          "version": "1.0.21"
+        }
+      },
+      "dynamicDependencies": {},
+      "maskedByOverrideDependencyMap": false
+    },
+    "entry": {
+      "name": "entry",
+      "dependencies": {},
+      "devDependencies": {},
+      "dynamicDependencies": {},
+      "maskedByOverrideDependencyMap": false
+    }
+  },
+  "packages": {
+    "@ohos/hypium@1.0.21": {
+      "integrity": "sha512-iyKGMXxE+9PpCkqEwu0VykN/7hNpb+QOeIuHwkmZnxOpI+dFZt6yhPB7k89EgV1MiSK/ieV/hMjr5Z2mWwRfMQ==",
+      "storePath": "oh_modules/.ohpm/@ohos+hypium@1.0.21",
+      "dependencies": {},
+      "dynamicDependencies": {},
+      "dev": true,
+      "dynamic": false,
+      "maskedByOverrideDependencyMap": false
+    }
+  }
+}
