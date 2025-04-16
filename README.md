@@ -18,7 +18,7 @@
 - UI(ArkTS)
   - [电子相册（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/ElectronicAlbum)
   - [构建多种样式弹窗（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/MultipleDialog)
-  - [简易计算器（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleCalculator)
+  - [简易计算器（ArkTS）（API 15）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SimpleCalculator)
   - [自定义抽奖转盘（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/CanvasComponent)
   - [像素转换（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/PixelConversion)
   - [二级联动（ArkTS）（API 9）](https://gitee.com/openharmony/codelabs/tree/master/ETSUI/SecondLevelLinkage)
