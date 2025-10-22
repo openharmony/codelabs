@@ -47,7 +47,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitcode中提供。
 
 “一次开发，多端部署”推荐使用三层目录的工程结构来管理工程，上层目录包括common、features和product，common为公共特性目录，存放不同形态设备公用的类和常量，features为功能模块目录，存放应用的各个功能模块，product为产品层目录，存放不同形态设备范类代码。本Codelab不涉及功能特性，因此只存在common、product两个分层。
 

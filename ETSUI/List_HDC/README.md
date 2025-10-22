@@ -45,7 +45,7 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitcode获取。
 
 ```
 ├──entry/src/main/ets                        // 代码区

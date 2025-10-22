@@ -56,7 +56,7 @@
 
 # 5 代码结构解读<a name="ZH-CN_TOPIC_0000001512821250"></a>
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitcode中提供。
 
 ```
 ├──entry/src/main/ets                   // 代码区

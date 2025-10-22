@@ -79,7 +79,7 @@ ForEach(
     2.  开发环境配置完成后，请参考[使用工程向导](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#创建ets工程)创建工程（模板选择“Empty Ability”）。
     3.  工程创建完成后，选择使用[真机进行调测](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-with-ets-stage.md#使用真机运行应用)。
 ## 代码结构解读
-本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitee获取。
+本篇Codelab只对核心代码进行讲解，完整代码可以直接从gitcode获取。
 ```
 ├──entry/src/main/ets               // 代码区    
 │  ├──common                        // 公共文件目录
