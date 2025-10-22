@@ -1,0 +1,110 @@
+{
+  "ohos-module-entry": {
+    "SELECT_TARGET": "default",
+    "MODULE_BUILD_DIR": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build",
+    "DEPENDENCY_INFO": {},
+    "TARGETS": {
+      "default": {
+        "SOURCE_ROOT": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/src/main",
+        "RESOURCES_PATH": [
+          "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/src/main/resources"
+        ],
+        "BUILD_PATH": {
+          "OUTPUT_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/outputs/default",
+          "INTERMEDIA_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates",
+          "JS_ASSETS_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/loader_out/default",
+          "JS_LITE_ASSETS_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/loader_out_lite/default",
+          "RES_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/res/default",
+          "RES_PROFILE_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/res/default/resources/base/profile",
+          "ETS_SUPER_VISUAL_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/cache/default/default@CompileArkTS/esmodule",
+          "JS_SUPER_VISUAL_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/cache/default/default@CompileJS/jsbundle",
+          "WORKER_LOADER": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/loader/default/loader.json",
+          "MANIFEST_JSON": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/manifest/default",
+          "OUTPUT_METADATA_JSON": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/hap_metadata/default/output_metadata.json",
+          "SOURCE_MAP_DIR": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry/build/default/intermediates/source_map/default"
+        },
+        "BUILD_OPTION": {
+          "debuggable": true
+        }
+      }
+    },
+    "BUILD_OPTION": {
+      "default-default": {
+        "debuggable": true,
+        "copyFrom": "default"
+      }
+    },
+    "BUILD_PROFILE_OPT": {
+      "apiType": "stageMode",
+      "buildOption": {},
+      "targets": [
+        {
+          "name": "default",
+          "runtimeOS": "OpenHarmony"
+        }
+      ]
+    },
+    "BUILD_CACHE_DIR": ""
+  },
+  "ohos-project": {
+    "SELECT_PRODUCT_NAME": "default",
+    "MODULE_BUILD_DIR": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/build",
+    "BUNDLE_NAME": "com.example.simplecalculator",
+    "BUILD_PATH": {
+      "OUTPUT_PATH": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/build/outputs/default"
+    },
+    "MODULES": [
+      {
+        "name": "entry",
+        "srcPath": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator/entry",
+        "targets": [
+          {
+            "name": "default",
+            "applyToProducts": [
+              "default"
+            ]
+          }
+        ],
+        "belongProjectPath": "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator"
+      }
+    ],
+    "PROFILE_OPT": {
+      "app": {
+        "signingConfigs": [],
+        "products": [
+          {
+            "name": "default",
+            "signingConfig": "default",
+            "compatibleSdkVersion": 15,
+            "compileSdkVersion": 15,
+            "runtimeOS": "OpenHarmony"
+          }
+        ]
+      },
+      "modules": [
+        {
+          "name": "entry",
+          "srcPath": "./entry",
+          "targets": [
+            {
+              "name": "default",
+              "applyToProducts": [
+                "default"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "CONFIG_PROPERTIES": {
+      "enableSignTask": true,
+      "skipNativeIncremental": false,
+      "hvigor.keepDependency": true
+    },
+    "OVERALL_PROJECT_PATHS": [
+      "/Users/jianguo/Desktop/test/codelabs/ETSUI/SimpleCalculator"
+    ],
+    "BUILD_CACHE_DIR": ""
+  },
+  "version": 1
+}
