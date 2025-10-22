@@ -43,7 +43,7 @@ OpenHarmony提供了常用的图片、图片帧动画播放器组件，开发者
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitee中提供。
+本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitcode中提供。
 
 ```
 ├──entry/src/main/js	              // 代码区
