@@ -1,0 +1,55 @@
+{
+	"app":	{
+		"bundleName":	"com.example.simplecalculator",
+		"vendor":	"example",
+		"versionCode":	1000000,
+		"versionName":	"1.0.0",
+		"icon":	"$media:app_icon",
+		"label":	"$string:app_name",
+		"apiReleaseType":	"Release",
+		"compileSdkVersion":	"5.0.3.135",
+		"targetAPIVersion":	15,
+		"minAPIVersion":	15,
+		"compileSdkType":	"OpenHarmony",
+		"appEnvironments":	[],
+		"bundleType":	"app",
+		"buildMode":	"debug",
+		"debug":	true,
+		"iconId":	16777217,
+		"labelId":	16777216
+	},
+	"module":	{
+		"name":	"entry",
+		"type":	"entry",
+		"description":	"$string:module_desc",
+		"mainElement":	"EntryAbility",
+		"deviceTypes":	["default", "tablet"],
+		"deliveryWithInstall":	true,
+		"installationFree":	false,
+		"pages":	"$profile:main_pages",
+		"abilities":	[{
+				"name":	"EntryAbility",
+				"srcEntry":	"./ets/entryability/EntryAbility.ts",
+				"description":	"$string:EntryAbility_desc",
+				"icon":	"$media:icon",
+				"label":	"$string:EntryAbility_label",
+				"startWindowIcon":	"$media:icon",
+				"startWindowBackground":	"$color:start_window_background",
+				"exported":	true,
+				"skills":	[{
+						"entities":	["entity.system.home"],
+						"actions":	["action.system.home"]
+					}],
+				"descriptionId":	16777218,
+				"iconId":	16777252,
+				"labelId":	16777219,
+				"startWindowIconId":	16777252,
+				"startWindowBackgroundId":	16777227
+			}],
+		"packageName":	"entry",
+		"virtualMachine":	"ark12.0.6.0",
+		"compileMode":	"esmodule",
+		"dependencies":	[],
+		"descriptionId":	16777221
+	}
+}
