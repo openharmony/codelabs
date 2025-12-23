@@ -1,4 +1,7 @@
+<<<<<<< HEAD
+=======
 // 新增联系人页面：表单输入 + 保存提交
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
 import { ContactData } from '../model/ContactData';
 import { contact } from '@kit.ContactsKit';
 import { router } from '@kit.ArkUI';
@@ -7,7 +10,10 @@ import { Context } from '@kit.AbilityKit';
 @Entry
 @Component
 struct AddContact {
+<<<<<<< HEAD
+=======
   // 数据层实例与表单状态
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
   private contactData: ContactData = new ContactData();
   @State name: string = '';
   @State phone: string = '';
@@ -16,7 +22,10 @@ struct AddContact {
 
   // 添加aboutToAppear生命周期获取Context
   aboutToAppear() {
+<<<<<<< HEAD
+=======
     // 优先使用父页面传入的 Context，缺省时使用当前页面 Context
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     // 从路由参数获取父页面传递的Context
     const params = router.getParams() as Record<string, Object>;
     if (params && params['parentContext']) {
@@ -33,7 +42,10 @@ struct AddContact {
     Column() {
       // 标题栏
       Row() {
+<<<<<<< HEAD
+=======
         // 返回上一页
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
         Button('取消')
           .fontSize(16)
           .backgroundColor(Color.Transparent)
@@ -52,7 +64,10 @@ struct AddContact {
           .fontSize(16)
           .backgroundColor(Color.Transparent)
           .fontColor(this.name && this.phone ? '#007DFF' : '#999')
+<<<<<<< HEAD
+=======
           // 姓名与电话均非空，且不在保存中时可点击
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
           .enabled(!!this.name && !!this.phone && !this.isSaving)
           .onClick(() => {
             this.saveContact();
@@ -67,7 +82,10 @@ struct AddContact {
         Column() {
           // 头像区域
           Column() {
+<<<<<<< HEAD
+=======
             // 已填姓名取首字母大写，否则显示“+”
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
             Text(this.name ? this.name.charAt(0).toUpperCase() : '+')
               .fontSize(40)
               .fontColor(Color.White)
@@ -106,7 +124,10 @@ struct AddContact {
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
+<<<<<<< HEAD
+=======
                 // 去除空格后写入 name
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
                 .onChange((value: string) => {
                   this.name = value.trim();
                 })
@@ -136,7 +157,10 @@ struct AddContact {
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
                 .type(InputType.Number)
+<<<<<<< HEAD
+=======
                 // 去除空格后写入 phone
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
                 .onChange((value: string) => {
                   this.phone = value.trim();
                 })
@@ -165,7 +189,10 @@ struct AddContact {
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
+<<<<<<< HEAD
+=======
                 // 去除空格后写入 email（可选）
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
                 .onChange((value: string) => {
                   this.email = value.trim();
                 })
@@ -192,7 +219,10 @@ struct AddContact {
             .fontSize(14)
             .margin({ top: 10 })
         }
+<<<<<<< HEAD
+=======
         // 居中展示保存中状态
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
         .width('100%')
         .justifyContent(FlexAlign.Center)
         .margin({ bottom: 20 })
@@ -204,11 +234,22 @@ struct AddContact {
   }
 
   async saveContact() {
+<<<<<<< HEAD
+=======
     // 简单校验：姓名/电话必填
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     if (!this.name || !this.phone) {
       return;
     }
 
+<<<<<<< HEAD
+    this.isSaving = true;
+
+    try {
+      const newContact = this.contactData.createContact(this.name, this.phone, this.email);
+      await this.contactData.addContact(newContact);
+      console.error('添加联系人成功');
+=======
     // 进入保存中，禁用按钮并显示进度
     this.isSaving = true;
 
@@ -218,11 +259,15 @@ struct AddContact {
       await this.contactData.addContact(newContact);
       console.error('添加联系人成功');
       // 成功后返回上一页
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
       router.back();
     } catch (error) {
       console.error('添加联系人失败:', error);
     } finally {
+<<<<<<< HEAD
+=======
       // 恢复保存状态
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
       this.isSaving = false;
     }
   }
