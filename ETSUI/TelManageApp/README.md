@@ -393,5 +393,472 @@ async saveContact() {
 ```
 
 ## 修改联系人信息
+### 修改联系人界面设计
+整体采用与新增页面一致的纵向结构：顶部标题栏、可滚动内容区（头像占位 + 基本信息表单），并在表单下方提供“删除联系人”入口。
+1. 顶栏
+
+    包含“取消”、“编辑联系人”标题与“保存”按钮，保存按钮在姓名与电话非空且非保存中时可点击。
+
+    ```typescript
+    // EditContact.ets 标题栏
+    Row() {
+      Button('取消')
+        .fontSize(16)
+        .backgroundColor(Color.Transparent)
+        .fontColor('#007DFF')
+        .onClick(() => {
+          router.back();
+        })
+
+      Text('编辑联系人')
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .textAlign(TextAlign.Center)
+        .layoutWeight(1)
+
+      Button('保存')
+        .fontSize(16)
+        .backgroundColor(Color.Transparent)
+        .fontColor(this.name && this.phone && !this.isSaving ? '#007DFF' : '#999')
+        .enabled(!!this.name && !!this.phone && !this.isSaving)
+        .onClick(() => {
+          this.saveContact();
+        })
+    }
+    .width('100%')
+    .padding(20)
+    .backgroundColor('#f0f0f0')
+    ```
+
+2. 头像区域
+
+    显示姓名首字母作为占位头像。
+
+    ```typescript
+    // 头像占位
+    Column() {
+      Text(this.name ? this.name.charAt(0).toUpperCase() : '?')
+        .fontSize(40)
+        .fontColor(Color.White)
+        .textAlign(TextAlign.Center)
+        .width(80)
+        .height(80)
+        .borderRadius(40)
+        .backgroundColor('#007DFF')
+    }
+    .width('100%')
+    .padding(30)
+    .justifyContent(FlexAlign.Center)
+    ```
+
+3. 基本信息
+
+    表单包含姓名、电话号码、邮箱三项；已填值通过 `text` 属性回显。
+
+    ```typescript
+    // 基本信息卡片（节选）
+    Column() {
+      Text('基本信息')
+        .fontSize(16)
+        .fontWeight(FontWeight.Medium)
+        .textAlign(TextAlign.Start)
+        .width('100%')
+        .margin({ bottom: 15 })
+
+      // 姓名
+      Column() {
+        Text('姓名')
+          .fontSize(14)
+          .fontColor('#666')
+          .textAlign(TextAlign.Start)
+          .width('100%')
+          .margin({ bottom: 5 })
+
+        TextInput({ text: this.name, placeholder: '请输入姓名' })
+          .width('100%')
+          .height(50)
+          .fontSize(16)
+          .backgroundColor('#f8f8f8')
+          .borderRadius(5)
+          .onChange((value: string) => {
+            this.name = value.trim();
+          })
+      }
+      .width('100%')
+      .margin({ bottom: 15 })
+
+      // 电话
+      Column() {
+        Text('电话号码')
+          .fontSize(14)
+          .fontColor('#666')
+          .textAlign(TextAlign.Start)
+          .width('100%')
+          .margin({ bottom: 5 })
+
+        TextInput({ text: this.phone, placeholder: '请输入电话号码' })
+          .width('100%')
+          .height(50)
+          .fontSize(16)
+          .backgroundColor('#f8f8f8')
+          .borderRadius(5)
+          .type(InputType.Number)
+          .onChange((value: string) => {
+            this.phone = value.trim();
+          })
+      }
+      .width('100%')
+      .margin({ bottom: 15 })
+
+      // 邮箱
+      Column() {
+        Text('邮箱地址')
+          .fontSize(14)
+          .fontColor('#666')
+          .textAlign(TextAlign.Start)
+          .width('100%')
+          .margin({ bottom: 5 })
+
+        TextInput({ text: this.email, placeholder: '请输入邮箱地址（可选）' })
+          .width('100%')
+          .height(50)
+          .fontSize(16)
+          .backgroundColor('#f8f8f8')
+          .borderRadius(5)
+          .onChange((value: string) => {
+            this.email = value.trim();
+          })
+      }
+      .width('100%')
+    }
+    .width('100%')
+    .padding(20)
+    .backgroundColor(Color.White)
+    .borderRadius(10)
+    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .margin({ bottom: 20 })
+    ```
+
+4. 删除入口
+
+    编辑页底部提供“删除联系人”按钮，点击后显示二次确认遮罩弹层（删除逻辑详见“删除联系人”章节）。
+
+    ```typescript
+    Button('删除联系人')
+      .width('100%')
+      .height(50)
+      .backgroundColor('#ff3b30')
+      .fontColor(Color.White)
+      .fontSize(16)
+      .borderRadius(10)
+      .onClick(() => {
+        this.showDeleteConfirm = true;
+      })
+    ```
+
+### 修改联系人逻辑
+编辑页在生命周期中获取参数并加载详情，保存时构造更新对象并提交。
+
+```typescript
+// 1) 获取参数并加载联系人
+aboutToAppear() {
+  this.contactData.setContext(getContext(this));
+  const params = router.getParams() as Record<string, string>;
+  this.contactKey = params?.contactKey || '';
+  if (this.contactKey) {
+    this.loadContact();
+  } else {
+    this.isLoading = false;
+  }
+}
+
+async loadContact() {
+  this.isLoading = true;
+  this.contactInfo = await this.contactData.queryContactById(this.contactKey);
+  if (this.contactInfo) {
+    this.name = this.contactInfo.name?.fullName || '';
+    this.phone = this.contactInfo.phoneNumbers?.[0]?.phoneNumber || '';
+    this.email = this.contactInfo.emails?.[0]?.email || '';
+  }
+  this.isLoading = false;
+}
+
+// 2) 保存更新
+async saveContact() {
+  if (!this.name || !this.phone || !this.contactInfo) {
+    return;
+  }
+
+  this.isSaving = true;
+  try {
+    const updatedContact: contact.Contact = {
+      id: this.contactInfo.id,
+      key: this.contactInfo.key,
+      name: { fullName: this.name },
+      phoneNumbers: [{ phoneNumber: this.phone, labelId: contact.PhoneNumber.NUM_MOBILE }],
+      emails: this.email ? [{ email: this.email, labelId: contact.Email.EMAIL_HOME }] : []
+    };
+
+    // 保留未在本页编辑但已存在的字段
+    if (this.contactInfo.portrait) updatedContact.portrait = this.contactInfo.portrait;
+    if (this.contactInfo.organization) updatedContact.organization = this.contactInfo.organization;
+    if (this.contactInfo.note) updatedContact.note = this.contactInfo.note;
+    if (this.contactInfo.relations) updatedContact.relations = this.contactInfo.relations;
+    if (this.contactInfo.imAddresses) updatedContact.imAddresses = this.contactInfo.imAddresses;
+    if (this.contactInfo.websites) updatedContact.websites = this.contactInfo.websites;
+    if (this.contactInfo.events) updatedContact.events = this.contactInfo.events;
+    if (this.contactInfo.postalAddresses) updatedContact.postalAddresses = this.contactInfo.postalAddresses;
+
+    await this.contactData.updateContact(updatedContact);
+    router.back();
+  } catch (error) {
+    console.error('更新联系人失败:');
+  } finally {
+    this.isSaving = false;
+  }
+}
+```
+
 ## 查找联系人
+### 查找联系人界面设计
+搜索输入框位于主页顶栏下方，输入关键字（姓名或电话号码）后提交触发搜索；列表区域根据状态显示加载指示、空态或联系人列表。
+
+```typescript
+// 搜索框（Index.ets）
+TextInput({ placeholder: '搜索联系人姓名或电话号码' })
+  .width('90%')
+  .height(40)
+  .margin(10)
+  .onChange((value: string) => {
+    this.searchText = value;
+  })
+  .onSubmit(() => {
+    this.searchContacts();
+  })
+
+// 列表/空态/加载态（节选）
+if (this.isLoading) {
+  LoadingProgress()
+    .width(50)
+    .height(50)
+    .margin({ top: 100 })
+} else if (this.contacts.length === 0) {
+  Column() {
+    Text(this.searchText ? '未找到匹配的联系人' : '暂无联系人')
+      .fontSize(18)
+      .fontColor('#666')
+  }
+  .width('100%')
+  .height('70%')
+  .justifyContent(FlexAlign.Center)
+} else {
+  List({ space: 10 }) {
+    ForEach(this.contacts, (item: contact.Contact, index: number) => {
+      ListItem() {
+        this.contactItem(item)
+      }
+    }, (item: contact.Contact) => item.key || item.id?.toString() || '')
+  }
+  .width('100%')
+  .layoutWeight(1)
+}
+```
+
+### 查找联系人逻辑
+搜索逻辑位于 `searchContacts()`：空关键字回退到全量列表；申请权限后优先按电话号码查询，无结果再全量拉取并按姓名包含过滤；最终更新列表数据。
+
+```typescript
+async searchContacts() {
+  console.log('Index: 开始搜索联系人，关键词:', this.searchText);
+  if (this.searchText.trim() === '') {
+    console.log('Index: 搜索关键词为空，加载所有联系人');
+    this.loadContacts();
+    return;
+  }
+
+  this.isLoading = true;
+  try {
+    let permissionRequestResult = await abilityAccessCtrl.createAtManager().requestPermissionsFromUser(this.context,
+      [
+        'ohos.permission.READ_CONTACTS',
+        'ohos.permission.WRITE_CONTACTS'
+      ]);
+    if (permissionRequestResult.authResults[0] === 0) {
+      let results = await this.contactData.queryContactsByPhone(this.searchText);
+      console.log('Index: 按电话号码搜索到结果数量:', results.length);
+
+      if (results.length === 0) {
+        console.log('Index: 开始按姓名过滤');
+        const allContacts = await this.contactData.queryAllContacts();
+        results = allContacts.filter(contact =>
+          contact.name?.fullName?.toLowerCase().includes(this.searchText.toLowerCase())
+        );
+        console.log('Index: 按姓名过滤后结果数量:', results.length);
+      }
+
+      this.contacts = results;
+    }
+  } catch (error) {
+    console.error('Index: 搜索联系人失败:', error);
+  } finally {
+    this.isLoading = false;
+  }
+}
+```
+
 ## 删除联系人
+### 删除联系人界面设计
+删除入口在主页列表项与编辑页均可触达，并均提供二次确认。
+
+1. 主页删除入口与确认对话框
+
+    ```typescript
+    // 列表项中的删除按钮（Index.ets 节选）
+    Button('删除')
+      .fontSize(12)
+      .width(60)
+      .height(30)
+      .margin({ left: 10 })
+      .backgroundColor('#ff3b30')
+      .fontColor(Color.White)
+      .onClick(() => {
+        this.showDeleteConfirmDialog(contactItem);
+      })
+    ```
+
+    ```typescript
+    // 主页的 AlertDialog 确认（Index.ets）
+    showDeleteConfirmDialog(contactItem: contact.Contact) {
+      if (!contactItem.key) return;
+
+      const contactName = contactItem.name?.fullName || '未知联系人';
+
+      AlertDialog.show(
+        {
+          title: '删除联系人',
+          message: `确定要删除联系人"${contactName}"吗？此操作不可撤销。`,
+          autoCancel: true,
+          alignment: DialogAlignment.Center,
+          primaryButton: { value: '取消', action: () => {} },
+          secondaryButton: {
+            value: '删除',
+            fontColor: '#ff3b30',
+            action: () => {
+              this.deleteContact(contactItem.key!);
+            }
+          }
+        }
+      );
+    }
+    ```
+
+2. 编辑页删除入口与确认遮罩
+
+    ```typescript
+    // 删除入口按钮（EditContact.ets）
+    Button('删除联系人')
+      .width('100%')
+      .height(50)
+      .backgroundColor('#ff3b30')
+      .fontColor(Color.White)
+      .fontSize(16)
+      .borderRadius(10)
+      .onClick(() => {
+        this.showDeleteConfirm = true;
+      })
+    ```
+
+    ```typescript
+    // 遮罩确认对话框（EditContact.ets 节选）
+    if (this.showDeleteConfirm) {
+      Column() {
+        Blank()
+          .width('100%')
+          .height('100%')
+          .backgroundColor('#000000')
+          .opacity(0.5)
+          .onClick(() => {
+            this.showDeleteConfirm = false;
+          })
+
+        Column() {
+          Text('删除联系人')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .margin({ bottom: 10 })
+
+          Text('确定要删除这个联系人吗？此操作不可撤销。')
+            .fontSize(14)
+            .textAlign(TextAlign.Center)
+            .margin({ bottom: 20 })
+
+          Row() {
+            Button('取消')
+              .layoutWeight(1)
+              .height(40)
+              .backgroundColor('#f0f0f0')
+              .fontColor('#333')
+              .onClick(() => {
+                this.showDeleteConfirm = false;
+              })
+
+            Button('删除')
+              .layoutWeight(1)
+              .height(40)
+              .margin({ left: 10 })
+              .backgroundColor('#ff3b30')
+              .fontColor(Color.White)
+              .onClick(() => {
+                this.showDeleteConfirm = false;
+                this.deleteContact();
+              })
+          }
+          .width('100%')
+          .justifyContent(FlexAlign.SpaceBetween)
+        }
+        .width('80%')
+        .padding(20)
+        .backgroundColor(Color.White)
+        .borderRadius(10)
+        .shadow({ radius: 10, color: '#40000000', offsetX: 0, offsetY: 5 })
+      }
+      .width('100%')
+      .height('100%')
+      .justifyContent(FlexAlign.Center)
+      .alignItems(HorizontalAlign.Center)
+      .position({ x: 0, y: 0 })
+    }
+    ```
+
+### 删除联系人逻辑
+- 主页路径：确认后调用 `deleteContact(key)` 删除并刷新列表。
+
+  ```typescript
+  // Index.ets
+  async deleteContact(key: string) {
+    console.log('Index: 开始删除联系人，key:', key);
+    try {
+      await this.contactData.deleteContact(key);
+      console.log('Index: 删除联系人成功，重新加载列表');
+      this.loadContacts();
+    } catch (error) {
+      console.error('Index: 删除联系人失败:', error);
+    }
+  }
+  ```
+
+- 编辑页路径：确认后调用 `deleteContact()` 删除并返回上一页。
+
+  ```typescript
+  // EditContact.ets
+  async deleteContact() {
+    try {
+      await this.contactData.deleteContact(this.contactKey);
+      router.back();
+    } catch (error) {
+      console.error('删除联系人失败:');
+    }
+  }
+  ```
+
+- 底层实现：`ContactData.deleteContact(key)` 调用系统通讯录接口删除指定联系人。
