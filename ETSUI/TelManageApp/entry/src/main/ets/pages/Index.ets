@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+import { ContactData } from '../model/ContactData';
+import { contact } from '@kit.ContactsKit';
+import { router } from '@kit.ArkUI';
+=======
 // 数据层：封装联系人查询/删除等能力
 import { ContactData } from '../model/ContactData';
 // 类型与系统接口：联系人模型
@@ -5,34 +10,49 @@ import { contact } from '@kit.ContactsKit';
 // 页面路由：跳转添加/编辑页面
 import { router } from '@kit.ArkUI';
 // 权限与上下文：请求联系人权限、提供页面上下文
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
 import { abilityAccessCtrl, Context } from '@kit.AbilityKit';
 
 @Entry
 @Component
 struct Index {
+<<<<<<< HEAD
+  @Provide('context') context: Context = getContext(this);
+  private contactData: ContactData = new ContactData(this.context);
+=======
   // 提供上下文给子组件与路由参数，数据层依赖此上下文调用系统接口
   @Provide('context') context: Context = getContext(this);
   // 数据层实例（使用页面上下文初始化）
   private contactData: ContactData = new ContactData(this.context);
   // 列表数据、搜索关键字与加载态
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
   @State contacts: contact.Contact[] = [];
   @State searchText: string = '';
   @State isLoading: boolean = true;
 
   aboutToAppear() {
+<<<<<<< HEAD
+=======
     // 生命周期：页面将显示时拉取联系人，适配初次进入
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     console.log('Index: 页面即将显示，开始加载联系人');
     this.loadContacts();
   }
 
   onPageShow() {
+<<<<<<< HEAD
+=======
     // 生命周期：页面显示（前后台切换/返回）时刷新列表，保证数据一致
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     console.log('Index: 页面显示，刷新联系人列表');
     this.loadContacts();
   }
 
   async loadContacts() {
+<<<<<<< HEAD
+=======
     // 拉取全量联系人并更新加载态与列表数据
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     console.log('Index: 开始加载联系人列表');
     this.isLoading = true;
     try {
@@ -52,7 +72,10 @@ struct Index {
   }
 
   async searchContacts() {
+<<<<<<< HEAD
+=======
     // 搜索流程：空关键字回退全量；申请权限后号码优先；无结果再姓名包含过滤
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     console.log('Index: 开始搜索联系人，关键词:', this.searchText);
     if (this.searchText.trim() === '') {
       console.log('Index: 搜索关键词为空，加载所有联系人');
@@ -70,13 +93,19 @@ struct Index {
         ]);
       // 如果权限列表中有-1，说明用户拒绝了授权
       if (permissionRequestResult.authResults[0] === 0) {
+<<<<<<< HEAD
+=======
         // A: 先按电话号码查询
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
         let results = await this.contactData.queryContactsByPhone(this.searchText);
         console.log('Index: 按电话号码搜索到结果数量:', results.length);
 
         // 如果没有结果，按姓名过滤
         if (results.length === 0) {
+<<<<<<< HEAD
+=======
           // B: 回退为姓名包含过滤（大小写不敏感）
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
           console.log('Index: 开始按姓名过滤');
           const allContacts = await this.contactData.queryAllContacts();
           results = allContacts.filter(contact =>
@@ -95,7 +124,10 @@ struct Index {
   }
 
   async deleteContact(key: string) {
+<<<<<<< HEAD
+=======
     // 删除联系人并在成功后重新拉取列表
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     console.log('Index: 开始删除联系人，key:', key);
     try {
       await this.contactData.deleteContact(key);
@@ -108,7 +140,10 @@ struct Index {
 
   // 添加二次确认弹窗方法
   showDeleteConfirmDialog(contactItem: contact.Contact) {
+<<<<<<< HEAD
+=======
     // 二次确认对话框：避免误删，含遮障层点击关闭与取消/删除两按钮
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     if (!contactItem.key) return;
 
     const contactName = contactItem.name?.fullName || '未知联系人';
@@ -141,10 +176,13 @@ struct Index {
   }
 
   build() {
+<<<<<<< HEAD
+=======
     // 页面结构：
     // 1) 顶部标题栏（联系人管理 + 添加）
     // 2) 搜索输入框（姓名/电话号码）
     // 3) 列表区：加载指示/空态/联系人列表
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     Column() {
       // 标题栏
       Row() {
@@ -209,14 +247,20 @@ struct Index {
     .width('100%')
     .height('100%')
     .onAppear(() => {
+<<<<<<< HEAD
+=======
       // 页面可见时的日志记录
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
       console.log('Index: 界面已显示');
     })
   }
 
   @Builder
   contactItem(contactItem: contact.Contact) {
+<<<<<<< HEAD
+=======
     // 列表项结构：头像区 + 信息区（姓名/电话/邮箱）+ 操作区（编辑/删除）
+>>>>>>> d22acc0b635404fda9e57f547c003077af4e3bb9
     Row() {
       Column() {
         // 头像
