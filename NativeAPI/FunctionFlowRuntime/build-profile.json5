@@ -1,0 +1,49 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "material": {
+          "certpath": "C:/Users/XingFei/.ohos/config/openharmony/default_FunctionFlowRuntime_d2YR1ZrWy7LIv2FkzmRCfK_CnbcMT8iZd2YuDEaKY_c=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B07A83354174A26AFCAF9ACE4EF298C785150BA72D8D9A82E9613FC8096AEDE63A6222585EE7D0E",
+          "profile": "C:/Users/XingFei/.ohos/config/openharmony/default_FunctionFlowRuntime_d2YR1ZrWy7LIv2FkzmRCfK_CnbcMT8iZd2YuDEaKY_c=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:/Users/XingFei/.ohos/config/openharmony/default_FunctionFlowRuntime_d2YR1ZrWy7LIv2FkzmRCfK_CnbcMT8iZd2YuDEaKY_c=.p12",
+          "storePassword": "0000001B39822A28D10BA9A9C99D05FA5B48FE6133206F623DA5EBA31B61ABAF33F7012DA8BEF09AF4B938"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compileSdkVersion": 12,
+        "compatibleSdkVersion": 12,
+        "runtimeOS": "OpenHarmony"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
