@@ -23,9 +23,11 @@ struct EditContact {
   // 当前联系人唯一标识符
   private contactKey: string = '';
 
-    // 定义状态变量
-    // 当前联系人信息、姓名、电话号码、邮箱
-    //是否正在加载、是否正在保存、是否显示删除确认对话框
+  /**
+  定义状态变量
+  当前联系人信息、姓名、电话号码、邮箱
+  是否正在加载、是否正在保存、是否显示删除确认对话框
+  **/
   @State contactInfo: contact.Contact | null = null;
   @State name: string = '';
   @State phone: string = '';
