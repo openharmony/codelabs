@@ -19,10 +19,6 @@ export class PermissionUtil {
     ];
 
     try {
-
-      const atManager = abilityAccessCtrl.createAtManager();
-      const result = await atManager.requestPermissionsFromUser(context, permissions);
-
       // 创建权限管理器并发起请求
       const atManager = abilityAccessCtrl.createAtManager();
       const result = await atManager.requestPermissionsFromUser(context, permissions);
@@ -47,7 +43,6 @@ export class PermissionUtil {
       const atManager = abilityAccessCtrl.createAtManager();
       for (const permission of permissions) {
         const result = await atManager.checkAccessToken(context, permission);
-        if (result !== 0) { // 0表示有权限
         if (result !== 0) { // 非 0 表示未授权
           return false;
         }
