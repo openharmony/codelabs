@@ -1,5 +1,5 @@
-#include "FunctionClass.h"
-#include "BankQueueSystem.h"
+#include "function_class_cpp.h"
+#include "bank_queue_system.h"
 #include "native_log_wrapper.h"
 #include <string>
 #include <unistd.h>

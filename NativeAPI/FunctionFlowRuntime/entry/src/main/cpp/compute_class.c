@@ -1,6 +1,6 @@
 #include "function_class.h"
 #include "common_ffrt.h"
-// #include "native_log_wrapper.h"
+#include "native_log_wrapper.h"
 #include <string.h>
 #include <unistd.h>
 
@@ -28,7 +28,7 @@ void ComputeFfrtQueue() {
     // 并行调度
     ffrt_queue_t bank = create_bank_system("Bank", 2, 0);
     if (!bank) {
-        // LOGE("create bank system failed");
+        LOGE("create bank system failed");
         return;
     }
 
@@ -50,5 +50,5 @@ void ComputeFfrtQueue() {
 
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
-    // LOGI("FfrtQueue results ");
+    LOGI("FfrtQueue results ");
 }

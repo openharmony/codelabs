@@ -4,13 +4,13 @@
       {
         "name": "default",
         "material": {
-          "certpath": "C:/Users/XingFei/.ohos/config/openharmony/default_FunctionFlowRuntime_d2YR1ZrWy7LIv2FkzmRCfK_CnbcMT8iZd2YuDEaKY_c=.cer",
+          "certpath": "C:/Users/Administrator/.ohos/config/openharmony/default_FunctionFlowRuntime_nRZje5u06gsc66MtFvynE2w8dLvhK4nz6OIOUUoBjKw=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B07A83354174A26AFCAF9ACE4EF298C785150BA72D8D9A82E9613FC8096AEDE63A6222585EE7D0E",
-          "profile": "C:/Users/XingFei/.ohos/config/openharmony/default_FunctionFlowRuntime_d2YR1ZrWy7LIv2FkzmRCfK_CnbcMT8iZd2YuDEaKY_c=.p7b",
+          "keyPassword": "0000001B187A8FF48E2F6789AADF1E62E8322DA045FE69173B437C5EAC6063E90EC75FCC83901C487D8932",
+          "profile": "C:/Users/Administrator/.ohos/config/openharmony/default_FunctionFlowRuntime_nRZje5u06gsc66MtFvynE2w8dLvhK4nz6OIOUUoBjKw=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:/Users/XingFei/.ohos/config/openharmony/default_FunctionFlowRuntime_d2YR1ZrWy7LIv2FkzmRCfK_CnbcMT8iZd2YuDEaKY_c=.p12",
-          "storePassword": "0000001B39822A28D10BA9A9C99D05FA5B48FE6133206F623DA5EBA31B61ABAF33F7012DA8BEF09AF4B938"
+          "storeFile": "C:/Users/Administrator/.ohos/config/openharmony/default_FunctionFlowRuntime_nRZje5u06gsc66MtFvynE2w8dLvhK4nz6OIOUUoBjKw=.p12",
+          "storePassword": "0000001B1E7BC5B7FC939FF2B41BF5CC37C58FE95FC61F2B627C8113B82FE186053BA9F68E25F0981540C9"
         }
       }
     ],
