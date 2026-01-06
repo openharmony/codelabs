@@ -1,0 +1,57 @@
+{
+  "string": [
+    { "name": "module_desc", "value": "module description" },
+    { "name": "EntryAbility_desc", "value": "description" },
+    { "name": "EntryAbility_label", "value": "label" },
+
+    { "name": "contact_title", "value": "Contacts" },
+    { "name": "contact_empty_tip", "value": "No contacts. Tap + to add." },
+
+    { "name": "btn_add", "value": "Add" },
+    { "name": "btn_cancel", "value": "Cancel" },
+    { "name": "btn_delete", "value": "Delete" },
+
+    { "name": "input_name", "value": "Name" },
+    { "name": "input_phone", "value": "Phone" },
+    { "name": "input_relation", "value": "Relation (e.g. Friend)" },
+
+    { "name": "dialog_add_contact_title", "value": "New contact" },
+
+    { "name": "toast_add_success", "value": "Added" },
+    { "name": "toast_input_error", "value": "Please enter name and phone" },
+
+    { "name": "contact_detail_title", "value": "Contact details" },
+    { "name": "contact_detail_phone", "value": "Phone" },
+    { "name": "contact_detail_email", "value": "Email" },
+    { "name": "contact_detail_relation", "value": "Relation" },
+    { "name": "contact_detail_empty", "value": "Not provided" },
+
+    { "name": "contact_relation_phone_format", "value": "%s | %s" },
+
+    { "name": "event_title", "value": "Schedule" },
+    { "name": "event_empty_tip", "value": "No events. Enjoy your day!" },
+    { "name": "event_status_upcoming", "value": "Upcoming" },
+    { "name": "event_status_done", "value": "Done" },
+    { "name": "event_btn_add", "value": "New Event" },
+    { "name": "label_event_title", "value": "Title" },
+    { "name": "label_event_desc", "value": "Description" },
+    { "name": "label_all_day", "value": "All Day" },
+    { "name": "label_start_time", "value": "Starts" },
+    { "name": "label_end_time", "value": "Ends" },
+    { "name": "btn_save", "value": "Save" },
+    { "name": "toast_save_success", "value": "Saved" },
+
+    { "name": "settings_title", "value": "Settings" },
+    { "name": "biometric_title", "value": "Biometric Login" },
+    { "name": "biometric_desc", "value": "Use fingerprint to unlock" },
+
+    { "name": "mine_title", "value": "Mine" },
+    { "name": "privacy_lock_title", "value": "Privacy Lock" },
+    { "name": "privacy_lock_desc", "value": "Fingerprint required to view details" },
+    { "name": "privacy_active_toast", "value": "Privacy protection enabled" },
+    { "name": "privacy_inactive_toast", "value": "Privacy protection disabled" },
+    { "name": "unlock_success", "value": "Unlocked successfully" },
+    { "name": "unlock_fail", "value": "Verification failed" },
+    { "name": "btn_view", "value": "View" }
+  ]
+}
