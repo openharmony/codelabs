@@ -1,7 +1,3 @@
-import { ContactData } from '../model/ContactData';
-import { contact } from '@kit.ContactsKit';
-import { router } from '@kit.ArkUI';
-
 // 数据层：封装联系人查询/删除等能力
 import { ContactData } from '../model/ContactData';
 // 类型与系统接口：联系人模型
@@ -16,8 +12,6 @@ import { abilityAccessCtrl, Context } from '@kit.AbilityKit';
 @Component
 struct Index {
 
-  @Provide('context') context: Context = getContext(this);
-  private contactData: ContactData = new ContactData(this.context);
 
   // 提供上下文给子组件与路由参数，数据层依赖此上下文调用系统接口
   @Provide('context') context: Context = getContext(this);
