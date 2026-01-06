@@ -1,16 +1,19 @@
-#ifndef NATIVE_LOG_WRAPPER_H
-#define NATIVE_LOG_WRAPPER_H
+//
+// Created on 024 2023/10/24.
+//
+// Node APIs are not fully supported. To solve the compilation error of the interface cannot be found,
+// please include "napi/native_api.h".
 
-#include <hilog/log.h>
+#ifndef application_native_hanwujiproxy_LogUtils
+#define application_native_hanwujiproxy_LogUtils
 
-namespace OHOS {
-namespace NATIVE {
+#include "hilog/log.h"
 
-#ifndef NATIVE_LOG_TAG
-#define NATIVE_LOG_TAG "NATIVE"
+#ifdef __cplusplus
+extern "C" {
 #endif
 
-inline constexpr const char *GetRawFileName(const char *path)
+inline const char *GetRawFileName(const char *path)
 {
     char ch = '/';
     const char *start = path;
@@ -19,18 +22,20 @@ inline constexpr const char *GetRawFileName(const char *path)
     while (--start != path && *start != ch) {;}
     return (*start == ch) ? ++start : path;
 }
+    
+#define PRINT_OHOS_HILOG(op, fmt, ...)                                                          \
+    OH_LOG_Print(LOG_APP, op, LOG_DOMAIN, LOG_TAG, "[%{public}s-(%{public}s:%{public}d)] " fmt, \
+        __FUNCTION__, GetRawFileName(__FILE__), __LINE__, ##__VA_ARGS__)
 
-#define PRINT_OHOS_HILOG(op, fmt, ...)                                                             \
-    OH_LOG_Print(LOG_APP, op, 0xFF00, NATIVE_LOG_TAG, "[%{public}s-%{public}s:%{public}d)] " fmt, \
-        __FUNCTION__, OHOS::NATIVE::GetRawFileName(__FILE__), __LINE__, ##__VA_ARGS__)
+#define LOG(fmt, ...) PRINT_OHOS_HILOG(LOG_INFO, fmt, ##__VA_ARGS__);
+#define LOGE(fmt, ...) PRINT_OHOS_HILOG(LOG_ERROR, fmt, ##__VA_ARGS__);
+#define LOGW(fmt, ...) PRINT_OHOS_HILOG(LOG_WARN, fmt, ##__VA_ARGS__);
+#define LOGI(fmt, ...) PRINT_OHOS_HILOG(LOG_INFO, fmt, ##__VA_ARGS__);
+#define LOGF(fmt, ...) PRINT_OHOS_HILOG(LOG_FATAL, fmt, ##__VA_ARGS__);
+#define LOGD(fmt, ...) PRINT_OHOS_HILOG(LOG_DEBUG, fmt, ##__VA_ARGS__);
 
-#define LOGE(fmt, ...) PRINT_OHOS_HILOG(LOG_ERROR, fmt, ##__VA_ARGS__)
-#define LOGW(fmt, ...) PRINT_OHOS_HILOG(LOG_WARN, fmt, ##__VA_ARGS__)
-#define LOGI(fmt, ...) PRINT_OHOS_HILOG(LOG_INFO, fmt, ##__VA_ARGS__)
-#define LOGF(fmt, ...) PRINT_OHOS_HILOG(LOG_FATAL, fmt, ##__VA_ARGS__)
-#define LOGD(fmt, ...) PRINT_OHOS_HILOG(LOG_DEBUG, fmt, ##__VA_ARGS__)
+#ifdef __cplusplus
+}
+#endif
 
-} // namespace NATIVE
-} // namespace OHOS
-
-#endif // NATIVE_LOG_WRAPPER_H
+#endif //application_native_hanwujiproxy_LogUtils

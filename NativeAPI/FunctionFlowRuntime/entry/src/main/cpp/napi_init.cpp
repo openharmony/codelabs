@@ -1,5 +1,5 @@
 #include <aki/jsbind.h>
-#include "FunctionClass.h"
+#include "function_class_cpp.h"
 #include "function_class.h"
 #include "compute_class.h"
 

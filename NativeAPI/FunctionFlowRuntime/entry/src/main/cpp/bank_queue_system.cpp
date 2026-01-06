@@ -1,5 +1,5 @@
 
-#include "BankQueueSystem.h"
+#include "bank_queue_system.h"
 #include "native_log_wrapper.h"
 
 BankQueueSystem::BankQueueSystem(int type, const char *name, int concurrency) {

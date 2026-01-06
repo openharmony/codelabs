@@ -1,7 +1,5 @@
 #include "common_ffrt.h"
-// #include "native_log_wrapper.h"
-
-
+#include "native_log_wrapper.h"
 
 static inline void ffrt_exec_function_wrapper(void* t)
 {
@@ -52,18 +50,18 @@ ffrt_queue_t create_bank_system(const char *name, int concurrency, int type)
     // 队列创建完后需要销毁队列属性
     ffrt_queue_attr_destroy(&queue_attr);
     if (!queue) {
-        // LOGE("create queue failed");
+        LOGE("create queue failed");
         return NULL;
     }
 
-    // LOGI("create bank system successfully");
+    LOGI("create bank system successfully");
     return queue;
 }
 
 void destroy_bank_system(ffrt_queue_t queue_handle)
 {
     ffrt_queue_destroy(queue_handle);
-    // LOGI("destroy bank system successfully");
+    LOGI("destroy bank system successfully");
 }
 
 // 封装提交队列任务函数

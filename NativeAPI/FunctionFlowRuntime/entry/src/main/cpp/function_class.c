@@ -1,26 +1,26 @@
 #include "function_class.h"
 #include "common_ffrt.h"
-// #include "native_log_wrapper.h"
+#include "native_log_wrapper.h"
 #include <string.h>
 #include <unistd.h>
 
 void BankBusiness(void *arg)
 {
     usleep(100 * 1000);
-    // LOGI("saving or withdraw ordinary customer");
+    LOGI("saving or withdraw ordinary customer");
 }
 
 void BankBusinessVIP(void *arg)
 {
     usleep(100 * 1000);
-    // LOGI("saving or withdraw VIP");
+    LOGI("saving or withdraw VIP");
 }
 
 void ProcessFfrtQueue() {
     // 串行调度
     ffrt_queue_t bank = create_bank_system("Bank", 2,1);
     if (!bank) {
-        // LOGE("create bank system failed");
+        LOGE("create bank system failed");
         return;
     }
 
@@ -36,5 +36,5 @@ void ProcessFfrtQueue() {
 
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
-    // LOGI("FfrtQueue results ");
+    LOGI("FfrtQueue results ");
 }

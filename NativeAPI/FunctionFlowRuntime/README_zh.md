@@ -14,17 +14,17 @@ young@yy:~/develop/FunctionFlowRuntime/entry$ tree
 └── src
     ├── main
     │   ├── cpp
-    │   │   ├── BankQueueSystem.cpp
-    │   │   ├── BankQueueSystem.h
+    │   │   ├── bank_queue_system.cpp
+    │   │   ├── bank_queue_system.h
     │   │   ├── CMakeLists.txt
     │   │   ├── common_ffrt.c
     │   │   ├── common_ffrt.h
     │   │   ├── compute_class.c
     │   │   ├── compute_class.h
     │   │   ├── function_class.c
-    │   │   ├── FunctionClass.cpp
+    │   │   ├── function_class.cpp
     │   │   ├── function_class.h
-    │   │   ├── FunctionClass.h
+    │   │   ├── function_class.h
     │   │   ├── napi_init.cpp
     │   │   ├── native_log_wrapper.h
     │   │   └── types
@@ -72,5 +72,5 @@ young@yy:~/develop/FunctionFlowRuntime/entry$ tree
 
 compute_class.c展示了如何进行加减任务并行调度
 function_class.c展示了如何进行睡眠任务串行调度
-FunctionClass.cpp展示了如何进行睡眠任务并行和串行调度
+function_class.cpp展示了如何进行睡眠任务并行和串行调度
 
