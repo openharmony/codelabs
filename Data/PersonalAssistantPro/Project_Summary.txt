@@ -1,0 +1,338 @@
+========================================
+       PROJECT CODE STATISTICS          
+========================================
+Total Files : 61
+Total Lines : 6427
+========================================
+
+=== VISUAL TREE & LINE COUNTS ===
+└── PersonalAssistantPro [DIR: 6427 lines]
+    ├── entry [DIR: 6162 lines]
+    │   ├── src [DIR: 6118 lines]
+    │   │   └── main [DIR: 6118 lines]
+    │   │       ├── ets [DIR: 6057 lines]
+    │   │       │   ├── common [DIR: 1008 lines]
+    │   │       │   │   ├── constants [DIR: 122 lines]
+    │   │       │   │   │   ├── CommonConstants.ets [43 lines]
+    │   │       │   │   │   └── StyleConstants.ets [79 lines]
+    │   │       │   │   ├── database [DIR: 139 lines]
+    │   │       │   │   │   ├── RdbHelper.ts [103 lines]
+    │   │       │   │   │   └── Tables.ts [36 lines]
+    │   │       │   │   └── utils [DIR: 747 lines]
+    │   │       │   │       ├── AesCryptoUtils.ts [124 lines]
+    │   │       │   │       ├── DateUtils.ets [111 lines]
+    │   │       │   │       ├── Logger.ts [149 lines]
+    │   │       │   │       ├── PermissionUtils.ets [81 lines]
+    │   │       │   │       ├── ResourceUtils.ets [95 lines]
+    │   │       │   │       ├── StringUtils.ts [108 lines]
+    │   │       │   │       └── ValidationUtils.ts [79 lines]
+    │   │       │   ├── debug [DIR: 1114 lines]
+    │   │       │   │   ├── BackupRestoreDebugCase.ets [101 lines]
+    │   │       │   │   ├── BiometricSettingCase.ets [60 lines]
+    │   │       │   │   ├── ContactDatabaseCase.ts [63 lines]
+    │   │       │   │   ├── ContactStressTestCase.ts [87 lines]
+    │   │       │   │   ├── DateAndConfigStressTestCase.ets [124 lines]
+    │   │       │   │   ├── DebugCase.ts [33 lines]
+    │   │       │   │   ├── DebugRunner.ets [86 lines]
+    │   │       │   │   ├── EncryptionPrivacyCase.ts [81 lines]
+    │   │       │   │   ├── EventAlgoTestCase.ets [96 lines]
+    │   │       │   │   ├── ExampleDebugCase.ts [43 lines]
+    │   │       │   │   ├── SearchDebugCase.ets [72 lines]
+    │   │       │   │   ├── SecurityStressTestCase.ts [124 lines]
+    │   │       │   │   └── UserScenarioSimulationCase.ets [144 lines]
+    │   │       │   ├── entryability [DIR: 74 lines]
+    │   │       │   │   └── EntryAbility.ets [74 lines]
+    │   │       │   ├── model [DIR: 347 lines]
+    │   │       │   │   ├── ContactModel.ts [142 lines]
+    │   │       │   │   ├── EventModel.ets [172 lines]
+    │   │       │   │   └── SettingModel.ets [33 lines]
+    │   │       │   ├── pages [DIR: 1653 lines]
+    │   │       │   │   ├── ContactDetailPage.ets [192 lines]
+    │   │       │   │   ├── ContactListPage.ets [273 lines]
+    │   │       │   │   ├── EventDetailPage.ets [210 lines]
+    │   │       │   │   ├── EventEditPage.ets [239 lines]
+    │   │       │   │   ├── EventListPage.ets [220 lines]
+    │   │       │   │   ├── Index.ets [23 lines]
+    │   │       │   │   ├── MainPage.ets [87 lines]
+    │   │       │   │   ├── MinePage.ets [211 lines]
+    │   │       │   │   ├── SettingsPage.ets [98 lines]
+    │   │       │   │   └── SplashPage.ets [100 lines]
+    │   │       │   ├── services [DIR: 804 lines]
+    │   │       │   │   ├── BackupService.ets [107 lines]
+    │   │       │   │   ├── BiometricService.ets [87 lines]
+    │   │       │   │   ├── DataExportService.ets [339 lines]
+    │   │       │   │   ├── JumpService.ets [102 lines]
+    │   │       │   │   ├── NotificationService.ets [98 lines]
+    │   │       │   │   └── PreferenceService.ets [71 lines]
+    │   │       │   ├── view [DIR: 678 lines]
+    │   │       │   │   ├── calendar [DIR: 287 lines]
+    │   │       │   │   │   ├── DayItemView.ets [72 lines]
+    │   │       │   │   │   ├── MonthView.ets [105 lines]
+    │   │       │   │   │   └── WeekView.ets [110 lines]
+    │   │       │   │   ├── component [DIR: 193 lines]
+    │   │       │   │   │   ├── CustomDialog.ets [126 lines]
+    │   │       │   │   │   └── TitleBar.ets [67 lines]
+    │   │       │   │   └── form [DIR: 198 lines]
+    │   │       │   │       ├── DatePickerItem.ets [140 lines]
+    │   │       │   │       └── TextInputItem.ets [58 lines]
+    │   │       │   └── viewmodel [DIR: 379 lines]
+    │   │       │       ├── CalendarViewModel.ets [135 lines]
+    │   │       │       ├── ContactViewModel.ts [119 lines]
+    │   │       │       └── EventViewModel.ets [125 lines]
+    │   │       └── module.json5 [61 lines]
+    │   ├── build-profile.json5 [33 lines]
+    │   └── oh-package.json5 [11 lines]
+    ├── hvigor [DIR: 24 lines]
+    │   └── hvigor-config.json5 [24 lines]
+    ├── build-profile.json5 [56 lines]
+    ├── oh-package.json5 [11 lines]
+    └── PROJECT_CONTEXT.md [174 lines]
+
+=== JSON FILE LIST ===
+[
+  "build-profile.json5",
+  "entry/build-profile.json5",
+  "entry/oh-package.json5",
+  "entry/src/main/ets/common/constants/CommonConstants.ets",
+  "entry/src/main/ets/common/constants/StyleConstants.ets",
+  "entry/src/main/ets/common/database/RdbHelper.ts",
+  "entry/src/main/ets/common/database/Tables.ts",
+  "entry/src/main/ets/common/utils/AesCryptoUtils.ts",
+  "entry/src/main/ets/common/utils/DateUtils.ets",
+  "entry/src/main/ets/common/utils/Logger.ts",
+  "entry/src/main/ets/common/utils/PermissionUtils.ets",
+  "entry/src/main/ets/common/utils/ResourceUtils.ets",
+  "entry/src/main/ets/common/utils/StringUtils.ts",
+  "entry/src/main/ets/common/utils/ValidationUtils.ts",
+  "entry/src/main/ets/debug/BackupRestoreDebugCase.ets",
+  "entry/src/main/ets/debug/BiometricSettingCase.ets",
+  "entry/src/main/ets/debug/ContactDatabaseCase.ts",
+  "entry/src/main/ets/debug/ContactStressTestCase.ts",
+  "entry/src/main/ets/debug/DateAndConfigStressTestCase.ets",
+  "entry/src/main/ets/debug/DebugCase.ts",
+  "entry/src/main/ets/debug/DebugRunner.ets",
+  "entry/src/main/ets/debug/EncryptionPrivacyCase.ts",
+  "entry/src/main/ets/debug/EventAlgoTestCase.ets",
+  "entry/src/main/ets/debug/ExampleDebugCase.ts",
+  "entry/src/main/ets/debug/SearchDebugCase.ets",
+  "entry/src/main/ets/debug/SecurityStressTestCase.ts",
+  "entry/src/main/ets/debug/UserScenarioSimulationCase.ets",
+  "entry/src/main/ets/entryability/EntryAbility.ets",
+  "entry/src/main/ets/model/ContactModel.ts",
+  "entry/src/main/ets/model/EventModel.ets",
+  "entry/src/main/ets/model/SettingModel.ets",
+  "entry/src/main/ets/pages/ContactDetailPage.ets",
+  "entry/src/main/ets/pages/ContactListPage.ets",
+  "entry/src/main/ets/pages/EventDetailPage.ets",
+  "entry/src/main/ets/pages/EventEditPage.ets",
+  "entry/src/main/ets/pages/EventListPage.ets",
+  "entry/src/main/ets/pages/Index.ets",
+  "entry/src/main/ets/pages/MainPage.ets",
+  "entry/src/main/ets/pages/MinePage.ets",
+  "entry/src/main/ets/pages/SettingsPage.ets",
+  "entry/src/main/ets/pages/SplashPage.ets",
+  "entry/src/main/ets/services/BackupService.ets",
+  "entry/src/main/ets/services/BiometricService.ets",
+  "entry/src/main/ets/services/DataExportService.ets",
+  "entry/src/main/ets/services/JumpService.ets",
+  "entry/src/main/ets/services/NotificationService.ets",
+  "entry/src/main/ets/services/PreferenceService.ets",
+  "entry/src/main/ets/view/calendar/DayItemView.ets",
+  "entry/src/main/ets/view/calendar/MonthView.ets",
+  "entry/src/main/ets/view/calendar/WeekView.ets",
+  "entry/src/main/ets/view/component/CustomDialog.ets",
+  "entry/src/main/ets/view/component/TitleBar.ets",
+  "entry/src/main/ets/view/form/DatePickerItem.ets",
+  "entry/src/main/ets/view/form/TextInputItem.ets",
+  "entry/src/main/ets/viewmodel/CalendarViewModel.ets",
+  "entry/src/main/ets/viewmodel/ContactViewModel.ts",
+  "entry/src/main/ets/viewmodel/EventViewModel.ets",
+  "entry/src/main/module.json5",
+  "hvigor/hvigor-config.json5",
+  "oh-package.json5",
+  "PROJECT_CONTEXT.md"
+]
+
+=== CONFIG CONTENT ===
+
+--- FILE: build-profile.json5 ---
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B3C6D69A327381B386ABFE41D2D026CE96EC0CD8C4C3C18092B58962610ADDE08A7BDE61287FD54",
+          "profile": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.p12",
+          "storePassword": "0000001B55DF094998517C2AB96E541F4A33B767B9E7641E8753EFCB7CC6F852DD516E023D274E11CA8F2D"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compileSdkVersion": "6.0.0(20)",
+        "compatibleSdkVersion": "6.0.0(20)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
+
+--- FILE: entry\build-profile.json5 ---
+{
+  "apiType": "stageMode",
+  "buildOption": {
+    "resOptions": {
+      "copyCodeResource": {
+        "enable": false
+      }
+    }
+  },
+  "buildOptionSet": [
+    {
+      "name": "release",
+      "arkOptions": {
+        "obfuscation": {
+          "ruleOptions": {
+            "enable": false,
+            "files": [
+              "./obfuscation-rules.txt"
+            ]
+          }
+        }
+      }
+    },
+  ],
+  "targets": [
+    {
+      "name": "default"
+    },
+    {
+      "name": "ohosTest",
+    }
+  ]
+}
+
+--- FILE: entry\oh-package.json5 ---
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Please describe the basic information.",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {}
+}
+
+
+
+--- FILE: entry\src\main\module.json5 ---
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.ACCESS_BIOMETRIC"
+      },
+      {
+        "name": "ohos.permission.PUBLISH_AGENT_REMINDER"
+      }
+    ],
+
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:EntryAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:EntryAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "ohos.want.action.home"
+            ]
+          }
+        ]
+      }
+    ],
+    "extensionAbilities": [
+      {
+        "name": "EntryBackupAbility",
+        "srcEntry": "./ets/entrybackupability/EntryBackupAbility.ets",
+        "type": "backup",
+        "exported": false,
+        "metadata": [
+          {
+            "name": "ohos.extension.backup",
+            "resource": "$profile:backup_config"
+          }
+        ]
+      }
+    ]
+  }
+}
+
+--- FILE: oh-package.json5 ---
+{
+  "modelVersion": "6.0.0",
+  "description": "Please describe the basic information.",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@ohos/hypium": "1.0.24",
+    "@ohos/hamock": "1.0.0"
+  }
+}
+
