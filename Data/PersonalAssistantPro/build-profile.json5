@@ -3,15 +3,14 @@
     "signingConfigs": [
       {
         "name": "default",
-        "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.cer",
+          "certpath": "C:/Users/21440/.ohos/config/openharmony/default_PersonalAssistantPro_z7i_lgLoB155g_1MyPFQo-bQ161gCXioTpeXB5lkEpw=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B3C6D69A327381B386ABFE41D2D026CE96EC0CD8C4C3C18092B58962610ADDE08A7BDE61287FD54",
-          "profile": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.p7b",
+          "keyPassword": "0000001B232C466EB3A191A76A631816ED6FC451C44039A9A684477BB1A283446C1F934141572AC0DDFB71",
+          "profile": "C:/Users/21440/.ohos/config/openharmony/default_PersonalAssistantPro_z7i_lgLoB155g_1MyPFQo-bQ161gCXioTpeXB5lkEpw=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.p12",
-          "storePassword": "0000001B55DF094998517C2AB96E541F4A33B767B9E7641E8753EFCB7CC6F852DD516E023D274E11CA8F2D"
+          "storeFile": "C:/Users/21440/.ohos/config/openharmony/default_PersonalAssistantPro_z7i_lgLoB155g_1MyPFQo-bQ161gCXioTpeXB5lkEpw=.p12",
+          "storePassword": "0000001BF16CD71D71A3337825A259018CCD6EC104E9F4B2ECBBC194FF53CB152485BF61FB22D62F641CAA"
         }
       }
     ],
@@ -19,9 +18,9 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "compileSdkVersion": "6.0.0(20)",
-        "compatibleSdkVersion": "6.0.0(20)",
-        "runtimeOS": "HarmonyOS",
+        "compileSdkVersion": 20,
+        "compatibleSdkVersion": 20,
+        "runtimeOS": "OpenHarmony",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
