@@ -1,20 +1,22 @@
-//HarmonyOS 项目的构建配置文件
-//主要用于定义项目的构建选项和目标。
-//指定了 API 模式（如 stageMode 表示阶段模型）、构建选项（如代码混淆配置）
-//以及构建目标（如默认目标 default 和测试目标 ohosTest）。
-//该文件可根据需求修改
+/*
+* OpenHarmony 项目的构建配置文件
+* 主要用于定义项目的构建选项和目标。
+* 指定了 API 模式（如 stageMode 表示阶段模型）、构建选项（如代码混淆配置）
+* 以及构建目标（如默认目标 default 和测试目标 ohosTest）。
+* 该文件可根据需求修改
+*/
 {
-  "apiType": "stageMode",
-  "buildOption": {
+  "apiType":"stageMode",
+  "buildOption":{
   },
-  "buildOptionSet": [
+  "buildOptionSet":[
     {
-      "name": "release",
-      "arkOptions": {
-        "obfuscation": {
-          "ruleOptions": {
-            "enable": false,
-            "files": [
+      "name":"release",
+      "arkOptions":{
+        "obfuscation":{
+          "ruleOptions":{
+            "enable":false,
+            "files":[
               "./obfuscation-rules.txt"
             ]
           }
@@ -22,12 +24,12 @@
       }
     },
   ],
-  "targets": [
+  "targets":[
     {
-      "name": "default"
+      "name":"default"
     },
     {
-      "name": "ohosTest",
+      "name":"ohosTest",
     }
   ]
 }
