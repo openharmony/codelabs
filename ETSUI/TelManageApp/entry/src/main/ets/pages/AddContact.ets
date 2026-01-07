@@ -1,4 +1,3 @@
-
 // 新增联系人页面：表单输入 + 保存提交
 import { ContactData } from '../model/ContactData';
 import { contact } from '@kit.ContactsKit';
@@ -8,9 +7,7 @@ import { Context } from '@kit.AbilityKit';
 @Entry
 @Component
 struct AddContact {
-
   // 数据层实例与表单状态
-
   private contactData: ContactData = new ContactData();
   @State name: string = '';
   @State phone: string = '';
@@ -19,10 +16,7 @@ struct AddContact {
 
   // 添加aboutToAppear生命周期获取Context
   aboutToAppear() {
-
-
     // 优先使用父页面传入的 Context，缺省时使用当前页面 Context
-
     // 从路由参数获取父页面传递的Context
     const params = router.getParams() as Record<string, Object>;
     if (params && params['parentContext']) {
@@ -39,10 +33,7 @@ struct AddContact {
     Column() {
       // 标题栏
       Row() {
-
-
         // 返回上一页
-
         Button('取消')
           .fontSize(16)
           .backgroundColor(Color.Transparent)
@@ -61,8 +52,6 @@ struct AddContact {
           .fontSize(16)
           .backgroundColor(Color.Transparent)
           .fontColor(this.name && this.phone ? '#007DFF' : '#999')
-
-
           // 姓名与电话均非空，且不在保存中时可点击
           .enabled(!!this.name && !!this.phone && !this.isSaving)
           .onClick(() => {
@@ -78,9 +67,7 @@ struct AddContact {
         Column() {
           // 头像区域
           Column() {
-
             // 已填姓名取首字母大写，否则显示“+”
-
             Text(this.name ? this.name.charAt(0).toUpperCase() : '+')
               .fontSize(40)
               .fontColor(Color.White)
@@ -119,9 +106,7 @@ struct AddContact {
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
-
                 // 去除空格后写入 name
-
                 .onChange((value: string) => {
                   this.name = value.trim();
                 })
@@ -151,9 +136,7 @@ struct AddContact {
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
                 .type(InputType.Number)
-
                 // 去除空格后写入 phone
-
                 .onChange((value: string) => {
                   this.phone = value.trim();
                 })
@@ -182,9 +165,7 @@ struct AddContact {
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
-
                 // 去除空格后写入 email（可选）
-
                 .onChange((value: string) => {
                   this.email = value.trim();
                 })
@@ -211,9 +192,7 @@ struct AddContact {
             .fontSize(14)
             .margin({ top: 10 })
         }
-
         // 居中展示保存中状态
-
         .width('100%')
         .justifyContent(FlexAlign.Center)
         .margin({ bottom: 20 })
@@ -225,9 +204,7 @@ struct AddContact {
   }
 
   async saveContact() {
-
     // 简单校验：姓名/电话必填
-
     if (!this.name || !this.phone) {
       return;
     }
