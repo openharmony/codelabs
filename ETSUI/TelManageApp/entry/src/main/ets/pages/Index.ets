@@ -5,28 +5,22 @@ import { contact } from '@kit.ContactsKit';
 // 页面路由：跳转添加/编辑页面
 import { router } from '@kit.ArkUI';
 // 权限与上下文：请求联系人权限、提供页面上下文
-
 import { abilityAccessCtrl, Context } from '@kit.AbilityKit';
 
 @Entry
 @Component
 struct Index {
-
-
   // 提供上下文给子组件与路由参数，数据层依赖此上下文调用系统接口
   @Provide('context') context: Context = getContext(this);
   // 数据层实例（使用页面上下文初始化）
   private contactData: ContactData = new ContactData(this.context);
   // 列表数据、搜索关键字与加载态
-
   @State contacts: contact.Contact[] = [];
   @State searchText: string = '';
   @State isLoading: boolean = true;
 
   aboutToAppear() {
-
     // 生命周期：页面将显示时拉取联系人，适配初次进入
-
     console.log('Index: 页面即将显示，开始加载联系人');
     this.loadContacts();
   }

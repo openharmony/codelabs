@@ -1,19 +1,5 @@
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "default",
-        "material": {
-          "certpath": "C:/Users/gg/.ohos/config/openharmony/default_MyApplication22_RsjoWK1QcsbRtKvhnxPTYbc5f7QSo9_mHTl1IbpIy7A=.cer",
-          "storePassword": "0000001B1EA407438ED5C1A71F77E45018DF73EC0195AED9E6B3BB9695ED2142C30D57C0AF007DAAE72A9A",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BF6B7E9ACDCDDC0AC644B45B8309F1698AC2B8C0090E1967AF20A14ADAC8B0020E2ABD02B27A456",
-          "profile": "C:/Users/gg/.ohos/config/openharmony/default_MyApplication22_RsjoWK1QcsbRtKvhnxPTYbc5f7QSo9_mHTl1IbpIy7A=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:/Users/gg/.ohos/config/openharmony/default_MyApplication22_RsjoWK1QcsbRtKvhnxPTYbc5f7QSo9_mHTl1IbpIy7A=.p12"
-        }
-      }
-    ],
     "products": [
       {
         "name": "default",
@@ -30,12 +16,12 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
       }
-    ]
+    ],
   },
   "modules": [
     {
