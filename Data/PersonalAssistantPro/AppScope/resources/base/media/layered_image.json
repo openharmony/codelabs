@@ -1,7 +1,7 @@
 {
   "layered-image":
   {
-    "background" : "$media:background",
-    "foreground" : "$media:foreground"
+    "background" : "$media:bg_assist_pro",
+    "foreground" : "$media:fg_assist_pro"
   }
 }
