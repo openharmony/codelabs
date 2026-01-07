@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "联系人管理模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "联系人管理"
+    },
+    {
+      "name": "permission1",
+      "value": "需要写入联系人信息以添加删除或更新联系人"
+    },
+    {
+      "name": "permission2",
+      "value": "需要读取联系人信息以显示联系人列表"
+    }
+  ]
+}
