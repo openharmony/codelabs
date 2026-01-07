@@ -10,6 +10,7 @@
       "path": "./src/main/cpp/CMakeLists.txt",
       "arguments": "",
       "cppFlags": "",
+      "abiFilters": ["armeabi-v7a", "arm64-v8a"]
     }
   },
   "buildOptionSet": [
