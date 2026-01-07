@@ -209,7 +209,6 @@ struct AddContact {
       return;
     }
 
-
     // 进入保存中，禁用按钮并显示进度
     this.isSaving = true;
 
