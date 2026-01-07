@@ -1,0 +1,72 @@
+{
+  "module": {
+    // 模块名（与工程子模块同名）
+    "name": "entry",
+    // 模块类型：应用入口模块
+    "type": "entry",
+    // 模块描述（供商店/设置等位置展示）
+    "description": "联系人管理应用",
+    // 启动入口 Ability 名称（对应 ets/entryability/EntryAbility.ets）
+    "mainElement": "EntryAbility",
+    // 目标设备类型：手机/平板
+    "deviceTypes": [
+      "phone",
+      "tablet"
+    ],
+    // 随安装一并下发；非免安装
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    // 页面路由配置引用（在 profile/main_pages.json 中维护）
+    "pages": "$profile:main_pages",
+    // 声明 Ability 列表
+    "abilities": [
+      {
+        // Ability 名称与源文件入口
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        // 展示资源：描述/图标/标签/启动窗口样式
+
+        "description": "主Ability",
+        "icon": "$media:startIcon",
+        "label": "$string:EntryAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        // 是否对外导出（可被其他应用唤起）
+        "exported": true,
+        // 技能声明：系统 HOME 入口
+
+        "skills": [
+          {
+            "actions": [
+              "action.system.home"
+            ],
+            "entities": [
+              "entity.system.home"
+            ]
+          }
+        ]
+      }
+    ],
+    // 动态权限声明（联系人读/写），配合代码内的运行时请求
+    "requestPermissions": [
+      {
+        // 读取通讯录
+        "name": "ohos.permission.READ_CONTACTS",
+        "reason": "$string:permission1",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
+      },
+      {
+        // 写入通讯录
+        "name": "ohos.permission.WRITE_CONTACTS",
+        "reason": "$string:permission2",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "always"
+        }
+      }
+    ]
+  }
+}

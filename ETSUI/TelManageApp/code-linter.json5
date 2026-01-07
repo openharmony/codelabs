@@ -1,0 +1,32 @@
+/*
+* 代码检查工具的配置文件
+* 用于定义项目中代码检查的规则和范围，确保代码质量和一致性
+* 主要功能：
+* 1. 指定需要检查的文件范围
+* 2. 排除特定目录或文件，避免不必要的检查
+* 3. 定义规则集，引用推荐的代码检查规则
+* 4. 自定义规则，覆盖或扩展默认规则
+*/
+
+{
+  "files":[
+      // 定义需要检查的文件范围
+    "**/*.ets"
+  ],
+  "ignore":[
+    "**/src/ohosTest/**/*",
+    "**/src/test/**/*",
+    "**/src/mock/**/*",
+    "**/node_modules/**/*",
+    "**/oh_modules/**/*",
+    "**/build/**/*",
+    "**/.preview/**/*"
+  ],
+    // 定义规则集，引用推荐的代码检查规则
+  "ruleSet":[
+    "plugin:@performance/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules":{
+  }
+}
