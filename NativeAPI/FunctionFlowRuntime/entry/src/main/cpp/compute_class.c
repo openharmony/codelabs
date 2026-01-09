@@ -24,12 +24,12 @@ void sub(void *arg) {
     int b = para2->b;
 }
 
-void ComputeFfrtQueue() {
+int ComputeFfrtQueue() {
     // 并行调度
     ffrt_queue_t bank = create_bank_system("Bank", 2, 0);
     if (!bank) {
         LOGE("create bank system failed");
-        return;
+        return -1;
     }
 
     g_para1.a = 1;
@@ -51,4 +51,5 @@ void ComputeFfrtQueue() {
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
     LOGI("FfrtQueue results ");
+    return 5;
 }

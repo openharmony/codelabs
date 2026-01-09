@@ -16,12 +16,12 @@ void BankBusinessVIP(void *arg)
     LOGI("saving or withdraw VIP");
 }
 
-void ProcessFfrtQueue() {
+int ProcessFfrtQueue() {
     // 串行调度
     ffrt_queue_t bank = create_bank_system("Bank", 2,1);
     if (!bank) {
         LOGE("create bank system failed");
-        return;
+        return -1;
     }
 
     // VIP享受更优先的服务
@@ -37,4 +37,5 @@ void ProcessFfrtQueue() {
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
     LOGI("FfrtQueue results ");
+    return 4;
 }

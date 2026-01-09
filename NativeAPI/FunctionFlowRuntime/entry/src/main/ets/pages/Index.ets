@@ -9,7 +9,6 @@ export const sleep = (delay: number = 200) => new Promise<void>((resolve) => set
 @Component
 struct Index {
   @State message: string = 'Hello World';
-
   build() {
     Row() {
       Column() {
@@ -19,13 +18,18 @@ struct Index {
           .onClick(() => {
             this.message = 'FFRT';
             let fun = new FunctionClass(5);
-            fun.FfrtSerialQueue();
-            fun.FfrtConcurrentQueue();
-            let b = libaki.add(3, 5);
-            libaki.ProcessFfrtQueue();
-            libaki.ComputeFfrtQueue();
+            let ret1 = fun.FfrtSerialQueue();
+            let ret2 = fun.FfrtConcurrentQueue();
+            let ret3 = libaki.add(3, 5);
+            let ret4 = libaki.ProcessFfrtQueue();
+            let ret5 = libaki.ComputeFfrtQueue();
+
             sleep(10000);
-            this.message = b.toString();
+            this.message = ret3.toString();
+            console.info("FFRT_FUNCTION FfrtSerialQueue ret: ", ret1);
+            console.info("FFRT_FUNCTION FfrtConcurrentQueue ret: ", ret2);
+            console.info("FFRT_FUNCTION ProcessFfrtQueue ret: ", ret4);
+            console.info("FFRT_FUNCTION ComputeFfrtQueue ret: ", ret5);
           })
       }
       .width('100%')

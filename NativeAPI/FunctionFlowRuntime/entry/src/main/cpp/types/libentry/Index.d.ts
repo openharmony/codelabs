@@ -1,9 +1,9 @@
 export class FunctionClass {
   constructor(version: number)
-  FfrtSerialQueue():void;
-  FfrtConcurrentQueue():void;
+  FfrtSerialQueue():number;
+  FfrtConcurrentQueue():number;
 }
 
 export const add: (a: number, b: number) => number;
-export const ProcessFfrtQueue: () => void;
-export const ComputeFfrtQueue: () => void;
+export const ProcessFfrtQueue: () => number;
+export const ComputeFfrtQueue: () => number;
