@@ -18,8 +18,8 @@ JSBIND_GLOBAL()
 
 JSBIND_CLASS(FunctionClass) {
     JSBIND_CONSTRUCTOR<int>();
-    JSBIND_PMETHOD(FfrtSerialQueue);
-    JSBIND_PMETHOD(FfrtConcurrentQueue);
+    JSBIND_METHOD(FfrtSerialQueue);
+    JSBIND_METHOD(FfrtConcurrentQueue);
 }
 
 // Step 1 注册 AKI 插件

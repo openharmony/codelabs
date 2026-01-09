@@ -31,8 +31,9 @@ void BankBusinessVIP()
     LOGI("saving or withdraw VIP");
 }
 
-void FunctionClass::FfrtSerialQueue(){
+int FunctionClass::FfrtSerialQueue(){
     // type传1，代表串行调度
+    LOGI("FfrtQueue start ");
     BankQueueSystem bankQueue(1, "Bank", 2);
 
     auto task1 = bankQueue.Enter(BankBusiness, "customer1", ffrt_queue_priority_low, 0);
@@ -48,9 +49,10 @@ void FunctionClass::FfrtSerialQueue(){
     // 等待所有的客户服务完成
     bankQueue.Wait(task5);
     LOGI("FfrtQueue results ");
+    return 1;
 }
 
-void FunctionClass::FfrtConcurrentQueue(){
+int FunctionClass::FfrtConcurrentQueue(){
     // type传0，代表并发调度
     BankQueueSystem bankQueue(0, "Bank", 2);
 
@@ -64,4 +66,5 @@ void FunctionClass::FfrtConcurrentQueue(){
     // 等待所有的客户服务完成
     bankQueue.Wait(task2);
     LOGI("FfrtQueue results ");
+    return 2;
 }

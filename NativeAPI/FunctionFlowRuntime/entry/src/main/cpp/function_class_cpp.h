@@ -10,8 +10,8 @@ public:
     FunctionClass() = default;
     FunctionClass(uint32_t version);
     ~FunctionClass();
-    void FfrtSerialQueue();
-    void FfrtConcurrentQueue();
+    int FfrtSerialQueue();
+    int FfrtConcurrentQueue();
 };
 
 #endif

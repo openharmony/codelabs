@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-    void ProcessFfrtQueue();
+    int ProcessFfrtQueue();
 
 #ifdef __cplusplus
 }
