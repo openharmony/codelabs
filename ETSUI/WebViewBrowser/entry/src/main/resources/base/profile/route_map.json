@@ -1,0 +1,12 @@
+{
+  "routerMap": [
+    {
+      "name": "SettingsPage",
+      "pageSourceFile": "src/main/ets/pages/SettingsPage.ets",
+      "buildFunction": "SettingsPageBuilder",
+      "data": {
+        "description": "浏览器设置页面"
+      }
+    }
+  ]
+}
