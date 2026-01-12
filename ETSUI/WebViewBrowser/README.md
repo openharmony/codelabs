@@ -2,17 +2,15 @@
 
 <div align="center">
 
-一个基于 HarmonyOS ArkTS 开发的功能完善的多标签浏览器应用
+一个基于 ArkTS 开发的功能完善的多标签浏览器应用
 
-[![HarmonyOS](https://img.shields.io/badge/HarmonyOS-API%2020-blue)](https://developer.harmonyos.com/)
-[![ArkTS](https://img.shields.io/badge/Language-ArkTS-orange)](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/arkts-get-started-0000001504769321-V3)
-[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
+
 
 </div>
 
 ## 项目简介
 
-WebViewBrowser 是一个使用 HarmonyOS ArkWeb 组件开发的轻量级多标签浏览器应用。项目采用 ArkTS 语言和 Stage 模型开发，实现了现代浏览器的核心功能，包括多标签管理、历史记录、书签收藏、数据统计等特性。
+WebViewBrowser 是一个使用 ArkWeb 组件开发的轻量级多标签浏览器应用。项目采用 ArkTS 语言和 Stage 模型开发，实现了现代浏览器的核心功能，包括多标签管理、历史记录、书签收藏、数据统计等特性。
 
 
 
@@ -109,7 +107,7 @@ WebViewBrowser/
 ### 环境要求
 
 - **DevEco Studio**: 6.0.0.868 及以上版本
-- **HarmonyOS SDK**: API Level 20 及以上
+- **SDK**: API Level 20 及以上
 
 
 
