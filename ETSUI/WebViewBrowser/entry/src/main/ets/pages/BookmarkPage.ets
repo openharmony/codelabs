@@ -1,5 +1,5 @@
 import { promptAction } from '@kit.ArkUI';
-import { dataManager, BookmarkItem } from './DataManager';
+import { dataManager, BookmarkItem } from '../manager/DataManager';
 
 // Builder函数，用于Navigation路由
 @Builder

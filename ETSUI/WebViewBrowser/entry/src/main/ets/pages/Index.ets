@@ -2,7 +2,7 @@
 import { webview } from '@kit.ArkWeb';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { preferences } from '@kit.ArkData';
-import { dataManager } from './DataManager';
+import { dataManager } from '../manager/DataManager';
 import { promptAction } from '@kit.ArkUI';
 
 // 标签页信息接口
@@ -287,21 +287,40 @@ struct Index {
             })
             .onPageEnd((event) => {
               if (event && index === this.currentTabIndex) {
+                console.info('=== onPageEnd 触发 ===');
                 console.info(`页面加载完成: ${event.url}`);
+                console.info(`当前标签索引: ${index}`);
+                console.info(`当前激活标签索引: ${this.currentTabIndex}`);
+                console.info(`隐私模式: ${tab.incognitoMode}`);
+                
                 this.currentUrl = event.url;
                 this.inputUrl = event.url;
                 tab.url = event.url;
                 try {
                   const title = tab.controller.getTitle();
+                  console.info(`页面标题: ${title}`);
                   if (title) {
                     tab.title = title;
                   }
                   // 更新书签状态
                   this.isCurrentPageBookmarked = dataManager.isBookmarked(event.url);
+                  
+                  // 记录历史（非隐私模式）
+                  if (!tab.incognitoMode) {
+                    console.info('准备调用 dataManager.addHistory');
+                    dataManager.addHistory(event.url, title || event.url);
+                    console.info(`历史记录调用完成: ${title} - ${event.url}`);
+                  } else {
+                    console.info('隐私模式，跳过历史记录');
+                  }
                 } catch (error) {
                   console.error('获取标题失败:', error);
                 }
                 this.updateNavigationState();
+              } else {
+                if (event) {
+                  console.info(`onPageEnd 触发但不是当前标签 - 标签索引: ${index}, 当前激活: ${this.currentTabIndex}`);
+                }
               }
             })
             .onErrorReceive((event) => {
@@ -365,6 +384,33 @@ struct Index {
         .onClick(() => {
           // 点击打开书签列表
           this.pathStack.pushPathByName('BookmarkPage', null);
+        })
+
+        // 分隔线
+        Divider()
+          .vertical(true)
+          .height(40)
+          .color('#E0E0E0')
+
+        // 历史按钮
+        Button() {
+          Column() {
+            Image($r('app.media.history'))
+              .width(24)
+              .height(24)
+              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+            Text('历史')
+              .fontSize(11)
+              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+              .margin({ top: 2 })
+          }
+        }
+        .layoutWeight(1)
+        .height(60)
+        .backgroundColor(Color.Transparent)
+        .onClick(() => {
+          // 点击打开历史记录
+          this.pathStack.pushPathByName('HistoryPage', null);
         })
 
         // 分隔线
@@ -710,7 +756,8 @@ struct Index {
       this.homeUrl = dataPreferences.getSync('homeUrl', 'https://www.huawei.com') as string;
       this.darkMode = dataPreferences.getSync('darkMode', false) as boolean;
       this.forceDarkMode = dataPreferences.getSync('forceDarkMode', true) as boolean;
-      this.incognitoMode = dataPreferences.getSync('incognitoMode', false) as boolean;
+      // 隐私模式默认关闭，不从设置中读取（避免被错误保存为true）
+      this.incognitoMode = false;
       this.javaScriptEnabled = dataPreferences.getSync('javaScriptEnabled', true) as boolean;
       this.imageEnabled = dataPreferences.getSync('imageEnabled', true) as boolean;
       this.textZoom = dataPreferences.getSync('textZoom', 100) as number;
@@ -718,11 +765,15 @@ struct Index {
       this.geolocationEnabled = dataPreferences.getSync('geolocationEnabled', true) as boolean;
       this.clearCacheOnExit = dataPreferences.getSync('clearCacheOnExit', false) as boolean;
       
+      // 确保隐私模式设置为false并保存
+      dataPreferences.putSync('incognitoMode', false);
+      dataPreferences.flush();
+      
       // 设置初始URL为主页地址
       this.currentUrl = this.homeUrl;
       this.inputUrl = this.homeUrl;
 
-      console.info(`加载设置完成`);
+      console.info(`加载设置完成 - 隐私模式: ${this.incognitoMode}`);
     } catch (error) {
       console.error(`加载设置失败: ${error}`);
     }

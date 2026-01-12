@@ -15,6 +15,14 @@
       "data": {
         "description": "书签管理页面"
       }
+    },
+    {
+      "name": "HistoryPage",
+      "pageSourceFile": "src/main/ets/pages/HistoryPage.ets",
+      "buildFunction": "HistoryPageBuilder",
+      "data": {
+        "description": "历史记录页面"
+      }
     }
   ]
 }
