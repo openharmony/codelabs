@@ -7,6 +7,14 @@
       "data": {
         "description": "浏览器设置页面"
       }
+    },
+    {
+      "name": "BookmarkPage",
+      "pageSourceFile": "src/main/ets/pages/BookmarkPage.ets",
+      "buildFunction": "BookmarkPageBuilder",
+      "data": {
+        "description": "书签管理页面"
+      }
     }
   ]
 }

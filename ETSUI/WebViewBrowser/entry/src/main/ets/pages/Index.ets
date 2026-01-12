@@ -2,6 +2,8 @@
 import { webview } from '@kit.ArkWeb';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { preferences } from '@kit.ArkData';
+import { dataManager } from './DataManager';
+import { promptAction } from '@kit.ArkUI';
 
 // 标签页信息接口
 interface TabInfo {
@@ -54,12 +56,23 @@ struct Index {
   @StorageLink('textZoom') storageTextZoom: number = 100;
   @StorageLink('clearCache') storageClearCache: number = 0;
   @StorageLink('clearCookies') storageClearCookies: number = 0;
+  
+  // 书签状态
+  @State isCurrentPageBookmarked: boolean = false;
+  @StorageLink('openUrl') storageOpenUrl: string = '';
+  @StorageLink('bookmarkChanged') storageBookmarkChanged: number = 0;
 
   aboutToAppear() {
     // 设置全局NavPathStack供子页面使用
     AppStorage.setOrCreate('pathStack', this.pathStack);
     // 加载设置
     this.loadSettings();
+    
+    // 同步初始化DataManager（确保数据立即可用）
+    const context = this.getUIContext().getHostContext();
+    if (context) {
+      dataManager.initSync(context);
+    }
     
     // 初始化第一个标签页
     this.tabs.push({
@@ -80,6 +93,9 @@ struct Index {
     
     // 监听设置变化
     this.watchSettings();
+    
+    // 监听书签变化
+    this.watchBookmarkChanges();
   }
 
   aboutToDisappear() {
@@ -189,6 +205,21 @@ struct Index {
               this.loadUrl();
             })
 
+          // 收藏按钮
+          Button() {
+            Image(this.isCurrentPageBookmarked ? $r('app.media.bookmark_filled') : $r('app.media.bookmark'))
+              .width(20)
+              .height(20)
+              .fillColor(this.isCurrentPageBookmarked ? '#FF9500' : (this.darkMode ? '#FFFFFF' : '#666666'))
+          }
+          .width(40)
+          .height(40)
+          .backgroundColor(Color.Transparent)
+          .margin({ left: 4 })
+          .onClick(() => {
+            this.toggleBookmark();
+          })
+
           // 跳转按钮
           Button('跳转')
             .width(60)
@@ -265,6 +296,8 @@ struct Index {
                   if (title) {
                     tab.title = title;
                   }
+                  // 更新书签状态
+                  this.isCurrentPageBookmarked = dataManager.isBookmarked(event.url);
                 } catch (error) {
                   console.error('获取标题失败:', error);
                 }
@@ -284,7 +317,7 @@ struct Index {
       .width('100%')
       .layoutWeight(1)
 
-      // 底部工具栏：Home、标签、设置
+      // 底部工具栏：Home、书签、标签、设置
       Row() {
         // Home 按钮
         Button() {
@@ -305,6 +338,33 @@ struct Index {
         .onClick(() => {
           this.inputUrl = this.homeUrl;
           this.loadUrl();
+        })
+
+        // 分隔线
+        Divider()
+          .vertical(true)
+          .height(40)
+          .color('#E0E0E0')
+
+        // 书签按钮
+        Button() {
+          Column() {
+            Image($r('app.media.bookmark'))
+              .width(24)
+              .height(24)
+              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+            Text('书签')
+              .fontSize(11)
+              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+              .margin({ top: 2 })
+          }
+        }
+        .layoutWeight(1)
+        .height(60)
+        .backgroundColor(Color.Transparent)
+        .onClick(() => {
+          // 点击打开书签列表
+          this.pathStack.pushPathByName('BookmarkPage', null);
         })
 
         // 分隔线
@@ -715,7 +775,25 @@ struct Index {
         }
         AppStorage.setOrCreate('clearCookies', 0);
       }
+      
+      // 处理从历史/书签页面返回时打开URL
+      if (this.storageOpenUrl && this.storageOpenUrl.length > 0) {
+        this.inputUrl = this.storageOpenUrl;
+        this.loadUrl();
+        AppStorage.setOrCreate('openUrl', '');
+      }
     }, 500);
+  }
+  
+  // 监听书签变化
+  watchBookmarkChanges() {
+    setInterval(() => {
+      // 当书签数据变化时，重新检查当前页面的收藏状态
+      if (this.storageBookmarkChanged > 0) {
+        this.isCurrentPageBookmarked = dataManager.isBookmarked(this.currentUrl);
+        console.info(`书签状态已更新: ${this.currentUrl} - ${this.isCurrentPageBookmarked}`);
+      }
+    }, 100);
   }
 
   // 检查是否需要清除缓存
@@ -728,6 +806,32 @@ struct Index {
       }
     } catch (error) {
       console.error(`清除缓存失败: ${error}`);
+    }
+  }
+  
+  // 切换书签状态
+  async toggleBookmark() {
+    if (!this.currentUrl || this.currentUrl === 'about:blank') {
+      promptAction.showToast({ message: '无法收藏此页面' });
+      return;
+    }
+    
+    if (this.isCurrentPageBookmarked) {
+      // 取消收藏
+      await dataManager.deleteBookmarkByUrl(this.currentUrl);
+      this.isCurrentPageBookmarked = false;
+      promptAction.showToast({ message: '已取消收藏' });
+    } else {
+      // 添加收藏
+      const currentTab = this.tabs[this.currentTabIndex];
+      const title = currentTab?.title || this.currentUrl;
+      const success = await dataManager.addBookmark(this.currentUrl, title);
+      if (success) {
+        this.isCurrentPageBookmarked = true;
+        promptAction.showToast({ message: '已添加到书签' });
+      } else {
+        promptAction.showToast({ message: '添加书签失败' });
+      }
     }
   }
 }
