@@ -8,7 +8,8 @@
 #define application_native_hanwujiproxy_LogUtils
 
 #include "hilog/log.h"
-
+#define LOG_DOMAIN 0X000001
+#define LOG_TAG "Pr_411"
 #ifdef __cplusplus
 extern "C" {
 #endif
