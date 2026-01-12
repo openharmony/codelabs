@@ -212,6 +212,26 @@ export struct SettingsPage {
           // 数据管理
           this.SettingSection('数据管理')
           
+          // 统计信息
+          Row() {
+            Text('统计信息')
+              .fontSize(16)
+              .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+              .layoutWeight(1)
+
+            Text('›')
+              .fontSize(20)
+              .fontColor('#C7C7CC')
+          }
+          .width('100%')
+          .height(50)
+          .padding({ left: 16, right: 16 })
+          .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+          .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
+          .onClick(() => {
+            this.pathStack.pushPathByName('StatisticsPage', null);
+          })
+          
           this.ActionItem('清除缓存', () => {
             this.clearCache();
           })

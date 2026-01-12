@@ -18,6 +18,8 @@ export struct HistoryPage {
   @State searchKeyword: string = '';
   @State isEditing: boolean = false;
   @State selectedItems: Set<number> = new Set();
+  @State showFilterDialog: boolean = false;
+  @State filterOption: string = '全部'; // '全部', '今天', '最近7天', '最近30天'
   
   // 深色模式
   @StorageLink('darkMode') darkMode: boolean = false;
@@ -30,17 +32,75 @@ export struct HistoryPage {
   // 加载历史记录
   loadHistory() {
     console.info('=== HistoryPage loadHistory 开始 ===');
+    let allHistory = dataManager.getHistoryList();
+    
+    // 应用时间筛选
+    if (this.filterOption !== '全部') {
+      const now = Date.now();
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const todayTime = today.getTime();
+      
+      if (this.filterOption === '今天') {
+        allHistory = allHistory.filter(item => item.visitTime >= todayTime);
+      } else if (this.filterOption === '最近7天') {
+        const weekAgo = todayTime - 7 * 24 * 60 * 60 * 1000;
+        allHistory = allHistory.filter(item => item.visitTime >= weekAgo);
+      } else if (this.filterOption === '最近30天') {
+        const monthAgo = todayTime - 30 * 24 * 60 * 60 * 1000;
+        allHistory = allHistory.filter(item => item.visitTime >= monthAgo);
+      }
+    }
+    
+    // 应用搜索筛选
     if (this.searchKeyword.trim()) {
-      this.historyList = dataManager.searchHistory(this.searchKeyword);
+      const keyword = this.searchKeyword.toLowerCase();
+      allHistory = allHistory.filter(item => 
+        item.url.toLowerCase().includes(keyword) || 
+        item.title.toLowerCase().includes(keyword)
+      );
       // 搜索时不分组
+      this.historyList = allHistory;
       this.groupedHistory = new Map([['搜索结果', this.historyList]]);
       console.info(`搜索结果: ${this.historyList.length}条`);
     } else {
-      this.historyList = dataManager.getHistoryList();
-      this.groupedHistory = dataManager.getHistoryByDate();
+      this.historyList = allHistory;
+      this.groupedHistory = this.groupByDate(allHistory);
       console.info(`加载历史记录: ${this.historyList.length}条`);
       console.info(`分组数量: ${this.groupedHistory.size}`);
     }
+  }
+  
+  // 按日期分组
+  groupByDate(list: HistoryItem[]): Map<string, HistoryItem[]> {
+    const grouped = new Map<string, HistoryItem[]>();
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const yesterday = today - 24 * 60 * 60 * 1000;
+    const weekAgo = today - 7 * 24 * 60 * 60 * 1000;
+    
+    list.forEach(item => {
+      const itemTime = new Date(item.visitTime);
+      const itemDate = new Date(itemTime.getFullYear(), itemTime.getMonth(), itemTime.getDate()).getTime();
+      
+      let dateLabel: string;
+      if (itemDate === today) {
+        dateLabel = '今天';
+      } else if (itemDate === yesterday) {
+        dateLabel = '昨天';
+      } else if (itemDate >= weekAgo) {
+        dateLabel = '最近7天';
+      } else {
+        dateLabel = '更早';
+      }
+      
+      if (!grouped.has(dateLabel)) {
+        grouped.set(dateLabel, []);
+      }
+      grouped.get(dateLabel)?.push(item);
+    });
+    
+    return grouped;
   }
 
   // 格式化时间
@@ -79,6 +139,16 @@ export struct HistoryPage {
             .margin({ left: 16 })
           
           Blank()
+          
+          // 筛选按钮
+          Button(this.filterOption)
+            .fontSize(14)
+            .backgroundColor(Color.Transparent)
+            .fontColor('#007AFF')
+            .margin({ right: 8 })
+            .onClick(() => {
+              this.showFilterDialog = true;
+            })
           
           // 编辑/完成按钮
           Button(this.isEditing ? '完成' : '编辑')
@@ -313,6 +383,88 @@ export struct HistoryPage {
       .backgroundColor(this.darkMode ? '#1C1C1E' : '#F2F2F7')
     }
     .hideTitleBar(true)
+    .bindContentCover(this.showFilterDialog, this.filterDialog(), {
+      modalTransition: ModalTransition.DEFAULT
+    })
+  }
+  
+  // 筛选对话框
+  @Builder
+  filterDialog() {
+    Column() {
+      Column({ space: 0 }) {
+        // 标题
+        Row() {
+          Text('时间筛选')
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+            .layoutWeight(1)
+          
+          Button('关闭')
+            .fontSize(14)
+            .backgroundColor(Color.Transparent)
+            .fontColor('#007AFF')
+            .onClick(() => {
+              this.showFilterDialog = false;
+            })
+        }
+        .width('100%')
+        .height(56)
+        .padding({ left: 16, right: 16 })
+        .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
+        
+        Divider()
+          .color(this.darkMode ? '#38383A' : '#E5E5EA')
+        
+        // 筛选选项
+        Column() {
+          this.FilterOptionItem('全部')
+          this.FilterOptionItem('今天')
+          this.FilterOptionItem('最近7天')
+          this.FilterOptionItem('最近30天')
+        }
+        .width('100%')
+      }
+      .width('90%')
+      .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
+      .borderRadius(12)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor('rgba(0, 0, 0, 0.5)')
+    .justifyContent(FlexAlign.Center)
+    .onClick(() => {
+      this.showFilterDialog = false;
+    })
+  }
+  
+  // 筛选选项项
+  @Builder
+  FilterOptionItem(option: string) {
+    Row() {
+      Text(option)
+        .fontSize(16)
+        .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+        .layoutWeight(1)
+      
+      if (this.filterOption === option) {
+        Image($r('app.media.bookmark_filled'))
+          .width(20)
+          .height(20)
+          .fillColor('#007AFF')
+      }
+    }
+    .width('100%')
+    .height(50)
+    .padding({ left: 16, right: 16 })
+    .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
+    .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
+    .onClick(() => {
+      this.filterOption = option;
+      this.showFilterDialog = false;
+      this.loadHistory();
+    })
   }
   
   // 日期分组标题
