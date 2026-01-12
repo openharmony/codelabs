@@ -1,106 +1,170 @@
 # WebViewBrowser
 
-Web组件示例，使用内置 Web 组件实现轻量级多标签浏览器。核心逻辑位于 entry 模块。
+<div align="center">
 
-## 功能特点
-- 多标签浏览，标签列表弹窗支持快速切换与隐私模式开关。
-- 工具栏：前进、后退、刷新；地址栏支持自动补全 https://，提供主页快捷按钮。
-- Web 配置：深色模式与强制深色、JavaScript 与图片开关、DOM Storage 与地理定位访问、文本缩放、缓存/ Cookie 清理。
-- 设置持久化：通过 preferences 保存，运行时监听变更并即时应用。
-- 加载与导航状态日志，便于排查页面加载错误。
+一个基于 HarmonyOS ArkTS 开发的功能完善的多标签浏览器应用
 
-## 目录结构（关键部分）
+[![HarmonyOS](https://img.shields.io/badge/HarmonyOS-API%2020-blue)](https://developer.harmonyos.com/)
+[![ArkTS](https://img.shields.io/badge/Language-ArkTS-orange)](https://developer.harmonyos.com/cn/docs/documentation/doc-guides-V3/arkts-get-started-0000001504769321-V3)
+[![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
+
+</div>
+
+## 项目简介
+
+WebViewBrowser 是一个使用 HarmonyOS ArkWeb 组件开发的轻量级多标签浏览器应用。项目采用 ArkTS 语言和 Stage 模型开发，实现了现代浏览器的核心功能，包括多标签管理、历史记录、书签收藏、数据统计等特性。
+
+
+
+### 核心特性
+
+#### 浏览功能
+- **多标签浏览** - 支持创建、切换、关闭多个标签页，提供流畅的多任务体验
+- **智能地址栏** - 自动补全 `https://` 协议，支持 URL 输入与搜索
+- **页面导航** - 完整的前进、后退、刷新、停止加载功能
+- **加载进度** - 实时显示页面加载进度条，提供视觉反馈
+- **主页快捷** - 一键返回主页，快速开始浏览
+
+####  数据管理
+- **历史记录** - 自动记录访问历史，支持按日期分组查看
+- **智能过滤** - 提供"今天"、"最近7天"、"最近30天"等时间范围筛选
+- **访问统计** - 记录每个网站的访问次数，支持快速重访
+- **搜索功能** - 在历史记录中快速搜索目标网页
+- **一键清空** - 支持清空所有历史记录
+
+#### 书签收藏
+- **快速收藏** - 一键添加/移除当前页面书签
+- **分组管理** - 支持将书签按文件夹分类整理
+- **编辑功能** - 自定义书签标题和 URL
+- **快速访问** - 从书签列表快速打开收藏的网页
+
+####  数据统计
+- **浏览统计** - 展示总历史记录数、总书签数等概览数据
+- **访问分析** - 统计今日、本周、本月的访问次数
+- **热门榜单** - 显示访问次数最多的前 5 个网站
+- **最近书签** - 快速查看最近添加的书签
+
+####  设置与配置
+- **深色模式** - 支持浅色/深色主题切换
+- **强制深色** - 强制网页使用深色模式渲染
+- **JavaScript 控制** - 可选启用/禁用 JavaScript
+- **图片加载** - 控制是否加载网页图片
+- **文本缩放** - 调整网页文字大小（50% - 200%）
+- **存储管理** - DOM Storage 和地理定位权限控制
+- **缓存清理** - 支持清理浏览器缓存和 Cookie
+- **主页设置** - 自定义浏览器默认主页
+
+## 项目结构
+
+
+
 ```
-AppScope/            # 应用配置与资源
-entry/               # 主入口模块
-  src/main/ets/      # ArkTS 代码
-    entryability/    # Ability 启动入口
-    pages/           # UI 页面（Index 主页面）
-  src/main/resources # 资源文件
-hvigor/              # 构建配置
+WebViewBrowser/
+├── AppScope/                      # 应用全局配置
+│   ├── app.json5                 # 应用配置文件
+│   └── resources/                # 全局资源文件
+├── entry/                         # 主模块
+│   ├── src/main/
+│   │   ├── ets/                  # ArkTS 源代码
+│   │   │   ├── entryability/     # 应用入口能力
+│   │   │   │   ├── EntryAbility.ets           # 主入口
+│   │   │   │   └── EntryBackupAbility.ets     # 备份能力
+│   │   │   ├── manager/          # 数据管理层
+│   │   │   │   └── DataManager.ets            # 数据管理器（373行）
+│   │   │   └── pages/            # 页面 UI
+│   │   │       ├── Index.ets                  # 浏览器主页面（919行）
+│   │   │       ├── BookmarkPage.ets           # 书签页面（539行）
+│   │   │       ├── HistoryPage.ets            # 历史记录页面（580行）
+│   │   │       ├── SettingsPage.ets           # 设置页面（491行）
+│   │   │       └── StatisticsPage.ets         # 统计页面（419行）
+│   │   ├── resources/            # 应用资源
+│   │   │   └── base/
+│   │   │       ├── element/      # 字符串等元素资源
+│   │   │       └── media/        # 图片图标资源
+│   │   └── module.json5          # 模块配置文件
+│   ├── build-profile.json5       # 模块构建配置
+│   └── oh-package.json5          # 模块依赖配置
+├── web_doc/                       # ArkWeb 开发文档（40+篇）
+├── hvigor/                        # 构建工具配置
+├── build-profile.json5            # 项目构建配置
+├── hvigorfile.ts                  # 构建脚本
+└── oh-package.json5               # 项目依赖配置
 ```
 
-## 重要文件
-- [entry/src/main/ets/pages/Index.ets](entry/src/main/ets/pages/Index.ets)：主浏览器 UI、标签管理与 Web 设置。
-- [entry/src/main/module.json5](entry/src/main/module.json5)：模块元数据与权限（含 INTERNET）。
-- [entry/hvigorfile.ts](entry/hvigorfile.ts)、[entry/build-profile.json5](entry/build-profile.json5)：模块构建配置。
+### 核心文件说明
 
-## 环境要求
-- DevEco Studio（Stage 模型，ArkTS）及 API 20。
+| 文件 | 行数 | 说明 |
+|------|------|------|
+| [Index.ets](entry/src/main/ets/pages/Index.ets) | 919 | 浏览器主界面，包含 Web 组件、标签管理、导航栏等 |
+| [HistoryPage.ets](entry/src/main/ets/pages/HistoryPage.ets) | 580 | 历史记录页面，支持时间筛选、搜索、分组显示 |
+| [BookmarkPage.ets](entry/src/main/ets/pages/BookmarkPage.ets) | 539 | 书签管理页面，支持添加、编辑、删除、分组 |
+| [SettingsPage.ets](entry/src/main/ets/pages/SettingsPage.ets) | 491 | 设置页面，包含所有浏览器配置选项 |
+| [StatisticsPage.ets](entry/src/main/ets/pages/StatisticsPage.ets) | 419 | 数据统计页面，展示浏览数据的可视化分析 |
+| [DataManager.ets](entry/src/main/ets/manager/DataManager.ets) | 373 | 数据管理器，负责书签和历史记录的持久化 |
+
+**总代码行数：3,385 行**
+
+## 快速开始
+
+### 环境要求
+
+- **DevEco Studio**: 6.0.0.868 及以上版本
+- **HarmonyOS SDK**: API Level 20 及以上
 
 
 
-## 使用说明
-- 启动时从 preferences 读取主页、深色模式、强制深色、JS/图片开关、文本缩放、DOM Storage、地理定位、退出清缓存等设置，并在运行时监听变更。
-- 在标签列表对话框切换隐私模式，仅对新建标签生效。
-- 如启用“退出清缓存”偏好，关闭页面时自动调用缓存清理；Cookies 可按需手动清理。
+## 使用指南
 
-## 测试
-当前未提供自动化测试。已引入 Hypium 与 Hamock 作为开发依赖，可在 `entry/src/ohosTest` 或 `entry/src/test` 下添加用例。
+<!-- 功能演示截图 -->
 
-## 常见问题
-- 页面无法加载：检查设备/模拟器网络，确认 [entry/src/main/module.json5](entry/src/main/module.json5) 中仍声明 `ohos.permission.INTERNET`。
-- 深色或其他设置未生效：确认 `browser_settings` 偏好文件可写，并确保 StorageLink 值在监听中更新。
-# MyApplication
 
-HarmonyOS ArkTS sample that implements a lightweight multi-tab browser using the built-in Web component. The main UI and logic live in the entry module.
+### 基础操作
 
-## Features
-- Multi-tab browsing with quick switcher dialog and incognito toggle.
-- Toolbar navigation (back/forward/refresh), address bar with auto https:// prefix, and home shortcut.
-- Per-tab Web settings: dark mode toggle with optional force-dark, JavaScript and image enable switches, DOM storage and geolocation access, text zoom ratio, and cache/cookie clearing.
-- Persistent settings via preferences with runtime watchers to reflect user changes without restart.
-- Basic error logging for page load failures and navigation state updates.
+1. **访问网页**
+   - 在地址栏输入 URL 或关键词
+   - 点击 `前往` 按钮或回车确认
+   - 自动补全 `https://` 协议
 
-## Project Structure (key parts)
+2. **多标签管理**
+   - 点击底部 `标签` 按钮查看所有标签
+   - 点击 `+` 按钮创建新标签
+   - 滑动删除不需要的标签
+   - 点击标签可快速切换
+
+3. **添加书签**
+   - 访问目标网页
+   - 点击工具栏的收藏图标
+   - 再次点击可取消收藏
+
+4. **查看历史**
+   - 点击底部 `历史` 按钮
+   - 使用顶部筛选器选择时间范围
+   - 在搜索框输入关键词查找
+   - 点击历史记录即可重新访问
+
+5. **数据统计**
+   - 进入 `设置` 页面
+   - 点击 `统计信息` 查看浏览数据
+   - 查看访问趋势和热门网站
+
+### 高级功能
+
+#### 深色模式配置
 ```
-AppScope/            # App profile and resources
-entry/               # Main entry module
-  src/main/ets/      # ArkTS code
-    entryability/    # Ability bootstrap
-    pages/           # UI pages (Index main page)
-  src/main/resources # App resources
-hvigor/              # Build configuration
+设置 -> 深色模式 (开启/关闭)
+设置 -> 强制深色 (强制网页使用深色主题)
 ```
 
-## Important Files
-- [entry/src/main/ets/pages/Index.ets](entry/src/main/ets/pages/Index.ets): Main browser UI and tab management.
-- [entry/src/main/module.json5](entry/src/main/module.json5): Module metadata and permissions (includes INTERNET).
-- [entry/hvigorfile.ts](entry/hvigorfile.ts) and [entry/build-profile.json5](entry/build-profile.json5): Module build settings.
-
-## Requirements
-- DevEco Studio with HarmonyOS SDK (ArkTS/Stage model).
-- Node.js environment for `ohpm` (installed with DevEco Studio).
-
-## Setup
-1) Install dependencies at the repo root:
+#### 性能优化
 ```
-cd MyApplication
-ohpm install
-```
-2) (Optional) Install entry-specific dependencies if added later:
-```
-cd entry
-ohpm install
+设置 -> 禁用图片 (节省流量)
+设置 -> 禁用 JavaScript (提升安全性)
 ```
 
-## Build and Run
-- From DevEco Studio: Open the project folder, select the `entry` module, and Run on a phone/emulator.
-- From CLI (root directory):
+#### 缓存管理
 ```
-./hvigorw clean
-./hvigorw assembleHap --mode module --module entry
+设置 -> 清除缓存
+设置 -> 清除 Cookie
+设置 -> 退出时清除缓存 (自动清理)
 ```
-Outputs appear under `entry/build/default/outputs`.
 
-## Usage Notes
-- Home URL, dark mode, force-dark, JS/image enablement, text zoom, DOM storage, geolocation, and cache/cookie clearing are read from preferences when the app starts and watched at runtime.
-- Toggling incognito on the tab list dialog applies to newly created tabs.
-- Cache can be cleared on exit via the stored preference; cookies can be cleared on demand.
-
-## Testing
-No automated tests are currently defined. Hypium and Hamock are available as dev dependencies; add cases under `entry/src/ohosTest` or `entry/src/test` as needed.
-
-## Troubleshooting
-- If Web pages fail to load, confirm the device/emulator has network access and that `ohos.permission.INTERNET` remains declared in [entry/src/main/module.json5](entry/src/main/module.json5).
-- If dark mode or other settings do not reflect, ensure the `browser_settings` preferences file is writable and the storage links are updated.
