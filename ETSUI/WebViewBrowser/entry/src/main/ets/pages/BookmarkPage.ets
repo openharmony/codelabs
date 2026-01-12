@@ -14,14 +14,18 @@ export struct BookmarkPage {
   
   // 书签列表
   @State bookmarkList: BookmarkItem[] = [];
+  @State groupedBookmarks: Map<string, BookmarkItem[]> = new Map();
   @State searchKeyword: string = '';
   @State isEditing: boolean = false;
   @State selectedItems: Set<number> = new Set();
+  @State currentFolder: string = '全部'; // 当前文件夹筛选
+  @State showFolderDialog: boolean = false;
   
   // 编辑书签对话框
   @State showEditDialog: boolean = false;
   @State editingBookmark: BookmarkItem | null = null;
   @State editTitle: string = '';
+  @State editFolder: string = '';
   
   // 深色模式
   @StorageLink('darkMode') darkMode: boolean = false;
@@ -32,11 +36,43 @@ export struct BookmarkPage {
 
   // 加载书签
   loadBookmarks() {
+    let allBookmarks: BookmarkItem[];
+    
     if (this.searchKeyword.trim()) {
-      this.bookmarkList = dataManager.searchBookmarks(this.searchKeyword);
+      allBookmarks = dataManager.searchBookmarks(this.searchKeyword);
     } else {
-      this.bookmarkList = dataManager.getBookmarkList();
+      allBookmarks = dataManager.getBookmarkList();
     }
+    
+    // 按文件夹筛选
+    if (this.currentFolder !== '全部') {
+      allBookmarks = allBookmarks.filter(item => 
+        (item.folder || '默认') === this.currentFolder
+      );
+    }
+    
+    this.bookmarkList = allBookmarks;
+    
+    // 按文件夹分组
+    this.groupedBookmarks = new Map();
+    allBookmarks.forEach(item => {
+      const folder = item.folder || '默认';
+      if (!this.groupedBookmarks.has(folder)) {
+        this.groupedBookmarks.set(folder, []);
+      }
+      this.groupedBookmarks.get(folder)?.push(item);
+    });
+  }
+  
+  // 获取所有文件夹
+  getAllFolders(): string[] {
+    const folders = new Set<string>(['全部', '默认']);
+    dataManager.getBookmarkList().forEach(item => {
+      if (item.folder) {
+        folders.add(item.folder);
+      }
+    });
+    return Array.from(folders);
   }
 
   // 格式化日期

@@ -61,6 +61,11 @@ struct Index {
   @State isCurrentPageBookmarked: boolean = false;
   @StorageLink('openUrl') storageOpenUrl: string = '';
   @StorageLink('bookmarkChanged') storageBookmarkChanged: number = 0;
+  
+  // 加载进度
+  @State loadingProgress: number = 0;
+  @State isLoading: boolean = false;
+  @State pageTitle: string = '新标签页';
 
   aboutToAppear() {
     // 设置全局NavPathStack供子页面使用
@@ -234,6 +239,19 @@ struct Index {
         }
         .width('100%')
         .padding({ left: 12, right: 12, bottom: 8 })
+        
+        // 加载进度条
+        if (this.isLoading) {
+          Progress({ value: this.loadingProgress, total: 100, type: ProgressType.Linear })
+            .width('100%')
+            .height(3)
+            .color('#007AFF')
+            .backgroundColor(Color.Transparent)
+            .animation({
+              duration: 300,
+              curve: Curve.EaseInOut
+            })
+        }
       }
       .width('100%')
       .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
@@ -283,6 +301,8 @@ struct Index {
                 this.currentUrl = event.url;
                 this.inputUrl = event.url;
                 tab.url = event.url;
+                this.isLoading = true;
+                this.loadingProgress = 0;
               }
             })
             .onPageEnd((event) => {
@@ -323,8 +343,17 @@ struct Index {
                 }
               }
             })
+            .onProgressChange((event) => {
+              if (event && index === this.currentTabIndex) {
+                this.loadingProgress = event.newProgress;
+                if (event.newProgress >= 100) {
+                  this.isLoading = false;
+                }
+              }
+            })
             .onErrorReceive((event) => {
               if (event && index === this.currentTabIndex) {
+                this.isLoading = false;
                 console.error(`页面加载错误:`);
                 console.error(`  错误码: ${event.error.getErrorCode()}`);
                 console.error(`  错误信息: ${event.error.getErrorInfo()}`);
