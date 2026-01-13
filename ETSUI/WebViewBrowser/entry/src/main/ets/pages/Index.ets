@@ -44,12 +44,10 @@ struct Index {
   @State canGoBack: boolean = false;
   // 是否可以前进
   @State canGoForward: boolean = false;
-  
   // 多标签页管理
   @State tabs: Array<TabInfo> = [];
   @State currentTabIndex: number = 0;
   @State showTabList: boolean = false;
-  
   // 设置项
   @State homeUrl: string = 'https://www.huawei.com';
   @State darkMode: boolean = false;
@@ -61,7 +59,6 @@ struct Index {
   @State domStorageEnabled: boolean = true;
   @State geolocationEnabled: boolean = true;
   @State clearCacheOnExit: boolean = false;
-  
   // 监听设置变化
   @StorageLink('darkMode') storageDarkMode: boolean = false;
   @StorageLink('forceDarkMode') storageForceDarkMode: boolean = true;
@@ -71,12 +68,10 @@ struct Index {
   @StorageLink('textZoom') storageTextZoom: number = 100;
   @StorageLink('clearCache') storageClearCache: number = 0;
   @StorageLink('clearCookies') storageClearCookies: number = 0;
-  
   // 书签状态
   @State isCurrentPageBookmarked: boolean = false;
   @StorageLink('openUrl') storageOpenUrl: string = '';
   @StorageLink('bookmarkChanged') storageBookmarkChanged: number = 0;
-  
   // 加载进度
   @State loadingProgress: number = 0;
   @State isLoading: boolean = false;
@@ -87,13 +82,13 @@ struct Index {
     AppStorage.setOrCreate('pathStack', this.pathStack);
     // 加载设置
     this.loadSettings();
-    
+
     // 同步初始化DataManager（确保数据立即可用）
     const context = this.getUIContext().getHostContext();
     if (context) {
       dataManager.initSync(context);
     }
-    
+
     // 初始化第一个标签页
     this.tabs.push({
       id: Date.now(),
@@ -102,7 +97,7 @@ struct Index {
       controller: this.controller,
       incognitoMode: this.incognitoMode
     });
-    
+
     // Debug: 显示Web组件配置信息
     console.info('=== Web组件配置 ===');
     console.info(`隐私模式: ${this.incognitoMode}`);
@@ -110,10 +105,10 @@ struct Index {
     console.info(`强制深色: ${this.forceDarkMode}`);
     console.info(`JavaScript: ${this.javaScriptEnabled}`);
     console.info(`主页URL: ${this.homeUrl}`);
-    
+
     // 监听设置变化
     this.watchSettings();
-    
+
     // 监听书签变化
     this.watchBookmarkChanges();
   }
@@ -129,396 +124,397 @@ struct Index {
       Column() {
         // 顶部导航栏
         Column() {
-        // 工具栏：前进、后退、刷新按钮
-        Row() {
-          // 后退按钮
-          Button() {
-            Image($r('app.media.back'))
-              .width(24)
-              .height(24)
-              .fillColor(this.canGoBack ? '#000000' : '#CCCCCC')
-          }
-          .width(50)
-          .height(44)
-          .backgroundColor(Color.Transparent)
-          .onClick(() => {
-            try {
-              if (this.currentTabIndex >= 0 && this.currentTabIndex < this.tabs.length) {
-                const currentTab = this.tabs[this.currentTabIndex];
-                if (currentTab.controller.accessBackward()) {
-                  currentTab.controller.backward();
-                  this.updateNavigationState();
-                }
-              }
-            } catch (error) {
-              console.error(`后退失败: ${(error as BusinessError).code}, ${(error as BusinessError).message}`);
+          // 工具栏：前进、后退、刷新按钮
+          Row() {
+            // 后退按钮
+            Button() {
+              Image($r('app.media.back'))
+                .width(24)
+                .height(24)
+                .fillColor(this.canGoBack ? '#000000' : '#CCCCCC')
             }
-          })
-
-          // 前进按钮
-          Button() {
-            Image($r('app.media.forward'))
-              .width(24)
-              .height(24)
-              .fillColor(this.canGoForward ? '#FFFFFF' : '#CCCCCC')
-          }
-          .width(50)
-          .height(44)
-          .backgroundColor(Color.Transparent)
-          .onClick(() => {
-            try {
-              if (this.currentTabIndex >= 0 && this.currentTabIndex < this.tabs.length) {
-                const currentTab = this.tabs[this.currentTabIndex];
-                if (currentTab.controller.accessForward()) {
-                  currentTab.controller.forward();
-                  this.updateNavigationState();
-                }
-              }
-            } catch (error) {
-              console.error(`前进失败: ${(error as BusinessError).code}, ${(error as BusinessError).message}`);
-            }
-          })
-
-          // 刷新按钮
-          Button() {
-            Image($r('app.media.refresh'))
-              .width(24)
-              .height(24)
-              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
-          }
-          .width(50)
-          .height(44)
-          .backgroundColor(Color.Transparent)
-          .onClick(() => {
-            try {
-              if (this.currentTabIndex >= 0 && this.currentTabIndex < this.tabs.length) {
-                const currentTab = this.tabs[this.currentTabIndex];
-                currentTab.controller.refresh();
-              }
-            } catch (error) {
-              console.error(`刷新失败: ${(error as BusinessError).code}, ${(error as BusinessError).message}`);
-            }
-          })
-
-          // 占位，把按钮推到左边
-          Blank()
-        }
-        .width('100%')
-        .height(44)
-        .padding({ left: 8, right: 8 })
-
-        // URL 输入栏
-        Row() {
-          TextInput({ text: this.inputUrl, placeholder: '搜索或输入网址' })
-            .layoutWeight(1)
-            .height(40)
-            .fontSize(15)
-            .backgroundColor(this.darkMode ? '#3A3A3C' : '#F0F0F0')
-            .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
-            .placeholderColor(this.darkMode ? '#8E8E93' : '#999999')
-            .borderRadius(8)
-            .padding({ left: 12, right: 12 })
-            .onChange((value: string) => {
-              this.inputUrl = value;
-            })
-            .onSubmit(() => {
-              this.loadUrl();
-            })
-
-          // 收藏按钮
-          Button() {
-            Image(this.isCurrentPageBookmarked ? $r('app.media.bookmark_filled') : $r('app.media.bookmark'))
-              .width(20)
-              .height(20)
-              .fillColor(this.isCurrentPageBookmarked ? '#FF9500' : (this.darkMode ? '#FFFFFF' : '#666666'))
-          }
-          .width(40)
-          .height(40)
-          .backgroundColor(Color.Transparent)
-          .margin({ left: 4 })
-          .onClick(() => {
-            this.toggleBookmark();
-          })
-
-          // 跳转按钮
-          Button('跳转')
-            .width(60)
-            .height(40)
-            .fontSize(14)
-            .margin({ left: 8 })
-            .backgroundColor('#007AFF')
-            .borderRadius(8)
-            .onClick(() => {
-              this.loadUrl();
-            })
-        }
-        .width('100%')
-        .padding({ left: 12, right: 12, bottom: 8 })
-        
-        // 加载进度条
-        if (this.isLoading) {
-          Progress({ value: this.loadingProgress, total: 100, type: ProgressType.Linear })
-            .width('100%')
-            .height(3)
-            .color('#007AFF')
+            .width(50)
+            .height(44)
             .backgroundColor(Color.Transparent)
-            .animation({
-              duration: 300,
-              curve: Curve.EaseInOut
-            })
-        }
-      }
-      .width('100%')
-      .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
-      .shadow({ radius: 4, color: '#10000000', offsetY: 2 })
-
-      // Web组件区域 - 使用Stack布局显示所有标签页
-      Stack() {
-        ForEach(this.tabs, (tab: TabInfo, index: number) => {
-          Web({ 
-            src: tab.url, 
-            controller: tab.controller,
-            incognitoMode: tab.incognitoMode
-          })
-            .width('100%')
-            .height('100%')
-            .backgroundColor(this.darkMode ? '#1C1C1E' : Color.White)
-            .darkMode(this.darkMode ? WebDarkMode.On : WebDarkMode.Off)
-            .forceDarkAccess(this.darkMode && this.forceDarkMode)
-            .javaScriptAccess(this.javaScriptEnabled)
-            .domStorageAccess(this.domStorageEnabled)
-            .blockNetwork(!this.imageEnabled)
-            .textZoomRatio(this.textZoom)
-            .geolocationAccess(this.geolocationEnabled)
-            .multiWindowAccess(true)
-            .allowWindowOpenMethod(true)
-            .visibility(index === this.currentTabIndex ? Visibility.Visible : Visibility.Hidden)
-            .onControllerAttached(() => {
-              console.info(`=== Web组件已创建 (标签${index}) ===`);
-              console.info(`URL: ${tab.url}`);
-            })
-            .onWindowNew((event) => {
-              console.info('收到新窗口请求');
-              const newController = new webview.WebviewController();
-              this.tabs.push({
-                id: Date.now(),
-                url: 'about:blank',
-                title: '新标签页',
-                controller: newController,
-                incognitoMode: this.incognitoMode
-              });
-              event.handler.setWebController(newController);
-              this.currentTabIndex = this.tabs.length - 1;
-            })
-            .onPageBegin((event) => {
-              if (event && index === this.currentTabIndex) {
-                console.info(`页面开始加载: ${event.url}`);
-                this.currentUrl = event.url;
-                this.inputUrl = event.url;
-                tab.url = event.url;
-                this.isLoading = true;
-                this.loadingProgress = 0;
-              }
-            })
-            .onPageEnd((event) => {
-              if (event && index === this.currentTabIndex) {
-                console.info('=== onPageEnd 触发 ===');
-                console.info(`页面加载完成: ${event.url}`);
-                console.info(`当前标签索引: ${index}`);
-                console.info(`当前激活标签索引: ${this.currentTabIndex}`);
-                console.info(`隐私模式: ${tab.incognitoMode}`);
-                
-                this.currentUrl = event.url;
-                this.inputUrl = event.url;
-                tab.url = event.url;
-                try {
-                  const title = tab.controller.getTitle();
-                  console.info(`页面标题: ${title}`);
-                  if (title) {
-                    tab.title = title;
+            .onClick(() => {
+              try {
+                if (this.currentTabIndex >= 0 && this.currentTabIndex < this.tabs.length) {
+                  const currentTab = this.tabs[this.currentTabIndex];
+                  if (currentTab.controller.accessBackward()) {
+                    currentTab.controller.backward();
+                    this.updateNavigationState();
                   }
-                  // 更新书签状态
-                  this.isCurrentPageBookmarked = dataManager.isBookmarked(event.url);
-                  
-                  // 记录历史（非隐私模式）
-                  if (!tab.incognitoMode) {
-                    console.info('准备调用 dataManager.addHistory');
-                    dataManager.addHistory(event.url, title || event.url);
-                    console.info(`历史记录调用完成: ${title} - ${event.url}`);
-                  } else {
-                    console.info('隐私模式，跳过历史记录');
-                  }
-                } catch (error) {
-                  console.error('获取标题失败:', error);
                 }
-                this.updateNavigationState();
-              } else {
-                if (event) {
-                  console.info(`onPageEnd 触发但不是当前标签 - 标签索引: ${index}, 当前激活: ${this.currentTabIndex}`);
-                }
+              } catch (error) {
+                console.error(`后退失败: ${(error as BusinessError).code}, ${(error as BusinessError).message}`);
               }
             })
-            .onProgressChange((event) => {
-              if (event && index === this.currentTabIndex) {
-                this.loadingProgress = event.newProgress;
-                if (event.newProgress >= 100) {
-                  this.isLoading = false;
-                }
-              }
-            })
-            .onErrorReceive((event) => {
-              if (event && index === this.currentTabIndex) {
-                this.isLoading = false;
-                console.error(`页面加载错误:`);
-                console.error(`  错误码: ${event.error.getErrorCode()}`);
-                console.error(`  错误信息: ${event.error.getErrorInfo()}`);
-                console.error(`  请求URL: ${event.request.getRequestUrl()}`);
-              }
-            })
-        }, (tab: TabInfo) => tab.id.toString())
-      }
-      .width('100%')
-      .layoutWeight(1)
 
-      // 底部工具栏：Home、书签、标签、设置
-      Row() {
-        // Home 按钮
-        Button() {
-          Column() {
-            Image($r('app.media.home'))
-              .width(24)
-              .height(24)
-              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
-            Text('主页')
-              .fontSize(11)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-              .margin({ top: 2 })
-          }
-        }
-        .layoutWeight(1)
-        .height(60)
-        .backgroundColor(Color.Transparent)
-        .onClick(() => {
-          this.inputUrl = this.homeUrl;
-          this.loadUrl();
-        })
-
-        // 分隔线
-        Divider()
-          .vertical(true)
-          .height(40)
-          .color('#E0E0E0')
-
-        // 书签按钮
-        Button() {
-          Column() {
-            Image($r('app.media.bookmark'))
-              .width(24)
-              .height(24)
-              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
-            Text('书签')
-              .fontSize(11)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-              .margin({ top: 2 })
-          }
-        }
-        .layoutWeight(1)
-        .height(60)
-        .backgroundColor(Color.Transparent)
-        .onClick(() => {
-          // 点击打开书签列表
-          this.pathStack.pushPathByName('BookmarkPage', null);
-        })
-
-        // 分隔线
-        Divider()
-          .vertical(true)
-          .height(40)
-          .color('#E0E0E0')
-
-        // 历史按钮
-        Button() {
-          Column() {
-            Image($r('app.media.history'))
-              .width(24)
-              .height(24)
-              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
-            Text('历史')
-              .fontSize(11)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-              .margin({ top: 2 })
-          }
-        }
-        .layoutWeight(1)
-        .height(60)
-        .backgroundColor(Color.Transparent)
-        .onClick(() => {
-          // 点击打开历史记录
-          this.pathStack.pushPathByName('HistoryPage', null);
-        })
-
-        // 分隔线
-        Divider()
-          .vertical(true)
-          .height(40)
-          .color('#E0E0E0')
-
-        // 标签按钮
-        Button() {
-          Column() {
-            Stack() {
-              Text('□')
-                .fontSize(24)
-                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-              Text(this.tabs.length.toString())
-                .fontSize(10)
-                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-                .fontWeight(FontWeight.Bold)
+            // 前进按钮
+            Button() {
+              Image($r('app.media.forward'))
+                .width(24)
+                .height(24)
+                .fillColor(this.canGoForward ? '#FFFFFF' : '#CCCCCC')
             }
-            Text('标签')
-              .fontSize(11)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-              .margin({ top: 2 })
+            .width(50)
+            .height(44)
+            .backgroundColor(Color.Transparent)
+            .onClick(() => {
+              try {
+                if (this.currentTabIndex >= 0 && this.currentTabIndex < this.tabs.length) {
+                  const currentTab = this.tabs[this.currentTabIndex];
+                  if (currentTab.controller.accessForward()) {
+                    currentTab.controller.forward();
+                    this.updateNavigationState();
+                  }
+                }
+              } catch (error) {
+                console.error(`前进失败: ${(error as BusinessError).code}, ${(error as BusinessError).message}`);
+              }
+            })
+
+            // 刷新按钮
+            Button() {
+              Image($r('app.media.refresh'))
+                .width(24)
+                .height(24)
+                .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+            }
+            .width(50)
+            .height(44)
+            .backgroundColor(Color.Transparent)
+            .onClick(() => {
+              try {
+                if (this.currentTabIndex >= 0 && this.currentTabIndex < this.tabs.length) {
+                  const currentTab = this.tabs[this.currentTabIndex];
+                  currentTab.controller.refresh();
+                }
+              } catch (error) {
+                console.error(`刷新失败: ${(error as BusinessError).code}, ${(error as BusinessError).message}`);
+              }
+            })
+
+            // 占位，把按钮推到左边
+            Blank()
+          }
+          .width('100%')
+          .height(44)
+          .padding({ left: 8, right: 8 })
+
+          // URL 输入栏
+          Row() {
+            TextInput({ text: this.inputUrl, placeholder: '搜索或输入网址' })
+              .layoutWeight(1)
+              .height(40)
+              .fontSize(15)
+              .backgroundColor(this.darkMode ? '#3A3A3C' : '#F0F0F0')
+              .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+              .placeholderColor(this.darkMode ? '#8E8E93' : '#999999')
+              .borderRadius(8)
+              .padding({ left: 12, right: 12 })
+              .onChange((value: string) => {
+                this.inputUrl = value;
+              })
+              .onSubmit(() => {
+                this.loadUrl();
+              })
+
+            // 收藏按钮
+            Button() {
+              Image(this.isCurrentPageBookmarked ? $r('app.media.bookmark_filled') : $r('app.media.bookmark'))
+                .width(20)
+                .height(20)
+                .fillColor(this.isCurrentPageBookmarked ? '#FF9500' : (this.darkMode ? '#FFFFFF' : '#666666'))
+            }
+            .width(40)
+            .height(40)
+            .backgroundColor(Color.Transparent)
+            .margin({ left: 4 })
+            .onClick(() => {
+              this.toggleBookmark();
+            })
+
+            // 跳转按钮
+            Button('跳转')
+              .width(60)
+              .height(40)
+              .fontSize(14)
+              .margin({ left: 8 })
+              .backgroundColor('#007AFF')
+              .borderRadius(8)
+              .onClick(() => {
+                this.loadUrl();
+              })
+          }
+          .width('100%')
+          .padding({ left: 12, right: 12, bottom: 8 })
+
+          // 加载进度条
+          if (this.isLoading) {
+            Progress({ value: this.loadingProgress, total: 100, type: ProgressType.Linear })
+              .width('100%')
+              .height(3)
+              .color('#007AFF')
+              .backgroundColor(Color.Transparent)
+              .animation({
+                duration: 300,
+                curve: Curve.EaseInOut
+              })
           }
         }
-        .layoutWeight(1)
-        .height(60)
-        .backgroundColor(Color.Transparent)
-        .onClick(() => {
-          this.showTabList = true;
-        })
+        .width('100%')
+        .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
+        .shadow({ radius: 4, color: '#10000000', offsetY: 2 })
 
-        // 分隔线
-        Divider()
-          .vertical(true)
-          .height(40)
-          .color('#E0E0E0')
+        // Web组件区域 - 使用Stack布局显示所有标签页
+        Stack() {
+          ForEach(this.tabs, (tab: TabInfo, index: number) => {
+            Web({
+              src: tab.url,
+              controller: tab.controller,
+              incognitoMode: tab.incognitoMode
+            })
+              .width('100%')
+              .height('100%')
+              .backgroundColor(this.darkMode ? '#1C1C1E' : Color.White)
+              .darkMode(this.darkMode ? WebDarkMode.On : WebDarkMode.Off)
+              .forceDarkAccess(this.darkMode && this.forceDarkMode)
+              .javaScriptAccess(this.javaScriptEnabled)
+              .domStorageAccess(this.domStorageEnabled)
+              .blockNetwork(!this.imageEnabled)
+              .textZoomRatio(this.textZoom)
+              .geolocationAccess(this.geolocationEnabled)
+              .multiWindowAccess(true)
+              .allowWindowOpenMethod(true)
+              .visibility(index === this.currentTabIndex ? Visibility.Visible : Visibility.Hidden)
+              .onControllerAttached(() => {
+                console.info(`=== Web组件已创建 (标签${index}) ===`);
+                console.info(`URL: ${tab.url}`);
+              })
+              .onWindowNew((event) => {
+                console.info('收到新窗口请求');
+                const newController = new webview.WebviewController();
+                this.tabs.push({
+                  id: Date.now(),
+                  url: 'about:blank',
+                  title: '新标签页',
+                  controller: newController,
+                  incognitoMode: this.incognitoMode
+                });
+                event.handler.setWebController(newController);
+                this.currentTabIndex = this.tabs.length - 1;
+              })
+              .onPageBegin((event) => {
+                if (event && index === this.currentTabIndex) {
+                  console.info(`页面开始加载: ${event.url}`);
+                  this.currentUrl = event.url;
+                  this.inputUrl = event.url;
+                  tab.url = event.url;
+                  this.isLoading = true;
+                  this.loadingProgress = 0;
+                }
+              })
+              .onPageEnd((event) => {
+                if (event && index === this.currentTabIndex) {
+                  console.info('=== onPageEnd 触发 ===');
+                  console.info(`页面加载完成: ${event.url}`);
+                  console.info(`当前标签索引: ${index}`);
+                  console.info(`当前激活标签索引: ${this.currentTabIndex}`);
+                  console.info(`隐私模式: ${tab.incognitoMode}`);
 
-        // 设置按钮
-        Button() {
-          Column() {
-            Image($r('app.media.settings'))
-              .width(24)
-              .height(24)
-              .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+                  this.currentUrl = event.url;
+                  this.inputUrl = event.url;
+                  tab.url = event.url;
+                  try {
+                    const title = tab.controller.getTitle();
+                    console.info(`页面标题: ${title}`);
+                    if (title) {
+                      tab.title = title;
+                    }
+                    // 更新书签状态
+                    this.isCurrentPageBookmarked = dataManager.isBookmarked(event.url);
 
-            Text('设置')
-              .fontSize(11)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
-              .margin({ top: 2 })
-          }
+                    // 记录历史（非隐私模式）
+                    if (!tab.incognitoMode) {
+                      console.info('准备调用 dataManager.addHistory');
+                      dataManager.addHistory(event.url, title || event.url);
+                      console.info(`历史记录调用完成: ${title} - ${event.url}`);
+                    } else {
+                      console.info('隐私模式，跳过历史记录');
+                    }
+                  } catch (error) {
+                    console.error('获取标题失败:', error);
+                  }
+                  this.updateNavigationState();
+                } else {
+                  if (event) {
+                    console.info(`onPageEnd 触发但不是当前标签 - 标签索引: ${index}, 当前激活: ${this.currentTabIndex}`);
+                  }
+                }
+              })
+              .onProgressChange((event) => {
+                if (event && index === this.currentTabIndex) {
+                  this.loadingProgress = event.newProgress;
+                  if (event.newProgress >= 100) {
+                    this.isLoading = false;
+                  }
+                }
+              })
+              .onErrorReceive((event) => {
+                if (event && index === this.currentTabIndex) {
+                  this.isLoading = false;
+                  console.error(`页面加载错误:`);
+                  console.error(`  错误码: ${event.error.getErrorCode()}`);
+                  console.error(`  错误信息: ${event.error.getErrorInfo()}`);
+                  console.error(`  请求URL: ${event.request.getRequestUrl()}`);
+                }
+              })
+          }, (tab: TabInfo) => tab.id.toString())
         }
+        .width('100%')
         .layoutWeight(1)
-        .height(60)
-        .backgroundColor(Color.Transparent)
-        .onClick(() => {
-          // 使用Navigation跳转
-          this.pathStack.pushPathByName('SettingsPage', null);
-        })
-      }
-      .width('100%')
-      .backgroundColor(this.darkMode ? '#2C2C2E' : '#FAFAFA')
-      .border({ width: { top: 0.5 }, color: this.darkMode ? '#38383A' : '#E0E0E0' })
+
+        // 底部工具栏：Home、书签、标签、设置
+        Row() {
+          // Home 按钮
+          Button() {
+            Column() {
+              Image($r('app.media.home'))
+                .width(24)
+                .height(24)
+                .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+              Text('主页')
+                .fontSize(11)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                .margin({ top: 2 })
+            }
+          }
+          .layoutWeight(1)
+          .height(60)
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            this.inputUrl = this.homeUrl;
+            this.loadUrl();
+          })
+
+          // 分隔线
+          Divider()
+            .vertical(true)
+            .height(40)
+            .color('#E0E0E0')
+
+          // 书签按钮
+          Button() {
+            Column() {
+              Image($r('app.media.bookmark'))
+                .width(24)
+                .height(24)
+                .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+              Text('书签')
+                .fontSize(11)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                .margin({ top: 2 })
+            }
+          }
+          .layoutWeight(1)
+          .height(60)
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            // 点击打开书签列表
+            this.pathStack.pushPathByName('BookmarkPage', null);
+          })
+
+          // 分隔线
+          Divider()
+            .vertical(true)
+            .height(40)
+            .color('#E0E0E0')
+
+          // 历史按钮
+          Button() {
+            Column() {
+              Image($r('app.media.history'))
+                .width(24)
+                .height(24)
+                .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+              Text('历史')
+                .fontSize(11)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                .margin({ top: 2 })
+            }
+          }
+          .layoutWeight(1)
+          .height(60)
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            // 点击打开历史记录
+            this.pathStack.pushPathByName('HistoryPage', null);
+          })
+
+          // 分隔线
+          Divider()
+            .vertical(true)
+            .height(40)
+            .color('#E0E0E0')
+
+          // 标签按钮
+          Button() {
+            Column() {
+              Stack() {
+                Text('□')
+                  .fontSize(24)
+                  .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                Text(this.tabs.length.toString())
+                  .fontSize(10)
+                  .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                  .fontWeight(FontWeight.Bold)
+              }
+
+              Text('标签')
+                .fontSize(11)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                .margin({ top: 2 })
+            }
+          }
+          .layoutWeight(1)
+          .height(60)
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            this.showTabList = true;
+          })
+
+          // 分隔线
+          Divider()
+            .vertical(true)
+            .height(40)
+            .color('#E0E0E0')
+
+          // 设置按钮
+          Button() {
+            Column() {
+              Image($r('app.media.settings'))
+                .width(24)
+                .height(24)
+                .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+
+              Text('设置')
+                .fontSize(11)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                .margin({ top: 2 })
+            }
+          }
+          .layoutWeight(1)
+          .height(60)
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            // 使用Navigation跳转
+            this.pathStack.pushPathByName('SettingsPage', null);
+          })
+        }
+        .width('100%')
+        .backgroundColor(this.darkMode ? '#2C2C2E' : '#FAFAFA')
+        .border({ width: { top: 0.5 }, color: this.darkMode ? '#38383A' : '#E0E0E0' })
       }
       .width('100%')
       .height('100%')
@@ -547,7 +543,7 @@ struct Index {
             .fontWeight(FontWeight.Bold)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .layoutWeight(1)
-          
+
           // 隐私模式开关
           Row({ space: 6 }) {
             if (this.incognitoMode) {
@@ -569,7 +565,7 @@ struct Index {
               })
           }
           .margin({ right: 12 })
-          
+
           Button('新建')
             .fontSize(16)
             .backgroundColor(Color.Transparent)
@@ -577,7 +573,7 @@ struct Index {
             .onClick(() => {
               this.createNewTab();
             })
-          
+
           Button('关闭')
             .fontSize(16)
             .backgroundColor(Color.Transparent)
@@ -590,7 +586,7 @@ struct Index {
         .height(56)
         .padding({ left: 16, right: 16 })
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
-        
+
         // 标签列表
         Scroll() {
           Column({ space: 12 }) {
@@ -604,7 +600,7 @@ struct Index {
                     .fillColor('#8E8E93')
                     .margin({ right: 8 })
                 }
-                
+
                 Column({ space: 4 }) {
                   Row({ space: 4 }) {
                     Text(tab.title || '新标签页')
@@ -615,12 +611,17 @@ struct Index {
                       Text('隐私')
                         .fontSize(10)
                         .fontColor('#8E8E93')
-                        .padding({ left: 4, right: 4, top: 2, bottom: 2 })
+                        .padding({
+                          left: 4,
+                          right: 4,
+                          top: 2,
+                          bottom: 2
+                        })
                         .backgroundColor(this.darkMode ? '#38383A' : '#E5E5EA')
                         .borderRadius(4)
                     }
                   }
-                  
+
                   Text(tab.url)
                     .fontSize(12)
                     .fontColor('#8E8E93')
@@ -629,7 +630,7 @@ struct Index {
                 }
                 .alignItems(HorizontalAlign.Start)
                 .layoutWeight(1)
-                
+
                 // 关闭按钮
                 Image($r('app.media.close'))
                   .width(20)
@@ -641,8 +642,8 @@ struct Index {
               }
               .width('100%')
               .padding(12)
-              .backgroundColor(index === this.currentTabIndex ? 
-                (this.darkMode ? '#2C2C2E' : '#E5E5EA') : 
+              .backgroundColor(index === this.currentTabIndex ?
+                (this.darkMode ? '#2C2C2E' : '#E5E5EA') :
                 (this.darkMode ? '#1C1C1E' : '#FFFFFF'))
               .borderRadius(8)
               .onClick(() => {
@@ -677,7 +678,7 @@ struct Index {
     console.log(`当前标签数: ${this.tabs.length}`);
     console.log(`隐私模式: ${this.incognitoMode}`);
     console.log(`主页URL: ${this.homeUrl}`);
-    
+
     const newController = new webview.WebviewController();
     const newTab: TabInfo = {
       id: Date.now(),
@@ -686,18 +687,18 @@ struct Index {
       controller: newController,
       incognitoMode: this.incognitoMode
     };
-    
+
     this.tabs.push(newTab);
     console.log(`标签已添加，ID: ${newTab.id}`);
     console.log(`新标签数: ${this.tabs.length}`);
-    
+
     // 只更新索引和UI，不访问controller（因为Web组件还未创建）
     this.currentTabIndex = this.tabs.length - 1;
     this.currentUrl = newTab.url;
     this.inputUrl = newTab.url;
     this.canGoBack = false;
     this.canGoForward = false;
-    
+
     console.log(`切换到新标签索引: ${this.currentTabIndex}`);
     this.showTabList = false;
   }
@@ -707,18 +708,18 @@ struct Index {
     console.log(`=== 切换标签页 ===`);
     console.log(`目标索引: ${index}`);
     console.log(`当前索引: ${this.currentTabIndex}`);
-    
+
     if (index >= 0 && index < this.tabs.length) {
       this.currentTabIndex = index;
       const tab = this.tabs[index];
       console.log(`标签ID: ${tab.id}`);
       console.log(`标签URL: ${tab.url}`);
       console.log(`隐私模式: ${tab.incognitoMode}`);
-      
+
       // 更新显示的URL和输入框
       this.currentUrl = tab.url;
       this.inputUrl = tab.url;
-      
+
       // 安全地更新导航按钮状态
       try {
         this.canGoBack = tab.controller.accessBackward();
@@ -730,7 +731,7 @@ struct Index {
         this.canGoBack = false;
         this.canGoForward = false;
       }
-      
+
       console.log('标签切换完成');
     } else {
       console.error(`无效的标签索引: ${index}`);
@@ -743,17 +744,17 @@ struct Index {
       // 最后一个标签页，不允许关闭
       return;
     }
-    
+
     this.tabs.splice(index, 1);
-    
+
     if (this.currentTabIndex >= this.tabs.length) {
       this.currentTabIndex = this.tabs.length - 1;
     }
-    
+
     if (index <= this.currentTabIndex && this.currentTabIndex > 0) {
       this.currentTabIndex--;
     }
-    
+
     this.switchTab(this.currentTabIndex);
   }
 
@@ -808,11 +809,11 @@ struct Index {
       this.domStorageEnabled = dataPreferences.getSync('domStorageEnabled', true) as boolean;
       this.geolocationEnabled = dataPreferences.getSync('geolocationEnabled', true) as boolean;
       this.clearCacheOnExit = dataPreferences.getSync('clearCacheOnExit', false) as boolean;
-      
+
       // 确保隐私模式设置为false并保存
       dataPreferences.putSync('incognitoMode', false);
       dataPreferences.flush();
-      
+
       // 设置初始URL为主页地址
       this.currentUrl = this.homeUrl;
       this.inputUrl = this.homeUrl;
@@ -822,12 +823,12 @@ struct Index {
       console.error(`加载设置失败: ${error}`);
     }
   }
-  
+
   // 监听设置变化
   watchSettings() {
     // 监听深色模式变化
     this.storageDarkMode = this.darkMode;
-    
+
     // 使用定时器监听设置变化（简化方案）
     setInterval(() => {
       if (this.storageDarkMode !== this.darkMode) {
@@ -848,7 +849,7 @@ struct Index {
       if (this.storageTextZoom !== this.textZoom) {
         this.textZoom = this.storageTextZoom;
       }
-      
+
       // 处理清除缓存请求
       if (this.storageClearCache > 0) {
         try {
@@ -859,7 +860,7 @@ struct Index {
         console.info('缓存已清除');
         AppStorage.setOrCreate('clearCache', 0);
       }
-      
+
       // 处理清除Cookies请求
       if (this.storageClearCookies > 0) {
         try {
@@ -870,7 +871,7 @@ struct Index {
         }
         AppStorage.setOrCreate('clearCookies', 0);
       }
-      
+
       // 处理从历史/书签页面返回时打开URL
       if (this.storageOpenUrl && this.storageOpenUrl.length > 0) {
         this.inputUrl = this.storageOpenUrl;
@@ -879,7 +880,7 @@ struct Index {
       }
     }, 500);
   }
-  
+
   // 监听书签变化
   watchBookmarkChanges() {
     setInterval(() => {
@@ -903,14 +904,14 @@ struct Index {
       console.error(`清除缓存失败: ${error}`);
     }
   }
-  
+
   // 切换书签状态
   async toggleBookmark() {
     if (!this.currentUrl || this.currentUrl === 'about:blank') {
       promptAction.showToast({ message: '无法收藏此页面' });
       return;
     }
-    
+
     if (this.isCurrentPageBookmarked) {
       // 取消收藏
       await dataManager.deleteBookmarkByUrl(this.currentUrl);

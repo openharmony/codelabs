@@ -26,7 +26,6 @@ export function BookmarkPageBuilder() {
 export struct BookmarkPage {
   // 获取全局NavPathStack
   pathStack: NavPathStack = AppStorage.get('pathStack') as NavPathStack;
-  
   // 书签列表
   @State bookmarkList: BookmarkItem[] = [];
   @State groupedBookmarks: Map<string, BookmarkItem[]> = new Map();
@@ -35,13 +34,11 @@ export struct BookmarkPage {
   @State selectedItems: Set<number> = new Set();
   @State currentFolder: string = '全部'; // 当前文件夹筛选
   @State showFolderDialog: boolean = false;
-  
   // 编辑书签对话框
   @State showEditDialog: boolean = false;
   @State editingBookmark: BookmarkItem | null = null;
   @State editTitle: string = '';
   @State editFolder: string = '';
-  
   // 深色模式
   @StorageLink('darkMode') darkMode: boolean = false;
 
@@ -52,22 +49,22 @@ export struct BookmarkPage {
   // 加载书签
   loadBookmarks() {
     let allBookmarks: BookmarkItem[];
-    
+
     if (this.searchKeyword.trim()) {
       allBookmarks = dataManager.searchBookmarks(this.searchKeyword);
     } else {
       allBookmarks = dataManager.getBookmarkList();
     }
-    
+
     // 按文件夹筛选
     if (this.currentFolder !== '全部') {
-      allBookmarks = allBookmarks.filter(item => 
-        (item.folder || '默认') === this.currentFolder
+      allBookmarks = allBookmarks.filter(item =>
+      (item.folder || '默认') === this.currentFolder
       );
     }
-    
+
     this.bookmarkList = allBookmarks;
-    
+
     // 按文件夹分组
     this.groupedBookmarks = new Map();
     allBookmarks.forEach(item => {
@@ -78,7 +75,7 @@ export struct BookmarkPage {
       this.groupedBookmarks.get(folder)?.push(item);
     });
   }
-  
+
   // 获取所有文件夹
   getAllFolders(): string[] {
     const folders = new Set<string>(['全部', '默认']);
@@ -110,15 +107,15 @@ export struct BookmarkPage {
             .onClick(() => {
               this.pathStack.pop();
             })
-          
+
           Text('书签')
             .fontSize(18)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .fontWeight(FontWeight.Medium)
             .margin({ left: 16 })
-          
+
           Blank()
-          
+
           // 编辑/完成按钮
           Button(this.isEditing ? '完成' : '编辑')
             .fontSize(14)
@@ -136,7 +133,7 @@ export struct BookmarkPage {
         .height(56)
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
         .alignItems(VerticalAlign.Center)
-        
+
         // 搜索框
         Row() {
           Image($r('app.media.search'))
@@ -144,7 +141,7 @@ export struct BookmarkPage {
             .height(16)
             .fillColor('#8E8E93')
             .margin({ left: 8 })
-          
+
           TextInput({ placeholder: '搜索书签', text: this.searchKeyword })
             .layoutWeight(1)
             .height(36)
@@ -156,7 +153,7 @@ export struct BookmarkPage {
               this.searchKeyword = value;
               this.loadBookmarks();
             })
-          
+
           if (this.searchKeyword.length > 0) {
             Image($r('app.media.close'))
               .width(16)
@@ -171,11 +168,16 @@ export struct BookmarkPage {
         }
         .width('100%')
         .height(36)
-        .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+        .margin({
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8
+        })
         .padding({ left: 4, right: 4 })
         .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
         .borderRadius(8)
-        
+
         // 批量操作栏（编辑模式下显示）
         if (this.isEditing && this.selectedItems.size > 0) {
           Row() {
@@ -187,9 +189,9 @@ export struct BookmarkPage {
               .onClick(() => {
                 this.deleteSelectedItems();
               })
-            
+
             Blank()
-            
+
             Button('全选')
               .fontSize(14)
               .backgroundColor(Color.Transparent)
@@ -203,7 +205,7 @@ export struct BookmarkPage {
           .padding({ left: 16, right: 16 })
           .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
         }
-        
+
         // 书签列表
         if (this.bookmarkList.length === 0) {
           // 空状态
@@ -213,12 +215,12 @@ export struct BookmarkPage {
               .height(64)
               .fillColor('#8E8E93')
               .opacity(0.5)
-            
+
             Text(this.searchKeyword ? '未找到匹配的书签' : '暂无书签')
               .fontSize(16)
               .fontColor('#8E8E93')
               .margin({ top: 16 })
-            
+
             Text('在浏览页面时点击书签按钮可添加书签')
               .fontSize(14)
               .fontColor('#8E8E93')
@@ -249,7 +251,7 @@ export struct BookmarkPage {
                         this.selectedItems = new Set(this.selectedItems);
                       })
                   }
-                  
+
                   // 网站图标
                   Column() {
                     Image($r('app.media.bookmark_filled'))
@@ -263,7 +265,7 @@ export struct BookmarkPage {
                   .backgroundColor(this.getIconColor(item.url))
                   .justifyContent(FlexAlign.Center)
                   .margin({ right: 12 })
-                  
+
                   // 标题和URL
                   Column({ space: 4 }) {
                     Text(item.title || '无标题')
@@ -272,7 +274,7 @@ export struct BookmarkPage {
                       .maxLines(1)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
                       .width('100%')
-                    
+
                     Text(item.url)
                       .fontSize(12)
                       .fontColor('#8E8E93')
@@ -282,7 +284,7 @@ export struct BookmarkPage {
                   }
                   .alignItems(HorizontalAlign.Start)
                   .layoutWeight(1)
-                  
+
                   // 添加日期
                   if (!this.isEditing) {
                     Text(this.formatDate(item.createTime))
@@ -292,7 +294,12 @@ export struct BookmarkPage {
                   }
                 }
                 .width('100%')
-                .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+                .padding({
+                  left: 16,
+                  right: 16,
+                  top: 12,
+                  bottom: 12
+                })
                 .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
               }
               .onClick(() => {
@@ -318,7 +325,7 @@ export struct BookmarkPage {
             endMargin: 0
           })
         }
-        
+
         // 底部清空按钮
         if (this.bookmarkList.length > 0 && !this.isEditing) {
           Button('清空所有书签')
@@ -343,7 +350,7 @@ export struct BookmarkPage {
       modalTransition: ModalTransition.DEFAULT
     })
   }
-  
+
   // 编辑书签对话框
   @Builder
   editBookmarkDialog() {
@@ -358,14 +365,14 @@ export struct BookmarkPage {
             .onClick(() => {
               this.showEditDialog = false;
             })
-          
+
           Text('编辑书签')
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .layoutWeight(1)
             .textAlign(TextAlign.Center)
-          
+
           Button('保存')
             .fontSize(16)
             .backgroundColor(Color.Transparent)
@@ -377,14 +384,14 @@ export struct BookmarkPage {
         .width('100%')
         .height(56)
         .padding({ left: 16, right: 16 })
-        
+
         // 书签名称输入
         Column({ space: 8 }) {
           Text('名称')
             .fontSize(14)
             .fontColor('#8E8E93')
             .width('100%')
-          
+
           TextInput({ text: this.editTitle })
             .width('100%')
             .height(44)
@@ -397,14 +404,14 @@ export struct BookmarkPage {
         }
         .width('100%')
         .padding(16)
-        
+
         // 书签URL（只读）
         Column({ space: 8 }) {
           Text('网址')
             .fontSize(14)
             .fontColor('#8E8E93')
             .width('100%')
-          
+
           Text(this.editingBookmark?.url || '')
             .fontSize(14)
             .fontColor('#8E8E93')
@@ -430,7 +437,7 @@ export struct BookmarkPage {
       this.showEditDialog = false;
     })
   }
-  
+
   // 根据URL生成图标颜色
   getIconColor(url: string): string {
     const colors = ['#007AFF', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5856D6'];
@@ -440,14 +447,14 @@ export struct BookmarkPage {
     }
     return colors[Math.abs(hash) % colors.length];
   }
-  
+
   // 打开URL
   openUrl(url: string) {
     // 将URL传递给主页面并返回
     AppStorage.setOrCreate('openUrl', url);
     this.pathStack.pop();
   }
-  
+
   // 显示单条记录菜单
   showItemMenu(item: BookmarkItem) {
     promptAction.showActionMenu({
@@ -478,14 +485,14 @@ export struct BookmarkPage {
       // 用户取消
     });
   }
-  
+
   // 显示编辑书签对话框
   showEditBookmarkDialog(item: BookmarkItem) {
     this.editingBookmark = item;
     this.editTitle = item.title;
     this.showEditDialog = true;
   }
-  
+
   // 保存书签编辑
   async saveBookmarkEdit() {
     if (this.editingBookmark && this.editTitle.trim()) {
@@ -495,7 +502,7 @@ export struct BookmarkPage {
       promptAction.showToast({ message: '已保存' });
     }
   }
-  
+
   // 删除单条记录
   async deleteItem(item: BookmarkItem) {
     await dataManager.deleteBookmark(item.id);
@@ -504,7 +511,7 @@ export struct BookmarkPage {
     AppStorage.setOrCreate('bookmarkChanged', Date.now());
     promptAction.showToast({ message: '已删除' });
   }
-  
+
   // 删除选中项
   async deleteSelectedItems() {
     for (const id of this.selectedItems) {
@@ -517,7 +524,7 @@ export struct BookmarkPage {
     AppStorage.setOrCreate('bookmarkChanged', Date.now());
     promptAction.showToast({ message: '已删除选中书签' });
   }
-  
+
   // 全选
   selectAllItems() {
     for (const item of this.bookmarkList) {
@@ -525,7 +532,7 @@ export struct BookmarkPage {
     }
     this.selectedItems = new Set(this.selectedItems);
   }
-  
+
   // 显示清空确认
   showClearAllConfirm() {
     promptAction.showDialog({
@@ -541,7 +548,7 @@ export struct BookmarkPage {
       }
     });
   }
-  
+
   // 清空所有书签
   async clearAllBookmarks() {
     await dataManager.clearAllBookmarks();
