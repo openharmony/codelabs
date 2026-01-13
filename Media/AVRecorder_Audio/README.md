@@ -7,7 +7,6 @@
 1.  录制麦克风音频，支持开始、暂停、恢复、停止等录制控制，并可配置采样率、声道数、码率与格式。
 2.  管理录音文件并进行回放：列表展示、重命名、删除，支持播放/暂停与进度拖拽。
 
-![](figures/IMG_0759.gif)
 
 ### 相关概念
 
@@ -298,4 +297,3 @@ async seek(positionMs: number): Promise<void> {
 2. 使用AVPlayer完成录音回放与进度控制。
 3. 使用@ohos.file.fs管理录音文件，并通过abilityAccessCtrl申请权限。
 
-![](figures/zh-cn_image_0000001515522392.gif)
