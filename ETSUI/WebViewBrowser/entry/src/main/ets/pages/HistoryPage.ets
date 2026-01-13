@@ -26,7 +26,6 @@ export function HistoryPageBuilder() {
 export struct HistoryPage {
   // 获取全局NavPathStack
   pathStack: NavPathStack = AppStorage.get('pathStack') as NavPathStack;
-  
   // 历史记录列表
   @State historyList: HistoryItem[] = [];
   @State groupedHistory: Map<string, HistoryItem[]> = new Map();
@@ -35,7 +34,6 @@ export struct HistoryPage {
   @State selectedItems: Set<number> = new Set();
   @State showFilterDialog: boolean = false;
   @State filterOption: string = '全部'; // '全部', '今天', '最近7天', '最近30天'
-  
   // 深色模式
   @StorageLink('darkMode') darkMode: boolean = false;
 
@@ -48,14 +46,14 @@ export struct HistoryPage {
   loadHistory() {
     console.info('=== HistoryPage loadHistory 开始 ===');
     let allHistory = dataManager.getHistoryList();
-    
+
     // 应用时间筛选
     if (this.filterOption !== '全部') {
       const now = Date.now();
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const todayTime = today.getTime();
-      
+
       if (this.filterOption === '今天') {
         allHistory = allHistory.filter(item => item.visitTime >= todayTime);
       } else if (this.filterOption === '最近7天') {
@@ -66,13 +64,13 @@ export struct HistoryPage {
         allHistory = allHistory.filter(item => item.visitTime >= monthAgo);
       }
     }
-    
+
     // 应用搜索筛选
     if (this.searchKeyword.trim()) {
       const keyword = this.searchKeyword.toLowerCase();
-      allHistory = allHistory.filter(item => 
-        item.url.toLowerCase().includes(keyword) || 
-        item.title.toLowerCase().includes(keyword)
+      allHistory = allHistory.filter(item =>
+      item.url.toLowerCase().includes(keyword) ||
+      item.title.toLowerCase().includes(keyword)
       );
       // 搜索时不分组
       this.historyList = allHistory;
@@ -85,7 +83,7 @@ export struct HistoryPage {
       console.info(`分组数量: ${this.groupedHistory.size}`);
     }
   }
-  
+
   // 按日期分组
   groupByDate(list: HistoryItem[]): Map<string, HistoryItem[]> {
     const grouped = new Map<string, HistoryItem[]>();
@@ -93,11 +91,11 @@ export struct HistoryPage {
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
     const yesterday = today - 24 * 60 * 60 * 1000;
     const weekAgo = today - 7 * 24 * 60 * 60 * 1000;
-    
+
     list.forEach(item => {
       const itemTime = new Date(item.visitTime);
       const itemDate = new Date(itemTime.getFullYear(), itemTime.getMonth(), itemTime.getDate()).getTime();
-      
+
       let dateLabel: string;
       if (itemDate === today) {
         dateLabel = '今天';
@@ -108,13 +106,13 @@ export struct HistoryPage {
       } else {
         dateLabel = '更早';
       }
-      
+
       if (!grouped.has(dateLabel)) {
         grouped.set(dateLabel, []);
       }
       grouped.get(dateLabel)?.push(item);
     });
-    
+
     return grouped;
   }
 
@@ -146,15 +144,15 @@ export struct HistoryPage {
             .onClick(() => {
               this.pathStack.pop();
             })
-          
+
           Text('历史记录')
             .fontSize(18)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .fontWeight(FontWeight.Medium)
             .margin({ left: 16 })
-          
+
           Blank()
-          
+
           // 筛选按钮
           Button(this.filterOption)
             .fontSize(14)
@@ -164,7 +162,7 @@ export struct HistoryPage {
             .onClick(() => {
               this.showFilterDialog = true;
             })
-          
+
           // 编辑/完成按钮
           Button(this.isEditing ? '完成' : '编辑')
             .fontSize(14)
@@ -182,7 +180,7 @@ export struct HistoryPage {
         .height(56)
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
         .alignItems(VerticalAlign.Center)
-        
+
         // 搜索框
         Row() {
           Image($r('app.media.search'))
@@ -190,7 +188,7 @@ export struct HistoryPage {
             .height(16)
             .fillColor('#8E8E93')
             .margin({ left: 8 })
-          
+
           TextInput({ placeholder: '搜索历史记录', text: this.searchKeyword })
             .layoutWeight(1)
             .height(36)
@@ -202,7 +200,7 @@ export struct HistoryPage {
               this.searchKeyword = value;
               this.loadHistory();
             })
-          
+
           if (this.searchKeyword.length > 0) {
             Image($r('app.media.close'))
               .width(16)
@@ -217,11 +215,16 @@ export struct HistoryPage {
         }
         .width('100%')
         .height(36)
-        .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+        .margin({
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8
+        })
         .padding({ left: 4, right: 4 })
         .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
         .borderRadius(8)
-        
+
         // 批量操作栏（编辑模式下显示）
         if (this.isEditing && this.selectedItems.size > 0) {
           Row() {
@@ -233,9 +236,9 @@ export struct HistoryPage {
               .onClick(() => {
                 this.deleteSelectedItems();
               })
-            
+
             Blank()
-            
+
             Button('全选')
               .fontSize(14)
               .backgroundColor(Color.Transparent)
@@ -249,7 +252,7 @@ export struct HistoryPage {
           .padding({ left: 16, right: 16 })
           .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
         }
-        
+
         // 历史记录列表
         if (this.historyList.length === 0) {
           // 空状态
@@ -259,12 +262,12 @@ export struct HistoryPage {
               .height(64)
               .fillColor('#8E8E93')
               .opacity(0.5)
-            
+
             Text(this.searchKeyword ? '未找到匹配的历史记录' : '暂无浏览历史')
               .fontSize(16)
               .fontColor('#8E8E93')
               .margin({ top: 16 })
-            
+
             Text('您访问的网页将显示在这里')
               .fontSize(14)
               .fontColor('#8E8E93')
@@ -298,7 +301,7 @@ export struct HistoryPage {
                             this.selectedItems = new Set(this.selectedItems);
                           })
                       }
-                      
+
                       // 网站图标
                       Column() {
                         Image($r('app.media.web'))
@@ -312,7 +315,7 @@ export struct HistoryPage {
                       .backgroundColor(this.getIconColor(item.url))
                       .justifyContent(FlexAlign.Center)
                       .margin({ right: 12 })
-                      
+
                       // 标题和URL
                       Column({ space: 4 }) {
                         Text(item.title || '无标题')
@@ -321,7 +324,7 @@ export struct HistoryPage {
                           .maxLines(1)
                           .textOverflow({ overflow: TextOverflow.Ellipsis })
                           .width('100%')
-                        
+
                         Row({ space: 8 }) {
                           Text(item.url)
                             .fontSize(12)
@@ -329,7 +332,7 @@ export struct HistoryPage {
                             .maxLines(1)
                             .textOverflow({ overflow: TextOverflow.Ellipsis })
                             .layoutWeight(1)
-                          
+
                           if (item.visitCount > 1) {
                             Text(`访问${item.visitCount}次`)
                               .fontSize(11)
@@ -340,7 +343,7 @@ export struct HistoryPage {
                       }
                       .alignItems(HorizontalAlign.Start)
                       .layoutWeight(1)
-                      
+
                       // 访问时间
                       if (!this.isEditing) {
                         Text(this.formatTime(item.visitTime))
@@ -350,7 +353,12 @@ export struct HistoryPage {
                       }
                     }
                     .width('100%')
-                    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+                    .padding({
+                      left: 16,
+                      right: 16,
+                      top: 12,
+                      bottom: 12
+                    })
                     .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
                   }
                   .onClick(() => {
@@ -378,7 +386,7 @@ export struct HistoryPage {
             endMargin: 0
           })
         }
-        
+
         // 底部清空按钮
         if (this.historyList.length > 0 && !this.isEditing) {
           Button('清空所有历史记录')
@@ -402,7 +410,7 @@ export struct HistoryPage {
       modalTransition: ModalTransition.DEFAULT
     })
   }
-  
+
   // 筛选对话框
   @Builder
   filterDialog() {
@@ -415,7 +423,7 @@ export struct HistoryPage {
             .fontWeight(FontWeight.Bold)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .layoutWeight(1)
-          
+
           Button('关闭')
             .fontSize(14)
             .backgroundColor(Color.Transparent)
@@ -428,10 +436,10 @@ export struct HistoryPage {
         .height(56)
         .padding({ left: 16, right: 16 })
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
-        
+
         Divider()
           .color(this.darkMode ? '#38383A' : '#E5E5EA')
-        
+
         // 筛选选项
         Column() {
           this.FilterOptionItem('全部')
@@ -453,7 +461,7 @@ export struct HistoryPage {
       this.showFilterDialog = false;
     })
   }
-  
+
   // 筛选选项项
   @Builder
   FilterOptionItem(option: string) {
@@ -462,7 +470,7 @@ export struct HistoryPage {
         .fontSize(16)
         .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
         .layoutWeight(1)
-      
+
       if (this.filterOption === option) {
         Image($r('app.media.bookmark_filled'))
           .width(20)
@@ -481,7 +489,7 @@ export struct HistoryPage {
       this.loadHistory();
     })
   }
-  
+
   // 日期分组标题
   @Builder
   dateHeader(label: string) {
@@ -494,7 +502,7 @@ export struct HistoryPage {
       .backgroundColor(this.darkMode ? '#1C1C1E' : '#F2F2F7')
       .textAlign(TextAlign.Start)
   }
-  
+
   // 根据URL生成图标颜色
   getIconColor(url: string): string {
     const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
@@ -504,13 +512,13 @@ export struct HistoryPage {
     }
     return colors[Math.abs(hash) % colors.length];
   }
-  
+
   // 打开URL
   openUrl(url: string) {
     AppStorage.setOrCreate('openUrl', url);
     this.pathStack.pop();
   }
-  
+
   // 显示项目菜单
   showItemMenu(item: HistoryItem) {
     AlertDialog.show({
@@ -525,24 +533,25 @@ export struct HistoryPage {
       },
       secondaryButton: {
         value: '取消',
-        action: () => {}
+        action: () => {
+        }
       }
     });
   }
-  
+
   // 删除单个历史记录
   async deleteHistoryItem(id: number) {
     await dataManager.deleteHistory(id);
     this.loadHistory();
     promptAction.showToast({ message: '已删除' });
   }
-  
+
   // 删除选中项
   async deleteSelectedItems() {
     if (this.selectedItems.size === 0) {
       return;
     }
-    
+
     AlertDialog.show({
       title: '确认删除',
       message: `确定要删除选中的 ${this.selectedItems.size} 条历史记录吗？`,
@@ -558,11 +567,12 @@ export struct HistoryPage {
       },
       secondaryButton: {
         value: '取消',
-        action: () => {}
+        action: () => {
+        }
       }
     });
   }
-  
+
   // 全选
   selectAllItems() {
     this.historyList.forEach(item => {
@@ -570,7 +580,7 @@ export struct HistoryPage {
     });
     this.selectedItems = new Set(this.selectedItems);
   }
-  
+
   // 显示清空确认对话框
   showClearAllConfirm() {
     AlertDialog.show({
@@ -587,7 +597,8 @@ export struct HistoryPage {
       },
       secondaryButton: {
         value: '取消',
-        action: () => {}
+        action: () => {
+        }
       }
     });
   }

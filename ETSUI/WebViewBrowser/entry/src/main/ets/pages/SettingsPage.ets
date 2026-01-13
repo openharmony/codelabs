@@ -32,7 +32,6 @@ export function SettingsPageBuilder() {
 export struct SettingsPage {
   // 获取全局NavPathStack
   pathStack: NavPathStack = AppStorage.get('pathStack') as NavPathStack;
-  
   // 基础设置
   @State homeUrl: string = 'https://www.huawei.com';
   @State darkMode: boolean = false;
@@ -40,12 +39,10 @@ export struct SettingsPage {
   @State javaScriptEnabled: boolean = true;
   @State imageEnabled: boolean = true;
   @State textZoom: number = 100;
-  
   // 隐私设置
   @State domStorageEnabled: boolean = true;
   @State geolocationEnabled: boolean = true;
   @State clearCacheOnExit: boolean = false;
-  
   // 显示输入对话框的状态
   @State showUrlDialog: boolean = false;
   @State tempHomeUrl: string = '';
@@ -68,206 +65,211 @@ export struct SettingsPage {
             .onClick(() => {
               this.pathStack.pop();
             })
-          
+
           Text('设置')
             .fontSize(18)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .fontWeight(FontWeight.Medium)
             .margin({ left: 16 })
-          
+
           Blank()
         }
         .width('100%')
         .height(56)
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
         .alignItems(VerticalAlign.Center)
-        
+
         // 内容区域
         Scroll() {
-        Column({ space: 0 }) {
-          // 常规设置
-          this.SettingSection('常规设置')
-          
-          // 主页地址
-          Row() {
-            Text('主页地址')
-              .fontSize(16)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+          Column({ space: 0 }) {
+            // 常规设置
+            this.SettingSection('常规设置')
 
-            Blank()
-
-            Text(this.homeUrl)
-              .fontSize(16)
-              .fontColor('#8E8E93')
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .layoutWeight(1)
-              .textAlign(TextAlign.End)
-              .margin({ left: 12, right: 8 })
-
-            Text('›')
-              .fontSize(20)
-              .fontColor('#C7C7CC')
-          }
-          .width('100%')
-          .height(50)
-          .padding({ left: 16, right: 16 })
-          .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
-          .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
-          .onClick(() => {
-            this.tempHomeUrl = this.homeUrl;
-            this.showUrlDialog = true;
-          })
-          
-          this.ToggleItem('深色模式', this.darkMode, (value: boolean) => {
-            this.darkMode = value;
-            this.saveSettings();
-            // 通知主页面更新主题
-            AppStorage.setOrCreate('darkMode', value);
-          })
-          
-          // 强制深色模式（仅在深色模式开启时可用）
-          Row() {
-            Text('强制深色模式')
-              .fontSize(16)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
-              .opacity(this.darkMode ? 1.0 : 0.5)
-              .layoutWeight(1)
-
-            Toggle({ type: ToggleType.Switch, isOn: this.forceDarkMode })
-              .selectedColor('#34C759')
-              .enabled(this.darkMode)
-              .onChange((value: boolean) => {
-                if (this.darkMode) {
-                  this.forceDarkMode = value;
-                  this.saveSettings();
-                  AppStorage.setOrCreate('forceDarkMode', value);
-                }
-              })
-          }
-          .width('100%')
-          .height(50)
-          .padding({ left: 16, right: 16 })
-          .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
-          .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
-          .opacity(this.darkMode ? 1.0 : 0.6)
-
-          // 网页设置
-          this.SettingSection('网页设置')
-          
-          this.ToggleItem('启用 JavaScript', this.javaScriptEnabled, (value: boolean) => {
-            this.javaScriptEnabled = value;
-            this.saveSettings();
-            AppStorage.setOrCreate('javaScriptEnabled', value);
-          })
-          
-          this.ToggleItem('加载图片', this.imageEnabled, (value: boolean) => {
-            this.imageEnabled = value;
-            this.saveSettings();
-            AppStorage.setOrCreate('imageEnabled', value);
-          })
-
-          // 文字缩放
-          Column({ space: 8 }) {
+            // 主页地址
             Row() {
-              Text('文字缩放')
+              Text('主页地址')
                 .fontSize(16)
                 .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
 
               Blank()
 
-              Text(`${this.textZoom}%`)
+              Text(this.homeUrl)
                 .fontSize(16)
                 .fontColor('#8E8E93')
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+                .layoutWeight(1)
+                .textAlign(TextAlign.End)
+                .margin({ left: 12, right: 8 })
+
+              Text('›')
+                .fontSize(20)
+                .fontColor('#C7C7CC')
             }
             .width('100%')
-
-            Slider({
-              value: this.textZoom,
-              min: 50,
-              max: 200,
-              step: 10,
-              style: SliderStyle.OutSet
+            .height(50)
+            .padding({ left: 16, right: 16 })
+            .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+            .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
+            .onClick(() => {
+              this.tempHomeUrl = this.homeUrl;
+              this.showUrlDialog = true;
             })
+
+            this.ToggleItem('深色模式', this.darkMode, (value: boolean) => {
+              this.darkMode = value;
+              this.saveSettings();
+              // 通知主页面更新主题
+              AppStorage.setOrCreate('darkMode', value);
+            })
+
+            // 强制深色模式（仅在深色模式开启时可用）
+            Row() {
+              Text('强制深色模式')
+                .fontSize(16)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+                .opacity(this.darkMode ? 1.0 : 0.5)
+                .layoutWeight(1)
+
+              Toggle({ type: ToggleType.Switch, isOn: this.forceDarkMode })
+                .selectedColor('#34C759')
+                .enabled(this.darkMode)
+                .onChange((value: boolean) => {
+                  if (this.darkMode) {
+                    this.forceDarkMode = value;
+                    this.saveSettings();
+                    AppStorage.setOrCreate('forceDarkMode', value);
+                  }
+                })
+            }
+            .width('100%')
+            .height(50)
+            .padding({ left: 16, right: 16 })
+            .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+            .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
+            .opacity(this.darkMode ? 1.0 : 0.6)
+
+            // 网页设置
+            this.SettingSection('网页设置')
+
+            this.ToggleItem('启用 JavaScript', this.javaScriptEnabled, (value: boolean) => {
+              this.javaScriptEnabled = value;
+              this.saveSettings();
+              AppStorage.setOrCreate('javaScriptEnabled', value);
+            })
+
+            this.ToggleItem('加载图片', this.imageEnabled, (value: boolean) => {
+              this.imageEnabled = value;
+              this.saveSettings();
+              AppStorage.setOrCreate('imageEnabled', value);
+            })
+
+            // 文字缩放
+            Column({ space: 8 }) {
+              Row() {
+                Text('文字缩放')
+                  .fontSize(16)
+                  .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+
+                Blank()
+
+                Text(`${this.textZoom}%`)
+                  .fontSize(16)
+                  .fontColor('#8E8E93')
+              }
               .width('100%')
-              .blockColor('#007AFF')
-              .trackColor(this.darkMode ? '#48484A' : '#E5E5EA')
-              .selectedColor('#007AFF')
-              .onChange((value: number) => {
-                this.textZoom = Math.round(value);
-                this.saveSettings();
-                AppStorage.setOrCreate('textZoom', this.textZoom);
+
+              Slider({
+                value: this.textZoom,
+                min: 50,
+                max: 200,
+                step: 10,
+                style: SliderStyle.OutSet
               })
+                .width('100%')
+                .blockColor('#007AFF')
+                .trackColor(this.darkMode ? '#48484A' : '#E5E5EA')
+                .selectedColor('#007AFF')
+                .onChange((value: number) => {
+                  this.textZoom = Math.round(value);
+                  this.saveSettings();
+                  AppStorage.setOrCreate('textZoom', this.textZoom);
+                })
+            }
+            .width('100%')
+            .padding({
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 12
+            })
+            .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+            .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
+
+            // 隐私与安全
+            this.SettingSection('隐私与安全')
+
+            this.ToggleItem('启用 Cookie', this.domStorageEnabled, (value: boolean) => {
+              this.domStorageEnabled = value;
+              this.saveSettings();
+              AppStorage.setOrCreate('domStorageEnabled', value);
+            })
+
+            this.ToggleItem('允许定位', this.geolocationEnabled, (value: boolean) => {
+              this.geolocationEnabled = value;
+              this.saveSettings();
+              AppStorage.setOrCreate('geolocationEnabled', value);
+            })
+
+            this.ToggleItem('退出时清除缓存', this.clearCacheOnExit, (value: boolean) => {
+              this.clearCacheOnExit = value;
+              this.saveSettings();
+            })
+
+            // 数据管理
+            this.SettingSection('数据管理')
+
+            // 统计信息
+            Row() {
+              Text('统计信息')
+                .fontSize(16)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+                .layoutWeight(1)
+
+              Text('›')
+                .fontSize(20)
+                .fontColor('#C7C7CC')
+            }
+            .width('100%')
+            .height(50)
+            .padding({ left: 16, right: 16 })
+            .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+            .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
+            .onClick(() => {
+              this.pathStack.pushPathByName('StatisticsPage', null);
+            })
+
+            this.ActionItem('清除缓存', () => {
+              this.clearCache();
+            })
+
+            this.ActionItem('清除Cookie', () => {
+              this.clearCookies();
+            })
+
+            // 关于
+            this.SettingSection('关于')
+            this.InfoItem('应用名称', 'WebView 浏览器')
+            this.InfoItem('版本', '1.0.0')
+            this.InfoItem('HarmonyOS API', '20')
+
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-          .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
-          .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
-
-          // 隐私与安全
-          this.SettingSection('隐私与安全')
-          
-          this.ToggleItem('启用 Cookie', this.domStorageEnabled, (value: boolean) => {
-            this.domStorageEnabled = value;
-            this.saveSettings();
-            AppStorage.setOrCreate('domStorageEnabled', value);
-          })
-          
-          this.ToggleItem('允许定位', this.geolocationEnabled, (value: boolean) => {
-            this.geolocationEnabled = value;
-            this.saveSettings();
-            AppStorage.setOrCreate('geolocationEnabled', value);
-          })
-          
-          this.ToggleItem('退出时清除缓存', this.clearCacheOnExit, (value: boolean) => {
-            this.clearCacheOnExit = value;
-            this.saveSettings();
-          })
-
-          // 数据管理
-          this.SettingSection('数据管理')
-          
-          // 统计信息
-          Row() {
-            Text('统计信息')
-              .fontSize(16)
-              .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
-              .layoutWeight(1)
-
-            Text('›')
-              .fontSize(20)
-              .fontColor('#C7C7CC')
-          }
-          .width('100%')
-          .height(50)
-          .padding({ left: 16, right: 16 })
-          .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
-          .border({ width: { bottom: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
-          .onClick(() => {
-            this.pathStack.pushPathByName('StatisticsPage', null);
-          })
-          
-          this.ActionItem('清除缓存', () => {
-            this.clearCache();
-          })
-          
-          this.ActionItem('清除Cookie', () => {
-            this.clearCookies();
-          })
-
-          // 关于
-          this.SettingSection('关于')
-          this.InfoItem('应用名称', 'WebView 浏览器')
-          this.InfoItem('版本', '1.0.0')
-          this.InfoItem('HarmonyOS API', '20')
-
+          .padding({ bottom: 20 })
         }
-        .width('100%')
-        .padding({ bottom: 20 })
-      }
-      .layoutWeight(1)
-      .scrollBar(BarState.Auto)
-      .backgroundColor(this.darkMode ? '#1C1C1E' : '#F2F2F7')
+        .layoutWeight(1)
+        .scrollBar(BarState.Auto)
+        .backgroundColor(this.darkMode ? '#1C1C1E' : '#F2F2F7')
       }
       .width('100%')
       .height('100%')
@@ -351,7 +353,12 @@ export struct SettingsPage {
       .fontSize(13)
       .fontColor('#8E8E93')
       .width('100%')
-      .padding({ left: 16, right: 16, top: 20, bottom: 8 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 20,
+        bottom: 8
+      })
       .textCase(TextCase.UpperCase)
   }
 

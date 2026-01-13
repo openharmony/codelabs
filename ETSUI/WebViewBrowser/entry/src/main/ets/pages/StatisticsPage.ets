@@ -43,7 +43,6 @@ interface StatisticsData {
 export struct StatisticsPage {
   // 获取全局NavPathStack
   pathStack: NavPathStack = AppStorage.get('pathStack') as NavPathStack;
-  
   // 统计数据
   @State statistics: StatisticsData = {
     totalHistory: 0,
@@ -54,7 +53,6 @@ export struct StatisticsPage {
     topVisitedSites: [],
     recentBookmarks: []
   };
-  
   // 深色模式
   @StorageLink('darkMode') darkMode: boolean = false;
 
@@ -66,11 +64,11 @@ export struct StatisticsPage {
   loadStatistics() {
     const historyList = dataManager.getHistoryList();
     const bookmarkList = dataManager.getBookmarkList();
-    
+
     // 基础统计
     this.statistics.totalHistory = historyList.length;
     this.statistics.totalBookmarks = bookmarkList.length;
-    
+
     // 时间统计
     const now = Date.now();
     const today = new Date();
@@ -78,11 +76,11 @@ export struct StatisticsPage {
     const todayTime = today.getTime();
     const weekAgo = todayTime - 7 * 24 * 60 * 60 * 1000;
     const monthAgo = todayTime - 30 * 24 * 60 * 60 * 1000;
-    
+
     this.statistics.todayVisits = historyList.filter(item => item.visitTime >= todayTime).length;
     this.statistics.weekVisits = historyList.filter(item => item.visitTime >= weekAgo).length;
     this.statistics.monthVisits = historyList.filter(item => item.visitTime >= monthAgo).length;
-    
+
     // 最常访问的网站（按访问次数排序，取前5个）
     const sortedHistory = [...historyList].sort((a, b) => b.visitCount - a.visitCount);
     this.statistics.topVisitedSites = sortedHistory.slice(0, 5).map((item): TopSite => {
@@ -92,7 +90,7 @@ export struct StatisticsPage {
         count: item.visitCount
       };
     });
-    
+
     // 最近的书签（取前5个）
     this.statistics.recentBookmarks = bookmarkList.slice(0, 5);
   }
@@ -111,32 +109,32 @@ export struct StatisticsPage {
             .onClick(() => {
               this.pathStack.pop();
             })
-          
+
           Text('统计信息')
             .fontSize(18)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .fontWeight(FontWeight.Medium)
             .margin({ left: 16 })
-          
+
           Blank()
         }
         .width('100%')
         .height(56)
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
         .alignItems(VerticalAlign.Center)
-        
+
         // 内容区域
         Scroll() {
           Column({ space: 16 }) {
             // 总览卡片
             this.OverviewCard()
-            
+
             // 访问统计卡片
             this.VisitStatsCard()
-            
+
             // 热门网站卡片
             this.TopSitesCard()
-            
+
             // 最近书签卡片
             this.RecentBookmarksCard()
           }
@@ -151,7 +149,7 @@ export struct StatisticsPage {
     }
     .hideTitleBar(true)
   }
-  
+
   // 总览卡片
   @Builder
   OverviewCard() {
@@ -161,7 +159,7 @@ export struct StatisticsPage {
         .fontWeight(FontWeight.Bold)
         .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
         .width('100%')
-      
+
       Row({ space: 12 }) {
         // 历史记录数
         Column({ space: 8 }) {
@@ -169,7 +167,7 @@ export struct StatisticsPage {
             .fontSize(28)
             .fontWeight(FontWeight.Bold)
             .fontColor('#007AFF')
-          
+
           Text('历史记录')
             .fontSize(12)
             .fontColor('#8E8E93')
@@ -180,14 +178,14 @@ export struct StatisticsPage {
         .borderRadius(12)
         .justifyContent(FlexAlign.Center)
         .shadow({ radius: 8, color: this.darkMode ? '#00000040' : '#00000010', offsetY: 2 })
-        
+
         // 书签数
         Column({ space: 8 }) {
           Text(`${this.statistics.totalBookmarks}`)
             .fontSize(28)
             .fontWeight(FontWeight.Bold)
             .fontColor('#FF9500')
-          
+
           Text('收藏书签')
             .fontSize(12)
             .fontColor('#8E8E93')
@@ -207,7 +205,7 @@ export struct StatisticsPage {
     .borderRadius(12)
     .shadow({ radius: 8, color: this.darkMode ? '#00000040' : '#00000010', offsetY: 2 })
   }
-  
+
   // 访问统计卡片
   @Builder
   VisitStatsCard() {
@@ -217,14 +215,14 @@ export struct StatisticsPage {
         .fontWeight(FontWeight.Bold)
         .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
         .width('100%')
-      
+
       // 今天
       Row() {
         Text('今天')
           .fontSize(14)
           .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
           .layoutWeight(1)
-        
+
         Text(`${this.statistics.todayVisits} 次`)
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
@@ -235,14 +233,14 @@ export struct StatisticsPage {
       .padding({ left: 12, right: 12 })
       .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
       .borderRadius(8)
-      
+
       // 最近7天
       Row() {
         Text('最近7天')
           .fontSize(14)
           .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
           .layoutWeight(1)
-        
+
         Text(`${this.statistics.weekVisits} 次`)
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
@@ -253,14 +251,14 @@ export struct StatisticsPage {
       .padding({ left: 12, right: 12 })
       .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
       .borderRadius(8)
-      
+
       // 最近30天
       Row() {
         Text('最近30天')
           .fontSize(14)
           .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
           .layoutWeight(1)
-        
+
         Text(`${this.statistics.monthVisits} 次`)
           .fontSize(16)
           .fontWeight(FontWeight.Medium)
@@ -278,7 +276,7 @@ export struct StatisticsPage {
     .borderRadius(12)
     .shadow({ radius: 8, color: this.darkMode ? '#00000040' : '#00000010', offsetY: 2 })
   }
-  
+
   // 热门网站卡片
   @Builder
   TopSitesCard() {
@@ -288,7 +286,7 @@ export struct StatisticsPage {
         .fontWeight(FontWeight.Bold)
         .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
         .width('100%')
-      
+
       if (this.statistics.topVisitedSites.length === 0) {
         Column() {
           Text('暂无数据')
@@ -312,7 +310,7 @@ export struct StatisticsPage {
                 .textAlign(TextAlign.Center)
                 .borderRadius(12)
                 .backgroundColor(this.getRankColor(index))
-              
+
               // 网站信息
               Column({ space: 4 }) {
                 Text(site.title || '无标题')
@@ -320,7 +318,7 @@ export struct StatisticsPage {
                   .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
-                
+
                 Text(site.url)
                   .fontSize(12)
                   .fontColor('#8E8E93')
@@ -329,7 +327,7 @@ export struct StatisticsPage {
               }
               .alignItems(HorizontalAlign.Start)
               .layoutWeight(1)
-              
+
               // 访问次数
               Text(`${site.count}次`)
                 .fontSize(14)
@@ -351,7 +349,7 @@ export struct StatisticsPage {
     .borderRadius(12)
     .shadow({ radius: 8, color: this.darkMode ? '#00000040' : '#00000010', offsetY: 2 })
   }
-  
+
   // 最近书签卡片
   @Builder
   RecentBookmarksCard() {
@@ -361,7 +359,7 @@ export struct StatisticsPage {
         .fontWeight(FontWeight.Bold)
         .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
         .width('100%')
-      
+
       if (this.statistics.recentBookmarks.length === 0) {
         Column() {
           Text('暂无书签')
@@ -387,7 +385,7 @@ export struct StatisticsPage {
               .borderRadius(8)
               .backgroundColor('#FF9500')
               .justifyContent(FlexAlign.Center)
-              
+
               // 书签信息
               Column({ space: 4 }) {
                 Text(bookmark.title || '无标题')
@@ -395,7 +393,7 @@ export struct StatisticsPage {
                   .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
                   .maxLines(1)
                   .textOverflow({ overflow: TextOverflow.Ellipsis })
-                
+
                 Text(this.formatDate(bookmark.createTime))
                   .fontSize(12)
                   .fontColor('#8E8E93')
@@ -419,7 +417,7 @@ export struct StatisticsPage {
     .borderRadius(12)
     .shadow({ radius: 8, color: this.darkMode ? '#00000040' : '#00000010', offsetY: 2 })
   }
-  
+
   // 获取排名颜色
   getRankColor(index: number): string {
     switch (index) {
@@ -433,7 +431,7 @@ export struct StatisticsPage {
         return '#8E8E93'; // 灰色
     }
   }
-  
+
   // 格式化日期
   formatDate(timestamp: number): string {
     const date = new Date(timestamp);
