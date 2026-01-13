@@ -19,7 +19,7 @@
 
 ### 相关概念
 
--   [ArkTS 语言](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-get-started.md)：HarmonyOS/OpenHarmony应用开发语言（TypeScript超集）。
+-   [ArkTS 语言](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/arkts-get-started.md)：OpenHarmony应用开发语言（TypeScript超集）。
 -   [commonEventManager](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-basic-services-kit/js-apis-commonEventManager.md)：公共事件的订阅与发布能力。
 -   [Preferences](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-preferences.md)：轻量级持久化存储，用于保存快照与历史缓存。
 -   [RDB](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/reference/apis-arkdata/js-apis-data-relationalStore.md)：关系型数据库存储，用于保存完整历史事件（本示例可选启用）。
