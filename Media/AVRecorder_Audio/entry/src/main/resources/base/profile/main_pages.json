@@ -1,0 +1,7 @@
+{
+  "src": [
+    "pages/RecordPage",
+    "pages/PlayerPage",
+    "pages/SettingsPage"
+  ]
+}

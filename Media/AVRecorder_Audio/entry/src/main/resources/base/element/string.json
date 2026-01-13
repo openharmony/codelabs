@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "permission_microphone_reason",
+      "value": "Allow access to the microphone for recording."
+    },
+    {
+      "name": "permission_media_reason",
+      "value": "Allow access to save and play recordings."
+    }
+  ]
+}
