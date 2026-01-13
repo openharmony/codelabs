@@ -52,7 +52,6 @@
 
 ## 代码结构解读
 
-本篇Codelab只对核心代码进行讲解，对于完整代码，我们会在gitcode中提供。
 
 ```
 ├──entry/src/main/ets               // 代码区
