@@ -1,6 +1,7 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { FunctionClass } from 'libentry.so';
 import libaki from 'libentry.so';
+
 const DOMAIN = 0x0000;
 
 export const sleep = (delay: number = 200) => new Promise<void>((resolve) => setTimeout(resolve, delay));
@@ -9,6 +10,7 @@ export const sleep = (delay: number = 200) => new Promise<void>((resolve) => set
 @Component
 struct Index {
   @State message: string = 'Hello World';
+
   build() {
     Row() {
       Column() {
