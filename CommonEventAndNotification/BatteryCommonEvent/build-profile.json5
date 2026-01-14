@@ -4,8 +4,10 @@
     "products": [
       {
         "name": "default",
-        "targetSdkVersion": "6.0.0(20)",
-        "compatibleSdkVersion": "6.0.0(20)",
+        "signingConfig": "default",
+        "compileSdkVersion": 20,
+        "compatibleSdkVersion": 20,
+        "targetSdkVersion": 20,
         "runtimeOS": "OpenHarmony",
         "buildOption": {
           "strictMode": {
@@ -16,12 +18,8 @@
       }
     ],
     "buildModeSet": [
-      {
-        "name": "debug",
-      },
-      {
-        "name": "release"
-      }
+      { "name": "debug" },
+      { "name": "release" }
     ]
   },
   "modules": [
@@ -31,9 +29,7 @@
       "targets": [
         {
           "name": "default",
-          "applyToProducts": [
-            "default"
-          ]
+          "applyToProducts": ["default"]
         }
       ]
     }

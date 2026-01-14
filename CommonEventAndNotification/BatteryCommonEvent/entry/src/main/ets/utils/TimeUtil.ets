@@ -29,6 +29,17 @@ export class TimeUtil {
     return `${yyyy}-${mm}-${dd} ${hh}:${mi}:${ss}`;
   }
 
+  static formatForFile(ms: number): string {
+    const d = new Date(ms);
+    const yyyy = d.getFullYear();
+    const mm = TimeUtil.pad2(d.getMonth() + 1);
+    const dd = TimeUtil.pad2(d.getDate());
+    const hh = TimeUtil.pad2(d.getHours());
+    const mi = TimeUtil.pad2(d.getMinutes());
+    const ss = TimeUtil.pad2(d.getSeconds());
+    return `${yyyy}-${mm}-${dd}_${hh}-${mi}-${ss}`;
+  }
+
   static daysAgo(ms: number): number {
     const now = Date.now();
     const diff = now - ms;

@@ -40,6 +40,7 @@ interface ValuesRow {}
 
 export class RdbStore {
   private static _inst: RdbStore | null = null;
+
   static get inst(): RdbStore {
     if (!RdbStore._inst) {
       RdbStore._inst = new RdbStore();

@@ -23,7 +23,9 @@ export struct About {
     Column({ space: 10 }) {
       Row() {
         Text('About').fontSize(20).fontWeight(FontWeight.Bold).layoutWeight(1);
-        Button('Back').onClick(() => { router.back(); });
+        Button('Back').onClick(() => {
+          router.back();
+        });
       }.padding({ left: 16, right: 16, top: 10 });
 
       Column({ space: 8 }) {

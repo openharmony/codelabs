@@ -28,7 +28,9 @@ export struct EmptyState {
       }
       if (this.actionText) {
         Button(this.actionText)
-          .onClick(() => { this.onAction?.(); });
+          .onClick(() => {
+            this.onAction?.();
+          });
       }
     }
     .padding(24)

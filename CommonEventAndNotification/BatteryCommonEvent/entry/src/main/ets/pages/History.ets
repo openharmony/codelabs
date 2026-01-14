@@ -22,9 +22,17 @@ import { EmptyState } from '../components/EmptyState';
 
 class HistoryListener implements RepositoryListener {
   private owner: History;
-  constructor(owner: History) { this.owner = owner; }
-  onSnapshotUpdated(_: BatterySnapshot): void { }
-  onHistoryUpdated(events: BatteryEvent[]): void { this.owner.history = events; }
+
+  constructor(owner: History) {
+    this.owner = owner;
+  }
+
+  onSnapshotUpdated(_: BatterySnapshot): void {
+  }
+
+  onHistoryUpdated(events: BatteryEvent[]): void {
+    this.owner.history = events;
+  }
 }
 
 @Entry
@@ -32,7 +40,6 @@ class HistoryListener implements RepositoryListener {
 export struct History {
   @State history: BatteryEvent[] = [];
   @State pageSize: number = 40;
-
   private repo: BatteryEventRepository = BatteryEventRepository.inst;
   private listener: RepositoryListener | null = null;
 
@@ -48,7 +55,10 @@ export struct History {
   }
 
   aboutToDisappear() {
-    if (this.listener) {this.repo.removeListener(this.listener)};
+    if (this.listener) {
+      this.repo.removeListener(this.listener)
+    }
+    ;
     this.listener = null;
   }
 
@@ -59,13 +69,19 @@ export struct History {
   build() {
     Column() {
       Row() {
-        Button('â†?Back').onClick(() => this.back());
+        Button('Back').onClick(() => this.back());
         Text('History')
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
           .margin({ left: 12 });
         Blank();
-      }.padding({ left: 16, right: 16, top: 16, bottom: 10 })
+      }
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 10
+      })
       .width('100%');
 
       if (!this.history || this.history.length === 0) {
@@ -84,7 +100,8 @@ export struct History {
                     .fontSize(14)
                     .margin({ top: 2 });
                 }.layoutWeight(1);
-                Text('â€?).fontSize(20).opacity(0.5);
+
+                Text('â€º').fontSize(20).opacity(0.5);
               }
               .padding(12)
               .backgroundColor(0x0D000000)

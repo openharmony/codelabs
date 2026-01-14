@@ -61,17 +61,25 @@ export struct Detail {
   build() {
     Column() {
       Row() {
-        Button('â†?Back').onClick(() => this.back());
+        Button('Back').onClick(() => this.back());
         Text('Detail')
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
           .margin({ left: 12 });
         Blank();
-      }.padding({ left: 16, right: 16, top: 16, bottom: 10 });
+      }
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 10
+      });
 
       if (!this.event) {
-        Column() { Text('No event found.').opacity(0.7); }
-          .padding(16);
+        Column() {
+          Text('No event found.').opacity(0.7);
+        }
+        .padding(16);
       } else {
         Text(TimeUtil.formatTime(this.event!.timeMs))
           .fontSize(14)
@@ -98,5 +106,4 @@ export struct Detail {
     }
     .height('100%');
   }
-
 }

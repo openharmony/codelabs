@@ -24,9 +24,15 @@ export struct JsonViewer {
 
   private getText(): string {
     const text = JsonUtil.safeStringify(this.obj as Object, 2);
-    if (this.expanded) {return text};
+    if (this.expanded) {
+      return text
+    }
+    ;
     const lines = text.split('\n');
-    if (lines.length <= this.maxLines) {return text};
+    if (lines.length <= this.maxLines) {
+      return text
+    }
+    ;
     return lines.slice(0, this.maxLines).join('\n') + '\n...';
   }
 
@@ -37,8 +43,11 @@ export struct JsonViewer {
         Text(this.expanded ? 'Collapse' : 'Expand')
           .fontSize(12)
           .opacity(0.75)
-          .onClick(() => { this.expanded = !this.expanded; });
+          .onClick(() => {
+            this.expanded = !this.expanded;
+          });
       }
+
       Scroll() {
         Text(this.getText())
           .fontSize(12)

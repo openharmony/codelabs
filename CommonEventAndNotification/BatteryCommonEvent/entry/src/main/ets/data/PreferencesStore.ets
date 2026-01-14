@@ -26,6 +26,7 @@ const KEY_HISTORY = 'history_json';
 
 export class PreferencesStore {
   private static _inst: PreferencesStore | null = null;
+
   static get inst(): PreferencesStore {
     if (!PreferencesStore._inst) {
       PreferencesStore._inst = new PreferencesStore();

@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 import {
-  chargeStateText, healthStateText, pluggedTypeText,
-  ChargeState, PluggedType
+  chargeStateText, healthStateText, pluggedTypeText, ChargeState, PluggedType
 } from '../model/BatteryEnums';
 
 import type { BatterySnapshot } from '../model/BatteryEvent';
@@ -45,6 +44,7 @@ export class BatteryFormat {
   static chargeText(v: number): string {
     return chargeStateText(v);
   }
+
   static chargeTextBySnapshot(s: BatterySnapshot): string {
     if (s.soc >= 100 || s.chargeState === ChargeState.FULL) {
       return 'Full';

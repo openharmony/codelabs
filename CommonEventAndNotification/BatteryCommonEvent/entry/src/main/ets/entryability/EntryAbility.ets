@@ -25,7 +25,6 @@ export default class EntryAbility extends UIAbility {
   private readonly svc: BatteryEventService = new BatteryEventService();
   private initStarted: boolean = false;
   private listenerAdded: boolean = false;
-
   private readonly onBatteryEvent: BatteryEventListener = (raw: BatteryEventRawParams): void => {
     BatteryEventRepository.inst.onBatteryCommonEvent(raw)
       .catch((err: Object) => {
