@@ -78,7 +78,7 @@ export struct Memory {
 
       Row() {
         Button('返回')
-        .onClick(() => this.back())
+          .onClick(() => this.back())
 
         Text('内存')
           .layoutWeight(1)
@@ -87,20 +87,25 @@ export struct Memory {
           .fontWeight(FontWeight.Medium)
 
         Button('刷新')
-        .onClick(() => this.refresh())
+          .onClick(() => this.refresh())
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 10 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 10
+      })
 
 
       Row({ space: 12 }) {
         Column() {
-          this.Card('实际占用（PSS�?, formatKb(this.pssKb))
+          this.Card('实际占用（PSS）', formatKb(this.pssKb))
         }
         .layoutWeight(1)
 
         Column() {
-          this.Card('虚拟占用（VSS�?, formatKb(this.vssKb))
+          this.Card('虚拟占用（VSS）', formatKb(this.vssKb))
         }
         .layoutWeight(1)
       }

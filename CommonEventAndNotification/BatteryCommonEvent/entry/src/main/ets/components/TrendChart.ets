@@ -17,10 +17,8 @@ export struct TrendChart {
   values: number[] = [];
   label: string = 'SOC';
   heightPx: number = 140;
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
-
   private canvasW: number = 0;
   private canvasH: number = 0;
 

@@ -21,7 +21,10 @@ export class StateStore {
   private static _inst: StateStore | null = null;
 
   static get inst(): StateStore {
-    if (!StateStore._inst) {StateStore._inst = new StateStore()};
+    if (!StateStore._inst) {
+      StateStore._inst = new StateStore()
+    }
+    ;
     return StateStore._inst;
   }
 

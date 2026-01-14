@@ -28,8 +28,12 @@ export class ExportUtil {
     const dir = context.filesDir + '/' + EXPORT_DIR;
     try {
       const stat = await fs.stat(dir);
-      if (stat && stat.isDirectory()) {return dir};
-    } catch (e) {}
+      if (stat && stat.isDirectory()) {
+        return dir
+      }
+      ;
+    } catch (e) {
+    }
     await fs.mkdir(dir);
     return dir;
   }

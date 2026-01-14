@@ -47,7 +47,6 @@ class IndexListener implements RepositoryListener {
 export struct Index {
   @State snapshot: BatterySnapshot | null = null;
   @State history: BatteryEvent[] = [];
-
   private repo: BatteryEventRepository = BatteryEventRepository.inst;
   private listener: RepositoryListener | null = null;
 
@@ -128,14 +127,14 @@ export struct Index {
 
         Blank().width(44)
 
-        Text('电池监测�?)
+        Text('电池监测器')
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
           .fontSize(20)
           .fontWeight(FontWeight.Medium)
 
         Button() {
-          Text('�?)
+          Text('⋯')
             .fontSize(24)
             .fontWeight(FontWeight.Medium)
         }
@@ -149,7 +148,12 @@ export struct Index {
           { value: 'About', action: () => this.gotoAbout() },
         ], { placement: Placement.Bottom })
       }
-      .padding({ left: 16, right: 16, top: 16, bottom: 10 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 10
+      })
 
 
       if (this.snapshot) {

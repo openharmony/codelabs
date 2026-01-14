@@ -41,7 +41,10 @@ export struct StatCard {
     .backgroundColor(0x0D000000)
     .borderRadius(12)
     .onClick(() => {
-      if (this.onTap) {this.onTap()};
+      if (this.onTap) {
+        this.onTap()
+      }
+      ;
     });
   }
 }

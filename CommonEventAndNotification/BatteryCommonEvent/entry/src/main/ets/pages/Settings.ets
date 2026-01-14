@@ -35,30 +35,47 @@ export struct SettingsPage {
   build() {
     Column() {
       Row() {
-        Button('�?退�?).onClick(() => this.back());
+        Button('← 退后').onClick(() => this.back());
         Text('Settings')
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
         Button('保存').onClick(() => this.save());
-      }.padding({ left: 16, right: 16, top: 16, bottom: 10 })
+      }
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 10
+      })
       .width('100%');
 
       Column({ space: 12 }) {
         Text('History size (1-200)').fontSize(12).opacity(0.75);
-        Slider({ value: this.s.maxHistory, min: 1, max: 200, step: 1 })
-          .onChange((v: number) => { this.s.maxHistory = Math.floor(v); });
+        Slider({
+          value: this.s.maxHistory,
+          min: 1,
+          max: 200,
+          step: 1
+        })
+          .onChange((v: number) => {
+            this.s.maxHistory = Math.floor(v);
+          });
 
         Row({ space: 10 }) {
           Toggle({ type: ToggleType.Switch, isOn: this.s.autoSubscribe })
-            .onChange((on: boolean) => { this.s.autoSubscribe = on; });
+            .onChange((on: boolean) => {
+              this.s.autoSubscribe = on;
+            });
           Text('自动订阅').fontSize(14);
         }
 
         Row({ space: 10 }) {
           Toggle({ type: ToggleType.Switch, isOn: this.s.keepInBackground })
-            .onChange((on: boolean) => { this.s.keepInBackground = on; });
+            .onChange((on: boolean) => {
+              this.s.keepInBackground = on;
+            });
           Text('后台运行').fontSize(14);
         }
 
@@ -68,19 +85,33 @@ export struct SettingsPage {
           Row({ space: 10 }) {
             Radio({ value: 'all', group: 'mode' })
               .checked(this.s.recordMode === RecordMode.ALL)
-              .onChange((checked: boolean) => { if (checked) {this.s.recordMode = RecordMode.ALL;} });
+              .onChange((checked: boolean) => {
+                if (checked) {
+                  this.s.recordMode = RecordMode.ALL;
+                }
+              });
             Text('全记录Record All').fontSize(14);
           }
+
           Row({ space: 10 }) {
             Radio({ value: 'soc', group: 'mode' })
               .checked(this.s.recordMode === RecordMode.SOC_ONLY)
-              .onChange((checked: boolean) => { if (checked) {this.s.recordMode = RecordMode.SOC_ONLY;} });
+              .onChange((checked: boolean) => {
+                if (checked) {
+                  this.s.recordMode = RecordMode.SOC_ONLY;
+                }
+              });
             Text('仅电量变换记录SOC only').fontSize(14);
           }
+
           Row({ space: 10 }) {
             Radio({ value: 'plug', group: 'mode' })
               .checked(this.s.recordMode === RecordMode.PLUG_ONLY)
-              .onChange((checked: boolean) => { if (checked) {this.s.recordMode = RecordMode.PLUG_ONLY;} });
+              .onChange((checked: boolean) => {
+                if (checked) {
+                  this.s.recordMode = RecordMode.PLUG_ONLY;
+                }
+              });
             Text('插拔变化时记录Plug only').fontSize(14);
           }
         }

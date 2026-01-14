@@ -23,6 +23,7 @@ import type common from '@ohos.app.ability.common';
 
 export interface RepositoryListener {
   onSnapshotUpdated(snapshot: BatterySnapshot): void;
+
   onHistoryUpdated(events: BatteryEvent[]): void;
 }
 
@@ -38,16 +39,12 @@ export class BatteryEventRepository {
 
   private parser: BatteryEventParser = new BatteryEventParser();
   private filter: BatteryEventFilter = new BatteryEventFilter();
-
   private settings: Settings = new Settings();
   private lastSnapshot: BatterySnapshot | null = null;
-
   private history: BatteryEvent[] = [];
   private listeners: Set<RepositoryListener> = new Set();
-
   private inited: boolean = false;
   private initPromise: Promise<void> | null = null;
-
   private useRdb: boolean = true;
 
   addListener(l: RepositoryListener): void {
