@@ -93,7 +93,7 @@
 
 这一页主要做三件事：
 
-- 页面出现时加载商品（含首次 mock 注入）
+- 页面出现时加载商品（含初始化时 mock 注入）
 - 将搜索关键词映射为 `shownProductList`（实际渲染列表）
 - 协调 Tab 切换（含从子页面返回后“跳到指定 Tab”）
 
@@ -118,7 +118,7 @@ async loadProducts() {
 }
 ```
 
-### 2) 首次启动 mock 注入（Demo 级幂等）
+### 2) 初始化时 mock 注入（Demo 级幂等）
 
 为避免每次启动重复插入，这里用“多字段组合唯一键”做幂等判重。
 
@@ -400,7 +400,7 @@ const ok = await RdbUtil.updateOrderStatus(this.detail.order.id, nextStatus)
 
 ## 评论（CommentList）
 
-评论页通过路由参数接收 `product`，并使用 `AppStorage(commentStore)` 做本地存储。首次进入会为该商品注入种子评论，之后所有操作都会写回存储。
+评论页通过路由参数接收 `product`，并使用 `AppStorage(commentStore)` 做本地存储。初始化时会为该商品注入种子评论，之后所有操作都会写回存储。
 
 - 取参与加载：
   
@@ -429,7 +429,7 @@ private send() {
   const now = Date.now()
   const item: CommentItem = {
     id: `${now}`,
-    userName: this.currentUser ? this.currentUser.username : '我',
+    userName: this.currentUser ? this.currentUser.username : '',
     content: isReply ? `回复@${this.replyToName}：${text}` : text,
     createTime: now,
     likeCount: 0,
