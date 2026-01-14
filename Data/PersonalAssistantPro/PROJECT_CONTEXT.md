@@ -31,7 +31,7 @@
 > 记录原则：倒序排列，包含关键代码变动与功能新增。
 
 * **[2026-01-07] v1.1.0 {Release Candidate} - 品牌重塑与架构封板**
-* **品牌升级**: App 正式更名为“个人助手Pro”；图标重构为 HarmonyOS 分层图标 (`layered_image`)，配置 `startWindow` 实现无缝启动。
+* **品牌升级**: App 正式更名为“个人助手Pro”；图标重构为**系统分层图标** (`layered_image`)，配置 `startWindow` 实现无缝启动。
 * **架构定型**: 确立五大核心领域分工（Pages, View, Services, Common, Debug），通过服务化拆分（如 `DataExportService`）大幅提升代码可维护性。
 * **代码合规**: 完成 6300+ 行代码的最终审计，确保所有模块（包括测试用例）均符合 ArkTS 严格模式。
 
@@ -85,7 +85,7 @@
 * **错误处理**: `catch(err)` 禁止添加类型注解（如 `: any` 或 `: ESObject`），必须在块内使用类型断言 (`as BusinessError` 或 `as object`) 或 `JSON.stringify(err)` 处理。
 * **异常抛出**: 禁止 `throw` 任意类型，必须抛出 `Error` 或其子类实例。
 * **类型断言**: SDK 类型定义缺失时，必须使用 `as ESObject` 规避编译器检查。
-* **静态方法**: 在类的方法（尤其是 async）中，禁止在静态上下文使用 `this` 调用其他静态方法，必须使用**类名**调用（如 `EventModel.queryAll()`）。
+* **静态方法**: 在类的方法（尤其是 async）中，禁止在静态上下文使用 `this` 调用**其余**静态方法，必须使用**类名**调用（如 `EventModel.queryAll()`）。
 
 ### 4.2 架构与分层规范 (Architecture)
 
