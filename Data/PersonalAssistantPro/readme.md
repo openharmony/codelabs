@@ -12,7 +12,7 @@
 
 * **架构规范**: 采用标准 MVVM + Service 分层架构，实现高内聚低耦合。
 * **工程完备**: 内置自主研发的**智能日志系统**与**真机调试框架**，大幅提升开发与排错效率。
-* **技术深度**: 深入实践 RDB 事务、UserIAM 生物认证、AES-256 隐私加密及后台代理提醒等高阶能力。
+* **技术深度**: 深入实践 RDB 事务、UserIAM **生物识别**、AES-256 隐私加密及后台代理提醒等高阶能力。
 
 ---
 
@@ -58,7 +58,7 @@
 ### 2. 🔐 隐私通讯录
 
 * **安全存储**: 联系人姓名、关系等字段明文存储，但**手机号 (Phone)** 等敏感字段在落库前自动加密。
-* **权限管控**: 列表页仅展示脱敏数据（如 `138****0000`），点击查看详情时触发**生物认证**，只有认证通过才解密展示完整号码。
+* **权限管控**: 列表页仅展示脱敏数据（如 `138****0000`），点击查看详情时触发**生物识别**，只有验证通过才解密展示完整号码。
 
 ### 3. 🔔 后台代理提醒
 
@@ -80,7 +80,7 @@
 
 > **代码路径**: `entry/src/main/ets/common/database/RdbHelper.ts`
 
-我们封装了一个通用的 `RdbHelper` 类，解决了原生 `relationalStore` API 使用繁琐的问题：
+**本项目**封装了一个通用的 `RdbHelper` 类，解决了原生 `relationalStore` API 使用繁琐的问题：
 
 * **事务管理**: 所有写操作（Insert/Update/Delete）均包裹在 Transaction 中，确保数据一致性。
 * **动态查询**: 实现了 SQL `LIKE` 语法的动态拼接，支持 `Search` 组件对数据库的多字段模糊匹配。
@@ -90,7 +90,7 @@
 
 > **代码路径**: `entry/src/main/ets/common/utils/AesCryptoUtils.ts`
 
-为满足企业级安全要求，我们设计了一套完整的隐私保护流程：
+为满足企业级安全要求，**本项目**设计了一套完整的隐私保护流程：
 
 * **AES-256 加密流程**:
 1. **密钥生成**: 使用 `cryptoFramework.createSymKeyGenerator('AES256')` 生成对称密钥。
@@ -98,8 +98,8 @@
 3. **落库**: 将 Base64 字符串存入 RDB。
 
 
-* **生物认证流程**:
-* 调用 `userAuth.getAvailableStatus()` 检查设备是否具备认证能力（指纹/人脸）。
+* **生物识别流程**:
+* 调用 `userAuth.getAvailableStatus()` 检查设备是否具备**识别**能力（指纹/人脸）。
 * 拉起系统统一认证弹窗 (`AuthWidgetMgr`)，用户验证通过后，才执行 `AesCryptoUtils.decrypt()` 解密逻辑。
 
 
@@ -107,10 +107,10 @@
 
 > **代码路径**: `entry/src/main/ets/services/JumpService.ts`
 
-为了解耦 UI 层与系统能力，我们实现了 `JumpService` 单例：
+为了解耦 UI 层与系统能力，**本项目**实现了 `JumpService` 单例：
 
 * **外部应用拉起**: 构建包含 `entities: ['entity.system.browsable']` 的 `Want`，通过 `context.startAbility` 拉起系统浏览器打开 URL。
-* **系统设置跳转**: 定向拉起 `com.huawei.hmos.settings`，引导用户开启通知或生物认证权限。
+* **系统设置跳转**: 定向拉起 `com.huawei.hmos.settings`，引导用户开启通知或**生物识别**权限。
 * **DeepLink 解析**: 预留了 `pa://` 协议的解析逻辑，为跨应用调用提供接口。
   好的，这是 **第三阶段** 的内容，包含 **工程化与基础设施** 以及 **目录结构**。
 
@@ -137,7 +137,7 @@
 
 > **代码路径**: `entry/src/main/ets/debug/`
 
-由于 OpenHarmony 应用涉及大量原生能力（RDB、UserIAM），纯单元测试难以覆盖真实环境。我们设计了一套 **DebugRunner**，允许在真机上直接运行后端逻辑测试用例。
+由于 OpenHarmony 应用涉及大量原生能力（RDB、UserIAM），纯单元测试难以覆盖真实环境。**本项目**设计了一套 **DebugRunner**，允许在真机上直接运行后端逻辑测试用例。
 
 #### 如何添加新的测试用例 (3步走)：
 
@@ -184,7 +184,7 @@ entry/src/main/ets
 │   ├── SplashPage.ets      # 启动页
 │   └── [BusinessPages]     # 业务页面 (Mine, Detail, Edit...)
 ├── services                # [业务服务层] (解耦核心逻辑)
-│   ├── BiometricService    # 生物认证服务
+│   ├── BiometricService    # 生物识别服务
 │   ├── DataExportService   # 数据导出/报表生成服务
 │   ├── JumpService         # 路由跳转与 DeepLink 服务
 │   └── NotificationService # 后台通知服务
