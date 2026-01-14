@@ -178,7 +178,7 @@ struct CommentList {
   private isMyComment(c: CommentItem): boolean {
     const u = this.currentUser ? this.currentUser.username : '';
     if (!u) return false;
-    return c.userName === u || c.userName === '我';
+    return c.userName === u;
   }
 
   private toggleLikeById(id: string) {
@@ -245,7 +245,7 @@ struct CommentList {
     const now = new Date().getTime();
     const item: CommentItem = {
       id: `${now}`,
-      userName: this.currentUser ? this.currentUser.username : '我',
+      userName: this.currentUser ? this.currentUser.username : '',
       content: isReply ? `回复@${this.replyToName}：${text}` : text,
       createTime: now,
       location: '',
