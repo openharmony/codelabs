@@ -406,22 +406,20 @@ const ok = await RdbUtil.updateOrderStatus(this.detail.order.id, nextStatus)
   
   ```typescript
   aboutToAppear() {
-  const params = router.getParams() as Record<string, Object>
-  if (params && params['product']) this.product = params['product'] as Product
-  this.loadComments()
+    const params = router.getParams() as Record<string, Object>
+    if (params && params['product']) this.product = params['product'] as Product
+    this.loadComments()
+  }
+
+  private loadComments() {
+    const key = (this.product?.id ?? 0).toString()
+    const store = (AppStorage.get('commentStore') as CommentStore | undefined) || {}
+    if (!store[key] || store[key].length === 0) store[key] = this.buildSeedComments()
+    AppStorage.setOrCreate('commentStore', store)
+    this.comments = (store[key] || []).slice()
   }
   ```
-
-private loadComments() {
-  const key = (this.product?.id ?? 0).toString()
-  const store = (AppStorage.get('commentStore') as CommentStore | undefined) || {}
-  if (!store[key] || store[key].length === 0) store[key] = this.buildSeedComments()
-  AppStorage.setOrCreate('commentStore', store)
-  this.comments = (store[key] || []).slice()
-}
-
-```
-- 发表评论/回复与删除（需登录，且删除仅限本人）：
+- 发表评论/回复与删除（需登录，且删除仅限用户本人）：
 ```typescript
 private send() {
   if (!this.ensureLoggedIn()) return
