@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { DebugCase } from './DebugCase';
 import { DateUtils } from '../common/utils/DateUtils';
 import { PreferenceService } from '../services/PreferenceService';
@@ -35,7 +49,7 @@ export class DateAndConfigStressTestCase extends DebugCase {
       const formatted = DateUtils.formatDate(ts);
       this.logInfo(`     - Format Result: ${formatted}`);
       if (!formatted || formatted.length === 0) {
-        this.logError('     ❌ Format failed (Empty result)');
+        this.logError('      Format failed (Empty result)');
       }
 
       // 测试周计算
@@ -44,7 +58,7 @@ export class DateAndConfigStressTestCase extends DebugCase {
 
       // 简单校验：周开始时间必须 <= 当前时间
       if (startOfWeek > ts) {
-        this.logError('     ❌ Logic Error: Start of week is after current time!');
+        this.logError('      Logic Error: Start of week is after current time!');
       }
 
       // 测试 "是今天?" 逻辑
@@ -62,7 +76,7 @@ export class DateAndConfigStressTestCase extends DebugCase {
     const fmt2 = DateUtils.formatFull(nonLeapDate);
     this.logInfo(`     2024-02-29 -> ${fmt1}`);
     this.logInfo(`     2023-02-28 -> ${fmt2}`);
-    this.logInfo('   ✅ DateUtils Logic Check Completed.');
+    this.logInfo('    DateUtils Logic Check Completed.');
 
 
     // ==========================================
@@ -106,18 +120,18 @@ export class DateAndConfigStressTestCase extends DebugCase {
       // 3. 立即读取验证
       const readBack = await PreferenceService.getInstance().getAesKey();
       if (readBack === dummyKey) {
-        this.logInfo('   ✅ Read-After-Write Verification Passed.');
+        this.logInfo('   Read-After-Write Verification Passed.');
       } else {
-        this.logError(`   ❌ Verification Failed: Expected ${dummyKey}, got ${readBack}`);
+        this.logError(`  Verification Failed: Expected ${dummyKey}, got ${readBack}`);
       }
 
     } catch (e) {
-      this.logError(`   ❌ Stress Test Exception: ${JSON.stringify(e)}`);
+      this.logError(`    Stress Test Exception: ${JSON.stringify(e)}`);
     }
 
     const duration = Date.now() - startTime;
     this.logInfo(`   Performance: Handled ${LOOP_COUNT} ops in ${duration}ms`);
-    this.logInfo('   ✅ Config Stress Test Completed.');
+    this.logInfo('   Config Stress Test Completed.');
 
     this.logInfo('=== DateAndConfigStressTestCase END ===');
   }
