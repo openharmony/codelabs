@@ -1,0 +1,10 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/History",
+    "pages/Detail",
+    "pages/Settings",
+    "pages/About",
+    "pages/Memory"
+  ]
+}
