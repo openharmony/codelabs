@@ -110,7 +110,6 @@
 为了解耦 UI 层与系统能力，**本项目**实现了 `JumpService` 单例：
 
 * **外部应用拉起**: 构建包含 `entities: ['entity.system.browsable']` 的 `Want`，通过 `context.startAbility` 拉起系统浏览器打开 URL。
-* **系统设置跳转**: 定向拉起 `com.huawei.hmos.settings`，引导用户开启通知或**生物识别**权限。
 * **DeepLink 解析**: 预留了 `pa://` 协议的解析逻辑，为跨应用调用提供接口。
   好的，这是 **第三阶段** 的内容，包含 **工程化与基础设施** 以及 **目录结构**。
 
@@ -157,7 +156,7 @@ export class MyNewTest extends DebugCase {
 
 
 2. **注册**: 在 `DebugRunner.ts` 的工厂方法中返回该实例。
-3. **运行**: 进入 App **"我的" -> "调试入口"**，即可触发运行并在 Log 控制台查看结果。
+3. **运行**: 进入 App **"个人中心" -> "调试入口"**，即可触发运行并在 Log 控制台查看结果。
 
 ---
 
