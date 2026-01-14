@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 // entry/src/main/ets/common/utils/ResourceUtils.ets
 import { common } from '@kit.AbilityKit';
 import { Logger } from './Logger';
@@ -15,7 +29,7 @@ export class ResourceUtils {
    * 初始化工具类
    */
   public static init(context: common.UIAbilityContext) {
-    // ❌ Fix: this.context -> ResourceUtils.context
+    //  Fix: this.context -> ResourceUtils.context
     ResourceUtils.context = context;
     ResourceUtils.logger.info('ResourceUtils initialized');
   }
@@ -26,7 +40,7 @@ export class ResourceUtils {
    * @returns Promise<string>
    */
   public static async getString(resId: Resource): Promise<string> {
-    // ❌ Fix: this.context -> ResourceUtils.context
+    //  Fix: this.context -> ResourceUtils.context
     if (!ResourceUtils.context) {
       ResourceUtils.logger.error('Context not initialized');
       return '';
@@ -81,7 +95,7 @@ export class ResourceUtils {
    */
   public static async getRawFileString(fileName: string): Promise<string> {
     try {
-      // ❌ Fix: this.getRawFileContent -> ResourceUtils.getRawFileContent
+      //  Fix: this.getRawFileContent -> ResourceUtils.getRawFileContent
       const data = await ResourceUtils.getRawFileContent(fileName);
       if (data.length === 0) return '';
 

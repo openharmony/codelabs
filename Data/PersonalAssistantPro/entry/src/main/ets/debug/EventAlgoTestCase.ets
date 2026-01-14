@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { DebugCase } from './DebugCase';
 import { EventModel, Event } from '../model/EventModel';
 import { DateUtils } from '../common/utils/DateUtils';
@@ -54,12 +68,12 @@ export class EventAlgoTestCase extends DebugCase {
       const first = allEvents[0];
       const second = allEvents[1];
       if (first.startTime <= second.startTime) {
-        this.logInfo(`✅ Sorting Check Passed: ${first.startTime} <= ${second.startTime}`);
+        this.logInfo(`Sorting Check Passed: ${first.startTime} <= ${second.startTime}`);
       } else {
-        this.logInfo(`❌ Sorting Check Failed: List is not sorted by start time.`);
+        this.logInfo(`Sorting Check Failed: List is not sorted by start time.`);
       }
     } else {
-      this.logInfo('⚠️ Not enough events to check sorting.');
+      this.logInfo(' Not enough events to check sorting.');
     }
 
     this.logInfo('=== EventAlgoTestCase END ===');
@@ -74,9 +88,9 @@ export class EventAlgoTestCase extends DebugCase {
     else status = '未开始';
 
     if (status === expectedLabel) {
-      this.logInfo(`   ✅ Status OK: [${event.title}] is ${status}`);
+      this.logInfo(`   Status OK: [${event.title}] is ${status}`);
     } else {
-      this.logInfo(`   ❌ Status Error: [${event.title}] expected ${expectedLabel}, got ${status}`);
+      this.logInfo(`   Status Error: [${event.title}] expected ${expectedLabel}, got ${status}`);
     }
   }
 
@@ -88,9 +102,9 @@ export class EventAlgoTestCase extends DebugCase {
     const isConflict = overlapStart < overlapEnd;
 
     if (isConflict === expected) {
-      this.logInfo(`   ✅ Algo OK (${tag}): Result=${isConflict}`);
+      this.logInfo(`   Algo OK (${tag}): Result=${isConflict}`);
     } else {
-      this.logInfo(`   ❌ Algo Fail (${tag}): Expected ${expected}, got ${isConflict}`);
+      this.logInfo(`   Algo Fail (${tag}): Expected ${expected}, got ${isConflict}`);
     }
   }
 }
