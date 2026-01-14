@@ -9,7 +9,7 @@
 - 榜单（按评分排序，支持分类 Top）
 - 图书/电影详情页：收藏、评分、评论
 - 广场：发帖、点赞、评论
-- 我的收藏：聚合展示已收藏的图书/电影
+- 收藏：聚合展示已收藏的图书/电影
 
 本应用的运行效果如下图所示：
 
@@ -33,7 +33,7 @@
 
 ## 环境搭建
 
-完成本篇 Codelab 我们先要完成开发环境的搭建，本示例以 DAYU200 开发板为例，参照以下步骤进行：
+完成本篇 Codelab 先要完成开发环境的搭建，本示例以 DAYU200 开发板为例，参照以下步骤进行：
 
 1. [获取OpenHarmony系统版本](https://gitcode.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以 6.0 版本为例：
    
@@ -69,7 +69,7 @@
 │  │  ├──Login.ets                       // 简易登录页
 │  │  ├──MediaDetail.ets                 // 详情页
 │  │  ├──MediaSearch.ets                 // 搜索页：关键词/分类筛选
-│  │  ├──MyFavorites.ets                 // 我的收藏：展示收藏列表
+│  │  ├──MyFavorites.ets                 // 收藏：展示收藏列表
 │  │  ├──MyPage.ets                      // 用户主页
 │  │  ├──PostDetail.ets                  // 帖子详情
 │  │  ├──RankPage.ets                    // 榜单页
@@ -82,7 +82,7 @@
 
 ## 首页（Index）
 
-首页既是“书/影发现页”，也是应用的主容器：上层用 `section` 切换图书/电影内容区，中部提供“搜索/榜单”两个入口，下层用 Tabs 承载“首页/广场/我的”。
+首页既是“书/影发现页”，也是应用的主容器：上层用 `section` 切换图书/电影内容区，中部提供“搜索/榜单”两个入口，下层用 Tabs 承载“首页/广场/个人中心”。
 
 核心代码如下：
 
@@ -120,7 +120,7 @@ ForEach(this.featuredMovies.slice(this.recommendMovieIndex, this.recommendMovieI
 })
 this.recommendMovieIndex = (this.recommendMovieIndex + 4) % this.featuredMovies.length
 
-// 5) 底部 Tabs：承载首页/广场/我的；广场未登录时统一跳转登录页
+// 5) 底部 Tabs：承载首页/广场/个人中心；广场未登录时统一跳转登录页
 Tabs({ barPosition: BarPosition.End, index: this.currentTab }) {
   TabContent() { this.homeContent() }
   TabContent() {
