@@ -1,0 +1,62 @@
+
+@CustomDialog
+struct AAConfirmDialog {
+  controller: CustomDialogController
+  confirm: (amount: number) => void = (amount: number) => {}
+  @State inputValue: string = ""
+
+  build() {
+    Column() {
+      Text("AA收款确认")
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 24, bottom: 16 })
+
+      Text("请输入收到的金额（将从账单中扣除）：")
+        .fontSize(14)
+        .fontColor("#666666")
+        .margin({ bottom: 12 })
+        .width("90%")
+
+      TextInput({ placeholder: "0.00", text: this.inputValue })
+        .type(InputType.Number)
+        .onChange((value: string) => {
+          this.inputValue = value
+        })
+        .width("90%")
+        .height(48)
+        .backgroundColor("#F5F7FA")
+        .margin({ bottom: 24 })
+
+      Row() {
+        Button("取消")
+          .onClick(() => {
+            this.controller.close()
+          })
+          .backgroundColor("#F5F7FA")
+          .fontColor("#666666")
+          .layoutWeight(1)
+          .margin({ right: 12 })
+        
+        Button("确认")
+          .onClick(() => {
+            const val = parseFloat(this.inputValue);
+            if (!isNaN(val) && val >= 0) {
+              this.confirm(val);
+              this.controller.close();
+            } else {
+              promptAction.showToast({ message: '请输入有效金额' });
+            }
+          })
+          .backgroundColor("#4A6CF7")
+          .fontColor(Color.White)
+          .layoutWeight(1)
+      }
+      .width("90%")
+      .margin({ bottom: 24 })
+    }
+    .backgroundColor(Color.White)
+    .borderRadius(16)
+    .width("80%")
+  }
+}
