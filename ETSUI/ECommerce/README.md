@@ -8,7 +8,7 @@
 - 商品详情：收藏、评论入口、加入购物车、立即购买（引导到购物车结算）
 - 购物车：数量增减、单选/全选、管理模式批量删除、结算支付
 - 订单：列表按状态筛选、订单详情
-- 我的：代金券余额展示、收货地址、收藏列表、足迹列表
+- 个人中心：代金券余额展示、收货地址、收藏列表、足迹列表
 - 本地持久化：使用 RDB 保存用户/商品/购物车/地址/订单/收藏/足迹等数据
 
 本应用的运行效果如下图所示：
@@ -31,7 +31,7 @@
 
 ## 环境搭建
 
-完成本篇 Codelab 我们先要完成开发环境的搭建，本示例以 DAYU200 开发板为例，参照以下步骤进行：
+完成本篇 Codelab 先要完成开发环境的搭建，本示例以 DAYU200 开发板为例，参照以下步骤进行：
 
 1. [获取OpenHarmony系统版本](https://gitcode.com/openharmony/docs/blob/master/zh-cn/device-dev/get-code/sourcecode-acquire.md#%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F3%E4%BB%8E%E9%95%9C%E5%83%8F%E7%AB%99%E7%82%B9%E8%8E%B7%E5%8F%96)：标准系统解决方案（二进制）。以 6.0 版本为例：
    
@@ -72,7 +72,7 @@
 │  │  │  ├── FootprintList.ets            // 足迹列表
 │  │  │  ├── Index.ets                    // 首页
 │  │  │  ├── LoginPage.ets                // 登录注册
-│  │  │  ├── MineView.ets                 // 我的：订单入口/地址/收藏/足迹
+│  │  │  ├── MineView.ets                 // 个人中心：订单入口/地址/收藏/足迹
 │  │  │  ├── OrderDetail.ets              // 订单详情
 │  │  │  ├── OrderList.ets                // 订单列表
 │  │  │  └── ProductDetail.ets            // 商品详情
@@ -376,9 +376,9 @@ if (success) {
 
 另外，管理模式下底部按钮会切换为“删除(已选数量)”，通过循环调用 `RdbUtil.deleteCartItem()` 批量删除勾选项。
 
-## 我的（MineView）与订单（OrderList / OrderDetail）
+## 个人中心（MineView）与订单（OrderList / OrderDetail）
 
-“我的”页负责聚合个人入口，并统一做登录态拦截：涉及订单/地址/收藏/足迹等功能时，如果 `currentUser` 为空会提示并跳转登录。已登录时会在头部展示代金券余额（结算会扣减该余额）。
+“个人中心”页负责聚合个人入口，并统一做登录态拦截：涉及订单/地址/收藏/足迹等功能时，如果 `currentUser` 为空会提示并跳转登录。已登录时会在头部展示代金券余额（结算会扣减该余额）。
 
 订单入口通过路由参数 `tab` 指定默认筛选。`OrderList` 在 `aboutToAppear()` 读取该参数，将其映射为订单状态码过滤条件，并调用 `RdbUtil.getOrderDetails(userId, status)` 拉取“订单+明细”；点击订单卡片会携带 `orderId` 进入 `OrderDetail`。
 
