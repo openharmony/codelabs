@@ -70,7 +70,6 @@ struct RecordPage {
   @State toastVisible: boolean = false;
   @State confirmVisible: boolean = false;
   @State pendingDelete: AudioRecord | null = null;
-
   private startAt: number = 0;
   private accumulatedMs: number = 0;
   private timerId: number = -1;
@@ -104,23 +103,25 @@ struct RecordPage {
       .width('100%')
       .height('100%');
 
-      Column() {}
-        .width(220)
-        .height(220)
-        .backgroundColor(COLORS.accentSoft)
-        .borderRadius(120)
-        .opacity(0.6)
-        .align(Alignment.TopEnd)
-        .offset({ x: 40, y: -60 });
+      Column() {
+      }
+      .width(220)
+      .height(220)
+      .backgroundColor(COLORS.accentSoft)
+      .borderRadius(120)
+      .opacity(0.6)
+      .align(Alignment.TopEnd)
+      .offset({ x: 40, y: -60 });
 
-      Column() {}
-        .width(160)
-        .height(160)
-        .backgroundColor('#f7d9c4')
-        .borderRadius(100)
-        .opacity(0.5)
-        .align(Alignment.BottomStart)
-        .offset({ x: -20, y: 60 });
+      Column() {
+      }
+      .width(160)
+      .height(160)
+      .backgroundColor('#f7d9c4')
+      .borderRadius(100)
+      .opacity(0.5)
+      .align(Alignment.BottomStart)
+      .offset({ x: -20, y: 60 });
     }
     .width('100%')
     .height('100%');
@@ -370,63 +371,79 @@ struct RecordPage {
       this.buildBackground();
 
       Column() {
-      TopBar({ title: 'Field Recorder', trailing: this.buildTopBarTrailing });
+        TopBar({ title: 'Field Recorder', trailing: this.buildTopBarTrailing });
 
-      Column({ space: 12 }) {
-        Row() {
-          Blank();
-          Text(this.status === RecordStatus.Recording ? 'REC' : 'READY')
-            .fontSize(12)
-            .fontColor('#ffffff')
-            .backgroundColor(this.status === RecordStatus.Recording ? COLORS.accentWarm : COLORS.accent)
-            .padding({ left: 10, right: 10, top: 4, bottom: 4 })
-            .borderRadius(12)
-            .letterSpacing(1);
-        }
-        Text(formatDuration(this.durationMs))
-          .fontSize(36)
-          .fontWeight(FontWeight.Bold)
-          .fontFamily('HarmonyOS Sans')
-          .fontColor(COLORS.ink);
-        RecorderControls({
-          status: this.status,
-          onRecord: () => this.startRecording(),
-          onPause: () => this.pauseOrResume(),
-          onStop: () => this.stopRecording()
-        });
-      }
-      .padding({ left: 20, right: 20, top: 18, bottom: 16 })
-      .backgroundColor(COLORS.card)
-      .borderRadius(24)
-      .margin({ left: 16, right: 16, top: 16 })
-      .shadow({ radius: 12, color: '#22000000', offsetX: 0, offsetY: 6 });
-
-      Column() {
-        this.buildRecordListHeader();
-        if (this.records.length === 0) {
-          Text('No recordings yet')
-            .fontColor(COLORS.muted)
-            .padding({ top: 12, bottom: 12 });
-        } else {
-          List() {
-            ForEach(this.records, (record: AudioRecord) => {
-              ListItem() {
-                AudioItemCard({
-                  record,
-                  editable: true,
-                  onPlay: (item) => this.playRecord(item),
-                  onDelete: (item) => this.requestDelete(item)
-                });
-              }
-            }, (record: AudioRecord) => record.id)
+        Column({ space: 12 }) {
+          Row() {
+            Blank();
+            Text(this.status === RecordStatus.Recording ? 'REC' : 'READY')
+              .fontSize(12)
+              .fontColor('#ffffff')
+              .backgroundColor(this.status === RecordStatus.Recording ? COLORS.accentWarm : COLORS.accent)
+              .padding({
+                left: 10,
+                right: 10,
+                top: 4,
+                bottom: 4
+              })
+              .borderRadius(12)
+              .letterSpacing(1);
           }
-          .layoutWeight(1)
-          .width('100%')
-          .padding({ bottom: 8 });
+
+          Text(formatDuration(this.durationMs))
+            .fontSize(36)
+            .fontWeight(FontWeight.Bold)
+            .fontFamily('HarmonyOS Sans')
+            .fontColor(COLORS.ink);
+          RecorderControls({
+            status: this.status,
+            onRecord: () => this.startRecording(),
+            onPause: () => this.pauseOrResume(),
+            onStop: () => this.stopRecording()
+          });
         }
-      }
-      .padding({ left: 16, right: 16, bottom: 16 })
-      .layoutWeight(1);
+        .padding({
+          left: 20,
+          right: 20,
+          top: 18,
+          bottom: 16
+        })
+        .backgroundColor(COLORS.card)
+        .borderRadius(24)
+        .margin({ left: 16, right: 16, top: 16 })
+        .shadow({
+          radius: 12,
+          color: '#22000000',
+          offsetX: 0,
+          offsetY: 6
+        });
+
+        Column() {
+          this.buildRecordListHeader();
+          if (this.records.length === 0) {
+            Text('No recordings yet')
+              .fontColor(COLORS.muted)
+              .padding({ top: 12, bottom: 12 });
+          } else {
+            List() {
+              ForEach(this.records, (record: AudioRecord) => {
+                ListItem() {
+                  AudioItemCard({
+                    record,
+                    editable: true,
+                    onPlay: (item) => this.playRecord(item),
+                    onDelete: (item) => this.requestDelete(item)
+                  });
+                }
+              }, (record: AudioRecord) => record.id)
+            }
+            .layoutWeight(1)
+            .width('100%')
+            .padding({ bottom: 8 });
+          }
+        }
+        .padding({ left: 16, right: 16, bottom: 16 })
+        .layoutWeight(1);
       }
       .width('100%')
       .height('100%')

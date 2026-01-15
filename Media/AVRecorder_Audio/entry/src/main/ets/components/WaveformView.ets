@@ -29,7 +29,12 @@ export struct WaveformView {
         }
       }, (value: number, index?: number) => `${index}`)
     }
-    .padding({ left: 12, right: 12, top: 8, bottom: 8 })
+    .padding({
+      left: 12,
+      right: 12,
+      top: 8,
+      bottom: 8
+    })
     .backgroundColor('#f1ebe1')
     .borderRadius(16)
     .height(70)

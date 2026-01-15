@@ -113,7 +113,12 @@ struct SettingsPage {
           .backgroundColor('#fff8f0')
           .borderRadius(14)
           .border({ width: 1, color: '#e7dccb' })
-          .shadow({ radius: 6, color: '#16000000', offsetX: 0, offsetY: 3 });
+          .shadow({
+            radius: 6,
+            color: '#16000000',
+            offsetX: 0,
+            offsetY: 3
+          });
 
           Column() {
             Row() {
@@ -136,7 +141,12 @@ struct SettingsPage {
           .backgroundColor('#fff8f0')
           .borderRadius(14)
           .border({ width: 1, color: '#e7dccb' })
-          .shadow({ radius: 6, color: '#16000000', offsetX: 0, offsetY: 3 });
+          .shadow({
+            radius: 6,
+            color: '#16000000',
+            offsetX: 0,
+            offsetY: 3
+          });
 
           Column() {
             Row() {
@@ -159,7 +169,12 @@ struct SettingsPage {
           .backgroundColor('#fff8f0')
           .borderRadius(14)
           .border({ width: 1, color: '#e7dccb' })
-          .shadow({ radius: 6, color: '#16000000', offsetX: 0, offsetY: 3 });
+          .shadow({
+            radius: 6,
+            color: '#16000000',
+            offsetX: 0,
+            offsetY: 3
+          });
 
           Column() {
             Row() {
@@ -182,7 +197,12 @@ struct SettingsPage {
           .backgroundColor('#fff8f0')
           .borderRadius(14)
           .border({ width: 1, color: '#e7dccb' })
-          .shadow({ radius: 6, color: '#16000000', offsetX: 0, offsetY: 3 });
+          .shadow({
+            radius: 6,
+            color: '#16000000',
+            offsetX: 0,
+            offsetY: 3
+          });
         }
         .width('100%')
 

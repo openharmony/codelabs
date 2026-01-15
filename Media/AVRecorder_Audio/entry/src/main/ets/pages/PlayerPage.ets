@@ -94,23 +94,25 @@ struct PlayerPage {
       .width('100%')
       .height('100%');
 
-      Column() {}
-        .width(200)
-        .height(200)
-        .backgroundColor(COLORS.accentSoft)
-        .borderRadius(120)
-        .opacity(0.6)
-        .align(Alignment.TopEnd)
-        .offset({ x: 36, y: -50 });
+      Column() {
+      }
+      .width(200)
+      .height(200)
+      .backgroundColor(COLORS.accentSoft)
+      .borderRadius(120)
+      .opacity(0.6)
+      .align(Alignment.TopEnd)
+      .offset({ x: 36, y: -50 });
 
-      Column() {}
-        .width(150)
-        .height(150)
-        .backgroundColor('#f7d9c4')
-        .borderRadius(100)
-        .opacity(0.5)
-        .align(Alignment.BottomStart)
-        .offset({ x: -10, y: 50 });
+      Column() {
+      }
+      .width(150)
+      .height(150)
+      .backgroundColor('#f7d9c4')
+      .borderRadius(100)
+      .opacity(0.5)
+      .align(Alignment.BottomStart)
+      .offset({ x: -10, y: 50 });
     }
     .width('100%')
     .height('100%');
@@ -241,15 +243,30 @@ struct PlayerPage {
                 .fontColor('#ffffff')
                 .backgroundColor(this.status === PlayerStatus.Playing ? COLORS.accentWarm : COLORS.accent)
                 .borderRadius(18)
-                .padding({ left: 20, right: 20, top: 8, bottom: 8 })
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 8,
+                  bottom: 8
+                })
                 .onClick(() => this.togglePlayback());
             }
           }
           .alignItems(HorizontalAlign.Center)
-          .padding({ left: 20, right: 20, top: 18, bottom: 16 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 18,
+            bottom: 16
+          })
           .backgroundColor(COLORS.card)
           .borderRadius(24)
-          .shadow({ radius: 12, color: '#22000000', offsetX: 0, offsetY: 6 })
+          .shadow({
+            radius: 12,
+            color: '#22000000',
+            offsetX: 0,
+            offsetY: 6
+          })
           .width('100%');
         }
         .padding({ left: 16, right: 16, top: 16 });
