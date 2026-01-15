@@ -21,10 +21,8 @@
         </policylist>
         <filefilterlist>
             <filefilter name="defaultFilter" desc="Files not to check">
-                <filteritem type="filename" name="ci-default.xml" desc="File used to synchronize warehouse code"/>
-                <filteritem type="filename" name="llvm-19.1.7-toolchain.xml"
-                            desc="File used to llvm19-build synchronize warehouse code"/>
                 <filteritem type="filename" name="*.png" desc="desc files"/>
+                <filteritem type="filename" name="*.gif" desc="desc files"/>
             </filefilter>
         </filefilterlist>
     </oatconfig>
