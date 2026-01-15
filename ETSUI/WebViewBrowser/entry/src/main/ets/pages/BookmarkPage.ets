@@ -15,7 +15,7 @@
 
 import { promptAction } from '@kit.ArkUI';
 import { dataManager, BookmarkItem } from '../manager/DataManager';
-
+import { BusinessError } from '@kit.BasicServicesKit';
 // Builder函数，用于Navigation路由
 @Builder
 export function BookmarkPageBuilder() {
@@ -475,7 +475,9 @@ export struct BookmarkPage {
           break;
         case 2:
           // TODO: 复制到剪贴板
-          promptAction.showToast({ message: '链接已复制' });
+          promptAction.openToast({ message: '链接已复制' }).catch((err: BusinessError) => {
+            console.error('显示Toast失败:', err);
+          });
           break;
         case 3:
           this.deleteItem(item);
@@ -499,7 +501,9 @@ export struct BookmarkPage {
       await dataManager.updateBookmark(this.editingBookmark.id, this.editTitle.trim());
       this.loadBookmarks();
       this.showEditDialog = false;
-      promptAction.showToast({ message: '已保存' });
+      promptAction.openToast({ message: '已保存' }).catch((err: BusinessError) => {
+        console.error('显示Toast失败:', err);
+      });
     }
   }
 
@@ -509,7 +513,9 @@ export struct BookmarkPage {
     this.loadBookmarks();
     // 通知主页面更新书签状态
     AppStorage.setOrCreate('bookmarkChanged', Date.now());
-    promptAction.showToast({ message: '已删除' });
+    promptAction.openToast({ message: '已删除' }).catch((err: BusinessError) => {
+      console.error('显示Toast失败:', err);
+    });
   }
 
   // 删除选中项
@@ -522,7 +528,9 @@ export struct BookmarkPage {
     this.isEditing = false;
     // 通知主页面更新书签状态
     AppStorage.setOrCreate('bookmarkChanged', Date.now());
-    promptAction.showToast({ message: '已删除选中书签' });
+    promptAction.openToast({ message: '已删除选中书签' }).catch((err: BusinessError) => {
+      console.error('显示Toast失败:', err);
+    });
   }
 
   // 全选
@@ -555,6 +563,8 @@ export struct BookmarkPage {
     this.loadBookmarks();
     // 通知主页面更新书签状态
     AppStorage.setOrCreate('bookmarkChanged', Date.now());
-    promptAction.showToast({ message: '书签已清空' });
+    promptAction.openToast({ message: '书签已清空' }).catch((err: BusinessError) => {
+      console.error('显示Toast失败:', err);
+    });
   }
 }
