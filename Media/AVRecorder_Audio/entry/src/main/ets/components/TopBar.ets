@@ -28,7 +28,12 @@ export struct TopBar {
         this.trailing();
       }
     }
-    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 12,
+      bottom: 12
+    })
     .backgroundColor('#f1f1f1')
     .width('100%')
   }

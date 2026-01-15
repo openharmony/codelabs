@@ -28,6 +28,7 @@ export class PlayerService {
   private positionMs: number = 0;
   private playingFile: fs.File | null = null;
   private stateWaitTimer: number = -1;
+
   subscribe(listener: PlayerListener): () => void {
     this.listeners.add(listener);
     return () => this.listeners.delete(listener);

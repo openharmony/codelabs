@@ -47,7 +47,7 @@ export struct AudioItemCard {
     }
     const lowerName = trimmed.toLowerCase();
     const exists = recordStore.getRecords().some((item) =>
-      item.id !== this.record.id && item.name.toLowerCase() === lowerName
+    item.id !== this.record.id && item.name.toLowerCase() === lowerName
     );
     if (exists) {
       appState.showToast('Name already exists');
@@ -71,7 +71,12 @@ export struct AudioItemCard {
               .fontWeight(FontWeight.Medium)
               .backgroundColor('#ffffff')
               .borderRadius(8)
-              .padding({ left: 8, right: 8, top: 6, bottom: 6 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 6,
+                bottom: 6
+              })
               .width('100%')
               .onChange((value: string) => {
                 this.draftName = value;
@@ -82,7 +87,12 @@ export struct AudioItemCard {
             Text(this.record.name)
               .fontSize(16)
               .fontWeight(FontWeight.Medium)
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
               .border({ width: 1, color: '#d6cbbd' })
               .borderRadius(6)
               .onClick(() => this.startEditing());
@@ -93,14 +103,15 @@ export struct AudioItemCard {
           }
           Text(
             `${formatDuration(this.record.durationMs)}  •  ` +
-            `${formatFileSize(this.record.sizeBytes)}  •  ` +
-            `${formatDate(this.record.createdAt)}`
+              `${formatFileSize(this.record.sizeBytes)}  •  ` +
+              `${formatDate(this.record.createdAt)}`
           )
             .fontSize(12)
             .fontColor('#666666');
         }
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1);
+
         Row({ space: 8 }) {
           Button() {
             Image($r('app.media.play'))
@@ -135,7 +146,12 @@ export struct AudioItemCard {
     .backgroundColor('#fff8f0')
     .border({ width: 1, color: '#e7dccb' })
     .borderRadius(16)
-    .shadow({ radius: 8, color: '#1a000000', offsetX: 0, offsetY: 4 })
+    .shadow({
+      radius: 8,
+      color: '#1a000000',
+      offsetX: 0,
+      offsetY: 4
+    })
     .margin({ bottom: 12 })
   }
 }

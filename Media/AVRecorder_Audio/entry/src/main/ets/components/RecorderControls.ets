@@ -21,14 +21,14 @@ export struct RecorderControls {
   @Event onRecord?: () => void;
   @Event onPause?: () => void;
   @Event onStop?: () => void;
-
   private readonly primaryColor: string = '#1f6f6d';
   private readonly secondaryColor: string = '#e7dccb';
   private readonly dangerColor: string = '#ee6c4d';
 
   build() {
     Row({ space: 12 }) {
-      Button(this.status === RecordStatus.Recording ? 'Pause' : (this.status === RecordStatus.Paused ? 'Resume' : 'Record'))
+      Button(this.status === RecordStatus.Recording ? 'Pause' :
+        (this.status === RecordStatus.Paused ? 'Resume' : 'Record'))
         .width(140)
         .height(44)
         .fontColor('#ffffff')
