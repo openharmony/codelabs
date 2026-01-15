@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Beijing Institude of Technology.All Rights Reserved.
+ * Copyright (c) 2025 Huawei Device Co., Ltd.All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -28,7 +28,7 @@ inline const char *GetRawFileName(const char *path)
     // get end of the string
     while (*start) { start++; }
     while (start > path && *start != ch) { start--; }
-    return (*start == ch) ?start : path;
+    return (*start == ch) ? start : path;
 }
     
 #define PRINT_OHOS_HILOG(op, fmt, ...)                                                          \
