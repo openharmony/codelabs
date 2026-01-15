@@ -1,14 +1,30 @@
+/*
+ * Copyright (c) 2025 Beijing Institude of Technology.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include "function_class_cpp.h"
 #include "bank_queue_system.h"
 #include "native_log_wrapper.h"
 #include <string>
 #include <unistd.h>
-
-FunctionClass::FunctionClass(uint32_t version) {
+#define SLEEP_DURATION_MS 100
+FunctionClass::FunctionClass(uint32_t version) 
+{
     LOGI("FunctionClass::~FunctionClass %d",version);
 }
 
-FunctionClass::~FunctionClass() {
+FunctionClass::~FunctionClass() 
+{
     LOGI("FunctionClass::~FunctionClass");
 }
 
@@ -21,17 +37,18 @@ public:
 
 void BankBusiness()
 {
-    usleep(100 * 1000);
+    usleep(SLEEP_DURATION_MS * 1000);
     LOGI("saving or withdraw ordinary customer");
 }
 
 void BankBusinessVIP()
 {
-    usleep(100 * 1000);
+    usleep(SLEEP_DURATION_MS * 1000);
     LOGI("saving or withdraw VIP");
 }
 
-int FunctionClass::FfrtSerialQueue(){
+int FunctionClass::FfrtSerialQueue()
+{
     // type传1，代表串行调度
     LOGI("FfrtQueue start ");
     BankQueueSystem bankQueue(1, "Bank", 2);
@@ -52,7 +69,8 @@ int FunctionClass::FfrtSerialQueue(){
     return 1;
 }
 
-int FunctionClass::FfrtConcurrentQueue(){
+int FunctionClass::FfrtConcurrentQueue()
+{
     // type传0，代表并发调度
     BankQueueSystem bankQueue(0, "Bank", 2);
 

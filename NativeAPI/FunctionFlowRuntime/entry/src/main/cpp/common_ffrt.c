@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2025 Beijing Institude of Technology.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 #include "common_ffrt.h"
 #include "native_log_wrapper.h"
 
@@ -65,7 +79,7 @@ void destroy_bank_system(ffrt_queue_t queue_handle)
 }
 
 // 封装提交队列任务函数
-ffrt_task_handle_t commit_request(ffrt_queue_t bank, void (*func)(void *), const char *name, void *arg,
+ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), const char *name, void *arg,
     ffrt_queue_priority_t level, int delay)
 {
     ffrt_task_attr_t task_attr;
@@ -78,7 +92,7 @@ ffrt_task_handle_t commit_request(ffrt_queue_t bank, void (*func)(void *), const
 }
 
 // 封装等待队列任务函数
-void wait_for_request(ffrt_task_handle_t task)
+void waitForRequest(ffrt_task_handle_t task)
 {
     ffrt_queue_wait(task);
 }
