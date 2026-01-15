@@ -67,7 +67,7 @@ export class BackupService {
 
     } catch (err) {
       logger.error(`Backup failed: ${JSON.stringify(err)}`);
-      // ✅ 修复：包装成 Error 对象抛出
+      //  修复：包装成 Error 对象抛出
       throw new Error(`Backup failed: ${JSON.stringify(err)}`);
     }
   }
@@ -114,7 +114,7 @@ export class BackupService {
 
     } catch (err) {
       logger.error(`Restore failed: ${JSON.stringify(err)}`);
-      // ✅ 修复：ArkTS 禁止 throw unknown，必须包装成 Error 抛出
+      //  修复：ArkTS 禁止 throw unknown，必须包装成 Error 抛出
       throw new Error(`Restore failed: ${JSON.stringify(err)}`);
     }
   }

@@ -54,11 +54,38 @@ export class ContactModel {
       };
 
       const id = await RdbHelper.getInstance().insert(TABLE_CONTACT, values);
-      this.logger.info(`✅ Insert Success, ID: ${id}`);
+      this.logger.info(` Insert Success, ID: ${id}`);
       return id;
     } catch (err) {
       this.logger.error('Insert failed', err);
       return -1;
+    }
+  }
+  static async update(contact: Contact): Promise<boolean> {
+    try {
+      this.logger.info(`=== [Update Start] ID: ${contact.id} ===`);
+
+      // 1. 同样需要加密电话号码
+      const encryptedPhone = await AesCryptoUtils.encrypt(contact.phone);
+
+      const values: relationalStore.ValuesBucket = {
+        'name': contact.name,
+        'phone': encryptedPhone, // 存入密文
+        'email': contact.email,
+        'relation': contact.relation
+      };
+
+      // 2. 构造查询条件：根据 ID 更新
+      let predicates = new relationalStore.RdbPredicates(TABLE_CONTACT);
+      predicates.equalTo('id', contact.id);
+
+      const rows = await RdbHelper.getInstance().update(values, predicates);
+      this.logger.info(` Update Success, Rows affected: ${rows}`);
+
+      return rows > 0;
+    } catch (err) {
+      this.logger.error('Update failed', err);
+      return false;
     }
   }
 
@@ -79,7 +106,7 @@ export class ContactModel {
   }
 
   /**
-   * ✅ [新增] 搜索功能
+   *  [新增] 搜索功能
    * 注意：由于 phone 是加密存储的，SQL LIKE 无法直接搜索手机号。
    * 这里只搜索：姓名、邮箱、关系。
    */
@@ -117,39 +144,58 @@ export class ContactModel {
    * 🔧 [内部工具] 将 ResultSet 解析为 Contact 数组 (含解密逻辑)
    */
   private static async resultSetToContacts(resultSet: relationalStore.ResultSet): Promise<Contact[]> {
-    let contacts: Contact[] = [];
+    // 1. 定义临时接口存储原始数据库数据
+    interface RawContact {
+      id: number;
+      name: string;
+      encryptedPhone: string;
+      relation: string;
+      email: string;
+    }
+
+    let rawData: RawContact[] = [];
 
     // 确保 resultSet 有效
     if (!resultSet) {
-      return contacts;
+      return [];
     }
 
     try {
       this.logger.info(`=== [Parsing ResultSet] Found ${resultSet.rowCount} records ===`);
 
+      // 步骤 A: 快速从数据库读取原始数据 (密文)
       while (resultSet.goToNextRow()) {
-        const id = resultSet.getLong(resultSet.getColumnIndex('id'));
-        const name = resultSet.getString(resultSet.getColumnIndex('name'));
-        const dbPhone = resultSet.getString(resultSet.getColumnIndex('phone'));
-
-        // 🔓 [解密] 修复：直接调用静态方法，去掉 getInstance()
-        const decryptedPhone = await AesCryptoUtils.decrypt(dbPhone);
-
-        let c = new Contact(
-          name,
-          decryptedPhone,
-          resultSet.getString(resultSet.getColumnIndex('relation')),
-          resultSet.getString(resultSet.getColumnIndex('email'))
-        );
-        c.id = id;
-        contacts.push(c);
+        rawData.push({
+          id: resultSet.getLong(resultSet.getColumnIndex('id')),
+          name: resultSet.getString(resultSet.getColumnIndex('name')),
+          encryptedPhone: resultSet.getString(resultSet.getColumnIndex('phone')), // 这里读到的是密文
+          relation: resultSet.getString(resultSet.getColumnIndex('relation')),
+          email: resultSet.getString(resultSet.getColumnIndex('email'))
+        });
       }
     } catch (e) {
       this.logger.error('Parse resultSet error', e);
     } finally {
-      // 务必关闭 resultSet
+      // 步骤 B: 立即关闭结果集，释放数据库资源
       resultSet.close();
     }
+
+    // 步骤 C: 在内存中进行解密 (并发处理，提升性能)
+    const contacts: Contact[] = await Promise.all(rawData.map(async (item) => {
+      let finalPhone = item.encryptedPhone;
+      try {
+        // 尝试解密
+        finalPhone = await AesCryptoUtils.decrypt(item.encryptedPhone);
+      } catch (decryptErr) {
+        // 🚨 关键：如果解密失败（比如密钥变了），这里要捕获，防止整个列表崩溃
+        // 此时 finalPhone 保持为密文，或者你可以设置为 "解密失败"
+        ContactModel.logger.error(`Decrypt failed for ID ${item.id}`, decryptErr);
+      }
+
+      let contact = new Contact(item.name, finalPhone, item.relation, item.email);
+      contact.id = item.id;
+      return contact;
+    }));
 
     return contacts;
   }

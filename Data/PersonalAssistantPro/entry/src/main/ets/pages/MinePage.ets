@@ -42,7 +42,7 @@ export struct MinePage {
         buttons: [{ text: '确定', color: '#007DFF' }]
       });
     } catch (err) {
-      // ✅ 修复：catch 括号内不写类型，在内部处理
+      //  修复：catch 括号内不写类型，在内部处理
       promptAction.showToast({ message: '备份失败，请查看日志' });
     } finally {
       this.isProcessing = false;
@@ -70,7 +70,7 @@ export struct MinePage {
 
           promptAction.showToast({ message: `恢复成功！共导入 ${count} 条数据` });
         } catch (err) {
-          // ✅ 修复：移除类型注解，使用断言获取 message
+          //  修复：移除类型注解，使用断言获取 message
           let msg = '未知错误';
           // 尝试将其断言为 Error 对象获取 message，或者直接转字符串
           if (err) {

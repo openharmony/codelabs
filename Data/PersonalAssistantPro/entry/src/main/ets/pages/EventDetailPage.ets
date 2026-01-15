@@ -24,13 +24,13 @@ import { promptAction } from '@kit.ArkUI';
  */
 @Component
 export struct EventDetailPage {
-  // ✅ 1. 接收从 MainPage 路由传递的参数
+  //  1. 接收从 MainPage 路由传递的参数
   @State eventItem: Event | undefined = undefined;
 
-  // ✅ 2. 接收路由栈，用于跳转和返回
+  //  2. 接收路由栈，用于跳转和返回
   @Consume('pageStack') pageStack: NavPathStack;
 
-  // ✅ 3. 监听全局刷新信号 (用于编辑后回来刷新页面)
+  //  3. 监听全局刷新信号 (用于编辑后回来刷新页面)
   @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
 
   async onRefreshChange() {

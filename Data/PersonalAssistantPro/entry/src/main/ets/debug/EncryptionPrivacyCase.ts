@@ -26,7 +26,7 @@ export class EncryptionPrivacyCase extends DebugCase {
   async run(): Promise<void> {
     this.logInfo('=== 🔒 开始隐私加密专项测试 (Static Mode) ===');
 
-    // ✅ 修复：直接调用静态方法，去掉 getInstance()
+    //  修复：直接调用静态方法，去掉 getInstance()
     await AesCryptoUtils.initKey();
 
     const rawPhone = '138-SECRET-888';
@@ -43,7 +43,7 @@ export class EncryptionPrivacyCase extends DebugCase {
       this.logError('❌ Setup failed: Could not insert contact.');
       return;
     }
-    this.logInfo(`✅ Inserted successfully. ID: ${id}`);
+    this.logInfo(` Inserted successfully. ID: ${id}`);
 
     // ---------------------------------------------------------
     // Step 2: 直接查库 (验证加密)
@@ -61,7 +61,7 @@ export class EncryptionPrivacyCase extends DebugCase {
 
         // 验证逻辑：不等于明文 且 包含冒号(IV格式)
         if (storedPhone !== rawPhone && storedPhone.includes(':')) {
-          this.logInfo('✅ 验证通过：数据库中存储的是加密密文 (Ciphertext)。');
+          this.logInfo(' 验证通过：数据库中存储的是加密密文 (Ciphertext)。');
         } else {
           this.logError('❌ 验证失败：数据库中数据未加密或格式错误！');
         }
@@ -81,7 +81,7 @@ export class EncryptionPrivacyCase extends DebugCase {
     const retrievedContact = allContacts.find(c => c.id === id);
 
     if (retrievedContact && retrievedContact.phone === rawPhone) {
-      this.logInfo(`✅ 解密验证成功: 读取结果为 ${retrievedContact.phone}`);
+      this.logInfo(` 解密验证成功: 读取结果为 ${retrievedContact.phone}`);
     } else {
       this.logError(`❌ 解密失败: 期望 ${rawPhone}, 实际读取到 ${retrievedContact?.phone}`);
     }

@@ -46,7 +46,7 @@ export class SearchDebugCase extends DebugCase {
       });
 
       if (contacts.some(c => c.name.includes(uniqueKey))) {
-        this.logInfo('   ✅ Contact Search Passed');
+        this.logInfo('    Contact Search Passed');
       } else {
         this.logInfo('   ❌ Contact Search Failed (Target not found)');
       }
@@ -66,7 +66,7 @@ export class SearchDebugCase extends DebugCase {
       });
 
       if (events.length > 0) {
-        this.logInfo('   ✅ Event Search Passed');
+        this.logInfo('    Event Search Passed');
       } else {
         this.logInfo('   ❌ Event Search Failed');
       }

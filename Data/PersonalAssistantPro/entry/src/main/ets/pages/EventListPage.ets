@@ -15,6 +15,10 @@
 // entry/src/main/ets/pages/EventListPage.ets
 import { Event, EventModel } from '../model/EventModel';
 import { Logger } from '../common/utils/Logger';
+import { MonthView } from '../view/calendar/MonthView';
+import { WeekView } from '../view/calendar/WeekView';
+//  [修复] 引入 TaskStatus 类型
+import { CalendarViewModel, TaskStatus } from '../viewmodel/CalendarViewModel';
 
 const logger = new Logger('EventListPage');
 
@@ -22,28 +26,119 @@ const logger = new Logger('EventListPage');
 export struct EventListPage {
   @State events: Array<Event> = [];
   @State keyword: string = '';
+  // 默认选中今天
+  @State selectedTimestamp: number = new Date().getTime();
+
+  //  [修复] 类型改为 Map<string, TaskStatus>
+  @State taskMap: Map<string, TaskStatus> = new Map();
+
+  @State viewMode: string = 'month';
 
   @Consume('pageStack') pageStack: NavPathStack;
-
+  @StorageProp('notificationJumpTarget') @Watch('onNotificationJump') jumpTarget: string = '';
+  @StorageProp('notificationJumpId') jumpId: number = -1;
   @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
 
+  private calendarViewModel = new CalendarViewModel();
+
   aboutToAppear() {
-    this.loadEvents();
+    // 1. ✅ [核心修复] 使用 setTimeout 延迟检查，确保能够捕获冷启动信号
+    // 将检查放到事件队列的末尾，避开 UI 初始化竞争
+    setTimeout(() => {
+      this.checkColdStartJump();
+    }, 100);
+
+    // 2. 加载数据
+    this.refreshAllData();
+  }
+
+  // ✅ 独立出来的检查方法
+  private checkColdStartJump() {
+    // 绕过 @StorageProp，直接查 AppStorage (最真实的数据)
+    const storedTarget = AppStorage.get<string>('notificationJumpTarget');
+    const storedId = AppStorage.get<number>('notificationJumpId');
+
+    logger.info(`[ColdStart Check] Target: ${storedTarget}, ID: ${storedId}`);
+
+    if (storedTarget === 'EventDetailPage' && storedId && storedId > 0) {
+      logger.info('🚀 DETECTED PENDING JUMP! Triggering now...');
+
+      // 强制同步本地状态
+      this.jumpTarget = storedTarget;
+      this.jumpId = storedId;
+
+      // 执行跳转
+      this.onNotificationJump();
+    } else {
+      logger.info('No pending jump found during cold start.');
+    }
+  }
+  // ✅ 跳转响应逻辑
+  async onNotificationJump() {
+    logger.info(`[Jump Logic] Processing jump... Target: ${this.jumpTarget}, ID: ${this.jumpId}`);
+
+    if (this.jumpTarget === 'EventDetailPage') {
+      // 1. 消费信号 (清空)
+      AppStorage.setOrCreate('notificationJumpTarget', '');
+
+      // 2. 检查 ID
+      if (this.jumpId > 0) {
+        logger.info(`[Jump Logic] Querying DB for Event ID: ${this.jumpId}`);
+        const event = await EventModel.queryById(this.jumpId);
+
+        if (event) {
+          logger.info('[Jump Logic] Event found! Pushing to stack.');
+          this.pageStack.pushPath({ name: 'EventDetailPage', param: event });
+        } else {
+          logger.error('[Jump Logic] Failed: Event ID not found in DB.');
+        }
+      } else {
+        logger.error(`[Jump Logic] Failed: Invalid ID ${this.jumpId}`);
+      }
+    }
   }
 
   onRefreshChange() {
-    this.loadEvents();
+    this.refreshAllData();
   }
 
-  async loadEvents() {
+  async refreshAllData() {
+    await this.loadMonthTaskDots();
+    await this.loadEventsForList();
+  }
+
+  async loadMonthTaskDots() {
+    try {
+      const date = new Date(this.selectedTimestamp);
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+
+      const monthEvents = await EventModel.queryByMonth(year, month);
+
+      //  这里的类型现在匹配了
+      this.taskMap = this.calendarViewModel.processEventsToTaskMap(monthEvents);
+    } catch (err) {
+      logger.error('Load calendar dots failed', JSON.stringify(err));
+    }
+  }
+
+  async loadEventsForList() {
     try {
       if (this.keyword && this.keyword.trim().length > 0) {
         this.events = await EventModel.search(this.keyword);
-      } else {
-        this.events = await EventModel.queryUpcoming();
+        return;
       }
+
+      const startOfDay = new Date(this.selectedTimestamp);
+      startOfDay.setHours(0, 0, 0, 0);
+
+      const endOfDay = new Date(this.selectedTimestamp);
+      endOfDay.setHours(23, 59, 59, 999);
+
+      this.events = await EventModel.queryRange(startOfDay.getTime(), endOfDay.getTime());
+
     } catch (err) {
-      logger.error('Load events failed', JSON.stringify(err));
+      logger.error('Load events list failed', JSON.stringify(err));
       this.events = [];
     }
   }
@@ -52,6 +147,7 @@ export struct EventListPage {
     const success = await EventModel.deleteById(id);
     if (success) {
       this.events.splice(index, 1);
+      this.refreshAllData();
       logger.info(`Deleted event id: ${id}`);
     }
   }
@@ -64,6 +160,27 @@ export struct EventListPage {
         .fontWeight(FontWeight.Bold)
 
       Blank()
+
+      Row() {
+        Text('月')
+          .fontSize(14)
+          .fontColor(this.viewMode === 'month' ? '#FFFFFF' : '#007DFF')
+          .backgroundColor(this.viewMode === 'month' ? '#007DFF' : Color.Transparent)
+          .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+          .borderRadius(14)
+          .onClick(() => this.viewMode = 'month')
+
+        Text('周')
+          .fontSize(14)
+          .fontColor(this.viewMode === 'week' ? '#FFFFFF' : '#007DFF')
+          .backgroundColor(this.viewMode === 'week' ? '#007DFF' : Color.Transparent)
+          .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+          .borderRadius(14)
+          .onClick(() => this.viewMode = 'week')
+      }
+      .backgroundColor('#E5F1FF')
+      .borderRadius(16)
+      .margin({ right: 16 })
 
       Button({ type: ButtonType.Circle, stateEffect: true }) {
         Text('+')
@@ -95,11 +212,11 @@ export struct EventListPage {
         .textFont({ size: 14 })
         .onChange((value: string) => {
           this.keyword = value;
-          this.loadEvents();
+          this.loadEventsForList();
         })
         .onSubmit((value: string) => {
           this.keyword = value;
-          this.loadEvents();
+          this.loadEventsForList();
         })
     }
     .width('100%')
@@ -123,11 +240,9 @@ export struct EventListPage {
 
   private formatTime(timestamp: number): string {
     const date = new Date(timestamp);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
     const hours = date.getHours().toString().padStart(2, '0');
     const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${month}/${day} ${hours}:${minutes}`;
+    return `${hours}:${minutes}`;
   }
 
   @Builder
@@ -157,12 +272,14 @@ export struct EventListPage {
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
 
-        Text(item.isAllDay ? 'All Day' : $r('app.string.event_status_upcoming'))
-          .fontSize(12)
-          .fontColor('#007DFF')
-          .backgroundColor('#E5F1FF')
-          .padding({ left: 8, right: 8, top: 2, bottom: 2 })
-          .borderRadius(10)
+        if (item.isAllDay) {
+          Text('All Day')
+            .fontSize(12)
+            .fontColor('#007DFF')
+            .backgroundColor('#E5F1FF')
+            .padding({ left: 8, right: 8, top: 2, bottom: 2 })
+            .borderRadius(10)
+        }
       }
       .width('100%')
       .padding(12)
@@ -171,7 +288,6 @@ export struct EventListPage {
     }
     .margin({ bottom: 10 })
     .onClick(() => {
-      // ✅ [核心修改] 跳转到详情页，而不是直接编辑页
       this.pageStack.pushPath({ name: 'EventDetailPage', param: item });
     })
     .swipeAction({
@@ -182,7 +298,32 @@ export struct EventListPage {
   build() {
     Column() {
       this.CustomHeader()
-      this.SearchBar()
+
+      if (this.keyword.length === 0) {
+        Column() {
+          if (this.viewMode === 'month') {
+            MonthView({
+              selectedTimestamp: $selectedTimestamp,
+              taskMap: this.taskMap,
+              onDateSelected: (ts: number) => {
+                this.selectedTimestamp = ts;
+                this.loadEventsForList();
+              }
+            })
+          } else {
+            WeekView({
+              selectedTimestamp: $selectedTimestamp,
+              taskMap: this.taskMap,
+              onDateSelected: (ts) => {
+                this.loadEventsForList();
+              }
+            })
+          }
+        }
+        .margin({ bottom: 12 })
+      } else {
+        this.SearchBar()
+      }
 
       GridRow({
         columns: { sm: 4, md: 8, lg: 12 },
@@ -198,17 +339,19 @@ export struct EventListPage {
                 Image($r('app.media.app_icon'))
                   .width(64)
                   .height(64)
-                  .opacity(0.5)
+                  .opacity(0.3)
                   .grayscale(1)
+                  .margin({ bottom: 10 })
 
                 if (this.keyword.length > 0) {
-                  Text('无搜索结果').fontSize(16).fontColor(Color.Gray).margin({ top: 16 })
+                  Text('无搜索结果').fontSize(16).fontColor(Color.Gray)
                 } else {
-                  Text($r('app.string.event_empty_tip')).fontSize(16).fontColor(Color.Gray).margin({ top: 16 })
+                  Text('今天没有安排').fontSize(16).fontColor(Color.Black)
+                  Text('去休息一下吧').fontSize(14).fontColor(Color.Gray).margin({ top: 4 })
                 }
               }
               .justifyContent(FlexAlign.Center)
-              .height('80%')
+              .height('100%')
               .width('100%')
             } else {
               List() {
@@ -222,7 +365,7 @@ export struct EventListPage {
             }
           }
           .width('100%')
-          .height('100%')
+          .layoutWeight(1)
         }
       }
       .layoutWeight(1)

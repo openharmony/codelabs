@@ -46,7 +46,7 @@ struct SplashPage {
       this.logger.info('Step 3: Initializing Crypto Key...');
       const savedKey = await PreferenceService.getInstance().getAesKey();
 
-      // ✅ 修复：直接调用静态方法，不再使用 getInstance()
+      //  修复：直接调用静态方法，不再使用 getInstance()
       const activeKey = await AesCryptoUtils.initKey(savedKey);
 
       if (!savedKey || savedKey !== activeKey) {

@@ -42,6 +42,6 @@ export class SettingModel {
     // 写入并强制刷新
     await PreferenceService.getInstance().putValue(this.KEY_BIOMETRIC_ENABLE, isEnabled);
 
-    this.logger.info(`✅ [Model] 保存完成`);
+    this.logger.info(` [Model] 保存完成`);
   }
 }

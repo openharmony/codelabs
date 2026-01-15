@@ -12,8 +12,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import reminderAgentManager from '@ohos.reminderAgentManager';
 import notificationManager from '@ohos.notificationManager';
+// 必须引入这个旧包，才能拿到 SlotType 枚举
+import notification from '@ohos.notification';
 import common from '@ohos.app.ability.common';
 import wantAgent from '@ohos.app.ability.wantAgent';
 import { Logger } from '../common/utils/Logger';
@@ -24,50 +27,43 @@ export class NotificationService {
 
   static async checkAndRequestPermission(context: common.UIAbilityContext): Promise<boolean> {
     try {
-      const isEnabled = await notificationManager.isNotificationEnabled();
-      if (isEnabled) {
-        return true;
-      }
-      logger.info('Notification is disabled, requesting permission...');
       await notificationManager.requestEnableNotification(context);
-      return await notificationManager.isNotificationEnabled();
+      return true;
     } catch (err) {
-      logger.error(`Request notification permission failed: ${JSON.stringify(err)}`);
       return false;
     }
   }
 
-  static async publishCalendarReminder(context: common.UIAbilityContext, title: string, content: string, targetTime: number): Promise<number> {
-    logger.info(`[Step 1] Preparing reminder. Bundle: ${context.abilityInfo.bundleName}, Ability: ${context.abilityInfo.name}`);
-    const date = new Date(targetTime);
+  // ✅ 定时 + 强制标准 UI + 跳转
+  static async publishCalendarReminder(context: common.UIAbilityContext, eventId: number, title: string, content: string, triggerTime: number): Promise<number> {
+    // 1. 时间校验
+    if (triggerTime < new Date().getTime()) {
+      logger.warn('Time passed.');
+      return -1;
+    }
+
+    const date = new Date(triggerTime);
 
     try {
-      // 1. 准备 WantAgentInfo
-      // 采用“模拟桌面图标点击”的策略，这是最稳妥的唤起方式
+      // 2. 准备跳转 (WantAgent) - 保持不变
       const wantInfo: wantAgent.WantAgentInfo = {
         wants: [
           {
             bundleName: context.abilityInfo.bundleName,
             abilityName: context.abilityInfo.name,
-            action: 'ohos.want.action.home', // 👈 必须加：匹配 module.json5 的 action
-            entities: ['entity.system.home'], // 👈 必须加：匹配 module.json5 的 entities
             parameters: {
-              'fromNotification': true // 👈 必须加：防止 Intent 被系统去重拦截
+              'targetPage': 'EventDetailPage',
+              'eventId': eventId
             }
           }
         ],
-        // 使用 START_ABILITY 启动应用
         operationType: wantAgent.OperationType.START_ABILITY,
         requestCode: 0,
-        // REPLACE_ELEMENT 确保使用最新的参数
-        wantAgentFlags: [wantAgent.WantAgentFlags.REPLACE_ELEMENT]
+        wantAgentFlags: [wantAgent.WantAgentFlags.UPDATE_PRESENT_FLAG]
       };
-
-      // 2. 获取 WantAgent
       const agent = await wantAgent.getWantAgent(wantInfo);
-      logger.info('[Step 2] WantAgent created with HOME action.');
 
-      // 3. 构建提醒请求对象
+      // 3. 提醒配置 (关键修改)
       const reminderRequest: reminderAgentManager.ReminderRequestCalendar = {
         reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_CALENDAR,
         dateTime: {
@@ -80,22 +76,36 @@ export class NotificationService {
         },
         content: content,
         title: title,
+
+        // ✅ [关键修改 1] 显式指定 SlotType
+        // 告诉系统：这是一条“社交通讯”级别的消息。
+        // 系统会因此使用“标准横幅”模板（通常是不透明、高度正常的）来渲染它。
+        slotType: notification.SlotType.SOCIAL_COMMUNICATION,
+
+        // ✅ [关键修改 2] 控制时长
+        // 设为 1 秒，仅仅为了触发一下系统通知，避免长时间占用变成全屏闹钟
+        ringDuration: 1,
+
         snoozeTimes: 0,
         timeInterval: 0,
-        ringDuration: 5,
-        notificationId: Math.floor(targetTime / 1000),
 
-        // 使用 as ESObject 解决类型问题
-        wantAgent: agent as ESObject
+        notificationId: eventId,
+        wantAgent: agent as ESObject,
+
+        // ✅ [关键修改 3] 保留按钮
+        // 在 SOCIAL_COMMUNICATION 模式下，按钮会显示在横幅下方，而不是全屏弹窗里
+        actionButton: [
+          { title: '查看', type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE }
+        ]
       };
 
-      // 4. 发布提醒
+      // 4. 发布
       const reminderId = await reminderAgentManager.publishReminder(reminderRequest);
-      logger.info(`[Step 3] Reminder published successfully. ID: ${reminderId}`);
+      logger.info(`Scheduled standard UI reminder. ID: ${reminderId}`);
       return reminderId;
 
     } catch (err) {
-      logger.error(`[ERROR] Publish failed. Code:${err.code}, Message:${err.message}`);
+      logger.error(`Schedule failed: ${err.message}`);
       return -1;
     }
   }
@@ -104,9 +114,8 @@ export class NotificationService {
     if (reminderId < 0) return;
     try {
       await reminderAgentManager.cancelReminder(reminderId);
-      logger.info(`Reminder ${reminderId} canceled.`);
     } catch (err) {
-      logger.error(`Cancel reminder failed code:${err.code} message:${err.message}`);
+      // ignore
     }
   }
 }

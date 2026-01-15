@@ -20,7 +20,7 @@ import { ContactDetailPage } from './ContactDetailPage';
 import { Contact } from '../model/ContactModel';
 import { EventEditPage } from './EventEditPage';
 import { Event } from '../model/EventModel';
-// ✅ [新增] 引入详情页
+//  [新增] 引入详情页
 import { EventDetailPage } from './EventDetailPage';
 
 @Entry
@@ -64,7 +64,7 @@ struct MainPage {
     else if (name === 'EventEditPage') {
       EventEditPage({ eventItem: param as Event });
     }
-    // ✅ [新增] 详情页路由配置
+    //  [新增] 详情页路由配置
     else if (name === 'EventDetailPage') {
       EventDetailPage({ eventItem: param as Event });
     }

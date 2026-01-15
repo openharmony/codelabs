@@ -12,113 +12,129 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// src/main/ets/view/calendar/WeekView.ets
-import { CalendarModel, CalendarViewModel } from '../../viewmodel/CalendarViewModel';
-import { DateUtils } from '../../common/utils/DateUtils';
+// entry/src/main/ets/view/calendar/WeekView.ets
+import { CalendarModel, CalendarViewModel, TaskStatus } from '../../viewmodel/CalendarViewModel';
 import { DayItemView } from './DayItemView';
 
-/**
- * 周视图组件
- * 仅显示当前周的7天数据，适用于需要节省空间的场景
- */
 @Component
 export struct WeekView {
-  // === 状态定义 ===
-  @State currentYear: number = new Date().getFullYear();
-  @State currentMonth: number = new Date().getMonth() + 1;
+  //  [修正] @Watch 必须写在变量上，意思为：当 selectedTimestamp 变化时，调用 onSelectedDateChange
+  @Link @Watch('onSelectedDateChange') selectedTimestamp: number;
+
+  // 接收忙碌日期 Map
+  @Prop taskMap: Map<string, TaskStatus> = new Map();
+
+  // 内部状态：这周的7天数据
   @State weekData: Array<CalendarModel> = [];
-  @Link selectedTimestamp: number;
+
+  // 回调
+  onDateSelected: (timestamp: number) => void = () => {};
 
   private viewModel: CalendarViewModel = new CalendarViewModel();
   private weekTitles: string[] = ['日', '一', '二', '三', '四', '五', '六'];
 
-  /**
-   * 组件加载时计算本周数据
-   */
   aboutToAppear() {
-    this.initWeekData();
+    this.refreshData();
   }
 
-  /**
-   * 初始化本周数据
-   * 逻辑：先获取本周第一天，然后往后推7天
-   */
-  private initWeekData() {
-    const now = new Date();
-    // 使用工具类获取本周第一天的时间戳
-    const startOfWeekTs = DateUtils.getStartOfWeek(now.getTime());
-    const startObj = new Date(startOfWeekTs);
+  //  监听回调方法 (这里不需要再加 @Watch 了)
+  onSelectedDateChange() {
+    // 只有当选中的日期跳出了当前周的范围时，才需要刷新数据
+    this.refreshData();
+  }
 
-    const result: Array<CalendarModel> = [];
+  refreshData() {
+    this.weekData = this.viewModel.getWeekData(this.selectedTimestamp);
+  }
 
-    // 循环构造7天数据
-    for (let i = 0; i < 7; i++) {
-      // 复制日期对象
-      const tempDate = new Date(startObj.getTime() + i * 24 * 60 * 60 * 1000);
+  // 切换到上一周
+  prevWeek() {
+    const date = new Date(this.selectedTimestamp);
+    date.setDate(date.getDate() - 7);
+    this.selectedTimestamp = date.getTime();
+    // 由于是双向绑定，修改 selectedTimestamp 会自动触发 onSelectedDateChange -> refreshData
+    this.onDateSelected(this.selectedTimestamp);
+  }
 
-      const y = tempDate.getFullYear();
-      const m = tempDate.getMonth() + 1;
-      const d = tempDate.getDate();
-
-      // 判断是否是今天
-      const isToday = DateUtils.isSameDay(tempDate.getTime(), now.getTime());
-
-      result.push(new CalendarModel(y, m, d, true, isToday));
-    }
-
-    this.weekData = result;
-
-    // 更新当前显示的年月信息（取第一天的）
-    this.currentYear = result[0].year;
-    this.currentMonth = result[0].month;
+  // 切换到下一周
+  nextWeek() {
+    const date = new Date(this.selectedTimestamp);
+    date.setDate(date.getDate() + 7);
+    this.selectedTimestamp = date.getTime();
+    this.onDateSelected(this.selectedTimestamp);
   }
 
   build() {
     Column() {
-      // 1. 顶部显示的年月信息
-      Text(`${this.currentYear}年 ${this.currentMonth}月 - 本周`)
-        .fontSize(14)
-        .fontColor('#666666')
-        .width('100%')
-        .textAlign(TextAlign.Start)
-        .margin({ bottom: 12, left: 4 })
+      // 1. 顶部控制栏 (左右切换 + 日期范围)
+      Row() {
+        Image($r('app.media.ic_public_arrow_left'))
+          .width(20).height(20)
+          .onClick(() => this.prevWeek())
 
-      // 2. 星期标题 (一行)
+        Text(this.getWeekRangeTitle())
+          .fontSize(14)
+          .fontColor(Color.Gray)
+          .margin({ left: 10, right: 10 })
+
+        Image($r('app.media.ic_public_arrow_right'))
+          .width(20).height(20)
+          .onClick(() => this.nextWeek())
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .height(30)
+      .margin({ bottom: 8 })
+
+      // 2. 星期标题头 (Mon, Tue, Wed...)
       GridRow({ columns: 7 }) {
         ForEach(this.weekTitles, (title: string) => {
           GridCol() {
             Text(title)
-              .fontSize(10)
+              .fontSize(12)
               .fontColor('#999999')
               .width('100%')
               .textAlign(TextAlign.Center)
-              .margin({ bottom: 6 })
           }
         })
       }
       .width('100%')
+      .height(20)
+      .margin({ bottom: 4 })
 
-      // 3. 日期内容 (一行)
-      GridRow({ columns: 7 }) {
+      // 3. 星期数据网格
+      Grid() {
         ForEach(this.weekData, (day: CalendarModel) => {
-          GridCol() {
-            // 复用 DayItemView
+          GridItem() {
             DayItemView({
               dayModel: day,
-              selectedTimestamp: this.selectedTimestamp
+              selectedTimestamp: this.selectedTimestamp,
+              // 传递条状样式
+              stripType: this.taskMap.get(`${day.year}-${day.month}-${day.day}`)?.stripType || '',
+              // 传递点状样式
+              hasPoint: this.taskMap.get(`${day.year}-${day.month}-${day.day}`)?.hasPoint || false
             })
-              .onClick(() => {
-                this.selectedTimestamp = day.timestamp;
-              })
           }
+          .onClick(() => {
+            this.selectedTimestamp = day.timestamp;
+            this.onDateSelected(day.timestamp);
+          })
         })
       }
-      .width('100%')
+      .columnsTemplate('1fr 1fr 1fr 1fr 1fr 1fr 1fr')
+      .rowsTemplate('1fr')
+      .height(40)
     }
     .width('100%')
-    .padding(12)
+    .padding(10)
     .backgroundColor(Color.White)
-    .borderRadius(12)
-    .margin({ bottom: 12 })
+    .borderRadius(16)
+  }
+
+  private getWeekRangeTitle(): string {
+    if (this.weekData.length === 0) return '';
+    const start = this.weekData[0];
+    const end = this.weekData[6];
+    return `${start.year}年${start.month}月${start.day}日 - ${end.month}月${end.day}日`;
   }
 }

@@ -60,7 +60,7 @@ export class UserScenarioSimulationCase extends DebugCase {
       // 验证联系人添加
       const contacts = await ContactModel.search(tag);
       if (contacts.length === 3) {
-        this.logInfo('   ✅ Contact Phase Verified: 3 contacts added.');
+        this.logInfo('    Contact Phase Verified: 3 contacts added.');
       } else {
         throw new Error('Contact addition failed count check.');
       }
@@ -85,7 +85,7 @@ export class UserScenarioSimulationCase extends DebugCase {
       // 验证日程添加
       const events = await EventModel.search(tag);
       if (events.length === 2) {
-        this.logInfo('   ✅ Event Phase Verified: 2 events scheduled.');
+        this.logInfo('    Event Phase Verified: 2 events scheduled.');
       } else {
         throw new Error('Event scheduling failed count check.');
       }
@@ -118,7 +118,7 @@ export class UserScenarioSimulationCase extends DebugCase {
       const targetAssistant = checkAssistant.find(c => c.name.includes(tag));
 
       if (!targetAssistant) {
-        this.logInfo('   ✅ Assistant is correctly removed.');
+        this.logInfo('    Assistant is correctly removed.');
       } else {
         this.logInfo('   ❌ Error: Assistant still exists!');
       }
@@ -128,7 +128,7 @@ export class UserScenarioSimulationCase extends DebugCase {
       const targetMeeting = updatedEvents.find(e => e.id === meetingId);
 
       if (targetMeeting && targetMeeting.description.includes('(Delayed)')) {
-        this.logInfo('   ✅ Meeting description updated correctly.');
+        this.logInfo('    Meeting description updated correctly.');
       } else {
         this.logInfo('   ❌ Error: Meeting update failed!');
       }
@@ -147,7 +147,7 @@ export class UserScenarioSimulationCase extends DebugCase {
 
       this.logInfo('   > Cleanup completed.');
 
-      this.logInfo('✅ User Scenario Simulation Completed Successfully.');
+      this.logInfo(' User Scenario Simulation Completed Successfully.');
 
     } catch (err) {
       this.logInfo(`❌ Simulation Crashed: ${JSON.stringify(err)}`);

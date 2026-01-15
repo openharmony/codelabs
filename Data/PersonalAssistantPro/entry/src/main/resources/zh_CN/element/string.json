@@ -21,6 +21,10 @@
     { "name": "toast_input_error", "value": "请输入姓名和电话" },
 
     { "name": "contact_detail_title", "value": "联系人详情" },
+    {
+      "name": "btn_edit",
+      "value": "编辑"
+    },
     { "name": "contact_detail_phone", "value": "电话" },
     { "name": "contact_detail_email", "value": "邮箱" },
     { "name": "contact_detail_relation", "value": "关系" },

@@ -31,7 +31,7 @@ export class ContactDatabaseCase extends DebugCase {
     const id2 = await ContactModel.insert(contact2);
 
     if (id1 > 0 && id2 > 0) {
-      this.logInfo(`✅ Insert success. IDs: ${id1}, ${id2}`);
+      this.logInfo(` Insert success. IDs: ${id1}, ${id2}`);
     } else {
       this.logError('❌ Insert failed');
       return;
@@ -48,7 +48,7 @@ export class ContactDatabaseCase extends DebugCase {
     // 验证数据准确性
     const insertedZhang = list.find(c => c.name === '张三');
     if (insertedZhang && insertedZhang.phone === '13800138000') {
-      this.logInfo('✅ Data verification passed (Zhang San found).');
+      this.logInfo(' Data verification passed (Zhang San found).');
     } else {
       this.logError('❌ Data verification failed!');
     }
@@ -57,7 +57,7 @@ export class ContactDatabaseCase extends DebugCase {
     this.logInfo(`Step 3: Deleting contact ID: ${id1}...`);
     const deleteSuccess = await ContactModel.deleteById(id1);
     if (deleteSuccess) {
-      this.logInfo('✅ Delete success.');
+      this.logInfo(' Delete success.');
     } else {
       this.logError('❌ Delete failed.');
     }
@@ -67,7 +67,7 @@ export class ContactDatabaseCase extends DebugCase {
     const finalList = await ContactModel.queryAll();
     this.logInfo(`Remaining contacts: ${finalList.length}`);
     if (finalList.length === list.length - 1) {
-      this.logInfo('✅ Final count check passed.');
+      this.logInfo(' Final count check passed.');
     } else {
       this.logError('❌ Final count check failed.');
     }
