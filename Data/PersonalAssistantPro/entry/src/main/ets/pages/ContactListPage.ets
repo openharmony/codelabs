@@ -21,15 +21,15 @@ const logger = new Logger('ContactListPage');
 @Component
 export struct ContactListPage {
   @State contacts: Array<Contact> = [];
-  // ✅ [新增] 搜索关键词状态
   @State keyword: string = '';
 
   @Consume('pageStack') pageStack: NavPathStack;
 
+  //  [修改] DialogController 回调增加 email 参数
   dialogController: CustomDialogController = new CustomDialogController({
     builder: AddContactDialog({
-      onConfirm: (name: string, phone: string, relation: string) => {
-        this.addContact(name, phone, relation);
+      onConfirm: (name: string, phone: string, relation: string, email: string) => {
+        this.addContact(name, phone, relation, email);
       }
     }),
     alignment: DialogAlignment.Bottom,
@@ -50,15 +50,12 @@ export struct ContactListPage {
     return safe.length > 0 ? safe.substring(0, 1) : '?';
   }
 
-  // ✅ [修改] 加载逻辑支持搜索
   async loadContacts(): Promise<void> {
     try {
       if (this.keyword && this.keyword.trim().length > 0) {
-        // 搜索模式
         const list = await ContactModel.search(this.keyword);
         this.contacts = Array.isArray(list) ? list : [];
       } else {
-        // 默认模式
         const list = await ContactModel.queryAll();
         this.contacts = Array.isArray(list) ? list : [];
       }
@@ -68,11 +65,14 @@ export struct ContactListPage {
     }
   }
 
-  async addContact(name: string, phone: string, relation: string): Promise<void> {
+  //  [修改] 方法签名增加 email 参数
+  async addContact(name: string, phone: string, relation: string, email: string): Promise<void> {
     if (!name || !phone) return;
-    const newContact: Contact = new Contact(name, phone, relation);
+
+    //  [修改] 将 email 传入构造函数 (确保 ContactModel 构造函数第4个参数是 email)
+    const newContact: Contact = new Contact(name, phone, relation, email);
+
     if (await ContactModel.insert(newContact) > 0) {
-      // 添加成功后，清空搜索并刷新
       this.keyword = '';
       await this.loadContacts();
     }
@@ -127,11 +127,10 @@ export struct ContactListPage {
     .alignItems(VerticalAlign.Center)
   }
 
-  // ✅ [新增] 搜索栏组件
   @Builder
   private SearchBar(): void {
     Row() {
-      Search({ value: this.keyword, placeholder: '搜索姓名、关系...' }) // 这里的 placeholder 建议稍后放入资源文件
+      Search({ value: this.keyword, placeholder: '搜索姓名、关系...' })
         .width('100%')
         .height(40)
         .backgroundColor(Color.White)
@@ -140,7 +139,6 @@ export struct ContactListPage {
         .textFont({ size: 14 })
         .onChange((value: string) => {
           this.keyword = value;
-          // 实时搜索 (如果数据量大建议加防抖，目前直接查)
           this.loadContacts();
         })
         .onSubmit((value: string) => {
@@ -200,8 +198,6 @@ export struct ContactListPage {
   build() {
     Column() {
       this.CustomHeader()
-
-      // ✅ [新增] 插入搜索栏
       this.SearchBar()
 
       GridRow({
@@ -212,7 +208,6 @@ export struct ContactListPage {
           Column() {
             if (this.contacts.length === 0) {
               Column() {
-                // 根据是否在搜索状态显示不同提示
                 if (this.keyword.length > 0) {
                   Text('无搜索结果')
                     .fontColor(Color.Gray)
@@ -256,14 +251,18 @@ export struct ContactListPage {
   }
 }
 
-// Dialog 代码保持不变...
+// ================= Dialog 修改区域 =================
+
 @CustomDialog
 struct AddContactDialog {
   controller?: CustomDialogController;
-  onConfirm: (name: string, phone: string, relation: string) => void = () => {};
+  //  [修改] 增加 email 参数定义
+  onConfirm: (name: string, phone: string, relation: string, email: string) => void = () => {};
   @State name: string = '';
   @State phone: string = '';
   @State relation: string = '';
+  //  [新增] 邮箱状态
+  @State email: string = '';
 
   build() {
     Column() {
@@ -272,13 +271,35 @@ struct AddContactDialog {
         .fontWeight(FontWeight.Bold)
         .margin({ top: 20, bottom: 20 })
 
-      TextInput({ placeholder: $r('app.string.input_name') }).onChange((v) => { this.name = v; }).margin({ bottom: 12 }).width('90%')
-      TextInput({ placeholder: $r('app.string.input_phone') }).onChange((v) => { this.phone = v; }).margin({ bottom: 12 }).width('90%')
-      TextInput({ placeholder: $r('app.string.input_relation') }).onChange((v) => { this.relation = v; }).margin({ bottom: 20 }).width('90%')
+      TextInput({ placeholder: $r('app.string.input_name') })
+        .onChange((v) => { this.name = v; })
+        .margin({ bottom: 12 }).width('90%')
+
+      TextInput({ placeholder: $r('app.string.input_phone') })
+        .onChange((v) => { this.phone = v; })
+        .margin({ bottom: 12 }).width('90%')
+
+      //  [新增] 邮箱输入框 (如果没有资源字符串，先用中文，或者去 string.json 添加 "input_email")
+      TextInput({ placeholder: '请输入邮箱' })
+        .onChange((v) => { this.email = v; })
+        .margin({ bottom: 12 }).width('90%')
+
+      TextInput({ placeholder: $r('app.string.input_relation') })
+        .onChange((v) => { this.relation = v; })
+        .margin({ bottom: 20 }).width('90%')
 
       Row() {
-        Button($r('app.string.btn_cancel')).backgroundColor(Color.Transparent).fontColor(Color.Gray).onClick(() => { this.controller?.close(); })
-        Button($r('app.string.btn_add')).onClick(() => { this.onConfirm(this.name, this.phone, this.relation); this.controller?.close(); })
+        Button($r('app.string.btn_cancel'))
+          .backgroundColor(Color.Transparent)
+          .fontColor(Color.Gray)
+          .onClick(() => { this.controller?.close(); })
+
+        Button($r('app.string.btn_add'))
+          .onClick(() => {
+            //  [修改] 提交时加上 this.email
+            this.onConfirm(this.name, this.phone, this.relation, this.email);
+            this.controller?.close();
+          })
       }
       .justifyContent(FlexAlign.SpaceEvenly).width('100%').margin({ bottom: 20 })
     }

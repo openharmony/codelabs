@@ -95,7 +95,7 @@ export class EventModel {
   }
 
   // ========================================================
-  // ✅ 新增方法 1：查询所有日程 (供 DataExportService 使用)
+  //  新增方法 1：查询所有日程 (供 DataExportService 使用)
   // ========================================================
   static async queryAll(): Promise<Event[]> {
     let predicates = new relationalStore.RdbPredicates(TABLE_EVENT);
@@ -110,21 +110,61 @@ export class EventModel {
   }
 
   // ========================================================
-  // ✅ 新增方法 2：查询时间段日程 (供日历视图筛选使用)
+  //  新增方法 2：查询时间段日程 (供日历视图筛选使用)
   // ========================================================
   static async queryRange(start: number, end: number): Promise<Event[]> {
     let predicates = new relationalStore.RdbPredicates(TABLE_EVENT);
-    predicates.orderByAsc('start_time');
+
+    // 数据库直接筛选：
+    // 1. 日程开始时间早于查询结束时间
+    // 2. 且 日程结束时间晚于查询开始时间
+    predicates.lessThanOrEqualTo('start_time', end)
+      .and()
+      .greaterThanOrEqualTo('end_time', start)
+      .orderByAsc('start_time');
 
     try {
       const resultSet = await RdbHelper.getInstance().query(predicates);
-      const allEvents = EventModel.resultSetToEvents(resultSet);
-      // 内存筛选: (EventStart < RangeEnd) AND (EventEnd > RangeStart)
-      return allEvents.filter(e => e.startTime < end && e.endTime > start);
+      return EventModel.resultSetToEvents(resultSet);
     } catch (err) {
       logger.error('Query range events failed', JSON.stringify(err));
       return [];
     }
+  }
+
+  static async queryByMonth(year: number, month: number): Promise<Event[]> {
+    try {
+      // 1. 月初：year年 month月(索引需-1) 1日 00:00:00
+      const startOfMonth = new Date(year, month - 1, 1).getTime();
+
+      // 2. 月末：下个月的第0天，即本月的最后一天 23:59:59
+      // 注意：Date构造函数里 month 不用减1，因为我们要找的是"下个月的前一天"
+      const endOfMonth = new Date(year, month, 0, 23, 59, 59, 999).getTime();
+
+      logger.info(`Querying month: ${year}-${month}, Range: ${startOfMonth} - ${endOfMonth}`);
+
+      // 3. 复用 queryRange
+      //  [修复] ArkTS 不允许静态方法用 this，改为类名调用
+      return await EventModel.queryRange(startOfMonth, endOfMonth);
+    } catch (err) {
+      logger.error('Query by month failed', JSON.stringify(err));
+      return [];
+    }
+  }
+  static async queryById(id: number): Promise<Event | undefined> {
+    let predicates = new relationalStore.RdbPredicates(TABLE_EVENT);
+    predicates.equalTo('id', id);
+
+    try {
+      const resultSet = await RdbHelper.getInstance().query(predicates);
+      const events = EventModel.resultSetToEvents(resultSet);
+      if (events.length > 0) {
+        return events[0];
+      }
+    } catch (err) {
+      logger.error('Query event by id failed', JSON.stringify(err));
+    }
+    return undefined;
   }
 
   static async queryUpcoming(): Promise<Event[]> {

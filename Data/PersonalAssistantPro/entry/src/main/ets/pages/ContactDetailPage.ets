@@ -13,48 +13,85 @@
  * limitations under the License.
  */
 // File: entry/src/main/ets/pages/ContactDetailPage.ets
-import { Contact } from '../model/ContactModel';
-import { SettingModel } from '../model/SettingModel'; // ✅ 引入配置模型
-import { BiometricService } from '../services/BiometricService'; // ✅ 引入生物认证服务
+import { Contact, ContactModel } from '../model/ContactModel';
+import { SettingModel } from '../model/SettingModel';
+import { BiometricService } from '../services/BiometricService';
 import promptAction from '@ohos.promptAction';
 
 @Component
 export struct ContactDetailPage {
-  // 接收页面路由传递过来的参数
   @State contact: Contact = new Contact('', '', '');
 
-  // 🔒 新增：隐私与解锁状态
-  @State isPrivacyOn: boolean = false; // 总开关：是否开启了隐私保护
-  @State isUnlocked: boolean = false;  // 当前状态：是否已解锁查看
+  // 🔒 隐私与解锁状态
+  @State isPrivacyOn: boolean = false;
+  @State isUnlocked: boolean = false;
 
   private settingModel = new SettingModel();
 
-  // 获取头像文字
+  //  [新增] 编辑弹窗控制器
+  editDialogController: CustomDialogController = new CustomDialogController({
+    builder: EditContactDialog({
+      // 传入当前数据用于回显
+      name: this.contact.name,
+      phone: this.contact.phone,
+      relation: this.contact.relation,
+      email: this.contact.email,
+      onConfirm: (name, phone, relation, email) => {
+        this.saveContact(name, phone, relation, email);
+      }
+    }),
+    alignment: DialogAlignment.Bottom,
+    autoCancel: true
+  });
+
   private getAvatarText(): string {
     const name = this.contact.name || '';
     return name.length > 0 ? name.substring(0, 1).toUpperCase() : '?';
   }
 
-  // ✅ 生命周期：检查隐私设置
   async aboutToAppear() {
-    // 1. 读取设置：用户是否在“我的”里开启了隐私锁？
     this.isPrivacyOn = await this.settingModel.isBiometricEnabled();
-
-    // 2. 逻辑判断：如果没开锁，默认就是“已解锁”状态，直接看
-    // 只有“开启了隐私锁”且“尚未验证”，isUnlocked 才是 false
     if (!this.isPrivacyOn) {
       this.isUnlocked = true;
     }
   }
 
-  // ✅ 核心业务：触发指纹解锁
   async unlock() {
     const success = await BiometricService.getInstance().authenticate();
     if (success) {
-      this.isUnlocked = true; // 改变状态，UI 会自动刷新显示真号码
+      this.isUnlocked = true;
       promptAction.showToast({ message: $r('app.string.unlock_success') });
     } else {
       promptAction.showToast({ message: $r('app.string.unlock_fail') });
+    }
+  }
+
+  //  [新增] 保存修改逻辑
+  async saveContact(name: string, phone: string, relation: string, email: string) {
+    // 1. 更新内存对象
+    this.contact.name = name;
+    this.contact.phone = phone;
+    this.contact.relation = relation;
+    this.contact.email = email;
+
+    // 2. 更新数据库
+    const success = await ContactModel.update(this.contact);
+
+    if (success) {
+      promptAction.showToast({ message: '修改成功' });
+    } else {
+      promptAction.showToast({ message: '修改失败' });
+    }
+  }
+
+  //  [新增] 点击编辑按钮逻辑
+  handleEditClick() {
+    // 安全策略：如果开启了隐私保护且未解锁，禁止编辑（防止绕过解锁查看号码）
+    if (this.isPrivacyOn && !this.isUnlocked) {
+      promptAction.showToast({ message: '请先解锁以编辑隐私信息' });
+      this.unlock();
+    } else {
+      this.editDialogController.open();
     }
   }
 
@@ -98,16 +135,15 @@ export struct ContactDetailPage {
 
             // --- 详情列表区域 ---
             List() {
-              // 📞 电话 (核心修改点：根据解锁状态显示不同内容)
+              // 📞 电话
               ListItem() {
                 Row() {
-                  Text($r('app.string.contact_detail_phone')) // "电话"
+                  Text($r('app.string.contact_detail_phone'))
                     .width(80)
                     .fontColor(Color.Gray)
                     .fontSize(16)
 
                   if (this.isUnlocked) {
-                    // ✅ 情况 A：已解锁/没开锁 -> 显示真实号码
                     Text(this.contact.phone)
                       .fontWeight(FontWeight.Regular)
                       .fontSize(16)
@@ -115,9 +151,7 @@ export struct ContactDetailPage {
                       .layoutWeight(1)
                       .textAlign(TextAlign.End)
                   } else {
-                    // 🔒 情况 B：未解锁 -> 显示掩码 + 按钮
                     Row() {
-                      // 138****1234
                       Text(this.contact.phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2'))
                         .fontSize(16)
                         .fontColor(Color.Black)
@@ -125,15 +159,12 @@ export struct ContactDetailPage {
                         .textAlign(TextAlign.End)
                         .margin({ right: 8 })
 
-                      // 查看按钮
-                      Button($r('app.string.btn_view')) // "查看"
+                      Button($r('app.string.btn_view'))
                         .type(ButtonType.Capsule)
                         .height(24)
                         .fontSize(12)
                         .backgroundColor('#007DFF')
-                        .onClick(() => {
-                          this.unlock(); // 点击触发指纹
-                        })
+                        .onClick(() => { this.unlock(); })
                     }
                     .layoutWeight(1)
                     .justifyContent(FlexAlign.End)
@@ -144,13 +175,13 @@ export struct ContactDetailPage {
                 .backgroundColor(Color.White)
               }
 
-              // 📧 邮箱 (普通展示)
+              // 📧 邮箱
               this.DetailItem(
                 $r('app.string.contact_detail_email'),
                 this.contact.email || $r('app.string.contact_detail_empty')
               )
 
-              // 🔗 关系 (普通展示)
+              // 🔗 关系
               this.DetailItem(
                 $r('app.string.contact_detail_relation'),
                 this.contact.relation
@@ -160,12 +191,7 @@ export struct ContactDetailPage {
             .borderRadius(16)
             .margin({ top: 30 })
             .backgroundColor(Color.White)
-            .divider({
-              strokeWidth: 0.5,
-              color: '#F0F0F0',
-              startMargin: 16,
-              endMargin: 16
-            })
+            .divider({ strokeWidth: 0.5, color: '#F0F0F0', startMargin: 16, endMargin: 16 })
           }
           .width('100%')
           .height('100%')
@@ -178,9 +204,18 @@ export struct ContactDetailPage {
     }
     .title($r('app.string.contact_detail_title'))
     .backgroundColor('#F1F3F5')
+    //  [新增] 右上角菜单
+    .menus([
+      {
+        value: $r('app.string.btn_edit'),
+        icon: $r('app.media.ic_edit_box'),
+        action: () => {
+          this.handleEditClick();
+        }
+      }
+    ])
   }
 
-  // 普通列表项 Builder (保持原样)
   @Builder DetailItem(label: Resource, value: string | Resource) {
     ListItem() {
       Row() {
@@ -202,5 +237,58 @@ export struct ContactDetailPage {
       .padding(16)
       .backgroundColor(Color.White)
     }
+  }
+}
+
+//  [新增] 编辑弹窗组件
+@CustomDialog
+struct EditContactDialog {
+  controller?: CustomDialogController;
+  onConfirm: (name: string, phone: string, relation: string, email: string) => void = () => {};
+
+  // 这里的 State 用来接收初始值并支持用户修改
+  @State name: string = '';
+  @State phone: string = '';
+  @State relation: string = '';
+  @State email: string = '';
+
+  build() {
+    Column() {
+      Text('编辑联系人')
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 20, bottom: 20 })
+
+      TextInput({ text: this.name, placeholder: $r('app.string.input_name') })
+        .onChange((v) => { this.name = v; })
+        .margin({ bottom: 12 }).width('90%')
+
+      TextInput({ text: this.phone, placeholder: $r('app.string.input_phone') })
+        .onChange((v) => { this.phone = v; })
+        .margin({ bottom: 12 }).width('90%')
+
+      TextInput({ text: this.email, placeholder: '请输入邮箱' })
+        .onChange((v) => { this.email = v; })
+        .margin({ bottom: 12 }).width('90%')
+
+      TextInput({ text: this.relation, placeholder: $r('app.string.input_relation') })
+        .onChange((v) => { this.relation = v; })
+        .margin({ bottom: 20 }).width('90%')
+
+      Row() {
+        Button($r('app.string.btn_cancel'))
+          .backgroundColor(Color.Transparent)
+          .fontColor(Color.Gray)
+          .onClick(() => { this.controller?.close(); })
+
+        Button($r('app.string.btn_save')) // 建议添加 string: "保存"
+          .onClick(() => {
+            this.onConfirm(this.name, this.phone, this.relation, this.email);
+            this.controller?.close();
+          })
+      }
+      .justifyContent(FlexAlign.SpaceEvenly).width('100%').margin({ bottom: 20 })
+    }
+    .backgroundColor(Color.White).borderRadius(24).width('100%')
   }
 }

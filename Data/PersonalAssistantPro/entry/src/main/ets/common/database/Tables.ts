@@ -19,7 +19,7 @@ export const TABLE_CONTACT = 'contact';
 export const TABLE_EVENT = 'event';
 
 // 联系人建表语句
-// ✅ 优化：根据项目文档 F6/F10 需求，补充了 privacy 相关的字段 (is_secret, image_uri)
+//  优化：根据项目文档 F6/F10 需求，补充了 privacy 相关的字段 (is_secret, image_uri)
 // 这样您在测试隐私锁功能时就不需要再次卸载应用了
 export const SQL_CREATE_CONTACT = `
   CREATE TABLE IF NOT EXISTS ${TABLE_CONTACT} (
@@ -47,4 +47,4 @@ export const SQL_CREATE_EVENT = `
     reminder_id INTEGER DEFAULT -1
   )
 `;
-// 👆 ✅ 核心修复：增加了 reminder_id 字段
+// 👆  核心修复：增加了 reminder_id 字段

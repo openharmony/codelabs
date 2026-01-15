@@ -30,7 +30,7 @@ export class BiometricSettingCase extends DebugCase {
     const isAvailable = BiometricService.getInstance().checkAvailability();
 
     if (isAvailable) {
-      this.logInfo('✅ Biometric hardware is AVAILABLE on this device.');
+      this.logInfo(' Biometric hardware is AVAILABLE on this device.');
     } else {
       this.logInfo('⚠️ Biometric hardware is NOT available (Normal for some Simulators).');
     }
@@ -47,7 +47,7 @@ export class BiometricSettingCase extends DebugCase {
     const isEnabledAfterSet = await this.settingModel.isBiometricEnabled();
 
     if (isEnabledAfterSet === true) {
-      this.logInfo('✅ Write TRUE success. Value read back matches.');
+      this.logInfo(' Write TRUE success. Value read back matches.');
     } else {
       this.logError(`❌ Write TRUE failed. Read back: ${isEnabledAfterSet}`);
     }
@@ -64,7 +64,7 @@ export class BiometricSettingCase extends DebugCase {
     const isEnabledAfterOff = await this.settingModel.isBiometricEnabled();
 
     if (isEnabledAfterOff === false) {
-      this.logInfo('✅ Write FALSE success. Value read back matches.');
+      this.logInfo(' Write FALSE success. Value read back matches.');
     } else {
       this.logError(`❌ Write FALSE failed. Read back: ${isEnabledAfterOff}`);
     }

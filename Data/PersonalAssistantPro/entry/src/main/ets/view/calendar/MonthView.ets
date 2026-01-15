@@ -15,21 +15,28 @@
 // entry/src/main/ets/view/calendar/MonthView.ets
 import { CalendarModel, CalendarViewModel } from '../../viewmodel/CalendarViewModel';
 import { DayItemView } from './DayItemView';
-
+import { TaskStatus } from '../../viewmodel/CalendarViewModel';
 @Component
 export struct MonthView {
   @State currentYear: number = new Date().getFullYear();
   @State currentMonth: number = new Date().getMonth() + 1;
   @State calendarData: Array<CalendarModel> = [];
-  @State selectedTimestamp: number = 0; // 当前选中的日期
+
+  //  [修改] 改为 @Link 以便和父组件双向同步 (选中日期)
+  @Link selectedTimestamp: number;
+
+  //  [新增] 接收父组件传来的“忙碌日期”集合
+  @Prop taskDaysSet: Set<string> = new Set();
+  @Prop taskMap: Map<string, TaskStatus> = new Map();
+
+  //  [新增] 点击日期的回调函数
+  onDateSelected: (timestamp: number) => void = () => {};
 
   private viewModel: CalendarViewModel = new CalendarViewModel();
   private weekTitles: string[] = ['日', '一', '二', '三', '四', '五', '六'];
 
   aboutToAppear() {
     this.refreshData();
-    // 默认选中今天
-    this.selectedTimestamp = new Date(this.currentYear, this.currentMonth - 1, new Date().getDate()).getTime();
   }
 
   private refreshData() {
@@ -54,7 +61,7 @@ export struct MonthView {
     Column() {
       // 1. 年月切换标题栏
       Row() {
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.ic_public_arrow_left'))
           .width(20).height(20)
           .onClick(() => this.goToPrevMonth())
 
@@ -63,9 +70,8 @@ export struct MonthView {
           .fontWeight(FontWeight.Bold)
           .margin({ left: 16, right: 16 })
 
-        Image($r('app.media.ic_back'))
+        Image($r('app.media.ic_public_arrow_right'))
           .width(20).height(20)
-          .rotate({ angle: 180 })
           .onClick(() => this.goToNextMonth())
       }
       .width('100%')
@@ -92,28 +98,33 @@ export struct MonthView {
       Grid() {
         ForEach(this.calendarData, (day: CalendarModel) => {
           GridItem() {
-            // 这里传参给子组件
             DayItemView({
               dayModel: day,
-              selectedTimestamp: this.selectedTimestamp
+              selectedTimestamp: this.selectedTimestamp,
+
+              //  [修改] 传递 stripType (如果 undefined 则传空串)
+              stripType: this.taskMap.get(`${day.year}-${day.month}-${day.day}`)?.stripType || '',
+
+              //  [修改] 传递 hasPoint (如果 undefined 则传 false)
+              hasPoint: this.taskMap.get(`${day.year}-${day.month}-${day.day}`)?.hasPoint || false
             })
           }
           .onClick(() => {
+            // 更新选中状态
             this.selectedTimestamp = day.timestamp;
-            // 这里可以触发一个外部回调，通知父组件筛选列表
-            console.info(`Selected date: ${day.year}-${day.month}-${day.day}`);
+            // 触发回调
+            this.onDateSelected(day.timestamp);
           })
         })
       }
       .columnsTemplate('1fr 1fr 1fr 1fr 1fr 1fr 1fr')
       .rowsTemplate('1fr 1fr 1fr 1fr 1fr 1fr') // 6行
       .rowsGap(8)
-      .height(340) // 固定高度
+      .height(300)
     }
     .width('100%')
     .padding(16)
     .backgroundColor(Color.White)
     .borderRadius(16)
-    .shadow({ radius: 4, color: '#10000000', offsetY: 2 })
   }
 }

@@ -38,7 +38,7 @@ export interface ExportResult {
   message: string;
 }
 
-// ✅ 新增：JSON 导出数据的结构定义 (解决 arkts-no-untyped-obj-literals)
+//  新增：JSON 导出数据的结构定义 (解决 arkts-no-untyped-obj-literals)
 interface ExportMeta {
   version: string;
   timestamp: number;
@@ -86,9 +86,9 @@ export class DataExportService {
 
     let resultData = '';
 
-    // ✅ 注意：请确保 EventModel.ets 已更新并包含 queryAll 方法
+    //  注意：请确保 EventModel.ets 已更新并包含 queryAll 方法
     const contacts = options.includeContacts ? await ContactModel.queryAll() : [];
-    // ✅ 修复：如果 EventModel 还没更新，这里会暂时报错，请继续操作第二步
+    //  修复：如果 EventModel 还没更新，这里会暂时报错，请继续操作第二步
     const events = options.includeEvents ? await EventModel.queryAll() : [];
 
     if (onProgress) onProgress(30, 'Fetching data from database...');
@@ -139,7 +139,7 @@ export class DataExportService {
   private static async generateJson(contacts: Contact[], events: Event[], encrypt: boolean): Promise<string> {
     DataExportService.logger.info('Generating JSON...');
 
-    // ✅ 修复：显式使用接口类型定义对象字面量
+    //  修复：显式使用接口类型定义对象字面量
     const meta: ExportMeta = {
       version: '2.0',
       timestamp: Date.now(),

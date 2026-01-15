@@ -21,6 +21,10 @@
     { "name": "toast_input_error", "value": "Please enter name and phone" },
 
     { "name": "contact_detail_title", "value": "Contact details" },
+    {
+      "name": "btn_edit",
+      "value": "Edit"
+    },
     { "name": "contact_detail_phone", "value": "Phone" },
     { "name": "contact_detail_email", "value": "Email" },
     { "name": "contact_detail_relation", "value": "Relation" },

@@ -12,6 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// src/main/ets/pages/EventEditPage.ets
 import promptAction from '@ohos.promptAction';
 import common from '@ohos.app.ability.common';
 import { Event, EventModel } from '../model/EventModel';
@@ -94,70 +95,77 @@ export struct EventEditPage {
     })
   }
 
+  // ✅ [核心修改] 逻辑重构：先存 DB 获取 ID，再发通知
   async saveEvent() {
+    // 1. 校验输入 & 取消旧提醒 (不变)
     if (this.title.trim() === '') {
       promptAction.showToast({ message: $r('app.string.toast_input_error') });
       return;
     }
-
-    // 1. 如果之前有旧提醒，先取消（防止重复或僵尸提醒）
     if (this.oldReminderId > -1) {
       await NotificationService.cancelReminder(this.oldReminderId);
     }
 
-    let newReminderId = -1;
-
-    // 2. 如果开启了新提醒
-    if (this.isReminderOn) {
-      const now = new Date().getTime();
-      if (this.startTime.getTime() > now) {
-        // 获取 Context 并检查权限
-        const context = getContext(this) as common.UIAbilityContext;
-        const hasPermission = await NotificationService.checkAndRequestPermission(context);
-
-        if (hasPermission) {
-          // ✅ 修改：传入 context
-          newReminderId = await NotificationService.publishCalendarReminder(
-            context,
-            this.title,
-            this.description || "您有一个日程待办",
-            this.startTime.getTime()
-          );
-        } else {
-          promptAction.showToast({ message: '通知权限被拒绝，将仅保存日程' });
-        }
-      } else {
-        promptAction.showToast({ message: '开始时间已过，无法设置提醒' });
-        // 继续保存日程，但不带提醒
-      }
-    }
-
-    // 3. 构建对象
+    // 2. 构建 Event 对象 (不变)
     const event = new Event(
       this.title,
       this.startTime.getTime(),
       this.endTime.getTime(),
       this.description,
       this.isAllDay,
-      newReminderId // 存入 ID
+      -1
     );
     event.id = this.eventId;
 
-    // 4. 存入数据库
-    let result = 0;
+    // 3. 【第一步】先存入数据库，确保拿到 ID (不变)
+    let finalEventId = this.eventId;
     if (this.eventId > 0) {
-      result = await EventModel.update(event);
+      await EventModel.update(event);
     } else {
-      result = await EventModel.insert(event);
+      finalEventId = await EventModel.insert(event);
+      event.id = finalEventId;
     }
 
-    if (result >= 0) {
-      promptAction.showToast({ message: $r('app.string.toast_save_success') });
-      // 通知列表刷新
-      AppStorage.setOrCreate('refreshEventList', Date.now());
-      // 返回上一页
-      this.pageStack.pop();
+    // 4. 【第二步】设置准点提醒
+    let newReminderId = -1;
+    if (this.isReminderOn) {
+
+      // ✅ [修改] 不再减去任何时间，直接用开始时间
+      const triggerTime = this.startTime.getTime();
+      const now = new Date().getTime();
+
+      // 只有开始时间是在未来，才设置提醒
+      if (triggerTime > now) {
+        const context = getContext(this) as common.UIAbilityContext;
+        const hasPermission = await NotificationService.checkAndRequestPermission(context);
+
+        if (hasPermission) {
+          // 发送请求给 ReminderAgent
+          newReminderId = await NotificationService.publishCalendarReminder(
+            context,
+            finalEventId,
+            this.title,
+            this.description || "日程时间到了", // 文案改为“时间到了”
+            triggerTime // 👈 传入准确的开始时间
+          );
+        } else {
+          promptAction.showToast({ message: '通知权限被拒绝' });
+        }
+      } else {
+        // 如果开始时间已过（比如现在10:01，你设了10:00开始的日程）
+        promptAction.showToast({ message: '开始时间已过，未设置提醒' });
+      }
     }
+
+    // 5. 【第三步】更新 reminderId (不变)
+    if (newReminderId > -1) {
+      event.reminderId = newReminderId;
+      await EventModel.update(event);
+    }
+
+    promptAction.showToast({ message: $r('app.string.toast_save_success') });
+    AppStorage.setOrCreate('refreshEventList', Date.now());
+    this.pageStack.pop();
   }
 
   build() {
