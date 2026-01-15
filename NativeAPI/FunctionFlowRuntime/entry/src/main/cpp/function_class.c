@@ -32,7 +32,7 @@ void BankBusinessVIP(void *arg)
     LOGI("saving or withdraw VIP");
 }
 
-int ProcessFfrtQueue() 
+int ProcessFfrtQueue()
 {
     // 串行调度
     ffrt_queue_t bank = create_bank_system("Bank", 2, 1);

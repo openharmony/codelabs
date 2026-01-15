@@ -15,7 +15,7 @@
 #include "bank_queue_system.h"
 #include "native_log_wrapper.h"
 
-BankQueueSystem::BankQueueSystem(int type, const char *name, int concurrency) 
+BankQueueSystem::BankQueueSystem(int type, const char *name, int concurrency)
 {
     if (type == 0) {
         queue_ = std::make_unique<ffrt::queue>(
@@ -42,11 +42,11 @@ ffrt::task_handle BankQueueSystem::Enter(const std::function<void()> &func, cons
 // 退出排队，即取消队列任务
 int BankQueueSystem::Exit(const ffrt::task_handle &t)
 {
-    return queue_->cancel(t); 
+    return queue_->cancel(t);
 }
 
 // 等待排队，即等待队列任务
-void BankQueueSystem::Wait(const ffrt::task_handle &handle) 
+void BankQueueSystem::Wait(const ffrt::task_handle &handle)
 {
-    queue_->wait(handle); 
+    queue_->wait(handle);
 }
