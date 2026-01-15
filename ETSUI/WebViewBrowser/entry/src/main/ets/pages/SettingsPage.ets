@@ -33,7 +33,7 @@ export struct SettingsPage {
   // 获取全局NavPathStack
   pathStack: NavPathStack = AppStorage.get('pathStack') as NavPathStack;
   // 基础设置
-  @State homeUrl: string = 'https://www.huawei.com';
+  @State homeUrl: string = 'http://www.huawei.com';
   @State darkMode: boolean = false;
   @State forceDarkMode: boolean = true;
   @State javaScriptEnabled: boolean = true;
@@ -317,9 +317,9 @@ export struct SettingsPage {
             .onClick(() => {
               if (this.tempHomeUrl.trim()) {
                 let url = this.tempHomeUrl.trim();
-                if (!url.startsWith('http://') && !url.startsWith('https://')) {
-                  url = 'https://' + url;
-                }
+                // if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                //   url = 'https://' + url;
+                // }
                 this.homeUrl = url;
                 this.saveSettings();
                 AppStorage.setOrCreate('homeUrl', url);
@@ -450,7 +450,7 @@ export struct SettingsPage {
       const context = this.getUIContext().getHostContext();
       const dataPreferences = preferences.getPreferencesSync(context, { name: 'browser_settings' });
 
-      this.homeUrl = dataPreferences.getSync('homeUrl', 'https://www.huawei.com') as string;
+      this.homeUrl = dataPreferences.getSync('homeUrl', 'http://www.huawei.com') as string;
       this.darkMode = dataPreferences.getSync('darkMode', false) as boolean;
       this.forceDarkMode = dataPreferences.getSync('forceDarkMode', true) as boolean;
       this.javaScriptEnabled = dataPreferences.getSync('javaScriptEnabled', true) as boolean;

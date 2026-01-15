@@ -370,6 +370,23 @@ struct Index {
                   console.error(`  请求URL: ${event.request.getRequestUrl()}`);
                 }
               })
+              .onSslErrorEventReceive((event) => {
+                // 处理SSL证书错误：忽略错误但标记为不安全连接
+                if (event && index === this.currentTabIndex) {
+                  console.warn(`SSL证书错误: ${event.error}`);
+
+                  // 继续加载但标记为不安全连接
+                  event.handler.handleConfirm();
+                  console.info('已忽略SSL证书错误，继续加载（不安全连接）');
+                  // 提示用户连接不安全
+                  promptAction.openToast({
+                    message: '⚠️ https失效，部分资源可能无法加载',
+                    duration: 2000
+                  }).catch((err: BusinessError) => {
+                    console.error('显示Toast失败:', err);
+                  });
+                }
+              })
           }, (tab: TabInfo) => tab.id.toString())
         }
         .width('100%')
@@ -908,7 +925,9 @@ struct Index {
   // 切换书签状态
   async toggleBookmark() {
     if (!this.currentUrl || this.currentUrl === 'about:blank') {
-      promptAction.showToast({ message: '无法收藏此页面' });
+      promptAction.openToast({ message: '无法收藏此页面' }).catch((err: BusinessError) => {
+        console.error('显示Toast失败:', err);
+      });
       return;
     }
 
@@ -916,7 +935,9 @@ struct Index {
       // 取消收藏
       await dataManager.deleteBookmarkByUrl(this.currentUrl);
       this.isCurrentPageBookmarked = false;
-      promptAction.showToast({ message: '已取消收藏' });
+      promptAction.openToast({ message: '已取消收藏' }).catch((err: BusinessError) => {
+        console.error('显示Toast失败:', err);
+      });
     } else {
       // 添加收藏
       const currentTab = this.tabs[this.currentTabIndex];
@@ -924,9 +945,13 @@ struct Index {
       const success = await dataManager.addBookmark(this.currentUrl, title);
       if (success) {
         this.isCurrentPageBookmarked = true;
-        promptAction.showToast({ message: '已添加到书签' });
+        promptAction.openToast({ message: '已添加到书签' }).catch((err: BusinessError) => {
+          console.error('显示Toast失败:', err);
+        });
       } else {
-        promptAction.showToast({ message: '添加书签失败' });
+        promptAction.openToast({ message: '添加书签失败' }).catch((err: BusinessError) => {
+          console.error('显示Toast失败:', err);
+        });
       }
     }
   }

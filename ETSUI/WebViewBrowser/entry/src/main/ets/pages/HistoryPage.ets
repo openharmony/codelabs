@@ -15,7 +15,7 @@
 
 import { promptAction } from '@kit.ArkUI';
 import { dataManager, HistoryItem } from '../manager/DataManager';
-
+import { BusinessError } from '@kit.BasicServicesKit';
 // Builder函数，用于Navigation路由
 @Builder
 export function HistoryPageBuilder() {
@@ -543,7 +543,9 @@ export struct HistoryPage {
   async deleteHistoryItem(id: number) {
     await dataManager.deleteHistory(id);
     this.loadHistory();
-    promptAction.showToast({ message: '已删除' });
+    promptAction.openToast({ message: '已删除' }).catch((err: BusinessError) => {
+      console.error('显示Toast失败:', err);
+    });
   }
 
   // 删除选中项
@@ -562,7 +564,9 @@ export struct HistoryPage {
           await dataManager.deleteHistoryBatch(Array.from(this.selectedItems));
           this.selectedItems.clear();
           this.loadHistory();
-          promptAction.showToast({ message: '删除成功' });
+          promptAction.openToast({ message: '删除成功' }).catch((err: BusinessError) => {
+            console.error('显示Toast失败:', err);
+          });
         }
       },
       secondaryButton: {
@@ -592,7 +596,9 @@ export struct HistoryPage {
         action: async () => {
           await dataManager.clearAllHistory();
           this.loadHistory();
-          promptAction.showToast({ message: '历史记录已清空' });
+          promptAction.openToast({ message: '历史记录已清空' }).catch((err: BusinessError) => {
+            console.error('显示Toast失败:', err);
+          });
         }
       },
       secondaryButton: {
