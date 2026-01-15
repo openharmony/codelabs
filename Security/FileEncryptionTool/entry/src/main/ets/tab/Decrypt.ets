@@ -26,7 +26,6 @@ import { MetadataHelper, MetadataParseResult } from '../util/MetadataHelper';
 
 const TAG: string = '[Crypto_Framework]';
 
-
 interface BinaryDecryptResult {
   success: boolean;
   data?: ArrayBuffer;
