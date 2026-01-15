@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Beijing Institude of Technology.All Rights Reserved.
+ * Copyright (c) 2025 Huawei Device Co., Ltd.All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -40,10 +40,18 @@ int ProcessFfrtQueue()
         LOGE("create bank system failed");
         return -1;
     }
-
+    
+    CRequest request1;
+    request1.name = "customer1";
+    request1.arg = NULL;
+    
+    CRequest request2;
+    request2.name = "customer2";
+    request2.arg = NULL;
+    
     // VIP享受更优先的服务
-    ffrt_task_handle_t task1 = commitRequest(bank, BankBusiness, "customer1", NULL, ffrt_queue_priority_low, 0);
-    ffrt_task_handle_t task2 = commitRequest(bank, BankBusinessVIP, "customer2", NULL, ffrt_queue_priority_low, 0);
+    ffrt_task_handle_t task1 = commitRequest(bank, BankBusiness, request1, ffrt_queue_priority_low, 0);
+    ffrt_task_handle_t task2 = commitRequest(bank, BankBusinessVIP, request2, ffrt_queue_priority_low, 0);
 
     // 等待所有的客户服务完成
     waitForRequest(task1);

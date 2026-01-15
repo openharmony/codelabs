@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Beijing Institude of Technology.All Rights Reserved.
+ * Copyright (c) 2025 Huawei Device Co., Ltd.All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -30,7 +30,10 @@ public:
     ~BankQueueSystem();
 
     // 开始排队，即提交队列任务
-    ffrt::task_handle Enter(const std::function<void()>& func, const char *name, ffrt_queue_priority_t level, int delay);
+    ffrt::task_handle Enter(const std::function<void()>& func,
+                            const char *name,
+                            ffrt_queue_priority_t level,
+                            int delay);
 
     // 退出排队，即取消队列任务
     int Exit(const ffrt::task_handle &t);

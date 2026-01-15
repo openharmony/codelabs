@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Beijing Institude of Technology.All Rights Reserved.
+ * Copyright (c) 2025 Huawei Device Co., Ltd.All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -78,16 +78,16 @@ void destroy_bank_system(ffrt_queue_t queue_handle)
 }
 
 // 封装提交队列任务函数
-ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), const char *name, void *arg,
+ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
     ffrt_queue_priority_t level, int delay)
 {
     ffrt_task_attr_t task_attr;
     (void)ffrt_task_attr_init(&task_attr);
-    ffrt_task_attr_set_name(&task_attr, name);
+    ffrt_task_attr_set_name(&task_attr, request.name);
     ffrt_task_attr_set_queue_priority(&task_attr, level);
     ffrt_task_attr_set_delay(&task_attr, delay);
 
-    return ffrt_queue_submit_h(bank, ffrt_create_function_wrapper(func, NULL, arg), &task_attr);
+    return ffrt_queue_submit_h(bank, ffrt_create_function_wrapper(func, NULL, request.arg), &task_attr);
 }
 
 // 封装等待队列任务函数
