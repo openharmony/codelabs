@@ -16,6 +16,7 @@
 import { promptAction } from '@kit.ArkUI';
 import { dataManager, HistoryItem } from '../manager/DataManager';
 import { BusinessError } from '@kit.BasicServicesKit';
+
 // Builder函数，用于Navigation路由
 @Builder
 export function HistoryPageBuilder() {
