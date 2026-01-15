@@ -24,20 +24,21 @@
 #define TYPE_CONCURRENT  0
 #define TYPE_SERIAL 1
 #define TWO  2
-FunctionClass::FunctionClass(uint32_t version) 
+FunctionClass::FunctionClass(uint32_t version)
 {
-    LOGI("FunctionClass::FunctionClass %d", version );
+    LOGI("FunctionClass::FunctionClass %d", version);
 }
 
-FunctionClass::~FunctionClass() 
+FunctionClass::~FunctionClass()
 {
     LOGI("FunctionClass::~FunctionClass");
 }
 
 class Test {
 public:
-    int Add(int a, int b) {
-        return a + b; 
+    int Add(int a, int b)
+    {
+        return a + b;
     }
 };
 

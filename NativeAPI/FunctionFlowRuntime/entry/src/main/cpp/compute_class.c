@@ -30,21 +30,21 @@ struct ParaStruct {
 struct ParaStruct g_para1;
 struct ParaStruct g_para2;
 
-void Add(void *arg) 
+void Add(void *arg)
 {
     struct ParaStruct *para1 = (struct ParaStruct *)arg;
     int a = para1->a;
     int b = para1->b;
 }
 
-void Sub(void *arg) 
+void Sub(void *arg)
 {
     struct ParaStruct *para2 = (struct ParaStruct *)arg;
     int a = para2->a;
     int b = para2->b;
 }
 
-int ComputeFfrtQueue() 
+int ComputeFfrtQueue()
 {
     // 并行调度
     ffrt_queue_t bank = create_bank_system("Bank", 2, 0);
@@ -69,7 +69,7 @@ int ComputeFfrtQueue()
     
     // VIP享受更优先的服务
     ffrt_task_handle_t task1 = commitRequest(bank, Add, request1, ffrt_queue_priority_low, 0);
-    ffrt_task_handle_t task2 = commitRequest(bank, Sub, request2,ffrt_queue_priority_low, 0);
+    ffrt_task_handle_t task2 = commitRequest(bank, Sub, request2, ffrt_queue_priority_low, 0);
 
     // 等待所有的客户服务完成
     waitForRequest(task1);

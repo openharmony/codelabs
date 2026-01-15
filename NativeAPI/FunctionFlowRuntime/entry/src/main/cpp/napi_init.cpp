@@ -19,11 +19,11 @@
 
 int Add(int a, int b) 
 {
-    return a + b; 
+    return a + b;
 }
 
 // Step 2 注册 FFI 特性
-JSBIND_GLOBAL() 
+JSBIND_GLOBAL()
 {
     JSBIND_FUNCTION(Add);
     JSBIND_FUNCTION(ProcessFfrtQueue);
