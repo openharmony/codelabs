@@ -36,7 +36,7 @@ struct Index {
             let fun = new FunctionClass(5);
             let ret1 = fun.FfrtSerialQueue();
             let ret2 = fun.FfrtConcurrentQueue();
-            let ret3 = libaki.add(3, 5);
+            let ret3 = libaki.Add(3, 5);
             let ret4 = libaki.ProcessFfrtQueue();
             let ret5 = libaki.ComputeFfrtQueue();
 

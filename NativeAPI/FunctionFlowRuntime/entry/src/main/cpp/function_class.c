@@ -17,16 +17,18 @@
 #include "native_log_wrapper.h"
 #include <string.h>
 #include <unistd.h>
-#define  RET_SUCCESS_4 = 4;
+#define  RET_SUCCESS_4  4
+#define SLEEP_DURATION_MS 100
+#define THOUSAND 1000
 void BankBusiness(void *arg)
 {
-    usleep(100 * 1000);
+    usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
 }
 
 void BankBusinessVIP(void *arg)
 {
-    usleep(100 * 1000);
+    usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
 }
 

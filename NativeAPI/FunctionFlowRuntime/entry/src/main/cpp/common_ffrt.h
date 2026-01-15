@@ -18,11 +18,11 @@
 #include "ffrt/ffrt.h"
 
 typedef struct {
-    FfrtFunctionHeader header;
-    FfrtFunction func;
-    FfrtFunction afterFunc;
+    ffrt_function_header_t header;
+    ffrt_function_t func;
+    ffrt_function_t afterFunc;
     void* arg;
-} c_function_t;
+} CFunction;
 
 // 封装提交队列任务函数
 ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), const char *name, void *arg,
