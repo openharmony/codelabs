@@ -34,7 +34,7 @@ BankQueueSystem::~BankQueueSystem()
 }
 
 // 开始排队，即提交队列任务
-ffrt::task_handle BankQueueSystem::Enter(const std::function<void()> &func, const char *name, 
+ffrt::task_handle BankQueueSystem::Enter(const std::function<void()> &func, const char *name,
                                          ffrt_queue_priority_t level, int delay)
 {
     return queue_->submit_h(func, ffrt::task_attr().name(name).priority(level).delay(delay));
