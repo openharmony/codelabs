@@ -15,34 +15,33 @@
 #include "common_ffrt.h"
 #include "native_log_wrapper.h"
 
-static inline void ffrt_exec_function_wrapper(void* t)
+static inline void FfrtExecFunctionWrapper(void* t)
 {
-    c_function_t* f = (c_function_t *)t;
+    CFunction* f = (CFunction *)t;
     if (f->func) {
         f->func(f->arg);
     }
 }
 
-static inline void ffrt_destroy_function_wrapper(void* t)
+static inline void FfrtDestroyFunctionWrapper(void* t)
 {
-    c_function_t* f = (c_function_t *)t;
-    if (f->after_func) {
-        f->after_func(f->arg);
+    CFunction* f = (CFunction*)t;
+    if (f->afterFunc) {
+        f->afterFunc(f->arg);
     }
 }
-
 #define FFRT_STATIC_ASSERT(cond, msg) int x(int static_assertion_##msg[(cond) ? 1 : -1])
 static inline ffrt_function_header_t *ffrt_create_function_wrapper(const ffrt_function_t func,
     const ffrt_function_t after_func, void *arg)
 {
-    FFRT_STATIC_ASSERT(sizeof(c_function_t) <= ffrt_auto_managed_function_storage_size,
+    FFRT_STATIC_ASSERT(sizeof(CFunction) <= ffrt_auto_managed_function_storage_size,
         size_of_function_must_be_less_than_ffrt_auto_managed_function_storage_size);
 
-    c_function_t* f = (c_function_t *)ffrt_alloc_auto_managed_function_storage_base(ffrt_function_kind_queue);
-    f->header.exec = ffrt_exec_function_wrapper;
-    f->header.destroy = ffrt_destroy_function_wrapper;
+    CFunction* f = (CFunction *)ffrt_alloc_auto_managed_function_storage_base(ffrt_function_kind_queue);
+    f->header.exec = FfrtExecFunctionWrapper;
+    f->header.destroy = FfrtDestroyFunctionWrapper;
     f->func = func;
-    f->after_func = after_func;
+    f->afterFunc = after_func;
     f->arg = arg;
     return (ffrt_function_header_t *)f;
 }

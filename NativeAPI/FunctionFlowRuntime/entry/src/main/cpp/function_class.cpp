@@ -18,6 +18,12 @@
 #include <string>
 #include <unistd.h>
 #define SLEEP_DURATION_MS 100
+#define THOUSAND 1000
+#define RET_SUCCESS_1  1
+#define RET_SUCCESS_2  2
+#define TYPE_CONCURRENT  0
+#define TYPE_SERIAL 1
+#define TWO  2
 FunctionClass::FunctionClass(uint32_t version) 
 {
     LOGI("FunctionClass::~FunctionClass %d",version);
@@ -30,20 +36,20 @@ FunctionClass::~FunctionClass()
 
 class Test {
 public:
-    int add(int a, int b) {
+    int Add(int a, int b) {
         return a + b; 
     }
 };
 
 void BankBusiness()
 {
-    usleep(SLEEP_DURATION_MS * 1000);
+    usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
 }
 
 void BankBusinessVIP()
 {
-    usleep(SLEEP_DURATION_MS * 1000);
+    usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
 }
 
@@ -51,7 +57,7 @@ int FunctionClass::FfrtSerialQueue()
 {
     // type传1，代表串行调度
     LOGI("FfrtQueue start ");
-    BankQueueSystem bankQueue(1, "Bank", 2);
+    BankQueueSystem bankQueue(TYPE_SERIAL, "Bank", TWO);
 
     auto task1 = bankQueue.Enter(BankBusiness, "customer1", ffrt_queue_priority_low, 0);
     auto task2 = bankQueue.Enter(BankBusiness, "customer2", ffrt_queue_priority_low, 0);
@@ -66,13 +72,13 @@ int FunctionClass::FfrtSerialQueue()
     // 等待所有的客户服务完成
     bankQueue.Wait(task5);
     LOGI("FfrtQueue results ");
-    return 1;
+    return RET_SUCCESS_1;
 }
 
 int FunctionClass::FfrtConcurrentQueue()
 {
     // type传0，代表并发调度
-    BankQueueSystem bankQueue(0, "Bank", 2);
+    BankQueueSystem bankQueue(TYPE_CONCURRENT, "Bank", TWO);
 
     auto task1 = bankQueue.Enter(BankBusiness, "customer1", ffrt_queue_priority_low, 0);
     // VIP享受更优先的服务
@@ -84,5 +90,5 @@ int FunctionClass::FfrtConcurrentQueue()
     // 等待所有的客户服务完成
     bankQueue.Wait(task2);
     LOGI("FfrtQueue results ");
-    return 2;
+    return RET_SUCCESS_2;
 }

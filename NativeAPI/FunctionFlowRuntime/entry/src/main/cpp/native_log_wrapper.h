@@ -25,10 +25,10 @@ inline const char *GetRawFileName(const char *path)
 {
     char ch = '/';
     const char *start = path;
-    // get the end of the string
-    while (*start++) {;}
-    while (--start != path && *start != ch) {;}
-    return (*start == ch) ? ++start : path;
+    // get end of the string
+    while (*start) { start++; }
+    while (start > path && *start != ch) { start--; }
+    return (*start == ch) ?start : path;
 }
     
 #define PRINT_OHOS_HILOG(op, fmt, ...)                                                          \

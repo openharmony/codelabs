@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 const NativeMock: Record<string, Object> = {
-  'add': (a: number, b: number) => {
+  'Add': (a: number, b: number) => {
     return a + b;
   },
 };

@@ -17,10 +17,10 @@
 #include "native_log_wrapper.h"
 #include <string.h>
 #include <unistd.h>
-#define ONE = 1
-#define TWO = 2
-#define THREE = 3
-#define FIVE = 5
+#define ONE  1
+#define TWO  2
+#define THREE  3
+#define FIVE  5
 
 struct ParaStruct {
     int a;
