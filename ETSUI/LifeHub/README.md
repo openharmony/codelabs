@@ -73,7 +73,7 @@ LifeHub 是一个综合性的个人生活管理应用，融合了健康记录、
 ### 数据层
 
 - **统一数据管理**：`LifeHubData` 类管理所有模块数据
-- **关系型数据库**：使用 HarmonyOS RDB 存储
+- **关系型数据库**：使用 HarmonyOS 关系型数据库存储
 - **数据关联**：支持跨模块数据关联
 
 ### 视图层
@@ -90,40 +90,11 @@ LifeHub 是一个综合性的个人生活管理应用，融合了健康记录、
 
 ---
 
-## 项目结构
-
-LifeHub/
-├── entry/src/main/ets/
-│ ├── model/
-│ │ └── LifeHubData.ets # 统一数据管理类
-│ ├── pages/
-│ │ ├── Index.ets # 主页面（底部导航）
-│ │ ├── Dashboard.ets # 仪表盘
-│ │ ├── health/ # 健康模块
-│ │ ├── travel/ # 旅行模块
-│ │ ├── goals/ # 目标模块
-│ │ ├── mood/ # 心情模块
-│ │ ├── learning/ # 学习模块
-│ │ ├── diary/ # 日记模块
-│ │ ├── statistics/ # 统计模块
-│ │ ├── achievements/ # 成就系统
-│ │ ├── report/ # 生活报告
-│ │ ├── reminder/ # 提醒模块
-│ │ ├── filter/ # 数据筛选
-│ │ └── help/ # 帮助中心
-│ └── entryability/
-│ └── EntryAbility.ets # 应用入口
-
-yaml
-复制代码
-
----
-
 ## 开发环境
 
 - **DevEco Studio**：5.0.5+
-- **HarmonyOS SDK**：API version 13+
-- **目标系统**：HarmonyOS 5.0.1 Release+
+- **HarmonyOS SDK**：版本13及以上
+- **目标系统**：HarmonyOS 5.0.1
 
 ---
 
@@ -132,7 +103,7 @@ yaml
 ### 快速开始
 
 1. 在 DevEco Studio 中打开项目  
-2. 配置 HarmonyOS SDK  
+2. 配置 HarmonyOS开发环境 
 3. 连接设备或模拟器  
 4. 运行应用  
 
@@ -224,7 +195,7 @@ yaml
 
 - **开发语言**：ArkTS  
 - **UI框架**：ETSUI  
-- **数据库**：HarmonyOS RDB  
+- **数据存储**：HarmonyOS RDB  
 - **状态管理**：@State  
 - **路由导航**：@kit.ArkUI  
 
