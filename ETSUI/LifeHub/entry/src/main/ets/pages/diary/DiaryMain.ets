@@ -7,7 +7,7 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct DiaryMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
+
   @State diaries: Diary[] = [];
   @State isLoading: boolean = true;
 
@@ -36,9 +36,9 @@ export struct DiaryMain {
         Text('我的日记')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)
@@ -80,7 +80,7 @@ export struct DiaryMain {
                   Text(diary.mood || '📝')
                     .fontSize(24)
                     .width(40)
-                  
+
                   Column() {
                     Text(diary.title || diary.date)
                       .fontSize(18)
