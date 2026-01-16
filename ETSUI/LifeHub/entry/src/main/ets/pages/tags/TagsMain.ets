@@ -26,7 +26,7 @@ export struct TagsMain {
   @State showAddDialog: boolean = false;
   @State newTagName: string = '';
   @State newTagColor: string = '#007DFF';
-  @State newTagCategory: string = 'all';
+  @State newTagCategory: 'all' | 'health' | 'goal' | 'mood' | 'learning' | 'diary' = 'all';
 
   private colors: ColorOption[] = [
     { value: '#007DFF' }, { value: '#4CAF50' }, { value: '#FF9800' }, { value: '#E91E63' }, 
@@ -211,6 +211,141 @@ export struct TagsMain {
     .width('100%')
     .height('100%')
     .backgroundColor('#f5f5f5')
+    .bindDialog(this.showAddDialog, this.buildAddTagDialog(), {
+      alignment: DialogAlignment.Bottom,
+      offset: { x: 0, y: -20 },
+      customStyle: true
+    })
+  }
+
+  @Builder
+  buildAddTagDialog() {
+    Column() {
+      Text('添加标签')
+        .fontSize(20)
+        .fontWeight(FontWeight.Bold)
+        .width('100%')
+        .textAlign(TextAlign.Center)
+        .margin({ bottom: 20 })
+
+      Text('标签名称')
+        .fontSize(16)
+        .fontWeight(FontWeight.Medium)
+        .width('100%')
+        .textAlign(TextAlign.Start)
+        .margin({ bottom: 10 })
+
+      TextInput({ placeholder: '输入标签名称', text: this.newTagName })
+        .width('100%')
+        .height(50)
+        .fontSize(16)
+        .padding({ left: 15, right: 15 })
+        .backgroundColor('#f8f8f8')
+        .borderRadius(8)
+        .onChange((value: string) => {
+          this.newTagName = value;
+        })
+        .margin({ bottom: 20 })
+
+      Text('标签颜色')
+        .fontSize(16)
+        .fontWeight(FontWeight.Medium)
+        .width('100%')
+        .textAlign(TextAlign.Start)
+        .margin({ bottom: 10 })
+
+      Row() {
+        ForEach(this.colors, (color: ColorOption) => {
+          Column() {
+            Blank()
+          }
+          .width(40)
+          .height(40)
+          .borderRadius(20)
+          .backgroundColor(color.value)
+          .border({
+            width: this.newTagColor === color.value ? 3 : 0,
+            color: '#333'
+          })
+          .onClick(() => {
+            this.newTagColor = color.value;
+          })
+        })
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.SpaceAround)
+      .margin({ bottom: 20 })
+
+      Text('标签分类')
+        .fontSize(16)
+        .fontWeight(FontWeight.Medium)
+        .width('100%')
+        .textAlign(TextAlign.Start)
+        .margin({ bottom: 10 })
+
+      Select(this.categories.map(c => c.label))
+        .width('100%')
+        .height(50)
+        .fontSize(16)
+        .selected(this.categories.findIndex(c => c.value === this.newTagCategory))
+        .onSelect((index: number) => {
+          this.newTagCategory = this.categories[index].value;
+        })
+        .margin({ bottom: 30 })
+
+      Row() {
+        Button('取消')
+          .layoutWeight(1)
+          .height(50)
+          .fontSize(16)
+          .backgroundColor('#f0f0f0')
+          .fontColor('#333')
+          .onClick(() => {
+            this.showAddDialog = false;
+            this.newTagName = '';
+            this.newTagColor = '#007DFF';
+            this.newTagCategory = 'all';
+          })
+
+        Button('添加')
+          .layoutWeight(1)
+          .height(50)
+          .fontSize(16)
+          .backgroundColor('#007DFF')
+          .fontColor(Color.White)
+          .margin({ left: 15 })
+          .enabled(!!this.newTagName)
+          .onClick(() => {
+            this.addTag();
+          })
+      }
+      .width('100%')
+    }
+    .width('100%')
+    .padding(20)
+    .backgroundColor(Color.White)
+    .borderRadius({ topLeft: 20, topRight: 20 })
+  }
+
+  async addTag() {
+    if (!this.newTagName) return;
+
+    try {
+      const tag: Tag = {
+        name: this.newTagName,
+        color: this.newTagColor,
+        category: this.newTagCategory,
+        createTime: Date.now()
+      };
+      await this.lifeHubData.addTag(tag);
+      this.showAddDialog = false;
+      this.newTagName = '';
+      this.newTagColor = '#007DFF';
+      this.newTagCategory = 'all';
+      await this.loadTags();
+    } catch (error) {
+      console.error('TagsMain: 添加标签失败:', error);
+    }
   }
 
   @Builder

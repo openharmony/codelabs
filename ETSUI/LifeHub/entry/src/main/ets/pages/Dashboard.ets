@@ -23,7 +23,7 @@ export struct Dashboard {
       // 延迟加载，确保数据库初始化完成
       setTimeout(() => {
         this.loadDashboardData();
-      }, 200);
+      }, 500);
     } else {
       this.loadDashboardData();
     }
@@ -33,7 +33,7 @@ export struct Dashboard {
     this.isLoading = true;
     try {
       // 等待一下确保数据库初始化完成
-      await new Promise<void>((resolve: () => void) => setTimeout(resolve, 100));
+      await new Promise<void>((resolve: () => void) => setTimeout(resolve, 300));
       const stats: DashboardStats = await this.lifeHubData.getDashboardStats();
       console.log('Dashboard: 统计数据:', JSON.stringify(stats));
       this.healthRecordsToday = stats.healthRecordsToday;

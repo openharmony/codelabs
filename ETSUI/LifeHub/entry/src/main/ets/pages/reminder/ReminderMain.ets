@@ -11,17 +11,6 @@ export struct ReminderMain {
   
   @State reminders: Reminder[] = [];
   @State isLoading: boolean = true;
-  @State showAddDialog: boolean = false;
-  @State newReminder: Reminder = {
-    title: '',
-    description: '',
-    type: 'health',
-    time: '09:00',
-    days: '1,2,3,4,5',
-    enabled: true,
-    createTime: Date.now(),
-    updateTime: Date.now()
-  };
 
   aboutToAppear() {
     const context = getContext(this);
@@ -62,7 +51,7 @@ export struct ReminderMain {
           .backgroundColor('#007DFF')
           .fontColor(Color.White)
           .onClick(() => {
-            this.showAddDialog = true;
+            router.pushUrl({ url: 'pages/reminder/ReminderEdit' });
           })
       }
       .width('100%')

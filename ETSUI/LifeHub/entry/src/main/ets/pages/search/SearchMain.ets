@@ -42,9 +42,12 @@ export struct SearchMain {
           .onChange((value: string) => {
             this.searchText = value;
             if (value.length > 0) {
-              this.performSearch(value);
+              setTimeout(() => {
+                this.performSearch(value);
+              }, 300);
             } else {
               this.searchResults = [];
+              this.isSearching = false;
             }
           })
 
