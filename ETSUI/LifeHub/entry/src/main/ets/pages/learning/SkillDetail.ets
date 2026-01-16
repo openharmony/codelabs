@@ -1,19 +1,19 @@
 /**
- * 目标详情/创建页面
+ * 技能详情/创建页面
  */
-import { LifeHubData, Goal } from '../../model/LifeHubData';
+import { LifeHubData, Skill } from '../../model/LifeHubData';
 import { router } from '@kit.ArkUI';
 
 @Entry
 @Component
-export struct GoalDetail {
+export struct SkillDetail {
   private lifeHubData: LifeHubData = new LifeHubData();
   
-  @State title: string = '';
+  @State name: string = '';
+  @State category: string = '技能';
+  @State level: number = 1;
+  @State targetLevel: number = 5;
   @State description: string = '';
-  @State category: string = '生活';
-  @State priority: 'high' | 'medium' | 'low' = 'medium';
-  @State progress: number = 0;
   @State isSaving: boolean = false;
 
   aboutToAppear() {
@@ -34,7 +34,7 @@ export struct GoalDetail {
             router.back();
           })
 
-        Text('创建目标')
+        Text('添加技能')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .textAlign(TextAlign.Center)
@@ -43,10 +43,10 @@ export struct GoalDetail {
         Button('保存')
           .fontSize(16)
           .backgroundColor(Color.Transparent)
-          .fontColor(this.title ? '#007DFF' : '#999')
-          .enabled(!!this.title && !this.isSaving)
+          .fontColor(this.name ? '#007DFF' : '#999')
+          .enabled(!!this.name && !this.isSaving)
           .onClick(() => {
-            this.saveGoal();
+            this.saveSkill();
           })
       }
       .width('100%')
@@ -55,7 +55,7 @@ export struct GoalDetail {
 
       Scroll() {
         Column() {
-          TextInput({ placeholder: '目标标题', text: this.title })
+          TextInput({ placeholder: '技能名称', text: this.name })
             .width('100%')
             .height(50)
             .fontSize(18)
@@ -63,11 +63,11 @@ export struct GoalDetail {
             .backgroundColor('#f8f8f8')
             .borderRadius(8)
             .onChange((value: string) => {
-              this.title = value;
+              this.name = value;
             })
             .margin({ top: 20, left: 15, right: 15 })
 
-          TextArea({ placeholder: '目标描述（可选）', text: this.description })
+          TextArea({ placeholder: '技能描述（可选）', text: this.description })
             .width('100%')
             .height(100)
             .padding(15)
@@ -86,26 +86,25 @@ export struct GoalDetail {
     .backgroundColor('#f5f5f5')
   }
 
-  async saveGoal() {
-    if (!this.title) return;
+  async saveSkill() {
+    if (!this.name) return;
 
     this.isSaving = true;
     try {
-      const goal: Goal = {
-        title: this.title,
-        description: this.description,
+      const skill: Skill = {
+        name: this.name,
         category: this.category,
-        priority: this.priority,
-        progress: this.progress,
-        status: 'not_started',
+        level: this.level,
+        targetLevel: this.targetLevel,
+        description: this.description,
         createTime: Date.now(),
         updateTime: Date.now()
       };
 
-      await this.lifeHubData.addGoal(goal);
+      await this.lifeHubData.addSkill(skill);
       router.back();
     } catch (error) {
-      console.error('GoalDetail: 保存失败:', error);
+      console.error('SkillDetail: 保存失败:', error);
     } finally {
       this.isSaving = false;
     }

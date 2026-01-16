@@ -1,14 +1,14 @@
 /**
- * 日记模块主页面
+ * 心情模块主页面
  */
-import { LifeHubData, Diary } from '../../model/LifeHubData';
+import { LifeHubData, MoodRecord } from '../../model/LifeHubData';
 import { router } from '@kit.ArkUI';
 
 @Component
-export struct DiaryMain {
+export struct MoodMain {
   private lifeHubData: LifeHubData = new LifeHubData();
   
-  @State diaries: Diary[] = [];
+  @State moodRecords: MoodRecord[] = [];
   @State isLoading: boolean = true;
 
   aboutToAppear() {
@@ -16,15 +16,15 @@ export struct DiaryMain {
     if (context) {
       this.lifeHubData.setContext(context);
     }
-    this.loadDiaries();
+    this.loadMoodRecords();
   }
 
-  async loadDiaries() {
+  async loadMoodRecords() {
     this.isLoading = true;
     try {
-      this.diaries = await this.lifeHubData.getAllDiaries();
+      this.moodRecords = await this.lifeHubData.getMoodRecords(30);
     } catch (error) {
-      console.error('DiaryMain: 加载数据失败:', error);
+      console.error('MoodMain: 加载数据失败:', error);
     } finally {
       this.isLoading = false;
     }
@@ -33,7 +33,7 @@ export struct DiaryMain {
   build() {
     Column() {
       Row() {
-        Text('我的日记')
+        Text('心情记录')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
         
@@ -44,10 +44,10 @@ export struct DiaryMain {
           .width(40)
           .height(40)
           .borderRadius(20)
-          .backgroundColor('#00BCD4')
+          .backgroundColor('#E91E63')
           .fontColor(Color.White)
           .onClick(() => {
-            router.pushUrl({ url: 'pages/diary/DiaryEdit' });
+            router.pushUrl({ url: 'pages/mood/MoodRecord' });
           })
       }
       .width('100%')
@@ -59,12 +59,12 @@ export struct DiaryMain {
           .width(50)
           .height(50)
           .margin({ top: 100 })
-      } else if (this.diaries.length === 0) {
+      } else if (this.moodRecords.length === 0) {
         Column() {
-          Text('📝')
+          Text('😊')
             .fontSize(60)
             .margin({ bottom: 20 })
-          Text('还没有日记')
+          Text('还没有心情记录')
             .fontSize(18)
             .fontColor('#666')
         }
@@ -73,22 +73,22 @@ export struct DiaryMain {
         .justifyContent(FlexAlign.Center)
       } else {
         List() {
-          ForEach(this.diaries, (diary: Diary) => {
+          ForEach(this.moodRecords, (record: MoodRecord) => {
             ListItem() {
-              Column() {
-                Row() {
-                  Text(diary.mood || '📝')
-                    .fontSize(24)
-                    .width(40)
-                  
-                  Column() {
-                    Text(diary.title || diary.date)
-                      .fontSize(18)
-                      .fontWeight(FontWeight.Medium)
-                      .textAlign(TextAlign.Start)
-                      .width('100%')
+              Row() {
+                Text(record.mood)
+                  .fontSize(40)
+                  .width(60)
 
-                    Text(diary.content)
+                Column() {
+                  Text(record.date)
+                    .fontSize(16)
+                    .fontWeight(FontWeight.Medium)
+                    .textAlign(TextAlign.Start)
+                    .width('100%')
+
+                  if (record.note) {
+                    Text(record.note)
                       .fontSize(14)
                       .fontColor('#666')
                       .textAlign(TextAlign.Start)
@@ -96,34 +96,23 @@ export struct DiaryMain {
                       .margin({ top: 5 })
                       .maxLines(2)
                       .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-                    Text(diary.date)
-                      .fontSize(12)
-                      .fontColor('#999')
-                      .textAlign(TextAlign.Start)
-                      .width('100%')
-                      .margin({ top: 5 })
                   }
-                  .layoutWeight(1)
-                  .alignItems(HorizontalAlign.Start)
-                  .padding({ left: 15 })
                 }
-                .width('100%')
+                .layoutWeight(1)
+                .alignItems(HorizontalAlign.Start)
+                .padding({ left: 15 })
+
+                Text(`评分: ${record.score}`)
+                  .fontSize(14)
+                  .fontColor('#E91E63')
               }
               .width('100%')
               .padding(15)
-              .alignItems(HorizontalAlign.Start)
               .backgroundColor(Color.White)
               .borderRadius(10)
               .margin({ left: 15, right: 15, bottom: 10 })
-              .onClick(() => {
-                router.pushUrl({
-                  url: 'pages/diary/DiaryEdit',
-                  params: { diaryId: diary.id }
-                });
-              })
             }
-          }, (diary: Diary) => diary.id?.toString() || '')
+          }, (record: MoodRecord) => record.id?.toString() || '')
         }
         .width('100%')
         .layoutWeight(1)

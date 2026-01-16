@@ -1,14 +1,14 @@
 /**
- * 目标模块主页面
+ * 学习模块主页面
  */
-import { LifeHubData, Goal } from '../../model/LifeHubData';
+import { LifeHubData, Skill } from '../../model/LifeHubData';
 import { router } from '@kit.ArkUI';
 
 @Component
-export struct GoalsMain {
+export struct LearningMain {
   private lifeHubData: LifeHubData = new LifeHubData();
   
-  @State goals: Goal[] = [];
+  @State skills: Skill[] = [];
   @State isLoading: boolean = true;
 
   aboutToAppear() {
@@ -16,15 +16,15 @@ export struct GoalsMain {
     if (context) {
       this.lifeHubData.setContext(context);
     }
-    this.loadGoals();
+    this.loadSkills();
   }
 
-  async loadGoals() {
+  async loadSkills() {
     this.isLoading = true;
     try {
-      this.goals = await this.lifeHubData.getAllGoals();
+      this.skills = await this.lifeHubData.getAllSkills();
     } catch (error) {
-      console.error('GoalsMain: 加载数据失败:', error);
+      console.error('LearningMain: 加载数据失败:', error);
     } finally {
       this.isLoading = false;
     }
@@ -33,7 +33,7 @@ export struct GoalsMain {
   build() {
     Column() {
       Row() {
-        Text('我的目标')
+        Text('技能学习')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
         
@@ -44,10 +44,10 @@ export struct GoalsMain {
           .width(40)
           .height(40)
           .borderRadius(20)
-          .backgroundColor('#FF9800')
+          .backgroundColor('#9C27B0')
           .fontColor(Color.White)
           .onClick(() => {
-            router.pushUrl({ url: 'pages/goals/GoalDetail' });
+            router.pushUrl({ url: 'pages/learning/SkillDetail' });
           })
       }
       .width('100%')
@@ -59,12 +59,12 @@ export struct GoalsMain {
           .width(50)
           .height(50)
           .margin({ top: 100 })
-      } else if (this.goals.length === 0) {
+      } else if (this.skills.length === 0) {
         Column() {
-          Text('🎯')
+          Text('📚')
             .fontSize(60)
             .margin({ bottom: 20 })
-          Text('还没有目标')
+          Text('还没有技能')
             .fontSize(18)
             .fontColor('#666')
         }
@@ -73,33 +73,33 @@ export struct GoalsMain {
         .justifyContent(FlexAlign.Center)
       } else {
         List() {
-          ForEach(this.goals, (goal: Goal) => {
+          ForEach(this.skills, (skill: Skill) => {
             ListItem() {
               Column() {
                 Row() {
-                  Text(goal.title)
+                  Text(skill.name)
                     .fontSize(18)
                     .fontWeight(FontWeight.Medium)
                     .layoutWeight(1)
 
-                  Text(`${goal.progress}%`)
+                  Text(`Lv.${skill.level}/${skill.targetLevel}`)
                     .fontSize(16)
-                    .fontColor('#FF9800')
+                    .fontColor('#9C27B0')
                     .fontWeight(FontWeight.Bold)
                 }
                 .width('100%')
 
-                // 进度条
+                // 等级进度条
                 Row() {
                   Blank()
-                    .layoutWeight(1 - goal.progress / 100)
+                    .layoutWeight(1 - skill.level / skill.targetLevel)
                     .backgroundColor('#e0e0e0')
                     .height(6)
                     .borderRadius(3)
                   
                   Blank()
-                    .layoutWeight(goal.progress / 100)
-                    .backgroundColor('#FF9800')
+                    .layoutWeight(skill.level / skill.targetLevel)
+                    .backgroundColor('#9C27B0')
                     .height(6)
                     .borderRadius(3)
                 }
@@ -115,12 +115,12 @@ export struct GoalsMain {
               .margin({ left: 15, right: 15, bottom: 10 })
               .onClick(() => {
                 router.pushUrl({
-                  url: 'pages/goals/GoalDetail',
-                  params: { goalId: goal.id }
+                  url: 'pages/learning/SkillDetail',
+                  params: { skillId: skill.id }
                 });
               })
             }
-          }, (goal: Goal) => goal.id?.toString() || '')
+          }, (skill: Skill) => skill.id?.toString() || '')
         }
         .width('100%')
         .layoutWeight(1)
