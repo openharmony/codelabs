@@ -55,6 +55,212 @@ export struct Dashboard {
     }
   }
 
+  // build() {
+  //   Scroll() {
+  //     Column() {
+  //       // 标题
+  //       Row() {
+  //         Text('生活中心')
+  //           .fontSize(28)
+  //           .fontWeight(FontWeight.Bold)
+  //
+  //         Blank()
+  //       }
+  //       .width('100%')
+  //       .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+  //
+  //       // 今日概览
+  //       Text('今日概览')
+  //         .fontSize(18)
+  //         .fontWeight(FontWeight.Medium)
+  //         .textAlign(TextAlign.Start)
+  //         .width('100%')
+  //         .padding({ left: 20, right: 20, top: 10, bottom: 10 })
+  //
+  //       // 数据卡片
+  //       Row() {
+  //         // 健康
+  //         this.buildStatCard('健康', '💚', this.healthRecordsToday > 0 ? this.healthRecordsToday.toString() : '0', '今日记录', '#4CAF50', () => {
+  //           // 跳转到健康模块
+  //         })
+  //
+  //         // 目标
+  //         this.buildStatCard('目标', '🎯', this.activeGoals > 0 ? this.activeGoals.toString() : '0', '进行中', '#FF9800', () => {
+  //           // 跳转到目标模块
+  //         })
+  //       }
+  //       .width('100%')
+  //       .padding({ left: 15, right: 15, bottom: 10 })
+  //       .justifyContent(FlexAlign.SpaceBetween)
+  //
+  //       Row() {
+  //         // 心情
+  //         this.buildStatCard('心情', this.moodToday, '', '今日心情', '#E91E63', () => {
+  //           // 跳转到心情模块
+  //         })
+  //
+  //         // 学习
+  //         this.buildStatCard('学习', '📚', this.skillsCount > 0 ? this.skillsCount.toString() : '0', '技能数', '#2196F3', () => {
+  //           // 跳转到学习模块
+  //         })
+  //       }
+  //       .width('100%')
+  //       .padding({ left: 15, right: 15, bottom: 10 })
+  //       .justifyContent(FlexAlign.SpaceBetween)
+  //
+  //       // 快速入口
+  //       Text('快速入口')
+  //         .fontSize(18)
+  //         .fontWeight(FontWeight.Medium)
+  //         .textAlign(TextAlign.Start)
+  //         .width('100%')
+  //         .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+  //
+  //       // 功能入口网格
+  //       Grid() {
+  //         GridItem() {
+  //           this.buildQuickEntry('记录健康', '💚', '#4CAF50', () => {
+  //             router.pushUrl({ url: 'pages/health/HealthRecord' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('创建目标', '🎯', '#FF9800', () => {
+  //             router.pushUrl({ url: 'pages/goals/GoalDetail' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('记录心情', '😊', '#E91E63', () => {
+  //             router.pushUrl({ url: 'pages/mood/MoodRecord' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('规划旅行', '✈️', '#2196F3', () => {
+  //             router.pushUrl({ url: 'pages/travel/TravelPlan' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('添加技能', '📚', '#9C27B0', () => {
+  //             router.pushUrl({ url: 'pages/learning/SkillDetail' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('写日记', '📝', '#00BCD4', () => {
+  //             router.pushUrl({ url: 'pages/diary/DiaryEdit' });
+  //           })
+  //         }
+  //       }
+  //       .columnsTemplate('1fr 1fr 1fr')
+  //       .rowsTemplate('1fr 1fr')
+  //       .columnsGap(10)
+  //       .rowsGap(10)
+  //       .width('100%')
+  //       .height(200)
+  //       .padding({ left: 15, right: 15, bottom: 20 })
+  //
+  //       // 更多功能
+  //       Text('更多功能')
+  //         .fontSize(18)
+  //         .fontWeight(FontWeight.Medium)
+  //         .textAlign(TextAlign.Start)
+  //         .width('100%')
+  //         .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+  //
+  //       Grid() {
+  //         GridItem() {
+  //           this.buildQuickEntry('数据统计', '📊', '#607D8B', () => {
+  //             router.pushUrl({ url: 'pages/statistics/StatisticsMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('统一搜索', '🔍', '#795548', () => {
+  //             router.pushUrl({ url: 'pages/search/SearchMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('成就系统', '🏆', '#FFD700', () => {
+  //             router.pushUrl({ url: 'pages/achievements/AchievementsMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('生活报告', '📄', '#9E9E9E', () => {
+  //             router.pushUrl({ url: 'pages/report/ReportMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('设置', '⚙️', '#424242', () => {
+  //             router.pushUrl({ url: 'pages/settings/SettingsMain' });
+  //           })
+  //         }
+  //       }
+  //       .columnsTemplate('1fr 1fr 1fr')
+  //       .rowsTemplate('1fr 1fr')
+  //       .columnsGap(10)
+  //       .rowsGap(10)
+  //       .width('100%')
+  //       .height(200)
+  //       .padding({ left: 15, right: 15, bottom: 20 })
+  //
+  //       // 工具功能
+  //       Text('工具功能')
+  //         .fontSize(18)
+  //         .fontWeight(FontWeight.Medium)
+  //         .textAlign(TextAlign.Start)
+  //         .width('100%')
+  //         .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+  //
+  //       Grid() {
+  //         GridItem() {
+  //           this.buildQuickEntry('提醒管理', '⏰', '#FF9800', () => {
+  //             router.pushUrl({ url: 'pages/reminder/ReminderMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('数据备份', '📦', '#607D8B', () => {
+  //             router.pushUrl({ url: 'pages/backup/BackupMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('标签管理', '🏷️', '#9C27B0', () => {
+  //             router.pushUrl({ url: 'pages/tags/TagsMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('数据筛选', '🔍', '#795548', () => {
+  //             router.pushUrl({ url: 'pages/filter/FilterMain' });
+  //           })
+  //         }
+  //
+  //         GridItem() {
+  //           this.buildQuickEntry('帮助中心', '❓', '#00BCD4', () => {
+  //             router.pushUrl({ url: 'pages/help/HelpMain' });
+  //           })
+  //         }
+  //       }
+  //       .columnsTemplate('1fr 1fr 1fr')
+  //       .rowsTemplate('1fr 1fr')
+  //       .columnsGap(10)
+  //       .rowsGap(10)
+  //       .width('100%')
+  //       .height(200)
+  //       .padding({ left: 15, right: 15, bottom: 20 })
+  //     }
+  //   }
+  //   .width('100%')
+  //   .layoutWeight(1)
+  // }
+
   build() {
     Scroll() {
       Column() {
@@ -63,52 +269,16 @@ export struct Dashboard {
           Text('生活中心')
             .fontSize(28)
             .fontWeight(FontWeight.Bold)
-          
+
           Blank()
         }
         .width('100%')
         .padding({ left: 20, right: 20, top: 20, bottom: 10 })
 
-        // 今日概览
-        Text('今日概览')
-          .fontSize(18)
-          .fontWeight(FontWeight.Medium)
-          .textAlign(TextAlign.Start)
-          .width('100%')
-          .padding({ left: 20, right: 20, top: 10, bottom: 10 })
+        // ===== 删除：今日概览整个区域 =====
 
-        // 数据卡片
-        Row() {
-          // 健康
-          this.buildStatCard('健康', '💚', this.healthRecordsToday > 0 ? this.healthRecordsToday.toString() : '0', '今日记录', '#4CAF50', () => {
-            // 跳转到健康模块
-          })
-          
-          // 目标
-          this.buildStatCard('目标', '🎯', this.activeGoals > 0 ? this.activeGoals.toString() : '0', '进行中', '#FF9800', () => {
-            // 跳转到目标模块
-          })
-        }
-        .width('100%')
-        .padding({ left: 15, right: 15, bottom: 10 })
-        .justifyContent(FlexAlign.SpaceBetween)
 
-        Row() {
-          // 心情
-          this.buildStatCard('心情', this.moodToday, '', '今日心情', '#E91E63', () => {
-            // 跳转到心情模块
-          })
-          
-          // 学习
-          this.buildStatCard('学习', '📚', this.skillsCount > 0 ? this.skillsCount.toString() : '0', '技能数', '#2196F3', () => {
-            // 跳转到学习模块
-          })
-        }
-        .width('100%')
-        .padding({ left: 15, right: 15, bottom: 10 })
-        .justifyContent(FlexAlign.SpaceBetween)
-
-        // 快速入口
+        // 快速入口（保留）
         Text('快速入口')
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
@@ -116,38 +286,37 @@ export struct Dashboard {
           .width('100%')
           .padding({ left: 20, right: 20, top: 20, bottom: 10 })
 
-        // 功能入口网格
         Grid() {
           GridItem() {
             this.buildQuickEntry('记录健康', '💚', '#4CAF50', () => {
               router.pushUrl({ url: 'pages/health/HealthRecord' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('创建目标', '🎯', '#FF9800', () => {
               router.pushUrl({ url: 'pages/goals/GoalDetail' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('记录心情', '😊', '#E91E63', () => {
               router.pushUrl({ url: 'pages/mood/MoodRecord' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('规划旅行', '✈️', '#2196F3', () => {
               router.pushUrl({ url: 'pages/travel/TravelPlan' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('添加技能', '📚', '#9C27B0', () => {
               router.pushUrl({ url: 'pages/learning/SkillDetail' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('写日记', '📝', '#00BCD4', () => {
               router.pushUrl({ url: 'pages/diary/DiaryEdit' });
@@ -162,7 +331,7 @@ export struct Dashboard {
         .height(200)
         .padding({ left: 15, right: 15, bottom: 20 })
 
-        // 更多功能
+        // 更多功能（删除 统一搜索、设置）
         Text('更多功能')
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
@@ -176,40 +345,28 @@ export struct Dashboard {
               router.pushUrl({ url: 'pages/statistics/StatisticsMain' });
             })
           }
-          
-          GridItem() {
-            this.buildQuickEntry('统一搜索', '🔍', '#795548', () => {
-              router.pushUrl({ url: 'pages/search/SearchMain' });
-            })
-          }
-          
+
           GridItem() {
             this.buildQuickEntry('成就系统', '🏆', '#FFD700', () => {
               router.pushUrl({ url: 'pages/achievements/AchievementsMain' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('生活报告', '📄', '#9E9E9E', () => {
               router.pushUrl({ url: 'pages/report/ReportMain' });
             })
           }
-          
-          GridItem() {
-            this.buildQuickEntry('设置', '⚙️', '#424242', () => {
-              router.pushUrl({ url: 'pages/settings/SettingsMain' });
-            })
-          }
         }
         .columnsTemplate('1fr 1fr 1fr')
-        .rowsTemplate('1fr 1fr')
+        .rowsTemplate('1fr')
         .columnsGap(10)
         .rowsGap(10)
         .width('100%')
-        .height(200)
+        .height(100)
         .padding({ left: 15, right: 15, bottom: 20 })
 
-        // 工具功能
+        // 工具功能（删除 数据备份、标签管理）
         Text('工具功能')
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
@@ -223,25 +380,13 @@ export struct Dashboard {
               router.pushUrl({ url: 'pages/reminder/ReminderMain' });
             })
           }
-          
-          GridItem() {
-            this.buildQuickEntry('数据备份', '📦', '#607D8B', () => {
-              router.pushUrl({ url: 'pages/backup/BackupMain' });
-            })
-          }
-          
-          GridItem() {
-            this.buildQuickEntry('标签管理', '🏷️', '#9C27B0', () => {
-              router.pushUrl({ url: 'pages/tags/TagsMain' });
-            })
-          }
-          
+
           GridItem() {
             this.buildQuickEntry('数据筛选', '🔍', '#795548', () => {
               router.pushUrl({ url: 'pages/filter/FilterMain' });
             })
           }
-          
+
           GridItem() {
             this.buildQuickEntry('帮助中心', '❓', '#00BCD4', () => {
               router.pushUrl({ url: 'pages/help/HelpMain' });
@@ -249,11 +394,11 @@ export struct Dashboard {
           }
         }
         .columnsTemplate('1fr 1fr 1fr')
-        .rowsTemplate('1fr 1fr')
+        .rowsTemplate('1fr')
         .columnsGap(10)
         .rowsGap(10)
         .width('100%')
-        .height(200)
+        .height(100)
         .padding({ left: 15, right: 15, bottom: 20 })
       }
     }
