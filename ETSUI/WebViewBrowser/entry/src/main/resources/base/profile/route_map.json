@@ -1,0 +1,36 @@
+{
+  "routerMap": [
+    {
+      "name": "SettingsPage",
+      "pageSourceFile": "src/main/ets/pages/SettingsPage.ets",
+      "buildFunction": "SettingsPageBuilder",
+      "data": {
+        "description": "浏览器设置页面"
+      }
+    },
+    {
+      "name": "BookmarkPage",
+      "pageSourceFile": "src/main/ets/pages/BookmarkPage.ets",
+      "buildFunction": "BookmarkPageBuilder",
+      "data": {
+        "description": "书签管理页面"
+      }
+    },
+    {
+      "name": "HistoryPage",
+      "pageSourceFile": "src/main/ets/pages/HistoryPage.ets",
+      "buildFunction": "HistoryPageBuilder",
+      "data": {
+        "description": "历史记录页面"
+      }
+    },
+    {
+      "name": "StatisticsPage",
+      "pageSourceFile": "src/main/ets/pages/StatisticsPage.ets",
+      "buildFunction": "StatisticsPageBuilder",
+      "data": {
+        "description": "统计信息页面"
+      }
+    }
+  ]
+}
