@@ -2,7 +2,6 @@
  * 标签管理页面
  */
 import { LifeHubData, Tag } from '../../model/LifeHubData';
-import { AlertDialog } from '@kit.ArkUI';
 
 interface TagWithCount extends Tag {
   count: number;
@@ -208,6 +207,115 @@ export struct TagsMain {
         }
         .layoutWeight(1)
       }
+
+      // 添加标签对话框
+      if (this.showAddDialog) {
+        Column() {
+          // 半透明背景
+          Blank()
+            .width('100%')
+            .height('100%')
+            .backgroundColor('#000000')
+            .opacity(0.5)
+            .onClick(() => {
+              this.showAddDialog = false;
+              this.newTagName = '';
+              this.newTagColor = '#007DFF';
+              this.newTagCategory = 'all';
+            })
+
+          // 对话框内容
+          Column() {
+            Text('添加标签')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .width('100%')
+              .textAlign(TextAlign.Center)
+              .margin({ bottom: 20 })
+
+            TextInput({ placeholder: '输入标签名称', text: this.newTagName })
+              .width('100%')
+              .height(50)
+              .fontSize(16)
+              .padding({ left: 15, right: 15 })
+              .backgroundColor('#f8f8f8')
+              .borderRadius(8)
+              .onChange((value: string) => {
+                this.newTagName = value;
+              })
+              .margin({ bottom: 15 })
+
+            Text('标签颜色')
+              .fontSize(14)
+              .fontWeight(FontWeight.Medium)
+              .width('100%')
+              .textAlign(TextAlign.Start)
+              .margin({ bottom: 10 })
+
+            Row() {
+              ForEach(this.colors, (color: ColorOption) => {
+                Column() {
+                  Blank()
+                }
+                .width(35)
+                .height(35)
+                .borderRadius(18)
+                .backgroundColor(color.value)
+                .border({
+                  width: this.newTagColor === color.value ? 2 : 0,
+                  color: '#333'
+                })
+                .onClick(() => {
+                  this.newTagColor = color.value;
+                })
+              })
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.SpaceAround)
+            .margin({ bottom: 20 })
+
+            Row() {
+              Button('取消')
+                .layoutWeight(1)
+                .height(45)
+                .fontSize(16)
+                .backgroundColor('#f0f0f0')
+                .fontColor('#333')
+                .onClick(() => {
+                  this.showAddDialog = false;
+                  this.newTagName = '';
+                  this.newTagColor = '#007DFF';
+                  this.newTagCategory = 'all';
+                })
+
+              Button('添加')
+                .layoutWeight(1)
+                .height(45)
+                .fontSize(16)
+                .backgroundColor('#007DFF')
+                .fontColor(Color.White)
+                .margin({ left: 15 })
+                .enabled(!!this.newTagName)
+                .onClick(() => {
+                  this.addTag();
+                  this.showAddDialog = false;
+                })
+            }
+            .width('100%')
+          }
+          .width('85%')
+          .padding(20)
+          .backgroundColor(Color.White)
+          .borderRadius(12)
+          .shadow({ radius: 10, color: '#40000000', offsetX: 0, offsetY: 5 })
+        }
+        .width('100%')
+        .height('100%')
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Center)
+        .position({ x: 0, y: 0 })
+        .zIndex(1000)
+      }
     }
     .width('100%')
     .height('100%')
@@ -223,14 +331,7 @@ export struct TagsMain {
 
   async addTag() {
     if (!this.newTagName) {
-      // 如果名称为空，显示输入提示
-      AlertDialog.show({
-        title: '提示',
-        message: '请输入标签名称',
-        primaryButton: {
-          value: '确定'
-        }
-      });
+      // 如果名称为空，不执行任何操作
       return;
     }
 
