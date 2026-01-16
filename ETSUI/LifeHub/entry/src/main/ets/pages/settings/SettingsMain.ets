@@ -3,6 +3,7 @@
  */
 import { LifeHubData } from '../../model/LifeHubData';
 import { router } from '@kit.ArkUI';
+import { AlertDialog } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -211,53 +212,6 @@ export struct SettingsMain {
     .width('100%')
     .height('100%')
     .backgroundColor('#f5f5f5')
-    .bindDialog(this.showClearDialog, this.buildClearDialog(), {
-      alignment: DialogAlignment.Center
-    })
-  }
-
-  @Builder
-  buildClearDialog() {
-    Column() {
-      Text('确认清除')
-        .fontSize(20)
-        .fontWeight(FontWeight.Bold)
-        .margin({ bottom: 20 })
-
-      Text('确定要清除所有数据吗？此操作不可恢复！')
-        .fontSize(16)
-        .fontColor('#666')
-        .textAlign(TextAlign.Center)
-        .margin({ bottom: 30 })
-
-      Row() {
-        Button('取消')
-          .layoutWeight(1)
-          .height(50)
-          .fontSize(16)
-          .backgroundColor('#f0f0f0')
-          .fontColor('#333')
-          .onClick(() => {
-            this.showClearDialog = false;
-          })
-
-        Button('确认清除')
-          .layoutWeight(1)
-          .height(50)
-          .fontSize(16)
-          .backgroundColor('#FF5722')
-          .fontColor(Color.White)
-          .margin({ left: 15 })
-          .onClick(() => {
-            this.clearAllData();
-          })
-      }
-      .width('100%')
-    }
-    .width('100%')
-    .padding(20)
-    .backgroundColor(Color.White)
-    .borderRadius(12)
   }
 
   async exportData() {
@@ -305,7 +259,25 @@ export struct SettingsMain {
   @State showClearDialog: boolean = false;
 
   showClearDataDialog() {
-    this.showClearDialog = true;
+    AlertDialog.show({
+      title: '确认清除',
+      message: '确定要清除所有数据吗？此操作不可恢复！',
+      autoCancel: true,
+      alignment: DialogAlignment.Center,
+      primaryButton: {
+        value: '取消',
+        action: () => {
+          console.log('用户取消清除操作');
+        }
+      },
+      secondaryButton: {
+        value: '确认清除',
+        fontColor: '#FF5722',
+        action: () => {
+          this.clearAllData();
+        }
+      }
+    });
   }
 
   async clearAllData() {
@@ -319,7 +291,6 @@ export struct SettingsMain {
       console.log('SettingsMain: 清除所有数据功能需要数据库直接操作');
       // TODO: 实现数据库清空功能
       
-      this.showClearDialog = false;
       await this.loadDataCount();
     } catch (error) {
       console.error('SettingsMain: 清除数据失败:', error);
