@@ -1,5 +1,5 @@
+// 版权所有 (C) 2026 CoinNote. 保留所有权利。
 /*
- * Copyright (c) 2026 CoinNote
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import relationalStore from '@ohos.data.relationalStore';
 import common from '@ohos.app.ability.common';
 import { BillItem } from '../model/BillItem';
