@@ -1,4 +1,19 @@
-﻿import { promptAction } from '@kit.ArkUI';
+﻿/*
+ * Copyright (c) 2026 CoinNote
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import { promptAction } from '@kit.ArkUI';
 import common from '@ohos.app.ability.common';
 import router from '@ohos.router';
 import preferences from '@ohos.data.preferences';
@@ -1084,7 +1099,7 @@ struct CoinNote {
           .height(24)
           .margin({ right: 8 })
           
-        Text("CoinNote")
+        Text("理工账本")
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor(Color.White)
@@ -1228,64 +1243,66 @@ struct CoinNote {
                 }
               }
 
-              // 5. 标签（多选 Checkbox）
-              FormCard({ title: "标签" }) {
-                Flex({ wrap: FlexWrap.Wrap }) {
-                  ForEach(this.tagOptions, (tag: string) => {
+              if (this.billDirection === 'expense') {
+                // 5. 标签（多选 Checkbox）
+                FormCard({ title: "标签" }) {
+                  Flex({ wrap: FlexWrap.Wrap }) {
+                    ForEach(this.tagOptions, (tag: string) => {
+                      Row() {
+                        Checkbox({ name: tag, group: "tags" })
+                          .select(this.tags.includes(tag))
+                          .onChange((isChecked: boolean) => {
+                            if (isChecked) {
+                              this.tags.push(tag);
+                            } else {
+                              this.tags = this.tags.filter(t => t !== tag);
+                            }
+                          })
+                        Text(tag)
+                          .fontSize(14)
+                          .fontColor("#333333")
+                          .onClick(() => {
+                            // 简单的点击文字也能切换选中状态逻辑比较复杂，这里简化
+                          })
+                      }
+                      .margin({ right: 12, bottom: 8 })
+                    })
+                  }
+                }
+
+                // 6. 其他选项（报销、AA）
+                FormCard({ title: "其他选项" }) {
+                  Column() {
                     Row() {
-                      Checkbox({ name: tag, group: "tags" })
-                        .select(this.tags.includes(tag))
-                        .onChange((isChecked: boolean) => {
-                          if (isChecked) {
-                            this.tags.push(tag);
-                          } else {
-                            this.tags = this.tags.filter(t => t !== tag);
-                          }
-                        })
-                      Text(tag)
-                        .fontSize(14)
+                      Text("是否报销")
+                        .fontSize(16)
                         .fontColor("#333333")
-                        .onClick(() => {
-                          // 简单的点击文字也能切换选中状态逻辑比较复杂，这里简化
+                      Blank()
+                      Toggle({ type: ToggleType.Switch, isOn: this.isReimbursable })
+                        .onChange((isOn: boolean) => {
+                          this.isReimbursable = isOn;
                         })
                     }
-                    .margin({ right: 12, bottom: 8 })
-                  })
-                }
-              }
+                    .width("100%")
+                    .height(40)
+                    .alignItems(VerticalAlign.Center)
 
-              // 6. 其他选项（报销、AA）
-              FormCard({ title: "其他选项" }) {
-                Column() {
-                  Row() {
-                    Text("是否报销")
-                      .fontSize(16)
-                      .fontColor("#333333")
-                    Blank()
-                    Toggle({ type: ToggleType.Switch, isOn: this.isReimbursable })
-                      .onChange((isOn: boolean) => {
-                        this.isReimbursable = isOn;
-                      })
+                    Divider().color('#F5F5F5').margin({ top: 4, bottom: 4 })
+
+                    Row() {
+                      Text("是否AA")
+                        .fontSize(16)
+                        .fontColor("#333333")
+                      Blank()
+                      Toggle({ type: ToggleType.Switch, isOn: this.isAA })
+                        .onChange((isOn: boolean) => {
+                          this.isAA = isOn;
+                        })
+                    }
+                    .width("100%")
+                    .height(40)
+                    .alignItems(VerticalAlign.Center)
                   }
-                  .width("100%")
-                  .height(40)
-                  .alignItems(VerticalAlign.Center)
-
-                  Divider().color('#F5F5F5').margin({ top: 4, bottom: 4 })
-
-                  Row() {
-                    Text("是否AA")
-                      .fontSize(16)
-                      .fontColor("#333333")
-                    Blank()
-                    Toggle({ type: ToggleType.Switch, isOn: this.isAA })
-                      .onChange((isOn: boolean) => {
-                        this.isAA = isOn;
-                      })
-                  }
-                  .width("100%")
-                  .height(40)
-                  .alignItems(VerticalAlign.Center)
                 }
               }
 
@@ -1381,7 +1398,7 @@ struct CoinNote {
                 // 1. 日历区域
                 Column() {
                   CalendarView({ 
-                    selectedDate: $calendarSelectedDate,
+                    selectedDate: this.calendarSelectedDate,
                     bills: this.billList
                   })
                 }
@@ -1605,12 +1622,6 @@ struct CoinNote {
                                   .borderRadius(4)
                                   .flexShrink(0)
                                   .onClick((event: ClickEvent) => {
-                                    // 阻止冒泡，避免触发列表项点击
-                                    // 注意：ArkTS ClickEvent 没有 stopPropagation 方法，
-                                    // 但通常 onClick 会捕获事件。如果 ListItem 也有 onClick，可能需要注意。
-                                    // 这里假设 ListItem 的 onClick 是在 Row 上或者 ListItem 本身。
-                                    // 如果 ListItem 有 onClick，点击内部组件可能会触发。
-                                    // 暂时先这样写，如果触发了编辑，用户可以取消。
                                     this.toggleReimbursementStatus(bill);
                                   })
                               }
@@ -1976,7 +1987,6 @@ struct CoinNote {
               })
             }
             .width("92%")
-            // .layoutWeight(1) // 移除 layoutWeight，让 List 根据内容自适应高度
             .backgroundColor(Color.White)
             .borderRadius(12)
             .padding(16)
@@ -1984,7 +1994,6 @@ struct CoinNote {
             .shadow({ radius: 4, color: "#0D000000", offsetY: 2 }) // 优化阴影
           }
           .width("100%")
-          // .height("100%") // 移除固定高度，让 Column 自适应 Scroll
           .backgroundColor("#F9FAFB")
           .alignItems(HorizontalAlign.Center)
         }
