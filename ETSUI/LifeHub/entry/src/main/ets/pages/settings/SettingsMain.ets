@@ -3,7 +3,6 @@
  */
 import { LifeHubData } from '../../model/LifeHubData';
 import { router } from '@kit.ArkUI';
-import { AlertDialog } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -208,6 +207,69 @@ export struct SettingsMain {
         .width('100%')
       }
       .layoutWeight(1)
+
+      // 清除数据确认对话框
+      if (this.showClearDialog) {
+        Column() {
+          // 半透明背景
+          Blank()
+            .width('100%')
+            .height('100%')
+            .backgroundColor('#000000')
+            .opacity(0.5)
+            .onClick(() => {
+              this.showClearDialog = false;
+            })
+
+          // 确认对话框内容
+          Column() {
+            Text('确认清除')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .margin({ bottom: 10 })
+
+            Text('确定要清除所有数据吗？此操作不可恢复！')
+              .fontSize(14)
+              .textAlign(TextAlign.Center)
+              .margin({ bottom: 20 })
+
+            Row() {
+              Button('取消')
+                .layoutWeight(1)
+                .height(40)
+                .backgroundColor('#f0f0f0')
+                .fontColor('#333')
+                .onClick(() => {
+                  this.showClearDialog = false;
+                })
+
+              Button('确认清除')
+                .layoutWeight(1)
+                .height(40)
+                .margin({ left: 10 })
+                .backgroundColor('#FF5722')
+                .fontColor(Color.White)
+                .onClick(() => {
+                  this.showClearDialog = false;
+                  this.clearAllData();
+                })
+            }
+            .width('100%')
+            .justifyContent(FlexAlign.SpaceBetween)
+          }
+          .width('80%')
+          .padding(20)
+          .backgroundColor(Color.White)
+          .borderRadius(10)
+          .shadow({ radius: 10, color: '#40000000', offsetX: 0, offsetY: 5 })
+        }
+        .width('100%')
+        .height('100%')
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Center)
+        .position({ x: 0, y: 0 })
+        .zIndex(1000)
+      }
     }
     .width('100%')
     .height('100%')
@@ -259,25 +321,7 @@ export struct SettingsMain {
   @State showClearDialog: boolean = false;
 
   showClearDataDialog() {
-    AlertDialog.show({
-      title: '确认清除',
-      message: '确定要清除所有数据吗？此操作不可恢复！',
-      autoCancel: true,
-      alignment: DialogAlignment.Center,
-      primaryButton: {
-        value: '取消',
-        action: () => {
-          console.log('用户取消清除操作');
-        }
-      },
-      secondaryButton: {
-        value: '确认清除',
-        fontColor: '#FF5722',
-        action: () => {
-          this.clearAllData();
-        }
-      }
-    });
+    this.showClearDialog = true;
   }
 
   async clearAllData() {
