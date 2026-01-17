@@ -1,19 +1,6 @@
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "default",
-        "material": {
-          "certpath": "C:/Users/12722/.ohos/config/openharmony/default_ECommerce_c4g25lI2e7Wsh5bAidCzhmrl_2SVSNOiXK4l7varP5E=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001BC082DE33B1C83C3B6C9B094AB70B97EC9A72368CD29767FA20E5DDEB07D1A51168551DEB8F8574",
-          "profile": "C:/Users/12722/.ohos/config/openharmony/default_ECommerce_c4g25lI2e7Wsh5bAidCzhmrl_2SVSNOiXK4l7varP5E=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:/Users/12722/.ohos/config/openharmony/default_ECommerce_c4g25lI2e7Wsh5bAidCzhmrl_2SVSNOiXK4l7varP5E=.p12",
-          "storePassword": "0000001B38B3C1FC9E3444EA32171E96AC1B5E0C55DB23F4E392E4CE68A563CB226065F99C4F50AB6DAA5A"
-        }
-      }
-    ],
+    "signingConfigs": [],
     "products": [
       {
         "name": "default",
