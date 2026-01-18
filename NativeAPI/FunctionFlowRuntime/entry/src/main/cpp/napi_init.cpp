@@ -16,6 +16,7 @@
 #include "function_class_cpp.h"
 #include "function_class.h"
 #include "compute_class.h"
+#include "sort_class.h"
 
 int Add(int a, int b)
 {
@@ -33,6 +34,11 @@ JSBIND_GLOBAL()
 JSBIND_CLASS(FunctionClass) {
     JSBIND_CONSTRUCTOR<int>();
     JSBIND_METHOD(FfrtSerialQueue);
+    JSBIND_METHOD(FfrtConcurrentQueue);
+}
+
+JSBIND_CLASS(SortClass) {
+    JSBIND_CONSTRUCTOR<int>();
     JSBIND_METHOD(FfrtConcurrentQueue);
 }
 

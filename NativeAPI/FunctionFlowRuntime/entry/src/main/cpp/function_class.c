@@ -20,16 +20,21 @@
 #define  RET_SUCCESS_4  4
 #define SLEEP_DURATION_MS 100
 #define THOUSAND 1000
+/* 定义三个全局变量返回值 */
+static int g_bankbusiness_ret = -1;
+static int g_bankbusinessvip_ret = -1;
 void BankBusiness(void *arg)
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
+    g_bankbusiness_ret = 0;
 }
 
 void BankBusinessVIP(void *arg)
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
+    g_bankbusinessvip_ret = 0;
 }
 
 int ProcessFfrtQueue()
@@ -62,5 +67,9 @@ int ProcessFfrtQueue()
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
     LOGI("FfrtQueue results ");
+    if (g_bankbusiness_ret == 0 && g_bankbusinessvip_ret == 0) {
     return RET_SUCCESS_4;
+    } else {
+        return -1;
+    }
 }
