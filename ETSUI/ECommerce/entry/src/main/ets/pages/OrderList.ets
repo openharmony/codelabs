@@ -185,7 +185,7 @@ struct OrderList {
         Column({ space: 10 }) {
           ForEach(o.items, (it: OrderItem) => {
             Row({ space: 10 }) {
-              Image(it.image)
+              Image(RdbUtil.resolveImageSource(it.image))
                 .width(76)
                 .height(76)
                 .borderRadius(12)
@@ -203,7 +203,8 @@ struct OrderList {
                   Text(`¥${it.price}`)
                     .fontSize(14)
                     .fontWeight(FontWeight.Bold)
-                    .fontColor(Color.Red);
+                    .fontColor(Color.Red)
+                    .margin({ right: 8 });
 
                   Blank();
 

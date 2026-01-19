@@ -26,6 +26,15 @@ export default class EntryAbility extends UIAbility {
       this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
       // Initialize Database
       await RdbUtil.initDb(this.context);
+      const sessionUserId = await RdbUtil.getSessionUserId();
+      if (sessionUserId && sessionUserId > 0) {
+        const user = await RdbUtil.getUserById(sessionUserId);
+        if (user) {
+          AppStorage.setOrCreate('currentUser', user);
+        } else {
+          await RdbUtil.setSessionUserId(0);
+        }
+      }
     } catch (err) {
       hilog.error(DOMAIN, 'testTag', 'Failed to set colorMode or init DB. Cause: %{public}s', JSON.stringify(err));
     }

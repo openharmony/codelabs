@@ -170,7 +170,19 @@ export struct CartView {
                     .width(88)
                     .height(88)
                     .borderRadius(10)
-                    .backgroundColor('#F3F4F6');
+                    .backgroundColor('#F3F4F6')
+                    .onClick(async () => {
+                      if (this.isManaging) {
+                        return;
+                      }
+                      const products = await RdbUtil.getAllProducts();
+                      const product = products.find(p => p.id === item.productId);
+                      if (product) {
+                        router.pushUrl({ url: 'pages/ProductDetail', params: { product } });
+                        return;
+                      }
+                      promptAction.showToast({ message: '商品不存在' });
+                    });
 
                   Column({ space: 6 }) {
                     Row() {
@@ -210,7 +222,8 @@ export struct CartView {
                       Text(`¥${item.price}`)
                         .fontSize(16)
                         .fontWeight(FontWeight.Bold)
-                        .fontColor('#FF5000');
+                        .fontColor('#FF5000')
+                        .margin({ right: 8 });
 
                       Blank();
 
@@ -254,6 +267,7 @@ export struct CartView {
                               await this.refreshCart();
                             });
                         }
+                        .margin({ left: 10 })
                       }
                     }
                   }

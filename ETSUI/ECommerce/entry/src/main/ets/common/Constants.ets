@@ -25,6 +25,7 @@ export class Constants {
   static readonly TABLE_ORDER_ITEM = 'order_item';
   static readonly TABLE_FAVORITE = 'favorite';
   static readonly TABLE_FOOTPRINT = 'footprint';
+  static readonly TABLE_SESSION = 'user_session';
 
   static readonly KEY_USER_SESSION = 'user_session';
 }

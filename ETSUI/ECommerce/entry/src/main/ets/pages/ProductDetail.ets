@@ -105,7 +105,7 @@ struct ProductDetail {
 
       Scroll() {
         Column() {
-          Image(this.product.image)
+          Image(RdbUtil.resolveImageSource(this.product.image))
             .width('100%')
             .height(350)
             .objectFit(ImageFit.Contain)

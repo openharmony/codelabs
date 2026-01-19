@@ -125,6 +125,7 @@ struct LoginPage {
         promptAction.showToast({ message: '登录成功' });
         
         AppStorage.setOrCreate('currentUser', user);
+        await RdbUtil.setSessionUserId(user.id);
         router.back();
       } else {
         promptAction.showToast({ message: '密码错误' });

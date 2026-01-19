@@ -98,7 +98,7 @@ struct OrderDetail {
   @Builder
   ItemRow(it: OrderItem) {
     Row({ space: 10 }) {
-      Image(it.image)
+      Image(RdbUtil.resolveImageSource(it.image))
         .width(76)
         .height(76)
         .borderRadius(12)

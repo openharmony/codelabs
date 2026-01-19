@@ -15,6 +15,7 @@
 
 import { router, promptAction } from '@kit.ArkUI';
 import { User } from '../model/DataModels';
+import { RdbUtil } from '../utils/RdbUtil';
 
 @Component
 // 个人中心视图
@@ -284,7 +285,8 @@ export struct MineView {
                 .backgroundColor('#FF4D4F')
                 .borderRadius(22)
                 .margin({ top: 6 })
-                .onClick(() => {
+                .onClick(async () => {
+                  await RdbUtil.setSessionUserId(0);
                   AppStorage.setOrCreate('currentUser', undefined);
                   promptAction.showToast({ message: '已退出' });
                 });
