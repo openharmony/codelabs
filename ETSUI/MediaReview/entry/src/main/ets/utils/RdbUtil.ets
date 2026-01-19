@@ -186,7 +186,7 @@ export class RdbUtil {
     ')'
 
   private static readonly USERS_TABLE: string = 'users'
-  private static readonly PASSWORD_ITERATIONS: number = 10000
+  private static readonly PASSWORD_ITERATIONS: number = 100
   private static readonly SALT_LEN: number = 16
 
   private static readonly CREATE_USERS_SQL: string =

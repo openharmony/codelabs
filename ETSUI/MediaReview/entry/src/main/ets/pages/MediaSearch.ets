@@ -125,12 +125,14 @@ struct BookSearch {
     })
 
     const sorted = base.slice()
-    sorted.sort((a: Book | Movie, b: Book | Movie) => {
-      if (b.rating !== a.rating) {
-        return b.rating - a.rating
-      }
-      return b.ratingCount - a.ratingCount
-    })
+    if (keywords.length > 0) {
+      sorted.sort((a: Book | Movie, b: Book | Movie) => {
+        if (b.rating !== a.rating) {
+          return b.rating - a.rating
+        }
+        return b.ratingCount - a.ratingCount
+      })
+    }
     return sorted
   }
 
