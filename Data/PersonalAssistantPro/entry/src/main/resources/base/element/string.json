@@ -31,6 +31,7 @@
     { "name": "contact_detail_empty", "value": "Not provided" },
 
     { "name": "contact_relation_phone_format", "value": "%s | %s" },
+    { "name": "toast_event_input_error", "value": "Please enter the event title" },
 
     { "name": "event_title", "value": "Schedule" },
     { "name": "event_empty_tip", "value": "No events. Enjoy your day!" },

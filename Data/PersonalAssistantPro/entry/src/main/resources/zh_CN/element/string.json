@@ -19,6 +19,7 @@
 
     { "name": "toast_add_success", "value": "添加成功" },
     { "name": "toast_input_error", "value": "请输入姓名和电话" },
+    { "name": "toast_event_input_error", "value": "请输入日程标题" },
 
     { "name": "contact_detail_title", "value": "联系人详情" },
     {

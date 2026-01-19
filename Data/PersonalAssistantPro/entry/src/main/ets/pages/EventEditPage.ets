@@ -99,7 +99,7 @@ export struct EventEditPage {
   async saveEvent() {
     // 1. 校验输入 & 取消旧提醒 (不变)
     if (this.title.trim() === '') {
-      promptAction.showToast({ message: $r('app.string.toast_input_error') });
+      promptAction.showToast({ message: $r('app.string.toast_event_input_error') });
       return;
     }
     if (this.oldReminderId > -1) {

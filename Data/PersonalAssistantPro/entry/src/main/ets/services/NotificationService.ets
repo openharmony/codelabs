@@ -12,11 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// PAP/PersonalAssistantPro/entry/src/main/ets/services/NotificationService.ets
 
 import reminderAgentManager from '@ohos.reminderAgentManager';
 import notificationManager from '@ohos.notificationManager';
-// 必须引入这个旧包，才能拿到 SlotType 枚举
-import notification from '@ohos.notification';
 import common from '@ohos.app.ability.common';
 import wantAgent from '@ohos.app.ability.wantAgent';
 import { Logger } from '../common/utils/Logger';
@@ -34,7 +33,7 @@ export class NotificationService {
     }
   }
 
-  // ✅ 定时 + 强制标准 UI + 跳转
+  // ✅ 恢复标准 Calendar Reminder 模式 (最稳定)
   static async publishCalendarReminder(context: common.UIAbilityContext, eventId: number, title: string, content: string, triggerTime: number): Promise<number> {
     // 1. 时间校验
     if (triggerTime < new Date().getTime()) {
@@ -45,7 +44,7 @@ export class NotificationService {
     const date = new Date(triggerTime);
 
     try {
-      // 2. 准备跳转 (WantAgent) - 保持不变
+      // 2. 准备跳转 (WantAgent)
       const wantInfo: wantAgent.WantAgentInfo = {
         wants: [
           {
@@ -63,7 +62,7 @@ export class NotificationService {
       };
       const agent = await wantAgent.getWantAgent(wantInfo);
 
-      // 3. 提醒配置 (关键修改)
+      // 3. 提醒配置 (回归标准)
       const reminderRequest: reminderAgentManager.ReminderRequestCalendar = {
         reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_CALENDAR,
         dateTime: {
@@ -77,31 +76,29 @@ export class NotificationService {
         content: content,
         title: title,
 
-        // ✅ [关键修改 1] 显式指定 SlotType
-        // 告诉系统：这是一条“社交通讯”级别的消息。
-        // 系统会因此使用“标准横幅”模板（通常是不透明、高度正常的）来渲染它。
-        slotType: notification.SlotType.SOCIAL_COMMUNICATION,
+        // ❌ [移除] 不再强制指定 slotType，防止系统丢弃请求
+        // slotType: notification.SlotType.SOCIAL_COMMUNICATION,
 
-        // ✅ [关键修改 2] 控制时长
-        // 设为 1 秒，仅仅为了触发一下系统通知，避免长时间占用变成全屏闹钟
-        ringDuration: 1,
+        // ✅ [恢复] 设为 60 秒 (或更长)
+        // 让它像闹钟一样持续响铃，直到用户点击按钮或关闭
+        ringDuration: 60,
 
-        snoozeTimes: 0,
-        timeInterval: 0,
+        snoozeTimes: 1, // 允许稍后提醒一次
+        timeInterval: 5 * 60, // 稍后提醒间隔5分钟
 
         notificationId: eventId,
         wantAgent: agent as ESObject,
 
-        // ✅ [关键修改 3] 保留按钮
-        // 在 SOCIAL_COMMUNICATION 模式下，按钮会显示在横幅下方，而不是全屏弹窗里
+        // ✅ [保留] 按钮依然是必要的交互入口
         actionButton: [
-          { title: '查看', type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE }
+          { title: '关闭', type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE },
+          { title: '稍后', type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_SNOOZE }
         ]
       };
 
       // 4. 发布
       const reminderId = await reminderAgentManager.publishReminder(reminderRequest);
-      logger.info(`Scheduled standard UI reminder. ID: ${reminderId}`);
+      logger.info(`Scheduled standard calendar reminder. ID: ${reminderId}`);
       return reminderId;
 
     } catch (err) {
