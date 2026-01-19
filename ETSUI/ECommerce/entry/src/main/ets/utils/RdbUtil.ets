@@ -189,8 +189,47 @@ export class RdbUtil {
         createTime INTEGER
       )`;
       await RdbUtil.rdbStore.executeSql(sqlFootprint);
+
+      const sqlSession = `CREATE TABLE IF NOT EXISTS ${Constants.TABLE_SESSION} (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        userId INTEGER
+      )`;
+      await RdbUtil.rdbStore.executeSql(sqlSession);
     } catch (err) {
       hilog.error(0x0000, 'RdbUtil', 'Create tables failed: %{public}s', JSON.stringify(err));
+    }
+  }
+
+  static async getSessionUserId(): Promise<number | null> {
+    const store = await RdbUtil.getStore();
+    if (store) {
+      try {
+        let predicates = new relationalStore.RdbPredicates(Constants.TABLE_SESSION);
+        let resultSet = await store.query(predicates);
+        if (resultSet.goToFirstRow()) {
+          const userId = resultSet.getLong(resultSet.getColumnIndex('userId'));
+          resultSet.close();
+          return userId;
+        }
+        resultSet.close();
+      } catch (err) {
+        hilog.error(0x0000, 'RdbUtil', 'RDB: getSessionUserId failed: %{public}s', JSON.stringify(err));
+      }
+    }
+    return null;
+  }
+
+  static async setSessionUserId(userId: number | null): Promise<void> {
+    const store = await RdbUtil.getStore();
+    if (!store) return;
+    try {
+      await store.executeSql(`DELETE FROM ${Constants.TABLE_SESSION}`);
+      if (userId && userId > 0) {
+        const valueBucket: relationalStore.ValuesBucket = { userId };
+        await store.insert(Constants.TABLE_SESSION, valueBucket);
+      }
+    } catch (err) {
+      hilog.error(0x0000, 'RdbUtil', 'RDB: setSessionUserId failed: %{public}s', JSON.stringify(err));
     }
   }
 
@@ -325,11 +364,6 @@ export class RdbUtil {
 
   // 获取所有商品
   static async getAllProducts(): Promise<Product[]> {
-    if (RdbUtil.memProducts.length > 0) {
-      hilog.info(0x0000, 'RdbUtil', 'Memory: getAllProducts returning %{public}d items', RdbUtil.memProducts.length);
-      return RdbUtil.memProducts;
-    }
-
     let products: Product[] = [];
     const store = await RdbUtil.getStore();
 
@@ -352,6 +386,11 @@ export class RdbUtil {
       } catch (e) {
         hilog.error(0x0000, 'RdbUtil', 'RDB: getAllProducts failed: %{public}s', JSON.stringify(e));
       }
+    }
+
+    if (products.length === 0 && RdbUtil.memProducts.length > 0) {
+      hilog.info(0x0000, 'RdbUtil', 'Memory: getAllProducts returning %{public}d items', RdbUtil.memProducts.length);
+      return RdbUtil.memProducts;
     }
 
     return products;
@@ -422,7 +461,7 @@ export class RdbUtil {
                 resultSet.getDouble(resultSet.getColumnIndex('price')),
                 resultSet.getLong(resultSet.getColumnIndex('count')),
                 resultSet.getLong(resultSet.getColumnIndex('selected')) === 1,
-                RdbUtil.resolveProductImageSource(resultSet.getLong(resultSet.getColumnIndex('productId')))
+                RdbUtil.resolveImageSource(resultSet.getString(resultSet.getColumnIndex('image')))
               ));
             }
             resultSet.close();
@@ -946,22 +985,6 @@ export class RdbUtil {
   }
 
   static async getFavoriteProducts(userId: number): Promise<Product[]> {
-    const memFavorites = RdbUtil.memFavorites
-      .filter(f => f.userId === userId)
-      .slice()
-      .sort((a, b) => b.createTime - a.createTime);
-
-    if (memFavorites.length > 0) {
-      let memProducts: Product[] = [];
-      for (const it of memFavorites) {
-        const p = RdbUtil.memProducts.find(p => p.id === it.productId);
-        if (p) {
-          memProducts.push(p);
-        }
-      }
-      return memProducts;
-    }
-
     const store = await RdbUtil.getStore();
     let favorites: FavoriteItem[] = [];
 
@@ -979,51 +1002,69 @@ export class RdbUtil {
         }
         rs.close();
 
-        favorites.sort((a, b) => b.createTime - a.createTime);
+        if (favorites.length > 0) {
+          favorites.sort((a, b) => b.createTime - a.createTime);
 
-        const productMap: Map<number, Product> = new Map<number, Product>();
-        for (const it of favorites) {
-          const pPred = new relationalStore.RdbPredicates(Constants.TABLE_PRODUCT);
-          pPred.equalTo('id', it.productId);
-          const prs = await store.query(pPred);
-          if (prs.goToFirstRow()) {
-            const p = new Product(
-              prs.getLong(prs.getColumnIndex('id')),
-              prs.getString(prs.getColumnIndex('name')),
-              prs.getDouble(prs.getColumnIndex('price')),
-              prs.getString(prs.getColumnIndex('image')),
-              prs.getString(prs.getColumnIndex('category')),
-              prs.getString(prs.getColumnIndex('description')),
-              prs.getLong(prs.getColumnIndex('stock'))
-            );
-            productMap.set(p.id, p);
-          }
-          prs.close();
-        }
-
-        if (productMap.size < favorites.length && RdbUtil.memProducts.length > 0) {
+          const productMap: Map<number, Product> = new Map<number, Product>();
           for (const it of favorites) {
-            if (!productMap.has(it.productId)) {
-              const p = RdbUtil.memProducts.find(p => p.id === it.productId);
-              if (p) {
-                productMap.set(p.id, p);
+            const pPred = new relationalStore.RdbPredicates(Constants.TABLE_PRODUCT);
+            pPred.equalTo('id', it.productId);
+            const prs = await store.query(pPred);
+            if (prs.goToFirstRow()) {
+              const p = new Product(
+                prs.getLong(prs.getColumnIndex('id')),
+                prs.getString(prs.getColumnIndex('name')),
+                prs.getDouble(prs.getColumnIndex('price')),
+                prs.getString(prs.getColumnIndex('image')),
+                prs.getString(prs.getColumnIndex('category')),
+                prs.getString(prs.getColumnIndex('description')),
+                prs.getLong(prs.getColumnIndex('stock'))
+              );
+              productMap.set(p.id, p);
+            }
+            prs.close();
+          }
+
+          if (productMap.size < favorites.length && RdbUtil.memProducts.length > 0) {
+            for (const it of favorites) {
+              if (!productMap.has(it.productId)) {
+                const p = RdbUtil.memProducts.find(p => p.id === it.productId);
+                if (p) {
+                  productMap.set(p.id, p);
+                }
               }
             }
           }
-        }
 
-        let products: Product[] = [];
-        for (const it of favorites) {
-          const p = productMap.get(it.productId);
-          if (p) {
-            products.push(p);
+          let products: Product[] = [];
+          for (const it of favorites) {
+            const p = productMap.get(it.productId);
+            if (p) {
+              products.push(p);
+            }
           }
-        }
 
-        return products;
+          return products;
+        }
       } catch (err) {
         hilog.error(0x0000, 'RdbUtil', 'RDB: getFavoriteProducts failed: %{public}s', JSON.stringify(err));
       }
+    }
+
+    const memFavorites = RdbUtil.memFavorites
+      .filter(f => f.userId === userId)
+      .slice()
+      .sort((a, b) => b.createTime - a.createTime);
+
+    if (memFavorites.length > 0) {
+      let memProducts: Product[] = [];
+      for (const it of memFavorites) {
+        const p = RdbUtil.memProducts.find(p => p.id === it.productId);
+        if (p) {
+          memProducts.push(p);
+        }
+      }
+      return memProducts;
     }
 
     return [];
@@ -1090,22 +1131,6 @@ export class RdbUtil {
   }
 
   static async getFootprintProducts(userId: number): Promise<Product[]> {
-    const memFootprints = RdbUtil.memFootprints
-      .filter(f => f.userId === userId)
-      .slice()
-      .sort((a, b) => b.createTime - a.createTime);
-
-    if (memFootprints.length > 0) {
-      let memProducts: Product[] = [];
-      for (const it of memFootprints) {
-        const p = RdbUtil.memProducts.find(p => p.id === it.productId);
-        if (p) {
-          memProducts.push(p);
-        }
-      }
-      return memProducts;
-    }
-
     const store = await RdbUtil.getStore();
     let footprints: FootprintItem[] = [];
 
@@ -1123,51 +1148,69 @@ export class RdbUtil {
         }
         rs.close();
 
-        footprints.sort((a, b) => b.createTime - a.createTime);
+        if (footprints.length > 0) {
+          footprints.sort((a, b) => b.createTime - a.createTime);
 
-        const productMap: Map<number, Product> = new Map<number, Product>();
-        for (const it of footprints) {
-          const pPred = new relationalStore.RdbPredicates(Constants.TABLE_PRODUCT);
-          pPred.equalTo('id', it.productId);
-          const prs = await store.query(pPred);
-          if (prs.goToFirstRow()) {
-            const p = new Product(
-              prs.getLong(prs.getColumnIndex('id')),
-              prs.getString(prs.getColumnIndex('name')),
-              prs.getDouble(prs.getColumnIndex('price')),
-              prs.getString(prs.getColumnIndex('image')),
-              prs.getString(prs.getColumnIndex('category')),
-              prs.getString(prs.getColumnIndex('description')),
-              prs.getLong(prs.getColumnIndex('stock'))
-            );
-            productMap.set(p.id, p);
-          }
-          prs.close();
-        }
-
-        if (productMap.size < footprints.length && RdbUtil.memProducts.length > 0) {
+          const productMap: Map<number, Product> = new Map<number, Product>();
           for (const it of footprints) {
-            if (!productMap.has(it.productId)) {
-              const p = RdbUtil.memProducts.find(p => p.id === it.productId);
-              if (p) {
-                productMap.set(p.id, p);
+            const pPred = new relationalStore.RdbPredicates(Constants.TABLE_PRODUCT);
+            pPred.equalTo('id', it.productId);
+            const prs = await store.query(pPred);
+            if (prs.goToFirstRow()) {
+              const p = new Product(
+                prs.getLong(prs.getColumnIndex('id')),
+                prs.getString(prs.getColumnIndex('name')),
+                prs.getDouble(prs.getColumnIndex('price')),
+                prs.getString(prs.getColumnIndex('image')),
+                prs.getString(prs.getColumnIndex('category')),
+                prs.getString(prs.getColumnIndex('description')),
+                prs.getLong(prs.getColumnIndex('stock'))
+              );
+              productMap.set(p.id, p);
+            }
+            prs.close();
+          }
+
+          if (productMap.size < footprints.length && RdbUtil.memProducts.length > 0) {
+            for (const it of footprints) {
+              if (!productMap.has(it.productId)) {
+                const p = RdbUtil.memProducts.find(p => p.id === it.productId);
+                if (p) {
+                  productMap.set(p.id, p);
+                }
               }
             }
           }
-        }
 
-        let products: Product[] = [];
-        for (const it of footprints) {
-          const p = productMap.get(it.productId);
-          if (p) {
-            products.push(p);
+          let products: Product[] = [];
+          for (const it of footprints) {
+            const p = productMap.get(it.productId);
+            if (p) {
+              products.push(p);
+            }
           }
-        }
 
-        return products;
+          return products;
+        }
       } catch (err) {
         hilog.error(0x0000, 'RdbUtil', 'RDB: getFootprintProducts failed: %{public}s', JSON.stringify(err));
       }
+    }
+
+    const memFootprints = RdbUtil.memFootprints
+      .filter(f => f.userId === userId)
+      .slice()
+      .sort((a, b) => b.createTime - a.createTime);
+
+    if (memFootprints.length > 0) {
+      let memProducts: Product[] = [];
+      for (const it of memFootprints) {
+        const p = RdbUtil.memProducts.find(p => p.id === it.productId);
+        if (p) {
+          memProducts.push(p);
+        }
+      }
+      return memProducts;
     }
 
     return [];

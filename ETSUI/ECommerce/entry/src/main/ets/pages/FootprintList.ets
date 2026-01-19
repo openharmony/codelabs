@@ -236,7 +236,7 @@ struct FootprintList {
                     });
                 }
 
-                Image(p.image)
+                Image(RdbUtil.resolveImageSource(p.image))
                   .width(72)
                   .height(72)
                   .borderRadius(12)

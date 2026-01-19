@@ -77,16 +77,16 @@ struct Index {
     const existingKeySet: Set<string> = new Set<string>(existingProducts.map(buildKey));
 
     const mockProducts: Product[] = [
-      new Product(0, '智能手机 Pro', 5999, $r('app.media.smartphone'), '电子', '高性能旗舰手机', 50),
-      new Product(0, '蓝牙耳机', 299, $r('app.media.earphones'), '电子', '降噪入耳式耳机', 100),
-      new Product(0, '纯棉T恤', 99, $r('app.media.shirt'), '服饰', '舒适透气', 200),
-      new Product(0, '休闲运动鞋', 399, $r('app.media.sneaker'), '服饰', '轻便耐磨', 80),
-      new Product(0, '每日坚果', 129, $r('app.media.nut'), '食品', '健康零食', 150),
-      new Product(0, '有机牛奶', 68, $r('app.media.milk'), '食品', '高钙营养', 120),
-      new Product(0, '榨汁机', 159, $r('app.media.juicer'), '家电', '榨汁，鲜榨', 60),
-      new Product(0, '水杯', 50, $r('app.media.bottle'), '生活用品', '便携', 100),
-      new Product(0, 'GeForce RTX 5080', 12559, $r('app.media.gpu'), '电子', '显卡', 40),
-      new Product(0, '牙膏', 20, $r('app.media.toothpaste'), '生活用品', '清洁牙齿', 70),
+      new Product(0, '智能手机 Pro', 5999, 'app.media.smartphone', '电子', '高性能旗舰手机', 50),
+      new Product(0, '蓝牙耳机', 299, 'app.media.earphones', '电子', '降噪入耳式耳机', 100),
+      new Product(0, '纯棉T恤', 99, 'app.media.shirt', '服饰', '舒适透气', 200),
+      new Product(0, '休闲运动鞋', 399, 'app.media.sneaker', '服饰', '轻便耐磨', 80),
+      new Product(0, '每日坚果', 129, 'app.media.nut', '食品', '健康零食', 150),
+      new Product(0, '有机牛奶', 68, 'app.media.milk', '食品', '高钙营养', 120),
+      new Product(0, '榨汁机', 159, 'app.media.juicer', '家电', '榨汁，鲜榨', 60),
+      new Product(0, '水杯', 50, 'app.media.bottle', '生活用品', '便携', 100),
+      new Product(0, 'GeForce RTX 5080', 12559, 'app.media.gpu', '电子', '显卡', 40),
+      new Product(0, '牙膏', 20, 'app.media.toothpaste', '生活用品', '清洁牙齿', 70),
     ];
 
     let inserted = false;
@@ -205,7 +205,7 @@ struct Index {
         ForEach(this.shownProductList, (item: Product) => {
           GridItem() {
             Column() {
-              Image(item.image)
+              Image(RdbUtil.resolveImageSource(item.image))
                 .width('100%')
                 .height(150)
                 .borderRadius(12)

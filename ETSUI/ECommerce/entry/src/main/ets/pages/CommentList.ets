@@ -107,11 +107,10 @@ struct CommentList {
       {
         id: `${now}-1`,
         userName: '秋本丽子',
-        vip: '5VIP',
         content: name ? `这${name}真的挺不错的` : '还行',
         createTime: base,
         location: '浙江',
-        likeCount: 2,
+        likeCount: 0,
         liked: false
       },
       {
@@ -120,7 +119,7 @@ struct CommentList {
         content: '挺满意的',
         createTime: base,
         location: '北京',
-        likeCount: 1,
+        likeCount: 0,
         liked: false
       },
       {
@@ -138,7 +137,7 @@ struct CommentList {
         content: '回复@中村由利：还挺不错的',
         createTime: base,
         location: '北京',
-        likeCount: 1,
+        likeCount: 0,
         liked: false,
         replyToName: '中村由利',
         parentId: `${now}-3`
@@ -197,7 +196,8 @@ struct CommentList {
       location: c.location,
       likeCount: nextCount,
       liked: nextLiked,
-      replyToName: c.replyToName
+      replyToName: c.replyToName,
+      parentId: c.parentId
     };
     this.comments[idx] = next;
     this.comments = this.comments.slice();
@@ -365,19 +365,20 @@ struct CommentList {
               .layoutWeight(1);
 
               Row({ space: 6 }) {
-                Text(c.liked ? '♥' : '♡')
-                  .fontSize(18)
-                  .fontColor(c.liked ? '#FF4D4F' : '#9CA3AF')
-                  .onClick(() => {
-                    this.toggleLikeById(c.id);
-                  });
+                Text('点赞')
+                  .fontSize(12)
+                  .fontColor(c.liked ? '#EF4444' : '#6B7280');
 
-                if (c.likeCount > 0) {
-                  Text(`${c.likeCount}`)
-                    .fontSize(14)
-                    .fontColor('#9CA3AF');
-                }
+                Text(`${c.likeCount}`)
+                  .fontSize(12)
+                  .fontColor(c.liked ? '#EF4444' : '#9CA3AF');
               }
+              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .borderRadius(12)
+              .backgroundColor(c.liked ? '#FFE4E6' : '#F3F4F6')
+              .onClick(() => {
+                this.toggleLikeById(c.id);
+              })
               .alignItems(VerticalAlign.Center);
             }
             .padding({ left: 16, right: 16, top: 14, bottom: 14 })
