@@ -9,7 +9,7 @@
 - 购物车：数量增减、单选/全选、管理模式批量删除、结算支付
 - 订单：列表按状态筛选、订单详情
 - 个人中心：代金券余额展示、收货地址、收藏列表、足迹列表
-- 本地持久化：使用 RDB 保存用户/商品/购物车/地址/订单/收藏/足迹等数据
+- 本地持久化：使用 RDB 保存用户/商品/购物车/地址/订单/收藏/足迹/登录会话等数据
 
 本应用的运行效果如下图所示：
 
@@ -463,7 +463,9 @@ private deleteById(id: string) {
 
 ## 本地数据存储（RdbUtil）
 
-项目使用 `@kit.ArkData` 的 `relationalStore` 做本地持久化，应用启动时由 `EntryAbility` 初始化数据库；`RdbUtil` 内部缓存 `rdbStore/context`，所有读写优先走 RDB，预览器/无库/异常场景则使用 `memUsers/memProducts/memCart/...` 作为内存兜底。
+项目使用 `@kit.ArkData` 的 `relationalStore` 做本地持久化，应用启动时由 `EntryAbility` 初始化数据库；`RdbUtil` 内部缓存 `rdbStore/context`，商品/收藏/足迹等读取优先走 RDB，若结果为空再回退到 `memUsers/memProducts/memCart/...` 作为内存兜底。
+
+登录会话持久化使用 `user_session` 表：登录成功写入会话，启动时读取并恢复 `AppStorage(currentUser)`。
 
 数据库表名集中在 `Constants.ets`，并由 `RdbUtil.createTables()` 通过 `CREATE TABLE IF NOT EXISTS` 初始化。
 
