@@ -19,13 +19,13 @@ import { util } from '@kit.ArkTS';
  * 文件元数据接口
  */
 export interface FileMetadata {
-  originalExtension: string;    // 原始文件扩展名
-  timestamp: string;            // ISO格式时间戳
-  version: string;              // 元数据版本号
-  algorithm?: string;           // 算法标识：'AES-GCM' 或 'RSA-PKCS1-SHA256'
-  fileSize?: number;            // 文件大小（字节）
-  tag?: string;        // GCM Tag
-  hash?: string;       // 文件哈希（Base64）
+  originalExtension: string; // 原始文件扩展名
+  timestamp: string; // ISO格式时间戳
+  version: string; // 元数据版本号
+  algorithm?: string; // 算法标识：'AES-GCM' 或 'RSA-PKCS1-SHA256'
+  fileSize?: number; // 文件大小（字节）
+  tag?: string; // GCM Tag
+  hash?: string; // 文件哈希（Base64）
 }
 
 /**
@@ -217,8 +217,8 @@ export class MetadataHelper {
     fileName: string,
     algorithm: string,
     fileSize?: number,
-    tag?: ArrayBuffer,  // 直接传入 Tag 二进制数据
-    hash?: ArrayBuffer  // 可选的文件哈希二进制
+    tag?: ArrayBuffer, // 直接传入 Tag 二进制数据
+    hash?: ArrayBuffer // 可选的文件哈希二进制
   ): FileMetadata {
     const extension = this.getFileExtension(fileName);
 
@@ -277,7 +277,9 @@ export class MetadataHelper {
    * @returns 文件扩展名（不含点）
    */
   static getFileExtension(fileName: string): string {
-    if (!fileName) return '';
+    if (!fileName) {
+      return '';
+    }
 
     const parts = fileName.split('.');
     return parts.length > 1 ? parts[parts.length - 1] : '';
@@ -289,10 +291,14 @@ export class MetadataHelper {
    * @returns 基础文件名
    */
   static getFileBaseName(fileName: string): string {
-    if (!fileName) return '';
+    if (!fileName) {
+      return '';
+    }
 
     const lastDotIndex = fileName.lastIndexOf('.');
-    if (lastDotIndex === -1) return fileName;
+    if (lastDotIndex === -1) {
+      return fileName;
+    }
 
     return fileName.substring(0, lastDotIndex);
   }

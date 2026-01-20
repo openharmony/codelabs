@@ -22,7 +22,6 @@ const TAG: string = '[Crypto_Framework]';
 const FILE_SLEEP_TIME: number = 100;
 const TEXT_MAX_READ_LEN: number = 8192;
 const BINARY_BUFFER_SIZE: number = 65536; // 64KB buffer for binary operations
-const LARGE_FILE_THRESHOLD: number = 10 * 1024 * 1024; // 10MB threshold for large files
 
 // filePicker和文件管理，在OH 4.0.8.2镜像版本，读取uri后，无法直接read、write文件内容，需要sleep几十ms，这里sleep100毫秒
 function sleep(time: number): Promise<number> {
@@ -64,12 +63,12 @@ interface FileInfo {
 
 // 元数据头接口
 interface FileHeader {
-  magic: string;          // 魔数标识 "OPFE"
-  version: number;        // 格式版本
+  magic: string; // 魔数标识 "OPFE"
+  version: number; // 格式版本
   originalExtension: string; // 原始文件扩展名
-  originalSize: number;   // 原始文件大小
-  timestamp: number;      // 加密时间戳
-  headerSize: number;     // 头大小
+  originalSize: number; // 原始文件大小
+  timestamp: number; // 加密时间戳
+  headerSize: number; // 头大小
 }
 
 // 加密操作结果接口
@@ -96,7 +95,8 @@ class EnhancedFileManager {
 
   // 扩展文件类型分类
   private readonly textExtensions = ['txt', 'md', 'json', 'xml', 'html', 'css', 'js', 'ts', 'csv'];
-  private readonly documentExtensions = ['doc', 'docx', 'pdf', 'ppt', 'pptx', 'xls', 'xlsx', 'rtf', 'odt', 'ods', 'odp'];
+  private readonly documentExtensions =
+    ['doc', 'docx', 'pdf', 'ppt', 'pptx', 'xls', 'xlsx', 'rtf', 'odt', 'ods', 'odp'];
   private readonly imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg', 'ico', 'tiff'];
   private readonly audioExtensions = ['mp3', 'wav', 'ogg', 'aac', 'flac', 'm4a', 'wma'];
   private readonly videoExtensions = ['mp4', 'avi', 'mov', 'mkv', 'webm', 'flv', 'wmv', 'mpeg'];
@@ -228,7 +228,7 @@ class EnhancedFileManager {
   /**
    * 检测文件是否包含元数据头（加密文件）
    */
-  async isEncryptedFile(fileUri: string): Promise<{isEncrypted: boolean, originalExtension?: string}> {
+  async isEncryptedFile(fileUri: string): Promise<{ isEncrypted: boolean, originalExtension?: string }> {
     try {
       const fileInfo = await this.getFileInfo(fileUri);
       if (fileInfo.size < this.FILE_HEADER_SIZE) {
@@ -303,14 +303,30 @@ class EnhancedFileManager {
   private detectFileType(fileUri: string): FileType {
     const extension = fileUri.split('.').pop()?.toLowerCase() || '';
 
-    if (this.textExtensions.includes(extension)) return FileType.TEXT;
-    if (this.documentExtensions.includes(extension)) return FileType.DOCUMENT;
-    if (this.imageExtensions.includes(extension)) return FileType.IMAGE;
-    if (this.audioExtensions.includes(extension)) return FileType.AUDIO;
-    if (this.videoExtensions.includes(extension)) return FileType.VIDEO;
-    if (this.archiveExtensions.includes(extension)) return FileType.ARCHIVE;
-    if (this.encryptedExtensions.includes(extension)) return FileType.ENCRYPTED;
-    if (this.signatureExtensions.includes(extension)) return FileType.SIGNATURE;
+    if (this.textExtensions.includes(extension)) {
+      return FileType.TEXT;
+    }
+    if (this.documentExtensions.includes(extension)) {
+      return FileType.DOCUMENT;
+    }
+    if (this.imageExtensions.includes(extension)) {
+      return FileType.IMAGE;
+    }
+    if (this.audioExtensions.includes(extension)) {
+      return FileType.AUDIO;
+    }
+    if (this.videoExtensions.includes(extension)) {
+      return FileType.VIDEO;
+    }
+    if (this.archiveExtensions.includes(extension)) {
+      return FileType.ARCHIVE;
+    }
+    if (this.encryptedExtensions.includes(extension)) {
+      return FileType.ENCRYPTED;
+    }
+    if (this.signatureExtensions.includes(extension)) {
+      return FileType.SIGNATURE;
+    }
 
     return FileType.UNKNOWN;
   }
@@ -416,7 +432,8 @@ class EnhancedFileManager {
         EnhancedFileManager.readResult = readLen;
         try {
           const decoder = new util.TextDecoder('utf-8');
-          EnhancedFileManager.readString = decoder.decode(new Uint8Array(EnhancedFileManager.readBuffer).slice(0, 1000));
+          EnhancedFileManager.readString =
+            decoder.decode(new Uint8Array(EnhancedFileManager.readBuffer).slice(0, 1000));
         } catch (e) {
           EnhancedFileManager.readString = '';
         }
@@ -464,7 +481,9 @@ class EnhancedFileManager {
           length: chunkSize
         });
 
-        if (readLen === 0) break;
+        if (readLen === 0) {
+          break;
+        }
 
         // 复制数据到主缓冲区
         const mainView = new Uint8Array(buffer, bytesRead, readLen);
@@ -556,7 +575,9 @@ class EnhancedFileManager {
         });
 
         totalWritten += writeLen;
-        if (writeLen === 0) break;
+        if (writeLen === 0) {
+          break;
+        }
       }
 
       EnhancedFileManager.writeResult = totalWritten;
@@ -577,7 +598,8 @@ class EnhancedFileManager {
   /**
    * 增强的文件加密方法 - 包含元数据头，与CryptoOperation结合
    */
-  async encryptFileWithHeader(sourceUri: string, targetUri: string, encryptionKey: string): Promise<FileOperationResult> {
+  async encryptFileWithHeader(sourceUri: string, targetUri: string,
+    encryptionKey: string): Promise<FileOperationResult> {
     try {
       // 获取源文件信息
       const fileInfo = await this.getFileInfo(sourceUri);
@@ -635,7 +657,8 @@ class EnhancedFileManager {
   /**
    * 增强的文件解密方法 - 解析元数据头，与CryptoOperation结合
    */
-  async decryptFileWithHeader(sourceUri: string, targetUri: string, decryptionKey: string): Promise<FileOperationResult> {
+  async decryptFileWithHeader(sourceUri: string, targetUri: string,
+    decryptionKey: string): Promise<FileOperationResult> {
     try {
       // 读取加密文件（包含元数据头）
       const readResult = await this.readTextFile(sourceUri);
@@ -682,7 +705,8 @@ class EnhancedFileManager {
 
       // 验证解密后数据大小与头中记录的是否一致
       if (decryptResult.data.byteLength !== fileHeader.originalSize) {
-        Logger.warn(TAG, `解密后文件大小不匹配: 头中记录=${fileHeader.originalSize}, 实际=${decryptResult.data.byteLength}`);
+        Logger.warn(TAG,
+          `解密后文件大小不匹配: 头中记录=${fileHeader.originalSize}, 实际=${decryptResult.data.byteLength}`);
       }
 
       // 写入解密后的文件，使用原始扩展名
@@ -693,7 +717,8 @@ class EnhancedFileManager {
         return writeResult;
       }
 
-      Logger.info(TAG, `文件解密成功，原始格式: ${fileHeader.originalExtension}, 解密大小: ${decryptResult.data.byteLength}字节`);
+      Logger.info(TAG,
+        `文件解密成功，原始格式: ${fileHeader.originalExtension}, 解密大小: ${decryptResult.data.byteLength}字节`);
 
       return {
         success: true,
@@ -786,7 +811,8 @@ class EnhancedFileManager {
   /**
    * 文件验签 - 验证文件数字签名
    */
-  async verifyFileSignature(fileUri: string, signature: ArrayBuffer, rsaKeyJson: string): Promise<{success: boolean, valid?: boolean, message: string}> {
+  async verifyFileSignature(fileUri: string, signature: ArrayBuffer,
+    rsaKeyJson: string): Promise<{ success: boolean, valid?: boolean, message: string }> {
     try {
       const readResult = await this.readTextFile(fileUri);
       if (!readResult.success) {
@@ -881,7 +907,9 @@ class EnhancedFileManager {
           length: chunkSize
         });
 
-        if (readLen === 0) break;
+        if (readLen === 0) {
+          break;
+        }
 
         fs.writeSync(t_fd, buffer, {
           offset: bytesCopied,
@@ -898,8 +926,12 @@ class EnhancedFileManager {
         bytesProcessed: bytesCopied
       };
     } finally {
-      if (sourceFile !== null) fs.closeSync(sourceFile);
-      if (targetFile !== null) fs.closeSync(targetFile);
+      if (sourceFile !== null) {
+        fs.closeSync(sourceFile);
+      }
+      if (targetFile !== null) {
+        fs.closeSync(targetFile);
+      }
     }
   }
 

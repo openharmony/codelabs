@@ -38,7 +38,6 @@ export struct Encrypt {
   fileHash: string = '';
   originalExtension: string = '';
   isProcessing: boolean = false;
-
   @State keyFileName: string = '';
   @State keyFileUri: string = '';
   @State textFileUri: string = '';
@@ -49,7 +48,6 @@ export struct Encrypt {
   @State message: string = '';
   @State createKeyUri: string = '';
   @State encryptedFileUri: string = '';
-
   private CryptoOperation: CryptoOperation = new CryptoOperation();
 
   build() {
@@ -74,7 +72,7 @@ export struct Encrypt {
                 .fontWeight(600)
                 .fontColor($r('sys.color.font_primary'))
                 .lineHeight(32)
-              
+
               Text('安全可靠的加密文件保护工具')
                 .fontSize(14)
                 .fontWeight(400)
@@ -86,11 +84,23 @@ export struct Encrypt {
             .width('100%')
           }
           .width('100%')
-          .padding({ left: 24, right: 24, top: 16, bottom: 8 })
+          .padding({
+            left: 24,
+            right: 24,
+            top: 16,
+            bottom: 8
+          })
 
           // 文件选择卡片区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 卡片标题
                 Row() {
@@ -105,7 +115,12 @@ export struct Encrypt {
                   .width('100%')
                 }
                 .width('100%')
-                .padding({ left: 20, right: 20, top: 16, bottom: 12 })
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 16,
+                  bottom: 12
+                })
 
                 // 分隔线
                 Divider()
@@ -143,7 +158,8 @@ export struct Encrypt {
                           Text(this.textFileName === '' ? $r('app.string.please_choose') : this.textFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -169,7 +185,12 @@ export struct Encrypt {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -212,7 +233,8 @@ export struct Encrypt {
                           Text(this.keyFileName === '' ? $r('app.string.please_choose') : this.keyFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -238,7 +260,12 @@ export struct Encrypt {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -269,11 +296,23 @@ export struct Encrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 加密结果显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -324,7 +363,12 @@ export struct Encrypt {
                     .scrollBar(BarState.Auto)
                   }
                   .width('100%')
-                  .padding({ left: 20, right: 20, top: 8, bottom: 16 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 8,
+                    bottom: 16
+                  })
                 }
                 .width('100%')
               }
@@ -341,11 +385,23 @@ export struct Encrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 文件信息显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -417,7 +473,12 @@ export struct Encrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 操作按钮区域
           Column({ space: 16 }) {
@@ -520,7 +581,12 @@ export struct Encrypt {
             }
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 8, bottom: 24 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 24
+          })
         }
         .width('100%')
         .padding({ top: 8, bottom: 16 })
@@ -751,7 +817,9 @@ export struct Encrypt {
    * 从文件URI中提取文件名
    */
   private getFileNameFromUri(uri: string): string {
-    if (!uri) return '未知文件';
+    if (!uri) {
+      return '未知文件';
+    }
     try {
       const segments = uri.split('/');
       let name = segments[segments.length - 1] || '未知文件';
@@ -759,7 +827,10 @@ export struct Encrypt {
       try {
         name = decodeURIComponent(name);
       } catch (e) {
-        try { name = decodeURI(name); } catch (_) { /* ignore */ }
+        try {
+          name = decodeURI(name);
+        } catch (_) { /* ignore */
+        }
       }
       // 如果包含 file:// 前缀，去掉路径部分
       if (name.startsWith('file://')) {
@@ -844,7 +915,8 @@ export struct Encrypt {
         const finalEncryptedData = MetadataHelper.createDataWithMetadata(encryptResult.data, metadata);
 
         // 5. 显示加密信息
-        this.cipherText = `加密成功！\n原始数据大小: ${metadata.fileSize} 字节\n加密后大小: ${finalEncryptedData.byteLength} 字节`;
+        this.cipherText =
+          `加密成功！\n原始数据大小: ${metadata.fileSize} 字节\n加密后大小: ${finalEncryptedData.byteLength} 字节`;
 
         // 6. 保存带元数据头的加密文件
         const saveSuccess = await this.createEncryptedFileAndWrite(finalEncryptedData, this.originalExtension);
@@ -853,7 +925,8 @@ export struct Encrypt {
           windowClass.getUIContext().getPromptAction().showToast({
             message: $r('app.string.encrypt_success')
           });
-          Logger.info(TAG, `文件加密成功，原始格式: ${this.originalExtension}, 最终文件大小: ${finalEncryptedData.byteLength} 字节`);
+          Logger.info(TAG,
+            `文件加密成功，原始格式: ${this.originalExtension}, 最终文件大小: ${finalEncryptedData.byteLength} 字节`);
         }
       } else {
         windowClass.getUIContext().getPromptAction().showToast({

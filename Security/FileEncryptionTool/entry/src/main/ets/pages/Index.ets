@@ -12,12 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { Encrypt } from '../tab/Encrypt'
 import { Decrypt } from '../tab/Decrypt'
 import { Sign } from '../tab/Sign'
 import { Verify } from '../tab/Verify'
-
 @Entry
 @Component
 struct Index {
@@ -25,8 +23,8 @@ struct Index {
   @State selectedFontColor: string = '#007DFF'
   @State currentIndex: number = 0
   private controller: TabsController = new TabsController()
-
-  @Builder TabBuilder(index: number, name: Resource) {
+  @Builder
+  TabBuilder(index: number, name: Resource) {
     Column() {
       Text(name)
         .id(index.toString())
@@ -44,14 +42,18 @@ struct Index {
         .margin({ bottom: 8 })
     }
   }
-
   build() {
     Column() {
       Text($r('app.string.module_desc'))
         .fontSize(24)
         .fontWeight(700)
         .textAlign(TextAlign.Start)
-        .margin({ left: 24, right: 24, bottom: 11, top: 12 })
+        .margin({
+          left: 24,
+          right: 24,
+          bottom: 11,
+          top: 12
+        })
         .fontColor('#182431')
         .lineHeight(33)
         .alignSelf(ItemAlign.Start)
