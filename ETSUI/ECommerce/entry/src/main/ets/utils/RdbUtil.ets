@@ -935,26 +935,33 @@ export class RdbUtil {
   }
 
   static async addFavorite(userId: number, productId: number): Promise<void> {
-    const exists = RdbUtil.memFavorites.some(f => f.userId === userId && f.productId === productId);
-    if (!exists) {
-      RdbUtil.memFavorites.push(new FavoriteItem(RdbUtil.memFavorites.length + 1, userId, productId, new Date().getTime()));
+    const now = new Date().getTime();
+    const store = await RdbUtil.getStore();
+
+    if (store) {
+      try {
+        const pred = new relationalStore.RdbPredicates(Constants.TABLE_FAVORITE);
+        pred.equalTo('userId', userId);
+        pred.equalTo('productId', productId);
+        const rs = await store.query(pred);
+        const already = rs.goToFirstRow();
+        rs.close();
+        if (!already) {
+          const valueBucket: relationalStore.ValuesBucket = {
+            userId,
+            productId,
+            createTime: now
+          };
+          await store.insert(Constants.TABLE_FAVORITE, valueBucket);
+        }
+      } catch (err) {
+        hilog.error(0x0000, 'RdbUtil', 'RDB: addFavorite failed: %{public}s', JSON.stringify(err));
+      }
     }
 
-    const store = await RdbUtil.getStore();
-    if (!store) return;
-
-    try {
-      const already = await RdbUtil.isFavorite(userId, productId);
-      if (already) return;
-
-      const valueBucket: relationalStore.ValuesBucket = {
-        userId,
-        productId,
-        createTime: new Date().getTime()
-      };
-      await store.insert(Constants.TABLE_FAVORITE, valueBucket);
-    } catch (err) {
-      hilog.error(0x0000, 'RdbUtil', 'RDB: addFavorite failed: %{public}s', JSON.stringify(err));
+    const exists = RdbUtil.memFavorites.some(f => f.userId === userId && f.productId === productId);
+    if (!exists) {
+      RdbUtil.memFavorites.push(new FavoriteItem(RdbUtil.memFavorites.length + 1, userId, productId, now));
     }
   }
 
