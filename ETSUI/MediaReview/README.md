@@ -150,7 +150,7 @@ Tabs({ barPosition: BarPosition.End, index: this.currentTab }) {
   
   搜索页做两件事：
 1. 根据路由参数切换“图书/电影”数据源与分类。
-2. 根据输入关键词 + 分类过滤列表，并按评分排序（评分相同按评分人数）。
+2. 根据输入关键词 + 分类过滤列表；有关键词时按评分排序（评分相同按评分人数），无关键词时保持原始列表顺序。
 
 核心代码如下：
 
@@ -177,34 +177,51 @@ aboutToAppear() {
 
 ```typescript
 private filteredItems(): (Book | Movie)[] {
-  const keywords = this.query.trim().toLowerCase().split(/\s+/).filter(k => k.length > 0)
+  const q = this.query.trim().toLowerCase()
+  const keywords = q.split(/\s+/).filter(k => k.length > 0)
   const cat = this.selectedCategory
 
-  const base = this.items.filter((item: Book | Movie) => {
-    const hitCat = cat === '全部' || item.tags.includes(cat)
-    if (!hitCat) return false
+  const base = this.items.filter((b: Book | Movie) => {
+    let hitQuery = true
+    if (keywords.length > 0) {
+      let fullText = ''
+      if (this.searchType === 'book') {
+        const book = b as Book
+        fullText = (book.title + ' ' + book.author + ' ' + book.publisher + ' ' + book.year).toLowerCase()
+      } else {
+        const movie = b as Movie
+        const castNames = movie.cast.map(c => c.name).join(' ')
+        fullText = (movie.title + ' ' + movie.director + ' ' + castNames + ' ' + movie.year).toLowerCase()
+      }
 
-    if (keywords.length <= 0) return true
+      for (const k of keywords) {
+        if (!fullText.includes(k)) {
+          hitQuery = false
+          break
+        }
+      }
+    }
 
-    const fullText = this.searchType === 'book'
-      ? `${(item as Book).title} ${(item as Book).author} ${(item as Book).publisher} ${(item as Book).year}`.toLowerCase()
-      : `${(item as Movie).title} ${(item as Movie).director} ${(item as Movie).cast.map(c => c.name).join(' ')} ${(item as Movie).year}`.toLowerCase()
-
-    return keywords.every(k => fullText.includes(k))
+    const hitCat = cat === '全部' || b.tags.includes(cat)
+    return hitQuery && hitCat
   })
 
   const sorted = base.slice()
-  sorted.sort((a, b) => {
-    if (b.rating !== a.rating) return b.rating - a.rating
-    return b.ratingCount - a.ratingCount
-  })
+  if (keywords.length > 0) {
+    sorted.sort((a: Book | Movie, b: Book | Movie) => {
+      if (b.rating !== a.rating) {
+        return b.rating - a.rating
+      }
+      return b.ratingCount - a.ratingCount
+    })
+  }
   return sorted
 }
 ```
 
 - 关键词用空格分词，并用 `every()` 实现“所有关键词都命中”（AND）。
 
-- 分类通过 `item.tags.includes(cat)` 过滤；最终按 `rating` 降序输出（评分相同按 `ratingCount`）。
+- 分类通过 `item.tags.includes(cat)` 过滤；有关键词时按 `rating` 降序输出（评分相同按 `ratingCount`），无关键词时保持原顺序。
   
   ## 榜单页（RankPage）
   
