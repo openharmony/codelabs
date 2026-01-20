@@ -17,7 +17,8 @@ import promptAction from '@ohos.promptAction';
 import common from '@ohos.app.ability.common';
 import { Event, EventModel } from '../model/EventModel';
 import { NotificationService } from '../services/NotificationService';
-
+import { Logger } from '../common/utils/Logger';
+const logger = new Logger('EventEditlPage');
 @Component
 export struct EventEditPage {
   // 接收全局路由栈
@@ -47,9 +48,24 @@ export struct EventEditPage {
       this.startTime = new Date(this.eventItem.startTime);
       this.endTime = new Date(this.eventItem.endTime);
 
-      // 初始化提醒状态
       this.oldReminderId = this.eventItem.reminderId;
       this.isReminderOn = this.oldReminderId > -1;
+
+      // ✅ 【修正代码】使用 .then() 替代 await
+      // 这样就不需要在 aboutToAppear 上加 async 了
+      EventModel.queryById(this.eventId).then((freshEvent) => {
+        if (freshEvent) {
+          // 数据库查到了最新数据，覆盖当前页面的状态
+          this.startTime = new Date(freshEvent.startTime);
+          this.endTime = new Date(freshEvent.endTime);
+          this.title = freshEvent.title;
+          this.description = freshEvent.description;
+          this.isAllDay = freshEvent.isAllDay;
+          // 如果需要，这里也可以刷新提醒状态
+          this.oldReminderId = freshEvent.reminderId;
+          this.isReminderOn = this.oldReminderId > -1;
+        }
+      });
     }
   }
 
@@ -162,9 +178,17 @@ export struct EventEditPage {
       event.reminderId = newReminderId;
       await EventModel.update(event);
     }
+    AppStorage.setOrCreate('GlobalRefreshSignal', Date.now());
+    logger.info('Event saved, sent GlobalRefreshSignal');
 
     promptAction.showToast({ message: $r('app.string.toast_save_success') });
     AppStorage.setOrCreate('refreshEventList', Date.now());
+
+    // [DEBUG] 1. 打印保存时的关键信息
+    // 这里的 logger 假设您文件头部已经定义了 const logger = new Logger(...)
+    // 如果报错找不到 logger，请临时改成 console.error
+    logger.error(`[DEBUG_1_EDIT] 保存完毕，即将退出。StartTime: ${this.startTime.getTime()}, ID: ${this.eventId}`);
+
     this.pageStack.pop();
   }
 

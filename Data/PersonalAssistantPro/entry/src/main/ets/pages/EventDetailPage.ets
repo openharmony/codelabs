@@ -17,37 +17,43 @@ import { Event, EventModel } from '../model/EventModel';
 import { DateUtils } from '../common/utils/DateUtils';
 import { StyleConstants } from '../common/constants/StyleConstants';
 import { promptAction } from '@kit.ArkUI';
+import { Logger } from '../common/utils/Logger';
 
-/**
- * 日程详情页面
- * 业务逻辑：展示详情 -> 可跳转编辑 -> 编辑返回后刷新数据
- */
+const logger = new Logger('EventDetailPage');
+
 @Component
 export struct EventDetailPage {
-  //  1. 接收从 MainPage 路由传递的参数
+  // 1. 接收从 MainPage 路由传递的参数
   @State eventItem: Event | undefined = undefined;
-
-  //  2. 接收路由栈，用于跳转和返回
+  @State forceUpdateTrigger: number = 0;
+  // 2. 接收路由栈
   @Consume('pageStack') pageStack: NavPathStack;
 
-  //  3. 监听全局刷新信号 (用于编辑后回来刷新页面)
-  @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
+  // 3. 监听列表刷新信号（只用于删除时通知列表页，不用来刷新自己了）
+  @StorageProp('refreshEventList') refreshSignal: number = 0;
 
-  async onRefreshChange() {
-    // 当编辑页保存并触发 refreshEventList 时，这里会执行
-    // 我们需要重新从数据库查一遍最新的 eventItem
+  /**
+   * 核心刷新逻辑：根据 ID 查库
+   */
+  async reloadFromDb() {
+    // 1. 先查库，拿到最新的数据
     if (this.eventItem && this.eventItem.id) {
-      // 这里模拟一个 queryById (实际可以用 queryAll 过滤，或在 Model 加 queryById)
-      // 为了代码简洁，直接复用 queryAll + 过滤，性能允许
-      const allEvents = await EventModel.queryUpcoming(); // 或者 queryAll
-      const latest = allEvents.find(e => e.id === this.eventItem?.id);
+      const freshData = await EventModel.queryById(this.eventItem.id);
 
-      // 如果找到了最新数据（可能改了时间、标题），更新 UI
-      if (latest) {
-        this.eventItem = latest;
-      } else {
-        // 如果没找到，说明可能被删了，或者时间过期了
-        // 这里可以不做处理，或者 pop
+      if (freshData) {
+        logger.error(`[DEBUG_FORCE] 查到新数据: ${freshData.startTime}, 准备执行【毁灭重生】刷新`);
+
+        // 🔥🔥🔥【第一步】销毁 UI 🔥🔥🔥
+        // 设为 undefined，build() 里的 if (this.eventItem) 会变成 false
+        // 整个详情页的内容会被从屏幕上移除
+        this.eventItem = undefined;
+
+        // 🔥🔥🔥【第二步】重建 UI 🔥🔥🔥
+        // 延迟 10ms (极短时间，人眼几乎看不出闪烁，但足够让引擎重绘)
+        setTimeout(() => {
+          this.eventItem = freshData; // 重新赋值，UI 重新创建，读取新时间
+          logger.error('[DEBUG_FORCE] UI 已重建，时间应为最新');
+        }, 10);
       }
     }
   }
@@ -68,21 +74,16 @@ export struct EventDetailPage {
         await EventModel.deleteById(this.eventItem.id);
         promptAction.showToast({ message: '日程已删除' });
 
-        // 触发全局刷新，通知列表页
+        // 通知列表页刷新
         AppStorage.setOrCreate('refreshEventList', Date.now());
 
-        // 返回列表页
         this.pageStack.pop();
       }
     });
   }
 
-  /**
-   * 处理编辑操作
-   */
   private handleEdit() {
     if (this.eventItem) {
-      // 跳转到编辑页，传入当前对象
       this.pageStack.pushPath({ name: 'EventEditPage', param: this.eventItem });
     }
   }
@@ -93,7 +94,6 @@ export struct EventDetailPage {
       if (icon) {
         Image(icon).width(20).height(20).margin({ right: 12 }).fillColor(StyleConstants.COLOR_PRIMARY)
       } else {
-        // 默认圆点
         Circle({ width: 8, height: 8 }).fill(StyleConstants.COLOR_PRIMARY).margin({ right: 12 })
       }
 
@@ -116,9 +116,10 @@ export struct EventDetailPage {
   }
 
   build() {
+    // NavDestination 是处理 Navigation 页面生命周期的关键
     NavDestination() {
       Column() {
-        // --- 1. 自定义标题栏 ---
+        // --- 1. 标题栏 ---
         Row() {
           Image($r('app.media.ic_back'))
             .width(24).height(24)
@@ -129,7 +130,6 @@ export struct EventDetailPage {
             .margin({ left: 16 })
             .layoutWeight(1)
 
-          // 右侧菜单
           Row() {
             Text('编辑')
               .fontSize(16).fontColor(StyleConstants.COLOR_PRIMARY)
@@ -148,7 +148,7 @@ export struct EventDetailPage {
         if (this.eventItem) {
           Scroll() {
             Column() {
-              // --- 2. 顶部卡片 (标题 & 状态) ---
+              // --- 2. 顶部卡片 ---
               Column() {
                 Text(this.eventItem.title)
                   .fontSize(24)
@@ -181,25 +181,11 @@ export struct EventDetailPage {
               .backgroundColor(Color.White)
               .margin({ bottom: 12 })
 
-              // --- 3. 详细信息列表 ---
+              // --- 3. 详细信息 ---
               Column() {
-                // 开始时间
-                this.DetailItem(
-                  '开始时间',
-                  DateUtils.formatFull(this.eventItem.startTime)
-                )
-
-                // 结束时间
-                this.DetailItem(
-                  '结束时间',
-                  DateUtils.formatFull(this.eventItem.endTime)
-                )
-
-                // 备注
-                this.DetailItem(
-                  '备注说明',
-                  this.eventItem.description || '暂无备注'
-                )
+                this.DetailItem('开始时间', DateUtils.formatFull(this.eventItem.startTime) + (this.forceUpdateTrigger >= 0 ? "" : ""))
+                this.DetailItem('结束时间', DateUtils.formatFull(this.eventItem.endTime) + (this.forceUpdateTrigger >= 0 ? "" : ""))
+                this.DetailItem('备注说明', this.eventItem.description || '暂无备注')
               }
               .padding({ left: 24, right: 24 })
               .backgroundColor(Color.White)
@@ -210,7 +196,6 @@ export struct EventDetailPage {
           .layoutWeight(1)
           .backgroundColor('#F1F3F5')
         } else {
-          // 异常空状态
           Column() {
             Text('未找到日程信息').fontSize(16).fontColor(Color.Gray)
           }
@@ -220,5 +205,13 @@ export struct EventDetailPage {
       .width('100%').height('100%').backgroundColor('#F1F3F5')
     }
     .hideTitleBar(true)
+    // 使用 .onShown() 生命周期
+    // 当编辑页 pop，详情页重新显示时，这个方法会被系统自动调用
+    .onShown(() => {
+      logger.info('[DEBUG] onShown 触发，延时执行刷新...');
+      setTimeout(() => {
+        this.reloadFromDb();
+      }, 50); // 50毫秒足够让页面稳定下来，从而正确响应 UI 刷新
+    })
   }
 }
