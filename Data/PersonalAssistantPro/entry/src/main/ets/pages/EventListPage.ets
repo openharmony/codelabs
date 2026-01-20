@@ -35,12 +35,21 @@ export struct EventListPage {
   @State viewMode: string = 'month';
 
   @Consume('pageStack') pageStack: NavPathStack;
+  // 同样监听这个强刷新信号
+  @StorageProp('GlobalRefreshSignal') @Watch('onGlobalRefresh') signal: number = 0;
+
+  onGlobalRefresh() {
+    logger.info('Received GlobalRefreshSignal, refreshing list...');
+    this.refreshAllData();
+  }
   @StorageProp('notificationJumpTarget') @Watch('onNotificationJump') jumpTarget: string = '';
   @StorageProp('notificationJumpId') jumpId: number = -1;
   @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
 
   private calendarViewModel = new CalendarViewModel();
-
+  onPageShow() {
+    this.refreshAllData();
+  }
   aboutToAppear() {
     // 1. ✅ [核心修复] 使用 setTimeout 延迟检查，确保能够捕获冷启动信号
     // 将检查放到事件队列的末尾，避开 UI 初始化竞争
@@ -357,7 +366,7 @@ export struct EventListPage {
               List() {
                 ForEach(this.events, (item: Event, index: number) => {
                   this.EventItem(item, index)
-                }, (item: Event) => item.id.toString())
+                }, (item: Event) => `${item.id}_${item.startTime}`)
               }
               .width('100%')
               .layoutWeight(1)

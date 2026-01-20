@@ -18,7 +18,7 @@ import { RdbHelper, TABLE_EVENT } from '../common/database/RdbHelper';
 import { Logger } from '../common/utils/Logger';
 
 const logger = new Logger('EventModel');
-
+@Observed
 export class Event {
   id: number = 0;
   title: string;
@@ -152,6 +152,8 @@ export class EventModel {
     }
   }
   static async queryById(id: number): Promise<Event | undefined> {
+    logger.error(`[DEBUG_2_MODEL] queryById 被调用，查询 ID: ${id}`); // [DEBUG]
+
     let predicates = new relationalStore.RdbPredicates(TABLE_EVENT);
     predicates.equalTo('id', id);
 
@@ -159,7 +161,10 @@ export class EventModel {
       const resultSet = await RdbHelper.getInstance().query(predicates);
       const events = EventModel.resultSetToEvents(resultSet);
       if (events.length > 0) {
+        logger.error(`[DEBUG_2_MODEL] 数据库查到了! 时间戳: ${events[0].startTime}`); // [DEBUG]
         return events[0];
+      } else {
+        logger.error(`[DEBUG_2_MODEL] 数据库查无此ID`); // [DEBUG]
       }
     } catch (err) {
       logger.error('Query event by id failed', JSON.stringify(err));
