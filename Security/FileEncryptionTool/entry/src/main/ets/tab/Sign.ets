@@ -41,7 +41,6 @@ export struct Sign {
   @State isProcessing: boolean = false;
   @State signResult: string = '';
   @State signatureHex: string = ''; // 签名十六进制显示
-
   @State keyFileName: string = '';
   @State keyFileUri: string = '';
   @State textFileUri: string = '';
@@ -53,7 +52,6 @@ export struct Sign {
   @State signFileUri: string = '';
   @State createKeyUri: string = '';
   @State fileSize: number = 0; // 文件大小
-
   private CryptoOperation: CryptoOperation = new CryptoOperation();
 
   build() {
@@ -78,7 +76,7 @@ export struct Sign {
                 .fontWeight(600)
                 .fontColor($r('sys.color.font_primary'))
                 .lineHeight(32)
-              
+
               Text('安全可靠的数字签名工具')
                 .fontSize(14)
                 .fontWeight(400)
@@ -90,11 +88,23 @@ export struct Sign {
             .width('100%')
           }
           .width('100%')
-          .padding({ left: 24, right: 24, top: 16, bottom: 8 })
+          .padding({
+            left: 24,
+            right: 24,
+            top: 16,
+            bottom: 8
+          })
 
           // 文件选择卡片区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 卡片标题
                 Row() {
@@ -109,7 +119,12 @@ export struct Sign {
                   .width('100%')
                 }
                 .width('100%')
-                .padding({ left: 20, right: 20, top: 16, bottom: 12 })
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 16,
+                  bottom: 12
+                })
 
                 // 分隔线
                 Divider()
@@ -147,7 +162,8 @@ export struct Sign {
                           Text(this.textFileName === '' ? $r('app.string.please_choose') : this.textFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -173,7 +189,12 @@ export struct Sign {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -216,7 +237,8 @@ export struct Sign {
                           Text(this.keyFileName === '' ? $r('app.string.please_choose') : this.keyFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -242,7 +264,12 @@ export struct Sign {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -273,11 +300,23 @@ export struct Sign {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 签名结果显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -339,7 +378,12 @@ export struct Sign {
                     .scrollBar(BarState.Auto)
                   }
                   .width('100%')
-                  .padding({ left: 20, right: 20, top: 8, bottom: 16 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 8,
+                    bottom: 16
+                  })
                 }
                 .width('100%')
               }
@@ -356,11 +400,23 @@ export struct Sign {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 文件信息显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -464,7 +520,12 @@ export struct Sign {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 操作按钮区域
           Column({ space: 16 }) {
@@ -569,7 +630,12 @@ export struct Sign {
             }
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 8, bottom: 24 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 24
+          })
         }
         .width('100%')
         .padding({ top: 8, bottom: 16 })
@@ -741,7 +807,8 @@ export struct Sign {
         this.signFileUri = saveUris[0];
 
         // 创建带元数据头的签名数据
-        const signatureWithMetadata = this.createSignatureWithMetadata(signatureData, originalExtension || this.originalExtension);
+        const signatureWithMetadata =
+          this.createSignatureWithMetadata(signatureData, originalExtension || this.originalExtension);
 
         // 使用TextFileManager写入数据
         const writeResult = await TextFileManager.writeTextFile(this.signFileUri, signatureWithMetadata);
@@ -827,14 +894,19 @@ export struct Sign {
    * 从文件URI中提取文件名
    */
   private getFileNameFromUri(uri: string): string {
-    if (!uri) return '未知文件';
+    if (!uri) {
+      return '未知文件';
+    }
     try {
       const segments = uri.split('/');
       let name = segments[segments.length - 1] || '未知文件';
       try {
         name = decodeURIComponent(name);
       } catch (e) {
-        try { name = decodeURI(name); } catch (_) { }
+        try {
+          name = decodeURI(name);
+        } catch (_) {
+        }
       }
       if (name.startsWith('file://')) {
         const parts = name.split('/');
@@ -850,7 +922,9 @@ export struct Sign {
    * 格式化文件大小显示
    */
   private formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 B';
+    if (bytes === 0) {
+      return '0 B';
+    }
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -923,7 +997,8 @@ export struct Sign {
         this.signatureHex = Array.from(signatureArray).map(b => b.toString(16).padStart(2, '0')).join('');
 
         // 显示签名信息
-        this.signResult = `签名成功！\n签名算法: RSA-PKCS1-SHA256\n签名时间: ${new Date().toLocaleString()}\n文件大小: ${this.formatFileSize(this.fileSize)}\n签名长度: ${signResult.byteLength} 字节`;
+        this.signResult =
+          `签名成功！\n签名算法: RSA-PKCS1-SHA256\n签名时间: ${new Date().toLocaleString()}\n文件大小: ${this.formatFileSize(this.fileSize)}\n签名长度: ${signResult.byteLength} 字节`;
 
         // 保存签名文件
         const saveSuccess = await this.createSignedFileAndWrite(signResult, this.originalExtension);

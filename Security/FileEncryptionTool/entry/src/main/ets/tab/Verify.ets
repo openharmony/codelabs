@@ -20,7 +20,7 @@ import TextFileManager from '../textfilemanager/TextFileManager';
 import common from '@ohos.app.ability.common';
 import window from '@ohos.window';
 import { util } from '@kit.ArkTS';
-import { MetadataHelper, MetadataParseResult } from '../util/MetadataHelper';
+import { MetadataHelper } from '../util/MetadataHelper';
 
 const TAG: string = '[Crypto_Framework]';
 
@@ -75,7 +75,7 @@ export struct Verify {
                 .fontWeight(600)
                 .fontColor($r('sys.color.font_primary'))
                 .lineHeight(32)
-              
+
               Text('验证文件完整性和真实性')
                 .fontSize(14)
                 .fontWeight(400)
@@ -87,11 +87,23 @@ export struct Verify {
             .width('100%')
           }
           .width('100%')
-          .padding({ left: 24, right: 24, top: 16, bottom: 8 })
+          .padding({
+            left: 24,
+            right: 24,
+            top: 16,
+            bottom: 8
+          })
 
           // 文件选择卡片区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 卡片标题
                 Row() {
@@ -106,7 +118,12 @@ export struct Verify {
                   .width('100%')
                 }
                 .width('100%')
-                .padding({ left: 20, right: 20, top: 16, bottom: 12 })
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 16,
+                  bottom: 12
+                })
 
                 // 分隔线
                 Divider()
@@ -144,7 +161,8 @@ export struct Verify {
                           Text(this.textFileName === '' ? $r('app.string.please_choose') : this.textFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -170,7 +188,12 @@ export struct Verify {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -213,7 +236,8 @@ export struct Verify {
                           Text(this.keyFileName === '' ? $r('app.string.please_choose') : this.keyFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -239,7 +263,12 @@ export struct Verify {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -282,7 +311,8 @@ export struct Verify {
                           Text(this.signFileName === '' ? $r('app.string.please_choose') : this.signFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.signFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.signFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -308,7 +338,12 @@ export struct Verify {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -339,11 +374,23 @@ export struct Verify {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 文件内容显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -394,7 +441,12 @@ export struct Verify {
                     .scrollBar(BarState.Auto)
                   }
                   .width('100%')
-                  .padding({ left: 20, right: 20, top: 8, bottom: 16 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 8,
+                    bottom: 16
+                  })
                 }
                 .width('100%')
               }
@@ -411,12 +463,24 @@ export struct Verify {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 验签结果显示区域
           if (this.verifyResult) {
             GridRow() {
-              GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+              GridCol({
+                span: {
+                  xs: 12,
+                  sm: 12,
+                  md: 12,
+                  lg: 12
+                }
+              }) {
                 Column() {
                   // 标题栏
                   Row() {
@@ -452,9 +516,9 @@ export struct Verify {
                           Text(this.verifyResult)
                             .fontSize(16)
                             .fontWeight(600)
-                            .fontColor(this.verifyResult === '验签成功' ? 0xFF1E8E3E : 
-                                      this.verifyResult === '验签失败' ? 0xFFF44336 : 
-                                      $r('sys.color.font_primary'))
+                            .fontColor(this.verifyResult === '验签成功' ? 0xFF1E8E3E :
+                              this.verifyResult === '验签失败' ? 0xFFF44336 :
+                                $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(24)
 
@@ -480,14 +544,19 @@ export struct Verify {
                       .scrollBar(BarState.Auto)
                     }
                     .width('100%')
-                    .padding({ left: 20, right: 20, top: 8, bottom: 16 })
+                    .padding({
+                      left: 20,
+                      right: 20,
+                      top: 8,
+                      bottom: 16
+                    })
                   }
                   .width('100%')
                 }
                 .width('100%')
-                .backgroundColor(this.verifyResult === '验签成功' ? 0xFFE8F5E9 : 
-                                this.verifyResult === '验签失败' ? 0xFFFFEBEE : 
-                                0xFFFFFF)
+                .backgroundColor(this.verifyResult === '验签成功' ? 0xFFE8F5E9 :
+                  this.verifyResult === '验签失败' ? 0xFFFFEBEE :
+                    0xFFFFFF)
                 .borderRadius(20)
                 .padding({ top: 0, bottom: 0 })
                 .shadow({
@@ -499,7 +568,12 @@ export struct Verify {
               }
             }
             .width('100%')
-            .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+            .margin({
+              left: 16,
+              right: 16,
+              top: 8,
+              bottom: 8
+            })
           }
 
           // 操作按钮区域
@@ -572,7 +646,12 @@ export struct Verify {
             }
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 8, bottom: 24 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 24
+          })
         }
         .width('100%')
         .padding({ top: 8, bottom: 16 })
@@ -888,14 +967,19 @@ export struct Verify {
    * 从文件URI中提取文件名
    */
   private getFileNameFromUri(uri: string): string {
-    if (!uri) return '未知文件';
+    if (!uri) {
+      return '未知文件';
+    }
     try {
       const segments = uri.split('/');
       let name = segments[segments.length - 1] || '未知文件';
       try {
         name = decodeURIComponent(name);
       } catch (e) {
-        try { name = decodeURI(name); } catch (_) { }
+        try {
+          name = decodeURI(name);
+        } catch (_) {
+        }
       }
       if (name.startsWith('file://')) {
         const parts = name.split('/');

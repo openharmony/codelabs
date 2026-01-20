@@ -40,7 +40,6 @@ export struct Decrypt {
   @State isProcessing: boolean = false;
   @State decryptionStatus: string = '';
   @State decryptionDetails: string = '';
-
   @State keyFileName: string = '';
   @State keyFileUri: string = '';
   @State textFileUri: string = '';
@@ -54,7 +53,6 @@ export struct Decrypt {
   @State encryptedFileUri: string = '';
   @State metadataInfo: string = '';
   @State fileSize: number = 0;
-
   private CryptoOperation: CryptoOperation = new CryptoOperation();
 
   build() {
@@ -79,7 +77,7 @@ export struct Decrypt {
                 .fontWeight(600)
                 .fontColor($r('sys.color.font_primary'))
                 .lineHeight(32)
-              
+
               Text('安全可靠的加密文件解密工具')
                 .fontSize(14)
                 .fontWeight(400)
@@ -91,11 +89,23 @@ export struct Decrypt {
             .width('100%')
           }
           .width('100%')
-          .padding({ left: 24, right: 24, top: 16, bottom: 8 })
+          .padding({
+            left: 24,
+            right: 24,
+            top: 16,
+            bottom: 8
+          })
 
           // 文件选择卡片区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 卡片标题
                 Row() {
@@ -110,7 +120,12 @@ export struct Decrypt {
                   .width('100%')
                 }
                 .width('100%')
-                .padding({ left: 20, right: 20, top: 16, bottom: 12 })
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 16,
+                  bottom: 12
+                })
 
                 // 分隔线
                 Divider()
@@ -148,7 +163,8 @@ export struct Decrypt {
                           Text(this.textFileName === '' ? $r('app.string.please_choose') : this.textFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.textFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -174,7 +190,12 @@ export struct Decrypt {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -217,7 +238,8 @@ export struct Decrypt {
                           Text(this.keyFileName === '' ? $r('app.string.please_choose') : this.keyFileName)
                             .fontSize(13)
                             .fontWeight(400)
-                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') : $r('sys.color.font_primary'))
+                            .fontColor(this.keyFileName === '' ? $r('sys.color.font_secondary') :
+                              $r('sys.color.font_primary'))
                             .textAlign(TextAlign.Start)
                             .lineHeight(18)
                             .maxLines(1)
@@ -243,7 +265,12 @@ export struct Decrypt {
                   }
                   .width('100%')
                   .height(72)
-                  .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 12,
+                    bottom: 12
+                  })
                   .backgroundColor(0xFFFFFF)
                   .borderRadius(12)
                   .shadow({
@@ -274,11 +301,23 @@ export struct Decrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 加密文件信息显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -340,7 +379,12 @@ export struct Decrypt {
                     .scrollBar(BarState.Auto)
                   }
                   .width('100%')
-                  .padding({ left: 20, right: 20, top: 8, bottom: 16 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 8,
+                    bottom: 16
+                  })
                 }
                 .width('100%')
               }
@@ -357,11 +401,23 @@ export struct Decrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 解密结果显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -397,9 +453,9 @@ export struct Decrypt {
                         Text(this.decryptionStatus || '等待解密操作')
                           .fontSize(15)
                           .fontWeight(500)
-                          .fontColor(this.decryptionStatus.includes('成功') ? 0xFF4CAF50 : 
-                                    this.decryptionStatus.includes('失败') ? 0xFFF44336 : 
-                                    $r('sys.color.font_primary'))
+                          .fontColor(this.decryptionStatus.includes('成功') ? 0xFF4CAF50 :
+                            this.decryptionStatus.includes('失败') ? 0xFFF44336 :
+                              $r('sys.color.font_primary'))
                           .textAlign(TextAlign.Start)
                           .lineHeight(22)
 
@@ -425,7 +481,12 @@ export struct Decrypt {
                     .scrollBar(BarState.Auto)
                   }
                   .width('100%')
-                  .padding({ left: 20, right: 20, top: 8, bottom: 16 })
+                  .padding({
+                    left: 20,
+                    right: 20,
+                    top: 8,
+                    bottom: 16
+                  })
                 }
                 .width('100%')
               }
@@ -442,11 +503,23 @@ export struct Decrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 文件详细信息显示区域
           GridRow() {
-            GridCol({ span: { xs: 12, sm: 12, md: 12, lg: 12 } }) {
+            GridCol({
+              span: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 12
+              }
+            }) {
               Column() {
                 // 标题栏
                 Row() {
@@ -550,7 +623,12 @@ export struct Decrypt {
             }
           }
           .width('100%')
-          .margin({ left: 16, right: 16, top: 8, bottom: 8 })
+          .margin({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
 
           // 操作按钮区域
           Column({ space: 16 }) {
@@ -652,7 +730,12 @@ export struct Decrypt {
             }
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 8, bottom: 24 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 24
+          })
         }
         .width('100%')
         .padding({ top: 8, bottom: 16 })
@@ -981,7 +1064,8 @@ export struct Decrypt {
             // BinaryDecryptResult 类型的失败结果
             isDecryptionSuccessful = false;
             this.decryptionStatus = '❌ 解密失败';
-            this.decryptionDetails = `解密过程出错\n解密时间: ${decryptTime}\n错误: ${binaryResult.error || '未知错误'}`;
+            this.decryptionDetails =
+              `解密过程出错\n解密时间: ${decryptTime}\n错误: ${binaryResult.error || '未知错误'}`;
 
             windowClass.getUIContext().getPromptAction().showToast({
               message: $r('app.string.decrypt_fail')
@@ -1056,14 +1140,19 @@ export struct Decrypt {
    * 从文件URI中提取文件名
    */
   private getFileNameFromUri(uri: string): string {
-    if (!uri) return '未知文件';
+    if (!uri) {
+      return '未知文件';
+    }
     try {
       const segments = uri.split('/');
       let name = segments[segments.length - 1] || '未知文件';
       try {
         name = decodeURIComponent(name);
       } catch (e) {
-        try { name = decodeURI(name); } catch (_) { }
+        try {
+          name = decodeURI(name);
+        } catch (_) {
+        }
       }
       if (name.startsWith('file://')) {
         const parts = name.split('/');
@@ -1079,7 +1168,9 @@ export struct Decrypt {
    * 格式化文件大小显示
    */
   private formatFileSize(bytes: number): string {
-    if (bytes === 0) return '0 B';
+    if (bytes === 0) {
+      return '0 B';
+    }
     const k = 1024;
     const sizes = ['B', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));

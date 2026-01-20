@@ -14,7 +14,6 @@
  */
 
 import cryptoFramework from '@ohos.security.cryptoFramework';
-import promptAction from '@ohos.promptAction';
 import Logger from '../util/Logger';
 
 const TAG: string = '[Crypto_Framework]';
@@ -75,7 +74,12 @@ function genGcmParamsSpec(): cryptoFramework.GcmParamsSpec {
   let dataTag = new Uint8Array(arr);
   let tagBlob = { data: dataTag };
 
-  let gcmParamsSpec = { iv: ivBlob, aad: aadBlob, authTag: tagBlob, algName: 'GcmParamsSpec' };
+  let gcmParamsSpec = {
+    iv: ivBlob,
+    aad: aadBlob,
+    authTag: tagBlob,
+    algName: 'GcmParamsSpec'
+  };
   return gcmParamsSpec;
 }
 
@@ -343,7 +347,8 @@ export class CryptoOperation {
   /**
    * 流式AES加密处理（用于大文件）
    */
-  async aesGcmEncryptStream(globalKey, dataStream: ArrayBuffer, progressCallback?: StreamProgressCallback): Promise<BinaryOperationResult> {
+  async aesGcmEncryptStream(globalKey, dataStream: ArrayBuffer,
+    progressCallback?: StreamProgressCallback): Promise<BinaryOperationResult> {
     let cipherAlgName = 'AES256|GCM|PKCS7';
     let cipher;
     let globalGcmParams = genGcmParamsSpec();
@@ -405,7 +410,8 @@ export class CryptoOperation {
   /**
    * 流式AES解密处理（用于大文件）
    */
-  async aesGcmDecryptStream(globalKey, cipherText: ArrayBuffer, tag: ArrayBuffer, progressCallback?: StreamProgressCallback): Promise<BinaryOperationResult> {
+  async aesGcmDecryptStream(globalKey, cipherText: ArrayBuffer, tag: ArrayBuffer,
+    progressCallback?: StreamProgressCallback): Promise<BinaryOperationResult> {
     let cipherAlgName = 'AES256|GCM|PKCS7';
     let decode;
     let globalGcmParams = genGcmParamsSpec();
@@ -511,7 +517,8 @@ export class CryptoOperation {
   /**
    * 二进制数据解密
    */
-  async aesConvertAndDecryptBinary(aesKeyBlobString: string, cipherText: ArrayBuffer, tag: ArrayBuffer): Promise<BinaryOperationResult> {
+  async aesConvertAndDecryptBinary(aesKeyBlobString: string, cipherText: ArrayBuffer,
+    tag: ArrayBuffer): Promise<BinaryOperationResult> {
     try {
       const key = await this.convertAesKey(aesKeyBlobString);
       return await this.aesGcmDecryptBinary(key, cipherText, tag);
@@ -672,7 +679,8 @@ export class CryptoOperation {
   /**
    * RSA二进制数据验签
    */
-  async rsaVerifyBinary(globalKey, data: ArrayBuffer, signature: ArrayBuffer): Promise<{success: boolean, valid?: boolean, error?: string}> {
+  async rsaVerifyBinary(globalKey, data: ArrayBuffer,
+    signature: ArrayBuffer): Promise<{ success: boolean, valid?: boolean, error?: string }> {
     let verifyer = cryptoFramework.createVerify('RSA3072|PKCS1|SHA256');
     let keyPair = globalKey;
 
@@ -724,7 +732,8 @@ export class CryptoOperation {
   /**
    * 数据完整性验证
    */
-  async verifyDataIntegrity(data: ArrayBuffer, expectedHash: ArrayBuffer, algorithm: string = 'SHA256'): Promise<boolean> {
+  async verifyDataIntegrity(data: ArrayBuffer, expectedHash: ArrayBuffer,
+    algorithm: string = 'SHA256'): Promise<boolean> {
     try {
       const hashResult = await this.calculateFileHash(data, algorithm);
       if (!hashResult.success) {
@@ -801,7 +810,8 @@ export class CryptoOperation {
   /**
    * RSA二进制数据验签
    */
-  async rsaConvertAndVerifyBinary(rsaJsonString: string, data: ArrayBuffer, signature: ArrayBuffer): Promise<{success: boolean, valid?: boolean, error?: string}> {
+  async rsaConvertAndVerifyBinary(rsaJsonString: string, data: ArrayBuffer,
+    signature: ArrayBuffer): Promise<{ success: boolean, valid?: boolean, error?: string }> {
     try {
       const key = await this.convertRsaKey(rsaJsonString);
       return await this.rsaVerifyBinary(key, data, signature);
