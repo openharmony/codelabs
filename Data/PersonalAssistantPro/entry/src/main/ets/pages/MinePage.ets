@@ -114,46 +114,46 @@ export struct MinePage {
       // 2. 设置选项列表
       List() {
         // --- 第一组：隐私安全 ---
-        ListItem() {
-          Column() {
-            this.SectionHeader('隐私与安全')
-            Row() {
-              Column() {
-                Text('生物识别锁')
-                  .fontSize(16)
-                  .fontColor('#333333')
-                Text('开启后，查看联系人详情需验证指纹')
-                  .fontSize(12)
-                  .fontColor('#999999')
-                  .margin({ top: 4 })
-              }
-              .alignItems(HorizontalAlign.Start)
-              .layoutWeight(1)
-
-              Toggle({ type: ToggleType.Switch, isOn: this.isBiometricOn })
-                .onChange(async (isOn: boolean) => {
-                  if (isOn) {
-                    const success = await BiometricService.getInstance().authenticate();
-                    if (success) {
-                      this.isBiometricOn = true;
-                      await this.settingModel.setBiometricEnabled(true);
-                      promptAction.showToast({ message: '隐私保护已开启' });
-                    } else {
-                      this.isBiometricOn = false;
-                      promptAction.showToast({ message: '认证失败' });
-                    }
-                  } else {
-                    this.isBiometricOn = false;
-                    await this.settingModel.setBiometricEnabled(false);
-                    promptAction.showToast({ message: '隐私保护已关闭' });
-                  }
-                })
-            }
-            .width('100%')
-            .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-            .backgroundColor(Color.White)
-          }
-        }
+        // ListItem() {
+        //   Column() {
+        //     this.SectionHeader('隐私与安全')
+        //     Row() {
+        //       Column() {
+        //         Text('生物识别锁')
+        //           .fontSize(16)
+        //           .fontColor('#333333')
+        //         Text('开启后，查看联系人详情需验证指纹')
+        //           .fontSize(12)
+        //           .fontColor('#999999')
+        //           .margin({ top: 4 })
+        //       }
+        //       .alignItems(HorizontalAlign.Start)
+        //       .layoutWeight(1)
+        //
+        //       Toggle({ type: ToggleType.Switch, isOn: this.isBiometricOn })
+        //         .onChange(async (isOn: boolean) => {
+        //           if (isOn) {
+        //             const success = await BiometricService.getInstance().authenticate();
+        //             if (success) {
+        //               this.isBiometricOn = true;
+        //               await this.settingModel.setBiometricEnabled(true);
+        //               promptAction.showToast({ message: '隐私保护已开启' });
+        //             } else {
+        //               this.isBiometricOn = false;
+        //               promptAction.showToast({ message: '认证失败' });
+        //             }
+        //           } else {
+        //             this.isBiometricOn = false;
+        //             await this.settingModel.setBiometricEnabled(false);
+        //             promptAction.showToast({ message: '隐私保护已关闭' });
+        //           }
+        //         })
+        //     }
+        //     .width('100%')
+        //     .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+        //     .backgroundColor(Color.White)
+        //   }
+        // }
 
         // --- 第二组：数据管理 (F3) ---
         ListItem() {
