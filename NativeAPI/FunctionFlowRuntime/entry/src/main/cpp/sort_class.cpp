@@ -220,12 +220,10 @@ void ThreeWayQuickSort(vector<int>& arr, int low, int high)
             swap(arr[lt], arr[i]);
             lt++;
             i++;
-        }
-        else if (arr[i] > pivot) {
+        } else if (arr[i] > pivot) {
             swap(arr[i], arr[gt]);
             gt--;
-        }
-        else {
+        } else {
             i++;
         }
     }
