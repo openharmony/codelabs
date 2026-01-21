@@ -31,29 +31,25 @@ struct Index {
 
   build() {
     Column() {
-      // 内容区域
-      if (this.currentTab === 0) {
-        // 仪表盘
-        Dashboard()
-      } else if (this.currentTab === 1) {
-        // 健康模块
-        HealthMain()
-      } else if (this.currentTab === 2) {
-        // 旅行模块
-        TravelMain()
-      } else if (this.currentTab === 3) {
-        // 目标模块
-        GoalsMain()
-      } else if (this.currentTab === 4) {
-        // 心情模块
-        MoodMain()
-      } else if (this.currentTab === 5) {
-        // 学习模块
-        LearningMain()
-      } else if (this.currentTab === 6) {
-        // 日记模块
-        DiaryMain()
+      // 内容区域，占满剩余空间
+      Column() {
+        if (this.currentTab === 0) {
+          Dashboard()
+        } else if (this.currentTab === 1) {
+          HealthMain()
+        } else if (this.currentTab === 2) {
+          TravelMain()
+        } else if (this.currentTab === 3) {
+          GoalsMain()
+        } else if (this.currentTab === 4) {
+          MoodMain()
+        } else if (this.currentTab === 5) {
+          LearningMain()
+        } else if (this.currentTab === 6) {
+          DiaryMain()
+        }
       }
+      .layoutWeight(1)
 
       // 底部导航栏
       this.buildBottomNav()
@@ -174,12 +170,8 @@ struct Index {
     .width('100%')
     .height(60)
     .padding({ top: 8, bottom: 8 })
+    .margin({ bottom: 16 })
     .backgroundColor(Color.White)
-    .shadow({
-      radius: 8,
-      color: '#10000000',
-      offsetX: 0,
-      offsetY: -2
-    })
+    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: -2 })
   }
 }
