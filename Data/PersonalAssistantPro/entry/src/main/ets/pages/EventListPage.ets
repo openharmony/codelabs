@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 // entry/src/main/ets/pages/EventListPage.ets
+
 import { Event, EventModel } from '../model/EventModel';
 import { Logger } from '../common/utils/Logger';
 import { MonthView } from '../view/calendar/MonthView';
 import { WeekView } from '../view/calendar/WeekView';
-//  [修复] 引入 TaskStatus 类型
 import { CalendarViewModel, TaskStatus } from '../viewmodel/CalendarViewModel';
 
 const logger = new Logger('EventListPage');
@@ -29,41 +29,46 @@ export struct EventListPage {
   // 默认选中今天
   @State selectedTimestamp: number = new Date().getTime();
 
-  //  [修复] 类型改为 Map<string, TaskStatus>
   @State taskMap: Map<string, TaskStatus> = new Map();
 
   @State viewMode: string = 'month';
 
   @Consume('pageStack') pageStack: NavPathStack;
-  // 同样监听这个强刷新信号
+
+  // 监听全局刷新信号
   @StorageProp('GlobalRefreshSignal') @Watch('onGlobalRefresh') signal: number = 0;
 
   onGlobalRefresh() {
     logger.info('Received GlobalRefreshSignal, refreshing list...');
     this.refreshAllData();
   }
+
+  // 通知跳转相关状态
   @StorageProp('notificationJumpTarget') @Watch('onNotificationJump') jumpTarget: string = '';
   @StorageProp('notificationJumpId') jumpId: number = -1;
+
+  // 监听列表刷新请求
   @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
 
   private calendarViewModel = new CalendarViewModel();
+
   onPageShow() {
     this.refreshAllData();
   }
+
   aboutToAppear() {
-    // 1. ✅ [核心修复] 使用 setTimeout 延迟检查，确保能够捕获冷启动信号
-    // 将检查放到事件队列的末尾，避开 UI 初始化竞争
+    // 1. 使用 setTimeout 延迟检查，确保能够捕获冷启动时的通知点击信号
     setTimeout(() => {
       this.checkColdStartJump();
     }, 100);
 
-    // 2. 加载数据
+    // 2. 加载页面数据
     this.refreshAllData();
   }
 
-  // ✅ 独立出来的检查方法
+  // 独立出来的冷启动跳转检查方法
   private checkColdStartJump() {
-    // 绕过 @StorageProp，直接查 AppStorage (最真实的数据)
+    // 绕过 @StorageProp，直接查 AppStorage 获取最真实的数据
     const storedTarget = AppStorage.get<string>('notificationJumpTarget');
     const storedId = AppStorage.get<number>('notificationJumpId');
 
@@ -72,25 +77,26 @@ export struct EventListPage {
     if (storedTarget === 'EventDetailPage' && storedId && storedId > 0) {
       logger.info('🚀 DETECTED PENDING JUMP! Triggering now...');
 
-      // 强制同步本地状态
+      // 强制同步本地状态，触发 Watch 回调
       this.jumpTarget = storedTarget;
       this.jumpId = storedId;
 
-      // 执行跳转
+      // 手动执行跳转逻辑
       this.onNotificationJump();
     } else {
       logger.info('No pending jump found during cold start.');
     }
   }
-  // ✅ 跳转响应逻辑
+
+  // 跳转响应逻辑
   async onNotificationJump() {
     logger.info(`[Jump Logic] Processing jump... Target: ${this.jumpTarget}, ID: ${this.jumpId}`);
 
     if (this.jumpTarget === 'EventDetailPage') {
-      // 1. 消费信号 (清空)
+      // 1. 消费信号 (清空，防止重复跳转)
       AppStorage.setOrCreate('notificationJumpTarget', '');
 
-      // 2. 检查 ID
+      // 2. 检查 ID 并查询数据库
       if (this.jumpId > 0) {
         logger.info(`[Jump Logic] Querying DB for Event ID: ${this.jumpId}`);
         const event = await EventModel.queryById(this.jumpId);
@@ -116,6 +122,7 @@ export struct EventListPage {
     await this.loadEventsForList();
   }
 
+  // 加载日历上的任务小圆点
   async loadMonthTaskDots() {
     try {
       const date = new Date(this.selectedTimestamp);
@@ -124,20 +131,22 @@ export struct EventListPage {
 
       const monthEvents = await EventModel.queryByMonth(year, month);
 
-      //  这里的类型现在匹配了
       this.taskMap = this.calendarViewModel.processEventsToTaskMap(monthEvents);
     } catch (err) {
       logger.error('Load calendar dots failed', JSON.stringify(err));
     }
   }
 
+  // 加载当前选中日期的事件列表
   async loadEventsForList() {
     try {
+      // 如果有搜索关键词，优先显示搜索结果
       if (this.keyword && this.keyword.trim().length > 0) {
         this.events = await EventModel.search(this.keyword);
         return;
       }
 
+      // 否则显示当天的日程
       const startOfDay = new Date(this.selectedTimestamp);
       startOfDay.setHours(0, 0, 0, 0);
 
@@ -152,6 +161,7 @@ export struct EventListPage {
     }
   }
 
+  // 删除事件
   async deleteEvent(index: number, id: number) {
     const success = await EventModel.deleteById(id);
     if (success) {
@@ -161,6 +171,7 @@ export struct EventListPage {
     }
   }
 
+  // 顶部标题栏 + 视图切换按钮
   @Builder
   private CustomHeader(): void {
     Row() {
@@ -170,6 +181,7 @@ export struct EventListPage {
 
       Blank()
 
+      // 月视图/周视图切换
       Row() {
         Text('月')
           .fontSize(14)
@@ -191,6 +203,7 @@ export struct EventListPage {
       .borderRadius(16)
       .margin({ right: 16 })
 
+      // 添加按钮
       Button({ type: ButtonType.Circle, stateEffect: true }) {
         Text('+')
           .fontSize(24)
@@ -209,6 +222,7 @@ export struct EventListPage {
     .alignItems(VerticalAlign.Center)
   }
 
+  // 搜索栏
   @Builder
   private SearchBar(): void {
     Row() {
@@ -232,6 +246,7 @@ export struct EventListPage {
     .padding({ left: 16, right: 16, bottom: 8 })
   }
 
+  // 侧滑删除按钮
   @Builder
   DeleteAction(index: number, id: number) {
     Button() {
@@ -247,6 +262,7 @@ export struct EventListPage {
     })
   }
 
+  // 时间格式化工具
   private formatTime(timestamp: number): string {
     const date = new Date(timestamp);
     const hours = date.getHours().toString().padStart(2, '0');
@@ -254,10 +270,12 @@ export struct EventListPage {
     return `${hours}:${minutes}`;
   }
 
+  // 单个日程列表项
   @Builder
   EventItem(item: Event, index: number) {
     ListItem() {
       Row() {
+        // 左侧装饰条 (蓝色)
         Column()
           .width(4)
           .height(40)
@@ -265,6 +283,7 @@ export struct EventListPage {
           .borderRadius(2)
           .margin({ right: 12 })
 
+        // 中间：标题与时间
         Column() {
           Text(item.title)
             .fontSize(16)
@@ -281,14 +300,28 @@ export struct EventListPage {
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
 
-        if (item.isAllDay) {
-          Text('All Day')
-            .fontSize(12)
-            .fontColor('#007DFF')
-            .backgroundColor('#E5F1FF')
-            .padding({ left: 8, right: 8, top: 2, bottom: 2 })
-            .borderRadius(10)
+        // 右侧：状态图标区 (提醒 + 全天)
+        Row() {
+          // 🔔 提醒图标：如果有 reminderId，显示小铃铛
+          if (item.reminderId > -1) {
+            Image($r('app.media.ic_public_reminder'))
+              .width(16)
+              .height(16)
+              .fillColor('#FF9800') // 设为橙色更醒目，若要灰色可设为 #999999 或删除此行
+              .margin({ right: 6 })
+          }
+
+          // All Day 标签
+          if (item.isAllDay) {
+            Text('All Day')
+              .fontSize(12)
+              .fontColor('#007DFF')
+              .backgroundColor('#E5F1FF')
+              .padding({ left: 8, right: 8, top: 2, bottom: 2 })
+              .borderRadius(10)
+          }
         }
+        .alignItems(VerticalAlign.Center)
       }
       .width('100%')
       .padding(12)
@@ -308,6 +341,7 @@ export struct EventListPage {
     Column() {
       this.CustomHeader()
 
+      // 如果不在搜索模式，显示日历视图
       if (this.keyword.length === 0) {
         Column() {
           if (this.viewMode === 'month') {
@@ -331,9 +365,11 @@ export struct EventListPage {
         }
         .margin({ bottom: 12 })
       } else {
+        // 搜索模式显示搜索栏
         this.SearchBar()
       }
 
+      // 日程列表区域
       GridRow({
         columns: { sm: 4, md: 8, lg: 12 },
         gutter: { x: 12, y: 12 }
@@ -344,6 +380,7 @@ export struct EventListPage {
         }) {
           Column() {
             if (this.events.length === 0) {
+              // 空状态页
               Column() {
                 Image($r('app.media.app_icon'))
                   .width(64)
@@ -363,6 +400,7 @@ export struct EventListPage {
               .height('100%')
               .width('100%')
             } else {
+              // 列表渲染
               List() {
                 ForEach(this.events, (item: Event, index: number) => {
                   this.EventItem(item, index)
