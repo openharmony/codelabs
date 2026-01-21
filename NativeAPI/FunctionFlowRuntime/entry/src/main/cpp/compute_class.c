@@ -226,7 +226,7 @@ Vector spline_interpolation(const Vector *x, const Vector *y);
 double spline_eval(const Vector *x, const Vector *y, const Vector *coeffs, double xi);
 
 // 统计分析
-Vector linear_regression(const Vector *x, const Vector *y);
+Vector LinearRegression(const Vector *x, const Vector *y);
 double correlation_coefficient(const Vector *x, const Vector *y);
 Vector moving_average(const Vector *data, int window);
 void compute_statistics(const Vector *data, double *mean, double *variance,
@@ -1101,7 +1101,7 @@ Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
 }
 
 /* ========== 统计分析 ========== */
-Vector linear_regression(const Vector *x, const Vector *y)
+Vector LinearRegression(const Vector *x, const Vector *y)
 {
     int n = x->size;
     
@@ -1126,7 +1126,6 @@ Vector linear_regression(const Vector *x, const Vector *y)
     
     return result;
 }
-
 /* ========== 特殊函数实现 ========== */
 double GammaFunction(double x)
 {
@@ -1158,7 +1157,6 @@ double GammaFunction(double x)
     double result = sqrt(DEFAULT_MULTIPLIER * PI) * pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) * exp(-(x + g + GAMMA_APPROX_OFFSET)) * A;
     return result;
 }
-
 double BetaFunction(double a, double b)
 {
     return GammaFunction(a) * GammaFunction(b) / GammaFunction(a + b);
@@ -1287,7 +1285,7 @@ void compute(void *arg)
     
     // 测试8: 统计分析
     printf("\n8. 测试统计分析:\n");
-    Vector reg = linear_regression(&xs, &ys);
+    Vector reg = LinearRegression(&xs, &ys);
     printf("线性回归: 截距 = %.4f, 斜率 = %.4f\n", reg.data[INIT_ZERO], reg.data[INIT_ONE]);
     
     // 测试9: 特殊函数
