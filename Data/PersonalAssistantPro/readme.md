@@ -12,18 +12,15 @@
 
 * **架构规范**: 采用标准 MVVM + Service 分层架构，实现高内聚低耦合。
 * **工程完备**: 内置自主研发的**智能日志系统**与**真机调试框架**，大幅提升开发与排错效率。
-* **技术深度**: 深入实践 RDB 事务、UserIAM **生物识别**、AES-256 隐私加密及后台代理提醒等高阶能力。
+* **技术深度**: 深入实践 RDB 事务、AES-256 **隐私加密**及后台代理提醒等高阶能力。
 
 ---
-
 
 ## 🏗️ 系统架构 (System Architecture)
 
 本项目采用经典的 **MVVM (Model-View-ViewModel)** 分层架构，结合 **SOA (Service-Oriented Architecture)** 服务化设计思想，确保 UI 与业务逻辑的彻底解耦。
 
 ### 1. 架构全景图
-
-![架构.png](tu/%E6%9E%B6%E6%9E%84.png)
 
 ### 2. 分层设计规范
 
@@ -46,6 +43,10 @@
 * **职责**: 负责数据的持久化、加密/解密及实体定义。
 * **规范**: 所有数据库操作通过 `RdbHelper` 统一代理，确保事务安全。
 
+
+
+---
+
 ## 🧩 核心特性 (Core Features)
 
 本项目聚焦于商务办公场景，实现了以下四大核心业务模块：
@@ -58,7 +59,7 @@
 ### 2. 🔐 隐私通讯录
 
 * **安全存储**: 联系人姓名、关系等字段明文存储，但**手机号 (Phone)** 等敏感字段在落库前自动加密。
-* **权限管控**: 列表页仅展示脱敏数据（如 `138****0000`），点击查看详情时触发**生物识别**，只有验证通过才解密展示完整号码。
+* **数据脱敏**: 列表页仅展示脱敏数据（如 `138****0000`），点击查看详情时实时解密并展示完整号码，兼顾便利性与数据安全。
 
 ### 3. 🔔 后台代理提醒
 
@@ -86,7 +87,7 @@
 * **动态查询**: 实现了 SQL `LIKE` 语法的动态拼接，支持 `Search` 组件对数据库的多字段模糊匹配。
 * **类型安全**: 严格遵循 ArkTS 类型规范，对 Entity 与 RDB 字段进行了完整的映射处理。
 
-### 2. 🛡️ 隐私安全体系 (Crypto + UserIAM)
+### 2. 🛡️ 隐私安全体系 (AES Crypto)
 
 > **代码路径**: `entry/src/main/ets/common/utils/AesCryptoUtils.ts`
 
@@ -96,11 +97,8 @@
 1. **密钥生成**: 使用 `cryptoFramework.createSymKeyGenerator('AES256')` 生成对称密钥。
 2. **加密 (Encrypt)**: `TextEncoder` 转码 -> 生成随机 16位 IV -> `Cipher` 加密 -> 拼接 IV 与密文 -> Base64 编码。
 3. **落库**: 将 Base64 字符串存入 RDB。
+4. **解密 (Decrypt)**: 读取密文 -> 分离 IV -> 使用相同密钥解密还原明文。
 
-
-* **生物识别流程**:
-* 调用 `userAuth.getAvailableStatus()` 检查设备是否具备**识别**能力（指纹/人脸）。
-* 拉起系统统一认证弹窗 (`AuthWidgetMgr`)，用户验证通过后，才执行 `AesCryptoUtils.decrypt()` 解密逻辑。
 
 
 ### 3. 🏗️ 统一跳转服务 (JumpService)
@@ -111,8 +109,8 @@
 
 * **外部应用拉起**: 构建包含 `entities: ['entity.system.browsable']` 的 `Want`，通过 `context.startAbility` 拉起系统浏览器打开 URL。
 * **DeepLink 解析**: 预留了 `pa://` 协议的解析逻辑，为跨应用调用提供接口。
-  好的，这是 **第三阶段** 的内容，包含 **工程化与基础设施** 以及 **目录结构**。
 
+---
 
 ## ⚙️ 工程化与基础设施 (Infrastructure)
 
@@ -136,9 +134,9 @@
 
 > **代码路径**: `entry/src/main/ets/debug/`
 
-由于 OpenHarmony 应用涉及大量原生能力（RDB、UserIAM），纯单元测试难以覆盖真实环境。**本项目**设计了一套 **DebugRunner**，允许在真机上直接运行后端逻辑测试用例。
+由于 OpenHarmony 应用涉及大量原生能力（RDB、文件系统等），纯单元测试难以覆盖真实环境。**本项目**设计了一套 **DebugRunner**，允许在真机上直接运行后端逻辑测试用例。
 
-#### 如何添加新的测试用例 (3步走)：
+#### 框架扩展方式：
 
 1. **新建 Case**: 在 `debug/` 目录下新建类继承 `DebugCase`。
 ```typescript
@@ -155,8 +153,7 @@ export class MyNewTest extends DebugCase {
 ```
 
 
-2. **注册**: 在 `DebugRunner.ts` 的工厂方法中返回该实例。
-3. **运行**: 进入 App **"个人中心" -> "调试入口"**，即可触发运行并在 Log 控制台查看结果。
+2. **注册**: 在 `DebugRunner.ts` 的工厂方法中注册该实例，即可在代码调用时执行。
 
 ---
 
@@ -183,7 +180,6 @@ entry/src/main/ets
 │   ├── SplashPage.ets      # 启动页
 │   └── [BusinessPages]     # 业务页面 (Mine, Detail, Edit...)
 ├── services                # [业务服务层] (解耦核心逻辑)
-│   ├── BiometricService    # 生物识别服务
 │   ├── DataExportService   # 数据导出/报表生成服务
 │   ├── JumpService         # 路由跳转与 DeepLink 服务
 │   └── NotificationService # 后台通知服务
