@@ -117,7 +117,12 @@ export struct SkillDetail {
       };
 
       await this.lifeHubData.addSkill(skill);
-      router.back();
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {
+          tab: 5
+        }
+      });
     } catch (error) {
       console.error('SkillDetail: 保存失败:', error);
     } finally {

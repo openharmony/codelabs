@@ -187,7 +187,12 @@ export struct TravelPlan {
       };
 
       await this.lifeHubData.addTravelPlan(plan);
-      router.back();
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {
+          tab: 2
+        }
+      });
     } catch (error) {
       console.error('TravelPlan: 保存失败:', error);
     } finally {
