@@ -520,7 +520,7 @@ struct CoinNote {
               isAaReceived: false,
               originalAmount: bill.originalAmount,
               aaReceivedAmount: 0, // 清零
-              note: bill.note, // 备注可能需要清理，这里暂时保留
+              note: bill.note.replace(/ \(AA已收: .*?\)/g, ""),
               direction: bill.direction
             };
             
@@ -554,8 +554,8 @@ struct CoinNote {
           action: () => {
             // 恢复金额 = 原始金额 - (已收AA金额 || 0)
             // 如果 originalAmount 不存在（旧数据），则尝试用 amount 恢复（但 amount 已经是 0 了...）
-            // 如果 originalAmount 丢失，无法准确恢复。我们假设 originalAmount 存在。
-            const original = bill.originalAmount || 0;
+            // 如果 originalAmount 丢失，无法准确恢复。我们假设 originalAmount 存在且有效。
+            const original = (bill.originalAmount && bill.originalAmount > 0) ? bill.originalAmount : bill.amount;
             const aaReceived = bill.aaReceivedAmount || 0;
             const newAmount = original - aaReceived;
 
@@ -572,7 +572,7 @@ struct CoinNote {
               isAaReceived: bill.isAaReceived,
               originalAmount: bill.originalAmount,
               aaReceivedAmount: bill.aaReceivedAmount,
-              note: bill.note,
+              note: bill.note.replace(" (已报销)", ""),
               direction: bill.direction
             };
             BillRdb.update(updatedBill).then(() => {
@@ -596,8 +596,8 @@ struct CoinNote {
         value: '确认',
         action: () => {
           // 记录原始金额（如果还没记录过）
-          // 如果已经有 originalAmount (比如做过 AA)，则保持不变
-          const original = (bill.originalAmount !== undefined && bill.originalAmount !== null) ? bill.originalAmount : bill.amount;
+          // 如果已经有 originalAmount (比如做过 AA)，则保持不变。排除0的情况。
+          const original = (bill.originalAmount && bill.originalAmount > 0) ? bill.originalAmount : bill.amount;
 
           const updatedBill: BillItem = {
             id: bill.id,
@@ -612,7 +612,7 @@ struct CoinNote {
             isAaReceived: bill.isAaReceived,
             originalAmount: original,
             aaReceivedAmount: bill.aaReceivedAmount,
-            note: bill.note + " (已报销)",
+            note: bill.note.includes(" (已报销)") ? bill.note : bill.note + " (已报销)",
             direction: bill.direction
           };
           BillRdb.update(updatedBill).then(() => {
@@ -637,7 +637,7 @@ struct CoinNote {
           }
           
           // 记录原始金额
-          const original = (bill.originalAmount !== undefined && bill.originalAmount !== null) ? bill.originalAmount : bill.amount;
+          const original = (bill.originalAmount && bill.originalAmount > 0) ? bill.originalAmount : bill.amount;
 
           const updatedBill: BillItem = {
             id: bill.id,
@@ -652,7 +652,7 @@ struct CoinNote {
             isAaReceived: true,
             originalAmount: original,
             aaReceivedAmount: receivedAmount,
-            note: bill.note + ` (AA已收: ${receivedAmount})`,
+            note: bill.note.replace(/ \(AA已收: .*?\)/g, "") + ` (AA已收: ${receivedAmount})`,
             direction: bill.direction
           };
           
@@ -1674,9 +1674,9 @@ struct CoinNote {
                       }
                       .swipeAction({ end: this.itemEnd(bill) })
                       .margin({ bottom: 12 })
-                    })
+                    }, (bill: BillItem) => JSON.stringify(bill))
                   }
-                })
+                }, (group: DayGroup) => group.date + JSON.stringify(group.bills))
               }
               .width("100%")
               .layoutWeight(1)
