@@ -5,7 +5,7 @@
     "description": "生活中心应用",
     "mainElement": "EntryAbility",
     "deviceTypes": [
-      "phone",
+      "default",
       "tablet"
     ],
     "deliveryWithInstall": true,
