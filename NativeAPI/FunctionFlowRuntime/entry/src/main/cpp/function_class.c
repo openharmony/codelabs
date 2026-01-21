@@ -40,7 +40,7 @@ void BankBusinessVIP(void *arg)
 int ProcessFfrtQueue()
 {
     // 串行调度
-    ffrt_queue_t bank = create_bank_system("Bank", 2, 1);
+    ffrt_queue_t bank = CreateBankSystem("Bank", 2, 1);
     if (!bank) {
         LOGE("create bank system failed");
         return -1;
@@ -62,7 +62,7 @@ int ProcessFfrtQueue()
     waitForRequest(task1);
     waitForRequest(task2);
 
-    destroy_bank_system(bank);
+    DestroyBankSystem(bank);
 
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
