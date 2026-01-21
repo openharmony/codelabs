@@ -233,17 +233,17 @@ void compute_statistics(const Vector *data, double *mean, double *variance,
                        double *skewness, double *kurtosis);
 
 // 特殊函数
-double gamma_function(double x);
+double GammaFunction(double x);
 double beta_function(double a, double b);
 double bessel_j0(double x);
 double bessel_j1(double x);
-double erf_function(double x);
+double ErfFunction(double x);
 double legendre_poly(int n, double x);
 double chebyshev_poly(int n, double x);
 
 // 随机数生成
 Vector random_uniform(int n, double a, double b);
-Vector random_normal(int n, double mean, double stddev);
+Vector RandomNormal(int n, double mean, double stddev);
 Vector random_exponential(int n, double lambda);
 Matrix random_matrix(int rows, int cols, double min_val, double max_val);
 
@@ -833,6 +833,24 @@ void dft(const double *input, ComplexNum *output, int n)
     }
 }
 
+void idft(const ComplexNum *input, double *output, int n)
+{
+    for (int k = INIT_ZERO; k < n; k++)
+    {
+        double real = INIT_VALUE_1;
+        double imag = INIT_VALUE_1;
+        
+        for (int t = INIT_ZERO; t < n; t++)
+        {
+            double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
+            real += input[t].real * cos(angle) - input[t].imag * sin(angle);
+            imag += input[t].real * sin(angle) + input[t].imag * cos(angle);
+        }
+        
+        output[k] = real / n;
+    }
+}
+
 void fft(ComplexNum *data, int n)
 {
     if (n <= INIT_ONE) return;
@@ -1112,7 +1130,7 @@ Vector linear_regression(const Vector *x, const Vector *y)
 }
 
 /* ========== 特殊函数实现 ========== */
-double gamma_function(double x)
+double GammaFunction(double x)
 {
     // Lanczos 近似
     const double g = GAMMA_G;
@@ -1130,7 +1148,7 @@ double gamma_function(double x)
     
     if (x < DEFAULT_DIVISOR)
     {
-        return PI / (sin(PI * x) * gamma_function(INIT_VALUE_1 - x));
+        return PI / (sin(PI * x) * GammaFunction(INIT_VALUE_1 - x));
     }
     
     x -= INIT_VALUE_1;
@@ -1145,12 +1163,12 @@ double gamma_function(double x)
     return result;
 }
 
-double beta_function(double a, double b)
+double BetaFunction(double a, double b)
 {
-    return gamma_function(a) * gamma_function(b) / gamma_function(a + b);
+    return GammaFunction(a) * GammaFunction(b) / GammaFunction(a + b);
 }
 
-double erf_function(double x)
+double ErfFunction(double x)
 {
     // Abramowitz and Stegun 近似
     const double a1 =  0.254829592;
@@ -1170,7 +1188,7 @@ double erf_function(double x)
 }
 
 /* ========== 随机数生成 ========== */
-Vector random_normal(int n, double mean, double stddev)
+Vector RandomNormal(int n, double mean, double stddev)
 {
     Vector result = create_vector(n);
     
@@ -1278,15 +1296,15 @@ void compute(void *arg)
     
     // 测试9: 特殊函数
     printf("\n9. 测试特殊函数:\n");
-    double gamma_val = gamma_function(TEST_GAMMA_ARG);
+    double gamma_val = GammaFunction(TEST_GAMMA_ARG);
     printf("Γ(5) = %.10f (理论值: 24.0)\n", gamma_val);
     
-    double erf_val = erf_function(TEST_ERF_ARG);
+    double erf_val = ErfFunction(TEST_ERF_ARG);
     printf("erf(1) = %.10f\n", erf_val);
     
     // 测试10: 随机数生成
     printf("\n10. 测试随机数生成:\n");
-    Vector rands = random_normal(TEST_RANDOM_SAMPLES, NORM_MEAN, NORM_STDDEV);
+    Vector rands = RandomNormal(TEST_RANDOM_SAMPLES, NORM_MEAN, NORM_STDDEV);
     
     double mean = INIT_VALUE_1;
     for (int i = INIT_ZERO; i < TEST_RANDOM_SAMPLES; i++)
@@ -1316,7 +1334,7 @@ void compute(void *arg)
 int ComputeFfrtQueue()
 {
     // 并行调度
-    ffrt_queue_t bank = create_bank_system("Bank", INIT_TWO, INIT_ZERO);
+    ffrt_queue_t bank = CreateBankSystem("Bank", INIT_TWO, TYPE_CONCURRENT);
     if (!bank)
     {
         LOGE("create bank system failed");
@@ -1351,7 +1369,7 @@ int ComputeFfrtQueue()
     waitForRequest(task2);
     waitForRequest(task3);
 
-    destroy_bank_system(bank);
+    DestroyBankSystem(bank);
 
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);

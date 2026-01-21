@@ -137,13 +137,13 @@ int hoarePartition(vector<int>& arr, int low, int high)
 }
 
 // 递归快速排序（Hoare版本）
-void quickSortHoare(vector<int>& arr, int low, int high)
+void QuickSortHoare(vector<int>& arr, int low, int high)
 {
     if (low < high)
     {
         int pi = hoarePartition(arr, low, high);
-        quickSortHoare(arr, low, pi);      // 注意：这里包含pi
-        quickSortHoare(arr, pi + 1, high);
+        QuickSortHoare(arr, low, pi);      // 注意：这里包含pi
+        QuickSortHoare(arr, pi + 1, high);
     }
 }
 
@@ -157,14 +157,14 @@ void BankBusinessVIP()
     
     // 测试Hoare版本
     auto start = chrono::high_resolution_clock::now();
-    quickSortHoare(arr, 0, arr.size() - 1);
+    QuickSortHoare(arr, 0, arr.size() - 1);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  Hoare版本:  " << duration.count() << " 微秒" << endl;
 }
 
 // 插入排序 - 用于小数组优化
-void insertionSort(vector<int>& arr, int low, int high)
+void InsertionSort(vector<int>& arr, int low, int high)
 {
     for (int i = low + 1; i <= high; i++)
     {
@@ -181,7 +181,7 @@ void insertionSort(vector<int>& arr, int low, int high)
 }
 
 // 随机选择基准元素，避免最坏情况
-int medianOfThree(vector<int>& arr, int low, int high)
+int MedianOfThree(vector<int>& arr, int low, int high)
 {
     int mid = low + (high - low) / 2;
     
@@ -205,17 +205,17 @@ int medianOfThree(vector<int>& arr, int low, int high)
 }
 
 // 三向切分快速排序（应对大量重复元素）
-void threeWayQuickSort(vector<int>& arr, int low, int high)
+void ThreeWayQuickSort(vector<int>& arr, int low, int high)
 {
     // 小数组优化：当数组大小小于等于16时使用插入排序
     if (high - low <= SMALL_ARRAY_THRESHOLD)
     {
-        insertionSort(arr, low, high);
+        InsertionSort(arr, low, high);
         return;
     }
     
     // 使用三数取中法选择基准
-    int pivot = medianOfThree(arr, low, high);
+    int pivot = MedianOfThree(arr, low, high);
     
     // 三向切分
     int lt = low;      // arr[low..lt-1] < pivot
@@ -242,8 +242,8 @@ void threeWayQuickSort(vector<int>& arr, int low, int high)
     }
     
     // 递归排序小于和大于基准的部分
-    threeWayQuickSort(arr, low, lt - 1);
-    threeWayQuickSort(arr, gt + 1, high);
+    ThreeWayQuickSort(arr, low, lt - 1);
+    ThreeWayQuickSort(arr, gt + 1, high);
 }
 
 // 快速排序包装函数（推荐使用）
@@ -255,7 +255,7 @@ void quickSort(vector<int>& arr)
     }
     
     // 如果数组已基本有序，先打乱顺序
-    threeWayQuickSort(arr, 0, arr.size() - 1);
+    ThreeWayQuickSort(arr, 0, arr.size() - 1);
 }
 
 void BankBusinessNew11()

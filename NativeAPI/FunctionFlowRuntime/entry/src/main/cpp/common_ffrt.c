@@ -46,7 +46,7 @@ static inline ffrt_function_header_t *ffrt_create_function_wrapper(const ffrt_fu
     return (ffrt_function_header_t *)f;
 }
 
-ffrt_queue_t create_bank_system(const char *name, int concurrency, int type)
+ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type)
 {
     ffrt_queue_attr_t queue_attr;
     (void)ffrt_queue_attr_init(&queue_attr);
@@ -54,7 +54,7 @@ ffrt_queue_t create_bank_system(const char *name, int concurrency, int type)
 
     // 创建一个并发/串行 队列
     ffrt_queue_t queue;
-    if (type == 0) {
+    if (type == TYPE_CONCURRENT) {
         queue = ffrt_queue_create(ffrt_queue_concurrent, name, &queue_attr);
     } else {
         queue = ffrt_queue_create(ffrt_queue_serial, name, &queue_attr);
@@ -71,7 +71,7 @@ ffrt_queue_t create_bank_system(const char *name, int concurrency, int type)
     return queue;
 }
 
-void destroy_bank_system(ffrt_queue_t queue_handle)
+void DestroyBankSystem(ffrt_queue_t queue_handle)
 {
     ffrt_queue_destroy(queue_handle);
     LOGI("destroy bank system successfully");
