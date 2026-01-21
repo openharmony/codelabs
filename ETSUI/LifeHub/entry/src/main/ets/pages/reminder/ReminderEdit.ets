@@ -271,6 +271,9 @@ export struct ReminderEdit {
         await this.lifeHubData.addReminder(reminder);
       }
       router.back();
+      router.replaceUrl({
+        url: 'pages/reminder/ReminderMain',
+      });
     } catch (error) {
       console.error('ReminderEdit: 保存失败:', error);
     } finally {
