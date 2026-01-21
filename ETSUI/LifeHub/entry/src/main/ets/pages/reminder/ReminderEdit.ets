@@ -29,7 +29,6 @@ interface TypeOption {
 export struct ReminderEdit {
   private lifeHubData: LifeHubData = new LifeHubData();
   private reminderId: number = 0;
-  
   @State title: string = '';
   @State description: string = '';
   @State type: 'health' | 'goal' | 'mood' | 'learning' | 'diary' | 'custom' = 'health';
@@ -37,7 +36,6 @@ export struct ReminderEdit {
   @State selectedDays: boolean[] = [false, true, true, true, true, true, false]; // 周一到周日
   @State isReminderEnabled: boolean = true;
   @State isSaving: boolean = false;
-
   private types: TypeOption[] = [
     { value: 'health', label: '健康', icon: '💚' },
     { value: 'goal', label: '目标', icon: '🎯' },
@@ -46,7 +44,6 @@ export struct ReminderEdit {
     { value: 'diary', label: '日记', icon: '📝' },
     { value: 'custom', label: '自定义', icon: '🔔' }
   ];
-
   private dayNames = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
   aboutToAppear() {
@@ -246,12 +243,14 @@ export struct ReminderEdit {
   }
 
   async saveReminder() {
-    if (!this.title) return;
+    if (!this.title) {
+      return;
+    }
 
     this.isSaving = true;
     try {
-      const days = this.selectedDays.map((selected: boolean, index: number) => 
-        selected ? index.toString() : ''
+      const days = this.selectedDays.map((selected: boolean, index: number) =>
+      selected ? index.toString() : ''
       ).filter(d => d).join(',');
 
       const reminder: Reminder = {

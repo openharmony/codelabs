@@ -23,12 +23,10 @@ import { router } from '@kit.ArkUI';
 export struct DiaryEdit {
   private lifeHubData: LifeHubData = new LifeHubData();
   private diaryId: number = 0;
-  
   @State title: string = '';
   @State content: string = '';
   @State mood: string = '😊';
   @State isSaving: boolean = false;
-
   private moods = ['😄', '😊', '😐', '😔', '😢'];
 
   aboutToAppear() {
@@ -84,7 +82,7 @@ export struct DiaryEdit {
             Text('心情：')
               .fontSize(16)
               .fontColor('#666')
-            
+
             ForEach(this.moods, (m: string) => {
               Text(m)
                 .fontSize(24)
@@ -125,7 +123,12 @@ export struct DiaryEdit {
             .onChange((value: string) => {
               this.content = value;
             })
-            .margin({ top: 15, left: 15, right: 15, bottom: 20 })
+            .margin({
+              top: 15,
+              left: 15,
+              right: 15,
+              bottom: 20
+            })
         }
       }
       .layoutWeight(1)
@@ -136,7 +139,9 @@ export struct DiaryEdit {
   }
 
   async saveDiary() {
-    if (!this.content) return;
+    if (!this.content) {
+      return;
+    }
 
     this.isSaving = true;
     try {

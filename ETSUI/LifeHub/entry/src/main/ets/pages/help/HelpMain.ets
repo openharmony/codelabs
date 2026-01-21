@@ -113,11 +113,11 @@ export struct HelpMain {
       category: '报告'
     }
   ];
-
   @State selectedCategory: string = '全部';
   @State expandedItems: Set<number> = new Set();
-
-  private categories = ['全部', '入门', '健康', '目标', '心情', '学习', '旅行', '日记', '统计', '搜索', '成就', '备份', '提醒', '标签', '报告'];
+  private categories =
+    ['全部', '入门', '健康', '目标', '心情', '学习', '旅行', '日记', '统计', '搜索', '成就', '备份', '提醒', '标签',
+      '报告'];
 
   build() {
     Column() {
@@ -126,7 +126,7 @@ export struct HelpMain {
         Text('帮助中心')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
       }
       .width('100%')
@@ -150,7 +150,12 @@ export struct HelpMain {
           })
         }
         .width('100%')
-        .padding({ left: 15, right: 15, top: 10, bottom: 10 })
+        .padding({
+          left: 15,
+          right: 15,
+          top: 10,
+          bottom: 10
+        })
       }
       .scrollBar(BarState.Auto)
       .scrollable(ScrollDirection.Horizontal)
@@ -179,7 +184,7 @@ export struct HelpMain {
         Text(item.icon)
           .fontSize(32)
           .width(50)
-        
+
         Column() {
           Text(item.title)
             .fontSize(18)
@@ -192,7 +197,12 @@ export struct HelpMain {
             Text(item.category)
               .fontSize(12)
               .fontColor('#666')
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
               .backgroundColor('#f0f0f0')
               .borderRadius(10)
           }

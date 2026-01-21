@@ -22,7 +22,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct Dashboard {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State healthRecordsToday: number = 0;
   @State activeGoals: number = 0;
   @State moodToday: string = '😊';
@@ -287,7 +286,12 @@ export struct Dashboard {
           Blank()
         }
         .width('100%')
-        .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+        .padding({
+          left: 20,
+          right: 20,
+          top: 20,
+          bottom: 10
+        })
 
         // ===== 删除：今日概览整个区域 =====
 
@@ -298,7 +302,12 @@ export struct Dashboard {
           .fontWeight(FontWeight.Medium)
           .textAlign(TextAlign.Start)
           .width('100%')
-          .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 10
+          })
 
         Grid() {
           GridItem() {
@@ -351,7 +360,12 @@ export struct Dashboard {
           .fontWeight(FontWeight.Medium)
           .textAlign(TextAlign.Start)
           .width('100%')
-          .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 10
+          })
 
         Grid() {
           GridItem() {
@@ -386,7 +400,12 @@ export struct Dashboard {
           .fontWeight(FontWeight.Medium)
           .textAlign(TextAlign.Start)
           .width('100%')
-          .padding({ left: 20, right: 20, top: 20, bottom: 10 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 20,
+            bottom: 10
+          })
 
         Grid() {
           GridItem() {
@@ -426,18 +445,18 @@ export struct Dashboard {
       Text(icon)
         .fontSize(32)
         .margin({ bottom: 8 })
-      
+
       Text(value || '0')
         .fontSize(24)
         .fontWeight(FontWeight.Bold)
         .fontColor(color)
         .margin({ bottom: 4 })
-      
+
       Text(title)
         .fontSize(14)
         .fontColor('#666')
         .margin({ bottom: 2 })
-      
+
       Text(subtitle)
         .fontSize(12)
         .fontColor('#999')
@@ -447,7 +466,12 @@ export struct Dashboard {
     .padding(15)
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 4, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 4,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
     .onClick(onClick)
   }
 
@@ -457,7 +481,7 @@ export struct Dashboard {
       Text(icon)
         .fontSize(36)
         .margin({ bottom: 8 })
-      
+
       Text(title)
         .fontSize(14)
         .fontColor('#333')
@@ -467,7 +491,12 @@ export struct Dashboard {
     .justifyContent(FlexAlign.Center)
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
     .onClick(onClick)
   }
 }

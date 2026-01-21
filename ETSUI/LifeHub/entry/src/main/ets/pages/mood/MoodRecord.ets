@@ -29,12 +29,10 @@ interface MoodOption {
 @Component
 export struct MoodRecord {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State selectedMood: string = '😊';
   @State score: number = 5;
   @State note: string = '';
   @State isSaving: boolean = false;
-
   private moods: MoodOption[] = [
     { emoji: '😄', score: 9, label: '非常开心' },
     { emoji: '😊', score: 7, label: '开心' },
@@ -133,7 +131,12 @@ export struct MoodRecord {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(12)
-          .margin({ top: 20, left: 15, right: 15, bottom: 20 })
+          .margin({
+            top: 20,
+            left: 15,
+            right: 15,
+            bottom: 20
+          })
         }
       }
       .layoutWeight(1)

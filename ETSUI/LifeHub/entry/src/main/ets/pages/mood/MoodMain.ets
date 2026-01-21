@@ -21,7 +21,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct MoodMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State moodRecords: MoodRecord[] = [];
   @State isLoading: boolean = true;
 
@@ -50,9 +49,9 @@ export struct MoodMain {
         Text('心情记录')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)

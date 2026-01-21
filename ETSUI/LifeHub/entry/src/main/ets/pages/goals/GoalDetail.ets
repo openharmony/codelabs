@@ -22,7 +22,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct GoalDetail {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State title: string = '';
   @State description: string = '';
   @State category: string = '生活';
@@ -101,7 +100,9 @@ export struct GoalDetail {
   }
 
   async saveGoal() {
-    if (!this.title) return;
+    if (!this.title) {
+      return;
+    }
 
     this.isSaving = true;
     try {

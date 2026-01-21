@@ -22,7 +22,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct TravelPlan {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State title: string = '';
   @State destination: string = '';
   @State startDate: string = '';
@@ -122,7 +121,12 @@ export struct TravelPlan {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(12)
-          .margin({ top: 15, left: 15, right: 15, bottom: 20 })
+          .margin({
+            top: 15,
+            left: 15,
+            right: 15,
+            bottom: 20
+          })
         }
       }
       .layoutWeight(1)
@@ -164,7 +168,9 @@ export struct TravelPlan {
   }
 
   async savePlan() {
-    if (!this.title || !this.destination) return;
+    if (!this.title || !this.destination) {
+      return;
+    }
 
     this.isSaving = true;
     try {

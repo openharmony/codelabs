@@ -22,7 +22,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct SettingsMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State isDarkMode: boolean = false;
   @State dataCount: number = 0;
 
@@ -42,9 +41,9 @@ export struct SettingsMain {
       const skills = await this.lifeHubData.getAllSkills();
       const travelPlans = await this.lifeHubData.getAllTravelPlans();
       const diaries = await this.lifeHubData.getAllDiaries();
-      
-      this.dataCount = healthRecords.length + goals.length + moodRecords.length + 
-                      skills.length + travelPlans.length + diaries.length;
+
+      this.dataCount = healthRecords.length + goals.length + moodRecords.length +
+      skills.length + travelPlans.length + diaries.length;
     } catch (error) {
       console.error('SettingsMain: 加载数据统计失败:', error);
     }
@@ -57,7 +56,7 @@ export struct SettingsMain {
         Text('设置')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
       }
       .width('100%')
@@ -79,9 +78,9 @@ export struct SettingsMain {
               Text('深色模式')
                 .fontSize(16)
                 .fontColor('#333')
-              
+
               Blank()
-              
+
               Toggle({ type: ToggleType.Switch, isOn: this.isDarkMode })
                 .selectedColor('#007DFF')
                 .onChange((isOn: boolean) => {
@@ -116,7 +115,7 @@ export struct SettingsMain {
                   .margin({ top: 5 })
               }
               .alignItems(HorizontalAlign.Start)
-              
+
               Blank()
             }
             .width('100%')
@@ -132,10 +131,10 @@ export struct SettingsMain {
             Row() {
               Text('导出数据')
                 .fontSize(16)
-              .fontColor('#007DFF')
-              
+                .fontColor('#007DFF')
+
               Blank()
-              
+
               Text('>')
                 .fontSize(18)
                 .fontColor('#999')
@@ -154,9 +153,9 @@ export struct SettingsMain {
               Text('清除所有数据')
                 .fontSize(16)
                 .fontColor('#FF5722')
-              
+
               Blank()
-              
+
               Text('>')
                 .fontSize(18)
                 .fontColor('#999')
@@ -185,9 +184,9 @@ export struct SettingsMain {
               Text('应用版本')
                 .fontSize(16)
                 .fontColor('#333')
-              
+
               Blank()
-              
+
               Text('1.0.0')
                 .fontSize(16)
                 .fontColor('#666')
@@ -203,9 +202,9 @@ export struct SettingsMain {
               Text('开发者')
                 .fontSize(16)
                 .fontColor('#333')
-              
+
               Blank()
-              
+
               Text('LifeHub Team')
                 .fontSize(16)
                 .fontColor('#666')
@@ -275,7 +274,12 @@ export struct SettingsMain {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(10)
-          .shadow({ radius: 10, color: '#40000000', offsetX: 0, offsetY: 5 })
+          .shadow({
+            radius: 10,
+            color: '#40000000',
+            offsetX: 0,
+            offsetY: 5
+          })
         }
         .width('100%')
         .height('100%')
@@ -342,13 +346,15 @@ export struct SettingsMain {
     try {
       // 使用 RDB 直接删除所有表数据
       const context = getContext(this);
-      if (!context) return;
-      
+      if (!context) {
+        return;
+      }
+
       // 注意：这里需要直接操作数据库，因为可能没有删除方法
       // 或者我们可以重新初始化数据库
       console.log('SettingsMain: 清除所有数据功能需要数据库直接操作');
       // TODO: 实现数据库清空功能
-      
+
       await this.loadDataCount();
     } catch (error) {
       console.error('SettingsMain: 清除数据失败:', error);

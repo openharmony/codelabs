@@ -15,7 +15,16 @@
 /**
  * 周报/月报生成页面
  */
-import { LifeHubData, DashboardStats, HealthRecord, MoodRecord, Goal, Skill, TravelPlan, Diary } from '../../model/LifeHubData';
+import {
+  LifeHubData,
+  DashboardStats,
+  HealthRecord,
+  MoodRecord,
+  Goal,
+  Skill,
+  TravelPlan,
+  Diary
+} from '../../model/LifeHubData';
 
 interface PeriodRecords {
   health: HealthRecord[];
@@ -26,7 +35,6 @@ interface PeriodRecords {
 @Component
 export struct ReportMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State reportType: 'week' | 'month' = 'week';
   @State reportData: string = '';
   @State isLoading: boolean = false;
@@ -46,9 +54,9 @@ export struct ReportMain {
         Text('生活报告')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Row() {
           Button('周报')
             .fontSize(14)
@@ -126,7 +134,7 @@ export struct ReportMain {
       const diaries = await this.lifeHubData.getAllDiaries();
 
       const period = this.reportType === 'week' ? '本周' : '本月';
-      const periodRecords = this.reportType === 'week' ? 
+      const periodRecords = this.reportType === 'week' ?
         this.filterThisWeek(healthRecords, moodRecords) :
         this.filterThisMonth(healthRecords, moodRecords);
 
@@ -141,9 +149,15 @@ export struct ReportMain {
         const avgWeight = this.getAverageValue(periodRecords.health, 'weight');
         const avgExercise = this.getAverageValue(periodRecords.health, 'exercise');
         const avgSleep = this.getAverageValue(periodRecords.health, 'sleep');
-        if (avgWeight > 0) report += `  • 平均体重: ${avgWeight.toFixed(1)}kg\n`;
-        if (avgExercise > 0) report += `  • 平均运动: ${avgExercise.toFixed(0)}分钟\n`;
-        if (avgSleep > 0) report += `  • 平均睡眠: ${avgSleep.toFixed(1)}小时\n`;
+        if (avgWeight > 0) {
+          report += `  • 平均体重: ${avgWeight.toFixed(1)}kg\n`;
+        }
+        if (avgExercise > 0) {
+          report += `  • 平均运动: ${avgExercise.toFixed(0)}分钟\n`;
+        }
+        if (avgSleep > 0) {
+          report += `  • 平均睡眠: ${avgSleep.toFixed(1)}小时\n`;
+        }
       }
       report += `  • 总记录数: ${healthRecords.length}条\n\n`;
 
@@ -199,7 +213,9 @@ export struct ReportMain {
         const categories = this.getSkillCategories(skills);
         let categoryStr = '';
         for (let i = 0; i < categories.length; i++) {
-          if (i > 0) categoryStr += ', ';
+          if (i > 0) {
+            categoryStr += ', ';
+          }
           categoryStr += categories[i];
         }
         report += `  • 技能分类: ${categoryStr}\n`;
@@ -219,8 +235,8 @@ export struct ReportMain {
 
       // 日记模块
       report += `📝 日记记录\n`;
-      const periodDiaries = this.reportType === 'week' ? 
-        this.filterThisWeekDiaries(diaries) : 
+      const periodDiaries = this.reportType === 'week' ?
+        this.filterThisWeekDiaries(diaries) :
         this.filterThisMonthDiaries(diaries);
       report += `  • ${period}日记数: ${periodDiaries.length}篇\n`;
       report += `  • 总日记数: ${diaries.length}篇\n\n`;
@@ -228,10 +244,10 @@ export struct ReportMain {
       // 总结
       report += `${'='.repeat(30)}\n`;
       report += `📈 总结\n`;
-      const totalRecords = periodRecords.health.length + periodRecords.mood.length + 
-                          periodDiaries.length;
+      const totalRecords = periodRecords.health.length + periodRecords.mood.length +
+      periodDiaries.length;
       report += `  • ${period}总活动: ${totalRecords}次\n`;
-      
+
       if (this.reportType === 'week') {
         const dailyAvg = (totalRecords / 7).toFixed(1);
         report += `  • 日均活动: ${dailyAvg}次\n`;
@@ -257,21 +273,21 @@ export struct ReportMain {
 
     const filteredHealth: HealthRecord[] = [];
     const filteredMood: MoodRecord[] = [];
-    
+
     for (let i = 0; i < health.length; i++) {
       const recordDate = new Date(health[i].date);
       if (recordDate >= weekStart) {
         filteredHealth.push(health[i]);
       }
     }
-    
+
     for (let i = 0; i < mood.length; i++) {
       const recordDate = new Date(mood[i].date);
       if (recordDate >= weekStart) {
         filteredMood.push(mood[i]);
       }
     }
-    
+
     return {
       health: filteredHealth,
       mood: filteredMood
@@ -284,21 +300,21 @@ export struct ReportMain {
 
     const filteredHealth: HealthRecord[] = [];
     const filteredMood: MoodRecord[] = [];
-    
+
     for (let i = 0; i < health.length; i++) {
       const recordDate = new Date(health[i].date);
       if (recordDate >= monthStart) {
         filteredHealth.push(health[i]);
       }
     }
-    
+
     for (let i = 0; i < mood.length; i++) {
       const recordDate = new Date(mood[i].date);
       if (recordDate >= monthStart) {
         filteredMood.push(mood[i]);
       }
     }
-    
+
     return {
       health: filteredHealth,
       mood: filteredMood
@@ -342,7 +358,9 @@ export struct ReportMain {
         filtered.push(records[i]);
       }
     }
-    if (filtered.length === 0) return 0;
+    if (filtered.length === 0) {
+      return 0;
+    }
     let sum = 0;
     for (let i = 0; i < filtered.length; i++) {
       sum += filtered[i].value;

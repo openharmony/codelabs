@@ -22,7 +22,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct ReminderMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State reminders: Reminder[] = [];
   @State isLoading: boolean = true;
 
@@ -54,9 +53,9 @@ export struct ReminderMain {
         Text('提醒管理')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)
@@ -90,7 +89,7 @@ export struct ReminderMain {
             .margin({ bottom: 20 })
           Text('还没有提醒')
             .fontSize(18)
-          .fontColor('#666')
+            .fontColor('#666')
           Text('点击右上角"+"添加提醒')
             .fontSize(14)
             .fontColor('#999')
@@ -123,7 +122,7 @@ export struct ReminderMain {
         Text(this.getTypeIcon(reminder.type))
           .fontSize(32)
           .width(50)
-        
+
         Column() {
           Text(reminder.title)
             .fontSize(18)
@@ -146,7 +145,7 @@ export struct ReminderMain {
             Text(`⏰ ${reminder.time}`)
               .fontSize(12)
               .fontColor('#666')
-            
+
             Text(`📅 ${this.formatDays(reminder.days)}`)
               .fontSize(12)
               .fontColor('#666')
@@ -195,9 +194,15 @@ export struct ReminderMain {
   formatDays(days: string): string {
     const dayNames = ['日', '一', '二', '三', '四', '五', '六'];
     const dayNums = days.split(',').map(d => parseInt(d));
-    if (dayNums.length === 7) return '每天';
-    if (dayNums.length === 5 && dayNums.includes(1) && dayNums.includes(5)) return '工作日';
-    if (dayNums.length === 2 && dayNums.includes(0) && dayNums.includes(6)) return '周末';
+    if (dayNums.length === 7) {
+      return '每天';
+    }
+    if (dayNums.length === 5 && dayNums.includes(1) && dayNums.includes(5)) {
+      return '工作日';
+    }
+    if (dayNums.length === 2 && dayNums.includes(0) && dayNums.includes(6)) {
+      return '周末';
+    }
     return dayNums.map(d => `周${dayNames[d]}`).join(' ');
   }
 

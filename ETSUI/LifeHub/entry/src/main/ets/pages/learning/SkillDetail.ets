@@ -22,7 +22,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct SkillDetail {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State name: string = '';
   @State category: string = '技能';
   @State level: number = 1;
@@ -101,7 +100,9 @@ export struct SkillDetail {
   }
 
   async saveSkill() {
-    if (!this.name) return;
+    if (!this.name) {
+      return;
+    }
 
     this.isSaving = true;
     try {

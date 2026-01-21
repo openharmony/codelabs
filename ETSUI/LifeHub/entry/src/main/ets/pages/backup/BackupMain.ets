@@ -36,7 +36,6 @@ interface Backup {
 @Component
 export struct BackupMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State backupData: string = '';
   @State isBackingUp: boolean = false;
   @State isRestoring: boolean = false;
@@ -62,7 +61,7 @@ export struct BackupMain {
         Text('数据备份')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
       }
       .width('100%')
@@ -149,9 +148,9 @@ export struct BackupMain {
               .textAlign(TextAlign.Start)
               .margin({ bottom: 10 })
 
-            TextArea({ 
-              placeholder: '在此粘贴备份的JSON数据...', 
-              text: this.restoreText 
+            TextArea({
+              placeholder: '在此粘贴备份的JSON数据...',
+              text: this.restoreText
             })
               .width('100%')
               .height(200)
@@ -190,9 +189,9 @@ export struct BackupMain {
                   .fontSize(16)
                   .fontWeight(FontWeight.Medium)
                   .fontColor('#333')
-                
+
                 Blank()
-                
+
                 Button('复制')
                   .fontSize(14)
                   .height(32)
@@ -299,7 +298,7 @@ export struct BackupMain {
 
       this.backupData = JSON.stringify(backup, null, 2);
       this.lastBackupTime = new Date().toLocaleString();
-      
+
       // TODO: 保存到本地文件或分享
       console.log('备份完成:', this.backupData);
     } catch (error) {
@@ -310,12 +309,14 @@ export struct BackupMain {
   }
 
   async performRestore() {
-    if (!this.restoreText) return;
+    if (!this.restoreText) {
+      return;
+    }
 
     this.isRestoring = true;
     try {
       const backup = JSON.parse(this.restoreText) as Backup;
-      
+
       if (!backup.data) {
         throw new Error('备份数据格式错误');
       }
@@ -323,7 +324,7 @@ export struct BackupMain {
       // TODO: 实现数据恢复逻辑
       // 1. 清除现有数据
       // 2. 导入备份数据
-      
+
       console.log('恢复完成');
     } catch (error) {
       console.error('BackupMain: 恢复失败:', error);

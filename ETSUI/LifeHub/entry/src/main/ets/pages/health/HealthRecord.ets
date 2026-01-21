@@ -30,19 +30,42 @@ interface HealthTypeOption {
 @Component
 export struct HealthRecord {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State selectedType: string = 'weight';
   @State value: string = '';
   @State unit: string = 'kg';
   @State note: string = '';
   @State isSaving: boolean = false;
-
   private types: HealthTypeOption[] = [
-    { value: 'weight', label: '体重', unit: 'kg', icon: '⚖️' },
-    { value: 'blood_pressure', label: '血压', unit: 'mmHg', icon: '🩺' },
-    { value: 'blood_sugar', label: '血糖', unit: 'mmol/L', icon: '🩸' },
-    { value: 'exercise', label: '运动', unit: '分钟', icon: '🏃' },
-    { value: 'sleep', label: '睡眠', unit: '小时', icon: '😴' }
+    {
+      value: 'weight',
+      label: '体重',
+      unit: 'kg',
+      icon: '⚖️'
+    },
+    {
+      value: 'blood_pressure',
+      label: '血压',
+      unit: 'mmHg',
+      icon: '🩺'
+    },
+    {
+      value: 'blood_sugar',
+      label: '血糖',
+      unit: 'mmol/L',
+      icon: '🩸'
+    },
+    {
+      value: 'exercise',
+      label: '运动',
+      unit: '分钟',
+      icon: '🏃'
+    },
+    {
+      value: 'sleep',
+      label: '睡眠',
+      unit: '小时',
+      icon: '😴'
+    }
   ];
 
   aboutToAppear() {
@@ -187,7 +210,12 @@ export struct HealthRecord {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(12)
-          .margin({ top: 15, left: 15, right: 15, bottom: 20 })
+          .margin({
+            top: 15,
+            left: 15,
+            right: 15,
+            bottom: 20
+          })
         }
       }
       .layoutWeight(1)
@@ -198,7 +226,9 @@ export struct HealthRecord {
   }
 
   async saveRecord() {
-    if (!this.value) return;
+    if (!this.value) {
+      return;
+    }
 
     this.isSaving = true;
     try {
