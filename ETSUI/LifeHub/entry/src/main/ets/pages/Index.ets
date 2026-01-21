@@ -175,6 +175,11 @@ struct Index {
     .height(60)
     .padding({ top: 8, bottom: 8 })
     .backgroundColor(Color.White)
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: -2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: -2
+    })
   }
 }

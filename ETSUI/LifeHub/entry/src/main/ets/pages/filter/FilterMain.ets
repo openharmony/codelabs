@@ -48,7 +48,6 @@ interface ItemWithId {
 @Component
 export struct FilterMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State selectedModule: 'health' | 'goal' | 'mood' | 'learning' | 'travel' | 'diary' = 'health';
   @State sortBy: 'date' | 'name' | 'value' = 'date';
   @State sortOrder: 'asc' | 'desc' = 'desc';
@@ -58,7 +57,6 @@ export struct FilterMain {
   @State endDate: string = '';
   @State filteredData: Array<HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary> = [];
   @State isLoading: boolean = false;
-
   private modules: ModuleOption[] = [
     { value: 'health', label: '健康记录', icon: '💚' },
     { value: 'goal', label: '目标', icon: '🎯' },
@@ -154,9 +152,10 @@ export struct FilterMain {
     }
 
     // 排序
-    data.sort((a: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary, b: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary) => {
+    data.sort((a: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary,
+      b: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary) => {
       let compareValue = 0;
-      
+
       if (this.sortBy === 'date') {
         let dateA = 0;
         let dateB = 0;
@@ -210,7 +209,7 @@ export struct FilterMain {
         }
         compareValue = valueA - valueB;
       }
-      
+
       return this.sortOrder === 'asc' ? compareValue : -compareValue;
     });
 
@@ -224,7 +223,7 @@ export struct FilterMain {
         Text('数据筛选')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
       }
       .width('100%')
@@ -349,16 +348,19 @@ export struct FilterMain {
               Text('排序方式')
                 .fontSize(16)
                 .fontColor('#333')
-              
+
               Blank()
-              
+
               Row() {
                 Button('日期')
                   .fontSize(14)
                   .height(32)
                   .backgroundColor(this.sortBy === 'date' ? '#007DFF' : '#f0f0f0')
                   .fontColor(this.sortBy === 'date' ? Color.White : '#666')
-                  .onClick(() => { this.sortBy = 'date'; this.loadData(); })
+                  .onClick(() => {
+                    this.sortBy = 'date';
+                    this.loadData();
+                  })
                   .margin({ right: 10 })
 
                 Button('名称')
@@ -366,7 +368,10 @@ export struct FilterMain {
                   .height(32)
                   .backgroundColor(this.sortBy === 'name' ? '#007DFF' : '#f0f0f0')
                   .fontColor(this.sortBy === 'name' ? Color.White : '#666')
-                  .onClick(() => { this.sortBy = 'name'; this.loadData(); })
+                  .onClick(() => {
+                    this.sortBy = 'name';
+                    this.loadData();
+                  })
                   .margin({ right: 10 })
 
                 Button('数值')
@@ -374,7 +379,10 @@ export struct FilterMain {
                   .height(32)
                   .backgroundColor(this.sortBy === 'value' ? '#007DFF' : '#f0f0f0')
                   .fontColor(this.sortBy === 'value' ? Color.White : '#666')
-                  .onClick(() => { this.sortBy = 'value'; this.loadData(); })
+                  .onClick(() => {
+                    this.sortBy = 'value';
+                    this.loadData();
+                  })
               }
             }
             .width('100%')
@@ -384,16 +392,19 @@ export struct FilterMain {
               Text('排序顺序')
                 .fontSize(16)
                 .fontColor('#333')
-              
+
               Blank()
-              
+
               Row() {
                 Button('升序')
                   .fontSize(14)
                   .height(32)
                   .backgroundColor(this.sortOrder === 'asc' ? '#007DFF' : '#f0f0f0')
                   .fontColor(this.sortOrder === 'asc' ? Color.White : '#666')
-                  .onClick(() => { this.sortOrder = 'asc'; this.loadData(); })
+                  .onClick(() => {
+                    this.sortOrder = 'asc';
+                    this.loadData();
+                  })
                   .margin({ right: 10 })
 
                 Button('降序')
@@ -401,7 +412,10 @@ export struct FilterMain {
                   .height(32)
                   .backgroundColor(this.sortOrder === 'desc' ? '#007DFF' : '#f0f0f0')
                   .fontColor(this.sortOrder === 'desc' ? Color.White : '#666')
-                  .onClick(() => { this.sortOrder = 'desc'; this.loadData(); })
+                  .onClick(() => {
+                    this.sortOrder = 'desc';
+                    this.loadData();
+                  })
               }
             }
             .width('100%')
@@ -446,13 +460,14 @@ export struct FilterMain {
             .height(200)
             .justifyContent(FlexAlign.Center)
           } else {
-            ForEach(this.filteredData.slice(0, 10), (item: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary, index: number) => {
-              this.buildResultItem(item, index)
-            }, (item: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary, index: number) => {
-              const itemId = this.getItemId(item);
-              const idStr = itemId ? itemId.toString() : '';
-              return `${this.selectedModule}-${idStr}-${index}`;
-            })
+            ForEach(this.filteredData.slice(0, 10),
+              (item: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary, index: number) => {
+                this.buildResultItem(item, index)
+              }, (item: HealthRecord | MoodRecord | Goal | Skill | TravelPlan | Diary, index: number) => {
+                const itemId = this.getItemId(item);
+                const idStr = itemId ? itemId.toString() : '';
+                return `${this.selectedModule}-${idStr}-${index}`;
+              })
           }
         }
         .width('100%')
@@ -478,7 +493,10 @@ export struct FilterMain {
           .height(28)
           .backgroundColor(this.filterType === 'all' ? '#007DFF' : '#f0f0f0')
           .fontColor(this.filterType === 'all' ? Color.White : '#666')
-          .onClick(() => { this.filterType = 'all'; this.loadData(); })
+          .onClick(() => {
+            this.filterType = 'all';
+            this.loadData();
+          })
           .margin({ right: 8 })
 
         Button('体重')
@@ -486,7 +504,10 @@ export struct FilterMain {
           .height(28)
           .backgroundColor(this.filterType === 'weight' ? '#007DFF' : '#f0f0f0')
           .fontColor(this.filterType === 'weight' ? Color.White : '#666')
-          .onClick(() => { this.filterType = 'weight'; this.loadData(); })
+          .onClick(() => {
+            this.filterType = 'weight';
+            this.loadData();
+          })
           .margin({ right: 8 })
 
         Button('运动')
@@ -494,7 +515,10 @@ export struct FilterMain {
           .height(28)
           .backgroundColor(this.filterType === 'exercise' ? '#007DFF' : '#f0f0f0')
           .fontColor(this.filterType === 'exercise' ? Color.White : '#666')
-          .onClick(() => { this.filterType = 'exercise'; this.loadData(); })
+          .onClick(() => {
+            this.filterType = 'exercise';
+            this.loadData();
+          })
       }
     }
     .width('100%')
@@ -514,7 +538,10 @@ export struct FilterMain {
           .height(28)
           .backgroundColor(this.filterStatus === 'all' ? '#007DFF' : '#f0f0f0')
           .fontColor(this.filterStatus === 'all' ? Color.White : '#666')
-          .onClick(() => { this.filterStatus = 'all'; this.loadData(); })
+          .onClick(() => {
+            this.filterStatus = 'all';
+            this.loadData();
+          })
           .margin({ right: 8 })
 
         Button('进行中')
@@ -522,7 +549,10 @@ export struct FilterMain {
           .height(28)
           .backgroundColor(this.filterStatus === 'ongoing' ? '#007DFF' : '#f0f0f0')
           .fontColor(this.filterStatus === 'ongoing' ? Color.White : '#666')
-          .onClick(() => { this.filterStatus = 'ongoing'; this.loadData(); })
+          .onClick(() => {
+            this.filterStatus = 'ongoing';
+            this.loadData();
+          })
           .margin({ right: 8 })
 
         Button('已完成')
@@ -530,7 +560,10 @@ export struct FilterMain {
           .height(28)
           .backgroundColor(this.filterStatus === 'completed' ? '#007DFF' : '#f0f0f0')
           .fontColor(this.filterStatus === 'completed' ? Color.White : '#666')
-          .onClick(() => { this.filterStatus = 'completed'; this.loadData(); })
+          .onClick(() => {
+            this.filterStatus = 'completed';
+            this.loadData();
+          })
       }
     }
     .width('100%')

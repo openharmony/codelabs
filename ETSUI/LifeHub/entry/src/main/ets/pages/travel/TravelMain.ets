@@ -21,7 +21,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct TravelMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State travelPlans: TravelPlan[] = [];
   @State isLoading: boolean = true;
 
@@ -50,9 +49,9 @@ export struct TravelMain {
         Text('旅行规划')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)

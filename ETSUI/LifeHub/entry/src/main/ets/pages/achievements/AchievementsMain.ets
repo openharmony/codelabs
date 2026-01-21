@@ -32,7 +32,6 @@ interface Achievement {
 @Component
 export struct AchievementsMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State achievements: Achievement[] = [];
   @State unlockedCount: number = 0;
 
@@ -162,11 +161,11 @@ export struct AchievementsMain {
           title: '数据收集者',
           description: '总记录数达到500条',
           icon: '📊',
-          progress: healthRecords.length + goals.length + moodRecords.length + 
-                   skills.length + travelPlans.length + diaries.length,
+          progress: healthRecords.length + goals.length + moodRecords.length +
+          skills.length + travelPlans.length + diaries.length,
           maxProgress: 500,
-          unlocked: (healthRecords.length + goals.length + moodRecords.length + 
-                    skills.length + travelPlans.length + diaries.length) >= 500,
+          unlocked: (healthRecords.length + goals.length + moodRecords.length +
+          skills.length + travelPlans.length + diaries.length) >= 500,
           category: '综合'
         },
         {
@@ -194,9 +193,9 @@ export struct AchievementsMain {
         Text('成就系统')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Column() {
           Text(this.unlockedCount.toString())
             .fontSize(20)
@@ -258,7 +257,12 @@ export struct AchievementsMain {
             Text(achievement.category)
               .fontSize(12)
               .fontColor('#999')
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
               .backgroundColor('#f0f0f0')
               .borderRadius(10)
 
@@ -285,10 +289,10 @@ export struct AchievementsMain {
       .width('100%')
 
       if (!achievement.unlocked && achievement.maxProgress > 1) {
-        Progress({ 
-          value: achievement.progress, 
-          total: achievement.maxProgress, 
-          type: ProgressType.Linear 
+        Progress({
+          value: achievement.progress,
+          total: achievement.maxProgress,
+          type: ProgressType.Linear
         })
           .width('100%')
           .height(6)
@@ -318,8 +322,10 @@ export struct AchievementsMain {
   }
 
   getConsecutiveDays(records: MoodRecord[]): number {
-    if (records.length === 0) return 0;
-    
+    if (records.length === 0) {
+      return 0;
+    }
+
     const dates: string[] = [];
     for (let i = 0; i < records.length; i++) {
       dates.push(records[i].date);
@@ -327,30 +333,43 @@ export struct AchievementsMain {
     dates.sort().reverse();
     let consecutive = 1;
     const today = new Date();
-    
+
     for (let i = 0; i < dates.length - 1; i++) {
       const date1 = new Date(dates[i]);
       const date2 = new Date(dates[i + 1]);
       const diffDays = Math.floor((date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24));
-      
+
       if (diffDays === 1) {
         consecutive++;
       } else {
         break;
       }
     }
-    
+
     return consecutive;
   }
 
-  getAllModulesProgress(health: HealthRecord[], goals: Goal[], mood: MoodRecord[], skills: Skill[], travel: TravelPlan[], diaries: Diary[]): number {
+  getAllModulesProgress(health: HealthRecord[], goals: Goal[], mood: MoodRecord[], skills: Skill[],
+    travel: TravelPlan[], diaries: Diary[]): number {
     let progress = 0;
-    if (health.length > 0) progress++;
-    if (goals.length > 0) progress++;
-    if (mood.length > 0) progress++;
-    if (skills.length > 0) progress++;
-    if (travel.length > 0) progress++;
-    if (diaries.length > 0) progress++;
+    if (health.length > 0) {
+      progress++;
+    }
+    if (goals.length > 0) {
+      progress++;
+    }
+    if (mood.length > 0) {
+      progress++;
+    }
+    if (skills.length > 0) {
+      progress++;
+    }
+    if (travel.length > 0) {
+      progress++;
+    }
+    if (diaries.length > 0) {
+      progress++;
+    }
     return progress;
   }
 }

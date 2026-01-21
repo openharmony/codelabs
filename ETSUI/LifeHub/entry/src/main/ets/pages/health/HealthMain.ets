@@ -21,7 +21,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct HealthMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State healthRecords: HealthRecord[] = [];
   @State isLoading: boolean = true;
 
@@ -51,9 +50,9 @@ export struct HealthMain {
         Text('健康记录')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)

@@ -21,7 +21,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct GoalsMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State goals: Goal[] = [];
   @State isLoading: boolean = true;
 
@@ -50,9 +49,9 @@ export struct GoalsMain {
         Text('我的目标')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)
@@ -110,7 +109,7 @@ export struct GoalsMain {
                     .backgroundColor('#e0e0e0')
                     .height(6)
                     .borderRadius(3)
-                  
+
                   Blank()
                     .layoutWeight(goal.progress / 100)
                     .backgroundColor('#FF9800')

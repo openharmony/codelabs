@@ -21,7 +21,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct LearningMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State skills: Skill[] = [];
   @State isLoading: boolean = true;
 
@@ -50,9 +49,9 @@ export struct LearningMain {
         Text('技能学习')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)
@@ -110,7 +109,7 @@ export struct LearningMain {
                     .backgroundColor('#e0e0e0')
                     .height(6)
                     .borderRadius(3)
-                  
+
                   Blank()
                     .layoutWeight(skill.level / skill.targetLevel)
                     .backgroundColor('#9C27B0')

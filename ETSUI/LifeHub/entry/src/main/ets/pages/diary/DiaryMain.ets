@@ -21,7 +21,6 @@ import { router } from '@kit.ArkUI';
 @Component
 export struct DiaryMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-
   @State diaries: Diary[] = [];
   @State isLoading: boolean = true;
 

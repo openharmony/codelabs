@@ -54,14 +54,12 @@ interface CategoryItem {
 @Component
 export struct StatisticsMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State healthRecords: HealthRecord[] = [];
   @State moodRecords: MoodRecord[] = [];
   @State goals: Goal[] = [];
   @State skills: Skill[] = [];
   @State isLoading: boolean = true;
   @State selectedTab: number = 0; // 0-健康, 1-心情, 2-目标, 3-学习
-  
   @State typeItems: TypeItem[] = [];
   @State moodItems: MoodItem[] = [];
   @State statusItems: StatusItem[] = [];
@@ -83,7 +81,7 @@ export struct StatisticsMain {
       this.moodRecords = await this.lifeHubData.getMoodRecords(30);
       this.goals = await this.lifeHubData.getAllGoals();
       this.skills = await this.lifeHubData.getAllSkills();
-      
+
       // 计算统计数据
       this.typeItems = this.getTypeItems();
       this.moodItems = this.getMoodItems();
@@ -104,7 +102,7 @@ export struct StatisticsMain {
         Text('数据统计')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
       }
       .width('100%')
@@ -165,7 +163,7 @@ export struct StatisticsMain {
         .fontSize(16)
         .fontColor(this.selectedTab === index ? '#007DFF' : '#666')
         .fontWeight(this.selectedTab === index ? FontWeight.Bold : FontWeight.Normal)
-      
+
       if (this.selectedTab === index) {
         Divider()
           .color('#007DFF')
@@ -323,13 +321,13 @@ export struct StatisticsMain {
       Text(icon)
         .fontSize(32)
         .margin({ bottom: 8 })
-      
+
       Text(value)
         .fontSize(24)
         .fontWeight(FontWeight.Bold)
         .fontColor(color)
         .margin({ bottom: 4 })
-      
+
       Text(title)
         .fontSize(14)
         .fontColor('#666')
@@ -339,7 +337,12 @@ export struct StatisticsMain {
     .padding(15)
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 4, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 4,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   getTypeItems(): TypeItem[] {
@@ -382,9 +385,9 @@ export struct StatisticsMain {
           Text(item.name)
             .fontSize(14)
             .fontColor('#333')
-          
+
           Blank()
-          
+
           Text(`${item.count} (${item.percentage.toFixed(0)}%)`)
             .fontSize(14)
             .fontColor('#666')
@@ -411,13 +414,13 @@ export struct StatisticsMain {
             .fontSize(12)
             .width(60)
             .fontColor('#666')
-          
+
           Progress({ value: day.count, total: 10, type: ProgressType.Linear })
             .layoutWeight(1)
             .height(20)
             .color('#4CAF50')
             .margin({ left: 10, right: 10 })
-          
+
           Text(day.count.toString())
             .fontSize(12)
             .width(30)
@@ -468,12 +471,12 @@ export struct StatisticsMain {
         Text(item.mood)
           .fontSize(24)
           .width(50)
-        
+
         Text(item.label)
           .fontSize(14)
           .fontColor('#333')
           .layoutWeight(1)
-        
+
         Text(`${item.count} (${item.percentage.toFixed(0)}%)`)
           .fontSize(14)
           .fontColor('#666')
@@ -521,9 +524,9 @@ export struct StatisticsMain {
           Text(item.label)
             .fontSize(14)
             .fontColor('#333')
-          
+
           Blank()
-          
+
           Text(`${item.count} (${item.percentage.toFixed(0)}%)`)
             .fontSize(14)
             .fontColor('#666')
@@ -579,9 +582,9 @@ export struct StatisticsMain {
             Text(item.category)
               .fontSize(14)
               .fontColor('#333')
-            
+
             Blank()
-            
+
             Text(`${item.count} (${item.percentage.toFixed(0)}%)`)
               .fontSize(14)
               .fontColor('#666')
@@ -617,7 +620,9 @@ export struct StatisticsMain {
   }
 
   getAverageMoodScore(): number {
-    if (this.moodRecords.length === 0) return 0;
+    if (this.moodRecords.length === 0) {
+      return 0;
+    }
     let sum = 0;
     for (let i = 0; i < this.moodRecords.length; i++) {
       sum += this.moodRecords[i].score;
@@ -626,7 +631,9 @@ export struct StatisticsMain {
   }
 
   getGoalCompletionRate(): number {
-    if (this.goals.length === 0) return 0;
+    if (this.goals.length === 0) {
+      return 0;
+    }
     let completed = 0;
     for (let i = 0; i < this.goals.length; i++) {
       if (this.goals[i].status === 'completed') {
@@ -637,7 +644,9 @@ export struct StatisticsMain {
   }
 
   getAverageSkillLevel(): number {
-    if (this.skills.length === 0) return 0;
+    if (this.skills.length === 0) {
+      return 0;
+    }
     let sum = 0;
     for (let i = 0; i < this.skills.length; i++) {
       sum += this.skills[i].level;

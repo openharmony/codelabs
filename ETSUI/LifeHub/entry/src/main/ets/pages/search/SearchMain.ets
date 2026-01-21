@@ -30,7 +30,6 @@ interface SearchResult {
 @Component
 export struct SearchMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State searchText: string = '';
   @State searchResults: SearchResult[] = [];
   @State isSearching: boolean = false;
@@ -192,9 +191,9 @@ export struct SearchMain {
       const healthRecords = await this.lifeHubData.getHealthRecords(undefined, 100);
       for (let i = 0; i < healthRecords.length; i++) {
         const record = healthRecords[i];
-        if (this.matches(record.type, keyword) || 
-            this.matches(record.note || '', keyword) ||
-            this.matches(record.date, keyword)) {
+        if (this.matches(record.type, keyword) ||
+        this.matches(record.note || '', keyword) ||
+        this.matches(record.date, keyword)) {
           const result: SearchResult = {
             type: '健康记录',
             title: this.getHealthTypeName(record.type),
@@ -210,9 +209,9 @@ export struct SearchMain {
       const goals = await this.lifeHubData.getAllGoals();
       for (let i = 0; i < goals.length; i++) {
         const goal = goals[i];
-        if (this.matches(goal.title, keyword) || 
-            this.matches(goal.description || '', keyword) ||
-            this.matches(goal.category, keyword)) {
+        if (this.matches(goal.title, keyword) ||
+        this.matches(goal.description || '', keyword) ||
+        this.matches(goal.category, keyword)) {
           const result: SearchResult = {
             type: '目标',
             title: goal.title,
@@ -228,9 +227,9 @@ export struct SearchMain {
       const moodRecords = await this.lifeHubData.getMoodRecords(100);
       for (let i = 0; i < moodRecords.length; i++) {
         const record = moodRecords[i];
-        if (this.matches(record.mood, keyword) || 
-            this.matches(record.note || '', keyword) ||
-            this.matches(record.date, keyword)) {
+        if (this.matches(record.mood, keyword) ||
+        this.matches(record.note || '', keyword) ||
+        this.matches(record.date, keyword)) {
           const result: SearchResult = {
             type: '心情记录',
             title: `${record.mood} 心情`,
@@ -246,9 +245,9 @@ export struct SearchMain {
       const skills = await this.lifeHubData.getAllSkills();
       for (let i = 0; i < skills.length; i++) {
         const skill = skills[i];
-        if (this.matches(skill.name, keyword) || 
-            this.matches(skill.description || '', keyword) ||
-            this.matches(skill.category, keyword)) {
+        if (this.matches(skill.name, keyword) ||
+        this.matches(skill.description || '', keyword) ||
+        this.matches(skill.category, keyword)) {
           const result: SearchResult = {
             type: '技能',
             title: skill.name,
@@ -264,9 +263,9 @@ export struct SearchMain {
       const travelPlans = await this.lifeHubData.getAllTravelPlans();
       for (let i = 0; i < travelPlans.length; i++) {
         const plan = travelPlans[i];
-        if (this.matches(plan.title, keyword) || 
-            this.matches(plan.destination, keyword) ||
-            this.matches(plan.description || '', keyword)) {
+        if (this.matches(plan.title, keyword) ||
+        this.matches(plan.destination, keyword) ||
+        this.matches(plan.description || '', keyword)) {
           const result: SearchResult = {
             type: '旅行计划',
             title: plan.title,
@@ -282,9 +281,9 @@ export struct SearchMain {
       const diaries = await this.lifeHubData.getAllDiaries();
       for (let i = 0; i < diaries.length; i++) {
         const diary = diaries[i];
-        if (this.matches(diary.title || '', keyword) || 
-            this.matches(diary.content, keyword) ||
-            this.matches(diary.date, keyword)) {
+        if (this.matches(diary.title || '', keyword) ||
+        this.matches(diary.content, keyword) ||
+        this.matches(diary.date, keyword)) {
           const result: SearchResult = {
             type: '日记',
             title: diary.title || diary.date,

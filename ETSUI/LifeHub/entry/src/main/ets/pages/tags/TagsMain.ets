@@ -34,19 +34,16 @@ interface CategoryOption {
 @Component
 export struct TagsMain {
   private lifeHubData: LifeHubData = new LifeHubData();
-  
   @State tags: TagWithCount[] = [];
   @State isLoading: boolean = true;
   @State showAddDialog: boolean = false;
   @State newTagName: string = '';
   @State newTagColor: string = '#007DFF';
   @State newTagCategory: 'all' | 'health' | 'goal' | 'mood' | 'learning' | 'diary' = 'all';
-
   private colors: ColorOption[] = [
-    { value: '#007DFF' }, { value: '#4CAF50' }, { value: '#FF9800' }, { value: '#E91E63' }, 
+    { value: '#007DFF' }, { value: '#4CAF50' }, { value: '#FF9800' }, { value: '#E91E63' },
     { value: '#9C27B0' }, { value: '#00BCD4' }, { value: '#FF5722' }, { value: '#795548' }
   ];
-
   private categories: CategoryOption[] = [
     { value: 'all', label: '全部' },
     { value: 'health', label: '健康' },
@@ -91,7 +88,7 @@ export struct TagsMain {
       for (let i = 0; i < tags.length; i++) {
         const tag = tags[i];
         let count = 0;
-        
+
         if (tag.category === 'all' || tag.category === 'health') {
           for (let j = 0; j < healthRecords.length; j++) {
             const r = healthRecords[j];
@@ -100,7 +97,7 @@ export struct TagsMain {
             }
           }
         }
-        
+
         if (tag.category === 'all' || tag.category === 'goal') {
           for (let j = 0; j < goals.length; j++) {
             const g = goals[j];
@@ -109,7 +106,7 @@ export struct TagsMain {
             }
           }
         }
-        
+
         if (tag.category === 'all' || tag.category === 'mood') {
           for (let j = 0; j < moodRecords.length; j++) {
             const m = moodRecords[j];
@@ -118,7 +115,7 @@ export struct TagsMain {
             }
           }
         }
-        
+
         if (tag.category === 'all' || tag.category === 'diary') {
           for (let j = 0; j < diaries.length; j++) {
             const d = diaries[j];
@@ -127,7 +124,7 @@ export struct TagsMain {
             }
           }
         }
-        
+
         const tagWithCount: TagWithCount = {
           id: tag.id,
           name: tag.name,
@@ -164,9 +161,9 @@ export struct TagsMain {
         Text('标签管理')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
-        
+
         Blank()
-        
+
         Button('+')
           .fontSize(20)
           .width(40)
@@ -321,7 +318,12 @@ export struct TagsMain {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(12)
-          .shadow({ radius: 10, color: '#40000000', offsetX: 0, offsetY: 5 })
+          .shadow({
+            radius: 10,
+            color: '#40000000',
+            offsetX: 0,
+            offsetY: 5
+          })
         }
         .width('100%')
         .height('100%')
@@ -385,7 +387,12 @@ export struct TagsMain {
         Text(this.getCategoryLabel(tag.category))
           .fontSize(12)
           .fontColor('#666')
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .padding({
+            left: 8,
+            right: 8,
+            top: 4,
+            bottom: 4
+          })
           .backgroundColor('#f0f0f0')
           .borderRadius(10)
           .margin({ right: 10 })
