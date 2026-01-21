@@ -158,7 +158,12 @@ export struct MoodRecord {
       };
 
       await this.lifeHubData.addMoodRecord(record);
-      router.back();
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {
+          tab: 4
+        }
+      });
     } catch (error) {
       console.error('MoodRecord: 保存失败:', error);
     } finally {

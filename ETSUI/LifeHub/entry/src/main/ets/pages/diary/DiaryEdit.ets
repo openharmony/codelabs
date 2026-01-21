@@ -155,7 +155,12 @@ export struct DiaryEdit {
       };
 
       await this.lifeHubData.addDiary(diary);
-      router.back();
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {
+          tab: 6
+        }
+      });
     } catch (error) {
       console.error('DiaryEdit: 保存失败:', error);
     } finally {

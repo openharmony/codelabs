@@ -118,7 +118,12 @@ export struct GoalDetail {
       };
 
       await this.lifeHubData.addGoal(goal);
-      router.back();
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {
+          tab: 3
+        }
+      });
     } catch (error) {
       console.error('GoalDetail: 保存失败:', error);
     } finally {

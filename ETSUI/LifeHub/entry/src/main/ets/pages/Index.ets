@@ -23,11 +23,32 @@ import { GoalsMain } from './goals/GoalsMain';
 import { MoodMain } from './mood/MoodMain';
 import { LearningMain } from './learning/LearningMain';
 import { DiaryMain } from './diary/DiaryMain';
+import { router } from '@kit.ArkUI';
+
+interface IndexRouteParams {
+  tab?: number
+}
 
 @Entry
 @Component
 struct Index {
   @State currentTab: number = 0; // 当前选中的标签页
+
+  aboutToAppear() {
+    let params: IndexRouteParams | null = null
+
+    try {
+      params = router.getParams() as IndexRouteParams
+    } catch (e) {
+      // 冷启动 / 非路由进入，会走到这里，直接忽略
+      return
+    }
+
+    if (params && typeof params.tab === 'number') {
+      this.currentTab = params.tab
+    }
+  }
+
 
   build() {
     Column() {

@@ -242,7 +242,12 @@ export struct HealthRecord {
       };
 
       await this.lifeHubData.addHealthRecord(record);
-      router.back();
+      router.replaceUrl({
+        url: 'pages/Index',
+        params: {
+          tab: 1
+        }
+      });
     } catch (error) {
       console.error('HealthRecord: 保存失败:', error);
     } finally {
