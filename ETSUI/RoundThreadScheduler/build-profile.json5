@@ -1,0 +1,26 @@
+{
+  "app": {
+    "bundleName": "com.example.roundthreadscheduler",
+    "appName": "ArkTS 多线程轮次调度示例",
+    "versionName": "1.0.0",
+    "versionCode": 1,
+    "minPlatformVersion": "3.1",
+    "targetPlatformVersion": "3.2"
+  },
+  "ets": {
+    "compileMode": "debug",
+    "sourceMaps": true,
+    "enableSourceMap": true
+  },
+  "packaging": {
+    "outputDir": "build",
+    "assetsDir": "entry/src/main/resources",
+    "jsBundleDir": "entry/src/main/ets"
+  },
+  "devices": [
+    {
+      "name": "emulator",
+      "type": "simulator"
+    }
+  ]
+}
