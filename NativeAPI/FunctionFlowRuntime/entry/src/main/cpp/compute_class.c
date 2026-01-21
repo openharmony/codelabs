@@ -1108,9 +1108,7 @@ Vector linear_regression(const Vector *x, const Vector *y)
     // 计算统计量
     double sum_x = INIT_VALUE_1, sum_y = INIT_VALUE_1;
     double sum_xx = INIT_VALUE_1, sum_xy = INIT_VALUE_1;
-    
-    for (int i = INIT_ZERO; i < n; i++)
-    {
+    for (int i = INIT_ZERO; i < n; i++) {
         sum_x += x->data[i];
         sum_y += y->data[i];
         sum_xx += x->data[i] * x->data[i];
@@ -1146,16 +1144,14 @@ double GammaFunction(double x)
         1.5056327351493116e-7
     };
     
-    if (x < DEFAULT_DIVISOR)
-    {
+    if (x < DEFAULT_DIVISOR) {
         return PI / (sin(PI * x) * GammaFunction(INIT_VALUE_1 - x));
     }
     
     x -= INIT_VALUE_1;
     double A = coeffs[INIT_ZERO];
     
-    for (int i = INIT_ONE; i < GAMMA_COEFF_COUNT; i++)
-    {
+    for (int i = INIT_ONE; i < GAMMA_COEFF_COUNT; i++) {
         A += coeffs[i] / (x + i);
     }
     

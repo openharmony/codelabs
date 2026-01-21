@@ -139,8 +139,7 @@ int hoarePartition(vector<int>& arr, int low, int high)
 // 递归快速排序（Hoare版本）
 void QuickSortHoare(vector<int>& arr, int low, int high)
 {
-    if (low < high)
-    {
+    if (low < high) {
         int pi = hoarePartition(arr, low, high);
         QuickSortHoare(arr, low, pi);      // 注意：这里包含pi
         QuickSortHoare(arr, pi + 1, high);
@@ -166,13 +165,11 @@ void BankBusinessVIP()
 // 插入排序 - 用于小数组优化
 void InsertionSort(vector<int>& arr, int low, int high)
 {
-    for (int i = low + 1; i <= high; i++)
-    {
+    for (int i = low + 1; i <= high; i++) {
         int key = arr[i];
         int j = i - 1;
         
-        while (j >= low && arr[j] > key)
-        {
+        while (j >= low && arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
         }
@@ -186,16 +183,13 @@ int MedianOfThree(vector<int>& arr, int low, int high)
     int mid = low + (high - low) / 2;
     
     // 对三个元素进行排序
-    if (arr[low] > arr[mid])
-    {
+    if (arr[low] > arr[mid]) {
         swap(arr[low], arr[mid]);
     }
-    if (arr[low] > arr[high])
-    {
+    if (arr[low] > arr[high]) {
         swap(arr[low], arr[high]);
     }
-    if (arr[mid] > arr[high])
-    {
+    if (arr[mid] > arr[high]) {
         swap(arr[mid], arr[high]);
     }
     
@@ -208,8 +202,7 @@ int MedianOfThree(vector<int>& arr, int low, int high)
 void ThreeWayQuickSort(vector<int>& arr, int low, int high)
 {
     // 小数组优化：当数组大小小于等于16时使用插入排序
-    if (high - low <= SMALL_ARRAY_THRESHOLD)
-    {
+    if (high - low <= SMALL_ARRAY_THRESHOLD) {
         InsertionSort(arr, low, high);
         return;
     }
@@ -222,21 +215,17 @@ void ThreeWayQuickSort(vector<int>& arr, int low, int high)
     int gt = high - 1; // arr[gt+1..high] > pivot
     int i = low + 1;   // arr[lt..i-1] == pivot
     
-    while (i <= gt)
-    {
-        if (arr[i] < pivot)
-        {
+    while (i <= gt) {
+        if (arr[i] < pivot) {
             swap(arr[lt], arr[i]);
             lt++;
             i++;
         }
-        else if (arr[i] > pivot)
-        {
+        else if (arr[i] > pivot) {
             swap(arr[i], arr[gt]);
             gt--;
         }
-        else
-        {
+        else {
             i++;
         }
     }
