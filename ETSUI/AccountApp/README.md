@@ -10,7 +10,7 @@
 
 - 图2：健康评分
 
-  <img src="./photo/2.png" alt="评分" style="zoom:45%;" />
+  <img src="./photo/2.png" alt="评分" style="zoom:30%;" />
 
 - 图3：编辑账号
 
