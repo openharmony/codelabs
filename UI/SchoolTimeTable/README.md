@@ -12,6 +12,10 @@
 - **统计分析**：提供简单的课程统计功能（如每周课时数）。
 - **个性化**：支持设置当前周次、学期开始日期等。
 
+## 演示视频
+
+[OpenHarmony课程管理器演示视频](https://gitcode.com/m0_62639958/codelabs_SchoolTimeTable/blob/feature/SchoolTimeTable/UI/SchoolTimeTable/%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91-OpenHarmony%E8%AF%BE%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8.mp4)
+
 ## 开发环境
 - **IDE**: DevEco Studio
 - **OpenHarmony SDK**: API 12 (5.0.0 Release)
