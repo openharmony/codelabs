@@ -1,12 +1,12 @@
-# 应用密码管理系统
+应用密码管理系统
 
 ## 介绍
 
 本 MyAccountApp 中，我们构建了一个具有用户注册、登录、密码增删改查以及密码健康检测功能的密码管理系统。应用包含多级页面，分别是登录页、注册页、主页（密码列表、搜索、删除）、以及账号信息添加/编辑页面。效果如下图所示：
 
-- 图1：添加账号密码![添加账号](C:\Users\任sir\Desktop\鸿蒙作业\添加账号.gif)
-- 图2：健康评分![安全评分](C:\Users\任sir\Desktop\鸿蒙作业\安全评分.png)
-- 图3：编辑账号![编辑删除](C:\Users\任sir\Desktop\鸿蒙作业\编辑删除.gif)
+- 图1：添加账号密码![添加账号](./photo/1.gif)
+- 图2：健康评分![评分](./photo/2.png)
+- 图3：编辑账号![账号](./photo/3.gif)
 
 ## 搭建 OpenHarmony 环境
 
@@ -28,8 +28,6 @@
 ├──entry/src/main/ets                     // 代码区
 │  ├──entryability
 │  │  └──EntryAbility.ets                // 程序入口类
-│  ├──entrybackupability
-│  │  └──EntryBackupAbility.ets          // 数据备份与恢复类
 │  ├──model
 │  │  ├──User.ets                        // 用户实体类
 │  │  └──AppAccount.ets                  // 应用账号实体类
@@ -44,8 +42,6 @@
 │  │  ├──AccountInputPage.ets            // 添加/编辑账号页面
 │  │  ├──SettingsPage.ets                // 设置页面
 │  │  └──ForgotPasswordPage                 // 忘记密码页面
-├──entry/src/main/resources               // 应用静态资源目录
-└──entry/src/main/module.json5            // 配置文件
 ```
 
 ## 用户登录页面
