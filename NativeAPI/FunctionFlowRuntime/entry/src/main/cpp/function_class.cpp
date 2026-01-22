@@ -66,14 +66,14 @@ void BankBusinessVIP1()
 }
 void BankBusiness2()
 {
-    usleep(100 * 1000);
+    usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
     g_bankbusiness2_ret = 0;
 }
 
 void BankBusinessVIP2()
 {
-    usleep(100 * 1000);
+    usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
     g_bankbusinessvip2_ret = 0;
 }
