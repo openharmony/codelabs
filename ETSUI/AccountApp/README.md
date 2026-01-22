@@ -326,36 +326,6 @@ performInsert() {
 
 主页面由三部分组成：顶部栏（含搜索框）、安全评分卡片和账号列表。
 
-### 顶部栏
-
-顶部栏使用蓝色背景，包含标题 "我的密码本"、欢迎语、设置按钮和搜索框。搜索框使用 Search 组件，支持实时过滤账号列表。
-
-```typescript
-Column() {
-  Row() {
-    Text('我的密码本').fontSize(22).fontWeight(FontWeight.Bold).fontColor(Color.White)
-    Blank()
-
-    // 设置按钮
-    Row() {
-      Text('⚙️ 设置')
-        .fontSize(16).fontWeight(FontWeight.Bold).fontColor(Color.White)
-    }
-    .onClick(() => {
-      router.pushUrl({ url: 'pages/SettingsPage' });
-    })
-  }.width('100%').margin({ bottom: 10 })
-
-  Text(`欢迎你，${this.currentUsername}`)
-    .fontSize(14).fontColor(Color.White).opacity(0.8).width('100%').margin({ bottom: 15 })
-
-  Search({ value: this.searchText, placeholder: '搜索平台或账号...' })
-    .width('100%').height(40).backgroundColor(Color.White).borderRadius(20)
-    .onChange((value: string) => { this.searchText = value; this.filterData(); })
-}
-.width('100%').height(160).backgroundColor(0x007DFF).padding(20)
-```
-
 ### 搜索过滤逻辑
 
 搜索功能通过 `filterData()` 方法实现，支持按平台名称或账号名过滤，不区分大小写。
