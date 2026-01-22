@@ -24,7 +24,8 @@
 #include <algorithm>
 #include <random>
 #include <thread>
-
+#define FIFTY 50
+#define ONE_HUNDRED 100
 using namespace std;
 
 // 常量定义
@@ -910,7 +911,7 @@ void BankBusinessBasebucketSort()
 
     // 测试基础桶排序版本
     auto start = chrono::high_resolution_clock::now();
-    bucketSortBasic(arr, 50);
+    bucketSortBasic(arr, FIFTY);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础桶排序:  " << duration.count() << " 微秒" << endl;
@@ -969,11 +970,11 @@ class OptimizedBucketSort {
 private:
     // 计算合适的桶数量
     int calculateBucketCount(int n, int minVal, int maxVal) {
-        if (n <= 100) {
+        if (n <= ONE_HUNDRED) {
             return 10;  // 小数据量用较少桶
         }
-        if (maxVal - minVal <= 1000) {
-            return 50;  // 数据范围小
+        if (maxVal - minVal <= MAX_BUCKET_COUNT) {
+            return FIFTY;  // 数据范围小
         }
         
         // 根据数据规模动态计算桶数量
@@ -1106,7 +1107,7 @@ public:
         exponential_distribution<> dis(lambda);
         
         for (int i = 0; i < size; i++) {
-            data[i] = min(1000, (int)(dis(gen) * 100));
+            data[i] = min(TEST_SIZE_SMALL, (int)(dis(gen) * MEDIUM_ARRAY_THRESHOLD));
         }
         return data;
     }
@@ -1354,17 +1355,19 @@ public:
     
     static void sortByFirstChar(vector<string>& arr) {
         // 按首字母分桶（26个字母+其他）
-        vector<vector<string>> buckets(27);  // 26个字母 + 其他字符
+        const int EMPTY_BUCKET_INDEX = 26;
+        const int EMPTY_BUCKET_INDEX_OTHER = 27;
+        vector<vector<string>> buckets(EMPTY_BUCKET_INDEX_OTHER);  // 26个字母 + 其他字符
         
         for (const auto& s : arr) {
             if (s.empty()) {
-                buckets[26].push_back(s);  // 空字符串放到最后一个桶
+                buckets[EMPTY_BUCKET_INDEX].push_back(s);  // 空字符串放到最后一个桶
             } else {
                 char firstChar = tolower(s[0]);
                 if (firstChar >= 'a' && firstChar <= 'z') {
                     buckets[firstChar - 'a'].push_back(s);
                 } else {
-                    buckets[26].push_back(s);  // 非字母字符
+                    buckets[EMPTY_BUCKET_INDEX].push_back(s);  // 非字母字符
                 }
             }
         }
@@ -1555,6 +1558,8 @@ private:
     // 递归排序函数
     void msdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
     {
+        const int DIGIT_COUNT = 10;  // 0-9
+        const int NUM_BUCKETS = 11;
         if (left >= right || digit > maxDigit)
         {
             return;
@@ -1569,7 +1574,7 @@ private:
         }
         
         // 计数数组
-        vector<int> count(11, 0);  // 0-9 + 一个额外位置
+        vector<int> count(DIGIT_COUNT + 1,0);  // 0-9 + 一个额外位置
         
         // 临时数组
         vector<int> temp(n);
@@ -1582,7 +1587,7 @@ private:
         }
         
         // 计算起始位置
-        for (int i = 1; i < 11; i++)
+        for (int i = 1; i < NUM_BUCKETS; i++)
         {
             count[i] += count[i - 1];
         }

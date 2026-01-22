@@ -16,10 +16,10 @@
 #ifndef FUNCTIONFLOWRUNTIME_DATABASE_OPS_H
 #define FUNCTIONFLOWRUNTIME_DATABASE_OPS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <time.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstdbool>
+#include <ctime>
 #include <string>
 #include <vector>
 
@@ -365,13 +365,11 @@ public:
     TableIndex* create_table_index(const char *column_name);
     bool delete_table_row(int row_id);
     SmartQueryResult* execute_select_query(const char *where_clause);
-    // void free_query_result(QueryResult *result);
     bool begin_transaction();
     bool commit_transaction();
     bool rollback_transaction();
     void print_table_schema();
     void print_query_result(SmartQueryResult *result);
-    // void free_database_table(DatabaseTable *table);
     int insert_table_row(DataCell *cells);
     bool update_table_row(int row_id, DataCell *new_cells);
 };

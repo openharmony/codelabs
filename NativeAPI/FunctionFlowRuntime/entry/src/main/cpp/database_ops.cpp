@@ -408,22 +408,22 @@ void DataBaseOps::print_table_schema()
     printf("列数: %d\n\n", table->column_count);
     
     printf("%-*s %-*s %-*s %-*s %-*s\n", 
-           SCHEMA_COLUMN_WIDTH, "列名",
-           SCHEMA_TYPE_WIDTH, "类型",
-           SCHEMA_FLAG_WIDTH, "非空",
-           SCHEMA_FLAG_WIDTH, "主键",
-           SCHEMA_FLAG_WIDTH, "索引");
+            (int)SCHEMA_COLUMN_WIDTH, "列名",
+            (int)SCHEMA_TYPE_WIDTH, "类型",
+            (int)SCHEMA_FLAG_WIDTH, "非空",
+            (int)SCHEMA_FLAG_WIDTH, "主键",
+            (int)SCHEMA_FLAG_WIDTH, "索引");
     printf("%s\n", "------------------------------------------------------------");
     
     for (int i = 0; i < table->column_count; i++)
     {
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
-               SCHEMA_COLUMN_WIDTH, col->name,
-               SCHEMA_TYPE_WIDTH, data_type_to_string(col->type),
-               SCHEMA_FLAG_WIDTH, col->not_null ? "YES" : "NO",
-               SCHEMA_FLAG_WIDTH, col->is_primary ? "YES" : "NO",
-               SCHEMA_FLAG_WIDTH, col->has_index ? "YES" : "NO");
+                (int)SCHEMA_COLUMN_WIDTH, col->name,
+                (int)SCHEMA_TYPE_WIDTH, data_type_to_string(col->type),
+                (int)SCHEMA_FLAG_WIDTH, col->not_null ? "YES" : "NO",
+                (int)SCHEMA_FLAG_WIDTH, col->is_primary ? "YES" : "NO",
+                (int)SCHEMA_FLAG_WIDTH, col->has_index ? "YES" : "NO");
     }
 }
 
@@ -666,8 +666,10 @@ int database_ops_demo()
     {
         update_cells[i].is_null = true;
     }
-    update_cells[4] = create_data_cell(TYPE_FLOAT, "80000.00");
-    update_cells[7] = create_data_cell(TYPE_DATE, "2023-10-22");
+    const int DATE_INDEX_4= 4;
+    const int DATE_INDEX_7 = 7;
+    update_cells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
+    update_cells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
     
     if (ops->update_table_row(3, update_cells))
     {

@@ -37,9 +37,9 @@
 #define MAX_MATRIX_SIZE        1000
 #define MAX_VECTOR_SIZE        10000
 #define MAX_ITERATIONS         10000
-#define EPSILON                1e-12
-#define PI                     3.14159265358979323846
-#define GOLDEN_RATIO           1.618033988749895
+#define EPSILON                (1e-12)
+#define PI                     (3.14159265358979323846)
+#define GOLDEN_RATIO           (1.618033988749895)
 #define MAX_OPT_VARS           100
 #define MAX_POLY_DEGREE        50
 #define MAX_INTEGRATION_POINTS 1000
@@ -48,68 +48,68 @@
 #define TEST_FFT_SIZE          8
 #define TEST_INTEGRAL_STEPS    100
 #define TEST_ODE_STEPS         100
-#define TEST_OPT_TOL           1e-6
+#define TEST_OPT_TOL           (1e-6)
 #define TEST_POLY_FIT_POINTS   10
 #define TEST_RANDOM_SAMPLES    1000
 #define TEST_POLY_DEGREE_1     1
-#define TEST_NOISE_AMPLITUDE   0.1
+#define TEST_NOISE_AMPLITUDE   (0.1)
 #define TEST_OPT_LOWER_BOUND   0
 #define TEST_OPT_UPPER_BOUND   5
-#define TEST_ODE_Y0            1.0
-#define TEST_ODE_T0            0.0
-#define TEST_ODE_TF            1.0
-#define TEST_GAMMA_ARG         5.0
-#define TEST_ERF_ARG          1.0
-#define GAMMA_G                7.0
+#define TEST_ODE_Y0            (1.0)
+#define TEST_ODE_T0            (0.0)
+#define TEST_ODE_TF            (1.0)
+#define TEST_GAMMA_ARG         (5.0)
+#define TEST_ERF_ARG          (1.0)
+#define GAMMA_G                (7.0)
 #define GAMMA_COEFF_COUNT      9
 #define ERF_COEFF_COUNT        5
-#define DFT_SIN_COEFF          -1.0
-#define DFT_COS_COEFF          1.0
-#define SIMPSON_EVEN_COEFF     2.0
-#define SIMPSON_ODD_COEFF      4.0
-#define SIMPSON_DIVISOR        3.0
-#define RK4_DIVISOR            6.0
-#define RK4_HALF               0.5
-#define RK4_K2_COEFF           2.0
-#define RK4_K3_COEFF           2.0
-#define POWER_ITER_INIT_VAL    0.0
-#define RANDOM_MAX_RANGE       1.0
-#define RANDOM_MIN_RANGE       0.0
+#define DFT_SIN_COEFF          (-1.0)
+#define DFT_COS_COEFF          (1.0)
+#define SIMPSON_EVEN_COEFF     (2.0)
+#define SIMPSON_ODD_COEFF      (4.0)
+#define SIMPSON_DIVISOR        (3.0)
+#define RK4_DIVISOR            (6.0)
+#define RK4_HALF               (0.5)
+#define RK4_K2_COEFF           (2.0)
+#define RK4_K3_COEFF           (2.0)
+#define POWER_ITER_INIT_VAL    (0.0)
+#define RANDOM_MAX_RANGE       (1.0)
+#define RANDOM_MIN_RANGE       (0.0)
 #define INIT_ZERO              0
 #define INIT_ONE               1
 #define INIT_TWO               2
 #define INIT_THREE             3
-#define INIT_VALUE_1           1.0
-#define INIT_VALUE_2           2.0
-#define INIT_VALUE_3           3.0
-#define INIT_VALUE_4           4.0
+#define INIT_VALUE_1           (1.0)
+#define INIT_VALUE_2           (2.0)
+#define INIT_VALUE_3           (3.0)
+#define INIT_VALUE_4           (4.0)
 #define MATRIX_DET_SIGN_1      1
-#define MATRIX_DET_SIGN_NEG    -1
+#define MATRIX_DET_SIGN_NEG    (-1)
 #define MATRIX_INDEX_OFFSET    3
 #define FFT_SEPARATION_FACTOR  2
-#define ROMBERG_BASE           4.0
-#define ROMBERG_POWER_BASE     2.0
-#define ROMBERG_CONV_FACTOR    0.5
-#define BRENT_P_COEFF_1        0.5
-#define BRENT_P_COEFF_2        2.0
-#define REGRESSION_DENOM_COEFF 1.0
-#define GAMMA_APPROX_OFFSET    0.5
+#define ROMBERG_BASE           (4.0)
+#define ROMBERG_POWER_BASE     (2.0)
+#define ROMBERG_CONV_FACTOR    (0.5)
+#define BRENT_P_COEFF_1        (0.5)
+#define BRENT_P_COEFF_2        (2.0)
+#define REGRESSION_DENOM_COEFF (1.0)
+#define GAMMA_APPROX_OFFSET    (0.5)
 #define ERF_SIGN_POS           1
-#define ERF_SIGN_NEG           -1
-#define ERF_T_DIVISOR          1.0
-#define ERF_EXP_COEFF          -1.0
-#define BOX_MULLER_COEFF       -2.0
-#define NORM_MEAN              0.0
-#define NORM_STDDEV            1.0
+#define ERF_SIGN_NEG           (-1)
+#define ERF_T_DIVISOR          (1.0)
+#define ERF_EXP_COEFF          (-1.0)
+#define BOX_MULLER_COEFF       (-2.0)
+#define NORM_MEAN              (0.0)
+#define NORM_STDDEV            (1.0)
 #define RET_SUCCESS            0
-#define RET_FAILURE            -1
+#define RET_FAILURE            (-1)
 #define FFRT_QUEUE_PRIORITY    ffrt_queue_priority_low
 #define FFRT_QUEUE_FLAG        0
 #define DEFAULT_STRIDE         1
 #define DEFAULT_INCREMENT      1
 #define DEFAULT_DECREMENT      1
-#define DEFAULT_MULTIPLIER     2.0
-#define DEFAULT_DIVISOR        2.0
+#define DEFAULT_MULTIPLIER     (2.0)
+#define DEFAULT_DIVISOR        (2.0)
 
 /* ========== 数据结构 ========== */
 typedef struct {
@@ -753,7 +753,7 @@ void dft(const double *input, ComplexNum *output, int n)
         double imag = INIT_VALUE_1;
         
         for (int t = INIT_ZERO; t < n; t++) {
-            double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
+            double angle = (n != 0) ? DEFAULT_MULTIPLIER * PI * k * t / n : 0;
             real += input[t] * cos(angle);
             imag += DFT_SIN_COEFF * input[t] * sin(angle);
         }
@@ -770,12 +770,16 @@ void idft(const ComplexNum *input, double *output, int n)
         double imag = INIT_VALUE_1;
         
         for (int t = INIT_ZERO; t < n; t++) {
-            double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
-            real += input[t].real * cos(angle) - input[t].imag * sin(angle);
-            imag += input[t].real * sin(angle) + input[t].imag * cos(angle);
+             if (n != 0) {
+                double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
+                real += input[t].real * cos(angle) - input[t].imag * sin(angle);
+                imag += input[t].real * sin(angle) + input[t].imag * cos(angle);
+             }
         }
+         if (n != 0) {
+            output[k] = real / n;
+         }
         
-        output[k] = real / n;
     }
 }
 
@@ -877,12 +881,13 @@ double minimize_brent(double (*f)(double), double a, double b, double c, double 
             
             // 检查抛物线步长是否可接受
             if (fabs(p) < fabs(BRENT_P_COEFF_1 * q * etemp) && p > q * (a - x) && p < q * (b - x)) {
-                d = p / q;
-                double u = x + d;
-                
-                if (u - a < tol2 || b - u < tol2) {
-                    d = (x < xm) ? tol1 : -tol1;
-                }
+               if (q != 0){
+                    d = p / q;
+                    double u = x + d;
+                    if (u - a < tol2 || b - u < tol2) {
+                        d = (x < xm) ? tol1 : -tol1;
+                    }
+               }
             } else {
                 e = (x < xm) ? b - x : a - x;
                 d = GOLDEN_RATIO * e;
