@@ -17,7 +17,6 @@
  */
 import {
   LifeHubData,
-  DashboardStats,
   HealthRecord,
   MoodRecord,
   Goal,

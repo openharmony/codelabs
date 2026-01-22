@@ -270,7 +270,6 @@ export struct ReminderEdit {
       } else {
         await this.lifeHubData.addReminder(reminder);
       }
-      router.back();
       router.replaceUrl({
         url: 'pages/reminder/ReminderMain',
       });

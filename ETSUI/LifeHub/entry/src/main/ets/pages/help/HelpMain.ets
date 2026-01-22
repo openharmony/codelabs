@@ -15,7 +15,6 @@
 /**
  * 帮助和教程页面
  */
-import { router } from '@kit.ArkUI';
 
 interface HelpItem {
   title: string;

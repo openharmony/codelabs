@@ -16,7 +16,6 @@
  * 设置页面
  */
 import { LifeHubData } from '../../model/LifeHubData';
-import { router } from '@kit.ArkUI';
 
 @Entry
 @Component
