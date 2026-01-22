@@ -128,10 +128,8 @@ char* DataBaseOps::format_date(time_t timestamp)
 
 void DataBaseOps::free_data_cell(DataCell *cell)
 {
-    if (cell)
-    {
-        if (cell->type == TYPE_STRING && !cell->is_null)
-        {
+    if (cell) {
+        if (cell->type == TYPE_STRING && !cell->is_null) {
             // 字符串在栈上，无需释放
         }
     }
@@ -139,35 +137,28 @@ void DataBaseOps::free_data_cell(DataCell *cell)
 
 int DataBaseOps::compare_data_cells(const DataCell *a, const DataCell *b)
 {
-    if (a->is_null && b->is_null)
-    {
+    if (a->is_null && b->is_null) {
         return 0;
     }
-    if (a->is_null)
-    {
+    if (a->is_null) {
         return -1;
     }
-    if (b->is_null)
-    {
+    if (b->is_null) {
         return 1;
     }
     
-    if (a->type != b->type)
-    {
+    if (a->type != b->type) {
         return static_cast<int>(a->type) - static_cast<int>(b->type);
     }
     
-    switch(a->type)
-    {
+    switch(a->type) {
         case TYPE_INT:
             return a->value.int_val - b->value.int_val;
         case TYPE_FLOAT:
-            if (a->value.float_val < b->value.float_val)
-            {
+            if (a->value.float_val < b->value.float_val) {
                 return -1;
             }
-            if (a->value.float_val > b->value.float_val)
-            {
+            if (a->value.float_val > b->value.float_val) {
                 return 1;
             }
             return 0;
@@ -176,12 +167,10 @@ int DataBaseOps::compare_data_cells(const DataCell *a, const DataCell *b)
         case TYPE_BOOL:
             return a->value.bool_val - b->value.bool_val;
         case TYPE_DATE:
-            if (a->value.date_val < b->value.date_val)
-            {
+            if (a->value.date_val < b->value.date_val) {
                 return -1;
             }
-            if (a->value.date_val > b->value.date_val)
-            {
+            if (a->value.date_val > b->value.date_val) {
                 return 1;
             }
             return 0;
@@ -193,8 +182,7 @@ int DataBaseOps::compare_data_cells(const DataCell *a, const DataCell *b)
 SmartBPlusTreeNode* DataBaseOps::create_bplus_tree_node(bool is_leaf, int order)
 {
     std::shared_ptr<SmartBPlusTreeNode> s_node = std::make_shared<SmartBPlusTreeNode>(order, is_leaf);
-    if (!s_node)
-    {
+    if (!s_node) {
         return nullptr;
     }
  
@@ -204,24 +192,20 @@ SmartBPlusTreeNode* DataBaseOps::create_bplus_tree_node(bool is_leaf, int order)
 TableIndex* DataBaseOps::create_table_index(const char *column_name)
 {
     const int BPLUS_TREE_ORDER = 4;
-    if (table->index_count >= MAX_INDEXES)
-    {
+    if (table->index_count >= MAX_INDEXES) {
         return nullptr;
     }
 
     // 查找列
     int col_index = -1;
-    for (int i = 0; i < table->column_count; i++)
-    {
-        if (strcmp(table->columns[i].name, column_name) == 0)
-        {
+    for (int i = 0; i < table->column_count; i++) {
+        if (strcmp(table->columns[i].name, column_name) == 0) {
             col_index = i;
             break;
         }
     }
     
-    if (col_index == -1)
-    {
+    if (col_index == -1) {
         return nullptr;
     }
     
@@ -262,8 +246,7 @@ DataBaseOps::DataBaseOps(const char *table_name, ColumnDef *columns, int column_
 {
     const int INITIAL_ROW_ID = 1;
     table = std::make_unique<DatabaseTable>();
-    if (!table)
-    {
+    if (!table) {
         printf("no memory for DatabaseTable pointer");
     }
 
@@ -273,15 +256,13 @@ DataBaseOps::DataBaseOps(const char *table_name, ColumnDef *columns, int column_
     table->next_row_id = INITIAL_ROW_ID;
     
     // 复制列定义
-    for (int i = 0; i < column_count; i++)
-    {
+    for (int i = 0; i < column_count; i++) {
         table->columns[i] = columns[i];
     }
     table->column_count = column_count;
     
     // 为每一行分配单元格内存
-    for (int i = 0; i < MAX_ROWS; i++)
-    {
+    for (int i = 0; i < MAX_ROWS; i++) {
         SmartTableRow table_row(column_count);
         table->rows[i] = table_row;
     }
@@ -291,10 +272,8 @@ DataBaseOps::~DataBaseOps() {}
 
 SmartTableRow* DataBaseOps::find_table_row(int row_id)
 {
-    for (int i = 0; i < table->row_count; i++)
-    {
-        if (!table->rows[i].deleted && table->rows[i].row_id == row_id)
-        {
+    for (int i = 0; i < table->row_count; i++) {
+        if (!table->rows[i].deleted && table->rows[i].row_id == row_id) {
             return &table->rows[i];
         }
     }
@@ -303,20 +282,16 @@ SmartTableRow* DataBaseOps::find_table_row(int row_id)
 
 int DataBaseOps::insert_table_row(DataCell *cells)
 {
-    if (table->row_count >= MAX_ROWS)
-    {
+    if (table->row_count >= MAX_ROWS) {
         return -1;
     }
     
-    for (int i = 0; i < MAX_ROWS; i++)
-    {
-        if (table->rows[i].deleted || table->rows[i].row_id == 0)
-        {
+    for (int i = 0; i < MAX_ROWS; i++) {
+        if (table->rows[i].deleted || table->rows[i].row_id == 0) {
             SmartTableRow *row = &table->rows[i];
             
             // 复制数据
-            for (int j = 0; j < table->column_count; j++)
-            {
+            for (int j = 0; j < table->column_count; j++) {
                 row->cells[j] = cells[j];
             }
             
@@ -328,11 +303,9 @@ int DataBaseOps::insert_table_row(DataCell *cells)
             table->row_count++;
             
             // 更新索引
-            for (int j = 0; j < table->index_count; j++)
-            {
+            for (int j = 0; j < table->index_count; j++) {
                 TableIndex *index = &table->indexes[j];
-                if (index->column_index < table->column_count)
-                {
+                if (index->column_index < table->column_count) {
                     // 简化：使用行ID作为索引键
                     insert_into_index(index, row->row_id);
                 }
@@ -348,25 +321,21 @@ int DataBaseOps::insert_table_row(DataCell *cells)
 bool DataBaseOps::update_table_row(int row_id, DataCell *new_cells)
 {
     SmartTableRow *row = find_table_row(row_id);
-    if (!row)
-    {
+    if (!row) {
         return false;
     }
     
     // 保存旧数据（用于事务回滚）
     DataCell *old_cells = (DataCell*)malloc(sizeof(DataCell) * table->column_count);
-    if (!old_cells)
-    {
+    if (!old_cells) {
         return false;
     }
     
     memcpy(old_cells, row->cells.get(), sizeof(DataCell) * table->column_count);
     
     // 更新数据
-    for (int i = 0; i < table->column_count; i++)
-    {
-        if (!new_cells[i].is_null)
-        {
+    for (int i = 0; i < table->column_count; i++) {
+        if (!new_cells[i].is_null) {
             row->cells[i] = new_cells[i];
         }
     }
@@ -380,14 +349,12 @@ bool DataBaseOps::update_table_row(int row_id, DataCell *new_cells)
 bool DataBaseOps::delete_table_row(int row_id)
 {
     SmartTableRow *row = find_table_row(row_id);
-    if (!row)
-    {
+    if (!row) {
         return false;
     }
     
     // 更新索引
-    for (int i = 0; i < table->index_count; i++)
-    {
+    for (int i = 0; i < table->index_count; i++) {
         TableIndex *index = &table->indexes[i];
         delete_from_index(index, row_id);
     }
@@ -400,8 +367,7 @@ bool DataBaseOps::delete_table_row(int row_id)
 
 bool DataBaseOps::begin_transaction()
 {
-    if (table->in_transaction)
-    {
+    if (table->in_transaction) {
         return false;
     }
     
@@ -411,8 +377,7 @@ bool DataBaseOps::begin_transaction()
 
 bool DataBaseOps::commit_transaction()
 {
-    if (!table->in_transaction)
-    {
+    if (!table->in_transaction) {
         return false;
     }
     
@@ -422,8 +387,7 @@ bool DataBaseOps::commit_transaction()
 
 bool DataBaseOps::rollback_transaction()
 {
-    if (!table->in_transaction)
-    {
+    if (!table->in_transaction) {
         return false;
     }
     
