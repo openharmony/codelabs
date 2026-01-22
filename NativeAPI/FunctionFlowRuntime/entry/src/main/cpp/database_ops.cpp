@@ -488,7 +488,7 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
     }
 }
 
-SmartQueryResult* DataBaseOps::execute_select_query(const char *where_clause)
+SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *where_clause)
 {
     const int MAX_QUERY_RESULTS = 100;
     std::vector<std::string> col_names;
@@ -619,7 +619,7 @@ int database_ops_demo()
     
     // 查询所有数据
     printf("\n执行查询: SELECT * FROM users\n");
-    SmartQueryResult *result = ops->execute_select_query("");
+    SmartQueryResult *result = ops->ExecuteSelectQuery("");
     if (result) {
         ops->print_query_result(result);
     }
@@ -647,7 +647,7 @@ int database_ops_demo()
     
     // 再次查询
     printf("\n再次查询更新后的数据:\n");
-    result = ops->execute_select_query("");
+    result = ops->ExecuteSelectQuery("");
     if (result) {
         ops->print_query_result(result);
     }
@@ -680,7 +680,7 @@ int database_ops_demo()
     
     // 验证数据已回滚
     printf("\n验证回滚后数据（应无测试用户）:\n");
-    result = ops->execute_select_query("");
+    result = ops->ExecuteSelectQuery("");
     if (result) {
         printf("找到 %d 行数据\n", result->row_count);
     }
@@ -748,7 +748,7 @@ int database_ops_demo()
     order_ops->print_table_schema();
 
     printf("\n订单表数据:\n");
-    result = order_ops->execute_select_query("");
+    result = order_ops->ExecuteSelectQuery("");
     if (result) {
         order_ops->print_query_result(result);
     }
