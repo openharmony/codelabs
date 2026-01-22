@@ -22,7 +22,6 @@ import { Logger } from '../common/utils/Logger';
 const logger = new Logger('NotificationService');
 
 export class NotificationService {
-
   /**
    * 检查并请求通知权限
    * 修复逻辑：必须等待用户操作结束后，再次查询真实的开关状态，而不是直接返回 true
@@ -55,7 +54,8 @@ export class NotificationService {
    * @param content 内容
    * @param triggerTime 触发时间戳
    */
-  static async publishCalendarReminder(context: common.UIAbilityContext, eventId: number, title: string, content: string, triggerTime: number): Promise<number> {
+  static async publishCalendarReminder(context: common.UIAbilityContext, eventId: number, title: string,
+    content: string, triggerTime: number): Promise<number> {
     const now = new Date().getTime();
 
     // 1. 时间校验 (修复：给予 1 分钟的宽限期，防止毫秒级延迟导致校验失败)
@@ -96,6 +96,10 @@ export class NotificationService {
       // 3. 获取 WantAgent
       const agent = await wantAgent.getWantAgent(wantInfo);
 
+      // 📝 [修复] 预先解析国际化字符串，因为 actionButton.title 只接受 string
+      const closeTitle = context.resourceManager.getStringSync($r('app.string.notification_action_close').id);
+      const snoozeTitle = context.resourceManager.getStringSync($r('app.string.notification_action_snooze').id);
+
       // 4. 构建提醒请求对象
       const reminderRequest: reminderAgentManager.ReminderRequestCalendar = {
         reminderType: reminderAgentManager.ReminderType.REMINDER_TYPE_CALENDAR,
@@ -125,8 +129,8 @@ export class NotificationService {
 
         // 交互按钮
         actionButton: [
-          { title: '关闭', type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE },
-          { title: '稍后', type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_SNOOZE }
+          { title: closeTitle, type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_CLOSE },
+          { title: snoozeTitle, type: reminderAgentManager.ActionButtonType.ACTION_BUTTON_TYPE_SNOOZE }
         ]
       };
 
@@ -146,7 +150,9 @@ export class NotificationService {
    * @param reminderId 提醒ID
    */
   static async cancelReminder(reminderId: number): Promise<void> {
-    if (reminderId < 0) return;
+    if (reminderId < 0) {
+      return;
+    }
     try {
       await reminderAgentManager.cancelReminder(reminderId);
       logger.info(`Reminder ${reminderId} canceled.`);

@@ -13,34 +13,36 @@
  * limitations under the License.
  */
 // entry/src/main/ets/view/calendar/MonthView.ets
-import { CalendarModel, CalendarViewModel } from '../../viewmodel/CalendarViewModel';
+import { CalendarModel, CalendarViewModel, TaskStatus } from '../../viewmodel/CalendarViewModel';
 import { DayItemView } from './DayItemView';
-import { TaskStatus } from '../../viewmodel/CalendarViewModel';
+
 @Component
 export struct MonthView {
   @State currentYear: number = new Date().getFullYear();
   @State currentMonth: number = new Date().getMonth() + 1;
   @State calendarData: Array<CalendarModel> = [];
-
   //  [修改] 改为 @Link 以便和父组件双向同步 (选中日期)
   @Link selectedTimestamp: number;
-
   //  [新增] 接收父组件传来的“忙碌日期”集合
   @Prop taskDaysSet: Set<string> = new Set();
   @Prop taskMap: Map<string, TaskStatus> = new Map();
+  private viewModel: CalendarViewModel = new CalendarViewModel();
+  private weekTitles: ResourceStr[] = [
+    $r('app.string.week_sun'),
+    $r('app.string.week_mon'),
+    $r('app.string.week_tue'),
+    $r('app.string.week_wed'),
+    $r('app.string.week_thu'),
+    $r('app.string.week_fri'),
+    $r('app.string.week_sat')
+  ];
 
   //  [新增] 点击日期的回调函数
-  onDateSelected: (timestamp: number) => void = () => {};
-
-  private viewModel: CalendarViewModel = new CalendarViewModel();
-  private weekTitles: string[] = ['日', '一', '二', '三', '四', '五', '六'];
+  onDateSelected: (timestamp: number) => void = () => {
+  };
 
   aboutToAppear() {
     this.refreshData();
-  }
-
-  private refreshData() {
-    this.calendarData = this.viewModel.getMonthData(this.currentYear, this.currentMonth);
   }
 
   public goToNextMonth() {
@@ -65,10 +67,16 @@ export struct MonthView {
           .width(20).height(20)
           .onClick(() => this.goToPrevMonth())
 
-        Text(`${this.currentYear}年 ${this.currentMonth}月`)
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .margin({ left: 16, right: 16 })
+        // ✅ 使用 Span 组合: "2025" + "年" + " " + "1" + "月"
+        Text() {
+          Span(`${this.currentYear}`)
+          Span($r('app.string.calendar_unit_year'))
+          Span(` ${this.currentMonth}`)
+          Span($r('app.string.calendar_unit_month'))
+        }
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .margin({ left: 16, right: 16 })
 
         Image($r('app.media.ic_public_arrow_right'))
           .width(20).height(20)
@@ -126,5 +134,9 @@ export struct MonthView {
     .padding(16)
     .backgroundColor(Color.White)
     .borderRadius(16)
+  }
+
+  private refreshData() {
+    this.calendarData = this.viewModel.getMonthData(this.currentYear, this.currentMonth);
   }
 }

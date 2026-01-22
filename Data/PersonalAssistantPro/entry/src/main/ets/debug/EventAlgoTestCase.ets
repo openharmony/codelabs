@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 import { DebugCase } from './DebugCase';
-import { EventModel, Event } from '../model/EventModel';
-import { DateUtils } from '../common/utils/DateUtils';
+import { Event, EventModel } from '../model/EventModel';
 
 /**
  * 日程算法逻辑测试
@@ -83,9 +82,14 @@ export class EventAlgoTestCase extends DebugCase {
   private checkStatus(event: Event, expectedLabel: string) {
     const now = Date.now();
     let status = '';
-    if (now > event.endTime) status = '已结束';
-    else if (now >= event.startTime) status = '进行中';
-    else status = '未开始';
+    if (now > event.endTime) {
+      status = '已结束';
+    } else if (now >= event.startTime) {
+      status = '进行中';
+    } else {
+      status =
+        '未开始';
+    }
 
     if (status === expectedLabel) {
       this.logInfo(`   Status OK: [${event.title}] is ${status}`);
@@ -95,7 +99,8 @@ export class EventAlgoTestCase extends DebugCase {
   }
 
   // 辅助函数：冲突检查算法
-  private checkConflict(baseStart: number, baseEnd: number, testStart: number, testEnd: number, expected: boolean, tag: string) {
+  private checkConflict(baseStart: number, baseEnd: number, testStart: number, testEnd: number, expected: boolean,
+    tag: string) {
     // 核心算法：Max(start1, start2) < Min(end1, end2)
     const overlapStart = Math.max(baseStart, testStart);
     const overlapEnd = Math.min(baseEnd, testEnd);

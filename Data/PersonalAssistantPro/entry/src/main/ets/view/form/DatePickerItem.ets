@@ -30,16 +30,13 @@ export struct DatePickerItem {
 
   /** 标题文本 */
   @Prop title: string | Resource = '';
-
   /** 当前选中的时间戳 */
   @Link timestamp: number;
-
   /** 选择模式: true=日期, false=时间 */
   @Prop isDateMode: boolean = true;
-
   /** 占位提示文案 */
-  @Prop placeholder: string = '请选择';
-
+  // 📝 [修改] 类型增加 Resource，默认值改为资源引用
+  @Prop placeholder: string | Resource = $r('app.string.common_select_placeholder');
   // === 内部状态 ===
   @State private isPressed: boolean = false;
 
@@ -50,7 +47,7 @@ export struct DatePickerItem {
     Column() {
       // 1. 标题区域
       Text(this.title)
-        .fontSize(StyleConstants.FONT_SIZE_MD)
+        .fontSize(StyleConstants.ICON_SIZE_MD)
         .fontColor(StyleConstants.COLOR_TEXT_SECONDARY)
         .margin({ bottom: StyleConstants.SPACE_XS })
         .width('100%')
@@ -59,7 +56,7 @@ export struct DatePickerItem {
       Row() {
         // 显示选中的时间，或者占位符
         Text(this.getDisplayText())
-          .fontSize(StyleConstants.FONT_SIZE_LG)
+          .fontSize(StyleConstants.ICON_SIZE_LG)
           .fontColor(this.timestamp > 0 ? StyleConstants.COLOR_TEXT_PRIMARY : StyleConstants.COLOR_TEXT_SECONDARY)
           .layoutWeight(1)
 
@@ -100,7 +97,8 @@ export struct DatePickerItem {
   /**
    * 获取显示的文本内容
    */
-  private getDisplayText(): string {
+  // 📝 [修改] 返回类型兼容 Resource
+  private getDisplayText(): string | Resource {
     if (!this.timestamp || this.timestamp <= 0) {
       return this.placeholder;
     }

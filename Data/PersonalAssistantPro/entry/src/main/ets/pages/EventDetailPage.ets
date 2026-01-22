@@ -28,7 +28,6 @@ export struct EventDetailPage {
   @State forceUpdateTrigger: number = 0;
   // 2. 接收路由栈
   @Consume('pageStack') pageStack: NavPathStack;
-
   // 3. 监听列表刷新信号（只用于删除时通知列表页，不用来刷新自己了）
   @StorageProp('refreshEventList') refreshSignal: number = 0;
 
@@ -58,38 +57,8 @@ export struct EventDetailPage {
     }
   }
 
-  /**
-   * 处理删除操作
-   */
-  private handleDelete() {
-    promptAction.showDialog({
-      title: '删除日程',
-      message: '确定要删除这个日程吗？',
-      buttons: [
-        { text: '取消', color: StyleConstants.COLOR_TEXT_SECONDARY },
-        { text: '删除', color: StyleConstants.COLOR_DANGER }
-      ]
-    }).then(async (resp) => {
-      if (resp.index === 1 && this.eventItem) {
-        await EventModel.deleteById(this.eventItem.id);
-        promptAction.showToast({ message: '日程已删除' });
-
-        // 通知列表页刷新
-        AppStorage.setOrCreate('refreshEventList', Date.now());
-
-        this.pageStack.pop();
-      }
-    });
-  }
-
-  private handleEdit() {
-    if (this.eventItem) {
-      this.pageStack.pushPath({ name: 'EventEditPage', param: this.eventItem });
-    }
-  }
-
   @Builder
-  DetailItem(label: string, value: string, icon?: Resource) {
+  DetailItem(label: ResourceStr, value: ResourceStr, icon?: Resource) {
     Row() {
       if (icon) {
         Image(icon).width(20).height(20).margin({ right: 12 }).fillColor(StyleConstants.COLOR_PRIMARY)
@@ -125,18 +94,18 @@ export struct EventDetailPage {
             .width(24).height(24)
             .onClick(() => this.pageStack.pop())
 
-          Text('日程详情')
+          Text($r('app.string.event_title_detail'))
             .fontSize(20).fontWeight(FontWeight.Bold)
             .margin({ left: 16 })
             .layoutWeight(1)
 
           Row() {
-            Text('编辑')
+            Text($r('app.string.common_edit'))
               .fontSize(16).fontColor(StyleConstants.COLOR_PRIMARY)
               .margin({ right: 16 })
               .onClick(() => this.handleEdit())
 
-            Text('删除')
+            Text($r('app.string.common_delete'))
               .fontSize(16).fontColor(StyleConstants.COLOR_DANGER)
               .onClick(() => this.handleDelete())
           }
@@ -158,19 +127,31 @@ export struct EventDetailPage {
 
                 Row() {
                   if (this.eventItem.isAllDay) {
-                    Text('全天')
-                      .fontSize(12).fontColor(Color.White)
+                    Text($r('app.string.event_label_all_day'))
+                      .fontSize(12)
+                      .fontColor(Color.White)
                       .backgroundColor(StyleConstants.COLOR_PRIMARY)
-                      .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+                      .padding({
+                        left: 8,
+                        right: 8,
+                        top: 4,
+                        bottom: 4
+                      })
                       .borderRadius(4)
                       .margin({ right: 8 })
                   }
 
                   if (this.eventItem.reminderId > -1) {
-                    Text('提醒开启')
-                      .fontSize(12).fontColor(StyleConstants.COLOR_SUCCESS)
+                    Text($r('app.string.event_label_reminder_on'))
+                      .fontSize(12)
+                      .fontColor(StyleConstants.COLOR_SUCCESS)
                       .backgroundColor('#E8F5E9')
-                      .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+                      .padding({
+                        left: 8,
+                        right: 8,
+                        top: 4,
+                        bottom: 4
+                      })
                       .borderRadius(4)
                   }
                 }
@@ -183,9 +164,12 @@ export struct EventDetailPage {
 
               // --- 3. 详细信息 ---
               Column() {
-                this.DetailItem('开始时间', DateUtils.formatFull(this.eventItem.startTime) + (this.forceUpdateTrigger >= 0 ? "" : ""))
-                this.DetailItem('结束时间', DateUtils.formatFull(this.eventItem.endTime) + (this.forceUpdateTrigger >= 0 ? "" : ""))
-                this.DetailItem('备注说明', this.eventItem.description || '暂无备注')
+                this.DetailItem($r('app.string.event_label_start_time'),
+                  DateUtils.formatFull(this.eventItem.startTime) + (this.forceUpdateTrigger >= 0 ? "" : ""))
+                this.DetailItem($r('app.string.event_label_end_time'),
+                  DateUtils.formatFull(this.eventItem.endTime) + (this.forceUpdateTrigger >= 0 ? "" : ""))
+                this.DetailItem($r('app.string.event_label_desc'),
+                  this.eventItem.description || $r('app.string.event_no_desc'))
               }
               .padding({ left: 24, right: 24 })
               .backgroundColor(Color.White)
@@ -197,7 +181,7 @@ export struct EventDetailPage {
           .backgroundColor('#F1F3F5')
         } else {
           Column() {
-            Text('未找到日程信息').fontSize(16).fontColor(Color.Gray)
+            Text($r('app.string.event_not_found')).fontSize(16).fontColor(Color.Gray)
           }
           .height('100%').justifyContent(FlexAlign.Center)
         }
@@ -213,5 +197,35 @@ export struct EventDetailPage {
         this.reloadFromDb();
       }, 50); // 50毫秒足够让页面稳定下来，从而正确响应 UI 刷新
     })
+  }
+
+  /**
+   * 处理删除操作
+   */
+  private handleDelete() {
+    promptAction.showDialog({
+      title: $r('app.string.event_delete_title'),
+      message: $r('app.string.event_delete_confirm'),
+      buttons: [
+        { text: $r('app.string.common_cancel'), color: StyleConstants.COLOR_TEXT_SECONDARY },
+        { text: $r('app.string.common_delete'), color: StyleConstants.COLOR_DANGER }
+      ]
+    }).then(async (resp) => {
+      if (resp.index === 1 && this.eventItem) {
+        await EventModel.deleteById(this.eventItem.id);
+        promptAction.showToast({ message: $r('app.string.event_toast_deleted') });
+
+        // 通知列表页刷新
+        AppStorage.setOrCreate('refreshEventList', Date.now());
+
+        this.pageStack.pop();
+      }
+    });
+  }
+
+  private handleEdit() {
+    if (this.eventItem) {
+      this.pageStack.pushPath({ name: 'EventEditPage', param: this.eventItem });
+    }
   }
 }

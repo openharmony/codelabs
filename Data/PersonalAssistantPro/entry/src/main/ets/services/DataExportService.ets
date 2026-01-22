@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 import { Logger } from '../common/utils/Logger';
-import { ContactModel, Contact } from '../model/ContactModel';
-import { EventModel, Event } from '../model/EventModel';
+import { Contact, ContactModel } from '../model/ContactModel';
+import { Event, EventModel } from '../model/EventModel';
 import { DateUtils } from '../common/utils/DateUtils';
 import { StringUtils } from '../common/utils/StringUtils';
 
@@ -81,7 +81,9 @@ export class DataExportService {
   static async exportData(options: ExportOptions, onProgress?: ProgressCallback): Promise<ExportResult> {
     DataExportService.logger.info(`Starting export with options: ${JSON.stringify(options)}`);
 
-    if (onProgress) onProgress(10, 'Initializing export engine...');
+    if (onProgress) {
+      onProgress(10, 'Initializing export engine...');
+    }
     await DataExportService.simulateDelay(500);
 
     let resultData = '';
@@ -91,7 +93,9 @@ export class DataExportService {
     //  修复：如果 EventModel 还没更新，这里会暂时报错，请继续操作第二步
     const events = options.includeEvents ? await EventModel.queryAll() : [];
 
-    if (onProgress) onProgress(30, 'Fetching data from database...');
+    if (onProgress) {
+      onProgress(30, 'Fetching data from database...');
+    }
 
     try {
       switch (options.format) {
@@ -112,16 +116,25 @@ export class DataExportService {
       }
     } catch (err) {
       DataExportService.logger.error(`Export generation failed: ${JSON.stringify(err as object)}`);
-      return { success: false, filePath: '', size: 0, message: 'Generation Error' };
+      return {
+        success: false,
+        filePath: '',
+        size: 0,
+        message: 'Generation Error'
+      };
     }
 
-    if (onProgress) onProgress(80, 'Finalizing file writing...');
+    if (onProgress) {
+      onProgress(80, 'Finalizing file writing...');
+    }
     await DataExportService.simulateDelay(500);
 
     const fileName = `backup_${Date.now()}.${options.format.toLowerCase()}`;
     const fileSize = resultData.length;
 
-    if (onProgress) onProgress(100, 'Export completed.');
+    if (onProgress) {
+      onProgress(100, 'Export completed.');
+    }
 
     DataExportService.logger.info(`Export Success. File: ${fileName}, Size: ${fileSize} bytes`);
 
@@ -135,6 +148,23 @@ export class DataExportService {
 
   // ==========================================
   // 1. JSON 生成器
+
+  static async mockCloudUpload(fileContent: string): Promise<boolean> {
+    DataExportService.logger.info('Initiating mock cloud upload...');
+    const totalChunks = 5;
+
+    for (let i = 1; i <= totalChunks; i++) {
+      await DataExportService.simulateDelay(300);
+      DataExportService.logger.info(`Uploading chunk ${i}/${totalChunks}...`);
+    }
+
+    DataExportService.logger.info('Upload Complete. Server responded: 200 OK');
+    return true;
+  }
+
+  // ==========================================
+  // 2. CSV 生成器
+
   // ==========================================
   private static async generateJson(contacts: Contact[], events: Event[], encrypt: boolean): Promise<string> {
     DataExportService.logger.info('Generating JSON...');
@@ -175,7 +205,8 @@ export class DataExportService {
   }
 
   // ==========================================
-  // 2. CSV 生成器
+  // 3. XML 生成器
+
   // ==========================================
   private static async generateCsv(contacts: Contact[], events: Event[]): Promise<string> {
     DataExportService.logger.info('Generating CSV...');
@@ -197,7 +228,8 @@ export class DataExportService {
   }
 
   // ==========================================
-  // 3. XML 生成器
+  // 4. HTML 生成器
+
   // ==========================================
   private static async generateXml(contacts: Contact[], events: Event[]): Promise<string> {
     DataExportService.logger.info('Generating XML...');
@@ -237,7 +269,9 @@ export class DataExportService {
   }
 
   // ==========================================
-  // 4. HTML 生成器
+  // 辅助方法
+  // ==========================================
+
   // ==========================================
   private static async generateHtml(contacts: Contact[], events: Event[]): Promise<string> {
     DataExportService.logger.info('Generating HTML Report...');
@@ -316,19 +350,22 @@ export class DataExportService {
     return html;
   }
 
-  // ==========================================
-  // 辅助方法
-  // ==========================================
-
   private static escapeXml(unsafe: string): string {
-    if (!unsafe) return '';
+    if (!unsafe) {
+      return '';
+    }
     return unsafe.replace(/[<>&'"]/g, (c) => {
       switch (c) {
-        case '<': return '&lt;';
-        case '>': return '&gt;';
-        case '&': return '&amp;';
-        case '\'': return '&apos;';
-        case '"': return '&quot;';
+        case '<':
+          return '&lt;';
+        case '>':
+          return '&gt;';
+        case '&':
+          return '&amp;';
+        case '\'':
+          return '&apos;';
+        case '"':
+          return '&quot;';
       }
       return c;
     });
@@ -336,18 +373,5 @@ export class DataExportService {
 
   private static simulateDelay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-  static async mockCloudUpload(fileContent: string): Promise<boolean> {
-    DataExportService.logger.info('Initiating mock cloud upload...');
-    const totalChunks = 5;
-
-    for (let i = 1; i <= totalChunks; i++) {
-      await DataExportService.simulateDelay(300);
-      DataExportService.logger.info(`Uploading chunk ${i}/${totalChunks}...`);
-    }
-
-    DataExportService.logger.info('Upload Complete. Server responded: 200 OK');
-    return true;
   }
 }

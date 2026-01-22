@@ -21,11 +21,11 @@ export class PreferenceService {
   private static instance: PreferenceService;
   private preferences: dataPreferences.Preferences | null = null;
   private logger = new Logger('PreferenceService');
-
   private readonly PREF_NAME = 'personal_assistant_pref';
   private readonly KEY_AES_SECRET = 'secure_aes_key';
 
-  private constructor() {}
+  private constructor() {
+  }
 
   public static getInstance(): PreferenceService {
     if (!PreferenceService.instance) {
@@ -60,7 +60,9 @@ export class PreferenceService {
    * 使用泛型 <T> 避免 'any' 类型报错
    */
   async getValue<T>(key: string, defValue: T): Promise<T> {
-    if (!this.preferences) return defValue;
+    if (!this.preferences) {
+      return defValue;
+    }
     try {
       // 显式断言为 ValueType，满足编译器检查
       const val = await this.preferences.get(key, defValue as dataPreferences.ValueType);
@@ -75,7 +77,9 @@ export class PreferenceService {
    * 通用写入值方法
    */
   async putValue(key: string, value: dataPreferences.ValueType): Promise<void> {
-    if (!this.preferences) return;
+    if (!this.preferences) {
+      return;
+    }
     try {
       await this.preferences.put(key, value);
       await this.preferences.flush();

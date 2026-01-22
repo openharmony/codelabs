@@ -27,7 +27,8 @@ export class JumpService {
   private logger = new Logger('JumpService');
   private context: common.UIAbilityContext | null = null;
 
-  private constructor() {}
+  private constructor() {
+  }
 
   public static getInstance(): JumpService {
     if (!JumpService.instance) {

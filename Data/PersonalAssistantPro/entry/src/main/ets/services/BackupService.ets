@@ -31,7 +31,8 @@ interface BackupData {
 export class BackupService {
   private static instance: BackupService;
 
-  private constructor() {}
+  private constructor() {
+  }
 
   public static getInstance(): BackupService {
     if (!BackupService.instance) {
@@ -72,6 +73,8 @@ export class BackupService {
     }
   }
 
+  // entry/src/main/ets/services/BackupService.ets
+
   public async restore(context: Context): Promise<number> {
     logger.info('Starting restore...');
 
@@ -79,13 +82,16 @@ export class BackupService {
       const filesDir = context.filesDir;
       const filePath = `${filesDir}/${BACKUP_FILE_NAME}`;
 
+      // 检查文件是否存在
       if (!fs.accessSync(filePath)) {
-        throw new Error('本地没有找到备份文件 (请先执行备份)');
+        const msg = context.resourceManager.getStringSync($r('app.string.mine_restore_file_missing').id);
+        throw new Error(msg);
       }
 
       const content = fs.readTextSync(filePath);
       if (!content) {
-        throw new Error('备份文件为空');
+        const msg = context.resourceManager.getStringSync($r('app.string.mine_restore_file_empty').id);
+        throw new Error(msg);
       }
 
       const data: BackupData = JSON.parse(content) as BackupData;
@@ -110,12 +116,27 @@ export class BackupService {
       }
 
       logger.info(`Restore finished. Restored ${successCount} items.`);
+      AppStorage.setOrCreate('GlobalRefreshSignal', Date.now());
       return successCount;
 
     } catch (err) {
-      logger.error(`Restore failed: ${JSON.stringify(err)}`);
-      //  修复：ArkTS 禁止 throw unknown，必须包装成 Error 抛出
-      throw new Error(`Restore failed: ${JSON.stringify(err)}`);
+      // 🚨🚨🚨 [关键修改] 修复 Log 为 {} 的问题 🚨🚨🚨
+
+      let errorMsg = 'Unknown error';
+      // 显式提取 message 属性
+      if (err instanceof Error) {
+        errorMsg = err.message;
+      } else if (typeof err === 'object' && err !== null) {
+        errorMsg = JSON.stringify(err);
+      } else {
+        errorMsg = String(err);
+      }
+
+      logger.error(`Restore failed details: ${errorMsg}`);
+
+      // 抛出具体的错误信息，而不是 stringify 后的对象
+      // 注意：不要加 "Restore failed: " 前缀了，直接抛出原始原因，UI 层会处理
+      throw new Error(errorMsg);
     }
   }
 }

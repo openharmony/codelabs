@@ -14,16 +14,18 @@
  */
 // entry/src/main/ets/pages/MinePage.ets
 import { SettingModel } from '../model/SettingModel';
-import { BiometricService } from '../services/BiometricService';
 import { BackupService } from '../services/BackupService';
 import { promptAction } from '@kit.ArkUI';
-import { BusinessError } from '@kit.BasicServicesKit'; // 引入标准错误类型
+import { BusinessError } from '@kit.BasicServicesKit';
+import { Logger } from '../common/utils/Logger';
+
+const logger = new Logger('MinePage');
 
 @Component
 export struct MinePage {
   @State isBiometricOn: boolean = false;
+  // 添加处理状态，防止重复点击
   @State isProcessing: boolean = false;
-
   private settingModel = new SettingModel();
 
   async aboutToAppear() {
@@ -32,18 +34,22 @@ export struct MinePage {
 
   // 处理备份
   async handleBackup() {
-    if (this.isProcessing) return;
+    if (this.isProcessing) {
+      return;
+    }
     this.isProcessing = true;
     try {
       const path = await BackupService.getInstance().backup(getContext(this));
+
+      // 显示成功弹窗，并传入路径参数
       promptAction.showDialog({
-        title: '备份成功',
-        message: `数据已导出至沙箱:\n${path}`,
-        buttons: [{ text: '确定', color: '#007DFF' }]
+        title: $r('app.string.mine_backup_success_title'),
+        message: $r('app.string.mine_backup_success_msg', path),
+        buttons: [{ text: $r('app.string.common_confirm'), color: '#007DFF' }]
       });
     } catch (err) {
-      //  修复：catch 括号内不写类型，在内部处理
-      promptAction.showToast({ message: '备份失败，请查看日志' });
+      logger.error('Backup failed', JSON.stringify(err));
+      promptAction.showToast({ message: $r('app.string.mine_backup_fail') });
     } finally {
       this.isProcessing = false;
     }
@@ -51,32 +57,58 @@ export struct MinePage {
 
   // 处理恢复
   async handleRestore() {
-    if (this.isProcessing) return;
+    if (this.isProcessing) {
+      return;
+    }
 
     promptAction.showDialog({
-      title: '确认恢复',
-      message: '恢复操作将读取本地备份文件并追加到数据库中。',
+      title: $r('app.string.mine_restore_confirm_title'),
+      message: $r('app.string.mine_restore_confirm_msg'),
       buttons: [
-        { text: '取消', color: '#666666' },
-        { text: '确定恢复', color: '#007DFF' }
+        { text: $r('app.string.common_cancel'), color: '#666666' },
+        { text: $r('app.string.mine_restore_btn'), color: '#007DFF' }
       ]
     }).then(async (resp) => {
       if (resp.index === 1) {
         this.isProcessing = true;
         try {
+          promptAction.showToast({ message: $r('app.string.common_loading') });
+
           const count = await BackupService.getInstance().restore(getContext(this));
 
           AppStorage.setOrCreate('refreshEventList', Date.now());
+          AppStorage.setOrCreate('GlobalRefreshSignal', Date.now());
 
-          promptAction.showToast({ message: `恢复成功！共导入 ${count} 条数据` });
-        } catch (err) {
-          //  修复：移除类型注解，使用断言获取 message
-          let msg = '未知错误';
-          // 尝试将其断言为 Error 对象获取 message，或者直接转字符串
-          if (err) {
-            msg = (err as BusinessError).message ?? JSON.stringify(err);
+          promptAction.showToast({ message: $r('app.string.mine_restore_success', count) });
+        } catch (error) {
+          // =========== 🔍 调试日志开始 ===========
+          // 将 error 强转为 BusinessError 以便访问属性 (ArkTS 语法要求)
+          let err = error as BusinessError;
+
+          logger.error('❌ [Restore Debug] 捕获到异常!');
+          logger.error(`❌ [Restore Debug] 类型 (typeof): ${typeof error}`);
+          // 显式打印 message，而不是 stringify
+          logger.error(`❌ [Restore Debug] 错误信息 (message): ${err.message}`);
+          logger.error(`❌ [Restore Debug] 错误代码 (code): ${err.code}`);
+          logger.error(`❌ [Restore Debug] 堆栈 (stack): ${err.stack}`);
+          // =========== 🔍 调试日志结束 ===========
+
+          // 提取用于显示的错误信息
+          let uiMsg = '';
+          if (err.message && err.message.length > 0) {
+            uiMsg = err.message; // 优先使用 Error 对象的 message
+          } else {
+            // 如果 message 为空，再尝试转字符串，防止出现 "{}"
+            uiMsg = JSON.stringify(error);
+            if (uiMsg === '{}') {
+              uiMsg = '未知错误 (Unknown Error)';
+            }
           }
-          promptAction.showToast({ message: `恢复失败: ${msg}` });
+
+          promptAction.showToast({
+            message: $r('app.string.mine_restore_fail', uiMsg),
+            duration: 3000
+          });
         } finally {
           this.isProcessing = false;
         }
@@ -84,8 +116,19 @@ export struct MinePage {
     });
   }
 
+  // 生物识别开关切换
+  async onBiometricChange(isOn: boolean) {
+    this.isBiometricOn = isOn;
+    await this.settingModel.setBiometricEnabled(isOn);
+    if (isOn) {
+      promptAction.showToast({ message: $r('app.string.privacy_active_toast') });
+    } else {
+      promptAction.showToast({ message: $r('app.string.privacy_inactive_toast') });
+    }
+  }
+
   @Builder
-  SectionHeader(title: string) {
+  SectionHeader(title: ResourceStr) {
     Text(title)
       .fontSize(14)
       .fontColor('#666666')
@@ -102,102 +145,98 @@ export struct MinePage {
           .height(80)
           .margin({ bottom: 10 })
           .borderRadius(16)
-        Text('Admin User')
+          // 简单的灰度处理模拟头像
+          .grayscale(0)
+        Text('Personal Assistant')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
+          .margin({ bottom: 4 })
+        Text('Pro Version')
+          .fontSize(14)
+          .fontColor('#666666')
       }
       .width('100%')
-      .height(200)
+      .height(220)
       .justifyContent(FlexAlign.Center)
       .backgroundColor('#E5F1FF')
 
       // 2. 设置选项列表
       List() {
-        // --- 第一组：隐私安全 ---
+        // --- 第一组：设置 ---
         // ListItem() {
         //   Column() {
-        //     this.SectionHeader('隐私与安全')
-        //     Row() {
-        //       Column() {
-        //         Text('生物识别锁')
-        //           .fontSize(16)
-        //           .fontColor('#333333')
-        //         Text('开启后，查看联系人详情需验证指纹')
-        //           .fontSize(12)
-        //           .fontColor('#999999')
-        //           .margin({ top: 4 })
-        //       }
-        //       .alignItems(HorizontalAlign.Start)
-        //       .layoutWeight(1)
+        //     this.SectionHeader($r('app.string.settings_title'))
         //
-        //       Toggle({ type: ToggleType.Switch, isOn: this.isBiometricOn })
-        //         .onChange(async (isOn: boolean) => {
-        //           if (isOn) {
-        //             const success = await BiometricService.getInstance().authenticate();
-        //             if (success) {
-        //               this.isBiometricOn = true;
-        //               await this.settingModel.setBiometricEnabled(true);
-        //               promptAction.showToast({ message: '隐私保护已开启' });
-        //             } else {
-        //               this.isBiometricOn = false;
-        //               promptAction.showToast({ message: '认证失败' });
-        //             }
-        //           } else {
-        //             this.isBiometricOn = false;
-        //             await this.settingModel.setBiometricEnabled(false);
-        //             promptAction.showToast({ message: '隐私保护已关闭' });
-        //           }
-        //         })
+        //     Column() {
+        //       // 隐私锁开关
+        //       Row() {
+        //         Row() {
+        //           Image($r('app.media.ic_public_lock')) // 确保你有这个图标，或者换一个存在的
+        //             .width(24).height(24).margin({ right: 12 }).fillColor('#007DFF')
+        //           Text($r('app.string.privacy_lock_title')).fontSize(16).fontColor('#333333')
+        //         }
+        //
+        //         Toggle({ type: ToggleType.Switch, isOn: this.isBiometricOn })
+        //           .onChange((isOn) => this.onBiometricChange(isOn))
+        //       }
+        //       .width('100%')
+        //       .justifyContent(FlexAlign.SpaceBetween)
+        //       .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+        //       .backgroundColor(Color.White)
         //     }
-        //     .width('100%')
-        //     .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+        //     .borderRadius(12)
+        //     .clip(true)
         //     .backgroundColor(Color.White)
+        //     .margin({ left: 12, right: 12 })
         //   }
         // }
 
-        // --- 第二组：数据管理 (F3) ---
+        // --- 第二组：数据管理 ---
         ListItem() {
           Column() {
-            this.SectionHeader('数据同步 (模拟)')
+            this.SectionHeader($r('app.string.mine_section_sync'))
 
             Column() {
               // 备份按钮
               Row() {
-                Text('备份数据至本地 (模拟上传)')
-                  .fontSize(16)
-                  .fontColor('#333333')
-                Blank()
-                // 箭头占位
-                Text('>')
-                  .fontSize(16)
-                  .fontColor('#999999')
-                  .opacity(0.5)
+                Row() {
+                  Image($r('app.media.ic_public_save')) // 假设有 save 图标，或者用 ic_public_folder
+                    .width(24).height(24).margin({ right: 12 }).fillColor('#007DFF')
+                  Text($r('app.string.mine_item_backup')).fontSize(16).fontColor('#333333')
+                }
+
+                Image($r('app.media.ic_public_arrow_right'))
+                  .width(16).height(16).fillColor('#CCCCCC')
               }
               .width('100%')
-              .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+              .justifyContent(FlexAlign.SpaceBetween)
+              .padding(16)
               .backgroundColor(Color.White)
               .onClick(() => this.handleBackup())
 
-              Divider().color('#F1F3F5').margin({ left: 16 })
+              Divider().color('#F1F3F5').margin({ left: 52 })
 
               // 恢复按钮
               Row() {
-                Text('从本地恢复数据 (模拟下载)')
-                  .fontSize(16)
-                  .fontColor('#333333')
-                Blank()
-                Text('>')
-                  .fontSize(16)
-                  .fontColor('#999999')
-                  .opacity(0.5)
+                Row() {
+                  Image($r('app.media.ic_public_refresh')) // 假设有 refresh 图标
+                    .width(24).height(24).margin({ right: 12 }).fillColor('#007DFF')
+                  Text($r('app.string.mine_item_restore')).fontSize(16).fontColor('#333333')
+                }
+
+                Image($r('app.media.ic_public_arrow_right'))
+                  .width(16).height(16).fillColor('#CCCCCC')
               }
               .width('100%')
-              .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+              .justifyContent(FlexAlign.SpaceBetween)
+              .padding(16)
               .backgroundColor(Color.White)
               .onClick(() => this.handleRestore())
             }
-            .borderRadius(8)
+            .borderRadius(12)
             .clip(true)
+            .backgroundColor(Color.White)
+            .margin({ left: 12, right: 12 })
           }
         }
 
@@ -205,8 +244,8 @@ export struct MinePage {
         if (this.isProcessing) {
           ListItem() {
             Row() {
-              LoadingProgress().width(20).height(20).margin({ right: 8 })
-              Text('处理中...').fontSize(14).fontColor('#999999')
+              LoadingProgress().width(24).height(24).margin({ right: 8 }).color('#007DFF')
+              Text($r('app.string.common_loading')).fontSize(14).fontColor('#999999')
             }
             .width('100%')
             .justifyContent(FlexAlign.Center)
@@ -221,5 +260,6 @@ export struct MinePage {
     }
     .width('100%')
     .height('100%')
+    .backgroundColor('#F1F3F5')
   }
 }

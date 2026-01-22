@@ -13,13 +13,15 @@
  * limitations under the License.
  */
 import userAuth from '@ohos.userIAM.userAuth';
+import common from '@ohos.app.ability.common'; // ✅ 引入 common 以使用 Context 类型
 import { Logger } from '../common/utils/Logger';
 
 export class BiometricService {
   private static instance: BiometricService;
   private logger = new Logger('BiometricService');
 
-  private constructor() {}
+  private constructor() {
+  }
 
   public static getInstance(): BiometricService {
     if (!BiometricService.instance) {
@@ -29,24 +31,14 @@ export class BiometricService {
   }
 
   /**
-   * 检查当前设备是否支持生物认证 (指纹)
-   * API 9 逻辑：成功则无返回值，失败则抛出异常
+   * 检查当前设备是否支持生物认证
    */
   checkAvailability(): boolean {
     try {
-      // 检查指纹认证能力 (AuthType.FINGERPRINT = 4)
-      // AuthTrustLevel.ATL1 = 10000
-
-      // ⚠️ 修正点：直接调用，不接收返回值
       userAuth.getAvailableStatus(userAuth.UserAuthType.FINGERPRINT, userAuth.AuthTrustLevel.ATL1);
-
-      // 如果代码能走到这里，说明没有抛出异常，即支持指纹
       this.logger.info('Biometric check passed (Supported).');
       return true;
-
     } catch (error) {
-      // 如果不支持或未录入指纹，会抛出异常
-      // 常见错误码: 12501 (General Error), 12502 (Not Supported), 12504 (Not Enrolled)
       this.logger.error(`Biometric check failed: ${JSON.stringify(error)}`);
       return false;
     }
@@ -54,9 +46,10 @@ export class BiometricService {
 
   /**
    * 发起认证
+   * @param context UIAbilityContext，用于解析资源字符串
    * @returns Promise<boolean> 认证成功返回 true
    */
-  async authenticate(): Promise<boolean> {
+  async authenticate(context: common.Context): Promise<boolean> { // ✅ 新增 context 参数
     return new Promise((resolve) => {
       try {
         const challenge = new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]);
@@ -67,9 +60,13 @@ export class BiometricService {
           authTrustLevel: userAuth.AuthTrustLevel.ATL1,
         };
 
+        // ✅ 核心修改：通过 context.resourceManager 将 $r 转为 string
+        const titleStr = context.resourceManager.getStringSync($r('app.string.auth_title'));
+        const cancelStr = context.resourceManager.getStringSync($r('app.string.common_cancel'));
+
         const widgetParam: userAuth.WidgetParam = {
-          title: '身份验证',
-          navigationButtonText: '取消',
+          title: titleStr,
+          navigationButtonText: cancelStr,
         };
 
         const userAuthInstance = userAuth.getUserAuthInstance(authParam, widgetParam);
@@ -77,7 +74,6 @@ export class BiometricService {
         userAuthInstance.on('result', {
           onResult: (result) => {
             this.logger.info(`Auth Result Info: ${JSON.stringify(result)}`);
-            // 结果码 12500 代表成功
             if (result.result === userAuth.UserAuthResultCode.SUCCESS) {
               this.logger.info('Biometric auth success');
               resolve(true);

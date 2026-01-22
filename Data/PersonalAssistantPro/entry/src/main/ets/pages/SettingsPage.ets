@@ -21,7 +21,6 @@ import { Logger } from '../common/utils/Logger';
 export struct SettingsPage {
   // 默认给 false，等待 aboutToAppear 读取真实值
   @State isBiometricOn: boolean = false;
-
   private settingModel = new SettingModel();
   private logger = new Logger('SettingsPage');
 
@@ -64,25 +63,23 @@ export struct SettingsPage {
               // 开关组件
               Toggle({ type: ToggleType.Switch, isOn: this.isBiometricOn })
                 .onChange(async (isOn: boolean) => {
-                  // 为了防止页面初始化时自动触发 onChange 导致逻辑死循环，
-                  // 我们在这里做一个简单的判断，或者是依靠用户的真实点击。
-                  // 但最稳妥的方式是直接处理。
 
                   this.logger.info(`👆 [UI] 开关被点击/改变: ${isOn}`);
 
                   if (isOn) {
                     // === 用户想开启 ===
                     // 先验证指纹
-                    const success = await BiometricService.getInstance().authenticate();
+                    // ✅ 传入当前上下文
+                    const success = await BiometricService.getInstance().authenticate(getContext(this));
                     if (success) {
                       this.isBiometricOn = true;
                       // 保存为 true
                       await this.settingModel.setBiometricEnabled(true);
-                      promptAction.showToast({ message: '生物认证已开启' });
+                      promptAction.showToast({ message: $r('app.string.auth_toast_opened') });
                     } else {
                       // 验证失败，把开关拨回去
                       this.isBiometricOn = false;
-                      promptAction.showToast({ message: '认证失败' });
+                      promptAction.showToast({ message: $r('app.string.auth_toast_failed') });
                     }
                   } else {
                     // === 用户想关闭 ===
@@ -93,7 +90,12 @@ export struct SettingsPage {
                 })
             }
             .width('100%')
-            .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+            .padding({
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 12
+            })
             .backgroundColor(Color.White)
             .borderRadius(12)
           }

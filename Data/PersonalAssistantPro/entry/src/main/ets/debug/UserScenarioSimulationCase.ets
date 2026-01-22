@@ -13,9 +13,8 @@
  * limitations under the License.
  */
 import { DebugCase } from './DebugCase';
-import { ContactModel, Contact } from '../model/ContactModel';
-import { EventModel, Event } from '../model/EventModel';
-import { DateUtils } from '../common/utils/DateUtils';
+import { Contact, ContactModel } from '../model/ContactModel';
+import { Event, EventModel } from '../model/EventModel';
 
 /**
  * 用户全场景模拟测试 (User Scenario Simulation)

@@ -22,34 +22,26 @@ const rootPath = __dirname;
 const outputFile = path.join(rootPath, 'Project_Summary.txt');
 
 // 配置忽略列表
-const ignoreList = [
-  'node_modules', 'build', '.ohpm', '.hvigor', '.cxx', '.idea', '.git',
-  'oh_modules', '.preview', 'ohosTest', 'test', 'mock',
-  'entrybackupability', 'rawfile', 'base', 'dark', 'element', 'media',
-  'AppScope', 'resources', 'hvigorfile.ts', 'obfuscation-rules.txt',
-  'code-linter.json5', 'local.properties', 'oh-package-lock.json5',
-  'package-lock.json', '.gitignore', 'backup_config.json',
-  'Project_Summary.txt', 'generate_context.ts', 'generate_context.js',
-  'tree.ts' // 忽略自己
-];
+const ignoreList =
+  ['node_modules', 'build', '.ohpm', '.hvigor', '.cxx', '.idea', '.git', 'oh_modules', '.preview', 'ohosTest', 'test',
+    'mock', 'entrybackupability', 'rawfile', 'base', 'dark', 'element', 'media', 'AppScope', 'resources',
+    'hvigorfile.ts', 'obfuscation-rules.txt', 'code-linter.json5', 'local.properties', 'oh-package-lock.json5',
+    'package-lock.json', '.gitignore', 'backup_config.json', 'Project_Summary.txt', 'generate_context.ts',
+    'generate_context.js', 'tree.ts'];
 
 // 配置关键配置文件 (会读取内容)
-const criticalConfigs = [
-  'module.json5', 'app.json5', 'oh-package.json5',
-  'build-profile.json5', 'main_pages.json'
-];
+const criticalConfigs = ['module.json5', 'app.json5', 'oh-package.json5', 'build-profile.json5', 'main_pages.json'];
 
 // 需要统计行数的文件后缀
 const codeExtensions = ['.ts', '.ets', '.js', '.json', '.json5', '.md', '.css'];
 
-let totalLines = 0;      // 全局总行数计数器
-let totalFiles = 0;      // 全局总文件数计数器
+let totalLines = 0; // 全局总行数计数器
+let totalFiles = 0; // 全局总文件数计数器
 
 // 辅助函数：计算文件行数
 function countFileLines(filePath) {
   try {
-    const content = fs.readFileSync(filePath, 'utf-8');
-    // 按换行符分割，兼容 Windows/Linux，过滤空行可选，这里统计所有行
+    const content = fs.readFileSync(filePath, 'utf-8'); // 按换行符分割，兼容 Windows/Linux，过滤空行可选，这里统计所有行
     return content.split(/\r\n|\r|\n/).length;
   } catch (e) {
     return 0;
@@ -66,8 +58,7 @@ function generateTree(dir, prefix = '', isLast = true) {
 
   // 递归结果对象
   let result = {
-    output: '',
-    lines: 0
+    output: '', lines: 0
   };
 
   try {
@@ -105,7 +96,8 @@ function generateTree(dir, prefix = '', isLast = true) {
     let children = [];
     try {
       children = fs.readdirSync(dir).filter(child => !ignoreList.includes(child));
-    } catch (e) {}
+    } catch (e) {
+    }
 
     // 排序：文件夹在前，文件在后
     children.sort((a, b) => {
@@ -113,11 +105,21 @@ function generateTree(dir, prefix = '', isLast = true) {
       const bPath = path.join(dir, b);
       let aIsDir = false;
       let bIsDir = false;
-      try { aIsDir = fs.statSync(aPath).isDirectory(); } catch(e){}
-      try { bIsDir = fs.statSync(bPath).isDirectory(); } catch(e){}
+      try {
+        aIsDir = fs.statSync(aPath).isDirectory();
+      } catch (e) {
+      }
+      try {
+        bIsDir = fs.statSync(bPath).isDirectory();
+      } catch (e) {
+      }
 
-      if (aIsDir && !bIsDir) return -1;
-      if (!aIsDir && bIsDir) return 1;
+      if (aIsDir && !bIsDir) {
+        return -1;
+      }
+      if (!aIsDir && bIsDir) {
+        return 1;
+      }
       return a.localeCompare(b);
     });
 
@@ -171,11 +173,14 @@ finalContent += treeOutput;
 
 // 3. 生成 JSON 文件列表 (保持原逻辑)
 const fileList = [];
+
 function scanFiles(dir) {
   try {
     const items = fs.readdirSync(dir);
     items.forEach(item => {
-      if (ignoreList.includes(item)) return;
+      if (ignoreList.includes(item)) {
+        return;
+      }
       const fullPath = path.join(dir, item);
       if (fs.statSync(fullPath).isDirectory()) {
         scanFiles(fullPath);
@@ -183,8 +188,10 @@ function scanFiles(dir) {
         fileList.push(fullPath.replace(rootPath, '').replace(/\\/g, '/').substring(1));
       }
     });
-  } catch (e) {}
+  } catch (e) {
+  }
 }
+
 scanFiles(rootPath);
 finalContent += '\n=== JSON FILE LIST ===\n';
 finalContent += JSON.stringify(fileList, null, 2);
@@ -196,7 +203,9 @@ function findAndReadConfigs(dir) {
   try {
     const items = fs.readdirSync(dir);
     items.forEach(item => {
-      if (ignoreList.includes(item)) return;
+      if (ignoreList.includes(item)) {
+        return;
+      }
       const fullPath = path.join(dir, item);
       if (fs.statSync(fullPath).isDirectory()) {
         findAndReadConfigs(fullPath);
@@ -208,8 +217,10 @@ function findAndReadConfigs(dir) {
         }
       }
     });
-  } catch (e) {}
+  } catch (e) {
+  }
 }
+
 findAndReadConfigs(rootPath);
 
 // 写入文件
