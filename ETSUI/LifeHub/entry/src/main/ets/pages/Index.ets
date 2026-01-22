@@ -49,7 +49,6 @@ struct Index {
     }
   }
 
-
   build() {
     Column() {
       // 内容区域，占满剩余空间
@@ -193,6 +192,11 @@ struct Index {
     .padding({ top: 8, bottom: 8 })
     .margin({ bottom: 16 })
     .backgroundColor(Color.White)
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: -2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: -2
+    })
   }
 }

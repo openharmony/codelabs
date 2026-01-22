@@ -16,7 +16,6 @@
  * 统计和可视化主页面
  */
 import { LifeHubData, HealthRecord, MoodRecord, Goal, Skill } from '../../model/LifeHubData';
-import { router } from '@kit.ArkUI';
 
 interface DayData {
   date: string;
