@@ -1,0 +1,48 @@
+{
+  "string" : [ {
+    "name" : "module_desc",
+    "value" : "module description"
+  }, {
+    "name" : "EntryAbility_desc",
+    "value" : "description"
+  }, {
+    "name" : "EntryAbility_label",
+    "value" : "label"
+  }, {
+    "name" : "defaultForm_label",
+    "value" : "form_label"
+  }, {
+    "name" : "defaultForm_desc",
+    "value" : "form_description"
+  }, {
+    "name" : "EntryFormAbility_desc",
+    "value" : "form_description"
+  }, {
+    "name" : "EntryFormAbility_label",
+    "value" : "form_label"
+  }, {
+    "name" : "widget_desc",
+    "value" : "This is a service widget."
+  }, {
+    "name" : "widget_display_name",
+    "value" : "widget"
+  }, {
+    "name" : "widget1_desc",
+    "value" : "This is a service widget."
+  }, {
+    "name" : "widget1_display_name",
+    "value" : "widget1"
+  }, {
+    "name" : "camera_permission_reason",
+    "value" : "用于启动相机应用"
+  }, {
+    "name" : "audio_permission_reason",
+    "value" : "用于调节音量设置"
+  }, {
+    "name" : "gallery_permission_reason",
+    "value" : "用于启动图库应用"
+  }, {
+    "name" : "internet_permission_reason",
+    "value" : "用于浏览器搜索功能"
+  } ]
+}
