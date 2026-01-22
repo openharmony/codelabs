@@ -16,14 +16,12 @@
 #include <memory>
 
 // C接口实现
-extern "C"
-{
+extern "C" {
 
 time_t parse_date(const char *date_str)
 {
     struct tm tm = {0};
-    if (strptime(date_str, "%Y-%m-%d", &tm) != nullptr)
-    {
+    if (strptime(date_str, "%Y-%m-%d", &tm) != nullptr) {
         return mktime(&tm);
     }
     return 0;
@@ -35,16 +33,14 @@ DataCell create_data_cell(DataType type, const char *value)
     memset((void *)&cell, 0, sizeof(cell));
     cell.type = type;
     
-    if (value == nullptr || strcasecmp(value, "NULL") == 0)
-    {
+    if (value == nullptr || strcasecmp(value, "NULL") == 0) {
         cell.is_null = true;
         return cell;
     }
     
     cell.is_null = false;
     
-    switch(type)
-    {
+    switch(type) {
         case TYPE_INT:
             cell.value.int_val = atoi(value);
             break;
@@ -75,8 +71,7 @@ DataCell create_data_cell(DataType type, const char *value)
 /* ========== 辅助函数 ========== */
 const char* DataBaseOps::data_type_to_string(DataType type)
 {
-    switch(type)
-    {
+    switch(type) {
         case TYPE_INT:
             return "INT";
         case TYPE_FLOAT:
@@ -94,24 +89,19 @@ const char* DataBaseOps::data_type_to_string(DataType type)
 
 DataType DataBaseOps::string_to_data_type(const char *str)
 {
-    if (strcasecmp(str, "int") == 0)
-    {
+    if (strcasecmp(str, "int") == 0) {
         return TYPE_INT;
     }
-    if (strcasecmp(str, "float") == 0)
-    {
+    if (strcasecmp(str, "float") == 0) {
         return TYPE_FLOAT;
     }
-    if (strcasecmp(str, "string") == 0)
-    {
+    if (strcasecmp(str, "string") == 0) {
         return TYPE_STRING;
     }
-    if (strcasecmp(str, "bool") == 0)
-    {
+    if (strcasecmp(str, "bool") == 0) {
         return TYPE_BOOL;
     }
-    if (strcasecmp(str, "date") == 0)
-    {
+    if (strcasecmp(str, "date") == 0) {
         return TYPE_DATE;
     }
     return TYPE_NULL;
@@ -415,8 +405,7 @@ void DataBaseOps::print_table_schema()
             (int)SCHEMA_FLAG_WIDTH, "索引");
     printf("%s\n", "------------------------------------------------------------");
     
-    for (int i = 0; i < table->column_count; i++)
-    {
+    for (int i = 0; i < table->column_count; i++) {
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
                 (int)SCHEMA_COLUMN_WIDTH, col->name,
@@ -433,8 +422,7 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
     const int FORMAT_BUFFER_SIZE = 21;
     const int DATE_FORMAT_SIZE = 20;
     
-    if (!result || result->error != ERR_NONE)
-    {
+    if (!result || result->error != ERR_NONE) {
         printf("查询错误: %s\n", result->error_msg);
         return;
     }
@@ -442,46 +430,35 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
     printf("\n查询结果 (%d 行):\n", result->row_count);
     
     // 打印表头
-    for (int i = 0; i < result->column_count; i++)
-    {
+    for (int i = 0; i < result->column_count; i++) {
         printf("%-*s", QUERY_COLUMN_WIDTH, result->getColumnName(i));
-        if (i < result->column_count - 1)
-        {
+        if (i < result->column_count - 1) {
             printf(" | ");
         }
     }
     printf("\n");
     
     // 打印分隔线
-    for (int i = 0; i < result->column_count; i++)
-    {
-        for (int j = 0; j < QUERY_COLUMN_WIDTH; j++)
-        {
+    for (int i = 0; i < result->column_count; i++) {
+        for (int j = 0; j < QUERY_COLUMN_WIDTH; j++) {
             printf("-");
         }
-        if (i < result->column_count - 1)
-        {
+        if (i < result->column_count - 1) {
             printf("-+-");
         }
     }
     printf("\n");
     
     // 打印数据
-    for (int i = 0; i < result->row_count; i++)
-    {
-        for (int j = 0; j < result->column_count; j++)
-        {
+    for (int i = 0; i < result->row_count; i++) {
+        for (int j = 0; j < result->column_count; j++) {
             DataCell *cell = &result->rows[i][j];
             
-            if (cell->is_null)
-            {
+            if (cell->is_null) {
                 printf("%-*s", QUERY_COLUMN_WIDTH, "NULL");
-            }
-            else
-            {
+            } else {
                 char buffer[FORMAT_BUFFER_SIZE] = {0};
-                switch(cell->type)
-                {
+                switch(cell->type) {
                     case TYPE_INT:
                         snprintf(buffer, FORMAT_BUFFER_SIZE - 1, "%d", cell->value.int_val);
                         break;
@@ -503,8 +480,7 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
                 printf("%-*s", QUERY_COLUMN_WIDTH, buffer);
             }
             
-            if (j < result->column_count - 1)
-            {
+            if (j < result->column_count - 1) {
                 printf(" | ");
             }
         }
@@ -516,8 +492,7 @@ SmartQueryResult* DataBaseOps::execute_select_query(const char *where_clause)
 {
     const int MAX_QUERY_RESULTS = 100;
     std::vector<std::string> col_names;
-    for (int i = 0; i < table->column_count; i++)
-    {
+    for (int i = 0; i < table->column_count; i++) {
         std::string str_temp(table->columns[i].name);
         col_names.push_back(str_temp);
     }
@@ -526,15 +501,12 @@ SmartQueryResult* DataBaseOps::execute_select_query(const char *where_clause)
     std::vector<std::vector<DataCell>> data;
     int row_count = 0;
     
-    for (int i = 0; i < MAX_QUERY_RESULTS; i++)
-    {
-        if (!table->rows[i].deleted && table->rows[i].row_id > 0)
-        {
+    for (int i = 0; i < MAX_QUERY_RESULTS; i++) {
+        if (!table->rows[i].deleted && table->rows[i].row_id > 0) {
             // 简化：暂时不考虑WHERE条件
             DataCell *p_cell = table->rows[i].cells.get();
             std::vector<DataCell> data_cell_vec;
-            for (int j = 0; j < table->column_count; j++)
-            {
+            for (int j = 0; j < table->column_count; j++) {
                 DataCell item = p_cell[j];
                 data_cell_vec.push_back(item);
             }
@@ -548,8 +520,7 @@ SmartQueryResult* DataBaseOps::execute_select_query(const char *where_clause)
 }
 
 // C接口实现
-extern "C"
-{
+extern "C" {
 
 int database_ops_demo()
 {
@@ -581,8 +552,7 @@ int database_ops_demo()
     };
     
     std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", user_columns, USER_COLUMN_COUNT);
-    if (!ops)
-    {
+    if (!ops) {
         printf("创建表失败！\n");
         return -1;
     }
@@ -650,8 +620,7 @@ int database_ops_demo()
     // 查询所有数据
     printf("\n执行查询: SELECT * FROM users\n");
     SmartQueryResult *result = ops->execute_select_query("");
-    if (result)
-    {
+    if (result) {
         ops->print_query_result(result);
     }
     operation_count++;
@@ -662,8 +631,7 @@ int database_ops_demo()
     DataCell update_cells[USER_COLUMN_COUNT];
     memset((void *)update_cells, 0, sizeof(update_cells));
 
-    for (int i = 0; i < USER_COLUMN_COUNT; i++)
-    {
+    for (int i = 0; i < USER_COLUMN_COUNT; i++) {
         update_cells[i].is_null = true;
     }
     const int DATE_INDEX_4= 4;
@@ -671,8 +639,7 @@ int database_ops_demo()
     update_cells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
     update_cells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
     
-    if (ops->update_table_row(3, update_cells))
-    {
+    if (ops->update_table_row(3, update_cells)) {
         printf("更新成功！\n");
         operation_count++;
     }
@@ -680,8 +647,7 @@ int database_ops_demo()
     // 再次查询
     printf("\n再次查询更新后的数据:\n");
     result = ops->execute_select_query("");
-    if (result)
-    {
+    if (result) {
         ops->print_query_result(result);
     }
     operation_count++;
@@ -714,8 +680,7 @@ int database_ops_demo()
     // 验证数据已回滚
     printf("\n验证回滚后数据（应无测试用户）:\n");
     result = ops->execute_select_query("");
-    if (result)
-    {
+    if (result) {
         printf("找到 %d 行数据\n", result->row_count);
     }
     operation_count++;
@@ -734,8 +699,7 @@ int database_ops_demo()
     };
     
     std::unique_ptr<DataBaseOps> order_ops = std::make_unique<DataBaseOps>("orders", order_columns, ORDER_COLUMN_COUNT);
-    if (!order_ops)
-    {
+    if (!order_ops) {
         printf("创建表失败！\n");
         return -1;
     }
@@ -783,8 +747,7 @@ int database_ops_demo()
 
     printf("\n订单表数据:\n");
     result = order_ops->execute_select_query("");
-    if (result)
-    {
+    if (result) {
         order_ops->print_query_result(result);
     }
     operation_count++;

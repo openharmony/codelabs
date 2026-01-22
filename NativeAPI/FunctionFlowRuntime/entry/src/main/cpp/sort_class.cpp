@@ -1556,18 +1556,15 @@ void BankBusinessradixSortOptimized()
 class MSDRadixSort {
 private:
     // 递归排序函数
-    void msdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
-    {
+    void msdSort(vector<int>& arr, int left, int right, int digit, int maxDigit) {
         const int DIGIT_COUNT = 10;  // 0-9
         const int NUM_BUCKETS = 11;
-        if (left >= right || digit > maxDigit)
-        {
+        if (left >= right || digit > maxDigit) {
             return;
         }
         
         int n = right - left + 1;
-        if (n <= SMALL_ARRAY_THRESHOLD)
-        {
+        if (n <= SMALL_ARRAY_THRESHOLD) {
             // 小数组使用插入排序
             insertionSort(arr, left, right);
             return;
@@ -1580,53 +1577,44 @@ private:
         vector<int> temp(n);
         
         // 统计频率（处理digit=0的情况）
-        for (int i = left; i <= right; i++)
-        {
+        for (int i = left; i <= right; i++) {
             int d = (digit == 0) ? 0 : getDigit(arr[i], digit);
             count[d + 1]++;  // +1为负数预留位置
         }
         
         // 计算起始位置
-        for (int i = 1; i < NUM_BUCKETS; i++)
-        {
+        for (int i = 1; i < NUM_BUCKETS; i++) {
             count[i] += count[i - 1];
         }
         
         // 排序到临时数组
-        for (int i = left; i <= right; i++)
-        {
+        for (int i = left; i <= right; i++) {
             int d = (digit == 0) ? 0 : getDigit(arr[i], digit);
             temp[count[d]++] = arr[i];
         }
         
         // 复制回原数组
-        for (int i = left; i <= right; i++)
-        {
+        for (int i = left; i <= right; i++) {
             arr[i] = temp[i - left];
         }
         
         // 递归排序每个桶
         int start = left;
-        for (int i = 0; i < DECIMAL_BASE; i++)
-        {
+        for (int i = 0; i < DECIMAL_BASE; i++) {
             int end = left + count[i] - 1;
-            if (start <= end)
-            {
+            if (start <= end) {
                 msdSort(arr, start, end, digit - 1, maxDigit);
                 start = end + 1;
             }
         }
     }
     
-    void insertionSort(vector<int>& arr, int left, int right)
-    {
-        for (int i = left + 1; i <= right; i++)
-        {
+    void insertionSort(vector<int>& arr, int left, int right) {
+        for (int i = left + 1; i <= right; i++) {
             int key = arr[i];
             int j = i - 1;
             
-            while (j >= left && arr[j] > key)
-            {
+            while (j >= left && arr[j] > key) {
                 arr[j + 1] = arr[j];
                 j--;
             }
@@ -1634,27 +1622,22 @@ private:
         }
     }
     
-    int getDigit(int num, int d)
-    {
-        for (int i = 1; i < d; i++)
-        {
+    int getDigit(int num, int d) {
+        for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
         return num % DECIMAL_BASE;
     }
     
-    int getMaxDigits(const vector<int>& arr)
-    {
-        if (arr.empty())
-        {
+    int getMaxDigits(const vector<int>& arr) {
+        if (arr.empty()) {
             return 0;
         }
         
         int maxVal = *max_element(arr.begin(), arr.end());
         int digits = 0;
         
-        while (maxVal > 0)
-        {
+        while (maxVal > 0) {
             digits++;
             maxVal /= DECIMAL_BASE;
         }
@@ -1663,10 +1646,8 @@ private:
     }
     
 public:
-    void sort(vector<int>& arr)
-    {
-        if (arr.size() <= 1)
-        {
+    void sort(vector<int>& arr) {
+        if (arr.size() <= 1) {
             return;
         }
         
@@ -1697,34 +1678,27 @@ void BankBusinessradixSortMSD()
 class SignedRadixSort {
 private:
     // 分离正负数
-    void separatePosNeg(vector<int>& arr)
-    {
+    void separatePosNeg(vector<int>& arr) {
         int n = arr.size();
         int left = 0, right = n - 1;
         
-        while (left <= right)
-        {
-            while (left <= right && arr[left] < 0)
-            {
+        while (left <= right) {
+            while (left <= right && arr[left] < 0) {
                 left++;
             }
-            while (left <= right && arr[right] >= 0)
-            {
+            while (left <= right && arr[right] >= 0) {
                 right--;
             }
             
-            if (left < right)
-            {
+            if (left < right) {
                 swap(arr[left], arr[right]);
             }
         }
     }
     
     // 对绝对值进行基数排序
-    void radixSortAbsolute(vector<int>& arr, int start, int end)
-    {
-        if (start >= end)
-        {
+    void radixSortAbsolute(vector<int>& arr, int start, int end) {
+        if (start >= end) {
             return;
         }
         
@@ -1733,73 +1707,61 @@ private:
         
         // 找到最大绝对值
         int maxAbs = 0;
-        for (int i = start; i <= end; i++)
-        {
+        for (int i = start; i <= end; i++) {
             int absVal = abs(arr[i]);
-            if (absVal > maxAbs)
-            {
+            if (absVal > maxAbs) {
                 maxAbs = absVal;
             }
         }
         
         // 计算最大位数
         int maxDigits = 0;
-        while (maxAbs > 0)
-        {
+        while (maxAbs > 0) {
             maxDigits++;
             maxAbs /= DECIMAL_BASE;
         }
         maxDigits = max(1, maxDigits);
         
         // LSD基数排序
-        for (int digit = 1; digit <= maxDigits; digit++)
-        {
+        for (int digit = 1; digit <= maxDigits; digit++) {
             vector<int> count(DECIMAL_BASE, 0);
             
             // 统计频率
-            for (int i = start; i <= end; i++)
-            {
+            for (int i = start; i <= end; i++) {
                 int num = abs(arr[i]);
                 int d = getDigit(num, digit);
                 count[d]++;
             }
             
             // 计算位置
-            for (int i = 1; i < DECIMAL_BASE; i++)
-            {
+            for (int i = 1; i < DECIMAL_BASE; i++) {
                 count[i] += count[i - 1];
             }
             
             // 从后向前填充
-            for (int i = end; i >= start; i--)
-            {
+            for (int i = end; i >= start; i--) {
                 int num = abs(arr[i]);
                 int d = getDigit(num, digit);
                 output[--count[d]] = arr[i];
             }
             
             // 复制回原数组
-            for (int i = start; i <= end; i++)
-            {
+            for (int i = start; i <= end; i++) {
                 arr[i] = output[i - start];
             }
         }
     }
     
-    int getDigit(int num, int d)
-    {
-        for (int i = 1; i < d; i++)
-        {
+    int getDigit(int num, int d) {
+        for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
         return num % DECIMAL_BASE;
     }
     
 public:
-    void sort(vector<int>& arr)
-    {
-        if (arr.size() <= 1)
-        {
+    void sort(vector<int>& arr) {
+        if (arr.size() <= 1) {
             return;
         }
         
@@ -1808,30 +1770,25 @@ public:
         
         // 找到正负数的分界点
         int negCount = 0;
-        for (int num : arr)
-        {
-            if (num < 0)
-            {
+        for (int num : arr) {
+            if (num < 0) {
                 negCount++;
             }
         }
         
         // 对负数部分按绝对值排序（降序，然后反转）
-        if (negCount > 0)
-        {
+        if (negCount > 0) {
             radixSortAbsolute(arr, 0, negCount - 1);
             // 反转负数部分
             reverse(arr.begin(), arr.begin() + negCount);
             // 将负数变回负号
-            for (int i = 0; i < negCount; i++)
-            {
+            for (int i = 0; i < negCount; i++) {
                 arr[i] = -arr[i];
             }
         }
         
         // 对正数部分排序
-        if (negCount < arr.size())
-        {
+        if (negCount < arr.size()) {
             radixSortAbsolute(arr, negCount, arr.size() - 1);
         }
     }
@@ -1859,21 +1816,17 @@ void BankBusinessradixSortSigned()
 class StringRadixSort {
 private:
     // 获取字符串的第k个字符，如果超出长度返回0
-    char getChar(const string& s, int k)
-    {
-        if (k < s.length())
-        {
+    char getChar(const string& s, int k) {
+        if (k < s.length()) {
             return s[k];
         }
         return 0;  // 空字符表示字符串结束
     }
     
     // 获取最大字符串长度
-    int getMaxLength(const vector<string>& arr)
-    {
+    int getMaxLength(const vector<string>& arr) {
         int maxLen = 0;
-        for (const auto& s : arr)
-        {
+        for (const auto& s : arr) {
             maxLen = max(maxLen, (int)s.length());
         }
         return maxLen;
@@ -1881,10 +1834,8 @@ private:
     
 public:
     // LSD字符串排序
-    void sortLSD(vector<string>& arr)
-    {
-        if (arr.size() <= 1)
-        {
+    void sortLSD(vector<string>& arr) {
+        if (arr.size() <= 1) {
             return;
         }
         
@@ -1892,28 +1843,24 @@ public:
         int n = arr.size();
         
         // 从最后一个字符开始排序
-        for (int pos = maxLen - 1; pos >= 0; pos--)
-        {
+        for (int pos = maxLen - 1; pos >= 0; pos--) {
             // 计数排序，ASCII码范围0-255
             vector<int> count(ASCII_CHAR_COUNT, 0);
             vector<string> output(n);
             
             // 统计频率
-            for (int i = 0; i < n; i++)
-            {
+            for (int i = 0; i < n; i++) {
                 char c = getChar(arr[i], pos);
                 count[c]++;
             }
             
             // 计算位置
-            for (int i = 1; i < ASCII_CHAR_COUNT; i++)
-            {
+            for (int i = 1; i < ASCII_CHAR_COUNT; i++) {
                 count[i] += count[i - 1];
             }
             
             // 从后向前填充
-            for (int i = n - 1; i >= 0; i--)
-            {
+            for (int i = n - 1; i >= 0; i--) {
                 char c = getChar(arr[i], pos);
                 output[--count[c]] = arr[i];
             }
@@ -1924,26 +1871,21 @@ public:
     }
     
     // MSD字符串排序
-    void sortMSD(vector<string>& arr)
-    {
-        if (arr.size() <= 1)
-        {
+    void sortMSD(vector<string>& arr) {
+        if (arr.size() <= 1) {
             return;
         }
         msdSort(arr, 0, arr.size() - 1, 0);
     }
     
 private:
-    void msdSort(vector<string>& arr, int low, int high, int depth)
-    {
-        if (low >= high)
-        {
+    void msdSort(vector<string>& arr, int low, int high, int depth) {
+        if (low >= high) {
             return;
         }
         
         // 小数组使用插入排序
-        if (high - low + 1 <= SMALL_ARRAY_THRESHOLD)
-        {
+        if (high - low + 1 <= SMALL_ARRAY_THRESHOLD) {
             insertionSort(arr, low, high, depth);
             return;
         }
@@ -1955,63 +1897,49 @@ private:
         vector<string> aux(high - low + 1);
         
         // 统计频率
-        for (int i = low; i <= high; i++)
-        {
+        for (int i = low; i <= high; i++) {
             char c = getChar(arr[i], depth);
             count[c + 2]++;  // +2为排序稳定性
         }
         
         // 计算起始位置
-        for (int i = 1; i < ASCII_CHAR_COUNT + 2; i++)
-        {
+        for (int i = 1; i < ASCII_CHAR_COUNT + 2; i++) {
             count[i] += count[i - 1];
         }
         
         // 排序到临时数组
-        for (int i = low; i <= high; i++)
-        {
+        for (int i = low; i <= high; i++) {
             char c = getChar(arr[i], depth);
             aux[count[c + 1]++] = arr[i];
         }
         
         // 复制回原数组
-        for (int i = low; i <= high; i++)
-        {
+        for (int i = low; i <= high; i++) {
             arr[i] = aux[i - low];
         }
         
         // 递归排序每个桶
-        for (int i = 0; i < ASCII_CHAR_COUNT; i++)
-        {
+        for (int i = 0; i < ASCII_CHAR_COUNT; i++) {
             msdSort(arr, low + count[i], low + count[i + 1] - 1, depth + 1);
         }
     }
     
-    void insertionSort(vector<string>& arr, int low, int high, int depth)
-    {
-        for (int i = low + 1; i <= high; i++)
-        {
-            for (int j = i; j > low; j--)
-            {
-                if (compareStrings(arr[j], arr[j - 1], depth) < 0)
-                {
+    void insertionSort(vector<string>& arr, int low, int high, int depth) {
+        for (int i = low + 1; i <= high; i++) {
+            for (int j = i; j > low; j--) {
+                if (compareStrings(arr[j], arr[j - 1], depth) < 0) {
                     swap(arr[j], arr[j - 1]);
-                }
-                else
-                {
+                } else {
                     break;
                 }
             }
         }
     }
     
-    int compareStrings(const string& a, const string& b, int depth)
-    {
+    int compareStrings(const string& a, const string& b, int depth) {
         int minLen = min(a.length(), b.length());
-        for (int i = depth; i < minLen; i++)
-        {
-            if (a[i] != b[i])
-            {
+        for (int i = depth; i < minLen; i++) {
+            if (a[i] != b[i]) {
                 return a[i] - b[i];
             }
         }
