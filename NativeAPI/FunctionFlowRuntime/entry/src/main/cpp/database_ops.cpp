@@ -30,7 +30,7 @@ time_t parse_date(const char *date_str)
 DataCell create_data_cell(DataType type, const char *value)
 {
     DataCell cell;
-    memset((void *)&cell, 0, sizeof(cell));
+    memset(static_cast<void*>(&cell), 0, sizeof(cell));
     cell.type = type;
     
     if (value == nullptr || strcasecmp(value, "NULL") == 0) {
@@ -397,22 +397,22 @@ void DataBaseOps::print_table_schema()
     printf("行数: %d\n", table->row_count);
     printf("列数: %d\n\n", table->column_count);
     
-    printf("%-*s %-*s %-*s %-*s %-*s\n", 
-            (int)SCHEMA_COLUMN_WIDTH, "列名",
-            (int)SCHEMA_TYPE_WIDTH, "类型",
-            (int)SCHEMA_FLAG_WIDTH, "非空",
-            (int)SCHEMA_FLAG_WIDTH, "主键",
-            (int)SCHEMA_FLAG_WIDTH, "索引");
+    printf("%-*s %-*s %-*s %-*s %-*s\n",
+             static_cast<int>(SCHEMA_COLUMN_WIDTH), "列名",
+            static_cast<int>(SCHEMA_TYPE_WIDTH), "类型",
+            static_cast<int>(SCHEMA_FLAG_WIDTH), "非空",
+            static_cast<int>(SCHEMA_FLAG_WIDTH), "主键",
+            static_cast<int>(SCHEMA_FLAG_WIDTH), "索引");
     printf("%s\n", "------------------------------------------------------------");
     
     for (int i = 0; i < table->column_count; i++) {
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
-                (int)SCHEMA_COLUMN_WIDTH, col->name,
-                (int)SCHEMA_TYPE_WIDTH, data_type_to_string(col->type),
-                (int)SCHEMA_FLAG_WIDTH, col->not_null ? "YES" : "NO",
-                (int)SCHEMA_FLAG_WIDTH, col->is_primary ? "YES" : "NO",
-                (int)SCHEMA_FLAG_WIDTH, col->has_index ? "YES" : "NO");
+               static_cast<int>(SCHEMA_COLUMN_WIDTH), col->name,
+                static_cast<int>(SCHEMA_TYPE_WIDTH), data_type_to_string(col->type),
+                static_cast<int>(SCHEMA_FLAG_WIDTH), col->not_null ? "YES" : "NO",
+                static_cast<int>(SCHEMA_FLAG_WIDTH), col->is_primary ? "YES" : "NO",
+                static_cast<int>(SCHEMA_FLAG_WIDTH), col->has_index ? "YES" : "NO");
     }
 }
 
@@ -431,7 +431,7 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
     
     // 打印表头
     for (int i = 0; i < result->column_count; i++) {
-        printf("%-*s", QUERY_COLUMN_WIDTH, result->getColumnName(i));
+        printf("%-*s", (int)QUERY_COLUMN_WIDTH, result->getColumnName(i));
         if (i < result->column_count - 1) {
             printf(" | ");
         }
@@ -455,21 +455,21 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
             DataCell *cell = &result->rows[i][j];
             
             if (cell->is_null) {
-                printf("%-*s", QUERY_COLUMN_WIDTH, "NULL");
+                printf("%-*s", (int)QUERY_COLUMN_WIDTH, "NULL");
             } else {
                 char buffer[FORMAT_BUFFER_SIZE] = {0};
                 switch(cell->type) {
                     case TYPE_INT:
-                        snprintf(buffer, FORMAT_BUFFER_SIZE - 1, "%d", cell->value.int_val);
+                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%d", cell->value.int_val);
                         break;
                     case TYPE_FLOAT:
-                        snprintf(buffer, FORMAT_BUFFER_SIZE - 1, "%.2f", cell->value.float_val);
+                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%.2f", cell->value.float_val);
                         break;
                     case TYPE_STRING:
-                        snprintf(buffer, FORMAT_BUFFER_SIZE - 1, "%s", cell->value.string_val);
+                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%s", cell->value.string_val);
                         break;
                     case TYPE_BOOL:
-                        snprintf(buffer, FORMAT_BUFFER_SIZE - 1, "%s", cell->value.bool_val ? "true" : "false");
+                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%s", cell->value.bool_val ? "true" : "false");
                         break;
                     case TYPE_DATE:
                         strncpy(buffer, format_date(cell->value.date_val), DATE_FORMAT_SIZE);
@@ -477,7 +477,7 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
                     default:
                         strncpy(buffer, "UNKNOWN", DATE_FORMAT_SIZE);
                 }
-                printf("%-*s", QUERY_COLUMN_WIDTH, buffer);
+                printf("%-*s", (int)QUERY_COLUMN_WIDTH, buffer);
             }
             
             if (j < result->column_count - 1) {
@@ -629,17 +629,18 @@ int database_ops_demo()
     printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
     
     DataCell update_cells[USER_COLUMN_COUNT];
-    memset((void *)update_cells, 0, sizeof(update_cells));
+    memset(static_cast<void*>(update_cells), 0, sizeof(update_cells));
 
     for (int i = 0; i < USER_COLUMN_COUNT; i++) {
         update_cells[i].is_null = true;
     }
+    const int DATE_INDEX_3= 3;
     const int DATE_INDEX_4= 4;
     const int DATE_INDEX_7 = 7;
     update_cells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
     update_cells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
     
-    if (ops->update_table_row(3, update_cells)) {
+    if (ops->update_table_row(DATE_INDEX_3, update_cells)) {
         printf("更新成功！\n");
         operation_count++;
     }
@@ -740,7 +741,8 @@ int database_ops_demo()
     order_ops->insert_table_row(order1);
     order_ops->insert_table_row(order2);
     order_ops->insert_table_row(order3);
-    operation_count += 3;
+    const int DATE_INDEX3= 3;
+    operation_count += DATE_INDEX3;
     
     // 显示订单表
     order_ops->print_table_schema();

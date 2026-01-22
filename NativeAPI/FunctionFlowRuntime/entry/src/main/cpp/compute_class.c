@@ -303,6 +303,11 @@ Vector create_vector(int size)
 {
     Vector vec;
     vec.size = size;
+    if (size <= 0)
+    {
+        fprintf(stderr, "无效的内存申请大小\n");
+        exit(EXIT_FAILURE);
+    }
     vec.data = (double*)malloc(size * sizeof(double));
     if (vec.data == NULL) {
         fprintf(stderr, "内存分配失败\n");
@@ -557,6 +562,7 @@ Matrix qr_decomposition(const Matrix *A)
         
         if (norm > EPSILON) {
             for (int i = INIT_ZERO; i < m; i++) {
+                Q.data[i * n + j] = norm != 0 ? V.data[i * n + j] / norm : 0;
                 Q.data[i * n + j] = V.data[i * n + j] / norm;
             }
             
@@ -597,7 +603,11 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
     }
     norm = sqrt(norm);
     for (int i = INIT_ZERO; i < n; i++) {
-        b.data[i] /= norm;
+        if (norm != 0) {
+            b.data[i] /= norm;;
+        } else {
+            b.data[i] = 0; 
+        }
     }
     
     // 幂迭代
@@ -654,6 +664,9 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
 /* ========== 数值积分实现 ========== */
 double integrate_trapezoidal(double (*f)(double), double a, double b, int n)
 {
+    if (n == 0){
+        return 0;
+    }
     double h = (b - a) / n;
     double sum = DEFAULT_DIVISOR * (f(a) + f(b));
     
@@ -668,7 +681,9 @@ double integrate_trapezoidal(double (*f)(double), double a, double b, int n)
 double integrate_simpson(double (*f)(double), double a, double b, int n)
 {
     if (n % INIT_TWO != INIT_ZERO) n++;  // 确保n为偶数
-    
+    if (n == 0) {
+        return 0; // 避免除零错误
+    }
     double h = (b - a) / n;
     double sum = f(a) + f(b);
     
@@ -802,15 +817,17 @@ void fft(ComplexNum *data, int n)
     
     // 合并结果
     for (int k = INIT_ZERO; k < n/FFT_SEPARATION_FACTOR; k++) {
-        double angle = DEFAULT_MULTIPLIER * DFT_SIN_COEFF * PI * k / n;
-        ComplexNum t;
-        t.real = cos(angle) * odd[k].real - sin(angle) * odd[k].imag;
-        t.imag = sin(angle) * odd[k].real + cos(angle) * odd[k].imag;
-        
-        data[k].real = even[k].real + t.real;
-        data[k].imag = even[k].imag + t.imag;
-        data[k + n/FFT_SEPARATION_FACTOR].real = even[k].real - t.real;
-        data[k + n/FFT_SEPARATION_FACTOR].imag = even[k].imag - t.imag;
+        if (n != 0) { // 检查 n 是否为 0
+            double angle = DEFAULT_MULTIPLIER * DFT_SIN_COEFF * PI * k / n;
+            ComplexNum t;
+            t.real = cos(angle) * odd[k].real - sin(angle) * odd[k].imag;
+            t.imag = sin(angle) * odd[k].real + cos(angle) * odd[k].imag;
+            
+            data[k].real = even[k].real + t.real;
+            data[k].imag = even[k].imag + t.imag;
+            data[k + n/FFT_SEPARATION_FACTOR].real = even[k].real - t.real;
+            data[k + n/FFT_SEPARATION_FACTOR].imag = even[k].imag - t.imag;
+        }
     }
     
     free(even);
