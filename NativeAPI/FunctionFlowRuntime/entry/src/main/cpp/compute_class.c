@@ -112,33 +112,28 @@
 #define DEFAULT_DIVISOR        2.0
 
 /* ========== 数据结构 ========== */
-typedef struct
-{
+typedef struct {
     int rows;
     int cols;
     double *data;
 } Matrix;
 
-typedef struct
-{
+typedef struct {
     int size;
     double *data;
 } Vector;
 
-typedef struct
-{
+typedef struct {
     int degree;
     double coeffs[MAX_POLY_DEGREE + INIT_ONE];
 } Polynomial;
 
-typedef struct
-{
+typedef struct {
     double real;
     double imag;
 } ComplexNum;
 
-typedef struct
-{
+typedef struct {
     int iterations;
     double tolerance;
     double (*function)(double);
@@ -255,8 +250,7 @@ double vector_norm(const Vector *vec, int p);
 bool is_symmetric(const Matrix *mat);
 bool is_positive_definite(const Matrix *mat);
 
-struct ParaStruct
-{
+struct ParaStruct {
     int a;
     int b;
 };
@@ -287,8 +281,7 @@ Matrix create_matrix(int rows, int cols)
     mat.rows = rows;
     mat.cols = cols;
     mat.data = (double*)malloc(rows * cols * sizeof(double));
-    if (mat.data == NULL)
-    {
+    if (mat.data == NULL) {
         fprintf(stderr, "内存分配失败\n");
         exit(EXIT_FAILURE);
     }
@@ -298,8 +291,7 @@ Matrix create_matrix(int rows, int cols)
 
 void destroy_matrix(Matrix *mat)
 {
-    if (mat->data != NULL)
-    {
+    if (mat->data != NULL) {
         free(mat->data);
         mat->data = NULL;
     }
@@ -312,8 +304,7 @@ Vector create_vector(int size)
     Vector vec;
     vec.size = size;
     vec.data = (double*)malloc(size * sizeof(double));
-    if (vec.data == NULL)
-    {
+    if (vec.data == NULL) {
         fprintf(stderr, "内存分配失败\n");
         exit(EXIT_FAILURE);
     }
@@ -323,8 +314,7 @@ Vector create_vector(int size)
 
 void destroy_vector(Vector *vec)
 {
-    if (vec->data != NULL)
-    {
+    if (vec->data != NULL) {
         free(vec->data);
         vec->data = NULL;
     }
@@ -348,8 +338,7 @@ Vector copy_vector(const Vector *src)
 /* ========== 基本运算实现 ========== */
 Matrix matrix_add(const Matrix *a, const Matrix *b)
 {
-    if (a->rows != b->rows || a->cols != b->cols)
-    {
+    if (a->rows != b->rows || a->cols != b->cols) {
         fprintf(stderr, "矩阵维度不匹配\n");
         exit(EXIT_FAILURE);
     }
@@ -357,8 +346,7 @@ Matrix matrix_add(const Matrix *a, const Matrix *b)
     Matrix result = create_matrix(a->rows, a->cols);
     int total = a->rows * a->cols;
     
-    for (int i = INIT_ZERO; i < total; i++)
-    {
+    for (int i = INIT_ZERO; i < total; i++) {
         result.data[i] = a->data[i] + b->data[i];
     }
     
@@ -367,21 +355,17 @@ Matrix matrix_add(const Matrix *a, const Matrix *b)
 
 Matrix matrix_multiply(const Matrix *a, const Matrix *b)
 {
-    if (a->cols != b->rows)
-    {
+    if (a->cols != b->rows) {
         fprintf(stderr, "矩阵维度不匹配，无法相乘\n");
         exit(EXIT_FAILURE);
     }
     
     Matrix result = create_matrix(a->rows, b->cols);
     
-    for (int i = INIT_ZERO; i < a->rows; i++)
-    {
-        for (int j = INIT_ZERO; j < b->cols; j++)
-        {
+    for (int i = INIT_ZERO; i < a->rows; i++) {
+        for (int j = INIT_ZERO; j < b->cols; j++) {
             double sum = INIT_VALUE_1;
-            for (int k = INIT_ZERO; k < a->cols; k++)
-            {
+            for (int k = INIT_ZERO; k < a->cols; k++) {
                 sum += a->data[i * a->cols + k] * b->data[k * b->cols + j];
             }
             result.data[i * b->cols + j] = sum;
@@ -395,10 +379,8 @@ Matrix matrix_transpose(const Matrix *mat)
 {
     Matrix result = create_matrix(mat->cols, mat->rows);
     
-    for (int i = INIT_ZERO; i < mat->rows; i++)
-    {
-        for (int j = INIT_ZERO; j < mat->cols; j++)
-        {
+    for (int i = INIT_ZERO; i < mat->rows; i++) {
+        for (int j = INIT_ZERO; j < mat->cols; j++) {
             result.data[j * mat->rows + i] = mat->data[i * mat->cols + j];
         }
     }
@@ -408,8 +390,7 @@ Matrix matrix_transpose(const Matrix *mat)
 
 double matrix_determinant(const Matrix *mat)
 {
-    if (mat->rows != mat->cols)
-    {
+    if (mat->rows != mat->cols) {
         fprintf(stderr, "只有方阵才有行列式\n");
         exit(EXIT_FAILURE);
     }
@@ -417,14 +398,12 @@ double matrix_determinant(const Matrix *mat)
     int n = mat->rows;
     
     // 1x1 矩阵
-    if (n == INIT_ONE)
-    {
+    if (n == INIT_ONE) {
         return mat->data[INIT_ZERO];
     }
     
     // 2x2 矩阵
-    if (n == INIT_TWO)
-    {
+    if (n == INIT_TWO) {
         return mat->data[INIT_ZERO] * mat->data[MATRIX_INDEX_OFFSET] - mat->data[INIT_ONE] * mat->data[INIT_TWO];
     }
     
@@ -432,17 +411,14 @@ double matrix_determinant(const Matrix *mat)
     double det = INIT_VALUE_1;
     int sign = MATRIX_DET_SIGN_1;
     
-    for (int j = INIT_ZERO; j < n; j++)
-    {
+    for (int j = INIT_ZERO; j < n; j++) {
         // 创建子矩阵
         Matrix submat = create_matrix(n - INIT_ONE, n - INIT_ONE);
         int sub_i = INIT_ZERO;
         
-        for (int i = INIT_ONE; i < n; i++)
-        {
+        for (int i = INIT_ONE; i < n; i++) {
             int sub_j = INIT_ZERO;
-            for (int k = INIT_ZERO; k < n; k++)
-            {
+            for (int k = INIT_ZERO; k < n; k++) {
                 if (k == j) continue;
                 submat.data[sub_i * (n - INIT_ONE) + sub_j] = mat->data[i * n + k];
                 sub_j++;
@@ -462,8 +438,7 @@ double matrix_determinant(const Matrix *mat)
 /* ========== LU分解实现 ========== */
 Matrix lu_decomposition(const Matrix *A)
 {
-    if (A->rows != A->cols)
-    {
+    if (A->rows != A->cols) {
         fprintf(stderr, "LU分解需要方阵\n");
         exit(EXIT_FAILURE);
     }
@@ -471,20 +446,16 @@ Matrix lu_decomposition(const Matrix *A)
     int n = A->rows;
     Matrix LU = copy_matrix(A);
     
-    for (int k = INIT_ZERO; k < n - INIT_ONE; k++)
-    {
-        if (fabs(LU.data[k * n + k]) < EPSILON)
-        {
+    for (int k = INIT_ZERO; k < n - INIT_ONE; k++) {
+        if (fabs(LU.data[k * n + k]) < EPSILON) {
             fprintf(stderr, "主元为零，无法进行LU分解\n");
             exit(EXIT_FAILURE);
         }
         
-        for (int i = k + INIT_ONE; i < n; i++)
-        {
+        for (int i = k + INIT_ONE; i < n; i++) {
             LU.data[i * n + k] /= LU.data[k * n + k];
             
-            for (int j = k + INIT_ONE; j < n; j++)
-            {
+            for (int j = k + INIT_ONE; j < n; j++) {
                 LU.data[i * n + j] -= LU.data[i * n + k] * LU.data[k * n + j];
             }
         }
@@ -498,11 +469,9 @@ Vector forward_substitution(const Matrix *L, const Vector *b)
     int n = L->rows;
     Vector x = create_vector(n);
     
-    for (int i = INIT_ZERO; i < n; i++)
-    {
+    for (int i = INIT_ZERO; i < n; i++) {
         double sum = INIT_VALUE_1;
-        for (int j = INIT_ZERO; j < i; j++)
-        {
+        for (int j = INIT_ZERO; j < i; j++) {
             sum += L->data[i * n + j] * x.data[j];
         }
         x.data[i] = (b->data[i] - sum) / L->data[i * n + i];
@@ -516,11 +485,9 @@ Vector backward_substitution(const Matrix *U, const Vector *b)
     int n = U->rows;
     Vector x = create_vector(n);
     
-    for (int i = n - INIT_ONE; i >= INIT_ZERO; i--)
-    {
+    for (int i = n - INIT_ONE; i >= INIT_ZERO; i--) {
         double sum = INIT_VALUE_1;
-        for (int j = i + INIT_ONE; j < n; j++)
-        {
+        for (int j = i + INIT_ONE; j < n; j++) {
             sum += U->data[i * n + j] * x.data[j];
         }
         x.data[i] = (b->data[i] - sum) / U->data[i * n + i];
@@ -539,22 +506,15 @@ Vector solve_linear_system_lu(const Matrix *A, const Vector *b)
     Matrix L = create_matrix(n, n);
     Matrix U = create_matrix(n, n);
     
-    for (int i = INIT_ZERO; i < n; i++)
-    {
-        for (int j = INIT_ZERO; j < n; j++)
-        {
-            if (i > j)
-            {
+    for (int i = INIT_ZERO; i < n; i++) {
+        for (int j = INIT_ZERO; j < n; j++) {
+            if (i > j) {
                 L.data[i * n + j] = LU.data[i * n + j];
                 U.data[i * n + j] = INIT_VALUE_1;
-            }
-            else if (i == j)
-            {
+            } else if (i == j) {
                 L.data[i * n + j] = INIT_VALUE_1;
                 U.data[i * n + j] = LU.data[i * n + j];
-            }
-            else
-            {
+            } else {
                 L.data[i * n + j] = INIT_VALUE_1;
                 U.data[i *n + j] = LU.data[i * n + j];
             }
@@ -584,12 +544,10 @@ Matrix qr_decomposition(const Matrix *A)
     Matrix R = create_matrix(n, n);
     Matrix V = copy_matrix(A);
     
-    for (int j = INIT_ZERO; j < n; j++)
-    {
+    for (int j = INIT_ZERO; j < n; j++) {
         // 计算第j列的范数
         double norm = INIT_VALUE_1;
-        for (int i = INIT_ZERO; i < m; i++)
-        {
+        for (int i = INIT_ZERO; i < m; i++) {
             norm += V.data[i * n + j] * V.data[i * n + j];
         }
         norm = sqrt(norm);
@@ -597,25 +555,20 @@ Matrix qr_decomposition(const Matrix *A)
         // 构造Householder向量
         R.data[j * n + j] = norm;
         
-        if (norm > EPSILON)
-        {
-            for (int i = INIT_ZERO; i < m; i++)
-            {
+        if (norm > EPSILON) {
+            for (int i = INIT_ZERO; i < m; i++) {
                 Q.data[i * n + j] = V.data[i * n + j] / norm;
             }
             
             // 更新剩余列
-            for (int k = j + INIT_ONE; k < n; k++)
-            {
+            for (int k = j + INIT_ONE; k < n; k++) {
                 double dot = INIT_VALUE_1;
-                for (int i = INIT_ZERO; i < m; i++)
-                {
+                for (int i = INIT_ZERO; i < m; i++) {
                     dot += Q.data[i * n + j] * V.data[i * n + k];
                 }
                 R.data[j * n + k] = dot;
                 
-                for (int i = INIT_ZERO; i < m; i++)
-                {
+                for (int i = INIT_ZERO; i < m; i++) {
                     V.data[i * n + k] -= DEFAULT_MULTIPLIER * Q.data[i * n + j] * dot;
                 }
             }
@@ -633,34 +586,28 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
     Vector b = create_vector(n);
     
     // 初始化随机向量
-    for (int i = INIT_ZERO; i < n; i++)
-    {
+    for (int i = INIT_ZERO; i < n; i++) {
         b.data[i] = (double)rand() / RAND_MAX;
     }
     
     // 归一化
     double norm = POWER_ITER_INIT_VAL;
-    for (int i = INIT_ZERO; i < n; i++)
-    {
+    for (int i = INIT_ZERO; i < n; i++) {
         norm += b.data[i] * b.data[i];
     }
     norm = sqrt(norm);
-    for (int i = INIT_ZERO; i < n; i++)
-    {
+    for (int i = INIT_ZERO; i < n; i++) {
         b.data[i] /= norm;
     }
     
     // 幂迭代
     double eigenvalue = POWER_ITER_INIT_VAL;
-    for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++)
-    {
+    for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++) {
         // 计算 Ab
         Vector Ab = create_vector(n);
-        for (int i = INIT_ZERO; i < n; i++)
-        {
+        for (int i = INIT_ZERO; i < n; i++) {
             Ab.data[i] = POWER_ITER_INIT_VAL;
-            for (int j = INIT_ZERO; j < n; j++)
-            {
+            for (int j = INIT_ZERO; j < n; j++) {
                 Ab.data[i] += A->data[i * n + j] * b.data[j];
             }
         }
@@ -668,20 +615,17 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
         // 计算 Rayleigh 商
         double numerator = POWER_ITER_INIT_VAL;
         double denominator = POWER_ITER_INIT_VAL;
-        for (int i = INIT_ZERO; i < n; i++)
-        {
+        for (int i = INIT_ZERO; i < n; i++) {
             numerator += b.data[i] * Ab.data[i];
             denominator += b.data[i] * b.data[i];
         }
         double new_eigenvalue = numerator / denominator;
         
         // 检查收敛
-        if (fabs(new_eigenvalue - eigenvalue) < EPSILON)
-        {
+        if (fabs(new_eigenvalue - eigenvalue) < EPSILON) {
             eigenvalue = new_eigenvalue;
             // 复制特征向量
-            for (int i = INIT_ZERO; i < n; i++)
-            {
+            for (int i = INIT_ZERO; i < n; i++) {
                 eigenvector->data[i] = b.data[i];
             }
             destroy_vector(&Ab);
@@ -692,13 +636,11 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
         
         // 归一化新向量
         norm = POWER_ITER_INIT_VAL;
-        for (int i = INIT_ZERO; i < n; i++)
-        {
+        for (int i = INIT_ZERO; i < n; i++) {
             norm += Ab.data[i] * Ab.data[i];
         }
         norm = sqrt(norm);
-        for (int i = INIT_ZERO; i < n; i++)
-        {
+        for (int i = INIT_ZERO; i < n; i++) {
             b.data[i] = Ab.data[i] / norm;
         }
         
@@ -715,8 +657,7 @@ double integrate_trapezoidal(double (*f)(double), double a, double b, int n)
     double h = (b - a) / n;
     double sum = DEFAULT_DIVISOR * (f(a) + f(b));
     
-    for (int i = INIT_ONE; i < n; i++)
-    {
+    for (int i = INIT_ONE; i < n; i++) {
         double x = a + i * h;
         sum += f(x);
     }
@@ -731,15 +672,11 @@ double integrate_simpson(double (*f)(double), double a, double b, int n)
     double h = (b - a) / n;
     double sum = f(a) + f(b);
     
-    for (int i = INIT_ONE; i < n; i++)
-    {
+    for (int i = INIT_ONE; i < n; i++) {
         double x = a + i * h;
-        if (i % INIT_TWO == INIT_ZERO)
-        {
+        if (i % INIT_TWO == INIT_ZERO) {
             sum += SIMPSON_EVEN_COEFF * f(x);
-        }
-        else
-        {
+        } else {
             sum += SIMPSON_ODD_COEFF * f(x);
         }
     }
@@ -755,15 +692,13 @@ double integrate_romberg(double (*f)(double), double a, double b, double tol)
     // 初始梯形公式
     R[INIT_ZERO][INIT_ZERO] = (b - a) * (f(a) + f(b)) / DEFAULT_MULTIPLIER;
     
-    for (k = INIT_ONE; k < MAX_ITERATIONS; k++)
-    {
+    for (k = INIT_ONE; k < MAX_ITERATIONS; k++) {
         // 计算梯形公式的递归
         int n = INIT_ONE << k;  // 2^k
         double h = (b - a) / n;
         double sum = INIT_VALUE_1;
         
-        for (int i = INIT_ONE; i < n; i += INIT_TWO)
-        {
+        for (int i = INIT_ONE; i < n; i += INIT_TWO) {
             double x = a + i * h;
             sum += f(x);
         }
@@ -771,14 +706,12 @@ double integrate_romberg(double (*f)(double), double a, double b, double tol)
         R[k][INIT_ZERO] = ROMBERG_CONV_FACTOR * R[k-INIT_ONE][INIT_ZERO] + h * sum;
         
         // Richardson 外推
-        for (int j = INIT_ONE; j <= k; j++)
-        {
+        for (int j = INIT_ONE; j <= k; j++) {
             R[k][j] = R[k][j-INIT_ONE] + (R[k][j-INIT_ONE] - R[k-INIT_ONE][j-INIT_ONE]) / (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
         }
         
         // 检查收敛
-        if (k > INIT_ZERO && fabs(R[k][k] - R[k-INIT_ONE][k-INIT_ONE]) < tol)
-        {
+        if (k > INIT_ZERO && fabs(R[k][k] - R[k-INIT_ONE][k-INIT_ONE]) < tol) {
             return R[k][k];
         }
     }
@@ -797,8 +730,7 @@ Vector solve_ode_rk4(double (*f)(double, double), double y0,
     double t = t0;
     double y = y0;
     
-    for (int i = INIT_ZERO; i < steps; i++)
-    {
+    for (int i = INIT_ZERO; i < steps; i++) {
         double k1 = h * f(t, y);
         double k2 = h * f(t + h/DEFAULT_MULTIPLIER, y + k1/DEFAULT_MULTIPLIER);
         double k3 = h * f(t + h/DEFAULT_MULTIPLIER, y + k2/DEFAULT_MULTIPLIER);
@@ -816,13 +748,11 @@ Vector solve_ode_rk4(double (*f)(double, double), double y0,
 /* ========== 傅里叶变换实现 ========== */
 void dft(const double *input, ComplexNum *output, int n)
 {
-    for (int k = INIT_ZERO; k < n; k++)
-    {
+    for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
         double imag = INIT_VALUE_1;
         
-        for (int t = INIT_ZERO; t < n; t++)
-        {
+        for (int t = INIT_ZERO; t < n; t++) {
             double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
             real += input[t] * cos(angle);
             imag += DFT_SIN_COEFF * input[t] * sin(angle);
@@ -835,13 +765,11 @@ void dft(const double *input, ComplexNum *output, int n)
 
 void idft(const ComplexNum *input, double *output, int n)
 {
-    for (int k = INIT_ZERO; k < n; k++)
-    {
+    for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
         double imag = INIT_VALUE_1;
         
-        for (int t = INIT_ZERO; t < n; t++)
-        {
+        for (int t = INIT_ZERO; t < n; t++) {
             double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
             real += input[t].real * cos(angle) - input[t].imag * sin(angle);
             imag += input[t].real * sin(angle) + input[t].imag * cos(angle);
@@ -859,8 +787,7 @@ void fft(ComplexNum *data, int n)
     ComplexNum *even = (ComplexNum*)malloc(n/FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
     ComplexNum *odd = (ComplexNum*)malloc(n/FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
     
-    for (int i = INIT_ZERO; i < n/FFT_SEPARATION_FACTOR; i++)
-    {
+    for (int i = INIT_ZERO; i < n/FFT_SEPARATION_FACTOR; i++) {
         even[i] = data[i * FFT_SEPARATION_FACTOR];
         odd[i] = data[i * FFT_SEPARATION_FACTOR + INIT_ONE];
     }
@@ -870,8 +797,7 @@ void fft(ComplexNum *data, int n)
     fft(odd, n/FFT_SEPARATION_FACTOR);
     
     // 合并结果
-    for (int k = INIT_ZERO; k < n/FFT_SEPARATION_FACTOR; k++)
-    {
+    for (int k = INIT_ZERO; k < n/FFT_SEPARATION_FACTOR; k++) {
         double angle = DEFAULT_MULTIPLIER * DFT_SIN_COEFF * PI * k / n;
         ComplexNum t;
         t.real = cos(angle) * odd[k].real - sin(angle) * odd[k].imag;
@@ -895,18 +821,14 @@ double minimize_golden_section(double (*f)(double), double a, double b, double t
     double fc = f(c);
     double fd = f(d);
     
-    while (fabs(c - d) > tol)
-    {
-        if (fc < fd)
-        {
+    while (fabs(c - d) > tol) {
+        if (fc < fd) {
             b = d;
             d = c;
             c = b - GOLDEN_RATIO * (b - a);
             fd = fc;
             fc = f(c);
-        }
-        else
-        {
+        } else {
             a = c;
             c = d;
             d = a + GOLDEN_RATIO * (b - a);
@@ -930,21 +852,18 @@ double minimize_brent(double (*f)(double), double a, double b, double c, double 
     double d = INIT_VALUE_1;
     double e = INIT_VALUE_1;
     
-    for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++)
-    {
+    for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++) {
         double xm = (a + b) / DEFAULT_MULTIPLIER;
         double tol1 = tol * fabs(x) + EPSILON;
         double tol2 = DEFAULT_MULTIPLIER * tol1;
         
         // 检查收敛
-        if (fabs(x - xm) <= (tol2 - BRENT_P_COEFF_1 * (b - a)))
-        {
+        if (fabs(x - xm) <= (tol2 - BRENT_P_COEFF_1 * (b - a))) {
             return x;
         }
         
         // 尝试抛物线插值
-        if (fabs(e) > tol1)
-        {
+        if (fabs(e) > tol1) {
             double r = (x - w) * (fx - fv);
             double q = (x - v) * (fx - fw);
             double p = (x - v) * q - (x - w) * r;
@@ -957,24 +876,18 @@ double minimize_brent(double (*f)(double), double a, double b, double c, double 
             e = d;
             
             // 检查抛物线步长是否可接受
-            if (fabs(p) < fabs(BRENT_P_COEFF_1 * q * etemp) && p > q * (a - x) && p < q * (b - x))
-            {
+            if (fabs(p) < fabs(BRENT_P_COEFF_1 * q * etemp) && p > q * (a - x) && p < q * (b - x)) {
                 d = p / q;
                 double u = x + d;
                 
-                if (u - a < tol2 || b - u < tol2)
-                {
+                if (u - a < tol2 || b - u < tol2) {
                     d = (x < xm) ? tol1 : -tol1;
                 }
-            }
-            else
-            {
+            } else {
                 e = (x < xm) ? b - x : a - x;
                 d = GOLDEN_RATIO * e;
             }
-        }
-        else
-        {
+        } else {
             e = (x < xm) ? b - x : a - x;
             d = GOLDEN_RATIO * e;
         }
@@ -984,23 +897,17 @@ double minimize_brent(double (*f)(double), double a, double b, double c, double 
         double fu = f(u);
         
         // 更新区间
-        if (fu <= fx)
-        {
+        if (fu <= fx) {
             if (u >= x) a = x; else b = x;
             v = w; fv = fw;
             w = x; fw = fx;
             x = u; fx = fu;
-        }
-        else
-        {
+        } else {
             if (u < x) a = u; else b = u;
-            if (fu <= fw || w == x)
-            {
+            if (fu <= fw || w == x) {
                 v = w; fv = fw;
                 w = u; fw = fu;
-            }
-            else if (fu <= fv || v == x || v == w)
-            {
+            } else if (fu <= fv || v == x || v == w) {
                 v = u; fv = fu;
             }
         }
@@ -1016,11 +923,9 @@ Vector minimize_gradient_descent(double (*f)(const Vector*),
     Vector x = copy_vector(x0);
     Vector grad = create_vector(x0->size);
     
-    for (int iter = INIT_ZERO; iter < iterations; iter++)
-    {
+    for (int iter = INIT_ZERO; iter < iterations; iter++) {
         // 计算梯度（简化：使用数值梯度）
-        for (int i = INIT_ZERO; i < x.size; i++)
-        {
+        for (int i = INIT_ZERO; i < x.size; i++) {
             Vector x_plus = copy_vector(&x);
             Vector x_minus = copy_vector(&x);
             
@@ -1034,21 +939,18 @@ Vector minimize_gradient_descent(double (*f)(const Vector*),
         }
         
         // 更新参数
-        for (int i = INIT_ZERO; i < x.size; i++)
-        {
+        for (int i = INIT_ZERO; i < x.size; i++) {
             x.data[i] -= learning_rate * grad.data[i];
         }
         
         // 检查收敛
         double grad_norm = INIT_VALUE_1;
-        for (int i = INIT_ZERO; i < x.size; i++)
-        {
+        for (int i = INIT_ZERO; i < x.size; i++) {
             grad_norm += grad.data[i] * grad.data[i];
         }
         grad_norm = sqrt(grad_norm);
         
-        if (grad_norm < EPSILON)
-        {
+        if (grad_norm < EPSILON) {
             break;
         }
     }
@@ -1065,11 +967,9 @@ Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
     
     // 构造范德蒙德矩阵
     Matrix A = create_matrix(n, m);
-    for (int i = INIT_ZERO; i < n; i++)
-    {
+    for (int i = INIT_ZERO; i < n; i++) {
         double power = INIT_VALUE_1;
-        for (int j = INIT_ZERO; j < m; j++)
-        {
+        for (int j = INIT_ZERO; j < m; j++) {
             A.data[i * m + j] = power;
             power *= x->data[i];
         }
@@ -1080,11 +980,9 @@ Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
     Matrix ATA = matrix_multiply(&AT, &A);
     
     Vector ATy = create_vector(m);
-    for (int i = INIT_ZERO; i < m; i++)
-    {
+    for (int i = INIT_ZERO; i < m; i++) {
         ATy.data[i] = INIT_VALUE_1;
-        for (int j = INIT_ZERO; j < n; j++)
-        {
+        for (int j = INIT_ZERO; j < n; j++) {
             ATy.data[i] += AT.data[i * n + j] * y->data[j];
         }
     }
@@ -1186,8 +1084,7 @@ Vector RandomNormal(int n, double mean, double stddev)
 {
     Vector result = create_vector(n);
     
-    for (int i = INIT_ZERO; i < n; i += INIT_TWO)
-    {
+    for (int i = INIT_ZERO; i < n; i += INIT_TWO) {
         // Box-Muller 变换
         double u1 = (double)rand() / RAND_MAX;
         double u2 = (double)rand() / RAND_MAX;
@@ -1196,8 +1093,7 @@ Vector RandomNormal(int n, double mean, double stddev)
         double z1 = sqrt(BOX_MULLER_COEFF * log(u1)) * sin(DEFAULT_MULTIPLIER * PI * u2);
         
         result.data[i] = mean + stddev * z0;
-        if (i + INIT_ONE < n)
-        {
+        if (i + INIT_ONE < n) {
             result.data[i + INIT_ONE] = mean + stddev * z1;
         }
     }
@@ -1220,10 +1116,8 @@ void compute(void *arg)
     Matrix B = create_matrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
     
     // 初始化矩阵
-    for (int i = INIT_ZERO; i < TEST_MATRIX_SIZE; i++)
-    {
-        for (int j = INIT_ZERO; j < TEST_MATRIX_SIZE; j++)
-        {
+    for (int i = INIT_ZERO; i < TEST_MATRIX_SIZE; i++) {
+        for (int j = INIT_ZERO; j < TEST_MATRIX_SIZE; j++) {
             A.data[i * TEST_MATRIX_SIZE + j] = i * TEST_MATRIX_SIZE + j + INIT_ONE;
             B.data[i * TEST_MATRIX_SIZE + j] = (i == j) ? INIT_VALUE_1 : INIT_VALUE_1;
         }
@@ -1274,8 +1168,7 @@ void compute(void *arg)
     Vector xs = create_vector(TEST_POLY_FIT_POINTS);
     Vector ys = create_vector(TEST_POLY_FIT_POINTS);
     
-    for (int i = INIT_ZERO; i < TEST_POLY_FIT_POINTS; i++)
-    {
+    for (int i = INIT_ZERO; i < TEST_POLY_FIT_POINTS; i++) {
         xs.data[i] = i;
         ys.data[i] = INIT_TWO*i + INIT_ONE + TEST_NOISE_AMPLITUDE*((double)rand()/RAND_MAX - DEFAULT_DIVISOR);
     }
@@ -1301,8 +1194,7 @@ void compute(void *arg)
     Vector rands = RandomNormal(TEST_RANDOM_SAMPLES, NORM_MEAN, NORM_STDDEV);
     
     double mean = INIT_VALUE_1;
-    for (int i = INIT_ZERO; i < TEST_RANDOM_SAMPLES; i++)
-    {
+    for (int i = INIT_ZERO; i < TEST_RANDOM_SAMPLES; i++) {
         mean += rands.data[i];
     }
     mean /= TEST_RANDOM_SAMPLES;
@@ -1329,8 +1221,7 @@ int ComputeFfrtQueue()
 {
     // 并行调度
     ffrt_queue_t bank = CreateBankSystem("Bank", INIT_TWO, TYPE_CONCURRENT);
-    if (!bank)
-    {
+    if (!bank) {
         LOGE("create bank system failed");
         return RET_FAILURE;
     }
@@ -1370,12 +1261,9 @@ int ComputeFfrtQueue()
     ffrt_task_handle_destroy(task3);
     
     LOGI("FfrtQueue results ");
-    if (g_add_ret == RET_SUCCESS && g_sub_ret == RET_SUCCESS && g_compute_ret == RET_SUCCESS)
-    {
+    if (g_add_ret == RET_SUCCESS && g_sub_ret == RET_SUCCESS && g_compute_ret == RET_SUCCESS) {
         return RET_SUCCESS_5;
-    }
-    else
-    {
+    } else {
         return RET_FAILURE;
     }
 }
