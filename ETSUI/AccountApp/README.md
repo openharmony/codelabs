@@ -8,11 +8,7 @@
 
   ![添加账号](./photo/1.gif)
 
-- 图2：健康评分
-
-  <img src="./photo/rank.png" alt="评分" style="zoom:30%;" />
-
-- 图3：编辑账号
+- 图2：编辑账号
 
   ![账号](./photo/3.gif)
 
