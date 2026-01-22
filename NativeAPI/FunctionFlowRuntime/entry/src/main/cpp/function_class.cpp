@@ -25,6 +25,7 @@
 #define TYPE_CONCURRENT  0
 #define TYPE_SERIAL 1
 #define TWO  2
+#define THREE  3
 
 
 /* 定义三个全局变量返回值 */
@@ -113,7 +114,7 @@ int FunctionClass::FfrtSerialQueue()
 int FunctionClass::FfrtConcurrentQueue()
 {
     // type传0，代表并发调度
-    BankQueueSystem bankQueue(TYPE_CONCURRENT, "Bank", 3);
+    BankQueueSystem bankQueue(TYPE_CONCURRENT, "Bank", THREE);
 
     auto task1 = bankQueue.Enter(BankBusiness2, "customer1", ffrt_queue_priority_low, 0);
     // VIP享受更优先的服务

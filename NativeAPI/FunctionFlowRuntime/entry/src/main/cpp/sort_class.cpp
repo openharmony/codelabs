@@ -24,8 +24,15 @@
 #include <algorithm>
 #include <random>
 #include <thread>
+#define ZERO 0
+#define TWO 2
+#define THREE 3
+#define TEN 10
 #define FIFTY 50
 #define ONE_HUNDRED 100
+#define FIVE_THOUSAND 5000
+#define MAX_MATRIX_SIZE        1000
+#define RET_SUCCESS_6         6
 using namespace std;
 
 // 常量定义
@@ -1045,7 +1052,7 @@ public:
         vector<vector<int>> buckets(bucketCount);
         
         // 将元素分配到桶中
-        double range = (double)(maxVal - minVal + 1) / bucketCount;
+        double range = bucketCount == 0 ? 0 : (double)(maxVal - minVal + 1) / bucketCount;
         
         for (int i = 0; i < n; i++) {
             int bucketIndex = (arr[i] - minVal) / range;
@@ -1094,7 +1101,7 @@ public:
         normal_distribution<> dis(mean, stddev);
         
         for (int i = 0; i < size; i++) {
-            data[i] = max(0, min(1000, (int)dis(gen)));
+            data[i] = max(ZERO, min(MAX_MATRIX_SIZE, (int)dis(gen)));
         }
         return data;
     }
@@ -1149,7 +1156,7 @@ public:
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
-        uniform_int_distribution<> dis(-5000, 5000);
+        uniform_int_distribution<> dis(-FIVE_THOUSAND, FIVE_THOUSAND);
         
         for (int i = 0; i < size; i++) {
             data[i] = dis(gen);
@@ -1165,9 +1172,9 @@ public:
         
         int minVal = 1;
         for (int i = 1; i < digits; i++) {
-            minVal *= 10;
+            minVal *= TEN;
         }
-        int maxVal = minVal * 10 - 1;
+        int maxVal = minVal * TEN - 1;
         
         uniform_int_distribution<> dis(minVal, maxVal);
         
@@ -1201,7 +1208,7 @@ void BankBusinessBasebucketSortOptimized()
         
         vector<vector<int>> allData = {uniformData, gaussianData, expData};
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < THREE; i++) {
             vector<int> data = allData[i];
             // 优化桶排序
             auto start = chrono::high_resolution_clock::now();
@@ -1229,7 +1236,7 @@ public:
         }
         
         // 确定桶数量（根据CPU核心数优化）
-        int bucketCount = min(n, (int)thread::hardware_concurrency() * 4);
+        int bucketCount = min(n, static_cast<int>(thread::hardware_concurrency()) * 4);
         bucketCount = max(bucketCount, 4);  // 至少4个桶
         
         // 找到最小值和最大值
@@ -1479,10 +1486,10 @@ private:
 
     // 计算最大位数
     int getMaxDigits(int maxVal, int radix) {
-        int digits = 0;
-        while (maxVal > 0) {
-            digits++;
-            maxVal /= radix;
+       int digits = 0;
+       while (maxVal > 0 && radix != 0) {
+        digits++;
+        maxVal /= radix;
         }
         return max(1, digits);
     }
@@ -1903,7 +1910,7 @@ private:
         }
         
         // 计算起始位置
-        for (int i = 1; i < ASCII_CHAR_COUNT + 2; i++) {
+        for (int i = 1; i < ASCII_CHAR_COUNT + TWO; i++) {
             count[i] += count[i - 1];
         }
         
@@ -2028,5 +2035,5 @@ int SortClass::FfrtConcurrentQueue()
     bankQueue.Wait(task24);
     bankQueue.Wait(task25);
     LOGI("FfrtQueue results ");
-    return 6;
+    return RET_SUCCESS_6;
 }
