@@ -171,7 +171,7 @@ Vector solve_linear_system(const Matrix *A, const Vector *b);
 Vector solve_linear_system_lu(const Matrix *A, const Vector *b);
 Matrix lu_decomposition(const Matrix *A);
 Vector forward_substitution(const Matrix *L, const Vector *b);
-Vector backward_substitution(const Matrix *U, const Vector *b);
+Vector BackwardSubstitution(const Matrix *U, const Vector *b);
 
 // 特征值/特征向量
 Matrix qr_decomposition(const Matrix *A);
@@ -449,24 +449,24 @@ Matrix lu_decomposition(const Matrix *A)
     }
     
     int n = A->rows;
-    Matrix LU = copy_matrix(A);
+    Matrix lu = copy_matrix(A);
     
     for (int k = INIT_ZERO; k < n - INIT_ONE; k++) {
-        if (fabs(LU.data[k * n + k]) < EPSILON) {
+        if (fabs(lu.data[k * n + k]) < EPSILON) {
             fprintf(stderr, "主元为零，无法进行LU分解\n");
             exit(EXIT_FAILURE);
         }
         
         for (int i = k + INIT_ONE; i < n; i++) {
-            LU.data[i * n + k] /= LU.data[k * n + k];
+            lu.data[i * n + k] /= lu.data[k * n + k];
             
             for (int j = k + INIT_ONE; j < n; j++) {
-                LU.data[i * n + j] -= LU.data[i * n + k] * LU.data[k * n + j];
+                lu.data[i * n + j] -= lu.data[i * n + k] * lu.data[k * n + j];
             }
         }
     }
     
-    return LU;
+    return lu;
 }
 
 Vector forward_substitution(const Matrix *L, const Vector *b)
@@ -485,7 +485,7 @@ Vector forward_substitution(const Matrix *L, const Vector *b)
     return x;
 }
 
-Vector backward_substitution(const Matrix *U, const Vector *b)
+Vector BackwardSubstitution(const Matrix *U, const Vector *b)
 {
     int n = U->rows;
     Vector x = create_vector(n);
@@ -504,7 +504,7 @@ Vector backward_substitution(const Matrix *U, const Vector *b)
 /* ========== 线性方程组求解 ========== */
 Vector solve_linear_system_lu(const Matrix *A, const Vector *b)
 {
-    Matrix LU = lu_decomposition(A);
+    Matrix lu = lu_decomposition(A);
     int n = A->rows;
     
     // 从LU分解中提取L和U
@@ -514,14 +514,14 @@ Vector solve_linear_system_lu(const Matrix *A, const Vector *b)
     for (int i = INIT_ZERO; i < n; i++) {
         for (int j = INIT_ZERO; j < n; j++) {
             if (i > j) {
-                L.data[i * n + j] = LU.data[i * n + j];
+                L.data[i * n + j] = lu.data[i * n + j];
                 U.data[i * n + j] = INIT_VALUE_1;
             } else if (i == j) {
                 L.data[i * n + j] = INIT_VALUE_1;
-                U.data[i * n + j] = LU.data[i * n + j];
+                U.data[i * n + j] = lu.data[i * n + j];
             } else {
                 L.data[i * n + j] = INIT_VALUE_1;
-                U.data[i *n + j] = LU.data[i * n + j];
+                U.data[i *n + j] = lu.data[i * n + j];
             }
         }
     }
@@ -530,9 +530,9 @@ Vector solve_linear_system_lu(const Matrix *A, const Vector *b)
     Vector y = forward_substitution(&L, b);
     
     // 解 Ux = y
-    Vector x = backward_substitution(&U, &y);
+    Vector x = BackwardSubstitution(&U, &y);
     
-    destroy_matrix(&LU);
+    destroy_matrix(&lu);
     destroy_matrix(&L);
     destroy_matrix(&U);
     destroy_vector(&y);

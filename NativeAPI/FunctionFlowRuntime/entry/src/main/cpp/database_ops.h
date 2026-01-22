@@ -364,7 +364,7 @@ public:
     ~DataBaseOps();
     TableIndex* create_table_index(const char *column_name);
     bool delete_table_row(int row_id);
-    SmartQueryResult* execute_select_query(const char *where_clause);
+    SmartQueryResult* ExecuteSelectQuery(const char *where_clause);
     bool begin_transaction();
     bool commit_transaction();
     bool rollback_transaction();
