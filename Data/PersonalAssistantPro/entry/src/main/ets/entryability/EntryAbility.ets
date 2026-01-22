@@ -80,23 +80,6 @@ export default class EntryAbility extends UIAbility {
     this.handleNotificationJump(want);
   }
 
-  // ✅ 辅助方法：处理通知跳转逻辑
-  private handleNotificationJump(want: Want) {
-    if (want && want.parameters && want.parameters['targetPage']) {
-      const targetPage = want.parameters['targetPage'] as string;
-      const eventId = want.parameters['eventId'] as number;
-
-      // ✅ 使用 logger 输出日志
-      this.logger.info(`🔔 Notification Clicked! Preparing to jump to: ${targetPage}, ID: ${eventId}`);
-
-      // 1. 先存 ID (数据)
-      AppStorage.setOrCreate('notificationJumpId', eventId);
-
-      // 2. 再存 Target (开关)
-      AppStorage.setOrCreate('notificationJumpTarget', targetPage);
-    }
-  }
-
   onDestroy(): void {
     this.logger.info('Ability onDestroy');
   }
@@ -123,5 +106,22 @@ export default class EntryAbility extends UIAbility {
 
   onBackground(): void {
     this.logger.info('Ability onBackground');
+  }
+
+  // ✅ 辅助方法：处理通知跳转逻辑
+  private handleNotificationJump(want: Want) {
+    if (want && want.parameters && want.parameters['targetPage']) {
+      const targetPage = want.parameters['targetPage'] as string;
+      const eventId = want.parameters['eventId'] as number;
+
+      // ✅ 使用 logger 输出日志
+      this.logger.info(`🔔 Notification Clicked! Preparing to jump to: ${targetPage}, ID: ${eventId}`);
+
+      // 1. 先存 ID (数据)
+      AppStorage.setOrCreate('notificationJumpId', eventId);
+
+      // 2. 再存 Target (开关)
+      AppStorage.setOrCreate('notificationJumpTarget', targetPage);
+    }
   }
 }

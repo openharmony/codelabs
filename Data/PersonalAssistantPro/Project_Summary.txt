@@ -1,92 +1,96 @@
 ========================================
        PROJECT CODE STATISTICS          
 ========================================
-Total Files : 61
-Total Lines : 6427
+Total Files : 64
+Total Lines : 8083
 ========================================
 
 === VISUAL TREE & LINE COUNTS ===
-└── PersonalAssistantPro [DIR: 6427 lines]
-    ├── entry [DIR: 6162 lines]
-    │   ├── src [DIR: 6118 lines]
-    │   │   └── main [DIR: 6118 lines]
-    │   │       ├── ets [DIR: 6057 lines]
-    │   │       │   ├── common [DIR: 1008 lines]
-    │   │       │   │   ├── constants [DIR: 122 lines]
-    │   │       │   │   │   ├── CommonConstants.ets [43 lines]
-    │   │       │   │   │   └── StyleConstants.ets [79 lines]
-    │   │       │   │   ├── database [DIR: 139 lines]
-    │   │       │   │   │   ├── RdbHelper.ts [103 lines]
-    │   │       │   │   │   └── Tables.ts [36 lines]
-    │   │       │   │   └── utils [DIR: 747 lines]
-    │   │       │   │       ├── AesCryptoUtils.ts [124 lines]
-    │   │       │   │       ├── DateUtils.ets [111 lines]
-    │   │       │   │       ├── Logger.ts [149 lines]
-    │   │       │   │       ├── PermissionUtils.ets [81 lines]
-    │   │       │   │       ├── ResourceUtils.ets [95 lines]
-    │   │       │   │       ├── StringUtils.ts [108 lines]
-    │   │       │   │       └── ValidationUtils.ts [79 lines]
-    │   │       │   ├── debug [DIR: 1114 lines]
-    │   │       │   │   ├── BackupRestoreDebugCase.ets [101 lines]
-    │   │       │   │   ├── BiometricSettingCase.ets [60 lines]
-    │   │       │   │   ├── ContactDatabaseCase.ts [63 lines]
-    │   │       │   │   ├── ContactStressTestCase.ts [87 lines]
-    │   │       │   │   ├── DateAndConfigStressTestCase.ets [124 lines]
-    │   │       │   │   ├── DebugCase.ts [33 lines]
-    │   │       │   │   ├── DebugRunner.ets [86 lines]
-    │   │       │   │   ├── EncryptionPrivacyCase.ts [81 lines]
-    │   │       │   │   ├── EventAlgoTestCase.ets [96 lines]
-    │   │       │   │   ├── ExampleDebugCase.ts [43 lines]
-    │   │       │   │   ├── SearchDebugCase.ets [72 lines]
-    │   │       │   │   ├── SecurityStressTestCase.ts [124 lines]
-    │   │       │   │   └── UserScenarioSimulationCase.ets [144 lines]
-    │   │       │   ├── entryability [DIR: 74 lines]
-    │   │       │   │   └── EntryAbility.ets [74 lines]
-    │   │       │   ├── model [DIR: 347 lines]
-    │   │       │   │   ├── ContactModel.ts [142 lines]
-    │   │       │   │   ├── EventModel.ets [172 lines]
-    │   │       │   │   └── SettingModel.ets [33 lines]
-    │   │       │   ├── pages [DIR: 1653 lines]
-    │   │       │   │   ├── ContactDetailPage.ets [192 lines]
-    │   │       │   │   ├── ContactListPage.ets [273 lines]
-    │   │       │   │   ├── EventDetailPage.ets [210 lines]
-    │   │       │   │   ├── EventEditPage.ets [239 lines]
-    │   │       │   │   ├── EventListPage.ets [220 lines]
-    │   │       │   │   ├── Index.ets [23 lines]
-    │   │       │   │   ├── MainPage.ets [87 lines]
-    │   │       │   │   ├── MinePage.ets [211 lines]
-    │   │       │   │   ├── SettingsPage.ets [98 lines]
-    │   │       │   │   └── SplashPage.ets [100 lines]
-    │   │       │   ├── services [DIR: 804 lines]
-    │   │       │   │   ├── BackupService.ets [107 lines]
-    │   │       │   │   ├── BiometricService.ets [87 lines]
-    │   │       │   │   ├── DataExportService.ets [339 lines]
-    │   │       │   │   ├── JumpService.ets [102 lines]
-    │   │       │   │   ├── NotificationService.ets [98 lines]
-    │   │       │   │   └── PreferenceService.ets [71 lines]
-    │   │       │   ├── view [DIR: 678 lines]
-    │   │       │   │   ├── calendar [DIR: 287 lines]
-    │   │       │   │   │   ├── DayItemView.ets [72 lines]
-    │   │       │   │   │   ├── MonthView.ets [105 lines]
-    │   │       │   │   │   └── WeekView.ets [110 lines]
-    │   │       │   │   ├── component [DIR: 193 lines]
-    │   │       │   │   │   ├── CustomDialog.ets [126 lines]
-    │   │       │   │   │   └── TitleBar.ets [67 lines]
-    │   │       │   │   └── form [DIR: 198 lines]
-    │   │       │   │       ├── DatePickerItem.ets [140 lines]
-    │   │       │   │       └── TextInputItem.ets [58 lines]
-    │   │       │   └── viewmodel [DIR: 379 lines]
-    │   │       │       ├── CalendarViewModel.ets [135 lines]
-    │   │       │       ├── ContactViewModel.ts [119 lines]
-    │   │       │       └── EventViewModel.ets [125 lines]
+└── PersonalAssistantPro [DIR: 8083 lines]
+    ├── entry [DIR: 7479 lines]
+    │   ├── src [DIR: 7435 lines]
+    │   │   └── main [DIR: 7435 lines]
+    │   │       ├── ets [DIR: 7374 lines]
+    │   │       │   ├── common [DIR: 1165 lines]
+    │   │       │   │   ├── constants [DIR: 152 lines]
+    │   │       │   │   │   ├── CommonConstants.ets [57 lines]
+    │   │       │   │   │   └── StyleConstants.ets [95 lines]
+    │   │       │   │   ├── database [DIR: 167 lines]
+    │   │       │   │   │   ├── RdbHelper.ts [117 lines]
+    │   │       │   │   │   └── Tables.ts [50 lines]
+    │   │       │   │   └── utils [DIR: 846 lines]
+    │   │       │   │       ├── AesCryptoUtils.ts [139 lines]
+    │   │       │   │       ├── DateUtils.ets [125 lines]
+    │   │       │   │       ├── Logger.ts [163 lines]
+    │   │       │   │       ├── PermissionUtils.ets [95 lines]
+    │   │       │   │       ├── ResourceUtils.ets [109 lines]
+    │   │       │   │       ├── StringUtils.ts [122 lines]
+    │   │       │   │       └── ValidationUtils.ts [93 lines]
+    │   │       │   ├── debug [DIR: 1296 lines]
+    │   │       │   │   ├── BackupRestoreDebugCase.ets [115 lines]
+    │   │       │   │   ├── BiometricSettingCase.ets [74 lines]
+    │   │       │   │   ├── ContactDatabaseCase.ts [77 lines]
+    │   │       │   │   ├── ContactStressTestCase.ts [101 lines]
+    │   │       │   │   ├── DateAndConfigStressTestCase.ets [138 lines]
+    │   │       │   │   ├── DebugCase.ts [47 lines]
+    │   │       │   │   ├── DebugRunner.ets [100 lines]
+    │   │       │   │   ├── EncryptionPrivacyCase.ts [95 lines]
+    │   │       │   │   ├── EventAlgoTestCase.ets [110 lines]
+    │   │       │   │   ├── ExampleDebugCase.ts [57 lines]
+    │   │       │   │   ├── SearchDebugCase.ets [86 lines]
+    │   │       │   │   ├── SecurityStressTestCase.ts [138 lines]
+    │   │       │   │   └── UserScenarioSimulationCase.ets [158 lines]
+    │   │       │   ├── entryability [DIR: 127 lines]
+    │   │       │   │   └── EntryAbility.ets [127 lines]
+    │   │       │   ├── model [DIR: 482 lines]
+    │   │       │   │   ├── ContactModel.ts [204 lines]
+    │   │       │   │   ├── EventModel.ets [231 lines]
+    │   │       │   │   └── SettingModel.ets [47 lines]
+    │   │       │   ├── pages [DIR: 1949 lines]
+    │   │       │   │   ├── ContactDetailPage.ets [191 lines]
+    │   │       │   │   ├── ContactListPage.ets [247 lines]
+    │   │       │   │   ├── EventDetailPage.ets [217 lines]
+    │   │       │   │   ├── EventEditPage.ets [324 lines]
+    │   │       │   │   ├── EventListPage.ets [424 lines]
+    │   │       │   │   ├── Index.ets [37 lines]
+    │   │       │   │   ├── MainPage.ets [101 lines]
+    │   │       │   │   ├── MinePage.ets [184 lines]
+    │   │       │   │   ├── SettingsPage.ets [110 lines]
+    │   │       │   │   └── SplashPage.ets [114 lines]
+    │   │       │   ├── services [DIR: 938 lines]
+    │   │       │   │   ├── BackupService.ets [126 lines]
+    │   │       │   │   ├── BiometricService.ets [96 lines]
+    │   │       │   │   ├── DataExportService.ets [353 lines]
+    │   │       │   │   ├── JumpService.ets [116 lines]
+    │   │       │   │   ├── NotificationService.ets [161 lines]
+    │   │       │   │   └── PreferenceService.ets [86 lines]
+    │   │       │   ├── view [DIR: 861 lines]
+    │   │       │   │   ├── calendar [DIR: 409 lines]
+    │   │       │   │   │   ├── DayItemView.ets [105 lines]
+    │   │       │   │   │   ├── MonthView.ets [144 lines]
+    │   │       │   │   │   └── WeekView.ets [160 lines]
+    │   │       │   │   ├── component [DIR: 224 lines]
+    │   │       │   │   │   ├── CustomDialog.ets [143 lines]
+    │   │       │   │   │   └── TitleBar.ets [81 lines]
+    │   │       │   │   └── form [DIR: 228 lines]
+    │   │       │   │       ├── DatePickerItem.ets [156 lines]
+    │   │       │   │       └── TextInputItem.ets [72 lines]
+    │   │       │   └── viewmodel [DIR: 556 lines]
+    │   │       │       ├── CalendarViewModel.ets [280 lines]
+    │   │       │       ├── ContactViewModel.ts [130 lines]
+    │   │       │       └── EventViewModel.ets [146 lines]
     │   │       └── module.json5 [61 lines]
     │   ├── build-profile.json5 [33 lines]
     │   └── oh-package.json5 [11 lines]
     ├── hvigor [DIR: 24 lines]
     │   └── hvigor-config.json5 [24 lines]
-    ├── build-profile.json5 [56 lines]
+    ├── tu
+    │   └── image.png
+    ├── build-profile.json5 [42 lines]
     ├── oh-package.json5 [11 lines]
-    └── PROJECT_CONTEXT.md [174 lines]
+    ├── PROJECT_CONTEXT.md [215 lines]
+    ├── readme.md [192 lines]
+    └── scan.js [120 lines]
 
 === JSON FILE LIST ===
 [
@@ -150,7 +154,10 @@ Total Lines : 6427
   "entry/src/main/module.json5",
   "hvigor/hvigor-config.json5",
   "oh-package.json5",
-  "PROJECT_CONTEXT.md"
+  "PROJECT_CONTEXT.md",
+  "readme.md",
+  "scan.js",
+  "tu/image.png"
 ]
 
 === CONFIG CONTENT ===
@@ -158,27 +165,13 @@ Total Lines : 6427
 --- FILE: build-profile.json5 ---
 {
   "app": {
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.cer",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B3C6D69A327381B386ABFE41D2D026CE96EC0CD8C4C3C18092B58962610ADDE08A7BDE61287FD54",
-          "profile": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\21440\\.ohos\\config\\default_PersonalAssistantPro_VfzSxev73UGT83JmpqRBt9UVtO2XLNlBvAiLs7-7zzY=.p12",
-          "storePassword": "0000001B55DF094998517C2AB96E541F4A33B767B9E7641E8753EFCB7CC6F852DD516E023D274E11CA8F2D"
-        }
-      }
-    ],
+    "signingConfigs": [],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
-        "compileSdkVersion": "6.0.0(20)",
-        "compatibleSdkVersion": "6.0.0(20)",
+        "compileSdkVersion":"6.0.0(20)",
+        "compatibleSdkVersion":"6.0.0(20)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
@@ -190,7 +183,7 @@ Total Lines : 6427
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
@@ -291,8 +284,8 @@ Total Lines : 6427
         "srcEntry": "./ets/entryability/EntryAbility.ets",
         "description": "$string:EntryAbility_desc",
         "icon": "$media:layered_image",
-        "label": "$string:EntryAbility_label",
-        "startWindowIcon": "$media:startIcon",
+        "label": "$string:app_name",
+        "startWindowIcon": "$media:fg_assist_pro",
         "startWindowBackground": "$color:start_window_background",
         "exported": true,
         "skills": [

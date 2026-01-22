@@ -27,10 +27,8 @@ import { EventDetailPage } from './EventDetailPage';
 @Component
 struct MainPage {
   @State currentIndex: number = 0;
-  private controller: TabsController = new TabsController();
-
   @Provide('pageStack') pageStack: NavPathStack = new NavPathStack();
-
+  private controller: TabsController = new TabsController();
   private readonly COLOR_SELECTED = '#007DFF';
   private readonly COLOR_NORMAL = '#999999';
 
@@ -60,8 +58,7 @@ struct MainPage {
   PageMap(name: string, param: Object) {
     if (name === 'ContactDetailPage') {
       ContactDetailPage({ contact: param as Contact });
-    }
-    else if (name === 'EventEditPage') {
+    } else if (name === 'EventEditPage') {
       EventEditPage({ eventItem: param as Event });
     }
     //  [新增] 详情页路由配置

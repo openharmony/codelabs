@@ -61,7 +61,9 @@ export class ResourceUtils {
    * @param resId
    */
   public static async getColor(resId: Resource): Promise<number> {
-    if (!ResourceUtils.context) return 0;
+    if (!ResourceUtils.context) {
+      return 0;
+    }
     try {
       const manager = ResourceUtils.context.resourceManager;
       return await manager.getColor(resId);
@@ -97,7 +99,9 @@ export class ResourceUtils {
     try {
       //  Fix: this.getRawFileContent -> ResourceUtils.getRawFileContent
       const data = await ResourceUtils.getRawFileContent(fileName);
-      if (data.length === 0) return '';
+      if (data.length === 0) {
+        return '';
+      }
 
       // 暂未实现 TextDecoder，返回空
       ResourceUtils.logger.warn('TextDecoder not implemented in this util yet.');

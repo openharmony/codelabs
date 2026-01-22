@@ -37,7 +37,8 @@ export class PermissionUtils {
 
     try {
       const atManager = abilityAccessCtrl.createAtManager();
-      const bundleInfo = await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
+      const bundleInfo =
+        await bundleManager.getBundleInfoForSelf(bundleManager.BundleFlag.GET_BUNDLE_INFO_WITH_APPLICATION);
       const appInfo = bundleInfo.appInfo;
       const tokenId = appInfo.accessTokenId;
 
@@ -61,7 +62,8 @@ export class PermissionUtils {
    * @param context 上下文
    * @param permissions 权限列表
    */
-  public static async requestPermissions(context: common.UIAbilityContext, permissions: Array<Permissions>): Promise<boolean> {
+  public static async requestPermissions(context: common.UIAbilityContext,
+    permissions: Array<Permissions>): Promise<boolean> {
     // ❌ Fix: this.logger -> PermissionUtils.logger
     PermissionUtils.logger.info(`Requesting permissions: ${JSON.stringify(permissions)}`);
 

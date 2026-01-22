@@ -12,20 +12,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// entry/src/main/ets/pages/ContactListPage.ets
+// src/main/ets/pages/ContactListPage.ets
 import { Contact, ContactModel } from '../model/ContactModel';
+import { ContactViewModel } from '../viewmodel/ContactViewModel'; // 📝 [新增] 引入 ViewModel
 import { Logger } from '../common/utils/Logger';
+import { emitter } from '@kit.BasicServicesKit';
+import promptAction from '@ohos.promptAction'; // 📝 [新增] 用于弹窗提示
 
 const logger = new Logger('ContactListPage');
+const EVENT_ID_REFRESH = 1001;
 
 @Component
 export struct ContactListPage {
   @State contacts: Array<Contact> = [];
   @State keyword: string = '';
-
+  // 列表版本号，用于辅助强制刷新
+  @State listVersion: number = 0;
   @Consume('pageStack') pageStack: NavPathStack;
-
-  //  [修改] DialogController 回调增加 email 参数
   dialogController: CustomDialogController = new CustomDialogController({
     builder: AddContactDialog({
       onConfirm: (name: string, phone: string, relation: string, email: string) => {
@@ -35,46 +38,80 @@ export struct ContactListPage {
     alignment: DialogAlignment.Bottom,
     autoCancel: true
   });
-
-  aboutToAppear(): void {
-    void this.loadContacts();
-  }
+  // 📝 [新增] 实例化 ViewModel
+  private contactViewModel = new ContactViewModel();
 
   get contactCountInfo(): Resource {
     const count: number = this.contacts.length;
     return $r('app.plural.contact_count_info', count, count);
   }
 
-  private getAvatarText(name: string): string {
-    const safe: string = (name ?? '').trim();
-    return safe.length > 0 ? safe.substring(0, 1) : '?';
+  aboutToAppear(): void {
+    logger.info('【生命周期】ContactListPage aboutToAppear');
+    this.loadContacts();
+
+    logger.info('【事件】注册监听 ID: 1001');
+    emitter.on({ eventId: EVENT_ID_REFRESH }, () => {
+      logger.info('【事件】收到刷新信号，延迟 50ms 执行刷新...');
+      setTimeout(() => {
+        this.loadContacts();
+      }, 50);
+    });
+  }
+
+  aboutToDisappear(): void {
+    logger.info('【生命周期】ContactListPage aboutToDisappear');
+    emitter.off(EVENT_ID_REFRESH);
   }
 
   async loadContacts(): Promise<void> {
+    logger.info('【数据】正在从数据库加载...');
     try {
+      let list: Contact[];
       if (this.keyword && this.keyword.trim().length > 0) {
-        const list = await ContactModel.search(this.keyword);
-        this.contacts = Array.isArray(list) ? list : [];
+        list = await ContactModel.search(this.keyword);
       } else {
-        const list = await ContactModel.queryAll();
-        this.contacts = Array.isArray(list) ? list : [];
+        list = await ContactModel.queryAll();
       }
-    } catch {
-      logger.error('loadContacts failed');
+
+      this.contacts = [];
+      setTimeout(() => {
+        this.contacts = Array.isArray(list) ? list : [];
+        this.listVersion++;
+        logger.info(`【数据】刷新完成，当前条数: ${this.contacts.length}`);
+      }, 0);
+
+    } catch (err) {
+      logger.error(`【数据】加载异常: ${JSON.stringify(err)}`);
       this.contacts = [];
     }
   }
 
-  //  [修改] 方法签名增加 email 参数
   async addContact(name: string, phone: string, relation: string, email: string): Promise<void> {
-    if (!name || !phone) return;
+    // 📝 [修改] 使用 ViewModel 进行国际化校验
+    const errorKey = this.contactViewModel.validateContact(name, phone);
+    if (errorKey) {
+      // 动态拼接 app.string.xxx
+      promptAction.showToast({ message: $r(`app.string.${errorKey}`) });
+      return;
+    }
 
-    //  [修改] 将 email 传入构造函数 (确保 ContactModel 构造函数第4个参数是 email)
-    const newContact: Contact = new Contact(name, phone, relation, email);
+    // 📝 [修改] 处理默认关系 (国际化)
+    // 如果用户没填关系，手动获取 "朋友" 的本地化字符串
+    let finalRelation = relation;
+    if (!finalRelation || finalRelation.trim() === '') {
+      try {
+        finalRelation = getContext(this).resourceManager.getStringSync($r('app.string.contact_default_relation').id);
+      } catch (e) {
+        finalRelation = 'Friend'; // 兜底
+      }
+    }
 
+    const newContact: Contact = new Contact(name, phone, finalRelation, email);
     if (await ContactModel.insert(newContact) > 0) {
       this.keyword = '';
       await this.loadContacts();
+      promptAction.showToast({ message: $r('app.string.toast_add_success') });
     }
   }
 
@@ -82,6 +119,46 @@ export struct ContactListPage {
     if (await ContactModel.deleteById(id)) {
       this.contacts.splice(index, 1);
     }
+  }
+
+  build() {
+    Column() {
+      this.CustomHeader()
+      this.SearchBar()
+
+      GridRow({ columns: { sm: 4, md: 8, lg: 12 }, gutter: { x: 12, y: 12 } }) {
+        GridCol({ span: { sm: 4, md: 6, lg: 8 }, offset: { sm: 0, md: 1, lg: 2 } }) {
+          Column() {
+            if (this.contacts.length === 0) {
+              Column() {
+                Text($r('app.string.contact_empty_list'))
+                  .fontColor(Color.Gray)
+                  .fontSize(16)
+                  .margin({ top: 100 })
+              }
+              .width('100%').alignItems(HorizontalAlign.Center)
+            } else {
+              List({ space: 10 }) {
+                ForEach(this.contacts, (item: Contact, index: number) => {
+                  this.ContactItem(item, index);
+                }, (item: Contact) => {
+                  return JSON.stringify(item);
+                })
+              }
+              .width('100%').layoutWeight(1).padding({ left: 16, right: 16, bottom: 10 })
+            }
+          }
+          .width('100%').height('100%')
+        }
+      }
+      .layoutWeight(1)
+    }
+    .width('100%').height('100%').backgroundColor('#F1F3F5')
+  }
+
+  private getAvatarText(name: string): string {
+    const safe: string = (name ?? '').trim();
+    return safe.length > 0 ? safe.substring(0, 1) : '?';
   }
 
   @Builder
@@ -104,50 +181,30 @@ export struct ContactListPage {
   private CustomHeader(): void {
     Row() {
       Text($r('app.string.contact_title'))
-        .fontSize(24)
-        .fontWeight(FontWeight.Bold)
-
+        .fontSize(24).fontWeight(FontWeight.Bold)
       Blank()
-
       Button({ type: ButtonType.Circle, stateEffect: true }) {
-        Text('+')
-          .fontSize(24)
-          .fontColor(Color.Black)
+        Text('+').fontSize(24).fontColor(Color.Black)
       }
-      .width(40)
-      .height(40)
-      .backgroundColor(Color.Transparent)
+      .width(40).height(40).backgroundColor(Color.Transparent)
       .onClick(() => {
         this.dialogController.open();
       })
     }
-    .width('100%')
-    .height(56)
-    .padding({ left: 16, right: 16 })
-    .alignItems(VerticalAlign.Center)
+    .width('100%').height(56).padding({ left: 16, right: 16 }).alignItems(VerticalAlign.Center)
   }
 
   @Builder
   private SearchBar(): void {
     Row() {
-      Search({ value: this.keyword, placeholder: '搜索姓名、关系...' })
-        .width('100%')
-        .height(40)
-        .backgroundColor(Color.White)
-        .placeholderColor(Color.Gray)
-        .placeholderFont({ size: 14 })
-        .textFont({ size: 14 })
+      Search({ value: this.keyword, placeholder: $r('app.string.contact_search_placeholder') })
+        .width('100%').height(40).backgroundColor(Color.White)
         .onChange((value: string) => {
           this.keyword = value;
           this.loadContacts();
         })
-        .onSubmit((value: string) => {
-          this.keyword = value;
-          this.loadContacts();
-        })
     }
-    .width('100%')
-    .padding({ left: 16, right: 16, bottom: 8 })
+    .width('100%').padding({ left: 16, right: 16, bottom: 8 })
   }
 
   @Builder
@@ -156,35 +213,24 @@ export struct ContactListPage {
       Row() {
         Stack({ alignContent: Alignment.Center }) {
           Circle({ width: 40, height: 40 }).fill('#E5F1FF')
-          Text(this.getAvatarText(item.name))
-            .fontSize(16)
-            .fontColor('#007DFF')
+          Text(this.getAvatarText(item.name)).fontSize(16).fontColor('#007DFF')
         }
 
         Column() {
-          Text(item.name ?? '')
-            .fontSize(16)
-            .fontWeight(FontWeight.Medium)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-
-          Text(`${item.relation ?? ''} | ${item.phone ?? ''}`)
-            .fontSize(14)
-            .fontColor('#999999')
-            .margin({ top: 4 })
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
+          Text(item.name ?? '').fontSize(16).fontWeight(FontWeight.Medium)
+          // 📝 [修改] 使用 Resource 格式化
+          // Text(`${item.relation ?? ''} | ${item.phone ?? ''}`) 改为使用资源模板
+          Text($r('app.string.contact_relation_phone_format', item.relation ?? '', item.phone ?? ''))
+            .fontSize(14).fontColor('#999999').margin({ top: 4 })
         }
-        .alignItems(HorizontalAlign.Start)
-        .margin({ left: 12 })
-        .layoutWeight(1)
+        .alignItems(HorizontalAlign.Start).margin({ left: 12 }).layoutWeight(1)
       }
       .width('100%')
       .padding(12)
       .backgroundColor(Color.White)
       .borderRadius(12)
-      .constraintSize({ minHeight: 48 })
       .onClick(() => {
+        logger.info(`【操作】进入详情页: ${item.name}`);
         this.pageStack.pushPath({ name: 'ContactDetailPage', param: item });
       })
     }
@@ -194,112 +240,42 @@ export struct ContactListPage {
       }
     })
   }
-
-  build() {
-    Column() {
-      this.CustomHeader()
-      this.SearchBar()
-
-      GridRow({
-        columns: { sm: 4, md: 8, lg: 12 },
-        gutter: { x: 12, y: 12 }
-      }) {
-        GridCol({ span: { sm: 4, md: 6, lg: 8 }, offset: { sm: 0, md: 1, lg: 2 } }) {
-          Column() {
-            if (this.contacts.length === 0) {
-              Column() {
-                if (this.keyword.length > 0) {
-                  Text('无搜索结果')
-                    .fontColor(Color.Gray)
-                    .fontSize(16)
-                    .margin({ top: 100 })
-                } else {
-                  Text(this.contactCountInfo)
-                    .fontColor(Color.Gray)
-                    .fontSize(16)
-                    .margin({ top: 100 })
-
-                  Text($r('app.string.contact_empty_tip'))
-                    .fontColor(Color.Gray)
-                    .fontSize(14)
-                    .margin({ top: 10 })
-                }
-              }
-              .width('100%')
-              .height('100%')
-              .alignItems(HorizontalAlign.Center)
-            } else {
-              List({ space: 10 }) {
-                ForEach(this.contacts, (item: Contact, index: number) => {
-                  this.ContactItem(item, index);
-                }, (item: Contact) => item.id.toString())
-              }
-              .width('100%')
-              .layoutWeight(1)
-              .padding({ left: 16, right: 16, bottom: 10 })
-            }
-          }
-          .width('100%')
-          .height('100%')
-        }
-      }
-      .layoutWeight(1)
-    }
-    .width('100%')
-    .height('100%')
-    .backgroundColor('#F1F3F5')
-  }
 }
-
-// ================= Dialog 修改区域 =================
 
 @CustomDialog
 struct AddContactDialog {
   controller?: CustomDialogController;
-  //  [修改] 增加 email 参数定义
-  onConfirm: (name: string, phone: string, relation: string, email: string) => void = () => {};
   @State name: string = '';
   @State phone: string = '';
   @State relation: string = '';
-  //  [新增] 邮箱状态
   @State email: string = '';
+
+  onConfirm: (name: string, phone: string, relation: string, email: string) => void = () => {
+  };
 
   build() {
     Column() {
-      Text($r('app.string.dialog_add_contact_title'))
-        .fontSize(20)
-        .fontWeight(FontWeight.Bold)
-        .margin({ top: 20, bottom: 20 })
-
-      TextInput({ placeholder: $r('app.string.input_name') })
-        .onChange((v) => { this.name = v; })
-        .margin({ bottom: 12 }).width('90%')
-
-      TextInput({ placeholder: $r('app.string.input_phone') })
-        .onChange((v) => { this.phone = v; })
-        .margin({ bottom: 12 }).width('90%')
-
-      //  [新增] 邮箱输入框 (如果没有资源字符串，先用中文，或者去 string.json 添加 "input_email")
-      TextInput({ placeholder: '请输入邮箱' })
-        .onChange((v) => { this.email = v; })
-        .margin({ bottom: 12 }).width('90%')
-
-      TextInput({ placeholder: $r('app.string.input_relation') })
-        .onChange((v) => { this.relation = v; })
-        .margin({ bottom: 20 }).width('90%')
-
+      Text($r('app.string.contact_btn_add')).fontSize(20).fontWeight(FontWeight.Bold).margin({ top: 20, bottom: 20 })
+      TextInput({ placeholder: $r('app.string.contact_label_name') }).onChange((v) => {
+        this.name = v;
+      }).margin({ bottom: 12 }).width('90%')
+      TextInput({ placeholder: $r('app.string.contact_label_phone') }).onChange((v) => {
+        this.phone = v;
+      }).margin({ bottom: 12 }).width('90%')
+      TextInput({ placeholder: $r('app.string.contact_label_email') }).onChange((v) => {
+        this.email = v;
+      }).margin({ bottom: 12 }).width('90%')
+      TextInput({ placeholder: $r('app.string.contact_label_relation') }).onChange((v) => {
+        this.relation = v;
+      }).margin({ bottom: 20 }).width('90%')
       Row() {
-        Button($r('app.string.btn_cancel'))
-          .backgroundColor(Color.Transparent)
-          .fontColor(Color.Gray)
-          .onClick(() => { this.controller?.close(); })
-
-        Button($r('app.string.btn_add'))
-          .onClick(() => {
-            //  [修改] 提交时加上 this.email
-            this.onConfirm(this.name, this.phone, this.relation, this.email);
-            this.controller?.close();
-          })
+        Button($r('app.string.common_cancel')).backgroundColor(Color.Transparent).fontColor(Color.Gray).onClick(() => {
+          this.controller?.close();
+        })
+        Button($r('app.string.common_add')).onClick(() => {
+          this.onConfirm(this.name, this.phone, this.relation, this.email);
+          this.controller?.close();
+        })
       }
       .justifyContent(FlexAlign.SpaceEvenly).width('100%').margin({ bottom: 20 })
     }

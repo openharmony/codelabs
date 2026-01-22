@@ -19,6 +19,8 @@ import { Logger } from '../common/utils/Logger';
 import { MonthView } from '../view/calendar/MonthView';
 import { WeekView } from '../view/calendar/WeekView';
 import { CalendarViewModel, TaskStatus } from '../viewmodel/CalendarViewModel';
+// 📝 [import] 确保 EventViewModel 文件存在于 viewmodel 目录下
+import { EventViewModel } from '../viewmodel/EventViewModel';
 
 const logger = new Logger('EventListPage');
 
@@ -28,29 +30,24 @@ export struct EventListPage {
   @State keyword: string = '';
   // 默认选中今天
   @State selectedTimestamp: number = new Date().getTime();
-
   @State taskMap: Map<string, TaskStatus> = new Map();
-
   @State viewMode: string = 'month';
-
   @Consume('pageStack') pageStack: NavPathStack;
-
   // 监听全局刷新信号
   @StorageProp('GlobalRefreshSignal') @Watch('onGlobalRefresh') signal: number = 0;
+  // 通知跳转相关状态
+  @StorageProp('notificationJumpTarget') @Watch('onNotificationJump') jumpTarget: string = '';
+  @StorageProp('notificationJumpId') jumpId: number = -1;
+  // 监听列表刷新请求
+  @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
+  private calendarViewModel: CalendarViewModel = new CalendarViewModel();
+  // 📝 [修复 2] 显式标注类型，解决 arkts-no-any-unknown 错误
+  private eventViewModel: EventViewModel = new EventViewModel();
 
   onGlobalRefresh() {
     logger.info('Received GlobalRefreshSignal, refreshing list...');
     this.refreshAllData();
   }
-
-  // 通知跳转相关状态
-  @StorageProp('notificationJumpTarget') @Watch('onNotificationJump') jumpTarget: string = '';
-  @StorageProp('notificationJumpId') jumpId: number = -1;
-
-  // 监听列表刷新请求
-  @StorageProp('refreshEventList') @Watch('onRefreshChange') refreshSignal: number = 0;
-
-  private calendarViewModel = new CalendarViewModel();
 
   onPageShow() {
     this.refreshAllData();
@@ -64,28 +61,6 @@ export struct EventListPage {
 
     // 2. 加载页面数据
     this.refreshAllData();
-  }
-
-  // 独立出来的冷启动跳转检查方法
-  private checkColdStartJump() {
-    // 绕过 @StorageProp，直接查 AppStorage 获取最真实的数据
-    const storedTarget = AppStorage.get<string>('notificationJumpTarget');
-    const storedId = AppStorage.get<number>('notificationJumpId');
-
-    logger.info(`[ColdStart Check] Target: ${storedTarget}, ID: ${storedId}`);
-
-    if (storedTarget === 'EventDetailPage' && storedId && storedId > 0) {
-      logger.info('🚀 DETECTED PENDING JUMP! Triggering now...');
-
-      // 强制同步本地状态，触发 Watch 回调
-      this.jumpTarget = storedTarget;
-      this.jumpId = storedId;
-
-      // 手动执行跳转逻辑
-      this.onNotificationJump();
-    } else {
-      logger.info('No pending jump found during cold start.');
-    }
   }
 
   // 跳转响应逻辑
@@ -171,81 +146,6 @@ export struct EventListPage {
     }
   }
 
-  // 顶部标题栏 + 视图切换按钮
-  @Builder
-  private CustomHeader(): void {
-    Row() {
-      Text($r('app.string.event_title'))
-        .fontSize(24)
-        .fontWeight(FontWeight.Bold)
-
-      Blank()
-
-      // 月视图/周视图切换
-      Row() {
-        Text('月')
-          .fontSize(14)
-          .fontColor(this.viewMode === 'month' ? '#FFFFFF' : '#007DFF')
-          .backgroundColor(this.viewMode === 'month' ? '#007DFF' : Color.Transparent)
-          .padding({ left: 12, right: 12, top: 6, bottom: 6 })
-          .borderRadius(14)
-          .onClick(() => this.viewMode = 'month')
-
-        Text('周')
-          .fontSize(14)
-          .fontColor(this.viewMode === 'week' ? '#FFFFFF' : '#007DFF')
-          .backgroundColor(this.viewMode === 'week' ? '#007DFF' : Color.Transparent)
-          .padding({ left: 12, right: 12, top: 6, bottom: 6 })
-          .borderRadius(14)
-          .onClick(() => this.viewMode = 'week')
-      }
-      .backgroundColor('#E5F1FF')
-      .borderRadius(16)
-      .margin({ right: 16 })
-
-      // 添加按钮
-      Button({ type: ButtonType.Circle, stateEffect: true }) {
-        Text('+')
-          .fontSize(24)
-          .fontColor(Color.Black)
-      }
-      .width(40)
-      .height(40)
-      .backgroundColor(Color.Transparent)
-      .onClick(() => {
-        this.pageStack.pushPath({ name: 'EventEditPage' });
-      })
-    }
-    .width('100%')
-    .height(56)
-    .padding({ left: 16, right: 16 })
-    .alignItems(VerticalAlign.Center)
-  }
-
-  // 搜索栏
-  @Builder
-  private SearchBar(): void {
-    Row() {
-      Search({ value: this.keyword, placeholder: '搜索日程标题、备注...' })
-        .width('100%')
-        .height(40)
-        .backgroundColor(Color.White)
-        .placeholderColor(Color.Gray)
-        .placeholderFont({ size: 14 })
-        .textFont({ size: 14 })
-        .onChange((value: string) => {
-          this.keyword = value;
-          this.loadEventsForList();
-        })
-        .onSubmit((value: string) => {
-          this.keyword = value;
-          this.loadEventsForList();
-        })
-    }
-    .width('100%')
-    .padding({ left: 16, right: 16, bottom: 8 })
-  }
-
   // 侧滑删除按钮
   @Builder
   DeleteAction(index: number, id: number) {
@@ -262,24 +162,20 @@ export struct EventListPage {
     })
   }
 
-  // 时间格式化工具
-  private formatTime(timestamp: number): string {
-    const date = new Date(timestamp);
-    const hours = date.getHours().toString().padStart(2, '0');
-    const minutes = date.getMinutes().toString().padStart(2, '0');
-    return `${hours}:${minutes}`;
-  }
-
   // 单个日程列表项
   @Builder
   EventItem(item: Event, index: number) {
+    // 📝 [修复 3 & 5] 删除了这里的 const 变量声明，修复 Invalid Syntax Context 错误
+    // 直接在下方的 UI 属性中调用方法
+
     ListItem() {
       Row() {
-        // 左侧装饰条 (蓝色)
+        // 左侧装饰条 (颜色动态变化)
         Column()
           .width(4)
           .height(40)
-          .backgroundColor('#007DFF')
+          // 📝 [修复] 直接内联调用
+          .backgroundColor(this.eventViewModel.getEventStatusColor(item))
           .borderRadius(2)
           .margin({ right: 12 })
 
@@ -292,10 +188,29 @@ export struct EventListPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-          Text(item.isAllDay ? $r('app.string.label_all_day') : `${this.formatTime(item.startTime)} - ${this.formatTime(item.endTime)}`)
-            .fontSize(14)
-            .fontColor(Color.Gray)
-            .margin({ top: 4 })
+          // 时间显示行：增加状态描述
+          Row() {
+            Text(item.isAllDay ? $r('app.string.label_all_day') :
+              `${this.formatTime(item.startTime)} - ${this.formatTime(item.endTime)}`)
+              .fontSize(14)
+              .fontColor(Color.Gray)
+
+            // 📝 [修复] 直接内联调用，动态拼接 Key
+            Text($r(`app.string.${this.eventViewModel.getEventStatusInfo(item).key}`,
+              this.eventViewModel.getEventStatusInfo(item).param))
+              .fontSize(12)
+              .fontColor(this.eventViewModel.getEventStatusColor(item)) // 颜色也直接调用
+              .margin({ left: 8 })
+              .backgroundColor(this.eventViewModel.getEventStatusColor(item) + '1A') // 10% 透明度背景
+              .padding({
+                left: 6,
+                right: 6,
+                top: 1,
+                bottom: 1
+              })
+              .borderRadius(4)
+          }
+          .margin({ top: 4 })
         }
         .alignItems(HorizontalAlign.Start)
         .layoutWeight(1)
@@ -307,18 +222,8 @@ export struct EventListPage {
             Image($r('app.media.ic_public_reminder'))
               .width(16)
               .height(16)
-              .fillColor('#FF9800') // 设为橙色更醒目，若要灰色可设为 #999999 或删除此行
+              .fillColor('#FF9800')
               .margin({ right: 6 })
-          }
-
-          // All Day 标签
-          if (item.isAllDay) {
-            Text('All Day')
-              .fontSize(12)
-              .fontColor('#007DFF')
-              .backgroundColor('#E5F1FF')
-              .padding({ left: 8, right: 8, top: 2, bottom: 2 })
-              .borderRadius(10)
           }
         }
         .alignItems(VerticalAlign.Center)
@@ -390,10 +295,10 @@ export struct EventListPage {
                   .margin({ bottom: 10 })
 
                 if (this.keyword.length > 0) {
-                  Text('无搜索结果').fontSize(16).fontColor(Color.Gray)
+                  Text($r('app.string.event_empty_search')).fontSize(16).fontColor(Color.Gray)
                 } else {
-                  Text('今天没有安排').fontSize(16).fontColor(Color.Black)
-                  Text('去休息一下吧').fontSize(14).fontColor(Color.Gray).margin({ top: 4 })
+                  Text($r('app.string.event_empty_today')).fontSize(16).fontColor(Color.Black)
+                  Text($r('app.string.event_empty_rest')).fontSize(14).fontColor(Color.Gray).margin({ top: 4 })
                 }
               }
               .justifyContent(FlexAlign.Center)
@@ -404,7 +309,8 @@ export struct EventListPage {
               List() {
                 ForEach(this.events, (item: Event, index: number) => {
                   this.EventItem(item, index)
-                }, (item: Event) => `${item.id}_${item.startTime}`)
+                },
+                  (item: Event) => `${item.id}_${item.title}_${item.startTime}_${item.endTime}_${item.reminderId}_${item.isAllDay}`)
               }
               .width('100%')
               .layoutWeight(1)
@@ -420,5 +326,120 @@ export struct EventListPage {
     .width('100%')
     .height('100%')
     .backgroundColor('#F1F3F5')
+  }
+
+  // 独立出来的冷启动跳转检查方法
+  private checkColdStartJump() {
+    // 绕过 @StorageProp，直接查 AppStorage 获取最真实的数据
+    const storedTarget = AppStorage.get<string>('notificationJumpTarget');
+    const storedId = AppStorage.get<number>('notificationJumpId');
+
+    logger.info(`[ColdStart Check] Target: ${storedTarget}, ID: ${storedId}`);
+
+    if (storedTarget === 'EventDetailPage' && storedId && storedId > 0) {
+      logger.info('🚀 DETECTED PENDING JUMP! Triggering now...');
+
+      // 强制同步本地状态，触发 Watch 回调
+      this.jumpTarget = storedTarget;
+      this.jumpId = storedId;
+
+      // 手动执行跳转逻辑
+      this.onNotificationJump();
+    } else {
+      logger.info('No pending jump found during cold start.');
+    }
+  }
+
+  // 顶部标题栏 + 视图切换按钮
+  @Builder
+  private CustomHeader(): void {
+    Row() {
+      Text($r('app.string.event_title'))
+        .fontSize(24)
+        .fontWeight(FontWeight.Bold)
+
+      Blank()
+
+      // 月视图/周视图切换
+      Row() {
+        Text($r('app.string.calendar_unit_month'))
+          .fontSize(14)
+          .fontColor(this.viewMode === 'month' ? '#FFFFFF' : '#007DFF')
+          .backgroundColor(this.viewMode === 'month' ? '#007DFF' : Color.Transparent)
+          .padding({
+            left: 12,
+            right: 12,
+            top: 6,
+            bottom: 6
+          })
+          .borderRadius(14)
+          .onClick(() => this.viewMode = 'month')
+
+        Text($r('app.string.week_sun'))
+          .fontSize(14)
+          .fontColor(this.viewMode === 'week' ? '#FFFFFF' : '#007DFF')
+          .backgroundColor(this.viewMode === 'week' ? '#007DFF' : Color.Transparent)
+          .padding({
+            left: 12,
+            right: 12,
+            top: 6,
+            bottom: 6
+          })
+          .borderRadius(14)
+          .onClick(() => this.viewMode = 'week')
+      }
+      .backgroundColor('#E5F1FF')
+      .borderRadius(16)
+      .margin({ right: 16 })
+
+      // 添加按钮
+      Button({ type: ButtonType.Circle, stateEffect: true }) {
+        Text('+')
+          .fontSize(24)
+          .fontColor(Color.Black)
+      }
+      .width(40)
+      .height(40)
+      .backgroundColor(Color.Transparent)
+      .onClick(() => {
+        this.pageStack.pushPath({ name: 'EventEditPage' });
+      })
+    }
+    .width('100%')
+    .height(56)
+    .padding({ left: 16, right: 16 })
+    .alignItems(VerticalAlign.Center)
+  }
+
+  // 搜索栏
+  @Builder
+  private SearchBar(): void {
+    Row() {
+      Search({ value: this.keyword, placeholder: $r('app.string.event_search_placeholder') })
+        .width('100%')
+        .height(40)
+        .backgroundColor(Color.White)
+        .placeholderColor(Color.Gray)
+        .placeholderFont({ size: 14 })
+        .textFont({ size: 14 })
+        .onChange((value: string) => {
+          this.keyword = value;
+          this.loadEventsForList();
+        })
+        .onSubmit((value: string) => {
+          this.keyword = value;
+          this.loadEventsForList();
+        })
+    }
+    .width('100%')
+    .padding({ left: 16, right: 16, bottom: 8 })
+  }
+
+  // 时间格式化工具
+  private formatTime(timestamp: number): string {
+    const date = new Date(timestamp);
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 }

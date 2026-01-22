@@ -15,8 +15,8 @@
 // entry/src/main/ets/debug/BackupRestoreDebugCase.ts
 import { DebugCase } from './DebugCase';
 import { BackupService } from '../services/BackupService';
-import { ContactModel, Contact } from '../model/ContactModel';
-import { EventModel, Event } from '../model/EventModel';
+import { Contact, ContactModel } from '../model/ContactModel';
+import { Event, EventModel } from '../model/EventModel';
 
 /**
  * 备份与恢复功能测试用例 (F3)

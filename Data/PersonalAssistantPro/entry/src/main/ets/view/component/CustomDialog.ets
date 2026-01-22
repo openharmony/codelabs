@@ -27,24 +27,21 @@ import { StyleConstants } from '../../common/constants/StyleConstants';
 export struct CommonDialog {
   // === 控制器 (必须) ===
   controller: CustomDialogController;
-
   // === 属性 ===
   /** 弹窗标题 */
-  title: string | Resource = '提示';
-
+  // 📝 [修改] 使用 app.string.common_tip 替代 '提示'
+  title: string | Resource = $r('app.string.common_tip');
   /** 弹窗内容 */
   message: string | Resource = '';
-
   /** 取消按钮文本 */
-  cancelText: string | Resource = '取消';
-
+  // 📝 [修改] 使用 app.string.common_cancel 替代 '取消'
+  cancelText: string | Resource = $r('app.string.common_cancel');
   /** 确认按钮文本 */
-  confirmText: string | Resource = '确定';
-
+  // 📝 [修改] 使用 app.string.common_confirm 替代 '确定'
+  confirmText: string | Resource = $r('app.string.common_confirm');
   // === 回调函数 ===
   /** 点击取消的回调 */
   onCancel?: () => void;
-
   /** 点击确认的回调 */
   onConfirm?: () => void;
 
@@ -52,7 +49,7 @@ export struct CommonDialog {
     Column() {
       // 1. 标题区域
       Text(this.title)
-        .fontSize(StyleConstants.FONT_SIZE_LG)
+        .fontSize(StyleConstants.ICON_SIZE_LG)
         .fontWeight(FontWeight.Bold)
         .fontColor(StyleConstants.COLOR_TEXT_PRIMARY)
         .margin({ top: StyleConstants.SPACE_XL, bottom: StyleConstants.SPACE_MD })
@@ -61,7 +58,7 @@ export struct CommonDialog {
 
       // 2. 内容区域
       Text(this.message)
-        .fontSize(StyleConstants.FONT_SIZE_MD)
+        .fontSize(StyleConstants.ICON_SIZE_MD)
         .fontColor(StyleConstants.COLOR_TEXT_SECONDARY)
         .margin({
           bottom: StyleConstants.SPACE_XL,
@@ -82,7 +79,7 @@ export struct CommonDialog {
         // --- 取消按钮 ---
         Button() {
           Text(this.cancelText)
-            .fontSize(StyleConstants.FONT_SIZE_LG)
+            .fontSize(StyleConstants.ICON_SIZE_LG)
             .fontColor(StyleConstants.COLOR_TEXT_SECONDARY)
         }
         .type(ButtonType.Normal)
@@ -107,7 +104,7 @@ export struct CommonDialog {
         // --- 确认按钮 ---
         Button() {
           Text(this.confirmText)
-            .fontSize(StyleConstants.FONT_SIZE_LG)
+            .fontSize(StyleConstants.ICON_SIZE_LG)
             .fontWeight(FontWeight.Medium)
             .fontColor(StyleConstants.COLOR_PRIMARY)
         }

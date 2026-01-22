@@ -27,7 +27,6 @@ export class CommonConstants {
   static readonly TABLE_CONTACT = 'contact';
   /** 日程表名 */
   static readonly TABLE_EVENT = 'event';
-
   // === 路由名称 (Router Names) ===
   static readonly PAGE_MAIN = 'MainPage';
   static readonly PAGE_CONTACT_LIST = 'ContactListPage';
@@ -36,17 +35,14 @@ export class CommonConstants {
   static readonly PAGE_EVENT_EDIT = 'EventEditPage';
   static readonly PAGE_MINE = 'MinePage';
   static readonly PAGE_SETTINGS = 'SettingsPage';
-
   // === 首选项 Key (Preferences Keys) ===
   static readonly PREF_NAME = 'app_preferences';
   static readonly KEY_IS_BIOMETRIC_ENABLED = 'is_biometric_enabled';
   static readonly KEY_USER_NAME = 'key_user_name';
   static readonly KEY_THEME_MODE = 'key_theme_mode';
-
   // === 日志配置 ===
   static readonly LOG_DOMAIN = 0x0000;
   static readonly LOG_TAG_PREFIX = 'PA_Pro_';
-
   // === 业务常量 ===
   /** 默认分页大小 */
   static readonly DEFAULT_PAGE_SIZE = 20;

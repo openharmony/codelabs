@@ -18,8 +18,6 @@ import { Logger } from '../common/utils/Logger';
 
 /**
  * 联系人业务逻辑模型 (ViewModel)
- * 负责处理联系人数据的加载、验证、转换、分组等逻辑
- * 这里的代码量主要来自详细的字段校验和数据处理
  */
 export class ContactViewModel {
   private logger = new Logger('ContactViewModel');
@@ -28,7 +26,7 @@ export class ContactViewModel {
    * 验证联系人表单数据是否合法
    * @param name 姓名
    * @param phone 电话
-   * @returns string | null 如果有错误返回错误提示信息，否则返回 null
+   * @returns string | null 返回资源文件的 Key (如 'contact_validate_name_empty')，UI层需自行封装 $r()
    */
   public validateContact(name: string, phone: string): string | null {
     this.logger.info(`Validating contact form: name=${name}, phone=${phone}`);
@@ -36,30 +34,35 @@ export class ContactViewModel {
     // 1. 校验姓名
     if (!name || name.trim().length === 0) {
       this.logger.warn('Validation failed: name is empty');
-      return '姓名不能为空';
+      // 对应 string.json: contact_validate_name_empty
+      return 'contact_validate_name_empty';
     }
 
     if (name.length > 50) {
       this.logger.warn('Validation failed: name too long');
-      return '姓名长度不能超过50个字符';
+      // 对应 string.json: contact_validate_name_length
+      return 'contact_validate_name_length';
     }
 
     // 2. 校验电话
     if (!phone || phone.trim().length === 0) {
       this.logger.warn('Validation failed: phone is empty');
-      return '电话号码不能为空';
+      // 对应 string.json: contact_validate_phone_empty
+      return 'contact_validate_phone_empty';
     }
 
-    // 简单的数字校验，实际项目可能需要更复杂的正则
+    // 简单的数字校验
     const isNum = /^\d+$/.test(phone);
     if (!isNum) {
       this.logger.warn('Validation failed: phone contains non-digits');
-      return '电话号码只能包含数字';
+      // 对应 string.json: contact_validate_phone_number_only
+      return 'contact_validate_phone_number_only';
     }
 
     if (phone.length < 3 || phone.length > 20) {
       this.logger.warn('Validation failed: phone length invalid');
-      return '电话号码长度不合理';
+      // 对应 string.json: contact_validate_phone_length
+      return 'contact_validate_phone_length';
     }
 
     return null; // 验证通过
@@ -67,7 +70,6 @@ export class ContactViewModel {
 
   /**
    * 格式化联系人显示名称
-   * 如果有关系备注，则显示为 "姓名 (关系)"
    */
   public getDisplayName(contact: Contact): string {
     if (contact.relation && contact.relation.trim().length > 0) {
@@ -78,7 +80,6 @@ export class ContactViewModel {
 
   /**
    * 异步加载所有联系人并按字母顺序排序
-   * (模拟 A-Z 排序逻辑)
    */
   public async loadContactsSorted(): Promise<Array<Contact>> {
     this.logger.info('Loading contacts and sorting...');
@@ -89,7 +90,6 @@ export class ContactViewModel {
         return [];
       }
 
-      // 排序逻辑：按姓名 localeCompare 排序
       contacts.sort((a, b) => {
         const nameA = a.name || '';
         const nameB = b.name || '';
@@ -105,9 +105,7 @@ export class ContactViewModel {
   }
 
   /**
-   * 按首字母分组 (Group By Initial)
-   * 用于通讯录的侧边索引栏功能 (模拟)
-   * @returns Map<string, Array<Contact>> Key为首字母
+   * 按首字母分组
    */
   public groupContactsByInitial(contacts: Array<Contact>): Map<string, Array<Contact>> {
     const groups = new Map<string, Array<Contact>>();
@@ -115,7 +113,6 @@ export class ContactViewModel {
     for (const contact of contacts) {
       let initial = '#';
       if (contact.name && contact.name.length > 0) {
-        // 简单取第一个字符转大写，实际中文需要转拼音库
         const firstChar = contact.name.charAt(0).toUpperCase();
         if (firstChar >= 'A' && firstChar <= 'Z') {
           initial = firstChar;

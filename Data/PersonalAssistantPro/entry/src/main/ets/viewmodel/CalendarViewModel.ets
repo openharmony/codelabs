@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 // entry/src/main/ets/viewmodel/CalendarViewModel.ets
-import { DateUtils } from '../common/utils/DateUtils';
 import { Logger } from '../common/utils/Logger';
 //  [修复] 引入 Event 类
 import { Event } from '../model/EventModel';
@@ -26,6 +25,7 @@ export class TaskStatus {
   stripType: string = ''; // 'head' | 'body' | 'tail' | '' (空代表没有跨天条)
   hasPoint: boolean = false; // 是否有单天日程的小圆点
 }
+
 @Observed
 export class CalendarModel {
   day: number;
@@ -186,6 +186,7 @@ export class CalendarViewModel {
 
     return taskSet;
   }
+
   public processEventsToTaskMap(events: Event[]): Map<string, TaskStatus> {
     const taskMap = new Map<string, TaskStatus>();
 
@@ -224,8 +225,11 @@ export class CalendarViewModel {
         const status = getStatus(key);
 
         let newType = 'body';
-        if (currentTs === startTs) newType = 'head';
-        else if (currentTs === endTs) newType = 'tail';
+        if (currentTs === startTs) {
+          newType = 'head';
+        } else if (currentTs === endTs) {
+          newType = 'tail';
+        }
 
         // 冲突逻辑：Body > Head/Tail > Empty
         // 如果已经是 Body，保持 Body；如果是 Head 遇到 Tail，变成 Body
@@ -245,11 +249,6 @@ export class CalendarViewModel {
     });
 
     return taskMap;
-  }
-
-  // 辅助方法：生成统一的 Key (yyyy-m-d)
-  private formatDateKey(date: Date): string {
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   }
 
   /**
@@ -276,5 +275,10 @@ export class CalendarViewModel {
       prevYear--;
     }
     return new MonthInfo(prevYear, prevMonth);
+  }
+
+  // 辅助方法：生成统一的 Key (yyyy-m-d)
+  private formatDateKey(date: Date): string {
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
   }
 }

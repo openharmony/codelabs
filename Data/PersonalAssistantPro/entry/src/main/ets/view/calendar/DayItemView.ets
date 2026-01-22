@@ -21,7 +21,6 @@ export struct DayItemView {
   @Prop selectedTimestamp: number;
   @Prop stripType: string;
   @Prop hasPoint: boolean;
-
   // 常量定义
   private readonly ITEM_SIZE = 40;
   private readonly CIRCLE_SIZE = 36;
@@ -87,15 +86,35 @@ export struct DayItemView {
 
   private getStripBorderRadius(): BorderRadiuses | number {
     const r = 18;
-    if (this.stripType === 'head') return { topLeft: r, bottomLeft: r, topRight: 0, bottomRight: 0 };
-    if (this.stripType === 'tail') return { topLeft: 0, bottomLeft: 0, topRight: r, bottomRight: r };
-    if (this.stripType === 'body') return 0;
+    if (this.stripType === 'head') {
+      return {
+        topLeft: r,
+        bottomLeft: r,
+        topRight: 0,
+        bottomRight: 0
+      };
+    }
+    if (this.stripType === 'tail') {
+      return {
+        topLeft: 0,
+        bottomLeft: 0,
+        topRight: r,
+        bottomRight: r
+      };
+    }
+    if (this.stripType === 'body') {
+      return 0;
+    }
     return 0;
   }
 
   private getTextColor(): string {
-    if (this.isSelected()) return '#FFFFFF';
-    if (this.dayModel.isToday) return '#007DFF';
+    if (this.isSelected()) {
+      return '#FFFFFF';
+    }
+    if (this.dayModel.isToday) {
+      return '#007DFF';
+    }
     return '#182431';
   }
 

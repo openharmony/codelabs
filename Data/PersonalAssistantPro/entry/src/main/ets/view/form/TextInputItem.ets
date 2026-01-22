@@ -25,7 +25,6 @@ export struct TextInputItem {
   @Prop placeholder: string | Resource = '';
   @Link text: string;
   @Prop inputType: InputType = InputType.Normal;
-
   /** 是否是密码模式 */
   @Prop isPassword: boolean = false;
 

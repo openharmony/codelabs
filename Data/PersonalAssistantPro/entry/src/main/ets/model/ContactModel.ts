@@ -26,7 +26,9 @@ export class Contact {
   relation: string;
   email: string;
 
-  constructor(name: string, phone: string, relation: string = '朋友', email: string = '') {
+  // 📝 [修改] .ts 文件中无法直接使用 $r，这里将默认值改为空字符串。
+  // 请在创建 Contact 实例的 UI 层（如 Dialog）传入 $r('app.string.contact_default_relation') 解析后的值
+  constructor(name: string, phone: string, relation: string = '', email: string = '') {
     this.name = name;
     this.phone = phone;
     this.relation = relation;
@@ -106,7 +108,7 @@ export class ContactModel {
   }
 
   /**
-   *  [新增] 搜索功能
+   * [新增] 搜索功能
    * 注意：由于 phone 是加密存储的，SQL LIKE 无法直接搜索手机号。
    * 这里只搜索：姓名、邮箱、关系。
    */

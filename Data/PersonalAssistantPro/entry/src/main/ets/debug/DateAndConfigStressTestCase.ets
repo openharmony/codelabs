@@ -38,7 +38,7 @@ export class DateAndConfigStressTestCase extends DebugCase {
       new Date('2024-02-29T12:00:00').getTime(), // 2024 闰日
       new Date('2025-12-31T23:59:59').getTime(), // 2025 年末
       new Date('2000-01-01T00:00:00').getTime(), // 千禧年
-      Date.now() // 现在
+      Date.now()// 现在
     ];
 
     for (const ts of timestamps) {

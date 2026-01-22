@@ -20,18 +20,25 @@ import { DayItemView } from './DayItemView';
 export struct WeekView {
   //  [修正] @Watch 必须写在变量上，意思为：当 selectedTimestamp 变化时，调用 onSelectedDateChange
   @Link @Watch('onSelectedDateChange') selectedTimestamp: number;
-
   // 接收忙碌日期 Map
   @Prop taskMap: Map<string, TaskStatus> = new Map();
-
   // 内部状态：这周的7天数据
   @State weekData: Array<CalendarModel> = [];
+  private viewModel: CalendarViewModel = new CalendarViewModel();
+  // 📝 [修改] 使用 Resource 数组替代硬编码的字符串数组
+  private weekTitles: Resource[] = [
+    $r('app.string.week_sun'),
+    $r('app.string.week_mon'),
+    $r('app.string.week_tue'),
+    $r('app.string.week_wed'),
+    $r('app.string.week_thu'),
+    $r('app.string.week_fri'),
+    $r('app.string.week_sat')
+  ];
 
   // 回调
-  onDateSelected: (timestamp: number) => void = () => {};
-
-  private viewModel: CalendarViewModel = new CalendarViewModel();
-  private weekTitles: string[] = ['日', '一', '二', '三', '四', '五', '六'];
+  onDateSelected: (timestamp: number) => void = () => {
+  };
 
   aboutToAppear() {
     this.refreshData();
@@ -88,7 +95,8 @@ export struct WeekView {
 
       // 2. 星期标题头 (Mon, Tue, Wed...)
       GridRow({ columns: 7 }) {
-        ForEach(this.weekTitles, (title: string) => {
+        // 📝 [修改] 遍历 Resource 数组
+        ForEach(this.weekTitles, (title: Resource) => {
           GridCol() {
             Text(title)
               .fontSize(12)
@@ -131,10 +139,21 @@ export struct WeekView {
     .borderRadius(16)
   }
 
+  // 📝 [修改] 动态获取年月日单位
   private getWeekRangeTitle(): string {
-    if (this.weekData.length === 0) return '';
+    if (this.weekData.length === 0) {
+      return '';
+    }
     const start = this.weekData[0];
     const end = this.weekData[6];
-    return `${start.year}年${start.month}月${start.day}日 - ${end.month}月${end.day}日`;
+
+    // 获取上下文以解析资源字符串
+    const context = getContext(this);
+    const y = context.resourceManager.getStringSync($r('app.string.calendar_unit_year').id);
+    const m = context.resourceManager.getStringSync($r('app.string.calendar_unit_month').id);
+    const d = context.resourceManager.getStringSync($r('app.string.calendar_unit_day').id);
+
+    // 拼接字符串: "2023年5月1日 - 5月7日"
+    return `${start.year}${y}${start.month}${m}${start.day}${d} - ${end.month}${m}${end.day}${d}`;
   }
 }

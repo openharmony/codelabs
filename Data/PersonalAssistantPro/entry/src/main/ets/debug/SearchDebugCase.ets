@@ -14,8 +14,8 @@
  */
 // File: entry/src/main/ets/debug/SearchDebugCase.ts
 import { DebugCase } from './DebugCase';
-import { ContactModel, Contact } from '../model/ContactModel';
-import { EventModel, Event } from '../model/EventModel';
+import { Contact, ContactModel } from '../model/ContactModel';
+import { Event, EventModel } from '../model/EventModel';
 
 export class SearchDebugCase extends DebugCase {
   readonly name = 'Search Functionality Test (F1)';

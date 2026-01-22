@@ -18,6 +18,7 @@ import { RdbHelper, TABLE_EVENT } from '../common/database/RdbHelper';
 import { Logger } from '../common/utils/Logger';
 
 const logger = new Logger('EventModel');
+
 @Observed
 export class Event {
   id: number = 0;
@@ -28,7 +29,8 @@ export class Event {
   isAllDay: boolean;
   reminderId: number;
 
-  constructor(title: string, startTime: number, endTime: number, description: string = '', isAllDay: boolean = false, reminderId: number = -1) {
+  constructor(title: string, startTime: number, endTime: number, description: string = '', isAllDay: boolean = false,
+    reminderId: number = -1) {
     this.title = title;
     this.startTime = startTime;
     this.endTime = endTime;
@@ -39,7 +41,6 @@ export class Event {
 }
 
 export class EventModel {
-
   static async update(event: Event): Promise<number> {
     const values: relationalStore.ValuesBucket = {
       'title': event.title,
@@ -151,6 +152,7 @@ export class EventModel {
       return [];
     }
   }
+
   static async queryById(id: number): Promise<Event | undefined> {
     logger.error(`[DEBUG_2_MODEL] queryById 被调用，查询 ID: ${id}`); // [DEBUG]
 
@@ -203,7 +205,9 @@ export class EventModel {
 
   private static resultSetToEvents(resultSet: relationalStore.ResultSet): Event[] {
     const events: Event[] = [];
-    if (!resultSet) return events;
+    if (!resultSet) {
+      return events;
+    }
 
     try {
       while (resultSet.goToNextRow()) {

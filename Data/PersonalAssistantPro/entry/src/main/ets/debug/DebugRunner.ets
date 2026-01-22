@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 import { DebugCase } from './DebugCase';
-import { ExampleDebugCase } from './ExampleDebugCase';        // 示范用例
-import { ContactDatabaseCase } from './ContactDatabaseCase';  // 业务用例：联系人数据库
+import { ExampleDebugCase } from './ExampleDebugCase'; // 示范用例
+import { ContactDatabaseCase } from './ContactDatabaseCase'; // 业务用例：联系人数据库
 import { EncryptionPrivacyCase } from './EncryptionPrivacyCase';
-import { BiometricSettingCase } from './BiometricSettingCase'
+import { BiometricSettingCase } from './BiometricSettingCase';
 import { SearchDebugCase } from './SearchDebugCase';
 import { Logger } from '../common/utils/Logger';
 import { BackupRestoreDebugCase } from './BackupRestoreDebugCase';
@@ -25,9 +25,9 @@ import { EventAlgoTestCase } from './EventAlgoTestCase';
 import { SecurityStressTestCase } from './SecurityStressTestCase';
 import { UserScenarioSimulationCase } from './UserScenarioSimulationCase';
 import { DateAndConfigStressTestCase } from './DateAndConfigStressTestCase';
-export enum DebugTarget {
+enum DebugTarget {
   NONE = 'NONE',
-  EXAMPLE = 'EXAMPLE',              // 示范用例
+  EXAMPLE = 'EXAMPLE', // 示范用例
   CONTACT_DATABASE = 'CONTACT_DATABASE', // 联系人数据库测试
   ENCRYPTION_PRIVACY = 'ENCRYPTION_PRIVACY',
   BIOMETRIC_SETTING = 'BIOMETRIC_SETTING',
@@ -47,6 +47,7 @@ export enum DebugTarget {
  * - 发布正式包：改成 DebugTarget.NONE（或在 EntryAbility 里关掉调试入口）
  */
 const CURRENT_DEBUG_TARGET: DebugTarget = DebugTarget.NONE;
+
 // 你想测别的就改成 DebugTarget.CONTACT_DATABASE 等
 
 function createCase(target: DebugTarget): DebugCase | null {

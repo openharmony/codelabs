@@ -18,6 +18,16 @@ import { DateUtils } from '../common/utils/DateUtils';
 import { Logger } from '../common/utils/Logger';
 
 /**
+ * 📝 [新增] 定义状态返回接口
+ * 因为本文件是逻辑层(.ts)，无法直接返回 $r对象，
+ * 所以返回 Key 和 参数，由 UI 层通过 $r('app.string.' + key, param) 解析
+ */
+export interface EventStatusInfo {
+  key: string; // string.json 中的键名
+  param?: number; // 动态参数 (如: 3天后 的 3)
+}
+
+/**
  * 日程业务逻辑模型 (ViewModel)
  * 处理日程冲突检测、状态判断、时间计算等复杂业务
  */
@@ -32,29 +42,19 @@ export class EventViewModel {
       this.logger.warn('Validate failed: Start time must be before end time');
       return false;
     }
-    // 检查是否是过去的时间 (可选逻辑)
-    // const now = Date.now();
-    // if (end < now) {
-    //   this.logger.warn('Validate failed: End time is in the past');
-    //   return false;
-    // }
     return true;
   }
 
   /**
    * 检查是否与现有日程冲突
-   * 逻辑：查询库中所有日程，判断时间段是否有重叠
-   * 重叠公式：Max(start1, start2) < Min(end1, end2)
    */
   public async checkConflict(startTime: number, endTime: number, excludeId?: number): Promise<boolean> {
     this.logger.info('Checking for event conflicts...');
 
     try {
-      // 获取即将到来的日程 (为了性能，实际应该根据日期范围查)
       const allEvents = await EventModel.queryUpcoming();
 
       for (const event of allEvents) {
-        // 如果是编辑模式，排除自己
         if (excludeId && event.id === excludeId) {
           continue;
         }
@@ -75,16 +75,20 @@ export class EventViewModel {
   }
 
   /**
-   * 获取日程的状态描述文本
+   * 📝 [修改] 获取日程的状态信息
+   * 原方法名: getEventStatusText -> 建议改为 getEventStatusInfo
    * @param event
+   * @returns EventStatusInfo 包含资源Key和参数
    */
-  public getEventStatusText(event: Event): string {
+  public getEventStatusInfo(event: Event): EventStatusInfo {
     const now = Date.now();
 
     if (now > event.endTime) {
-      return '已结束';
+      // 对应: "已结束" -> calendar_status_ended
+      return { key: 'calendar_status_ended' };
     } else if (now >= event.startTime && now <= event.endTime) {
-      return '进行中';
+      // 对应: "进行中" -> calendar_status_ongoing
+      return { key: 'calendar_status_ongoing' };
     } else {
       // 计算还有多久开始
       const diff = event.startTime - now;
@@ -92,14 +96,18 @@ export class EventViewModel {
 
       if (hours > 48) {
         const days = Math.floor(hours / 24);
-        return `${days}天后`;
+        // 对应: "%d天后" -> calendar_time_days_later
+        return { key: 'calendar_time_days_later', param: days };
       } else if (hours > 24) {
-        return '明天';
+        // 对应: "明天" -> calendar_time_tomorrow
+        return { key: 'calendar_time_tomorrow' };
       } else if (hours > 0) {
-        return `${hours}小时后`;
+        // 对应: "%d小时后" -> calendar_time_hours_later
+        return { key: 'calendar_time_hours_later', param: hours };
       } else {
         const mins = Math.floor(diff / (60 * 1000));
-        return `${Math.max(1, mins)}分钟后`;
+        // 对应: "%d分钟后" -> calendar_time_mins_later
+        return { key: 'calendar_time_mins_later', param: Math.max(1, mins) };
       }
     }
   }
@@ -121,7 +129,6 @@ export class EventViewModel {
 
   /**
    * 将日程按日期分组 (Group By Date)
-   * 适用于列表页的吸顶分组显示
    */
   public groupEventsByDate(events: Array<Event>): Map<string, Array<Event>> {
     const map = new Map<string, Array<Event>>();
