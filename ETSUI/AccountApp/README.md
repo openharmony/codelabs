@@ -2,7 +2,7 @@
 
 ## 介绍
 
-在MyAccountApp 中，我们构建了一个具有用户注册、登录、账号密码增删改查以及密码安全检测功能的简易APP。
+在MyAccountApp 中，构建了一个具有用户注册、登录、账号密码增删改查以及密码安全检测功能的简易APP。
 
 - 图1：添加账号密码
 
@@ -25,8 +25,6 @@
 - OpenHarmony 系统：6.0
 
 ## 代码结构解读
-
-本篇 Codelab 只对核心代码进行讲解，对于完整代码，我们会在 gitcode 中提供。
 
 ```typescript
 ├──entry/src/main/ets                     // 代码区
