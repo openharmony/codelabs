@@ -48,20 +48,20 @@ static inline ffrt_function_header_t *ffrt_create_function_wrapper(const ffrt_fu
 
 ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type)
 {
-    ffrt_queue_attr_t queue_attr;
-    (void)ffrt_queue_attr_init(&queue_attr);
-    ffrt_queue_attr_set_max_concurrency(&queue_attr, concurrency);
+    ffrt_queue_attr_t queueAttr;
+    (void)ffrt_queue_attr_init(&queueAttr);
+    ffrt_queue_attr_set_max_concurrency(&queueAttr, concurrency);
 
     // 创建一个并发/串行 队列
     ffrt_queue_t queue;
     if (type == TYPE_CONCURRENT) {
-        queue = ffrt_queue_create(ffrt_queue_concurrent, name, &queue_attr);
+        queue = ffrt_queue_create(ffrt_queue_concurrent, name, &queueAttr);
     } else {
-        queue = ffrt_queue_create(ffrt_queue_serial, name, &queue_attr);
+        queue = ffrt_queue_create(ffrt_queue_serial, name, &queueAttr);
     }
 
     // 队列创建完后需要销毁队列属性
-    ffrt_queue_attr_destroy(&queue_attr);
+    ffrt_queue_attr_destroy(&queueAttr);
     if (!queue) {
         LOGE("create queue failed");
         return NULL;

@@ -141,9 +141,9 @@ typedef struct {
 } OptimizerConfig;
 
 /* 定义三个全局变量返回值 */
-static int g_add_ret = RET_FAILURE;
-static int g_sub_ret = RET_FAILURE;
-static int g_compute_ret = RET_FAILURE;
+int g_addRet;
+int g_subRet;
+int g_computeRet;
 
 /* ========== 函数声明 ========== */
 // 内存管理
@@ -221,7 +221,7 @@ Vector spline_interpolation(const Vector *x, const Vector *y);
 double spline_eval(const Vector *x, const Vector *y, const Vector *coeffs, double xi);
 
 // 统计分析
-Vector LinearRegression(const Vector *x, const Vector *y);
+Vector LinearRegression(Vector *x, Vector *y);
 double correlation_coefficient(const Vector *x, const Vector *y);
 Vector moving_average(const Vector *data, int window);
 void compute_statistics(const Vector *data, double *mean, double *variance,
@@ -263,7 +263,7 @@ void Add(void *arg)
     struct ParaStruct *para1 = (struct ParaStruct *)arg;
     int a = para1->a;
     int b = para1->b;
-    g_add_ret = RET_SUCCESS;
+    g_addRet = RET_SUCCESS;
 }
 
 void Sub(void *arg)
@@ -271,7 +271,7 @@ void Sub(void *arg)
     struct ParaStruct *para2 = (struct ParaStruct *)arg;
     int a = para2->a;
     int b = para2->b;
-    g_sub_ret = RET_SUCCESS;
+    g_subRet = RET_SUCCESS;
 }
 
 /* ========== 内存管理实现 ========== */
@@ -999,24 +999,32 @@ Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
 }
 
 /* ========== 统计分析 ========== */
-Vector LinearRegression(const Vector *x, const Vector *y)
+Vector LinearRegression(Vector *x, Vector *y)
 {
     int n = x->size;
+    double sumX = 0.0;
+    double sumY = 0.0;
+    double sumXx = 0.0;
+    double sumXy = 0.0;
     
-    // 计算统计量
-    double sum_x = INIT_VALUE_1, sum_y = INIT_VALUE_1;
-    double sum_xx = INIT_VALUE_1, sum_xy = INIT_VALUE_1;
     for (int i = INIT_ZERO; i < n; i++) {
-        sum_x += x->data[i];
-        sum_y += y->data[i];
-        sum_xx += x->data[i] * x->data[i];
-        sum_xy += x->data[i] * y->data[i];
+        sumX += x->data[i];
+        sumY += y->data[i];
+        sumXx += x->data[i] * x->data[i];
+        sumXy += x->data[i] * y->data[i];
     }
     
     // 计算回归系数
-    double denominator = n * sum_xx - sum_x * sum_x;
-    double slope = (n * sum_xy - sum_x * sum_y) / denominator;
-    double intercept = (sum_y * sum_xx - sum_x * sum_xy) / denominator;
+    double denominator = n * sumXx - sumX * sumX;
+    if (denominator == 0.0) {
+        LOGE("LinearRegression: singular matrix");
+        Vector result = create_vector(INIT_ONE);
+        result.data[INIT_ZERO] = 0.0;
+        return result;
+    }
+    
+    double slope = (n * sumXy - sumX * sumY) / denominator;
+    double intercept = (sumY * sumXx - sumX * sumXy) / denominator;
     
     Vector result = create_vector(INIT_TWO);
     result.data[INIT_ZERO] = intercept;
@@ -1214,7 +1222,7 @@ void compute(void *arg)
     destroy_vector(&rands);
     
     printf("\n=== 所有测试完成 ===\n");
-    g_compute_ret = RET_SUCCESS;
+    g_computeRet = RET_SUCCESS;
 }
 
 int ComputeFfrtQueue()
@@ -1261,7 +1269,7 @@ int ComputeFfrtQueue()
     ffrt_task_handle_destroy(task3);
     
     LOGI("FfrtQueue results ");
-    if (g_add_ret == RET_SUCCESS && g_sub_ret == RET_SUCCESS && g_compute_ret == RET_SUCCESS) {
+    if (g_addRet == RET_SUCCESS && g_subRet == RET_SUCCESS && g_computeRet == RET_SUCCESS) {
         return RET_SUCCESS_5;
     } else {
         return RET_FAILURE;
