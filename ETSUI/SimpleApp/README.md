@@ -64,7 +64,7 @@ MyApplication/
 ### 环境要求
 
 - **DevEco Studio**:  6.0.1 或更高版本
-- **OpenHarmony SDK**: API 版本 9
+- **OpenHarmony SDK**: API 版本 20
 - **Node.js**: 18+ (用于包管理)
 
 ### 开发环境搭建
