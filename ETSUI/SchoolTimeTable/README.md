@@ -11,10 +11,7 @@
 - **搜索功能**：支持按课程名称、教师或地点快速搜索课程。
 - **统计分析**：提供简单的课程统计功能（如每周课时数）。
 - **个性化**：支持设置当前周次、学期开始日期等。
-
-## 演示视频
-
-[OpenHarmony课程管理器演示视频](./OpenHarmony课程管理器-演示视频.mp4)
+- **用户管理**：支持用户注册、登录及个人信息修改。
 
 ## 开发环境
 - **IDE**: DevEco Studio
@@ -30,7 +27,7 @@
 
 2. **导入项目**
    - 打开 DevEco Studio。
-   - 选择 `File` -> `Open`，导航到 `UI/SchoolTimeTable` 目录并打开。
+   - 选择 `File` -> `Open`，导航到 `ETSUI/SchoolTimeTable` 目录并打开。
 
 3. **运行应用**
    - 连接 OpenHarmony 设备或启动模拟器。
@@ -38,7 +35,7 @@
 
 ## 目录结构
 ```
-UI/SchoolTimeTable
+ETSUI/SchoolTimeTable
 ├── AppScope       # 应用范围内的资源
 ├── entry          # 主入口模块
 │   ├── src
