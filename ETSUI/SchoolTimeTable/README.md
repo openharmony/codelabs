@@ -14,7 +14,7 @@
 
 ## 演示视频
 
-[OpenHarmony课程管理器演示视频](https://gitcode.com/m0_62639958/codelabs_SchoolTimeTable/blob/feature/SchoolTimeTable/ETSUI/SchoolTimeTable/OpenHarmony%E8%AF%BE%E7%A8%8B%E7%AE%A1%E7%90%86%E5%99%A8-%E6%BC%94%E7%A4%BA%E8%A7%86%E9%A2%91.mp4)
+[OpenHarmony课程管理器演示视频](./OpenHarmony课程管理器-演示视频.mp4)
 
 ## 开发环境
 - **IDE**: DevEco Studio
