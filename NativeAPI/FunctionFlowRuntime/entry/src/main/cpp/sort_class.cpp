@@ -599,7 +599,7 @@ void BankBusinessInsertionSentinelSort()
 
 // 泛型插入排序模板
 template<typename T, typename Compare = std::less<T>>
-void insertionSortTemplate(vector<T>& arr, Compare comp = Compare())
+void InsertionSortTemplate(vector<T>& arr, Compare comp = Compare())
 {
     int n = arr.size();
 
@@ -638,14 +638,14 @@ void BankBusinessinsertionTemplateSort()
 
     // 测试泛型插入排序版本
     auto start = chrono::high_resolution_clock::now();
-    insertionSortTemplate(people);
+    InsertionSortTemplate(people);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  泛型插入排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 基础选择排序 - 升序
-void selectionSortBasic(vector<int>& arr)
+void SelectionSortBasic(vector<int>& arr)
 {
     int n = arr.size();
 
@@ -677,14 +677,14 @@ void BankBusinessBaseselectionSort()
 
     // 测试基础选择排序版本
     auto start = chrono::high_resolution_clock::now();
-    selectionSortBasic(arr);
+    SelectionSortBasic(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础选择排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 选择排序 - 降序（找最大值）
-void selectionSortDescending(vector<int>& arr)
+void SelectionSortDescending(vector<int>& arr)
 {
     int n = arr.size();
 
@@ -713,14 +713,14 @@ void BankBusinessBaseselectionDecSort()
 
     // 测试基础选择降序排序版本
     auto start = chrono::high_resolution_clock::now();
-    selectionSortDescending(arr);
+    SelectionSortDescending(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础选择降序排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 双向选择排序（鸡尾酒选择排序）
-void bidirectionalSelectionSort(vector<int>& arr)
+void BidirectionalSelectionSort(vector<int>& arr)
 {
     int n = arr.size();
     int left = 0;
@@ -770,14 +770,14 @@ void BankBusinessBasebidirectionalSelectionSort()
 
     // 测试选择双向排序版本
     auto start = chrono::high_resolution_clock::now();
-    bidirectionalSelectionSort(arr);
+    BidirectionalSelectionSort(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  选择双向排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 记录位置最后再交换的版本
-void selectionSortDelayedSwap(vector<int>& arr)
+void SelectionSortDelayedSwap(vector<int>& arr)
 {
     int n = arr.size();
 
@@ -815,7 +815,7 @@ void BankBusinessBaseSelectionSortDelayedSwap()
 
     // 测试记录位置最后再交换选择排序版本
     auto start = chrono::high_resolution_clock::now();
-    selectionSortDelayedSwap(arr);
+    SelectionSortDelayedSwap(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  记录位置最后再交换选择排序:  " << duration.count() << " 微秒" << endl;
@@ -823,7 +823,7 @@ void BankBusinessBaseSelectionSortDelayedSwap()
 
 // 泛型选择排序模板
 template<typename T, typename Compare = std::less<T>>
-void selectionSortTemplate(vector<T>& arr, Compare comp = Compare())
+void SelectionSortTemplate(vector<T>& arr, Compare comp = Compare())
 {
     int n = arr.size();
 
@@ -868,14 +868,14 @@ void BankBusinessBaseSelectionSortTemplate()
 
     // 测试选择模板排序版本
     auto start = chrono::high_resolution_clock::now();
-    selectionSortTemplate(people);
+    SelectionSortTemplate(people);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  选择模板排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 基础桶排序 - 假设输入是[0, maxValue]范围内的均匀分布
-void bucketSortBasic(vector<int>& arr, int maxValue = 100)
+void BucketSortBasic(vector<int>& arr, int maxValue = 100)
 {
     int n = arr.size();
     if (n <= 1) {
@@ -917,14 +917,14 @@ void BankBusinessBasebucketSort()
 
     // 测试基础桶排序版本
     auto start = chrono::high_resolution_clock::now();
-    bucketSortBasic(arr, FIFTY);
+    BucketSortBasic(arr, FIFTY);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础桶排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 桶排序 - 针对[0, 1)范围内的浮点数
-void bucketSortFloat(vector<double>& arr)
+void BucketSortFloat(vector<double>& arr)
 {
     int n = arr.size();
     if (n <= 1) {
@@ -965,7 +965,7 @@ void BankBusinessBasebucketSortFloat()
 
     // 测试基础浮点桶排序版本
     auto start = chrono::high_resolution_clock::now();
-    bucketSortFloat(arr);
+    BucketSortFloat(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础桶浮点排序:  " << duration.count() << " 微秒" << endl;
@@ -993,13 +993,13 @@ private:
     }
 
     // 根据桶大小选择排序算法
-    void sortBucket(vector<int>& bucket)
+    void SortBucket(vector<int>& bucket)
     {
         int size = bucket.size();
 
         if (size <= SMALL_ARRAY_THRESHOLD) {
             // 小桶使用插入排序
-            insertionSort(bucket);
+            InsertionSort(bucket);
         } else if (size <= MEDIUM_ARRAY_THRESHOLD) {
             // 中等桶使用快速排序
             std::sort(bucket.begin(), bucket.end());
@@ -1009,7 +1009,7 @@ private:
         }
     }
 
-    void insertionSort(vector<int>& arr)
+    void InsertionSort(vector<int>& arr)
     {
         int n = arr.size();
         for (int i = 1; i < n; i++) {
@@ -1024,7 +1024,7 @@ private:
     }
 
 public:
-    void sort(vector<int>& arr)
+    void Sort(vector<int>& arr)
     {
         int n = arr.size();
         if (n <= 1) {
@@ -1066,7 +1066,7 @@ public:
         // 对每个桶排序
         for (int i = 0; i < bucketCount; i++) {
             if (!buckets[i].empty()) {
-                sortBucket(buckets[i]);
+                SortBucket(buckets[i]);
             }
         }
 
@@ -1222,7 +1222,7 @@ void BankBusinessBasebucketSortOptimized()
             vector<int> data = allData[i];
             // 优化桶排序
             auto start = chrono::high_resolution_clock::now();
-            bucketSorter.sort(data);
+            bucketSorter.Sort(data);
             auto end = chrono::high_resolution_clock::now();
             auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
             cout << i << "  优化桶排序:  " << duration.count() << " 微秒" << endl;
@@ -1234,13 +1234,13 @@ void BankBusinessBasebucketSortOptimized()
 class ParallelBucketSort {
 private:
     // 并行排序单个桶
-    void parallelSortBucket(vector<int>& bucket)
+    void ParallelSortBucket(vector<int>& bucket)
     {
         std::sort(bucket.begin(), bucket.end());
     }
 
 public:
-    void sort(vector<int>& arr) {
+    void Sort(vector<int>& arr) {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1305,7 +1305,7 @@ private:
 
 public:
     // 通用桶排序
-    static void sort(vector<T>& arr, 
+    static void Sort(vector<T>& arr, 
                      int bucketCount,
                      HashFunction hashFunc,
                      function<bool(const T&, const T&)> comp = less<T>())
@@ -1343,7 +1343,7 @@ public:
 // 字符串桶排序示例
 class StringBucketSorter {
 public:
-    static void sortByLength(vector<string>& arr)
+    static void SortByLength(vector<string>& arr)
     {
         // 按字符串长度分桶
         int maxLength = 0;
@@ -1373,7 +1373,7 @@ public:
         }
     }
 
-    static void sortByFirstChar(vector<string>& arr)
+    static void SortByFirstChar(vector<string>& arr)
     {
         // 按首字母分桶（26个字母+其他）
         const int EMPTY_BUCKET_INDEX = 26;
@@ -1436,8 +1436,8 @@ int getMaxDigits(const vector<int>& arr)
 }
 
 // LSD基数排序 - 十进制
-void radixSortLSD(vector<int>& arr) 
-    {
+void RadixSortLSD(vector<int>& arr)
+{
     if (arr.size() <= 1) {
         return;
     }
@@ -1486,7 +1486,7 @@ void BankBusinessBaseradixSort()
 
     // 测试LSD基数排序版本
     auto start = chrono::high_resolution_clock::now();
-    radixSortLSD(arr);
+    RadixSortLSD(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  LSD基数排序:  " << duration.count() << " 微秒" << endl;
@@ -1514,7 +1514,7 @@ private:
 
 public:
     // 通用基数排序，radix必须是2的幂（2,4,8,16,32,64,128,256）
-    void sort(vector<int>& arr, int radix = DEFAULT_RADIX)
+    void Sort(vector<int>& arr, int radix = DEFAULT_RADIX)
     {
         int n = arr.size();
         if (n <= 1) {
@@ -1571,7 +1571,7 @@ void BankBusinessradixSortOptimized()
         OptimizedRadixSort sorter;
         // 测试基数优化排序版本
         auto start = chrono::high_resolution_clock::now();
-        sorter.sort(data, radix);
+        sorter.Sort(data, radix);
         auto end = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
         cout << radix << "  基数优化排序:  " << duration.count() << " 微秒" << endl;
@@ -1582,7 +1582,7 @@ void BankBusinessradixSortOptimized()
 class MSDRadixSort {
 private:
     // 递归排序函数
-    void msdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
+    void MsdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
     {
         const int DIGIT_COUNT = 10;  // 0-9
         const int NUM_BUCKETS = 11;
@@ -1593,7 +1593,7 @@ private:
         int n = right - left + 1;
         if (n <= SMALL_ARRAY_THRESHOLD) {
             // 小数组使用插入排序
-            insertionSort(arr, left, right);
+            InsertionSort(arr, left, right);
             return;
         }
 
@@ -1630,13 +1630,13 @@ private:
         for (int i = 0; i < DECIMAL_BASE; i++) {
             int end = left + count[i] - 1;
             if (start <= end) {
-                msdSort(arr, start, end, digit - 1, maxDigit);
+                MsdSort(arr, start, end, digit - 1, maxDigit);
                 start = end + 1;
             }
         }
     }
 
-    void insertionSort(vector<int>& arr, int left, int right)
+    void InsertionSort(vector<int>& arr, int left, int right)
     {
         for (int i = left + 1; i <= right; i++) {
             int key = arr[i];
@@ -1675,14 +1675,14 @@ private:
     }
 
 public:
-    void sort(vector<int>& arr)
+    void Sort(vector<int>& arr)
     {
         if (arr.size() <= 1) {
             return;
         }
 
         int maxDigits = getMaxDigits(arr);
-        msdSort(arr, 0, arr.size() - 1, maxDigits, maxDigits);
+        MsdSort(arr, 0, arr.size() - 1, maxDigits, maxDigits);
     }
 };
 
@@ -1698,7 +1698,7 @@ void BankBusinessradixSortMSD()
     MSDRadixSort sorter;
     // 测试MSD基数排序版本
     auto start = chrono::high_resolution_clock::now();
-    sorter.sort(data);
+    sorter.Sort(data);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  MSD基数排序:  " << duration.count() << " 微秒" << endl;
@@ -1708,7 +1708,7 @@ void BankBusinessradixSortMSD()
 class SignedRadixSort {
 private:
     // 分离正负数
-    void separatePosNeg(vector<int>& arr)
+    void SeparatePosNeg(vector<int>& arr)
     {
         int n = arr.size();
         int left = 0, right = n - 1;
@@ -1728,7 +1728,7 @@ private:
     }
 
     // 对绝对值进行基数排序
-    void radixSortAbsolute(vector<int>& arr, int start, int end)
+    void RadixSortAbsolute(vector<int>& arr, int start, int end)
     {
         if (start >= end) {
             return;
@@ -1793,14 +1793,14 @@ private:
     }
 
 public:
-    void sort(vector<int>& arr)
+    void Sort(vector<int>& arr)
     {
         if (arr.size() <= 1) {
             return;
         }
 
         // 分离正负数
-        separatePosNeg(arr);
+        SeparatePosNeg(arr);
 
         // 找到正负数的分界点
         int negCount = 0;
@@ -1812,7 +1812,7 @@ public:
 
         // 对负数部分按绝对值排序（降序，然后反转）
         if (negCount > 0) {
-            radixSortAbsolute(arr, 0, negCount - 1);
+            RadixSortAbsolute(arr, 0, negCount - 1);
             // 反转负数部分
             reverse(arr.begin(), arr.begin() + negCount);
             // 将负数变回负号
@@ -1823,7 +1823,7 @@ public:
 
         // 对正数部分排序
         if (negCount < arr.size()) {
-            radixSortAbsolute(arr, negCount, arr.size() - 1);
+            RadixSortAbsolute(arr, negCount, arr.size() - 1);
         }
     }
 };
@@ -1840,7 +1840,7 @@ void BankBusinessradixSortSigned()
     SignedRadixSort sorter;
     // 测试支持负数的基数排序版本
     auto start = chrono::high_resolution_clock::now();
-    sorter.sort(data);
+    sorter.Sort(data);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  支持负数的基数排序:  " << duration.count() << " 微秒" << endl;
@@ -1870,7 +1870,7 @@ private:
 
 public:
     // LSD字符串排序
-    void sortLSD(vector<string>& arr)
+    void SortLSD(vector<string>& arr)
     {
         if (arr.size() <= 1) {
             return;
@@ -1908,16 +1908,16 @@ public:
     }
 
     // MSD字符串排序
-    void sortMSD(vector<string>& arr)
+    void SortMSD(vector<string>& arr)
     {
         if (arr.size() <= 1) {
             return;
         }
-        msdSort(arr, 0, arr.size() - 1, 0);
+        MsdSort(arr, 0, arr.size() - 1, 0);
     }
 
 private:
-    void msdSort(vector<string>& arr, int low, int high, int depth)
+    void MsdSort(vector<string>& arr, int low, int high, int depth)
     {
         if (low >= high) {
             return;
@@ -1925,7 +1925,7 @@ private:
 
         // 小数组使用插入排序
         if (high - low + 1 <= SMALL_ARRAY_THRESHOLD) {
-            insertionSort(arr, low, high, depth);
+            InsertionSort(arr, low, high, depth);
             return;
         }
 
@@ -1959,11 +1959,11 @@ private:
 
         // 递归排序每个桶
         for (int i = 0; i < ASCII_CHAR_COUNT; i++) {
-            msdSort(arr, low + count[i], low + count[i + 1] - 1, depth + 1);
+            MsdSort(arr, low + count[i], low + count[i + 1] - 1, depth + 1);
         }
     }
 
-    void insertionSort(vector<string>& arr, int low, int high, int depth)
+    void InsertionSort(vector<string>& arr, int low, int high, int depth)
     {
         for (int i = low + 1; i <= high; i++) {
             for (int j = i; j > low; j--) {
@@ -1999,7 +1999,7 @@ void BankBusinessradixSortString()
     StringRadixSort sorter;
     // 测试字符串基数排序版本
     auto start = chrono::high_resolution_clock::now();
-    sorter.sortLSD(strings);
+    sorter.SortLSD(strings);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  字符串基数排序:  " << duration.count() << " 微秒" << endl;
