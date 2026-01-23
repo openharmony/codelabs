@@ -34,9 +34,9 @@ typedef struct {
 #define TYPE_SERIAL 1
 
 // 封装提交队列任务函数
-ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
+ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
     ffrt_queue_priority_t level, int delay);
-void waitForRequest(ffrt_task_handle_t task);
+void WaitForRequest(ffrt_task_handle_t task);
 
 // type: 0代表并发调度，非0代表串行调度
 ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type);

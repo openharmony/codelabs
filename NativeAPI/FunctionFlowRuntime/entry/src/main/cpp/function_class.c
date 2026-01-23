@@ -21,20 +21,20 @@
 #define SLEEP_DURATION_MS 100
 #define THOUSAND 1000
 /* 定义三个全局变量返回值 */
-static int g_bankbusiness_ret = -1;
-static int g_bankbusinessvip_ret = -1;
+static int g_bankBusinessRet = -1;
+static int g_bankBusinessVipRet = -1;
 void BankBusiness(void *arg)
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
-    g_bankbusiness_ret = 0;
+    g_bankBusinessRet = 0;
 }
 
 void BankBusinessVIP(void *arg)
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
-    g_bankbusinessvip_ret = 0;
+    g_bankBusinessVipRet = 0;
 }
 
 int ProcessFfrtQueue()
@@ -55,19 +55,19 @@ int ProcessFfrtQueue()
     request2.arg = NULL;
     
     // VIP享受更优先的服务
-    ffrt_task_handle_t task1 = commitRequest(bank, BankBusiness, request1, ffrt_queue_priority_low, 0);
-    ffrt_task_handle_t task2 = commitRequest(bank, BankBusinessVIP, request2, ffrt_queue_priority_low, 0);
+    ffrt_task_handle_t task1 = CommitRequest(bank, BankBusiness, request1, ffrt_queue_priority_low, 0);
+    ffrt_task_handle_t task2 = CommitRequest(bank, BankBusinessVIP, request2, ffrt_queue_priority_low, 0);
 
     // 等待所有的客户服务完成
-    waitForRequest(task1);
-    waitForRequest(task2);
+    WaitForRequest(task1);
+    WaitForRequest(task2);
 
     DestroyBankSystem(bank);
 
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
     LOGI("FfrtQueue results ");
-    if (g_bankbusiness_ret == 0 && g_bankbusinessvip_ret == 0) {
+    if (g_bankBusinessRet == 0 && g_bankBusinessVipRet == 0) {
     return RET_SUCCESS_4;
     } else {
         return -1;

@@ -78,7 +78,7 @@ void DestroyBankSystem(ffrt_queue_t queue_handle)
 }
 
 // 封装提交队列任务函数
-ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
+ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
     ffrt_queue_priority_t level, int delay)
 {
     ffrt_task_attr_t task_attr;
@@ -91,7 +91,7 @@ ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), CReque
 }
 
 // 封装等待队列任务函数
-void waitForRequest(ffrt_task_handle_t task)
+void WaitForRequest(ffrt_task_handle_t task)
 {
     ffrt_queue_wait(task);
 }
