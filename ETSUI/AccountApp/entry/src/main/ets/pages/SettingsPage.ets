@@ -121,7 +121,7 @@ struct SettingsPage {
           // 详细信息
           Column() {
             this.InfoRow('构建版本', this.buildVersion)
-            this.InfoRow('开发语言', 'ArkTS / HarmonyOS')
+            this.InfoRow('开发语言', 'ArkTS / OpenHarmony')
             this.InfoRow('数据存储', 'RDB (本地数据库)')
             this.InfoRow('联系我们', this.developerEmail)
           }
