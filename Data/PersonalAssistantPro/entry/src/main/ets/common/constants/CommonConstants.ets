@@ -50,4 +50,5 @@ export class CommonConstants {
   static readonly MAX_RETRY_COUNT = 3;
   /** 搜索防抖时间 (ms) */
   static readonly SEARCH_DEBOUNCE_TIME = 300;
+  static readonly EVENT_ID_REFRESH = 1001;
 }

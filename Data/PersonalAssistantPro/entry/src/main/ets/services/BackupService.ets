@@ -18,6 +18,8 @@ import { Context } from '@kit.AbilityKit';
 import { Contact, ContactModel } from '../model/ContactModel';
 import { Event, EventModel } from '../model/EventModel';
 import { Logger } from '../common/utils/Logger';
+import { emitter } from '@kit.BasicServicesKit';
+import { CommonConstants } from '../common/constants/CommonConstants';
 
 const logger = new Logger('BackupService');
 const BACKUP_FILE_NAME = 'cloud_backup_sim.json';
@@ -116,11 +118,10 @@ export class BackupService {
       }
 
       logger.info(`Restore finished. Restored ${successCount} items.`);
-      AppStorage.setOrCreate('GlobalRefreshSignal', Date.now());
+      emitter.emit({ eventId: CommonConstants.EVENT_ID_REFRESH });
       return successCount;
 
     } catch (err) {
-      // 🚨🚨🚨 [关键修改] 修复 Log 为 {} 的问题 🚨🚨🚨
 
       let errorMsg = 'Unknown error';
       // 显式提取 message 属性

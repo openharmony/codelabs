@@ -18,6 +18,7 @@ import { ContactViewModel } from '../viewmodel/ContactViewModel'; // 📝 [新�
 import { Logger } from '../common/utils/Logger';
 import { emitter } from '@kit.BasicServicesKit';
 import promptAction from '@ohos.promptAction'; // 📝 [新增] 用于弹窗提示
+import { CommonConstants } from '../common/constants/CommonConstants';
 
 const logger = new Logger('ContactListPage');
 const EVENT_ID_REFRESH = 1001;
@@ -50,8 +51,8 @@ export struct ContactListPage {
     logger.info('【生命周期】ContactListPage aboutToAppear');
     this.loadContacts();
 
-    logger.info('【事件】注册监听 ID: 1001');
-    emitter.on({ eventId: EVENT_ID_REFRESH }, () => {
+    logger.info(`【事件】注册监听 ID: ${CommonConstants.EVENT_ID_REFRESH}`);
+    emitter.on({ eventId: CommonConstants.EVENT_ID_REFRESH }, () => {
       logger.info('【事件】收到刷新信号，延迟 50ms 执行刷新...');
       setTimeout(() => {
         this.loadContacts();
@@ -61,7 +62,7 @@ export struct ContactListPage {
 
   aboutToDisappear(): void {
     logger.info('【生命周期】ContactListPage aboutToDisappear');
-    emitter.off(EVENT_ID_REFRESH);
+    emitter.off(CommonConstants.EVENT_ID_REFRESH);
   }
 
   async loadContacts(): Promise<void> {
@@ -249,7 +250,6 @@ struct AddContactDialog {
   @State phone: string = '';
   @State relation: string = '';
   @State email: string = '';
-
   onConfirm: (name: string, phone: string, relation: string, email: string) => void = () => {
   };
 
