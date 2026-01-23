@@ -1099,8 +1099,8 @@ double GammaFunction(double x)
         A += coeffs[i] / (x + i);
     }
     
-    double result = sqrt(DEFAULT_MULTIPLIER * PI) * 
-                    pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) * 
+    double result = sqrt(DEFAULT_MULTIPLIER * PI) *
+                    pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) *
                     exp(-(x + g + GAMMA_APPROX_OFFSET)) * A;
     return result;
 }
@@ -1195,7 +1195,7 @@ void Compute(void *arg)
     // dy/dt = -y, y(0) = 1
 
     Vector sol = SolveOdeRk4(ff, TEST_ODE_Y0, TEST_ODE_T0, TEST_ODE_TF, TEST_ODE_STEPS);
-    printf("微分方程 y' = -y 在 t=1 的解: %.10f (理论值: %.10f)\n", 
+    printf("微分方程 y' = -y 在 t=1 的解: %.10f (理论值: %.10f)\n",
            sol.data[TEST_ODE_STEPS], exp(-INIT_VALUE_1));
     
     // 测试5: 傅里叶变换
@@ -1274,7 +1274,7 @@ int ComputeFfrtQueue()
         LOGE("create bank system failed");
         return RET_FAILURE;
     }
-   
+
     g_para1.a = ONE;
     g_para1.b = TWO;
 
@@ -1284,15 +1284,15 @@ int ComputeFfrtQueue()
     CRequest request1;
     request1.name = "customer1";
     request1.arg = &g_para1;
-    
+
     CRequest request2;
     request2.name = "customer2";
     request2.arg = &g_para2;
-    
+
     CRequest request3;
     request3.name = "customer3";
     request3.arg = NULL;
-    
+
     // VIP享受更优先的服务
     ffrt_task_handle_t task1 = CommitRequest(bank, Add, request1, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
     ffrt_task_handle_t task2 = CommitRequest(bank, Sub, request2, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
@@ -1308,7 +1308,7 @@ int ComputeFfrtQueue()
     ffrt_task_handle_destroy(task1);
     ffrt_task_handle_destroy(task2);
     ffrt_task_handle_destroy(task3);
-    
+
     LOGI("FfrtQueue results ");
     if (g_addRet == RET_SUCCESS && g_subRet == RET_SUCCESS && g_computeRet == RET_SUCCESS) {
         return RET_SUCCESS_5;
