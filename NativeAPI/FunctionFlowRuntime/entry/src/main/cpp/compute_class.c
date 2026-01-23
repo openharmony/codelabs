@@ -33,7 +33,6 @@
 #define FIVE                   5
 #define RET_SUCCESS_5          5
 
-
 #define MAX_MATRIX_SIZE        1000
 #define MAX_VECTOR_SIZE        10000
 #define MAX_ITERATIONS         10000

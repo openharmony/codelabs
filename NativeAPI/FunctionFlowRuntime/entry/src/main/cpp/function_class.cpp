@@ -27,7 +27,6 @@
 #define TWO  2
 #define THREE  3
 
-
 /* 定义三个全局变量返回值 */
 static int g_bankbusiness1_ret = -1;
 static int g_bankbusinessvip1_ret = -1;
@@ -59,7 +58,6 @@ void BankBusiness1()
     LOGI("saving or withdraw ordinary customer");
     g_bankbusiness1_ret = 0;
 }
-
 
 void BankBusinessVIP1()
 {
