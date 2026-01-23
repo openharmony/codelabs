@@ -95,15 +95,15 @@ void BankBusiness()
 {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw ordinary customer");
-    
+
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试基础Lomuto版本
     auto start = chrono::high_resolution_clock::now();
     QuickSortLomuto(arr, 0, arr.size() - 1);
     auto end = chrono::high_resolution_clock::now();
-    
+
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  Lomuto版本: " << duration.count() << " 微秒" << endl;
 }
@@ -114,23 +114,23 @@ int HoarePartition(vector<int>& arr, int low, int high)
     int pivot = arr[low + (high - low) / 2];  // 选择中间元素作为基准
     int i = low - 1;
     int j = high + 1;
-    
+
     while (true) {
         // 从左向右找到第一个大于等于基准的元素
         do {
             i++;
         } while (arr[i] < pivot);
-        
+
         // 从右向左找到第一个小于等于基准的元素
         do {
             j--;
         } while (arr[j] > pivot);
-        
+
         // 如果指针相遇或交叉，返回分区点
         if (i >= j) {
             return j;
         }
-        
+
         // 交换这两个元素
         swap(arr[i], arr[j]);
     }
@@ -150,10 +150,10 @@ void BankBusinessVIP()
 {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
-    
+
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试Hoare版本
     auto start = chrono::high_resolution_clock::now();
     QuickSortHoare(arr, 0, arr.size() - 1);
@@ -168,7 +168,7 @@ void InsertionSort(vector<int>& arr, int low, int high)
     for (int i = low + 1; i <= high; i++) {
         int key = arr[i];
         int j = i - 1;
-        
+
         while (j >= low && arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
@@ -181,7 +181,7 @@ void InsertionSort(vector<int>& arr, int low, int high)
 int MedianOfThree(vector<int>& arr, int low, int high)
 {
     int mid = low + (high - low) / 2;
-    
+
     // 对三个元素进行排序
     if (arr[low] > arr[mid]) {
         swap(arr[low], arr[mid]);
@@ -192,7 +192,7 @@ int MedianOfThree(vector<int>& arr, int low, int high)
     if (arr[mid] > arr[high]) {
         swap(arr[mid], arr[high]);
     }
-    
+
     // 将中位数放在high-1位置
     swap(arr[mid], arr[high - 1]);
     return arr[high - 1];
@@ -206,15 +206,15 @@ void ThreeWayQuickSort(vector<int>& arr, int low, int high)
         InsertionSort(arr, low, high);
         return;
     }
-    
+
     // 使用三数取中法选择基准
     int pivot = MedianOfThree(arr, low, high);
-    
+
     // 三向切分
     int lt = low;      // arr[low..lt-1] < pivot
     int gt = high - 1; // arr[gt+1..high] > pivot
     int i = low + 1;   // arr[lt..i-1] == pivot
-    
+
     while (i <= gt) {
         if (arr[i] < pivot) {
             swap(arr[lt], arr[i]);
@@ -227,7 +227,7 @@ void ThreeWayQuickSort(vector<int>& arr, int low, int high)
             i++;
         }
     }
-    
+
     // 递归排序小于和大于基准的部分
     ThreeWayQuickSort(arr, low, lt - 1);
     ThreeWayQuickSort(arr, gt + 1, high);
@@ -239,7 +239,7 @@ void QuickSort(vector<int>& arr)
     if (arr.size() <= 1) {
         return;
     }
-    
+
     // 如果数组已基本有序，先打乱顺序
     ThreeWayQuickSort(arr, 0, arr.size() - 1);
 }
@@ -248,7 +248,7 @@ void BankBusinessNew11()
 {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
-    
+
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
 
@@ -264,7 +264,7 @@ void BankBusinessNew11()
 void BubbleSortBasic(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 0; i < n - 1; i++) {
         // 每轮将最大的元素"冒泡"到末尾
         for (int j = 0; j < n - 1 - i; j++) {
@@ -282,7 +282,7 @@ void BankBusinessBaseBubble()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试基础冒泡版本
     auto start = chrono::high_resolution_clock::now();
     BubbleSortBasic(arr);
@@ -295,17 +295,17 @@ void BankBusinessBaseBubble()
 void BubbleSortOptimized(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 0; i < n - 1; i++) {
         bool swapped = false;  // 标记本轮是否发生交换
-        
+
         for (int j = 0; j < n - 1 - i; j++) {
             if (arr[j] > arr[j + 1]) {
                 swap(arr[j], arr[j + 1]);
                 swapped = true;
             }
         }
-        
+
         // 如果本轮没有发生交换，说明数组已经有序
         if (!swapped) {
             break;  // 提前结束排序
@@ -320,7 +320,7 @@ void BankBusinessOptimizeBubble1()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试优化冒泡版本1
     auto start = chrono::high_resolution_clock::now();
     BubbleSortOptimized(arr);
@@ -334,20 +334,20 @@ void BubbleSortOptimized2(vector<int>& arr)
 {
     int n = arr.size();
     int lastSwapIndex = n - 1;  // 记录最后一次交换的位置
-    
+
     while (lastSwapIndex > 0) {
         int currentSwapIndex = 0;  // 当前轮最后交换的位置
-        
+
         for (int j = 0; j < lastSwapIndex; j++) {
             if (arr[j] > arr[j + 1]) {
                 swap(arr[j], arr[j + 1]);
                 currentSwapIndex = j;  // 更新最后交换位置
             }
         }
-        
+
         // 最后交换位置之后的元素已经有序
         lastSwapIndex = currentSwapIndex;
-        
+
         // 如果没有发生交换，则结束排序
         if (currentSwapIndex == 0) {
             break;
@@ -362,7 +362,7 @@ void BankBusinessOptimizeBubble2()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试优化冒泡版本1
     auto start = chrono::high_resolution_clock::now();
     BubbleSortOptimized2(arr);
@@ -377,10 +377,10 @@ void CocktailSort(vector<int>& arr)
     int n = arr.size();
     int left = 0;
     int right = n - 1;
-    
+
     while (left < right) {
         bool swapped = false;
-        
+
         // 从左到右，将最大元素移到右边
         for (int i = left; i < right; i++) {
             if (arr[i] > arr[i + 1]) {
@@ -389,14 +389,14 @@ void CocktailSort(vector<int>& arr)
             }
         }
         right--;  // 右边界缩小
-        
+
         // 如果没有发生交换，提前结束
         if (!swapped) {
             break;
         }
-        
+
         swapped = false;
-        
+
         // 从右到左，将最小元素移到左边
         for (int i = right; i > left; i--) {
             if (arr[i] < arr[i - 1]) {
@@ -405,7 +405,7 @@ void CocktailSort(vector<int>& arr)
             }
         }
         left++;  // 左边界缩小
-        
+
         // 如果没有发生交换，提前结束
         if (!swapped) {
             break;
@@ -420,7 +420,7 @@ void BankBusinessOptimizeCock()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试优化冒泡版本1
     auto start = chrono::high_resolution_clock::now();
     CocktailSort(arr);
@@ -433,18 +433,18 @@ void BankBusinessOptimizeCock()
 void InsertionSortBasic(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     // 从第二个元素开始（第一个元素视为已排序）
     for (int i = 1; i < n; i++) {
         int key = arr[i];  // 当前要插入的元素
         int j = i - 1;      // 已排序部分的最后一个元素索引
-        
+
         // 在已排序部分中找到合适位置
         while (j >= 0 && arr[j] > key) {
             arr[j + 1] = arr[j];  // 元素后移
             j--;
         }
-        
+
         // 插入元素到正确位置
         arr[j + 1] = key;
     }
@@ -457,7 +457,7 @@ void BankBusinessBaseInsertionSort()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试基础插入排序版本
     auto start = chrono::high_resolution_clock::now();
     InsertionSortBasic(arr);
@@ -470,17 +470,17 @@ void BankBusinessBaseInsertionSort()
 void InsertionSortDescending(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 1; i < n; i++) {
         int key = arr[i];
         int j = i - 1;
-        
+
         // 修改比较条件实现降序
         while (j >= 0 && arr[j] < key) {
             arr[j + 1] = arr[j];
             j--;
         }
-        
+
         arr[j + 1] = key;
     }
 }
@@ -492,7 +492,7 @@ void BankBusinessBaseInsertionSortDec()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试基础插入排序降序版本
     auto start = chrono::high_resolution_clock::now();
     InsertionSortDescending(arr);
@@ -505,29 +505,29 @@ void BankBusinessBaseInsertionSortDec()
 void InsertionSortBinarySearch(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 1; i < n; i++) {
         int key = arr[i];
-        
+
         // 使用二分查找找到插入位置
         int left = 0;
         int right = i - 1;
-        
+
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            
+
             if (arr[mid] > key) {
                 right = mid - 1;
             } else {
                 left = mid + 1;
             }
         }
-        
+
         // 将元素向后移动
         for (int j = i - 1; j >= left; j--) {
             arr[j + 1] = arr[j];
         }
-        
+
         // 插入元素
         arr[left] = key;
     }
@@ -540,7 +540,7 @@ void BankBusinessInsertionSortBinary()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试二分插入排序版本
     auto start = chrono::high_resolution_clock::now();
     InsertionSortBinarySearch(arr);
@@ -556,7 +556,7 @@ void InsertionSortWithSentinel(vector<int>& arr)
     if (n <= 1) {
         return;
     }
-    
+
     // 第一步：找到最小元素放在arr[0]作为哨兵
     int minIndex = 0;
     for (int i = 1; i < n; i++) {
@@ -565,18 +565,18 @@ void InsertionSortWithSentinel(vector<int>& arr)
         }
     }
     swap(arr[0], arr[minIndex]);
-    
+
     // 现在arr[0]是最小元素，可作为哨兵
     for (int i = 2; i < n; i++) {
         int key = arr[i];
         int j = i - 1;
-        
+
         // 不需要检查j>=0，因为arr[0]是最小元素
         while (arr[j] > key) {
             arr[j + 1] = arr[j];
             j--;
         }
-        
+
         arr[j + 1] = key;
     }
 }
@@ -588,7 +588,7 @@ void BankBusinessInsertionSentinelSort()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试二分插入排序版本
     auto start = chrono::high_resolution_clock::now();
     InsertionSortWithSentinel(arr);
@@ -602,16 +602,16 @@ template<typename T, typename Compare = std::less<T>>
 void insertionSortTemplate(vector<T>& arr, Compare comp = Compare())
 {
     int n = arr.size();
-    
+
     for (int i = 1; i < n; i++) {
         T key = arr[i];
         int j = i - 1;
-        
+
         while (j >= 0 && comp(key, arr[j])) {
             arr[j + 1] = arr[j];
             j--;
         }
-        
+
         arr[j + 1] = key;
     }
 }
@@ -621,7 +621,7 @@ struct Person
 {
     string name;
     int age;
-    
+
     bool operator<(const Person& other) const
     {
         return age < other.age;
@@ -635,7 +635,7 @@ void BankBusinessinsertionTemplateSort()
 
     // 简单示例
     vector<Person> people = {{"Alice", 25}, {"Bob", 20}, {"Charlie", 30}};
-    
+
     // 测试泛型插入排序版本
     auto start = chrono::high_resolution_clock::now();
     insertionSortTemplate(people);
@@ -648,18 +648,18 @@ void BankBusinessinsertionTemplateSort()
 void selectionSortBasic(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 0; i < n - 1; i++) {
         // 假设当前位置是最小值
         int minIndex = i;
-        
+
         // 在剩余部分中找到最小元素的索引
         for (int j = i + 1; j < n; j++) {
             if (arr[j] < arr[minIndex]) {
                 minIndex = j;
             }
         }
-        
+
         // 将找到的最小元素与当前位置交换
         if (minIndex != i) {
             swap(arr[i], arr[minIndex]);
@@ -674,7 +674,7 @@ void BankBusinessBaseselectionSort()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试基础选择排序版本
     auto start = chrono::high_resolution_clock::now();
     selectionSortBasic(arr);
@@ -687,16 +687,16 @@ void BankBusinessBaseselectionSort()
 void selectionSortDescending(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 0; i < n - 1; i++) {
         int maxIndex = i;
-        
+
         for (int j = i + 1; j < n; j++) {
             if (arr[j] > arr[maxIndex]) {
                 maxIndex = j;
             }
         }
-        
+
         if (maxIndex != i) {
             swap(arr[i], arr[maxIndex]);
         }
@@ -710,7 +710,7 @@ void BankBusinessBaseselectionDecSort()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试基础选择降序排序版本
     auto start = chrono::high_resolution_clock::now();
     selectionSortDescending(arr);
@@ -725,11 +725,11 @@ void bidirectionalSelectionSort(vector<int>& arr)
     int n = arr.size();
     int left = 0;
     int right = n - 1;
-    
+
     while (left < right) {
         int minIndex = left;
         int maxIndex = left;
-        
+
         // 在当前区间中找到最小和最大元素的索引
         for (int i = left + 1; i <= right; i++) {
             if (arr[i] < arr[minIndex]) {
@@ -739,22 +739,22 @@ void bidirectionalSelectionSort(vector<int>& arr)
                 maxIndex = i;
             }
         }
-        
+
         // 将最小元素交换到left位置
         if (minIndex != left) {
             swap(arr[left], arr[minIndex]);
-            
+
             // 如果最大元素原本在left位置，现在被移动到了minIndex位置
             if (maxIndex == left) {
                 maxIndex = minIndex;
             }
         }
-        
+
         // 将最大元素交换到right位置
         if (maxIndex != right) {
             swap(arr[right], arr[maxIndex]);
         }
-        
+
         left++;
         right--;
     }
@@ -767,7 +767,7 @@ void BankBusinessBasebidirectionalSelectionSort()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试选择双向排序版本
     auto start = chrono::high_resolution_clock::now();
     bidirectionalSelectionSort(arr);
@@ -780,11 +780,11 @@ void BankBusinessBasebidirectionalSelectionSort()
 void selectionSortDelayedSwap(vector<int>& arr)
 {
     int n = arr.size();
-    
+
     for (int i = 0; i < n - 1; i++) {
         int minIndex = i;
         int minValue = arr[i];
-        
+
         // 只记录最小值和位置，不立即交换
         for (int j = i + 1; j < n; j++) {
             if (arr[j] < minValue) {
@@ -792,7 +792,7 @@ void selectionSortDelayedSwap(vector<int>& arr)
                 minIndex = j;
             }
         }
-        
+
         // 最后进行一次交换
         if (minIndex != i) {
             // 将[i]到[minIndex-1]的元素向后移动
@@ -812,7 +812,7 @@ void BankBusinessBaseSelectionSortDelayedSwap()
 
     // 简单示例
     vector<int> arr = {64, 34, 25, 12, 22, 11, 90, 88};
-    
+
     // 测试记录位置最后再交换选择排序版本
     auto start = chrono::high_resolution_clock::now();
     selectionSortDelayedSwap(arr);
@@ -826,16 +826,16 @@ template<typename T, typename Compare = std::less<T>>
 void selectionSortTemplate(vector<T>& arr, Compare comp = Compare())
 {
     int n = arr.size();
-    
+
     for (int i = 0; i < n - 1; i++) {
         int targetIndex = i;
-        
+
         for (int j = i + 1; j < n; j++) {
             if (comp(arr[j], arr[targetIndex])) {
                 targetIndex = j;
             }
         }
-        
+
         if (targetIndex != i) {
             swap(arr[i], arr[targetIndex]);
         }
@@ -848,7 +848,7 @@ struct Student
     string name;
     int score;
     int age;
-    
+
     // 按分数降序，年龄升序
     bool operator<(const Student& other) const {
         if (score != other.score) {
@@ -881,23 +881,23 @@ void bucketSortBasic(vector<int>& arr, int maxValue = 100)
     if (n <= 1) {
         return;
     }
-    
+
     // 1. 创建桶，这里使用n个桶
     int bucketCount = n;
     vector<vector<int>> buckets(bucketCount);
-    
+
     // 2. 计算每个元素应该放入哪个桶
     for (int i = 0; i < n; i++) {
         // 归一化到[0, n-1]范围
         int bucketIndex = arr[i] * bucketCount / (maxValue + 1);
         buckets[bucketIndex].push_back(arr[i]);
     }
-    
+
     // 3. 对每个桶内部进行排序（这里使用插入排序）
     for (int i = 0; i < bucketCount; i++) {
         sort(buckets[i].begin(), buckets[i].end());
     }
-    
+
     // 4. 合并所有桶
     int index = 0;
     for (int i = 0; i < bucketCount; i++) {
@@ -930,22 +930,22 @@ void bucketSortFloat(vector<double>& arr)
     if (n <= 1) {
         return;
     }
-    
+
     // 1. 创建n个桶
     vector<vector<double>> buckets(n);
-    
+
     // 2. 将每个元素放入对应的桶
     for (int i = 0; i < n; i++) {
         // 假设arr[i]在[0, 1)范围内
         int bucketIndex = n * arr[i];  // 乘以n得到桶索引
         buckets[bucketIndex].push_back(arr[i]);
     }
-    
+
     // 3. 对每个桶排序
     for (int i = 0; i < n; i++) {
         sort(buckets[i].begin(), buckets[i].end());
     }
-    
+
     // 4. 合并桶
     int index = 0;
     for (int i = 0; i < n; i++) {
@@ -983,20 +983,20 @@ private:
         if (maxVal - minVal <= MAX_BUCKET_COUNT) {
             return FIFTY;  // 数据范围小
         }
-        
+
         // 根据数据规模动态计算桶数量
         int bucketCount = sqrt(n);
         bucketCount = min(bucketCount, MAX_BUCKET_COUNT);  // 上限1000个桶
         bucketCount = max(bucketCount, MIN_BUCKET_COUNT);    // 下限10个桶
-        
+
         return bucketCount;
     }
-    
+
     // 根据桶大小选择排序算法
     void sortBucket(vector<int>& bucket)
     {
         int size = bucket.size();
-        
+
         if (size <= SMALL_ARRAY_THRESHOLD) {
             // 小桶使用插入排序
             insertionSort(bucket);
