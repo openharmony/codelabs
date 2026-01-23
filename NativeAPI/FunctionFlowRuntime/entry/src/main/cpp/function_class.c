@@ -45,15 +45,15 @@ int ProcessFfrtQueue()
         LOGE("create bank system failed");
         return -1;
     }
-    
+
     CRequest request1;
     request1.name = "customer1";
     request1.arg = NULL;
-    
+
     CRequest request2;
     request2.name = "customer2";
     request2.arg = NULL;
-    
+
     // VIP享受更优先的服务
     ffrt_task_handle_t task1 = CommitRequest(bank, BankBusiness, request1, ffrt_queue_priority_low, 0);
     ffrt_task_handle_t task2 = CommitRequest(bank, BankBusinessVIP, request2, ffrt_queue_priority_low, 0);

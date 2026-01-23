@@ -56,7 +56,7 @@ DataCell create_data_cell(DataType type, const char *value)
             cell.value.stringVal[MAX_STRING_LEN - 1] = '\0';
             break;
         case TYPE_BOOL:
-            cell.value.boolVal = (strcasecmp(value, "true") == 0 || 
+            cell.value.boolVal = (strcasecmp(value, "true") == 0 ||
                                    strcasecmp(value, "1") == 0);
             break;
         case TYPE_DATE:
@@ -466,7 +466,8 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
         }
     }
     printf("\n");
-    
+    const int BUFFER_SIZE = 20;
+    const int PRECISION = 2;
     // 打印数据
     for (int i = 0; i < result->row_count; i++) {
         for (int j = 0; j < result->column_count; j++) {
@@ -478,22 +479,22 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
                 char buffer[21] = {0};
                 switch(cell->type) {
                     case TYPE_INT:
-                        snprintf(buffer, 20, "%d", cell->value.intVal);
+                        snprintf(buffer, BUFFER_SIZE, "%d", cell->value.intVal);
                         break;
                     case TYPE_FLOAT:
-                        snprintf(buffer, 20, "%.2f", cell->value.floatVal);
+                        snprintf(buffer, BUFFER_SIZE, "%.2f", cell->value.floatVal);
                         break;
                     case TYPE_STRING:
-                        snprintf(buffer, 20, "%s", cell->value.stringVal);
+                        snprintf(buffer, BUFFER_SIZE, "%s", cell->value.stringVal);
                         break;
                     case TYPE_BOOL:
-                        snprintf(buffer, 20, "%s", cell->value.boolVal ? "true" : "false");
+                        snprintf(buffer, BUFFER_SIZE, "%s", cell->value.boolVal ? "true" : "false");
                         break;
                     case TYPE_DATE:
-                        strncpy(buffer, FormatDate(cell->value.dateVal), 20);
+                        strncpy(buffer, FormatDate(cell->value.dateVal), BUFFER_SIZE);
                         break;
                     default:
-                        strncpy(buffer, "UNKNOWN", 20);
+                        strncpy(buffer, "UNKNOWN", BUFFER_SIZE);
                 }
                 printf("%-20s", buffer);
             }
@@ -646,20 +647,20 @@ int database_ops_demo()
     // 更新数据
     printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
     
-    DataCell update_cells[USER_COLUMN_COUNT];
+    DataCell updateCells[USER_COLUMN_COUNT];
     // 使用value initialization替代memset
-    memset(static_cast<void*>(update_cells), 0, sizeof(update_cells));
+    memset(static_cast<void*>(updateCells), 0, sizeof(updateCells));
 
     for (int i = 0; i < USER_COLUMN_COUNT; i++) {
-        update_cells[i].isNull = true;
+        updateCells[i].isNull = true;
     }
     const int DATE_INDEX_3 = 3;
     const int DATE_INDEX_4 = 4;
     const int DATE_INDEX_7 = 7;
-    update_cells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
-    update_cells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
+    updateCells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
+    updateCells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
     
-    if (ops->UpdateTableRow(DATE_INDEX_3, update_cells)) {
+    if (ops->UpdateTableRow(DATE_INDEX_3, updateCells)) {
         printf("更新成功！\n");
         operationCount++;
     }
@@ -708,7 +709,7 @@ int database_ops_demo()
     // 创建第二个表：订单表
     printf("\n创建第二个表: orders\n");
     
-    ColumnDef order_columns[] = {
+    ColumnDef orderColumns[] = {
         {"order_id", TYPE_INT, 0, true, true, false, "0"},
         {"user_id", TYPE_INT, 0, true, false, true, "0"},
         {"product_name", TYPE_STRING, 100, true, false, false, ""},
@@ -718,8 +719,8 @@ int database_ops_demo()
         {"status", TYPE_STRING, 20, true, false, false, "pending"}
     };
     
-    std::unique_ptr<DataBaseOps> order_ops = std::make_unique<DataBaseOps>("orders", order_columns, ORDER_COLUMN_COUNT);
-    if (!order_ops) {
+    std::unique_ptr<DataBaseOps> orderOps = std::make_unique<DataBaseOps>("orders", orderColumns, ORDER_COLUMN_COUNT);
+    if (!orderOps) {
         printf("创建表失败！\n");
         return -1;
     }
@@ -757,19 +758,19 @@ int database_ops_demo()
         create_data_cell(TYPE_STRING, "pending")
     };
     
-    order_ops->InsertTableRow(order1);
-    order_ops->InsertTableRow(order2);
-    order_ops->InsertTableRow(order3);
+    orderOps->InsertTableRow(order1);
+    orderOps->InsertTableRow(order2);
+    orderOps->InsertTableRow(order3);
     const int DATE_INDEX3 = 3;
     operationCount += DATE_INDEX3;
     
     // 显示订单表
-    order_ops->PrintTableSchema();
+    orderOps->PrintTableSchema();
 
     printf("\n订单表数据:\n");
-    result = order_ops->ExecuteSelectQuery("");
+    result = orderOps->ExecuteSelectQuery("");
     if (result) {
-        order_ops->PrintQueryResult(result);
+        orderOps->PrintQueryResult(result);
     }
     operationCount++;
     
