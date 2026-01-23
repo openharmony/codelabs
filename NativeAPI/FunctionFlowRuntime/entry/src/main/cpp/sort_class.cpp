@@ -1419,7 +1419,8 @@ int getDigit(int num, int d)
     }
 
 // 获取数组中最大数字的位数
-int getMaxDigits(const vector<int>& arr) {
+int getMaxDigits(const vector<int>& arr) 
+    {
     if (arr.empty()) {
         return 0;
     }
@@ -1436,7 +1437,8 @@ int getMaxDigits(const vector<int>& arr) {
 }
 
 // LSD基数排序 - 十进制
-void radixSortLSD(vector<int>& arr) {
+void radixSortLSD(vector<int>& arr) 
+    {
     if (arr.size() <= 1) {
         return;
     }
@@ -1501,7 +1503,8 @@ private:
     }
 
     // 计算最大位数
-    int getMaxDigits(int maxVal, int radix) {
+    int getMaxDigits(int maxVal, int radix) 
+    {
        int digits = 0;
        while (maxVal > 0 && radix != 0) {
         digits++;
@@ -1512,7 +1515,8 @@ private:
     
 public:
     // 通用基数排序，radix必须是2的幂（2,4,8,16,32,64,128,256）
-    void sort(vector<int>& arr, int radix = DEFAULT_RADIX) {
+    void sort(vector<int>& arr, int radix = DEFAULT_RADIX) 
+    {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1595,7 +1599,7 @@ private:
         }
         
         // 计数数组
-    vector<int> count(DIGIT_COUNT + 1, 0);  // 0-9 + 一个额外位置
+        vector<int> count(DIGIT_COUNT + 1, 0);  // 0-9 + 一个额外位置
         
         // 临时数组
         vector<int> temp(n);
@@ -1781,7 +1785,8 @@ private:
         }
     }
     
-    int getDigit(int num, int d) {
+    int getDigit(int num, int d) 
+    {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
@@ -1846,7 +1851,8 @@ void BankBusinessradixSortSigned()
 class StringRadixSort {
 private:
     // 获取字符串的第k个字符，如果超出长度返回0
-    char getChar(const string& s, int k) {
+    char getChar(const string& s, int k) 
+    {
         if (k < s.length()) {
             return s[k];
         }
@@ -1854,7 +1860,8 @@ private:
     }
     
     // 获取最大字符串长度
-    int getMaxLength(const vector<string>& arr) {
+    int getMaxLength(const vector<string>& arr) 
+    {
         int maxLen = 0;
         for (const auto& s : arr) {
             maxLen = max(maxLen, (int)s.length());
@@ -1864,7 +1871,8 @@ private:
     
 public:
     // LSD字符串排序
-    void sortLSD(vector<string>& arr) {
+    void sortLSD(vector<string>& arr) 
+    {
         if (arr.size() <= 1) {
             return;
         }
@@ -1901,7 +1909,8 @@ public:
     }
     
     // MSD字符串排序
-    void sortMSD(vector<string>& arr) {
+    void sortMSD(vector<string>& arr) 
+    {
         if (arr.size() <= 1) {
             return;
         }
@@ -1909,7 +1918,8 @@ public:
     }
     
 private:
-    void msdSort(vector<string>& arr, int low, int high, int depth) {
+    void msdSort(vector<string>& arr, int low, int high, int depth) 
+    {
         if (low >= high) {
             return;
         }
@@ -1954,7 +1964,8 @@ private:
         }
     }
     
-    void insertionSort(vector<string>& arr, int low, int high, int depth) {
+    void insertionSort(vector<string>& arr, int low, int high, int depth) 
+    {
         for (int i = low + 1; i <= high; i++) {
             for (int j = i; j > low; j--) {
                 if (compareStrings(arr[j], arr[j - 1], depth) < 0) {
@@ -1966,7 +1977,8 @@ private:
         }
     }
     
-    int compareStrings(const string& a, const string& b, int depth) {
+    int compareStrings(const string& a, const string& b, int depth) 
+    {
         int minLen = min(a.length(), b.length());
         for (int i = depth; i < minLen; i++) {
             if (a[i] != b[i]) {

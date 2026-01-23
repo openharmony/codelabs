@@ -18,9 +18,8 @@
 #include <sstream>
 #include <iomanip>
 
-// C接口实现
+// C鎺ュ彛瀹炵幇
 extern "C" {
-
 time_t parse_date(const char *date_str)
 {
     struct tm tm = {0};
