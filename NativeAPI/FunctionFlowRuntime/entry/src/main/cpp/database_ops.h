@@ -343,16 +343,16 @@ DataCell create_data_cell(DataType type, const char *value);
 class DataBaseOps {
 private:
     /* ========== 辅助函数 ========== */
-    const char* data_type_to_string(DataType type);
-    DataType string_to_data_type(const char *str);
+    const char* DataTypeToString(DataType type);
+    DataType StringToDataType(const char *str);
 
-    char* format_date(time_t timestamp);
-    void free_data_cell(DataCell *cell);
-    int compare_data_cells(const DataCell *a, const DataCell *b);
-    SmartBPlusTreeNode* create_bplus_tree_node(bool is_leaf, int order);
-    void insert_into_index(TableIndex *index, int key);
-    void delete_from_index(TableIndex *index, int key);
-    SmartTableRow* find_table_row(int row_id);
+    char* FormatDate(time_t timestamp);
+    void FreeDataCell(DataCell *cell);
+    int CompareDataCells(const DataCell *a, const DataCell *b);
+    SmartBPlusTreeNode* CreateBPlusTreeNode(bool is_leaf, int order);
+    void InsertIntoIndex(TableIndex *index, int key);
+    void DeleteFromIndex(TableIndex *index, int key);
+    SmartTableRow* FindTableRow(int row_id);
 
 private:    
     // DatabaseTable *table;
@@ -362,16 +362,16 @@ private:
 public:
     DataBaseOps(const char *table_name, ColumnDef *columns, int column_count);
     ~DataBaseOps();
-    TableIndex* create_table_index(const char *column_name);
-    bool delete_table_row(int row_id);
+    TableIndex* CreateTableIndex(const char *column_name);
+    bool DeleteTableRow(int row_id);
     SmartQueryResult* ExecuteSelectQuery(const char *where_clause);
-    bool begin_transaction();
-    bool commit_transaction();
-    bool rollback_transaction();
-    void print_table_schema();
-    void print_query_result(SmartQueryResult *result);
-    int insert_table_row(DataCell *cells);
-    bool update_table_row(int row_id, DataCell *new_cells);
+    bool BeginTransaction();
+    bool CommitTransaction();
+    bool RollbackTransaction();
+    void PrintTableSchema();
+    void PrintQueryResult(SmartQueryResult *result);
+    int InsertTableRow(DataCell *cells);
+    bool UpdateTableRow(int row_id, DataCell *new_cells);
 };
 
 #ifdef __cplusplus

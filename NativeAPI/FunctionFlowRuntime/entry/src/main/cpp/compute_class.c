@@ -520,7 +520,7 @@ Vector SolveLinearSystemLu(const Matrix *A, const Vector *b)
                 U.data[i * n + j] = lu.data[i * n + j];
             } else {
                 L.data[i * n + j] = INIT_VALUE_1;
-                U.data[i *n + j] = lu.data[i * n + j];
+                U.data[i * n + j] = lu.data[i * n + j];
             }
         }
     }
@@ -1138,7 +1138,7 @@ Vector RandomNormal(int n, double mean, double stddev)
 double ff(double t, double y) { return -y; }
 double parabola(double x) { return x * x - INIT_VALUE_4 * x + INIT_VALUE_4; }
 
-void compute(void *arg)
+void Compute(void *arg)
 {
     printf("=== 高性能科学计算库测试 ===\n\n");
     
@@ -1281,7 +1281,7 @@ int ComputeFfrtQueue()
     // VIP享受更优先的服务
     ffrt_task_handle_t task1 = CommitRequest(bank, Add, request1, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
     ffrt_task_handle_t task2 = CommitRequest(bank, Sub, request2, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
-    ffrt_task_handle_t task3 = CommitRequest(bank, compute, request3, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
+    ffrt_task_handle_t task3 = CommitRequest(bank, Compute, request3, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
 
     // 等待所有的客户服务完成
     WaitForRequest(task1);
