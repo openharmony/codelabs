@@ -87,17 +87,23 @@ struct Index {
 
   // --- 【找回】核心功能：密码健康分析 ---
   analyzeSecurity(list: Array<AppAccount>): void {
-    let weak = 0;
-    let score = 100;
+    // 特殊情况：如果没有账号，默认为 100 分（或者 0 分，看你定义，通常空仓没有风险）
+    if (list.length === 0) {
+      this.securityScore = 100;
+      this.weakCount = 0;
+      this.duplicateCount = 0;
+      return;
+    }
 
-    // 1. 检查重复密码
+    let weak = 0;
+    let safeCount = 0; // 记录强密码数量
     const pwdMap = new Map<string, number>();
     let duplicates = 0;
 
     list.forEach(item => {
       const pwd = item.getPassword();
 
-      // 统计重复
+      // 1. 统计重复逻辑（保持不变）
       if (pwdMap.has(pwd)) {
         let count = pwdMap.get(pwd);
         if (count !== undefined) {
@@ -107,11 +113,15 @@ struct Index {
         pwdMap.set(pwd, 1);
       }
 
-      // 检查弱密码 (长度<6 或 纯数字/纯字母)
-      const isShort = pwd.length < 6;
-      const isSimple = /^[0-9]+$/.test(pwd) || /^[a-zA-Z]+$/.test(pwd);
+      // 2. 【修改点】检查弱密码标准
+      // 原来是 < 6，现在改为 < 8，且增加了对纯符号的简单判断（可选）
+      const isShort = pwd.length < 8; // 修改位置：长度标准提高到 8
+      const isSimple = /^[0-9]+$/.test(pwd) || /^[a-zA-Z]+$/.test(pwd); // 纯数字或纯字母
+
       if (isShort || isSimple) {
         weak++;
+      } else {
+        safeCount++; // 统计强密码
       }
     });
 
@@ -120,15 +130,32 @@ struct Index {
       if (count > 1) duplicates += (count - 1);
     });
 
-    // 扣分逻辑
-    score -= (weak * 10);
-    score -= (duplicates * 15);
-    if (score < 0) score = 0;
+    // 3. 【修改点】全新的算分逻辑
+    // 逻辑变更：不再是从 100 分里扣，而是计算“健康比例”。
+    // 公式：(强密码账号 / 总账号数) * 100 - 额外惩罚
+
+    let total = list.length;
+
+    // 基础分：基于健康账号的占比。
+    // 例如：1个强，1个弱。基础分 = (1/2)*100 = 50分。
+    // 如果你删除了那个强账号：基础分 = (0/1)*100 = 0分。-> 解决了“删除强账号分数不降”的问题。
+    let baseScore = (safeCount / total) * 100;
+
+    // 额外惩罚：为了让“弱密码”和“重复”看起来更严重，在比例分基础上继续扣分
+    // 修改位置：大幅增加了扣分权重
+    let penalty = 0;
+    if (weak > 0) penalty += (weak * 5);        // 每个弱密码额外再扣 5 分
+    if (duplicates > 0) penalty += (duplicates * 10); // 每个重复额外再扣 10 分
+
+    let finalScore = baseScore - penalty;
+
+    // 兜底：分数不能小于 0
+    if (finalScore < 0) finalScore = 0;
 
     // 更新状态
     this.weakCount = weak;
     this.duplicateCount = duplicates;
-    this.securityScore = score;
+    this.securityScore = Math.floor(finalScore); // 取整
   }
 
   filterData(): void {
@@ -266,7 +293,7 @@ struct Index {
       Row() {
         Column() {
           Text('安全评分')
-            .fontSize(14).fontColor(Color.White).opacity(0.9)
+            .fontSize(15).fontWeight(800).fontColor(Color.White).opacity(0.9)
           Text(`${this.securityScore}`)
             .fontSize(40).fontWeight(FontWeight.Bold).fontColor(Color.White)
             .margin({ top: 5 })
@@ -277,12 +304,12 @@ struct Index {
         // 右侧状态
         Column({ space: 8 }) {
           Row() {
-            Text('⚠️ 弱密码: ').fontSize(12).fontColor(Color.White).opacity(0.9)
-            Text(`${this.weakCount}`).fontSize(14).fontWeight(FontWeight.Bold).fontColor(this.weakCount > 0 ? 0xFFC107 : Color.White)
+            Text('⚠️ 弱密码: ').fontSize(15).fontWeight(800).fontColor(Color.White).opacity(0.9)
+            Text(`${this.weakCount}`).fontSize(14).fontWeight(800).fontColor(Color.White)
           }
           Row() {
-            Text('♻️ 重复项: ').fontSize(12).fontColor(Color.White).opacity(0.9)
-            Text(`${this.duplicateCount}`).fontSize(14).fontWeight(FontWeight.Bold).fontColor(this.duplicateCount > 0 ? 0xFF5252 : Color.White)
+            Text('♻️ 重复项: ').fontSize(15).fontWeight(900).fontColor(Color.White).opacity(0.9)
+            Text(`${this.duplicateCount}`).fontSize(14).fontWeight(900).fontColor(this.duplicateCount > 0 ? 0xFF5252 : Color.White)
           }
         }.alignItems(HorizontalAlign.End)
       }

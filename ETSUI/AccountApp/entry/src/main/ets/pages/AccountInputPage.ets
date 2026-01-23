@@ -77,12 +77,22 @@ struct AccountInputPage {
       return;
     }
 
-    let score = 0;
-    // 1. 长度奖励
-    if (pwd.length >= 6) score += 1;
-    if (pwd.length >= 10) score += 1;
+    // 1. 强制拦截：不足8位直接由 UI 处理（红字提示），这里设为最低级
+    if (pwd.length < 8) {
+      this.strengthLevel = 1;
+      this.strengthColor = Color.Red;
+      this.strengthText = '密码太短 (需至少8位)';
+      return;
+    }
 
-    // 2. 字符类型奖励
+    let score = 0;
+
+    // 2. 算分逻辑
+    score += 1; // 基础分 (8位已满足)
+
+    if (pwd.length >= 10) score += 1; // 长密码加分
+
+    // 字符类型奖励
     const hasLower = /[a-z]/.test(pwd);
     const hasUpper = /[A-Z]/.test(pwd);
     const hasNum = /[0-9]/.test(pwd);
@@ -91,20 +101,28 @@ struct AccountInputPage {
     if (hasLower) score += 1;
     if (hasUpper) score += 1;
     if (hasNum) score += 1;
-    if (hasSpecial) score += 2; // 特殊符号权重高
+    if (hasSpecial) score += 2;
 
-    // 3. 评级逻辑
+    // --- 【修改重点】调整分界线 ---
+    // 您的案例：10位纯数字 = 基础(1) + 长(1) + 数字(1) = 3分
+
+    // 原逻辑：if (score < 4) ... 所以 3分是弱(1格)
+    // 新逻辑：if (score < 3) ... 这样 3分就是中(2格)了
+
     if (score < 3) {
+      // 只有8位且单一字符（比如 12345678）才会落在这里
       this.strengthLevel = 1;
-      this.strengthColor = Color.Red;
-      this.strengthText = '弱 (建议加长或混合字符)';
+      this.strengthColor = 0xFF5252; // 红色
+      this.strengthText = '弱 (建议混合字符)';
     } else if (score < 5) {
-      this.strengthLevel = 2;
-      this.strengthColor = Color.Orange;
+      // 3分 或 4分 进入这里（比如 10位纯数字，或者 8位数字+字母）
+      this.strengthLevel = 2; // 占据 2 格
+      this.strengthColor = 0xFFC107; // 橙色/黄色
       this.strengthText = '中 (尚可)';
     } else {
-      this.strengthLevel = 3;
-      this.strengthColor = 0x00CC66; // 鲜绿色
+      // 5分及以上
+      this.strengthLevel = 3; // 占据 3 格
+      this.strengthColor = 0x00CC66; // 绿色
       this.strengthText = '强 (非常安全)';
     }
   }
@@ -128,6 +146,14 @@ struct AccountInputPage {
       this.safeToast('请填写完整信息');
       return;
     }
+
+    // ▼▼▼▼▼▼ 新增代码：强制校验 8 位 ▼▼▼▼▼▼
+    if (this.password.length < 8) {
+      this.safeToast('请输入8位及以上密码'); // 按照你的要求提示
+      return; // ⛔️ 阻止后续保存代码执行
+    }
+    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
+
     if (this.currentUserId === 0) {
       this.safeToast('用户状态异常，请重新登录');
       return;
