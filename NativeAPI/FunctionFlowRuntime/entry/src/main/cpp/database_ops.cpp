@@ -42,10 +42,10 @@ DataCell create_data_cell(DataType type, const char *value)
     
     switch(type) {
         case TYPE_INT:
-            cell.value.int_val = atoi(value);
+            cell.value.int_val = std::stoi(value);
             break;
         case TYPE_FLOAT:
-            cell.value.float_val = atof(value);
+            cell.value.float_val = std::stod(value);
             break;
         case TYPE_STRING:
             strncpy(cell.value.string_val, value, MAX_STRING_LEN - 1);
@@ -69,7 +69,7 @@ DataCell create_data_cell(DataType type, const char *value)
 } // extern "C"
 
 /* ========== 辅助函数 ========== */
-const char* DataBaseOps::data_type_to_string(DataType type)
+const char* DataBaseOps::DataTypeToString(DataType type)
 {
     switch(type) {
         case TYPE_INT:
@@ -87,7 +87,7 @@ const char* DataBaseOps::data_type_to_string(DataType type)
     }
 }
 
-DataType DataBaseOps::string_to_data_type(const char *str)
+DataType DataBaseOps::StringToDataType(const char *str)
 {
     if (strcasecmp(str, "int") == 0) {
         return TYPE_INT;
@@ -107,7 +107,7 @@ DataType DataBaseOps::string_to_data_type(const char *str)
     return TYPE_NULL;
 }
 
-char* DataBaseOps::format_date(time_t timestamp)
+char* DataBaseOps::FormatDate(time_t timestamp)
 {
     static const int DATE_BUFFER_SIZE = 20;
     static char buffer[DATE_BUFFER_SIZE];
@@ -116,7 +116,7 @@ char* DataBaseOps::format_date(time_t timestamp)
     return buffer;
 }
 
-void DataBaseOps::free_data_cell(DataCell *cell)
+void DataBaseOps::FreeDataCell(DataCell *cell)
 {
     if (cell) {
         if (cell->type == TYPE_STRING && !cell->is_null) {
@@ -125,7 +125,7 @@ void DataBaseOps::free_data_cell(DataCell *cell)
     }
 }
 
-int DataBaseOps::compare_data_cells(const DataCell *a, const DataCell *b)
+int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
 {
     if (a->is_null && b->is_null) {
         return 0;
@@ -169,7 +169,7 @@ int DataBaseOps::compare_data_cells(const DataCell *a, const DataCell *b)
     }
 }
 
-SmartBPlusTreeNode* DataBaseOps::create_bplus_tree_node(bool is_leaf, int order)
+SmartBPlusTreeNode* DataBaseOps::CreateBPlusTreeNode(bool is_leaf, int order)
 {
     std::shared_ptr<SmartBPlusTreeNode> s_node = std::make_shared<SmartBPlusTreeNode>(order, is_leaf);
     if (!s_node) {
@@ -179,7 +179,7 @@ SmartBPlusTreeNode* DataBaseOps::create_bplus_tree_node(bool is_leaf, int order)
     return s_node.get();
 }
 
-TableIndex* DataBaseOps::create_table_index(const char *column_name)
+TableIndex* DataBaseOps::CreateTableIndex(const char *column_name)
 {
     const int BPLUS_TREE_ORDER = 4;
     if (table->index_count >= MAX_INDEXES) {
@@ -202,7 +202,7 @@ TableIndex* DataBaseOps::create_table_index(const char *column_name)
     TableIndex *index = &table->indexes[table->index_count];
     strncpy(index->name, column_name, MAX_COLUMN_NAME - 1);
     index->column_index = col_index;
-    index->root = create_bplus_tree_node(true, BPLUS_TREE_ORDER);
+    index->root = CreateBPlusTreeNode(true, BPLUS_TREE_ORDER);
     index->height = 1;
     index->key_count = 0;
     
@@ -212,7 +212,7 @@ TableIndex* DataBaseOps::create_table_index(const char *column_name)
     return index;
 }
 
-void DataBaseOps::insert_into_index(TableIndex *index, int key)
+void DataBaseOps::InsertIntoIndex(TableIndex *index, int key)
 {
     // 简化实现：在实际系统中需要实现完整的B+树插入算法
     // 这里仅做演示
@@ -223,7 +223,7 @@ void DataBaseOps::insert_into_index(TableIndex *index, int key)
     index->key_count++;
 }
 
-void DataBaseOps::delete_from_index(TableIndex *index, int key)
+void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
 {
     const int FORMAT_BUFFER_SIZE = 32;
     char buffer[FORMAT_BUFFER_SIZE];
@@ -260,7 +260,7 @@ DataBaseOps::DataBaseOps(const char *table_name, ColumnDef *columns, int column_
 
 DataBaseOps::~DataBaseOps() {}
 
-SmartTableRow* DataBaseOps::find_table_row(int row_id)
+SmartTableRow* DataBaseOps::FindTableRow(int row_id)
 {
     for (int i = 0; i < table->row_count; i++) {
         if (!table->rows[i].deleted && table->rows[i].row_id == row_id) {
@@ -270,7 +270,7 @@ SmartTableRow* DataBaseOps::find_table_row(int row_id)
     return nullptr;
 }
 
-int DataBaseOps::insert_table_row(DataCell *cells)
+int DataBaseOps::InsertTableRow(DataCell *cells)
 {
     if (table->row_count >= MAX_ROWS) {
         return -1;
@@ -297,7 +297,7 @@ int DataBaseOps::insert_table_row(DataCell *cells)
                 TableIndex *index = &table->indexes[j];
                 if (index->column_index < table->column_count) {
                     // 简化：使用行ID作为索引键
-                    insert_into_index(index, row->row_id);
+                    InsertIntoIndex(index, row->row_id);
                 }
             }
             
@@ -308,15 +308,15 @@ int DataBaseOps::insert_table_row(DataCell *cells)
     return -1;
 }
 
-bool DataBaseOps::update_table_row(int row_id, DataCell *new_cells)
+bool DataBaseOps::UpdateTableRow(int row_id, DataCell *new_cells)
 {
-    SmartTableRow *row = find_table_row(row_id);
+    SmartTableRow *row = FindTableRow(row_id);
     if (!row) {
         return false;
     }
     
     // 保存旧数据（用于事务回滚）
-    DataCell *old_cells = (DataCell*)malloc(sizeof(DataCell) * table->column_count);
+    DataCell *old_cells = static_cast<DataCell*>(malloc(sizeof(DataCell) * table->column_count));
     if (!old_cells) {
         return false;
     }
@@ -336,9 +336,9 @@ bool DataBaseOps::update_table_row(int row_id, DataCell *new_cells)
     return true;
 }
 
-bool DataBaseOps::delete_table_row(int row_id)
+bool DataBaseOps::DeleteTableRow(int row_id)
 {
-    SmartTableRow *row = find_table_row(row_id);
+    SmartTableRow *row = FindTableRow(row_id);
     if (!row) {
         return false;
     }
@@ -346,7 +346,7 @@ bool DataBaseOps::delete_table_row(int row_id)
     // 更新索引
     for (int i = 0; i < table->index_count; i++) {
         TableIndex *index = &table->indexes[i];
-        delete_from_index(index, row_id);
+        DeleteFromIndex(index, row_id);
     }
     
     row->deleted = true;
@@ -355,7 +355,7 @@ bool DataBaseOps::delete_table_row(int row_id)
     return true;
 }
 
-bool DataBaseOps::begin_transaction()
+bool DataBaseOps::BeginTransaction()
 {
     if (table->in_transaction) {
         return false;
@@ -365,7 +365,7 @@ bool DataBaseOps::begin_transaction()
     return true;
 }
 
-bool DataBaseOps::commit_transaction()
+bool DataBaseOps::CommitTransaction()
 {
     if (!table->in_transaction) {
         return false;
@@ -375,7 +375,7 @@ bool DataBaseOps::commit_transaction()
     return true;
 }
 
-bool DataBaseOps::rollback_transaction()
+bool DataBaseOps::RollbackTransaction()
 {
     if (!table->in_transaction) {
         return false;
@@ -386,14 +386,14 @@ bool DataBaseOps::rollback_transaction()
     return true;
 }
 
-void DataBaseOps::print_table_schema()
+void DataBaseOps::PrintTableSchema()
 {
     const int SCHEMA_COLUMN_WIDTH = 20;
     const int SCHEMA_TYPE_WIDTH = 10;
     const int SCHEMA_FLAG_WIDTH = 8;
     
     printf("\n=== 表结构: %s ===\n", table->name);
-    printf("创建时间: %s\n", format_date(table->created_at));
+    printf("创建时间: %s\n", FormatDate(table->created_at));
     printf("行数: %d\n", table->row_count);
     printf("列数: %d\n\n", table->column_count);
     
@@ -409,14 +409,14 @@ void DataBaseOps::print_table_schema()
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
                static_cast<int>(SCHEMA_COLUMN_WIDTH), col->name,
-                static_cast<int>(SCHEMA_TYPE_WIDTH), data_type_to_string(col->type),
+                static_cast<int>(SCHEMA_TYPE_WIDTH), DataTypeToString(col->type),
                 static_cast<int>(SCHEMA_FLAG_WIDTH), col->not_null ? "YES" : "NO",
                 static_cast<int>(SCHEMA_FLAG_WIDTH), col->is_primary ? "YES" : "NO",
                 static_cast<int>(SCHEMA_FLAG_WIDTH), col->has_index ? "YES" : "NO");
     }
 }
 
-void DataBaseOps::print_query_result(SmartQueryResult *result)
+void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 {
     const int QUERY_COLUMN_WIDTH = 20;
     const int FORMAT_BUFFER_SIZE = 21;
@@ -472,7 +472,7 @@ void DataBaseOps::print_query_result(SmartQueryResult *result)
                         snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%s", cell->value.bool_val ? "true" : "false");
                         break;
                     case TYPE_DATE:
-                        strncpy(buffer, format_date(cell->value.date_val), DATE_FORMAT_SIZE);
+                        strncpy(buffer, FormatDate(cell->value.date_val), DATE_FORMAT_SIZE);
                         break;
                     default:
                         strncpy(buffer, "UNKNOWN", DATE_FORMAT_SIZE);
@@ -558,12 +558,12 @@ int database_ops_demo()
     }
     
     // 创建索引
-    ops->create_table_index("username");
-    ops->create_table_index("email");
+    ops->CreateTableIndex("username");
+    ops->CreateTableIndex("email");
     
     // 开始事务
     printf("\n开始事务...\n");
-    ops->begin_transaction();
+    ops->BeginTransaction();
     operation_count++;
     
     // 插入示例数据
@@ -602,26 +602,26 @@ int database_ops_demo()
         create_data_cell(TYPE_DATE, "2023-09-15")
     };
     
-    int id1 = ops->insert_table_row(user1);
-    int id2 = ops->insert_table_row(user2);
-    int id3 = ops->insert_table_row(user3);
+    int id1 = ops->InsertTableRow(user1);
+    int id2 = ops->InsertTableRow(user2);
+    int id3 = ops->InsertTableRow(user3);
     operation_count += 3;
     
     printf("插入完成: id1=%d, id2=%d, id3=%d\n", id1, id2, id3);
     
     // 提交事务
     printf("\n提交事务...\n");
-    ops->commit_transaction();
+    ops->CommitTransaction();
     operation_count++;
     
     // 显示表结构
-    ops->print_table_schema();
+    ops->PrintTableSchema();
     
     // 查询所有数据
     printf("\n执行查询: SELECT * FROM users\n");
     SmartQueryResult *result = ops->ExecuteSelectQuery("");
     if (result) {
-        ops->print_query_result(result);
+        ops->PrintQueryResult(result);
     }
     operation_count++;
     
@@ -640,7 +640,7 @@ int database_ops_demo()
     update_cells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
     update_cells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
     
-    if (ops->update_table_row(DATE_INDEX_3, update_cells)) {
+    if (ops->UpdateTableRow(DATE_INDEX_3, update_cells)) {
         printf("更新成功！\n");
         operation_count++;
     }
@@ -649,13 +649,13 @@ int database_ops_demo()
     printf("\n再次查询更新后的数据:\n");
     result = ops->ExecuteSelectQuery("");
     if (result) {
-        ops->print_query_result(result);
+        ops->PrintQueryResult(result);
     }
     operation_count++;
     
     // 开始新事务测试回滚
     printf("\n=== 测试事务回滚 ===\n");
-    ops->begin_transaction();
+    ops->BeginTransaction();
     
     printf("插入测试数据...\n");
     DataCell test_user[USER_COLUMN_COUNT] = {
@@ -669,13 +669,13 @@ int database_ops_demo()
         create_data_cell(TYPE_DATE, "2023-10-22")
     };
     
-    int test_id = ops->insert_table_row(test_user);
+    int test_id = ops->InsertTableRow(test_user);
     printf("插入测试用户，ID = %d\n", test_id);
     operation_count++;
     
     // 回滚事务
     printf("\n回滚事务...\n");
-    ops->rollback_transaction();
+    ops->RollbackTransaction();
     operation_count++;
     
     // 验证数据已回滚
@@ -738,19 +738,19 @@ int database_ops_demo()
         create_data_cell(TYPE_STRING, "pending")
     };
     
-    order_ops->insert_table_row(order1);
-    order_ops->insert_table_row(order2);
-    order_ops->insert_table_row(order3);
+    order_ops->InsertTableRow(order1);
+    order_ops->InsertTableRow(order2);
+    order_ops->InsertTableRow(order3);
     const int DATE_INDEX3= 3;
     operation_count += DATE_INDEX3;
     
     // 显示订单表
-    order_ops->print_table_schema();
+    order_ops->PrintTableSchema();
 
     printf("\n订单表数据:\n");
     result = order_ops->ExecuteSelectQuery("");
     if (result) {
-        order_ops->print_query_result(result);
+        order_ops->PrintQueryResult(result);
     }
     operation_count++;
     

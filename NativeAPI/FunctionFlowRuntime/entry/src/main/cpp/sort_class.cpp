@@ -66,7 +66,7 @@ SortClass::~SortClass()
 }
 
 // Lomuto分区法 - 简单但效率较低
-int lomutoPartition(vector<int>& arr, int low, int high)
+int LomutoPartition(vector<int>& arr, int low, int high)
 {
     int pivot = arr[high];  // 选择最后一个元素作为基准
     int i = low - 1;  // 较小元素的索引
@@ -83,12 +83,12 @@ int lomutoPartition(vector<int>& arr, int low, int high)
 }
 
 // 递归快速排序（Lomuto版本）
-void quickSortLomuto(vector<int>& arr, int low, int high)
+void QuickSortLomuto(vector<int>& arr, int low, int high)
 {
     if (low < high) {
-        int pi = lomutoPartition(arr, low, high);
-        quickSortLomuto(arr, low, pi - 1);
-        quickSortLomuto(arr, pi + 1, high);
+        int pi = LomutoPartition(arr, low, high);
+        QuickSortLomuto(arr, low, pi - 1);
+        QuickSortLomuto(arr, pi + 1, high);
     }
 }
 
@@ -102,7 +102,7 @@ void BankBusiness()
     
     // 测试基础Lomuto版本
     auto start = chrono::high_resolution_clock::now();
-    quickSortLomuto(arr, 0, arr.size() - 1);
+    QuickSortLomuto(arr, 0, arr.size() - 1);
     auto end = chrono::high_resolution_clock::now();
     
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
@@ -110,7 +110,7 @@ void BankBusiness()
 }
 
 // Hoare分区法 - 效率更高，交换次数更少
-int hoarePartition(vector<int>& arr, int low, int high)
+int HoarePartition(vector<int>& arr, int low, int high)
 {
     int pivot = arr[low + (high - low) / 2];  // 选择中间元素作为基准
     int i = low - 1;
@@ -141,7 +141,7 @@ int hoarePartition(vector<int>& arr, int low, int high)
 void QuickSortHoare(vector<int>& arr, int low, int high)
 {
     if (low < high) {
-        int pi = hoarePartition(arr, low, high);
+        int pi = HoarePartition(arr, low, high);
         QuickSortHoare(arr, low, pi);      // 注意：这里包含pi
         QuickSortHoare(arr, pi + 1, high);
     }
@@ -235,7 +235,7 @@ void ThreeWayQuickSort(vector<int>& arr, int low, int high)
 }
 
 // 快速排序包装函数（推荐使用）
-void quickSort(vector<int>& arr)
+void QuickSort(vector<int>& arr)
 {
     if (arr.size() <= 1) {
         return;
@@ -255,14 +255,14 @@ void BankBusinessNew11()
 
     // 测试优化版本
     auto start = chrono::high_resolution_clock::now();
-    quickSort(arr);
+    QuickSort(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  优化版本:  " << duration.count() << " 微秒" << endl;
 }
 
 // 基础冒泡排序
-void bubbleSortBasic(vector<int>& arr)
+void BubbleSortBasic(vector<int>& arr)
 {
     int n = arr.size();
     
@@ -286,14 +286,14 @@ void BankBusinessBaseBubble()
     
     // 测试基础冒泡版本
     auto start = chrono::high_resolution_clock::now();
-    bubbleSortBasic(arr);
+    BubbleSortBasic(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  冒泡基础版本:  " << duration.count() << " 微秒" << endl;
 }
 
 // 优化版本1：增加提前结束判断
-void bubbleSortOptimized(vector<int>& arr)
+void BubbleSortOptimized(vector<int>& arr)
 {
     int n = arr.size();
     
@@ -324,14 +324,14 @@ void BankBusinessOptimizeBubble1()
     
     // 测试优化冒泡版本1
     auto start = chrono::high_resolution_clock::now();
-    bubbleSortOptimized(arr);
+    BubbleSortOptimized(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  冒泡优化版本1:  " << duration.count() << " 微秒" << endl;
 }
 
 // 优化版本2：记录最后交换位置
-void bubbleSortOptimized2(vector<int>& arr)
+void BubbleSortOptimized2(vector<int>& arr)
 {
     int n = arr.size();
     int lastSwapIndex = n - 1;  // 记录最后一次交换的位置
@@ -366,14 +366,14 @@ void BankBusinessOptimizeBubble2()
     
     // 测试优化冒泡版本1
     auto start = chrono::high_resolution_clock::now();
-    bubbleSortOptimized2(arr);
+    BubbleSortOptimized2(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  冒泡优化版本2:  " << duration.count() << " 微秒" << endl;
 }
 
 // 鸡尾酒排序（双向冒泡排序）
-void cocktailSort(vector<int>& arr)
+void CocktailSort(vector<int>& arr)
 {
     int n = arr.size();
     int left = 0;
@@ -424,14 +424,14 @@ void BankBusinessOptimizeCock()
     
     // 测试优化冒泡版本1
     auto start = chrono::high_resolution_clock::now();
-    cocktailSort(arr);
+    CocktailSort(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  双向冒泡排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 基础插入排序 - 升序
-void insertionSortBasic(vector<int>& arr)
+void InsertionSortBasic(vector<int>& arr)
 {
     int n = arr.size();
     
@@ -461,14 +461,14 @@ void BankBusinessBaseInsertionSort()
     
     // 测试基础插入排序版本
     auto start = chrono::high_resolution_clock::now();
-    insertionSortBasic(arr);
+    InsertionSortBasic(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础插入排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 插入排序 - 降序
-void insertionSortDescending(vector<int>& arr)
+void InsertionSortDescending(vector<int>& arr)
 {
     int n = arr.size();
     
@@ -496,14 +496,14 @@ void BankBusinessBaseInsertionSortDec()
     
     // 测试基础插入排序降序版本
     auto start = chrono::high_resolution_clock::now();
-    insertionSortDescending(arr);
+    InsertionSortDescending(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  基础插入排序降序排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 使用二分查找优化插入位置查找
-void insertionSortBinarySearch(vector<int>& arr)
+void InsertionSortBinarySearch(vector<int>& arr)
 {
     int n = arr.size();
     
@@ -534,7 +534,7 @@ void insertionSortBinarySearch(vector<int>& arr)
     }
 }
 
-void BankBusinessinsertionSortBinary()
+void BankBusinessInsertionSortBinary()
 {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
@@ -544,14 +544,14 @@ void BankBusinessinsertionSortBinary()
     
     // 测试二分插入排序版本
     auto start = chrono::high_resolution_clock::now();
-    insertionSortBinarySearch(arr);
+    InsertionSortBinarySearch(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  二分插入排序:  " << duration.count() << " 微秒" << endl;
 }
 
 // 哨兵优化版本
-void insertionSortWithSentinel(vector<int>& arr)
+void InsertionSortWithSentinel(vector<int>& arr)
 {
     int n = arr.size();
     if (n <= 1) {
@@ -582,7 +582,7 @@ void insertionSortWithSentinel(vector<int>& arr)
     }
 }
 
-void BankBusinessinsertionSentinelSort()
+void BankBusinessInsertionSentinelSort()
 {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
@@ -592,7 +592,7 @@ void BankBusinessinsertionSentinelSort()
     
     // 测试二分插入排序版本
     auto start = chrono::high_resolution_clock::now();
-    insertionSortWithSentinel(arr);
+    InsertionSortWithSentinel(arr);
     auto end = chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
     cout << "  哨兵插入排序:  " << duration.count() << " 微秒" << endl;
@@ -1993,9 +1993,9 @@ int SortClass::FfrtConcurrentQueue()
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task9 = bankQueue.Enter(BankBusinessBaseInsertionSortDec, "customer9", 
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task10 = bankQueue.Enter(BankBusinessinsertionSortBinary, "customer10", 
+    auto task10 = bankQueue.Enter(BankBusinessInsertionSortBinary, "customer10", 
                                   ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task11 = bankQueue.Enter(BankBusinessinsertionSentinelSort, "customer11", 
+    auto task11 = bankQueue.Enter(BankBusinessInsertionSentinelSort, "customer11", 
                                   ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task12 = bankQueue.Enter(BankBusinessinsertionTemplateSort, "customer12", 
                                   ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
