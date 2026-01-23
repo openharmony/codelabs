@@ -294,7 +294,7 @@ public:
         for (int i = 0; i < column_count; i++) {
             if (i < static_cast<int>(col_names.size()) && !col_names[i].empty()) {
                 column_names[i] = std::make_unique<char[]>(col_names[i].size() + 1);
-                    strcpy(column_names[i].get(), col_names[i].c_str());
+                    std::copy(col_names[i].c_str(), col_names[i].c_str() + col_names[i].size() + 1, column_names[i].get());
             }
         }
 
