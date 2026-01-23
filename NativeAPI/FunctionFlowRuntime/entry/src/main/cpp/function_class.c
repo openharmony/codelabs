@@ -68,7 +68,7 @@ int ProcessFfrtQueue()
     ffrt_task_handle_destroy(task2);
     LOGI("FfrtQueue results ");
     if (g_bankBusinessRet == 0 && g_bankBusinessVipRet == 0) {
-    return RET_SUCCESS_4;
+        return RET_SUCCESS_4;
     } else {
         return -1;
     }

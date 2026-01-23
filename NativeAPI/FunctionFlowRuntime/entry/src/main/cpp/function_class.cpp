@@ -33,7 +33,9 @@ static int g_bankbusiness1_ret = -1;
 static int g_bankbusinessvip1_ret = -1;
 static int g_bankbusiness2_ret = -1;
 static int g_bankbusinessvip2_ret = -1;
-static int g_bankbusinessnew_ret = -1;FunctionClass::FunctionClass(uint32_t version)
+static int g_bankbusinessnew_ret = -1;
+
+FunctionClass::FunctionClass(uint32_t version)
 {
     LOGI("FunctionClass::FunctionClass %d", version);
 }
@@ -105,7 +107,7 @@ int FunctionClass::FfrtSerialQueue()
     bankQueue.Wait(task5);
     LOGI("FfrtQueue results ");
     if (g_bankbusiness1_ret == 0 && g_bankbusinessvip1_ret == 0) {
-    return RET_SUCCESS_1;
+        return RET_SUCCESS_1;
     } else {
         return -1;
     }
@@ -128,7 +130,7 @@ int FunctionClass::FfrtConcurrentQueue()
     bankQueue.Wait(task3);
     LOGI("FfrtQueue results ");
     if (g_bankbusiness2_ret == 0 && g_bankbusinessvip2_ret == 0 && g_bankbusinessnew_ret == 0) {
-    return RET_SUCCESS_2;
+        return RET_SUCCESS_2;
     } else {
         return -1;
     }

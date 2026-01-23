@@ -147,108 +147,108 @@ int g_computeRet;
 
 /* ========== 函数声明 ========== */
 // 内存管理
-Matrix create_matrix(int rows, int cols);
-void destroy_matrix(Matrix *mat);
-Vector create_vector(int size);
-void destroy_vector(Vector *vec);
-Matrix copy_matrix(const Matrix *src);
-Vector copy_vector(const Vector *src);
+Matrix CreateMatrix(int rows, int cols);
+void DestroyMatrix(Matrix *mat);
+Vector CreateVector(int size);
+void DestroyVector(Vector *vec);
+Matrix CopyMatrix(const Matrix *src);
+Vector CopyVector(const Vector *src);
 
 // 基本运算
-Matrix matrix_add(const Matrix *a, const Matrix *b);
-Matrix matrix_subtract(const Matrix *a, const Matrix *b);
-Matrix matrix_multiply(const Matrix *a, const Matrix *b);
-Matrix matrix_scalar_multiply(const Matrix *a, double scalar);
-Vector vector_add(const Vector *a, const Vector *b);
-Vector vector_subtract(const Vector *a, const Vector *b);
-double vector_dot(const Vector *a, const Vector *b);
-Matrix matrix_transpose(const Matrix *mat);
-Matrix matrix_inverse(const Matrix *mat);
-double matrix_determinant(const Matrix *mat);
+Matrix MatrixAdd(const Matrix *a, const Matrix *b);
+Matrix MatrixSubtract(const Matrix *a, const Matrix *b);
+Matrix MatrixMultiply(const Matrix *a, const Matrix *b);
+Matrix MatrixScalarMultiply(const Matrix *a, double scalar);
+Vector VectorAdd(const Vector *a, const Vector *b);
+Vector VectorSubtract(const Vector *a, const Vector *b);
+double VectorDot(const Vector *a, const Vector *b);
+Matrix MatrixTranspose(const Matrix *mat);
+Matrix MatrixInverse(const Matrix *mat);
+double MatrixDeterminant(const Matrix *mat);
 
 // 线性方程组求解
-Vector solve_linear_system(const Matrix *A, const Vector *b);
-Vector solve_linear_system_lu(const Matrix *A, const Vector *b);
-Matrix lu_decomposition(const Matrix *A);
-Vector forward_substitution(const Matrix *L, const Vector *b);
+Vector SolveLinearSystem(const Matrix *A, const Vector *b);
+Vector SolveLinearSystemLu(const Matrix *A, const Vector *b);
+Matrix LuDecomposition(const Matrix *A);
+Vector ForwardSubstitution(const Matrix *L, const Vector *b);
 Vector BackwardSubstitution(const Matrix *U, const Vector *b);
 
 // 特征值/特征向量
-Matrix qr_decomposition(const Matrix *A);
-void qr_algorithm(const Matrix *A, double *eigenvalues, Matrix *eigenvectors);
-double power_iteration(const Matrix *A, Vector *eigenvector);
-double inverse_power_iteration(const Matrix *A, Vector *eigenvector, double sigma);
+Matrix QrDecomposition(const Matrix *A);
+void QrAlgorithm(const Matrix *A, double *eigenvalues, Matrix *eigenvectors);
+double PowerIteration(const Matrix *A, Vector *eigenvector);
+double InversePowerIteration(const Matrix *A, Vector *eigenvector, double sigma);
 
 // 数值积分
-double integrate_trapezoidal(double (*f)(double), double a, double b, int n);
-double integrate_simpson(double (*f)(double), double a, double b, int n);
-double integrate_romberg(double (*f)(double), double a, double b, double tol);
-double integrate_gaussian(double (*f)(double), double a, double b, int n);
-double integrate_monte_carlo(double (*f)(double), double a, double b, int samples);
+double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n);
+double IntegrateSimpson(double (*f)(double), double a, double b, int n);
+double IntegrateRomberg(double (*f)(double), double a, double b, double tol);
+double IntegrateGaussian(double (*f)(double), double a, double b, int n);
+double IntegrateMonteCarlo(double (*f)(double), double a, double b, int samples);
 
 // 微分方程求解
-Vector solve_ode_euler(double (*f)(double, double), double y0, 
+Vector SolveOdeEuler(double (*f)(double, double), double y0, 
                        double t0, double tf, int steps);
-Vector solve_ode_rk4(double (*f)(double, double), double y0,
+Vector SolveOdeRk4(double (*f)(double, double), double y0,
                      double t0, double tf, int steps);
-Vector solve_ode_adaptive(double (*f)(double, double), double y0,
+Vector SolveOdeAdaptive(double (*f)(double, double), double y0,
                           double t0, double tf, double tol);
-Vector solve_ode_system(void (*f)(double, const Vector*, Vector*),
+Vector SolveOdeSystem(void (*f)(double, const Vector*, Vector*),
                         const Vector *y0, double t0, double tf, int steps);
 
 // 傅里叶变换
-void dft(const double *input, ComplexNum *output, int n);
-void idft(const ComplexNum *input, double *output, int n);
-void fft(ComplexNum *data, int n);
-void ifft(ComplexNum *data, int n);
-void fft_real(const double *input, ComplexNum *output, int n);
+void Dft(const double *input, ComplexNum *output, int n);
+void Idft(const ComplexNum *input, double *output, int n);
+void Fft(ComplexNum *data, int n);
+void Ifft(ComplexNum *data, int n);
+void FftReal(const double *input, ComplexNum *output, int n);
 
 // 优化算法
-double minimize_golden_section(double (*f)(double), double a, double b, double tol);
-double minimize_brent(double (*f)(double), double a, double b, double c, double tol);
-Vector minimize_gradient_descent(double (*f)(const Vector*),
+double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol);
+double MinimizeBrent(double (*f)(double), double a, double b, double c, double tol);
+Vector MinimizeGradientDescent(double (*f)(const Vector*),
                                  const Vector *gradient,
                                  const Vector *x0, double learning_rate, int iterations);
-Vector minimize_conjugate_gradient(double (*f)(const Vector*),
+Vector MinimizeConjugateGradient(double (*f)(const Vector*),
                                    const Vector *gradient,
                                    const Matrix *A, const Vector *b,
                                    const Vector *x0, int iterations);
 
 // 插值与逼近
-Vector polynomial_fit(const Vector *x, const Vector *y, int degree);
-double polynomial_eval(const Polynomial *p, double x);
-Vector spline_interpolation(const Vector *x, const Vector *y);
-double spline_eval(const Vector *x, const Vector *y, const Vector *coeffs, double xi);
+Vector PolynomialFit(const Vector *x, const Vector *y, int degree);
+double PolynomialEval(const Polynomial *p, double x);
+Vector SplineInterpolation(const Vector *x, const Vector *y);
+double SplineEval(const Vector *x, const Vector *y, const Vector *coeffs, double xi);
 
 // 统计分析
 Vector LinearRegression(Vector *x, Vector *y);
-double correlation_coefficient(const Vector *x, const Vector *y);
-Vector moving_average(const Vector *data, int window);
-void compute_statistics(const Vector *data, double *mean, double *variance,
+double CorrelationCoefficient(const Vector *x, const Vector *y);
+Vector MovingAverage(const Vector *data, int window);
+void ComputeStatistics(const Vector *data, double *mean, double *variance,
                        double *skewness, double *kurtosis);
 
 // 特殊函数
 double GammaFunction(double x);
-double beta_function(double a, double b);
-double bessel_j0(double x);
-double bessel_j1(double x);
+double BetaFunction(double a, double b);
+double BesselJ0(double x);
+double BesselJ1(double x);
 double ErfFunction(double x);
-double legendre_poly(int n, double x);
-double chebyshev_poly(int n, double x);
+double LegendrePoly(int n, double x);
+double ChebyshevPoly(int n, double x);
 
 // 随机数生成
-Vector random_uniform(int n, double a, double b);
+Vector RandomUniform(int n, double a, double b);
 Vector RandomNormal(int n, double mean, double stddev);
-Vector random_exponential(int n, double lambda);
-Matrix random_matrix(int rows, int cols, double min_val, double max_val);
+Vector RandomExponential(int n, double lambda);
+Matrix RandomMatrix(int rows, int cols, double min_val, double max_val);
 
 // 工具函数
-void print_matrix(const Matrix *mat, const char *name);
-void print_vector(const Vector *vec, const char *name);
-double matrix_norm(const Matrix *mat, int p);
-double vector_norm(const Vector *vec, int p);
-bool is_symmetric(const Matrix *mat);
-bool is_positive_definite(const Matrix *mat);
+void PrintMatrix(const Matrix *mat, const char *name);
+void PrintVector(const Vector *vec, const char *name);
+double MatrixNorm(const Matrix *mat, int p);
+double VectorNorm(const Vector *vec, int p);
+bool IsSymmetric(const Matrix *mat);
+bool IsPositiveDefinite(const Matrix *mat);
 
 struct ParaStruct {
     int a;
@@ -275,7 +275,7 @@ void Sub(void *arg)
 }
 
 /* ========== 内存管理实现 ========== */
-Matrix create_matrix(int rows, int cols)
+Matrix CreateMatrix(int rows, int cols)
 {
     Matrix mat;
     mat.rows = rows;
@@ -289,7 +289,7 @@ Matrix create_matrix(int rows, int cols)
     return mat;
 }
 
-void destroy_matrix(Matrix *mat)
+void DestroyMatrix(Matrix *mat)
 {
     if (mat->data != NULL) {
         free(mat->data);
@@ -299,12 +299,11 @@ void destroy_matrix(Matrix *mat)
     mat->cols = INIT_ZERO;
 }
 
-Vector create_vector(int size)
+Vector CreateVector(int size)
 {
     Vector vec;
     vec.size = size;
-    if (size <= 0)
-    {
+    if (size <= 0) {
         fprintf(stderr, "无效的内存申请大小\n");
         exit(EXIT_FAILURE);
     }
@@ -317,7 +316,7 @@ Vector create_vector(int size)
     return vec;
 }
 
-void destroy_vector(Vector *vec)
+void DestroyVector(Vector *vec)
 {
     if (vec->data != NULL) {
         free(vec->data);
@@ -326,29 +325,29 @@ void destroy_vector(Vector *vec)
     vec->size = INIT_ZERO;
 }
 
-Matrix copy_matrix(const Matrix *src)
+Matrix CopyMatrix(const Matrix *src)
 {
-    Matrix dst = create_matrix(src->rows, src->cols);
+    Matrix dst = CreateMatrix(src->rows, src->cols);
     memcpy(dst.data, src->data, src->rows * src->cols * sizeof(double));
     return dst;
 }
 
-Vector copy_vector(const Vector *src)
+Vector CopyVector(const Vector *src)
 {
-    Vector dst = create_vector(src->size);
+    Vector dst = CreateVector(src->size);
     memcpy(dst.data, src->data, src->size * sizeof(double));
     return dst;
 }
 
 /* ========== 基本运算实现 ========== */
-Matrix matrix_add(const Matrix *a, const Matrix *b)
+Matrix MatrixAdd(const Matrix *a, const Matrix *b)
 {
     if (a->rows != b->rows || a->cols != b->cols) {
         fprintf(stderr, "矩阵维度不匹配\n");
         exit(EXIT_FAILURE);
     }
     
-    Matrix result = create_matrix(a->rows, a->cols);
+    Matrix result = CreateMatrix(a->rows, a->cols);
     int total = a->rows * a->cols;
     
     for (int i = INIT_ZERO; i < total; i++) {
@@ -358,14 +357,14 @@ Matrix matrix_add(const Matrix *a, const Matrix *b)
     return result;
 }
 
-Matrix matrix_multiply(const Matrix *a, const Matrix *b)
+Matrix MatrixMultiply(const Matrix *a, const Matrix *b)
 {
     if (a->cols != b->rows) {
         fprintf(stderr, "矩阵维度不匹配，无法相乘\n");
         exit(EXIT_FAILURE);
     }
     
-    Matrix result = create_matrix(a->rows, b->cols);
+    Matrix result = CreateMatrix(a->rows, b->cols);
     
     for (int i = INIT_ZERO; i < a->rows; i++) {
         for (int j = INIT_ZERO; j < b->cols; j++) {
@@ -380,9 +379,9 @@ Matrix matrix_multiply(const Matrix *a, const Matrix *b)
     return result;
 }
 
-Matrix matrix_transpose(const Matrix *mat)
+Matrix MatrixTranspose(const Matrix *mat)
 {
-    Matrix result = create_matrix(mat->cols, mat->rows);
+    Matrix result = CreateMatrix(mat->cols, mat->rows);
     
     for (int i = INIT_ZERO; i < mat->rows; i++) {
         for (int j = INIT_ZERO; j < mat->cols; j++) {
@@ -393,7 +392,7 @@ Matrix matrix_transpose(const Matrix *mat)
     return result;
 }
 
-double matrix_determinant(const Matrix *mat)
+double MatrixDeterminant(const Matrix *mat)
 {
     if (mat->rows != mat->cols) {
         fprintf(stderr, "只有方阵才有行列式\n");
@@ -418,7 +417,7 @@ double matrix_determinant(const Matrix *mat)
     
     for (int j = INIT_ZERO; j < n; j++) {
         // 创建子矩阵
-        Matrix submat = create_matrix(n - INIT_ONE, n - INIT_ONE);
+        Matrix submat = CreateMatrix(n - INIT_ONE, n - INIT_ONE);
         int sub_i = INIT_ZERO;
         
         for (int i = INIT_ONE; i < n; i++) {
@@ -431,17 +430,17 @@ double matrix_determinant(const Matrix *mat)
             sub_i++;
         }
         
-        det += sign * mat->data[j] * matrix_determinant(&submat);
+        det += sign * mat->data[j] * MatrixDeterminant(&submat);
         sign = MATRIX_DET_SIGN_NEG;
         
-        destroy_matrix(&submat);
+        DestroyMatrix(&submat);
     }
     
     return det;
 }
 
 /* ========== LU分解实现 ========== */
-Matrix lu_decomposition(const Matrix *A)
+Matrix LuDecomposition(const Matrix *A)
 {
     if (A->rows != A->cols) {
         fprintf(stderr, "LU分解需要方阵\n");
@@ -449,7 +448,7 @@ Matrix lu_decomposition(const Matrix *A)
     }
     
     int n = A->rows;
-    Matrix lu = copy_matrix(A);
+    Matrix lu = CopyMatrix(A);
     
     for (int k = INIT_ZERO; k < n - INIT_ONE; k++) {
         if (fabs(lu.data[k * n + k]) < EPSILON) {
@@ -469,10 +468,10 @@ Matrix lu_decomposition(const Matrix *A)
     return lu;
 }
 
-Vector forward_substitution(const Matrix *L, const Vector *b)
+Vector ForwardSubstitution(const Matrix *L, const Vector *b)
 {
     int n = L->rows;
-    Vector x = create_vector(n);
+    Vector x = CreateVector(n);
     
     for (int i = INIT_ZERO; i < n; i++) {
         double sum = INIT_VALUE_1;
@@ -488,7 +487,7 @@ Vector forward_substitution(const Matrix *L, const Vector *b)
 Vector BackwardSubstitution(const Matrix *U, const Vector *b)
 {
     int n = U->rows;
-    Vector x = create_vector(n);
+    Vector x = CreateVector(n);
     
     for (int i = n - INIT_ONE; i >= INIT_ZERO; i--) {
         double sum = INIT_VALUE_1;
@@ -502,14 +501,14 @@ Vector BackwardSubstitution(const Matrix *U, const Vector *b)
 }
 
 /* ========== 线性方程组求解 ========== */
-Vector solve_linear_system_lu(const Matrix *A, const Vector *b)
+Vector SolveLinearSystemLu(const Matrix *A, const Vector *b)
 {
-    Matrix lu = lu_decomposition(A);
+    Matrix lu = LuDecomposition(A);
     int n = A->rows;
     
     // 从LU分解中提取L和U
-    Matrix L = create_matrix(n, n);
-    Matrix U = create_matrix(n, n);
+    Matrix L = CreateMatrix(n, n);
+    Matrix U = CreateMatrix(n, n);
     
     for (int i = INIT_ZERO; i < n; i++) {
         for (int j = INIT_ZERO; j < n; j++) {
@@ -527,27 +526,27 @@ Vector solve_linear_system_lu(const Matrix *A, const Vector *b)
     }
     
     // 解 Ly = b
-    Vector y = forward_substitution(&L, b);
+    Vector y = ForwardSubstitution(&L, b);
     
     // 解 Ux = y
     Vector x = BackwardSubstitution(&U, &y);
     
-    destroy_matrix(&lu);
-    destroy_matrix(&L);
-    destroy_matrix(&U);
-    destroy_vector(&y);
+    DestroyMatrix(&lu);
+    DestroyMatrix(&L);
+    DestroyMatrix(&U);
+    DestroyVector(&y);
     
     return x;
 }
 
 /* ========== QR分解实现 ========== */
-Matrix qr_decomposition(const Matrix *A)
+Matrix QrDecomposition(const Matrix *A)
 {
     int m = A->rows;
     int n = A->cols;
-    Matrix Q = create_matrix(m, n);
-    Matrix R = create_matrix(n, n);
-    Matrix V = copy_matrix(A);
+    Matrix Q = CreateMatrix(m, n);
+    Matrix R = CreateMatrix(n, n);
+    Matrix V = CopyMatrix(A);
     
     for (int j = INIT_ZERO; j < n; j++) {
         // 计算第j列的范数
@@ -581,15 +580,15 @@ Matrix qr_decomposition(const Matrix *A)
         }
     }
     
-    destroy_matrix(&V);
+    DestroyMatrix(&V);
     return Q;  // 返回Q矩阵，R矩阵在过程中计算
 }
 
 /* ========== 特征值计算 ========== */
-double power_iteration(const Matrix *A, Vector *eigenvector)
+double PowerIteration(const Matrix *A, Vector *eigenvector)
 {
     int n = A->rows;
-    Vector b = create_vector(n);
+    Vector b = CreateVector(n);
     
     // 初始化随机向量
     for (int i = INIT_ZERO; i < n; i++) {
@@ -614,7 +613,7 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
     double eigenvalue = POWER_ITER_INIT_VAL;
     for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++) {
         // 计算 Ab
-        Vector Ab = create_vector(n);
+        Vector Ab = CreateVector(n);
         for (int i = INIT_ZERO; i < n; i++) {
             Ab.data[i] = POWER_ITER_INIT_VAL;
             for (int j = INIT_ZERO; j < n; j++) {
@@ -638,7 +637,7 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
             for (int i = INIT_ZERO; i < n; i++) {
                 eigenvector->data[i] = b.data[i];
             }
-            destroy_vector(&Ab);
+            DestroyVector(&Ab);
             break;
         }
         
@@ -654,17 +653,17 @@ double power_iteration(const Matrix *A, Vector *eigenvector)
             b.data[i] = Ab.data[i] / norm;
         }
         
-        destroy_vector(&Ab);
+        DestroyVector(&Ab);
     }
     
-    destroy_vector(&b);
+    DestroyVector(&b);
     return eigenvalue;
 }
 
 /* ========== 数值积分实现 ========== */
-double integrate_trapezoidal(double (*f)(double), double a, double b, int n)
+double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
 {
-    if (n == 0){
+    if (n == 0) {
         return 0;
     }
     double h = (b - a) / n;
@@ -678,11 +677,13 @@ double integrate_trapezoidal(double (*f)(double), double a, double b, int n)
     return sum * h;
 }
 
-double integrate_simpson(double (*f)(double), double a, double b, int n)
+double IntegrateSimpson(double (*f)(double), double a, double b, int n)
 {
-    if (n % INIT_TWO != INIT_ZERO) n++;  // 确保n为偶数
+    if (n % INIT_TWO != INIT_ZERO) n++;
+    // 确保n为偶数
     if (n == 0) {
-        return 0; // 避免除零错误
+        return 0;
+        // 避免除零错误
     }
     double h = (b - a) / n;
     double sum = f(a) + f(b);
@@ -699,7 +700,7 @@ double integrate_simpson(double (*f)(double), double a, double b, int n)
     return sum * h / SIMPSON_DIVISOR;
 }
 
-double integrate_romberg(double (*f)(double), double a, double b, double tol)
+double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
 {
     double R[MAX_ITERATIONS][MAX_ITERATIONS];
     int k = INIT_ZERO;
@@ -709,7 +710,8 @@ double integrate_romberg(double (*f)(double), double a, double b, double tol)
     
     for (k = INIT_ONE; k < MAX_ITERATIONS; k++) {
         // 计算梯形公式的递归
-        int n = INIT_ONE << k;  // 2^k
+        int n = INIT_ONE << k;
+        // 2^k
         double h = (b - a) / n;
         double sum = INIT_VALUE_1;
         
@@ -718,30 +720,30 @@ double integrate_romberg(double (*f)(double), double a, double b, double tol)
             sum += f(x);
         }
         
-        R[k][INIT_ZERO] = ROMBERG_CONV_FACTOR * R[k-INIT_ONE][INIT_ZERO] + h * sum;
+        R[k][INIT_ZERO] = ROMBERG_CONV_FACTOR * R[k - INIT_ONE][INIT_ZERO] + h * sum;
         
         // Richardson 外推
         for (int j = INIT_ONE; j <= k; j++) {
-            R[k][j] = R[k][j-INIT_ONE] + 
-                      (R[k][j-INIT_ONE] - R[k-INIT_ONE][j-INIT_ONE]) / 
+            R[k][j] = R[k][j - INIT_ONE] + 
+                      (R[k][j - INIT_ONE] - R[k - INIT_ONE][j - INIT_ONE]) / 
                       (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
         }
         
         // 检查收敛
-        if (k > INIT_ZERO && fabs(R[k][k] - R[k-INIT_ONE][k-INIT_ONE]) < tol) {
+        if (k > INIT_ZERO && fabs(R[k][k] - R[k - INIT_ONE][k - INIT_ONE]) < tol) {
             return R[k][k];
         }
     }
     
-    return R[k-INIT_ONE][k-INIT_ONE];
+    return R[k - INIT_ONE][k - INIT_ONE];
 }
 
 /* ========== 微分方程求解 ========== */
-Vector solve_ode_rk4(double (*f)(double, double), double y0,
+Vector SolveOdeRk4(double (*f)(double, double), double y0,
                      double t0, double tf, int steps)
 {
     double h = (tf - t0) / (steps != INIT_ZERO ? steps : INIT_ONE);
-    Vector solution = create_vector(steps + INIT_ONE);
+    Vector solution = CreateVector(steps + INIT_ONE);
     
     solution.data[INIT_ZERO] = y0;
     double t = t0;
@@ -749,11 +751,11 @@ Vector solve_ode_rk4(double (*f)(double, double), double y0,
     
     for (int i = INIT_ZERO; i < steps; i++) {
         double k1 = h * f(t, y);
-        double k2 = h * f(t + h/DEFAULT_MULTIPLIER, y + k1/DEFAULT_MULTIPLIER);
-        double k3 = h * f(t + h/DEFAULT_MULTIPLIER, y + k2/DEFAULT_MULTIPLIER);
+        double k2 = h * f(t + h / DEFAULT_MULTIPLIER, y + k1 / DEFAULT_MULTIPLIER);
+        double k3 = h * f(t + h / DEFAULT_MULTIPLIER, y + k2 / DEFAULT_MULTIPLIER);
         double k4 = h * f(t + h, y + k3);
         
-        y = y + (k1 + RK4_K2_COEFF*k2 + RK4_K3_COEFF*k3 + k4) / RK4_DIVISOR;
+        y = y + (k1 + RK4_K2_COEFF * k2 + RK4_K3_COEFF * k3 + k4) / RK4_DIVISOR;
         t = t + h;
         
         solution.data[i + INIT_ONE] = y;
@@ -763,7 +765,7 @@ Vector solve_ode_rk4(double (*f)(double, double), double y0,
 }
 
 /* ========== 傅里叶变换实现 ========== */
-void dft(const double *input, ComplexNum *output, int n)
+void Dft(const double *input, ComplexNum *output, int n)
 {
     for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
@@ -780,7 +782,7 @@ void dft(const double *input, ComplexNum *output, int n)
     }
 }
 
-void idft(const ComplexNum *input, double *output, int n)
+void Idft(const ComplexNum *input, double *output, int n)
 {
     for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
@@ -800,25 +802,25 @@ void idft(const ComplexNum *input, double *output, int n)
     }
 }
 
-void fft(ComplexNum *data, int n)
+void Fft(ComplexNum *data, int n)
 {
     if (n <= INIT_ONE) return;
     
     // 分离偶数和奇数项
-    ComplexNum *even = (ComplexNum*)malloc(n/FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
-    ComplexNum *odd = (ComplexNum*)malloc(n/FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
+    ComplexNum *even = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
+    ComplexNum *odd = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
     
-    for (int i = INIT_ZERO; i < n/FFT_SEPARATION_FACTOR; i++) {
+    for (int i = INIT_ZERO; i < n / FFT_SEPARATION_FACTOR; i++) {
         even[i] = data[i * FFT_SEPARATION_FACTOR];
         odd[i] = data[i * FFT_SEPARATION_FACTOR + INIT_ONE];
     }
     
     // 递归计算
-    fft(even, n/FFT_SEPARATION_FACTOR);
-    fft(odd, n/FFT_SEPARATION_FACTOR);
+    Fft(even, n / FFT_SEPARATION_FACTOR);
+    Fft(odd, n / FFT_SEPARATION_FACTOR);
     
     // 合并结果
-    for (int k = INIT_ZERO; k < n/FFT_SEPARATION_FACTOR; k++) {
+    for (int k = INIT_ZERO; k < n / FFT_SEPARATION_FACTOR; k++) {
         if (n != 0) { // 检查 n 是否为 0
             double angle = DEFAULT_MULTIPLIER * DFT_SIN_COEFF * PI * k / n;
             ComplexNum t;
@@ -827,8 +829,8 @@ void fft(ComplexNum *data, int n)
             
             data[k].real = even[k].real + t.real;
             data[k].imag = even[k].imag + t.imag;
-            data[k + n/FFT_SEPARATION_FACTOR].real = even[k].real - t.real;
-            data[k + n/FFT_SEPARATION_FACTOR].imag = even[k].imag - t.imag;
+            data[k + n / FFT_SEPARATION_FACTOR].real = even[k].real - t.real;
+            data[k + n / FFT_SEPARATION_FACTOR].imag = even[k].imag - t.imag;
         }
     }
     
@@ -837,7 +839,7 @@ void fft(ComplexNum *data, int n)
 }
 
 /* ========== 优化算法实现 ========== */
-double minimize_golden_section(double (*f)(double), double a, double b, double tol)
+double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol)
 {
     double c = b - GOLDEN_RATIO * (b - a);
     double d = a + GOLDEN_RATIO * (b - a);
@@ -863,7 +865,7 @@ double minimize_golden_section(double (*f)(double), double a, double b, double t
     return (a + b) / DEFAULT_MULTIPLIER;
 }
 
-double minimize_brent(double (*f)(double), double a, double b, double c, double tol)
+double MinimizeBrent(double (*f)(double), double a, double b, double c, double tol)
 {
     double x = b;
     double fx = f(x);
@@ -940,26 +942,24 @@ double minimize_brent(double (*f)(double), double a, double b, double c, double 
     return x;
 }
 
-Vector minimize_gradient_descent(double (*f)(const Vector*),
-                                 const Vector *gradient,
-                                 const Vector *x0, double learning_rate, int iterations)
+Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0, double learning_rate, int iterations)
 {
-    Vector x = copy_vector(x0);
-    Vector grad = create_vector(x0->size);
+    Vector x = CopyVector(x0);
+    Vector grad = CreateVector(x0->size);
     
     for (int iter = INIT_ZERO; iter < iterations; iter++) {
         // 计算梯度（简化：使用数值梯度）
         for (int i = INIT_ZERO; i < x.size; i++) {
-            Vector x_plus = copy_vector(&x);
-            Vector x_minus = copy_vector(&x);
+            Vector x_plus = CopyVector(&x);
+            Vector x_minus = CopyVector(&x);
             
             x_plus.data[i] += EPSILON;
             x_minus.data[i] -= EPSILON;
             
             grad.data[i] = (f(&x_plus) - f(&x_minus)) / (DEFAULT_MULTIPLIER * EPSILON);
             
-            destroy_vector(&x_plus);
-            destroy_vector(&x_minus);
+            DestroyVector(&x_plus);
+            DestroyVector(&x_minus);
         }
         
         // 更新参数
@@ -979,18 +979,18 @@ Vector minimize_gradient_descent(double (*f)(const Vector*),
         }
     }
     
-    destroy_vector(&grad);
+    DestroyVector(&grad);
     return x;
 }
 
 /* ========== 多项式拟合 ========== */
-Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
+Vector PolynomialFit(const Vector *x, const Vector *y, int degree)
 {
     int n = x->size;
     int m = degree + INIT_ONE;
     
     // 构造范德蒙德矩阵
-    Matrix A = create_matrix(n, m);
+    Matrix A = CreateMatrix(n, m);
     for (int i = INIT_ZERO; i < n; i++) {
         double power = INIT_VALUE_1;
         for (int j = INIT_ZERO; j < m; j++) {
@@ -1000,10 +1000,10 @@ Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
     }
     
     // 构造法方程 A^T A x = A^T y
-    Matrix AT = matrix_transpose(&A);
-    Matrix ATA = matrix_multiply(&AT, &A);
+    Matrix AT = MatrixTranspose(&A);
+    Matrix ATA = MatrixMultiply(&AT, &A);
     
-    Vector ATy = create_vector(m);
+    Vector ATy = CreateVector(m);
     for (int i = INIT_ZERO; i < m; i++) {
         ATy.data[i] = INIT_VALUE_1;
         for (int j = INIT_ZERO; j < n; j++) {
@@ -1012,12 +1012,12 @@ Vector polynomial_fit(const Vector *x, const Vector *y, int degree)
     }
     
     // 求解法方程
-    Vector coeffs = solve_linear_system_lu(&ATA, &ATy);
+    Vector coeffs = SolveLinearSystemLu(&ATA, &ATy);
     
-    destroy_matrix(&A);
-    destroy_matrix(&AT);
-    destroy_matrix(&ATA);
-    destroy_vector(&ATy);
+    DestroyMatrix(&A);
+    DestroyMatrix(&AT);
+    DestroyMatrix(&ATA);
+    DestroyVector(&ATy);
     
     return coeffs;
 }
@@ -1042,7 +1042,7 @@ Vector LinearRegression(Vector *x, Vector *y)
     double denominator = n * sumXx - sumX * sumX;
     if (denominator == 0.0) {
         LOGE("LinearRegression: singular matrix");
-        Vector result = create_vector(INIT_ONE);
+        Vector result = CreateVector(INIT_ONE);
         result.data[INIT_ZERO] = 0.0;
         return result;
     }
@@ -1050,7 +1050,7 @@ Vector LinearRegression(Vector *x, Vector *y)
     double slope = (n * sumXy - sumX * sumY) / denominator;
     double intercept = (sumY * sumXx - sumX * sumXy) / denominator;
     
-    Vector result = create_vector(INIT_TWO);
+    Vector result = CreateVector(INIT_TWO);
     result.data[INIT_ZERO] = intercept;
     result.data[INIT_ONE] = slope;
     
@@ -1116,7 +1116,7 @@ double ErfFunction(double x)
 /* ========== 随机数生成 ========== */
 Vector RandomNormal(int n, double mean, double stddev)
 {
-    Vector result = create_vector(n);
+    Vector result = CreateVector(n);
     
     for (int i = INIT_ZERO; i < n; i += INIT_TWO) {
         // Box-Muller 变换
@@ -1136,7 +1136,7 @@ Vector RandomNormal(int n, double mean, double stddev)
 }
 
 double ff(double t, double y) { return -y; }
-double parabola(double x) { return x*x - INIT_VALUE_4*x + INIT_VALUE_4; }
+double parabola(double x) { return x * x - INIT_VALUE_4 * x + INIT_VALUE_4; }
 
 void compute(void *arg)
 {
@@ -1146,8 +1146,8 @@ void compute(void *arg)
     
     // 测试1: 矩阵运算
     printf("1. 测试矩阵运算:\n");
-    Matrix A = create_matrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
-    Matrix B = create_matrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
+    Matrix A = CreateMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
+    Matrix B = CreateMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
     
     // 初始化矩阵
     for (int i = INIT_ZERO; i < TEST_MATRIX_SIZE; i++) {
@@ -1157,29 +1157,29 @@ void compute(void *arg)
         }
     }
     
-    Matrix C = matrix_multiply(&A, &B);
+    Matrix C = MatrixMultiply(&A, &B);
     printf("矩阵乘法测试通过\n");
     
     // 测试2: 线性方程组求解
     printf("\n2. 测试线性方程组求解:\n");
-    Vector b = create_vector(TEST_VECTOR_SIZE);
+    Vector b = CreateVector(TEST_VECTOR_SIZE);
     b.data[INIT_ZERO] = INIT_VALUE_1;
     b.data[INIT_ONE] = INIT_VALUE_2;
     b.data[INIT_TWO] = INIT_VALUE_3;
     
-    Vector x = solve_linear_system_lu(&A, &b);
+    Vector x = SolveLinearSystemLu(&A, &b);
     printf("线性方程组求解测试通过\n");
     
     // 测试3: 数值积分
     printf("\n3. 测试数值积分:\n");
-    double integral = integrate_simpson(sin, INIT_VALUE_1, PI, TEST_INTEGRAL_STEPS);
+    double integral = IntegrateSimpson(sin, INIT_VALUE_1, PI, TEST_INTEGRAL_STEPS);
     printf("sin(x)在[0,π]的积分: %.10f (理论值: 2.0)\n", integral);
     
     // 测试4: 微分方程求解
     printf("\n4. 测试微分方程求解:\n");
     // dy/dt = -y, y(0) = 1
 
-    Vector sol = solve_ode_rk4(ff, TEST_ODE_Y0, TEST_ODE_T0, TEST_ODE_TF, TEST_ODE_STEPS);
+    Vector sol = SolveOdeRk4(ff, TEST_ODE_Y0, TEST_ODE_T0, TEST_ODE_TF, TEST_ODE_STEPS);
     printf("微分方程 y' = -y 在 t=1 的解: %.10f (理论值: %.10f)\n", 
            sol.data[TEST_ODE_STEPS], exp(-INIT_VALUE_1));
     
@@ -1188,26 +1188,26 @@ void compute(void *arg)
     double signal[TEST_FFT_SIZE] = {INIT_VALUE_1, INIT_VALUE_2, INIT_VALUE_3, INIT_VALUE_4, 
                                    INIT_VALUE_4, INIT_VALUE_3, INIT_VALUE_2, INIT_VALUE_1};
     ComplexNum dft_output[TEST_FFT_SIZE];
-    dft(signal, dft_output, TEST_FFT_SIZE);
+    Dft(signal, dft_output, TEST_FFT_SIZE);
     printf("DFT计算完成\n");
     
     // 测试6: 优化算法
     printf("\n6. 测试优化算法:\n");
 
-    double min_x = minimize_golden_section(parabola, TEST_OPT_LOWER_BOUND, TEST_OPT_UPPER_BOUND, TEST_OPT_TOL);
+    double min_x = MinimizeGoldenSection(parabola, TEST_OPT_LOWER_BOUND, TEST_OPT_UPPER_BOUND, TEST_OPT_TOL);
     printf("抛物线最小值点: x = %.10f, f(x) = %.10f\n", min_x, parabola(min_x));
     
     // 测试7: 多项式拟合
     printf("\n7. 测试多项式拟合:\n");
-    Vector xs = create_vector(TEST_POLY_FIT_POINTS);
-    Vector ys = create_vector(TEST_POLY_FIT_POINTS);
+    Vector xs = CreateVector(TEST_POLY_FIT_POINTS);
+    Vector ys = CreateVector(TEST_POLY_FIT_POINTS);
     
     for (int i = INIT_ZERO; i < TEST_POLY_FIT_POINTS; i++) {
         xs.data[i] = i;
-        ys.data[i] = INIT_TWO*i + INIT_ONE + TEST_NOISE_AMPLITUDE*((double)rand()/RAND_MAX - DEFAULT_DIVISOR);
+        ys.data[i] = INIT_TWO * i + INIT_ONE + TEST_NOISE_AMPLITUDE * ((double)rand() / RAND_MAX - DEFAULT_DIVISOR);
     }
     
-    Vector coeffs = polynomial_fit(&xs, &ys, TEST_POLY_DEGREE_1);
+    Vector coeffs = PolynomialFit(&xs, &ys, TEST_POLY_DEGREE_1);
     printf("线性拟合: y = %.4f + %.4fx\n", coeffs.data[INIT_ZERO], coeffs.data[INIT_ONE]);
     
     // 测试8: 统计分析
@@ -1235,17 +1235,17 @@ void compute(void *arg)
     printf("正态分布样本均值: %.6f\n", mean);
     
     // 清理内存
-    destroy_matrix(&A);
-    destroy_matrix(&B);
-    destroy_matrix(&C);
-    destroy_vector(&b);
-    destroy_vector(&x);
-    destroy_vector(&sol);
-    destroy_vector(&xs);
-    destroy_vector(&ys);
-    destroy_vector(&coeffs);
-    destroy_vector(&reg);
-    destroy_vector(&rands);
+    DestroyMatrix(&A);
+    DestroyMatrix(&B);
+    DestroyMatrix(&C);
+    DestroyVector(&b);
+    DestroyVector(&x);
+    DestroyVector(&sol);
+    DestroyVector(&xs);
+    DestroyVector(&ys);
+    DestroyVector(&coeffs);
+    DestroyVector(&reg);
+    DestroyVector(&rands);
     
     printf("\n=== 所有测试完成 ===\n");
     g_computeRet = RET_SUCCESS;
