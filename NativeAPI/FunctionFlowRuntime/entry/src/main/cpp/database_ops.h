@@ -123,8 +123,8 @@ public:
 
     // 构造函数1：从vector初始化
     SmartTableRow(int id, const std::vector<DataCell>& cell_data)
-        : row_id(id), deleted(false), cell_count(cell_data.size()) {
-
+        : row_id(id), deleted(false), cell_count(cell_data.size())
+        {
         time_t now = time(nullptr);
         created_at = now;
         updated_at = now;
@@ -194,7 +194,7 @@ public:
     int max_degree;
 
     // 构造函数
-    SmartBPlusTreeNode(int degree, bool leaf) 
+    SmartBPlusTreeNode(int degree, bool leaf)
         : max_degree(degree), is_leaf(leaf), num_keys(0) {
 
         // 分配keys数组（B+树最多有max_degree-1个key）
@@ -279,7 +279,7 @@ class SmartQueryResult {
 public:
     // 使用unique_ptr管理二维数组
     std::unique_ptr<std::unique_ptr<DataCell[]>[]> rows;
-    int row_count;
+    int rowCount;
     int column_count;
 
     // 列名使用unique_ptr管理
@@ -300,9 +300,9 @@ public:
         }
 
         // 分配行数据
-        row_count = data.size();
-        rows = std::make_unique<std::unique_ptr<DataCell[]>[]>(row_count);
-        for (int i = 0; i < row_count; ++i) {
+        rowCount = data.size();
+        rows = std::make_unique<std::unique_ptr<DataCell[]>[]>(rowCount);
+        for (int i = 0; i < rowCount; ++i) {
             rows[i] = std::make_unique<DataCell[]>(column_count);
             for (int j = 0; j < column_count; ++j) {
                 rows[i][j] = data[i][j];
@@ -327,7 +327,7 @@ extern "C" {
 /* ========== 全局数据库状态 ========== */
 typedef struct {
     DatabaseTable *tables[50];
-    int table_count;
+    int tableCount;
     Transaction active_transactions[MAX_TRANSACTION_DEPTH];
     int transaction_depth;
     char current_database[256];

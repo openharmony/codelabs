@@ -221,8 +221,8 @@ void DataBaseOps::InsertIntoIndex(TableIndex *index, int key)
 {
     // 简化实现：在实际系统中需要实现完整的B+树插入算法
     // 这里仅做演示
-    const int FORMAT_BUFFER_SIZE = 32;
-    char buffer[FORMAT_BUFFER_SIZE];
+    const int formatBufferSize = 32;
+    char buffer[formatBufferSize];
     // 使用std::ostringstream替代snprintf
     std::ostringstream oss;
     oss << "Index insert: key=" << key << "\n";
@@ -235,8 +235,8 @@ void DataBaseOps::InsertIntoIndex(TableIndex *index, int key)
 
 void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
 {
-    const int FORMAT_BUFFER_SIZE = 32;
-    char buffer[FORMAT_BUFFER_SIZE];
+    const int formatBufferSize = 32;
+    char buffer[formatBufferSize];
     // 使用std::ostringstream替代snprintf
     std::ostringstream oss;
     oss << "Index delete: key=" << key << "\n";
@@ -437,7 +437,7 @@ void DataBaseOps::PrintTableSchema()
 void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 {
     const int QUERY_COLUMN_WIDTH = 20;
-    const int FORMAT_BUFFER_SIZE = 21;
+    const int formatBufferSize = 21;
     const int DATE_FORMAT_SIZE = 20;
 
     if (!result || result->error != ERR_NONE) {
@@ -445,7 +445,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
         return;
     }
 
-    printf("\n查询结果 (%d 行):\n", result->row_count);
+    printf("\n查询结果 (%d 行):\n", result->rowCount);
 
     // 打印表头
     for (int i = 0; i < result->column_count; i++) {
@@ -469,7 +469,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
     const int BUFFER_SIZE = 20;
     const int PRECISION = 2;
     // 打印数据
-    for (int i = 0; i < result->row_count; i++) {
+    for (int i = 0; i < result->rowCount; i++) {
         for (int j = 0; j < result->column_count; j++) {
             DataCell *cell = &result->rows[i][j];
 
@@ -543,10 +543,10 @@ extern "C" {
 
 int DatabaseOpsDemo()
 {
-    const int USER_COLUMN_COUNT = 8;
+    const int userColumnCount = 8;
     const int ORDER_COLUMN_COUNT = 8;
     const int MAX_TABLE_COUNT = 50;
-    const int FORMAT_BUFFER_SIZE = 32;
+    const int formatBufferSize = 32;
 
     int operationCount = 0;
     printf("=== 简易关系型数据库系统启动 ===\n");
@@ -570,7 +570,7 @@ int DatabaseOpsDemo()
         {"updated_at", TYPE_DATE, 0, false, false, false, ""}
     };
 
-    std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", userColumns, USER_COLUMN_COUNT);
+    std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", userColumns, userColumnCount);
     if (!ops) {
         printf("创建表失败！\n");
         return -1;
@@ -588,7 +588,7 @@ int DatabaseOpsDemo()
     // 插入示例数据
     printf("\n插入示例数据...\n");
 
-    DataCell user1[USER_COLUMN_COUNT] = {
+    DataCell user1[userColumnCount] = {
         CreateDataCell(TYPE_INT, "1"),
         CreateDataCell(TYPE_STRING, "john_doe"),
         CreateDataCell(TYPE_STRING, "john@example.com"),
@@ -599,7 +599,7 @@ int DatabaseOpsDemo()
         CreateDataCell(TYPE_DATE, "2023-10-20")
     };
 
-    DataCell user2[USER_COLUMN_COUNT] = {
+    DataCell user2[userColumnCount] = {
         CreateDataCell(TYPE_INT, "2"),
         CreateDataCell(TYPE_STRING, "jane_smith"),
         CreateDataCell(TYPE_STRING, "jane@example.com"),
@@ -610,7 +610,7 @@ int DatabaseOpsDemo()
         CreateDataCell(TYPE_DATE, "2023-10-21")
     };
 
-    DataCell user3[USER_COLUMN_COUNT] = {
+    DataCell user3[userColumnCount] = {
         CreateDataCell(TYPE_INT, "3"),
         CreateDataCell(TYPE_STRING, "bob_johnson"),
         CreateDataCell(TYPE_STRING, "bob@example.com"),
@@ -647,11 +647,11 @@ int DatabaseOpsDemo()
     // 更新数据
     printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
 
-    DataCell updateCells[USER_COLUMN_COUNT];
+    DataCell updateCells[userColumnCount];
     // 使用value initialization替代memset
     memset(static_cast<void*>(updateCells), 0, sizeof(updateCells));
 
-    for (int i = 0; i < USER_COLUMN_COUNT; i++) {
+    for (int i = 0; i < userColumnCount; i++) {
         updateCells[i].isNull = true;
     }
     const int DATE_INDEX_3 = 3;
@@ -678,7 +678,7 @@ int DatabaseOpsDemo()
     ops->BeginTransaction();
 
     printf("插入测试数据...\n");
-    DataCell testUser[USER_COLUMN_COUNT] = {
+    DataCell testUser[userColumnCount] = {
         CreateDataCell(TYPE_INT, "4"),
         CreateDataCell(TYPE_STRING, "test_user"),
         CreateDataCell(TYPE_STRING, "test@example.com"),
@@ -702,7 +702,7 @@ int DatabaseOpsDemo()
     printf("\n验证回滚后数据（应无测试用户）:\n");
     result = ops->ExecuteSelectQuery("");
     if (result) {
-        printf("找到 %d 行数据\n", result->row_count);
+        printf("找到 %d 行数据\n", result->rowCount);
     }
     operationCount++;
 

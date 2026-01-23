@@ -186,14 +186,14 @@ double IntegrateGaussian(double (*f)(double), double a, double b, int n);
 double IntegrateMonteCarlo(double (*f)(double), double a, double b, int samples);
 
 // 微分方程求解
-Vector SolveOdeEuler(double (*f)(double, double), double y0, 
-                       double t0, double tf, int steps);
+Vector SolveOdeEuler(double (*f)(double, double), double y0,
+                  double t0, double tf, int steps);
 Vector SolveOdeRk4(double (*f)(double, double), double y0,
-                     double t0, double tf, int steps);
+                  double t0, double tf, int steps);
 Vector SolveOdeAdaptive(double (*f)(double, double), double y0,
-                          double t0, double tf, double tol);
+                  double t0, double tf, double tol);
 Vector SolveOdeSystem(void (*f)(double, const Vector*, Vector*),
-                        const Vector *y0, double t0, double tf, int steps);
+                  const Vector *y0, double t0, double tf, int steps);
 
 // 傅里叶变换
 void Dft(const double *input, ComplexNum *output, int n);
@@ -396,48 +396,50 @@ double MatrixDeterminant(const Matrix *matrix)
     if (matrix->rows != matrix->cols) {
         fprintf(stderr, "只有方阵才有行列式\n");
         exit(EXIT_FAILURE);
-    }
+    }else {
+        int n = matrix->rows;
 
-    int n = matrix->rows;
-
-    // 1x1 矩阵
-    if (n == INIT_ONE) {
-        return matrix->data[INIT_ZERO];
-    }
-
-    // 2x2 矩阵
-    if (n == INIT_TWO) {
-        return matrix->data[INIT_ZERO] * matrix->data[MATRIX_INDEX_OFFSET] - matrix->data[INIT_ONE] * matrix->data[INIT_TWO];
-    }
-
-    // 递归计算行列式
-    double det = INIT_VALUE_1;
-    int sign = MATRIX_DET_SIGN_1;
-
-    for (int j = INIT_ZERO; j < n; j++) {
-        // 创建子矩阵
-        Matrix submat = CreateMatrix(n - INIT_ONE, n - INIT_ONE);
-        int subI = INIT_ZERO;
-
-        for (int i = INIT_ONE; i < n; i++) {
-            int subJ = INIT_ZERO;
-            for (int k = INIT_ZERO; k < n; k++) {
-                if (k == j) {
-                     continue;
-                 }
-                submat.data[subI * (n - INIT_ONE) + subJ] = matrix->data[i * n + k];
-                subJ++;
-            }
-            subI++;
+        // 1x1 矩阵
+        if (n == INIT_ONE) {
+            return matrix->data[INIT_ZERO];
         }
 
-        det += sign * matrix->data[j] * MatrixDeterminant(&submat);
-        sign = MATRIX_DET_SIGN_NEG;
+        // 2x2 矩阵
+        if (n == INIT_TWO) {
+            return matrix->data[INIT_ZERO] * matrix->data[MATRIX_INDEX_OFFSET] - matrix->data[INIT_ONE] * matrix->data[INIT_TWO];
+        }
 
-        DestroyMatrix(&submat);
+        // 递归计算行列式
+        double det = INIT_VALUE_1;
+        int sign = MATRIX_DET_SIGN_1;
+
+        for (int j = INIT_ZERO; j < n; j++) {
+            // 创建子矩阵
+            Matrix submat = CreateMatrix(n - INIT_ONE, n - INIT_ONE);
+            int subI = INIT_ZERO;
+
+            for (int i = INIT_ONE; i < n; i++) {
+                int subJ = INIT_ZERO;
+                for (int k = INIT_ZERO; k < n; k++) {
+                    if (k == j) {
+                        continue;
+                    }
+                    submat.data[subI * (n - INIT_ONE) + subJ] = matrix->data[i * n + k];
+                    subJ++;
+                }
+                subI++;
+            }
+
+            det += sign * matrix->data[j] * MatrixDeterminant(&submat);
+            sign = MATRIX_DET_SIGN_NEG;
+
+            DestroyMatrix(&submat);
+        } // 继续计算行列式的代码
+        return det;
     }
 
-    return det;
+
+    
 }
 
 /* ========== LU分解实现 ========== */
@@ -681,7 +683,7 @@ double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
 double IntegrateSimpson(double (*f)(double), double a, double b, int n)
 {
     if (n % INIT_TWO != INIT_ZERO) {
-         n++;
+        n++;
      }
     // 确保n为偶数
     if (n == 0) {
@@ -946,8 +948,10 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
                  b = u;
              }
             if (fu <= fw || w == x) {
-                v = w; fv = fw;
-                w = u; fw = fu;
+                v = w;
+                fv = fw;
+                w = u;
+                fw = fu;
             } else if (fu <= fv || v == x || v == w) {
                 v = u; fv = fu;
             }
@@ -1005,18 +1009,18 @@ Vector PolynomialFit(const Vector *x, const Vector *y, int degree)
     int m = degree + INIT_ONE;
 
     // 构造范德蒙德矩阵
-    Matrix A = CreateMatrix(n, m);
+    Matrix a = CreateMatrix(n, m);
     for (int i = INIT_ZERO; i < n; i++) {
         double power = INIT_VALUE_1;
         for (int j = INIT_ZERO; j < m; j++) {
-            A.data[i * m + j] = power;
+            a.data[i * m + j] = power;
             power *= x->data[i];
         }
     }
 
     // 构造法方程 A^T A x = A^T y
-    Matrix AT = MatrixTranspose(&A);
-    Matrix ATA = MatrixMultiply(&AT, &A);
+    Matrix AT = MatrixTranspose(&a);
+    Matrix ATA = MatrixMultiply(&AT, &a);
 
     Vector ATy = CreateVector(m);
     for (int i = INIT_ZERO; i < m; i++) {
@@ -1029,7 +1033,7 @@ Vector PolynomialFit(const Vector *x, const Vector *y, int degree)
     // 求解法方程
     Vector coeffs = SolveLinearSystemLu(&ATA, &ATy);
 
-    DestroyMatrix(&A);
+    DestroyMatrix(&a);
     DestroyMatrix(&AT);
     DestroyMatrix(&ATA);
     DestroyVector(&ATy);
@@ -1172,7 +1176,7 @@ void Compute(void *arg)
         }
     }
 
-    Matrix C = MatrixMultiply(&A, &B);
+    Matrix c = MatrixMultiply(&A, &B);
     printf("矩阵乘法测试通过\n");
 
     // 测试2: 线性方程组求解
@@ -1252,7 +1256,7 @@ void Compute(void *arg)
     // 清理内存
     DestroyMatrix(&A);
     DestroyMatrix(&B);
-    DestroyMatrix(&C);
+    DestroyMatrix(&c);
     DestroyVector(&b);
     DestroyVector(&x);
     DestroyVector(&sol);
