@@ -55,12 +55,12 @@ namespace {
     constexpr int DEFAULT_SORT_VERSION = 25;
 }
 
-SortClass::SortClass(uint32_t version)
+SortClass::SortClass(uint32_t version) 
 {
     LOGI("SortClass::SortClass %d", version);
 }
 
-SortClass::~SortClass()
+SortClass::~SortClass() 
 {
     LOGI("FunctionClass::~FunctionClass");
 }
@@ -1578,7 +1578,7 @@ private:
         }
         
         // 计数数组
-        vector<int> count(DIGIT_COUNT + 1,0);  // 0-9 + 一个额外位置
+    vector<int> count(DIGIT_COUNT + 1, 0);  // 0-9 + 一个额外位置
         
         // 临时数组
         vector<int> temp(n);

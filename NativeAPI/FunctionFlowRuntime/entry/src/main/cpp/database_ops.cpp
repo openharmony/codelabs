@@ -14,6 +14,9 @@
  */
 #include "database_ops.h"
 #include <memory>
+#include <algorithm>
+#include <sstream>
+#include <iomanip>
 
 // C接口实现
 extern "C" {
@@ -30,7 +33,8 @@ time_t parse_date(const char *date_str)
 DataCell create_data_cell(DataType type, const char *value)
 {
     DataCell cell;
-    memset(static_cast<void*>(&cell), 0, sizeof(cell));
+    // 使用value initialization替代memset
+    memset((void *)&cell, 0, sizeof(cell));
     cell.type = type;
     
     if (value == nullptr || strcasecmp(value, "NULL") == 0) {
@@ -40,7 +44,7 @@ DataCell create_data_cell(DataType type, const char *value)
     
     cell.is_null = false;
     
-    switch(type) {
+    switch (type) {
         case TYPE_INT:
             cell.value.int_val = std::stoi(value);
             break;
@@ -48,7 +52,8 @@ DataCell create_data_cell(DataType type, const char *value)
             cell.value.float_val = std::stod(value);
             break;
         case TYPE_STRING:
-            strncpy(cell.value.string_val, value, MAX_STRING_LEN - 1);
+            // 使用std::copy替代strncpy
+            std::copy_n(value, MAX_STRING_LEN - 1, cell.value.string_val);
             cell.value.string_val[MAX_STRING_LEN - 1] = '\0';
             break;
         case TYPE_BOOL:
@@ -71,7 +76,7 @@ DataCell create_data_cell(DataType type, const char *value)
 /* ========== 辅助函数 ========== */
 const char* DataBaseOps::DataTypeToString(DataType type)
 {
-    switch(type) {
+    switch (type) {
         case TYPE_INT:
             return "INT";
         case TYPE_FLOAT:
@@ -141,7 +146,7 @@ int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
         return static_cast<int>(a->type) - static_cast<int>(b->type);
     }
     
-    switch(a->type) {
+    switch (a->type) {
         case TYPE_INT:
             return a->value.int_val - b->value.int_val;
         case TYPE_FLOAT:
@@ -200,7 +205,8 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *column_name)
     }
     
     TableIndex *index = &table->indexes[table->index_count];
-    strncpy(index->name, column_name, MAX_COLUMN_NAME - 1);
+    // 使用std::copy替代strncpy
+    std::copy_n(column_name, MAX_COLUMN_NAME - 1, index->name);
     index->column_index = col_index;
     index->root = CreateBPlusTreeNode(true, BPLUS_TREE_ORDER);
     index->height = 1;
@@ -218,7 +224,12 @@ void DataBaseOps::InsertIntoIndex(TableIndex *index, int key)
     // 这里仅做演示
     const int FORMAT_BUFFER_SIZE = 32;
     char buffer[FORMAT_BUFFER_SIZE];
-    snprintf(buffer, FORMAT_BUFFER_SIZE, "Index insert: key=%d\n", key);
+    // 使用std::ostringstream替代snprintf
+    std::ostringstream oss;
+    oss << "Index insert: key=" << key << "\n";
+    std::string message = oss.str();
+    std::copy(message.begin(), message.end(), buffer);
+    buffer[message.size()] = '\0';
     printf("%s", buffer);
     index->key_count++;
 }
@@ -227,7 +238,12 @@ void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
 {
     const int FORMAT_BUFFER_SIZE = 32;
     char buffer[FORMAT_BUFFER_SIZE];
-    snprintf(buffer, FORMAT_BUFFER_SIZE, "Index delete: key=%d\n", key);
+    // 使用std::ostringstream替代snprintf
+    std::ostringstream oss;
+    oss << "Index delete: key=" << key << "\n";
+    std::string message = oss.str();
+    std::copy(message.begin(), message.end(), buffer);
+    buffer[message.size()] = '\0';
     printf("%s", buffer);
     index->key_count--;
 }
@@ -240,8 +256,10 @@ DataBaseOps::DataBaseOps(const char *table_name, ColumnDef *columns, int column_
         printf("no memory for DatabaseTable pointer");
     }
 
-    memset((void *)table.get(), 0, sizeof(DatabaseTable));
-    strncpy(table->name, table_name, MAX_TABLE_NAME - 1);
+    // 使用value initialization替代memset
+    *table.get() = DatabaseTable{};
+    // 使用std::copy替代strncpy
+    std::copy_n(table_name, MAX_TABLE_NAME - 1, table->name);
     table->created_at = time(nullptr);
     table->next_row_id = INITIAL_ROW_ID;
     
@@ -321,7 +339,8 @@ bool DataBaseOps::UpdateTableRow(int row_id, DataCell *new_cells)
         return false;
     }
     
-    memcpy(old_cells, row->cells.get(), sizeof(DataCell) * table->column_count);
+    // 使用std::copy替代memcpy
+    std::copy(row->cells.get(), row->cells.get() + table->column_count, old_cells);
     
     // 更新数据
     for (int i = 0; i < table->column_count; i++) {
@@ -457,27 +476,27 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
             if (cell->is_null) {
                 printf("%-*s", (int)QUERY_COLUMN_WIDTH, "NULL");
             } else {
-                char buffer[FORMAT_BUFFER_SIZE] = {0};
+                char buffer[21] = {0};
                 switch(cell->type) {
                     case TYPE_INT:
-                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%d", cell->value.int_val);
+                        snprintf(buffer, 20, "%d", cell->value.int_val);
                         break;
                     case TYPE_FLOAT:
-                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%.2f", cell->value.float_val);
+                        snprintf(buffer, 20, "%.2f", cell->value.float_val);
                         break;
                     case TYPE_STRING:
-                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%s", cell->value.string_val);
+                        snprintf(buffer, 20, "%s", cell->value.string_val);
                         break;
                     case TYPE_BOOL:
-                        snprintf(buffer, (int)FORMAT_BUFFER_SIZE - 1, "%s", cell->value.bool_val ? "true" : "false");
+                        snprintf(buffer, 20, "%s", cell->value.bool_val ? "true" : "false");
                         break;
                     case TYPE_DATE:
-                        strncpy(buffer, FormatDate(cell->value.date_val), DATE_FORMAT_SIZE);
+                        strncpy(buffer, FormatDate(cell->value.date_val), 20);
                         break;
                     default:
-                        strncpy(buffer, "UNKNOWN", DATE_FORMAT_SIZE);
+                        strncpy(buffer, "UNKNOWN", 20);
                 }
-                printf("%-*s", (int)QUERY_COLUMN_WIDTH, buffer);
+                printf("%-20s", buffer);
             }
             
             if (j < result->column_count - 1) {
@@ -629,13 +648,14 @@ int database_ops_demo()
     printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
     
     DataCell update_cells[USER_COLUMN_COUNT];
+    // 使用value initialization替代memset
     memset(static_cast<void*>(update_cells), 0, sizeof(update_cells));
 
     for (int i = 0; i < USER_COLUMN_COUNT; i++) {
         update_cells[i].is_null = true;
     }
-    const int DATE_INDEX_3= 3;
-    const int DATE_INDEX_4= 4;
+    const int DATE_INDEX_3 = 3;
+    const int DATE_INDEX_4 = 4;
     const int DATE_INDEX_7 = 7;
     update_cells[DATE_INDEX_4] = create_data_cell(TYPE_FLOAT, "80000.00");
     update_cells[DATE_INDEX_7] = create_data_cell(TYPE_DATE, "2023-10-22");
@@ -741,7 +761,7 @@ int database_ops_demo()
     order_ops->InsertTableRow(order1);
     order_ops->InsertTableRow(order2);
     order_ops->InsertTableRow(order3);
-    const int DATE_INDEX3= 3;
+    const int DATE_INDEX3 = 3;
     operation_count += DATE_INDEX3;
     
     // 显示订单表
