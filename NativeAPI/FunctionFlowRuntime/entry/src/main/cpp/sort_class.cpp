@@ -1081,7 +1081,8 @@ public:
 class TestDataGenerator {
 public:
     // 生成均匀分布的整数
-    static vector<int> generateUniformInt(int size, int minVal = 0, int maxVal = 1000) {
+    static vector<int> generateUniformInt(int size, int minVal = 0, int maxVal = 1000)
+    {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1094,7 +1095,8 @@ public:
     }
     
     // 生成高斯分布的整数
-    static vector<int> generateGaussianInt(int size, double mean = 500, double stddev = 100) {
+    static vector<int> generateGaussianInt(int size, double mean = 500, double stddev = 100)
+    {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1107,7 +1109,8 @@ public:
     }
     
     // 生成指数分布的整数
-    static vector<int> generateExponentialInt(int size, double lambda = 0.01) {
+    static vector<int> generateExponentialInt(int size, double lambda = 0.01)
+    {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1120,7 +1123,8 @@ public:
     }
     
     // 生成浮点数[0, 1)
-    static vector<double> generateUniformDouble(int size) {
+    static vector<double> generateUniformDouble(int size)
+    {
         vector<double> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1133,7 +1137,8 @@ public:
     }
     
     // 生成随机字符串
-    static vector<string> generateRandomStrings(int size, int maxLength = 10) {
+    static vector<string> generateRandomStrings(int size, int maxLength = 10)
+    {
         vector<string> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1152,7 +1157,8 @@ public:
     }
 
     // 生成包含负数的随机整数
-    static vector<int> generateSignedInts(int size) {
+    static vector<int> generateSignedInts(int size)
+    {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1165,7 +1171,8 @@ public:
     }
 
     // 生成固定位数的整数
-    static vector<int> generateFixedDigitInts(int size, int digits) {
+    static vector<int> generateFixedDigitInts(int size, int digits)
+    {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1297,7 +1304,8 @@ public:
     static void sort(vector<T>& arr, 
                      int bucketCount,
                      HashFunction hashFunc,
-                     function<bool(const T&, const T&)> comp = less<T>()) {
+                     function<bool(const T&, const T&)> comp = less<T>())
+    {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1331,7 +1339,8 @@ public:
 // 字符串桶排序示例
 class StringBucketSorter {
 public:
-    static void sortByLength(vector<string>& arr) {
+    static void sortByLength(vector<string>& arr)
+    {
         // 按字符串长度分桶
         int maxLength = 0;
         for (const auto& s : arr) {
@@ -1360,7 +1369,8 @@ public:
         }
     }
     
-    static void sortByFirstChar(vector<string>& arr) {
+    static void sortByFirstChar(vector<string>& arr)
+    {
         // 按首字母分桶（26个字母+其他）
         const int EMPTY_BUCKET_INDEX = 26;
         const int EMPTY_BUCKET_INDEX_OTHER = 27;
