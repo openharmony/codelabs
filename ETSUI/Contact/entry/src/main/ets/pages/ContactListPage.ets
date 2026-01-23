@@ -1,0 +1,423 @@
+import router from '@ohos.router'
+import { Routes } from '../constants/Routes'
+import { Contact } from '../model/Contact'
+import { ContactService } from '../service/ContactService'
+import { pinyin } from 'pinyin-pro' // 【新增】导入拼音库
+
+// 在应用入口或公共文件定义全局刷新标志
+PersistentStorage.PersistProp('contactListRefreshFlag', 0)
+
+// 联系人分组接口
+interface ContactGroup {
+  letter: string // 首字母
+  contacts: Contact[] // 该字母下的联系人列表
+}
+
+@Entry
+@Component
+struct ContactListPage {
+  @State contactList: Contact[] = []
+  @State filteredContactList: Contact[] = []
+  @State contactGroups: ContactGroup[] = []
+  @State alphabetList: string[] = []
+  @State searchText: string = ''
+  @State isLoading: boolean = true
+  @StorageLink('contactListRefreshFlag') refreshFlag: number = 0
+  private lastRefreshFlag: number = 0
+  private scroller: Scroller = new Scroller()
+
+  aboutToAppear() {
+    this.lastRefreshFlag = this.refreshFlag
+    this.loadData()
+  }
+
+  // 监听刷新标志变化
+  aboutToUpdate() {
+    if (this.refreshFlag !== this.lastRefreshFlag) {
+      console.info('[ContactListPage] 检测到刷新标志变化,重新加载数据')
+      this.lastRefreshFlag = this.refreshFlag
+      this.loadData()
+    }
+  }
+
+  onPageShow() {
+    this.loadData()
+  }
+
+  async loadData() {
+    this.isLoading = true
+
+    try {
+      const result = await ContactService.getAllContacts()
+      this.contactList = result
+      this.filterContacts()
+      console.info('[ContactListPage] 加载联系人成功,数量:', result.length)
+    } catch (err) {
+      console.error('加载联系人失败:', JSON.stringify(err))
+    } finally {
+      this.isLoading = false
+    }
+  }
+
+  // 【修改】使用 pinyin-pro 获取拼音首字母
+  getFirstLetter(name: string): string {
+    if (!name || name.length === 0) return '#'
+
+    try {
+      // 获取第一个字符的拼音首字母
+      const firstChar = name.charAt(0)
+
+      // 判断是否为英文字母
+      if (/^[A-Za-z]$/.test(firstChar)) {
+        return firstChar.toUpperCase()
+      }
+
+      // 使用 pinyin-pro 获取拼音首字母
+      const pinyinResult = pinyin(firstChar, {
+        pattern: 'first', // 只返回首字母
+        toneType: 'none', // 不带音调
+        type: 'string' // 返回字符串
+      })
+
+      // 将结果转换为大写
+      const letter = pinyinResult.toUpperCase()
+
+      // 验证是否为 A-Z
+      if (/^[A-Z]$/.test(letter)) {
+        return letter
+      }
+
+      // 如果不是标准字母,归类到 #
+      return '#'
+
+    } catch (error) {
+      console.error('[ContactListPage] 获取拼音失败:', error)
+      return '#'
+    }
+  }
+
+  // 对联系人进行分组
+  groupContacts(contacts: Contact[]): ContactGroup[] {
+    const groupMap = new Map<string, Contact[]>()
+
+    // 按首字母分组
+    contacts.forEach(contact => {
+      const letter = this.getFirstLetter(contact.name)
+      if (!groupMap.has(letter)) {
+        groupMap.set(letter, [])
+      }
+      groupMap.get(letter)!.push(contact)
+    })
+
+    // 转换为数组并排序
+    const groups: ContactGroup[] = []
+
+    // 将 # 放在最后
+    const letters = Array.from(groupMap.keys()).sort((a, b) => {
+      if (a === '#') return 1
+      if (b === '#') return -1
+      return a.localeCompare(b)
+    })
+
+    letters.forEach(letter => {
+      const contactsInGroup = groupMap.get(letter)!
+      // 组内按名字的拼音排序
+      contactsInGroup.sort((a, b) => {
+        const pinyinA = pinyin(a.name, { toneType: 'none', type: 'string' })
+        const pinyinB = pinyin(b.name, { toneType: 'none', type: 'string' })
+        return pinyinA.localeCompare(pinyinB)
+      })
+      groups.push({
+        letter: letter,
+        contacts: contactsInGroup
+      })
+    })
+
+    return groups
+  }
+
+  // 过滤联系人的方法
+  filterContacts() {
+    if (!this.searchText || this.searchText.trim() === '') {
+      this.filteredContactList = this.contactList
+    } else {
+      const keyword = this.searchText.toLowerCase().trim()
+      this.filteredContactList = this.contactList.filter(contact => {
+        const nameMatch = contact.name?.toLowerCase().includes(keyword)
+        const phoneMatch = contact.phone?.includes(keyword)
+
+        // 【新增】支持拼音搜索
+        let pinyinMatch = false
+        try {
+          const fullPinyin = pinyin(contact.name, { toneType: 'none', type: 'string' }).toLowerCase()
+          const firstLetters = pinyin(contact.name, { pattern: 'first', toneType: 'none', type: 'string' }).toLowerCase()
+          pinyinMatch = fullPinyin.includes(keyword) || firstLetters.includes(keyword)
+        } catch (error) {
+          console.error('[ContactListPage] 拼音搜索失败:', error)
+        }
+
+        return nameMatch || phoneMatch || pinyinMatch
+      })
+    }
+
+    // 更新分组数据
+    this.contactGroups = this.groupContacts(this.filteredContactList)
+    this.alphabetList = this.contactGroups.map(group => group.letter)
+
+    console.info('[ContactListPage] 过滤后联系人数量:', this.filteredContactList.length)
+    console.info('[ContactListPage] 字母索引:', this.alphabetList)
+  }
+
+  // 处理搜索输入变化
+  handleSearchChange(value: string) {
+    this.searchText = value
+    this.filterContacts()
+  }
+
+  // 清空搜索
+  clearSearch() {
+    this.searchText = ''
+    this.filterContacts()
+  }
+
+  // 处理字母索引点击
+  handleAlphabetSelect(index: number) {
+    const letter = this.alphabetList[index]
+    console.info('[ContactListPage] 选中字母:', letter)
+
+    // 计算目标位置(需要累加前面所有组的项数)
+    let targetIndex = 0
+    for (let i = 0; i < index; i++) {
+      targetIndex += this.contactGroups[i].contacts.length + 1 // +1是因为有分组标题
+    }
+
+    // 滚动到目标位置
+    this.scroller.scrollToIndex(targetIndex)
+  }
+
+  build() {
+    Navigation() {
+      Stack({ alignContent: Alignment.End }) {
+        Column({ space: 0 }) {
+          // 搜索框区域
+          Row() {
+            Search({
+              value: this.searchText,
+              placeholder: '搜索姓名、拼音或手机号' // 【修改】提示支持拼音搜索
+            })
+              .searchButton('搜索')
+              .width('100%')
+              .height(40)
+              .backgroundColor(Color.White)
+              .placeholderColor(Color.Grey)
+              .placeholderFont({ size: 14 })
+              .textFont({ size: 14 })
+              .onChange((value: string) => {
+                this.handleSearchChange(value)
+              })
+              .onSubmit((value: string) => {
+                console.info('[ContactListPage] 搜索提交:', value)
+              })
+          }
+          .width('100%')
+          .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+          .backgroundColor('#F1F3F5')
+
+          // 搜索结果提示
+          if (this.searchText.trim() !== '' && !this.isLoading) {
+            Row() {
+              Text(`找到 ${this.filteredContactList.length} 个联系人`)
+                .fontSize(12)
+                .fontColor(Color.Gray)
+
+              Blank()
+
+              Text('清空')
+                .fontSize(12)
+                .fontColor('#007DFF')
+                .onClick(() => this.clearSearch())
+            }
+            .width('100%')
+            .padding({ left: 16, right: 16, top: 4, bottom: 4 })
+            .backgroundColor('#F1F3F5')
+          }
+
+          // 列表内容区域
+          if (this.isLoading) {
+            Column() {
+              LoadingProgress()
+                .width(50)
+                .height(50)
+            }
+            .width('100%')
+            .layoutWeight(1)
+            .justifyContent(FlexAlign.Center)
+            .backgroundColor('#F1F3F5')
+          } else if (this.filteredContactList.length === 0) {
+            Column() {
+              if (this.searchText.trim() !== '') {
+                Text('未找到匹配的联系人')
+                  .fontSize(16)
+                  .fontColor(Color.Gray)
+                  .margin({ bottom: 10 })
+                Button('清空搜索')
+                  .fontSize(14)
+                  .onClick(() => this.clearSearch())
+              } else {
+                Text('暂无联系人')
+                  .fontSize(16)
+                  .fontColor(Color.Gray)
+                  .margin({ bottom: 10 })
+                Button('点击刷新')
+                  .fontSize(14)
+                  .onClick(() => this.loadData())
+              }
+            }
+            .width('100%')
+            .layoutWeight(1)
+            .justifyContent(FlexAlign.Center)
+            .backgroundColor('#F1F3F5')
+          } else {
+            // 按分组渲染列表
+            List({ space: 0, scroller: this.scroller }) {
+              ForEach(
+                this.contactGroups,
+                (group: ContactGroup, groupIndex: number) => {
+                  // 分组标题
+                  ListItemGroup({
+                    header: this.GroupHeader(group.letter),
+                    space: 0
+                  }) {
+                    ForEach(
+                      group.contacts,
+                      (item: Contact) => {
+                        ListItem() {
+                          Row() {
+                            // 头像首字母
+                            Text(item.name ? item.name.charAt(0) : '?')
+                              .width(40)
+                              .height(40)
+                              .borderRadius(20)
+                              .backgroundColor('#007DFF')
+                              .fontColor(Color.White)
+                              .textAlign(TextAlign.Center)
+                              .fontWeight(FontWeight.Bold)
+                              .fontSize(18)
+                              .margin({ right: 12 })
+
+                            Column() {
+                              Text(item.name || '未知')
+                                .fontSize(16)
+                                .fontWeight(FontWeight.Medium)
+                                .fontColor('#000000')
+                              Text(item.phone || '')
+                                .fontSize(14)
+                                .fontColor('#999999')
+                                .margin({ top: 2 })
+                            }
+                            .alignItems(HorizontalAlign.Start)
+                            .layoutWeight(1)
+
+                            Image($r('sys.media.ohos_ic_public_arrow_right'))
+                              .width(16)
+                              .height(16)
+                              .fillColor('#CCCCCC')
+                          }
+                          .width('100%')
+                          .height(64)
+                          .padding({ left: 16, right: 16 })
+                          .backgroundColor(Color.White)
+                        }
+                        .width('100%')
+                        .onClick(() => {
+                          console.info('[ContactListPage] 点击联系人:', {
+                            id: item.id,
+                            key: item.key,
+                            name: item.name
+                          })
+
+                          router.pushUrl({
+                            url: Routes.CONTACT_DETAIL,
+                            params: {
+                              contactId: item.id
+                            }
+                          })
+                        })
+                      },
+                      (item: Contact) => item.key || item.id || ''
+                    )
+                  }
+                },
+                (group: ContactGroup) => group.letter
+              )
+            }
+            .width('100%')
+            .layoutWeight(1)
+            .backgroundColor('#F1F3F5')
+            .divider({
+              strokeWidth: 1,
+              color: '#F0F0F0',
+              startMargin: 68,
+              endMargin: 0
+            })
+            .edgeEffect(EdgeEffect.Spring)
+            .sticky(StickyStyle.Header)
+          }
+        }
+        .width('100%')
+        .height('100%')
+
+        // 右侧字母索引
+        if (!this.isLoading && this.filteredContactList.length > 0 && this.searchText.trim() === '') {
+          AlphabetIndexer({ arrayValue: this.alphabetList, selected: 0 })
+            .color('#666666')
+            .selectedColor('#007DFF')
+            .popupColor('#007DFF')
+            .selectedBackgroundColor('#E6F2FF')
+            .popupBackground('#F0F0F0')
+            .usingPopup(true)
+            .selectedFont({ size: 14, weight: FontWeight.Bold })
+            .popupFont({ size: 32, weight: FontWeight.Bold })
+            .font({ size: 12, weight: FontWeight.Regular })
+            .itemSize(20)
+            .alignStyle(IndexerAlign.Right)
+            .popupPosition({ x: 60, y: 0 })
+            .onSelect((index: number) => {
+              this.handleAlphabetSelect(index)
+            })
+            .margin({ right: 8 })
+        }
+      }
+      .width('100%')
+      .height('100%')
+    }
+    .title('联系人')
+    .titleMode(NavigationTitleMode.Mini)
+    .backgroundColor('#F1F3F5')
+    .menus([
+      {
+        value: '新建',
+        icon: $r('sys.media.ohos_ic_public_add'),
+        action: () => {
+          console.info('[ContactListPage] 点击新建联系人')
+          router.pushUrl({ url: Routes.CONTACT_CREATE })
+        }
+      },
+    ])
+  }
+
+  // 分组标题Builder
+  @Builder
+  GroupHeader(letter: string) {
+    Row() {
+      Text(letter)
+        .fontSize(14)
+        .fontColor('#666666')
+        .fontWeight(FontWeight.Medium)
+    }
+    .width('100%')
+    .height(32)
+    .padding({ left: 16 })
+    .backgroundColor('#F1F3F5')
+  }
+}
