@@ -976,7 +976,8 @@ void BankBusinessBasebucketSortFloat()
 class OptimizedBucketSort {
 private:
     // 计算合适的桶数量
-    int calculateBucketCount(int n, int minVal, int maxVal) {
+    int calculateBucketCount(int n, int minVal, int maxVal)
+    {
         if (n <= ONE_HUNDRED) {
             return 10;  // 小数据量用较少桶
         }
@@ -993,7 +994,8 @@ private:
     }
     
     // 根据桶大小选择排序算法
-    void sortBucket(vector<int>& bucket) {
+    void sortBucket(vector<int>& bucket)
+    {
         int size = bucket.size();
         
         if (size <= SMALL_ARRAY_THRESHOLD) {
@@ -1008,7 +1010,8 @@ private:
         }
     }
     
-    void insertionSort(vector<int>& arr) {
+    void insertionSort(vector<int>& arr)
+    {
         int n = arr.size();
         for (int i = 1; i < n; i++) {
             int key = arr[i];
@@ -1022,7 +1025,8 @@ private:
     }
     
 public:
-    void sort(vector<int>& arr) {
+    void sort(vector<int>& arr)
+    {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1231,7 +1235,8 @@ void BankBusinessBasebucketSortOptimized()
 class ParallelBucketSort {
 private:
     // 并行排序单个桶
-    void parallelSortBucket(vector<int>& bucket) {
+    void parallelSortBucket(vector<int>& bucket)
+    {
         std::sort(bucket.begin(), bucket.end());
     }
     
@@ -1405,12 +1410,13 @@ public:
 };
 
 // 获取数字的第d位（从个位开始，d=1表示个位）
-int getDigit(int num, int d) {
-    for (int i = 1; i < d; i++) {
-        num /= DECIMAL_BASE;
+int getDigit(int num, int d)
+    {
+        for (int i = 1; i < d; i++) {
+            num /= DECIMAL_BASE;
+        }
+        return num % DECIMAL_BASE;
     }
-    return num % DECIMAL_BASE;
-}
 
 // 获取数组中最大数字的位数
 int getMaxDigits(const vector<int>& arr) {
@@ -1573,7 +1579,8 @@ void BankBusinessradixSortOptimized()
 class MSDRadixSort {
 private:
     // 递归排序函数
-    void msdSort(vector<int>& arr, int left, int right, int digit, int maxDigit) {
+    void msdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
+    {
         const int DIGIT_COUNT = 10;  // 0-9
         const int NUM_BUCKETS = 11;
         if (left >= right || digit > maxDigit) {
@@ -1626,7 +1633,8 @@ private:
         }
     }
     
-    void insertionSort(vector<int>& arr, int left, int right) {
+    void insertionSort(vector<int>& arr, int left, int right)
+    {
         for (int i = left + 1; i <= right; i++) {
             int key = arr[i];
             int j = i - 1;
@@ -1646,7 +1654,8 @@ private:
         return num % DECIMAL_BASE;
     }
     
-    int getMaxDigits(const vector<int>& arr) {
+    int getMaxDigits(const vector<int>& arr)
+    {
         if (arr.empty()) {
             return 0;
         }
@@ -1663,7 +1672,8 @@ private:
     }
     
 public:
-    void sort(vector<int>& arr) {
+    void sort(vector<int>& arr)
+    {
         if (arr.size() <= 1) {
             return;
         }
@@ -1695,7 +1705,8 @@ void BankBusinessradixSortMSD()
 class SignedRadixSort {
 private:
     // 分离正负数
-    void separatePosNeg(vector<int>& arr) {
+    void separatePosNeg(vector<int>& arr)
+    {
         int n = arr.size();
         int left = 0, right = n - 1;
         
@@ -1714,7 +1725,8 @@ private:
     }
     
     // 对绝对值进行基数排序
-    void radixSortAbsolute(vector<int>& arr, int start, int end) {
+    void radixSortAbsolute(vector<int>& arr, int start, int end)
+    {
         if (start >= end) {
             return;
         }
@@ -1777,7 +1789,8 @@ private:
     }
     
 public:
-    void sort(vector<int>& arr) {
+    void sort(vector<int>& arr)
+    {
         if (arr.size() <= 1) {
             return;
         }

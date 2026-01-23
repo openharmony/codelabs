@@ -587,9 +587,9 @@ Matrix QrDecomposition(const Matrix *A)
 }
 
 /* ========== 特征值计算 ========== */
-double PowerIteration(const Matrix *A, Vector *eigenvector)
+double PowerIteration(const Matrix *matrix, Vector *eigenvector)
 {
-    int n = A->rows;
+    int n = matrix->rows;
     Vector b = CreateVector(n);
     
     // 初始化随机向量
@@ -619,7 +619,7 @@ double PowerIteration(const Matrix *A, Vector *eigenvector)
         for (int i = INIT_ZERO; i < n; i++) {
             Ab.data[i] = POWER_ITER_INIT_VAL;
             for (int j = INIT_ZERO; j < n; j++) {
-                Ab.data[i] += A->data[i * n + j] * b.data[j];
+                Ab.data[i] += matrix->data[i * n + j] * b.data[j];
             }
         }
         
