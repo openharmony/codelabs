@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright (c) 2026 Beijing Institute of Technology.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,6 +144,7 @@
     .title('鑽搧璇︽儏').titleMode(NavigationTitleMode.Mini)
   }
 }
+
 
 
 
