@@ -30,7 +30,7 @@ void BankBusiness(void *arg)
     g_bankBusinessRet = 0;
 }
 
-void BankBusinessVIP(void *arg)
+void BankBusinessVip(void *arg)
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
@@ -56,7 +56,7 @@ int ProcessFfrtQueue()
 
     // VIP享受更优先的服务
     ffrt_task_handle_t task1 = CommitRequest(bank, BankBusiness, request1, ffrt_queue_priority_low, 0);
-    ffrt_task_handle_t task2 = CommitRequest(bank, BankBusinessVIP, request2, ffrt_queue_priority_low, 0);
+    ffrt_task_handle_t task2 = CommitRequest(bank, BankBusinessVip, request2, ffrt_queue_priority_low, 0);
 
     // 等待所有的客户服务完成
     WaitForRequest(task1);

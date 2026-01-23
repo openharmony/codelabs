@@ -28,11 +28,11 @@
 #define THREE  3
 
 /* 定义三个全局变量返回值 */
-static int g_bankbusiness1_ret = -1;
-static int g_bankbusinessvip1_ret = -1;
-static int g_bankbusiness2_ret = -1;
-static int g_bankbusinessvip2_ret = -1;
-static int g_bankbusinessnew_ret = -1;
+static int g_bankBusiness1Ret = -1;
+static int g_bankBusinessVip1Ret = -1;
+static int g_bankBusiness2Ret = -1;
+static int g_bankBusinessVip2Ret = -1;
+static int g_bankBusinessNewRet = -1;
 
 FunctionClass::FunctionClass(uint32_t version)
 {
@@ -56,34 +56,35 @@ void BankBusiness1()
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
-    g_bankbusiness1_ret = 0;
+    g_bankBusiness1Ret = 0;
 }
 
-void BankBusinessVIP1()
+void BankBusinessVip1()
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
-    g_bankbusinessvip1_ret = 0;
+    g_bankBusinessVip1Ret = 0;
 }
+
 void BankBusiness2()
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
-    g_bankbusiness2_ret = 0;
+    g_bankBusiness2Ret = 0;
 }
 
-void BankBusinessVIP2()
+void BankBusinessVip2()
 {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
-    g_bankbusinessvip2_ret = 0;
+    g_bankBusinessVip2Ret = 0;
 }
 
 void BankBusinessNew()
 {
-    database_ops_demo();
+    DatabaseOpsDemo();
     LOGI("saving or withdraw VIP");
-    g_bankbusinessnew_ret = 0;
+    g_bankBusinessNewRet = 0;
 }
 int FunctionClass::FfrtSerialQueue()
 {
@@ -94,7 +95,7 @@ int FunctionClass::FfrtSerialQueue()
     auto task1 = bankQueue.Enter(BankBusiness1, "customer1", ffrt_queue_priority_low, 0);
     auto task2 = bankQueue.Enter(BankBusiness1, "customer2", ffrt_queue_priority_low, 0);
     // VIP享受更优先的服务
-    auto task3 = bankQueue.Enter(BankBusinessVIP1, "customer3 vip", ffrt_queue_priority_high, 0);
+    auto task3 = bankQueue.Enter(BankBusinessVip1, "customer3 vip", ffrt_queue_priority_high, 0);
     auto task4 = bankQueue.Enter(BankBusiness1, "customer4", ffrt_queue_priority_low, 0);
     auto task5 = bankQueue.Enter(BankBusiness1, "customer5", ffrt_queue_priority_low, 0);
 
@@ -104,7 +105,7 @@ int FunctionClass::FfrtSerialQueue()
     // 等待所有的客户服务完成
     bankQueue.Wait(task5);
     LOGI("FfrtQueue results ");
-    if (g_bankbusiness1_ret == 0 && g_bankbusinessvip1_ret == 0) {
+    if (g_bankBusiness1Ret == 0 && g_bankBusinessVip1Ret == 0) {
         return RET_SUCCESS_1;
     } else {
         return -1;
@@ -118,7 +119,7 @@ int FunctionClass::FfrtConcurrentQueue()
 
     auto task1 = bankQueue.Enter(BankBusiness2, "customer1", ffrt_queue_priority_low, 0);
     // VIP享受更优先的服务
-    auto task2 = bankQueue.Enter(BankBusinessVIP2, "customer3 vip", ffrt_queue_priority_high, 0);
+    auto task2 = bankQueue.Enter(BankBusinessVip2, "customer3 vip", ffrt_queue_priority_high, 0);
     auto task3 = bankQueue.Enter(BankBusinessNew, "customer3 new", ffrt_queue_priority_high, 0);
     // 取消客户4的服务
 
@@ -127,7 +128,7 @@ int FunctionClass::FfrtConcurrentQueue()
     bankQueue.Wait(task2);
     bankQueue.Wait(task3);
     LOGI("FfrtQueue results ");
-    if (g_bankbusiness2_ret == 0 && g_bankbusinessvip2_ret == 0 && g_bankbusinessnew_ret == 0) {
+    if (g_bankBusiness2Ret == 0 && g_bankBusinessVip2Ret == 0 && g_bankBusinessNewRet == 0) {
         return RET_SUCCESS_2;
     } else {
         return -1;
