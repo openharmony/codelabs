@@ -978,7 +978,7 @@ private:
     int calculateBucketCount(int n, int minVal, int maxVal)
     {
         if (n <= ONE_HUNDRED) {
-            return 10;  // 小数据量用较少桶
+            return TEN;  // 小数据量用较少桶
         }
         if (maxVal - minVal <= MAX_BUCKET_COUNT) {
             return FIFTY;  // 数据范围小
