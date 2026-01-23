@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="12ab0ce8-5e72-4f25-9f4b-b34b0a9345d8" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/entry/src/main/ets/utils/RdbStore.ets" beforeDir="false" afterPath="$PROJECT_DIR$/entry/src/main/ets/utils/RdbStore.ets" afterDir="false" />
-    </list>
+    <list default="true" id="12ab0ce8-5e72-4f25-9f4b-b34b0a9345d8" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
