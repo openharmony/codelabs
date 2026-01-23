@@ -17,8 +17,8 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
-
-// C鎺ュ彛瀹炵幇
+#define ZERO 0
+// C接口实现
 extern "C" {
 time_t parse_date(const char *date_str)
 {
@@ -547,7 +547,7 @@ int database_ops_demo()
     const int MAX_TABLE_COUNT = 50;
     const int FORMAT_BUFFER_SIZE = 32;
     
-    int operation_count = 0;
+    int operationCount = 0;
     printf("=== 简易关系型数据库系统启动 ===\n");
     printf("版本: 1.0.0\n");
     printf("最大表数: %d\n", MAX_TABLE_COUNT);
@@ -558,7 +558,7 @@ int database_ops_demo()
     // 创建示例表：用户表
     printf("创建示例表: users\n");
     
-    ColumnDef user_columns[] = {
+    ColumnDef userColumns[] = {
         {"id", TYPE_INT, 0, true, true, false, "0"},
         {"username", TYPE_STRING, 50, true, false, true, ""},
         {"email", TYPE_STRING, 100, true, false, true, ""},
@@ -569,7 +569,7 @@ int database_ops_demo()
         {"updated_at", TYPE_DATE, 0, false, false, false, ""}
     };
     
-    std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", user_columns, USER_COLUMN_COUNT);
+    std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", userColumns, USER_COLUMN_COUNT);
     if (!ops) {
         printf("创建表失败！\n");
         return -1;
@@ -582,7 +582,7 @@ int database_ops_demo()
     // 开始事务
     printf("\n开始事务...\n");
     ops->BeginTransaction();
-    operation_count++;
+    operationCount++;
     
     // 插入示例数据
     printf("\n插入示例数据...\n");
@@ -623,14 +623,14 @@ int database_ops_demo()
     int id1 = ops->InsertTableRow(user1);
     int id2 = ops->InsertTableRow(user2);
     int id3 = ops->InsertTableRow(user3);
-    operation_count += 3;
+    operationCount += 3;
     
     printf("插入完成: id1=%d, id2=%d, id3=%d\n", id1, id2, id3);
     
     // 提交事务
     printf("\n提交事务...\n");
     ops->CommitTransaction();
-    operation_count++;
+    operationCount++;
     
     // 显示表结构
     ops->PrintTableSchema();
@@ -641,7 +641,7 @@ int database_ops_demo()
     if (result) {
         ops->PrintQueryResult(result);
     }
-    operation_count++;
+    operationCount++;
     
     // 更新数据
     printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
@@ -661,7 +661,7 @@ int database_ops_demo()
     
     if (ops->UpdateTableRow(DATE_INDEX_3, update_cells)) {
         printf("更新成功！\n");
-        operation_count++;
+        operationCount++;
     }
     
     // 再次查询
@@ -670,7 +670,7 @@ int database_ops_demo()
     if (result) {
         ops->PrintQueryResult(result);
     }
-    operation_count++;
+    operationCount++;
     
     // 开始新事务测试回滚
     printf("\n=== 测试事务回滚 ===\n");
@@ -690,12 +690,12 @@ int database_ops_demo()
     
     int test_id = ops->InsertTableRow(test_user);
     printf("插入测试用户，ID = %d\n", test_id);
-    operation_count++;
+    operationCount++;
     
     // 回滚事务
     printf("\n回滚事务...\n");
     ops->RollbackTransaction();
-    operation_count++;
+    operationCount++;
     
     // 验证数据已回滚
     printf("\n验证回滚后数据（应无测试用户）:\n");
@@ -703,7 +703,7 @@ int database_ops_demo()
     if (result) {
         printf("找到 %d 行数据\n", result->row_count);
     }
-    operation_count++;
+    operationCount++;
     
     // 创建第二个表：订单表
     printf("\n创建第二个表: orders\n");
@@ -761,7 +761,7 @@ int database_ops_demo()
     order_ops->InsertTableRow(order2);
     order_ops->InsertTableRow(order3);
     const int DATE_INDEX3 = 3;
-    operation_count += DATE_INDEX3;
+    operationCount += DATE_INDEX3;
     
     // 显示订单表
     order_ops->PrintTableSchema();
@@ -771,11 +771,11 @@ int database_ops_demo()
     if (result) {
         order_ops->PrintQueryResult(result);
     }
-    operation_count++;
+    operationCount++;
     
     printf("\n数据库系统正常关闭。\n");
-    printf("总计执行操作: %d\n", operation_count);
-    return 0;
+    printf("总计执行操作: %d\n", operationCount);
+    return ZERO;
 }
 
 } // extern "C"
