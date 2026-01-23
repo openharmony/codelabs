@@ -84,13 +84,13 @@ typedef struct {
 typedef struct {
     DataType type;
     union {
-        int int_val;
-        float float_val;
-        char string_val[MAX_STRING_LEN];
-        bool bool_val;
-        time_t date_val;
+        int intVal;
+        float floatVal;
+        char stringVal[MAX_STRING_LEN];
+        bool boolVal;
+        time_t dateVal;
     } value;
-    bool is_null;
+    bool isNull;
 } DataCell;
 
 #ifdef __cplusplus

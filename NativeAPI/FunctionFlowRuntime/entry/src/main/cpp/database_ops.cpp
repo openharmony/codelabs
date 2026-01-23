@@ -38,33 +38,33 @@ DataCell create_data_cell(DataType type, const char *value)
     cell.type = type;
     
     if (value == nullptr || strcasecmp(value, "NULL") == 0) {
-        cell.is_null = true;
+        cell.isNull = true;
         return cell;
     }
     
-    cell.is_null = false;
+    cell.isNull = false;
     
     switch (type) {
         case TYPE_INT:
-            cell.value.int_val = std::stoi(value);
+            cell.value.intVal = std::stoi(value);
             break;
         case TYPE_FLOAT:
-            cell.value.float_val = std::stod(value);
+            cell.value.floatVal = std::stod(value);
             break;
         case TYPE_STRING:
             // 使用std::copy替代strncpy
-            std::copy_n(value, MAX_STRING_LEN - 1, cell.value.string_val);
-            cell.value.string_val[MAX_STRING_LEN - 1] = '\0';
+            std::copy_n(value, MAX_STRING_LEN - 1, cell.value.stringVal);
+            cell.value.stringVal[MAX_STRING_LEN - 1] = '\0';
             break;
         case TYPE_BOOL:
-            cell.value.bool_val = (strcasecmp(value, "true") == 0 || 
+            cell.value.boolVal = (strcasecmp(value, "true") == 0 || 
                                    strcasecmp(value, "1") == 0);
             break;
         case TYPE_DATE:
-            cell.value.date_val = parse_date(value);
+            cell.value.dateVal = parse_date(value);
             break;
         default:
-            cell.is_null = true;
+            cell.isNull = true;
             break;
     }
     
@@ -124,7 +124,7 @@ char* DataBaseOps::FormatDate(time_t timestamp)
 void DataBaseOps::FreeDataCell(DataCell *cell)
 {
     if (cell) {
-        if (cell->type == TYPE_STRING && !cell->is_null) {
+        if (cell->type == TYPE_STRING && !cell->isNull) {
             // 字符串在栈上，无需释放
         }
     }
@@ -132,13 +132,13 @@ void DataBaseOps::FreeDataCell(DataCell *cell)
 
 int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
 {
-    if (a->is_null && b->is_null) {
+    if (a->isNull && b->isNull) {
         return 0;
     }
-    if (a->is_null) {
+    if (a->isNull) {
         return -1;
     }
-    if (b->is_null) {
+    if (b->isNull) {
         return 1;
     }
     
@@ -148,24 +148,24 @@ int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
     
     switch (a->type) {
         case TYPE_INT:
-            return a->value.int_val - b->value.int_val;
+            return a->value.intVal - b->value.intVal;
         case TYPE_FLOAT:
-            if (a->value.float_val < b->value.float_val) {
+            if (a->value.floatVal < b->value.floatVal) {
                 return -1;
             }
-            if (a->value.float_val > b->value.float_val) {
+            if (a->value.floatVal > b->value.floatVal) {
                 return 1;
             }
             return 0;
         case TYPE_STRING:
-            return strcmp(a->value.string_val, b->value.string_val);
+            return strcmp(a->value.stringVal, b->value.stringVal);
         case TYPE_BOOL:
-            return a->value.bool_val - b->value.bool_val;
+            return a->value.boolVal - b->value.boolVal;
         case TYPE_DATE:
-            if (a->value.date_val < b->value.date_val) {
+            if (a->value.dateVal < b->value.dateVal) {
                 return -1;
             }
-            if (a->value.date_val > b->value.date_val) {
+            if (a->value.dateVal > b->value.dateVal) {
                 return 1;
             }
             return 0;
@@ -344,7 +344,7 @@ bool DataBaseOps::UpdateTableRow(int row_id, DataCell *new_cells)
     
     // 更新数据
     for (int i = 0; i < table->column_count; i++) {
-        if (!new_cells[i].is_null) {
+        if (!new_cells[i].isNull) {
             row->cells[i] = new_cells[i];
         }
     }
@@ -473,25 +473,25 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
         for (int j = 0; j < result->column_count; j++) {
             DataCell *cell = &result->rows[i][j];
             
-            if (cell->is_null) {
+            if (cell->isNull) {
                 printf("%-*s", (int)QUERY_COLUMN_WIDTH, "NULL");
             } else {
                 char buffer[21] = {0};
                 switch(cell->type) {
                     case TYPE_INT:
-                        snprintf(buffer, 20, "%d", cell->value.int_val);
+                        snprintf(buffer, 20, "%d", cell->value.intVal);
                         break;
                     case TYPE_FLOAT:
-                        snprintf(buffer, 20, "%.2f", cell->value.float_val);
+                        snprintf(buffer, 20, "%.2f", cell->value.floatVal);
                         break;
                     case TYPE_STRING:
-                        snprintf(buffer, 20, "%s", cell->value.string_val);
+                        snprintf(buffer, 20, "%s", cell->value.stringVal);
                         break;
                     case TYPE_BOOL:
-                        snprintf(buffer, 20, "%s", cell->value.bool_val ? "true" : "false");
+                        snprintf(buffer, 20, "%s", cell->value.boolVal ? "true" : "false");
                         break;
                     case TYPE_DATE:
-                        strncpy(buffer, FormatDate(cell->value.date_val), 20);
+                        strncpy(buffer, FormatDate(cell->value.dateVal), 20);
                         break;
                     default:
                         strncpy(buffer, "UNKNOWN", 20);
@@ -652,7 +652,7 @@ int database_ops_demo()
     memset(static_cast<void*>(update_cells), 0, sizeof(update_cells));
 
     for (int i = 0; i < USER_COLUMN_COUNT; i++) {
-        update_cells[i].is_null = true;
+        update_cells[i].isNull = true;
     }
     const int DATE_INDEX_3 = 3;
     const int DATE_INDEX_4 = 4;
