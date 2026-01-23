@@ -155,29 +155,29 @@ Matrix CopyMatrix(const Matrix *src);
 Vector CopyVector(const Vector *src);
 
 // 基本运算
-Matrix MatrixAdd(const Matrix *a, const Matrix *b);
-Matrix MatrixSubtract(const Matrix *a, const Matrix *b);
-Matrix MatrixMultiply(const Matrix *a, const Matrix *b);
-Matrix MatrixScalarMultiply(const Matrix *a, double scalar);
-Vector VectorAdd(const Vector *a, const Vector *b);
-Vector VectorSubtract(const Vector *a, const Vector *b);
-double VectorDot(const Vector *a, const Vector *b);
-Matrix MatrixTranspose(const Matrix *mat);
-Matrix MatrixInverse(const Matrix *mat);
-double MatrixDeterminant(const Matrix *mat);
+Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB);
+Matrix MatrixSubtract(const Matrix *matrixA, const Matrix *matrixB);
+Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB);
+Matrix MatrixScalarMultiply(const Matrix *matrix, double scalar);
+Vector VectorAdd(const Vector *vectorA, const Vector *vectorB);
+Vector VectorSubtract(const Vector *vectorA, const Vector *vectorB);
+double VectorDot(const Vector *vectorA, const Vector *vectorB);
+Matrix MatrixTranspose(const Matrix *matrix);
+Matrix MatrixInverse(const Matrix *matrix);
+double MatrixDeterminant(const Matrix *matrix);
 
 // 线性方程组求解
-Vector SolveLinearSystem(const Matrix *A, const Vector *b);
-Vector SolveLinearSystemLu(const Matrix *A, const Vector *b);
-Matrix LuDecomposition(const Matrix *A);
-Vector ForwardSubstitution(const Matrix *L, const Vector *b);
-Vector BackwardSubstitution(const Matrix *U, const Vector *b);
+Vector SolveLinearSystem(const Matrix *matrix, const Vector *b);
+Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b);
+Matrix LuDecomposition(const Matrix *matrix);
+Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b);
+Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b);
 
 // 特征值/特征向量
-Matrix QrDecomposition(const Matrix *A);
-void QrAlgorithm(const Matrix *A, double *eigenvalues, Matrix *eigenvectors);
-double PowerIteration(const Matrix *A, Vector *eigenvector);
-double InversePowerIteration(const Matrix *A, Vector *eigenvector, double sigma);
+Matrix QrDecomposition(const Matrix *matrix);
+void QrAlgorithm(const Matrix *matrix, double *eigenvalues, Matrix *eigenvectors);
+double PowerIteration(const Matrix *matrix, Vector *eigenvector);
+double InversePowerIteration(const Matrix *matrix, Vector *eigenvector, double sigma);
 
 // 数值积分
 double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n);
@@ -211,7 +211,7 @@ Vector MinimizeGradientDescent(double (*f)(const Vector*),
                                  const Vector *x0, double learning_rate, int iterations);
 Vector MinimizeConjugateGradient(double (*f)(const Vector*),
                                    const Vector *gradient,
-                                   const Matrix *A, const Vector *b,
+                                   const Matrix *matrix, const Vector *b,
                                    const Vector *x0, int iterations);
 
 // 插值与逼近
@@ -243,12 +243,12 @@ Vector RandomExponential(int n, double lambda);
 Matrix RandomMatrix(int rows, int cols, double min_val, double max_val);
 
 // 工具函数
-void PrintMatrix(const Matrix *mat, const char *name);
-void PrintVector(const Vector *vec, const char *name);
-double MatrixNorm(const Matrix *mat, int p);
-double VectorNorm(const Vector *vec, int p);
-bool IsSymmetric(const Matrix *mat);
-bool IsPositiveDefinite(const Matrix *mat);
+void PrintMatrix(const Matrix *matrix, const char *name);
+void PrintVector(const Vector *vector, const char *name);
+double MatrixNorm(const Matrix *matrix, int p);
+double VectorNorm(const Vector *vector, int p);
+bool IsSymmetric(const Matrix *matrix);
+bool IsPositiveDefinite(const Matrix *matrix);
 
 struct ParaStruct {
     int a;
@@ -340,75 +340,75 @@ Vector CopyVector(const Vector *src)
 }
 
 /* ========== 基本运算实现 ========== */
-Matrix MatrixAdd(const Matrix *a, const Matrix *b)
+Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB)
 {
-    if (a->rows != b->rows || a->cols != b->cols) {
+    if (matrixA->rows != matrixB->rows || matrixA->cols != matrixB->cols) {
         fprintf(stderr, "矩阵维度不匹配\n");
         exit(EXIT_FAILURE);
     }
     
-    Matrix result = CreateMatrix(a->rows, a->cols);
-    int total = a->rows * a->cols;
+    Matrix result = CreateMatrix(matrixA->rows, matrixA->cols);
+    int total = matrixA->rows * matrixA->cols;
     
     for (int i = INIT_ZERO; i < total; i++) {
-        result.data[i] = a->data[i] + b->data[i];
+        result.data[i] = matrixA->data[i] + matrixB->data[i];
     }
     
     return result;
 }
 
-Matrix MatrixMultiply(const Matrix *a, const Matrix *b)
+Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB)
 {
-    if (a->cols != b->rows) {
+    if (matrixA->cols != matrixB->rows) {
         fprintf(stderr, "矩阵维度不匹配，无法相乘\n");
         exit(EXIT_FAILURE);
     }
     
-    Matrix result = CreateMatrix(a->rows, b->cols);
+    Matrix result = CreateMatrix(matrixA->rows, matrixB->cols);
     
-    for (int i = INIT_ZERO; i < a->rows; i++) {
-        for (int j = INIT_ZERO; j < b->cols; j++) {
+    for (int i = INIT_ZERO; i < matrixA->rows; i++) {
+        for (int j = INIT_ZERO; j < matrixB->cols; j++) {
             double sum = INIT_VALUE_1;
-            for (int k = INIT_ZERO; k < a->cols; k++) {
-                sum += a->data[i * a->cols + k] * b->data[k * b->cols + j];
+            for (int k = INIT_ZERO; k < matrixA->cols; k++) {
+                sum += matrixA->data[i * matrixA->cols + k] * matrixB->data[k * matrixB->cols + j];
             }
-            result.data[i * b->cols + j] = sum;
+            result.data[i * matrixB->cols + j] = sum;
         }
     }
     
     return result;
 }
 
-Matrix MatrixTranspose(const Matrix *mat)
+Matrix MatrixTranspose(const Matrix *matrix)
 {
-    Matrix result = CreateMatrix(mat->cols, mat->rows);
+    Matrix result = CreateMatrix(matrix->cols, matrix->rows);
     
-    for (int i = INIT_ZERO; i < mat->rows; i++) {
-        for (int j = INIT_ZERO; j < mat->cols; j++) {
-            result.data[j * mat->rows + i] = mat->data[i * mat->cols + j];
+    for (int i = INIT_ZERO; i < matrix->rows; i++) {
+        for (int j = INIT_ZERO; j < matrix->cols; j++) {
+            result.data[j * matrix->rows + i] = matrix->data[i * matrix->cols + j];
         }
     }
     
     return result;
 }
 
-double MatrixDeterminant(const Matrix *mat)
+double MatrixDeterminant(const Matrix *matrix)
 {
-    if (mat->rows != mat->cols) {
+    if (matrix->rows != matrix->cols) {
         fprintf(stderr, "只有方阵才有行列式\n");
         exit(EXIT_FAILURE);
     }
     
-    int n = mat->rows;
+    int n = matrix->rows;
     
     // 1x1 矩阵
     if (n == INIT_ONE) {
-        return mat->data[INIT_ZERO];
+        return matrix->data[INIT_ZERO];
     }
     
     // 2x2 矩阵
     if (n == INIT_TWO) {
-        return mat->data[INIT_ZERO] * mat->data[MATRIX_INDEX_OFFSET] - mat->data[INIT_ONE] * mat->data[INIT_TWO];
+        return matrix->data[INIT_ZERO] * matrix->data[MATRIX_INDEX_OFFSET] - matrix->data[INIT_ONE] * matrix->data[INIT_TWO];
     }
     
     // 递归计算行列式
@@ -426,13 +426,13 @@ double MatrixDeterminant(const Matrix *mat)
                 if (k == j) {
                      continue;
                  }
-                submat.data[sub_i * (n - INIT_ONE) + sub_j] = mat->data[i * n + k];
+                submat.data[sub_i * (n - INIT_ONE) + sub_j] = matrix->data[i * n + k];
                 sub_j++;
             }
             sub_i++;
         }
         
-        det += sign * mat->data[j] * MatrixDeterminant(&submat);
+        det += sign * matrix->data[j] * MatrixDeterminant(&submat);
         sign = MATRIX_DET_SIGN_NEG;
         
         DestroyMatrix(&submat);
@@ -442,15 +442,15 @@ double MatrixDeterminant(const Matrix *mat)
 }
 
 /* ========== LU分解实现 ========== */
-Matrix LuDecomposition(const Matrix *A)
+Matrix LuDecomposition(const Matrix *matrix)
 {
-    if (A->rows != A->cols) {
+    if (matrix->rows != matrix->cols) {
         fprintf(stderr, "LU分解需要方阵\n");
         exit(EXIT_FAILURE);
     }
     
-    int n = A->rows;
-    Matrix lu = CopyMatrix(A);
+    int n = matrix->rows;
+    Matrix lu = CopyMatrix(matrix);
     
     for (int k = INIT_ZERO; k < n - INIT_ONE; k++) {
         if (fabs(lu.data[k * n + k]) < EPSILON) {
@@ -470,43 +470,43 @@ Matrix LuDecomposition(const Matrix *A)
     return lu;
 }
 
-Vector ForwardSubstitution(const Matrix *L, const Vector *b)
+Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b)
 {
-    int n = L->rows;
+    int n = lowerMatrix->rows;
     Vector x = CreateVector(n);
     
     for (int i = INIT_ZERO; i < n; i++) {
         double sum = INIT_VALUE_1;
         for (int j = INIT_ZERO; j < i; j++) {
-            sum += L->data[i * n + j] * x.data[j];
+            sum += lowerMatrix->data[i * n + j] * x.data[j];
         }
-        x.data[i] = (b->data[i] - sum) / L->data[i * n + i];
+        x.data[i] = (b->data[i] - sum) / lowerMatrix->data[i * n + i];
     }
     
     return x;
 }
 
-Vector BackwardSubstitution(const Matrix *U, const Vector *b)
+Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b)
 {
-    int n = U->rows;
+    int n = upperMatrix->rows;
     Vector x = CreateVector(n);
     
     for (int i = n - INIT_ONE; i >= INIT_ZERO; i--) {
         double sum = INIT_VALUE_1;
         for (int j = i + INIT_ONE; j < n; j++) {
-            sum += U->data[i * n + j] * x.data[j];
+            sum += upperMatrix->data[i * n + j] * x.data[j];
         }
-        x.data[i] = (b->data[i] - sum) / U->data[i * n + i];
+        x.data[i] = (b->data[i] - sum) / upperMatrix->data[i * n + i];
     }
     
     return x;
 }
 
 /* ========== 线性方程组求解 ========== */
-Vector SolveLinearSystemLu(const Matrix *A, const Vector *b)
+Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b)
 {
-    Matrix lu = LuDecomposition(A);
-    int n = A->rows;
+    Matrix lu = LuDecomposition(matrix);
+    int n = matrix->rows;
     
     // 从LU分解中提取L和U
     Matrix L = CreateMatrix(n, n);
@@ -542,13 +542,13 @@ Vector SolveLinearSystemLu(const Matrix *A, const Vector *b)
 }
 
 /* ========== QR分解实现 ========== */
-Matrix QrDecomposition(const Matrix *A)
+Matrix QrDecomposition(const Matrix *matrix)
 {
-    int m = A->rows;
-    int n = A->cols;
+    int m = matrix->rows;
+    int n = matrix->cols;
     Matrix Q = CreateMatrix(m, n);
     Matrix R = CreateMatrix(n, n);
-    Matrix V = CopyMatrix(A);
+    Matrix V = CopyMatrix(matrix);
     
     for (int j = INIT_ZERO; j < n; j++) {
         // 计算第j列的范数
