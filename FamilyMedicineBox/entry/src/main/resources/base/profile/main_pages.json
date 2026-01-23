@@ -1,0 +1,15 @@
+{
+  "src": [
+    "pages/LoginPage",
+    "pages/Index",
+    "pages/ContactAddPage",
+    "pages/ContactDetailPage",
+    "pages/ContactEditPage",
+    "pages/ProfilePage",
+    "pages/ChangePasswordPage",
+    "pages/ExpiryWarningPage",
+    "pages/AllMedicinesPage",
+    "pages/CategoryListPage",
+    "pages/RegisterPage"
+  ]
+}
