@@ -423,7 +423,9 @@ double MatrixDeterminant(const Matrix *mat)
         for (int i = INIT_ONE; i < n; i++) {
             int sub_j = INIT_ZERO;
             for (int k = INIT_ZERO; k < n; k++) {
-                if (k == j) continue;
+                if (k == j) {
+                     continue;
+                 }
                 submat.data[sub_i * (n - INIT_ONE) + sub_j] = mat->data[i * n + k];
                 sub_j++;
             }
@@ -679,7 +681,9 @@ double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
 
 double IntegrateSimpson(double (*f)(double), double a, double b, int n)
 {
-    if (n % INIT_TWO != INIT_ZERO) n++;
+    if (n % INIT_TWO != INIT_ZERO) {
+         n++;
+     }
     // 确保n为偶数
     if (n == 0) {
         return 0;
@@ -804,7 +808,9 @@ void Idft(const ComplexNum *input, double *output, int n)
 
 void Fft(ComplexNum *data, int n)
 {
-    if (n <= INIT_ONE) return;
+    if (n <= INIT_ONE) {
+         return;
+     }
     
     // 分离偶数和奇数项
     ComplexNum *even = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
@@ -894,7 +900,9 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
             double p = (x - v) * q - (x - w) * r;
             q = BRENT_P_COEFF_2 * (q - r);
             
-            if (q > INIT_VALUE_1) p = -p;
+            if (q > INIT_VALUE_1) {
+                 p = -p;
+             }
             q = fabs(q);
             
             double etemp = e;
@@ -924,12 +932,20 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
         
         // 更新区间
         if (fu <= fx) {
-            if (u >= x) a = x; else b = x;
+            if (u >= x) {
+                 a = x;
+             } else {
+                 b = x;
+             }
             v = w; fv = fw;
             w = x; fw = fx;
             x = u; fx = fu;
         } else {
-            if (u < x) a = u; else b = u;
+            if (u < x) {
+                 a = u;
+             } else {
+                 b = u;
+             }
             if (fu <= fw || w == x) {
                 v = w; fv = fw;
                 w = u; fw = fu;

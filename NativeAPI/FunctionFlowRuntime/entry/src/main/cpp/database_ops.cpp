@@ -184,7 +184,7 @@ SmartBPlusTreeNode* DataBaseOps::CreateBPlusTreeNode(bool is_leaf, int order)
     return s_node.get();
 }
 
-TableIndex* DataBaseOps::CreateTableIndex(const char *column_name)
+TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
 {
     const int BPLUS_TREE_ORDER = 4;
     if (table->index_count >= MAX_INDEXES) {
@@ -192,27 +192,27 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *column_name)
     }
 
     // 查找列
-    int col_index = -1;
+    int colIndex = -1;
     for (int i = 0; i < table->column_count; i++) {
-        if (strcmp(table->columns[i].name, column_name) == 0) {
-            col_index = i;
+        if (strcmp(table->columns[i].name, columnName) == 0) {
+            colIndex = i;
             break;
         }
     }
     
-    if (col_index == -1) {
+    if (colIndex == -1) {
         return nullptr;
     }
     
     TableIndex *index = &table->indexes[table->index_count];
     // 使用std::copy替代strncpy
-    std::copy_n(column_name, MAX_COLUMN_NAME - 1, index->name);
-    index->column_index = col_index;
+    std::copy_n(columnName, MAX_COLUMN_NAME - 1, index->name);
+    index->column_index = colIndex;
     index->root = CreateBPlusTreeNode(true, BPLUS_TREE_ORDER);
     index->height = 1;
     index->key_count = 0;
     
-    table->columns[col_index].has_index = true;
+    table->columns[colIndex].has_index = true;
     table->index_count++;
     
     return index;
@@ -248,7 +248,7 @@ void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
     index->key_count--;
 }
 
-DataBaseOps::DataBaseOps(const char *table_name, ColumnDef *columns, int column_count)
+DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount)
 {
     const int INITIAL_ROW_ID = 1;
     table = std::make_unique<DatabaseTable>();
@@ -259,19 +259,19 @@ DataBaseOps::DataBaseOps(const char *table_name, ColumnDef *columns, int column_
     // 使用value initialization替代memset
     *table.get() = DatabaseTable{};
     // 使用std::copy替代strncpy
-    std::copy_n(table_name, MAX_TABLE_NAME - 1, table->name);
+    std::copy_n(tableName, MAX_TABLE_NAME - 1, table->name);
     table->created_at = time(nullptr);
     table->next_row_id = INITIAL_ROW_ID;
     
     // 复制列定义
-    for (int i = 0; i < column_count; i++) {
+    for (int i = 0; i < columnCount; i++) {
         table->columns[i] = columns[i];
     }
-    table->column_count = column_count;
+    table->column_count = columnCount;
     
     // 为每一行分配单元格内存
     for (int i = 0; i < MAX_ROWS; i++) {
-        SmartTableRow table_row(column_count);
+        SmartTableRow table_row(columnCount);
         table->rows[i] = table_row;
     }
 }
@@ -507,7 +507,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
     }
 }
 
-SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *where_clause)
+SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 {
     const int MAX_QUERY_RESULTS = 100;
     std::vector<std::string> col_names;

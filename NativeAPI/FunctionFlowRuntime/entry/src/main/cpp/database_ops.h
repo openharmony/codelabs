@@ -289,7 +289,8 @@ public:
 
     SmartQueryResult(int cols,
                      const std::vector<std::string>& col_names,
-                     const std::vector<std::vector<DataCell>>& data) : column_count(cols)  {
+                     const std::vector<std::vector<DataCell>>& data) : column_count(cols)
+    {
         column_names = std::make_unique<std::unique_ptr<char[]>[]>(column_count);
         for (int i = 0; i < column_count; i++) {
             if (i < static_cast<int>(col_names.size()) && !col_names[i].empty()) {
@@ -310,7 +311,8 @@ public:
     }
     
     // 获取列名
-    const char* getColumnName(int col) const {
+    const char* getColumnName(int col) const
+    {
         if (col < 0 || col >= column_count || !column_names || !column_names[col]) {
             return "";
         }
@@ -360,11 +362,11 @@ private:
     std::unique_ptr<SmartQueryResult> query_result;
 
 public:
-    DataBaseOps(const char *table_name, ColumnDef *columns, int column_count);
+    DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount);
     ~DataBaseOps();
-    TableIndex* CreateTableIndex(const char *column_name);
+    TableIndex* CreateTableIndex(const char *columnName);
     bool DeleteTableRow(int row_id);
-    SmartQueryResult* ExecuteSelectQuery(const char *where_clause);
+    SmartQueryResult* ExecuteSelectQuery(const char *whereClause);
     bool BeginTransaction();
     bool CommitTransaction();
     bool RollbackTransaction();
