@@ -1,0 +1,12 @@
+{
+  "plural": [
+    {
+      "name": "contact_count_info",
+      "value": [
+        { "quantity": "zero", "value": "You have no contacts" },
+        { "quantity": "one", "value": "You have %d contact" },
+        { "quantity": "other", "value": "Total %d contacts" }
+      ]
+    }
+  ]
+}
