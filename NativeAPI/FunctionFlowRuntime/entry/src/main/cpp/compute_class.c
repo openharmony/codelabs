@@ -722,7 +722,9 @@ double integrate_romberg(double (*f)(double), double a, double b, double tol)
         
         // Richardson 外推
         for (int j = INIT_ONE; j <= k; j++) {
-            R[k][j] = R[k][j-INIT_ONE] + (R[k][j-INIT_ONE] - R[k-INIT_ONE][j-INIT_ONE]) / (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
+            R[k][j] = R[k][j-INIT_ONE] + 
+                      (R[k][j-INIT_ONE] - R[k-INIT_ONE][j-INIT_ONE]) / 
+                      (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
         }
         
         // 检查收敛
@@ -1082,7 +1084,9 @@ double GammaFunction(double x)
         A += coeffs[i] / (x + i);
     }
     
-    double result = sqrt(DEFAULT_MULTIPLIER * PI) * pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) * exp(-(x + g + GAMMA_APPROX_OFFSET)) * A;
+    double result = sqrt(DEFAULT_MULTIPLIER * PI) * 
+                    pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) * 
+                    exp(-(x + g + GAMMA_APPROX_OFFSET)) * A;
     return result;
 }
 double BetaFunction(double a, double b)
@@ -1275,14 +1279,14 @@ int ComputeFfrtQueue()
     request3.arg = NULL;
     
     // VIP享受更优先的服务
-    ffrt_task_handle_t task1 = commitRequest(bank, Add, request1, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
-    ffrt_task_handle_t task2 = commitRequest(bank, Sub, request2, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
-    ffrt_task_handle_t task3 = commitRequest(bank, compute, request3, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
+    ffrt_task_handle_t task1 = CommitRequest(bank, Add, request1, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
+    ffrt_task_handle_t task2 = CommitRequest(bank, Sub, request2, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
+    ffrt_task_handle_t task3 = CommitRequest(bank, compute, request3, FFRT_QUEUE_PRIORITY, FFRT_QUEUE_FLAG);
 
     // 等待所有的客户服务完成
-    waitForRequest(task1);
-    waitForRequest(task2);
-    waitForRequest(task3);
+    WaitForRequest(task1);
+    WaitForRequest(task2);
+    WaitForRequest(task3);
 
     DestroyBankSystem(bank);
 
