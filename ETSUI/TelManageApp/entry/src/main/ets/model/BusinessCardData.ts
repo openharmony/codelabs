@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // model/BusinessCardData.ts
 import { common } from '@kit.AbilityKit';
 import { preferences } from '@kit.ArkData';
