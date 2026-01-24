@@ -17,6 +17,8 @@ import common from '@ohos.app.ability.common';
 import { Item, ItemUseStatus, DEFAULT_CATEGORY_OPTIONS } from '../model/Item';
 import ItemRdb from '../data/ItemRdb';
 import { StatisticsPage } from './StatisticsPage';
+import { MinePage } from './MinePage';
+import { itemStore } from '../store';
 
 // 定义Select组件选项接口
 interface SelectOption {
@@ -87,6 +89,16 @@ struct LightItemNote {
     const now = new Date();
     this.dateStr = this.formatDate(now);
     this.initDatabase();
+    // 新增：监听全局状态变化
+    itemStore.onDataCleared(this.dataClearedCallback);
+    itemStore.onItemCountChange(this.itemCountChangedCallback);
+  }
+
+  // 新增：页面消失时
+  aboutToDisappear(): void {
+    // 移除全局状态监听
+    itemStore.offDataCleared(this.dataClearedCallback);
+    itemStore.offItemCountChange(this.itemCountChangedCallback);
   }
 
   // 初始化数据库
@@ -94,6 +106,8 @@ struct LightItemNote {
     try {
       await ItemRdb.getRdbStore(this.context);
       await this.refreshItemList();
+      // 新增：初始化全局状态
+      await itemStore.updateItemCount();
     } catch (err) {
       console.error("数据库初始化失败:", err);
       promptAction.showToast({ message: '数据初始化失败', duration: 2000 });
@@ -222,10 +236,14 @@ struct LightItemNote {
       if (this.editingItemId !== -1) {
         // 编辑状态：执行更新
         await ItemRdb.update(itemData);
+        // 触发全局状态更新
+        await itemStore.updateItemCount();
         promptAction.showToast({ message: '物品修改成功！', duration: 2000 });
       } else {
         // 新增状态：执行插入
         await ItemRdb.insert(itemData);
+        // 触发全局状态更新
+        await itemStore.updateItemCount();
         promptAction.showToast({ message: '物品添加成功！', duration: 2000 });
       }
 
@@ -283,6 +301,8 @@ struct LightItemNote {
         action: async () => {
           try {
             await ItemRdb.delete(id);
+            // 触发全局状态更新
+            await itemStore.updateItemCount();
             // 关键修复1：立即本地过滤，实时更新UI
             this.itemList = this.itemList.filter(item => item.id !== id);
             // 关键修复2：延迟刷新，确保数据一致性
@@ -298,6 +318,18 @@ struct LightItemNote {
       }
     });
   }
+
+  // 数据清空监听回调
+  private dataClearedCallback = (): void => {
+    console.info('接收到数据清空事件，刷新列表');
+    this.refreshItemList();
+  };
+
+  // 物品数量变化监听回调
+  private itemCountChangedCallback = (count: number): void => {
+    console.info(`物品数量变化: ${count}个，刷新列表`);
+    this.refreshItemList();
+  };
 
   // 侧滑编辑+删除按钮
   @Builder itemEnd(item: Item) {
@@ -736,7 +768,14 @@ struct LightItemNote {
           StatisticsPage({ itemList: this.itemList })
         }
         .tabBar(this.TabBuilder("统计", 2, "📊"))
+
+        // 标签页3：我的页面
+        TabContent() {
+          MinePage()
+        }
+        .tabBar(this.TabBuilder("我的", 3, "👤"))
       }
+
       .barWidth("100%")
       .barHeight(60)
       .backgroundColor(Color.White)
