@@ -2,6 +2,11 @@
   "src": [
     "pages/Index",
     "pages/AddContact",
-    "pages/EditContact"
+    "pages/EditContact",
+    "pages/ImportExport",
+    "pages/FavoritesDisplay",
+    "pages/FavoriteManagement",
+    "pages/SelectFavorites",
+    "pages/MyBusinessCard"
   ]
 }

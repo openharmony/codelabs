@@ -34,33 +34,80 @@ struct AddContact {
       // 标题栏
       Row() {
         // 返回上一页
-        Button('取消')
-          .fontSize(16)
-          .backgroundColor(Color.Transparent)
-          .fontColor('#007DFF')
-          .onClick(() => {
-            router.back();
-          })
+        Button() {
+          Stack({ alignContent: Alignment.Center }) {
+            // 圆形背景
+            Column() {
+              // 空 Column 作为背景
+            }
+            .width(40)
+            .height(40)
+            .borderRadius(20)
+            .backgroundColor(Color.White)
+            .shadow({
+              radius: 1,
+              color: '#00000010',
+              offsetX: 0,
+              offsetY: 1
+            })
 
-        Text('添加联系人')
+            // 叉号
+            Text('×')
+              .fontSize(36)
+              .fontWeight(FontWeight.Medium)
+              .fontColor('#444')
+          }
+        }
+        .width(50)
+        .height(50)
+        .backgroundColor(Color.Transparent)
+        .onClick(() => {
+          router.back();
+        })
+
+        Text('新建联系人')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .textAlign(TextAlign.Center)
           .layoutWeight(1)
 
-        Button('保存')
-          .fontSize(16)
-          .backgroundColor(Color.Transparent)
-          .fontColor(this.name && this.phone ? '#007DFF' : '#999')
-          // 姓名与电话均非空，且不在保存中时可点击
-          .enabled(!!this.name && !!this.phone && !this.isSaving)
-          .onClick(() => {
-            this.saveContact();
-          })
+        Button() {
+          Stack({ alignContent: Alignment.Center }) {
+            // 圆形背景
+            Column() {
+              // 空 Column 作为背景
+            }
+            .width(40)
+            .height(40)
+            .borderRadius(20)
+            .backgroundColor(this.name && this.phone ? '#007DFF' : '#d1d1d6')
+            .shadow({
+              radius: 2,
+              color: this.name && this.phone ? '#007DFF30' : '#00000010',
+              offsetX: 0,
+              offsetY: 1
+            })
+
+            // 对号
+            Text('✓')
+              .fontSize(24)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(Color.White)
+          }
+        }
+        .width(50)
+        .height(50)
+        .backgroundColor(Color.Transparent)
+        .enabled(!!this.name && !!this.phone && !this.isSaving)
+        .onClick(() => {
+          this.saveContact();
+        })
+        .opacity(this.name && this.phone ? 1 : 0.6)
       }
       .width('100%')
-      .padding(20)
-      .backgroundColor('#f0f0f0')
+      .padding({ left: 12, right: 12, top: 20, bottom: 20 })
+      // .backgroundColor('#F0F0F0')
+      .borderRadius(4)
 
       // 表单内容
       Scroll() {
@@ -69,16 +116,16 @@ struct AddContact {
           Column() {
             // 已填姓名取首字母大写，否则显示“+”
             Text(this.name ? this.name.charAt(0).toUpperCase() : '+')
-              .fontSize(40)
+              .fontSize(100)
               .fontColor(Color.White)
               .textAlign(TextAlign.Center)
-              .width(80)
-              .height(80)
-              .borderRadius(40)
+              .width(180)
+              .height(180)
+              .borderRadius(70)
               .backgroundColor('#007DFF')
           }
           .width('100%')
-          .padding(30)
+          .padding(15)
           .justifyContent(FlexAlign.Center)
 
           // 基本信息表单

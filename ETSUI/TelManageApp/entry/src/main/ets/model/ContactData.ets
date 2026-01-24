@@ -177,4 +177,5 @@ export class ContactData{
     console.log('ContactData: 创建的联系人对象:',JSON.stringify(contactObj));
     return contactObj;
   }
+
 }
