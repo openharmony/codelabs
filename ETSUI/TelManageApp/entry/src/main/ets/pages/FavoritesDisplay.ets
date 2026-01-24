@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // pages/FavoritesDisplay.ets
 import { ContactData } from '../model/ContactData';
 import { FavoriteManager } from '../model/FavoriteManager';
