@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // model/FavoriteManager.ts
 import { contact } from '@kit.ContactsKit';
 import { Context, common } from '@kit.AbilityKit';
