@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // 导入导出界面 - 联系人信息导出
 import { ContactData } from '../model/ContactData';
 import { contact } from '@kit.ContactsKit';
