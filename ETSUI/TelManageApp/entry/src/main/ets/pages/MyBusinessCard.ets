@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // pages/MyBusinessCard.ets
 import { BusinessCardData } from '../model/BusinessCardData';
 import { router } from '@kit.ArkUI';
