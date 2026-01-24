@@ -40,6 +40,6 @@ void WaitForRequest(ffrt_task_handle_t task);
 
 // type: 0代表并发调度，非0代表串行调度
 ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type);
-void DestroyBankSystem(ffrt_queue_t queue_handle);
+void DestroyBankSystem(ffrt_queue_t queueHandle);
 
 #endif

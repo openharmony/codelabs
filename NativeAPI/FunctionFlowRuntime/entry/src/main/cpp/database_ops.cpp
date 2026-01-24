@@ -173,7 +173,7 @@ int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
     }
 }
 
-SmartBPlusTreeNode* DataBaseOps::CreateBPlusTreeNode(bool isLeaf, int order)
+SmartBPlusTreeNode* DataBaseOps::CreateBplusTreeNode(bool isLeaf, int order)
 {
     std::shared_ptr<SmartBPlusTreeNode> sNode = std::make_shared<SmartBPlusTreeNode>(order, isLeaf);
     if (!sNode) {
@@ -186,13 +186,13 @@ SmartBPlusTreeNode* DataBaseOps::CreateBPlusTreeNode(bool isLeaf, int order)
 TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
 {
     const int BPLUS_TREE_ORDER = 4;
-    if (table->index_count >= MAX_INDEXES) {
+    if (table->indexCount >= MAX_INDEXES) {
         return nullptr;
     }
 
     // 查找列
     int colIndex = -1;
-    for (int i = 0; i < table->column_count; i++) {
+    for (int i = 0; i < table->columnCount; i++) {
         if (strcmp(table->columns[i].name, columnName) == 0) {
             colIndex = i;
             break;
@@ -203,17 +203,17 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
         return nullptr;
     }
 
-    TableIndex *index = &table->indexes[table->index_count];
+    TableIndex *index = &table->indexes[table->indexCount];
     // 使用std::copy替代strncpy
     std::copy_n(columnName, MAX_COLUMN_NAME - 1, index->name);
-    index->column_index = colIndex;
-    index->root = CreateBPlusTreeNode(true, BPLUS_TREE_ORDER);
+    index->columnIndex = colIndex;
+    index->root = CreateBplusTreeNode(true, BPLUS_TREE_ORDER);
     index->height = 1;
-    index->key_count = 0;
-
-    table->columns[colIndex].has_index = true;
-    table->index_count++;
-
+    index->keyCount = 0;
+    
+    table->columns[colIndex].hasIndex = true;
+    table->indexCount++;
+    
     return index;
 }
 
@@ -230,7 +230,7 @@ void DataBaseOps::InsertIntoIndex(TableIndex *index, int key)
     std::copy(message.begin(), message.end(), buffer);
     buffer[message.size()] = '\0';
     printf("%s", buffer);
-    index->key_count++;
+    index->keyCount++;
 }
 
 void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
@@ -244,7 +244,7 @@ void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
     std::copy(message.begin(), message.end(), buffer);
     buffer[message.size()] = '\0';
     printf("%s", buffer);
-    index->key_count--;
+    index->keyCount--;
 }
 
 DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount)
@@ -259,14 +259,14 @@ DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCo
     *table.get() = DatabaseTable{};
     // 使用std::copy替代strncpy
     std::copy_n(tableName, MAX_TABLE_NAME - 1, table->name);
-    table->created_at = time(nullptr);
-    table->next_row_id = INITIAL_ROW_ID;
+    table->createdAt = time(nullptr);
+    table->nextRowId = INITIAL_ROW_ID;
 
     // 复制列定义
     for (int i = 0; i < columnCount; i++) {
         table->columns[i] = columns[i];
     }
-    table->column_count = columnCount;
+    table->columnCount = columnCount;
 
     // 为每一行分配单元格内存
     for (int i = 0; i < MAX_ROWS; i++) {
@@ -279,8 +279,8 @@ DataBaseOps::~DataBaseOps() {}
 
 SmartTableRow* DataBaseOps::FindTableRow(int rowId)
 {
-    for (int i = 0; i < table->row_count; i++) {
-        if (!table->rows[i].deleted && table->rows[i].row_id == rowId) {
+    for (int i = 0; i < table->rowCount; i++) {
+        if (!table->rows[i].deleted && table->rows[i].rowId == rowId) {
             return &table->rows[i];
         }
     }
@@ -289,36 +289,36 @@ SmartTableRow* DataBaseOps::FindTableRow(int rowId)
 
 int DataBaseOps::InsertTableRow(DataCell *cells)
 {
-    if (table->row_count >= MAX_ROWS) {
+    if (table->rowCount >= MAX_ROWS) {
         return -1;
     }
 
     for (int i = 0; i < MAX_ROWS; i++) {
-        if (table->rows[i].deleted || table->rows[i].row_id == 0) {
+        if (table->rows[i].deleted || table->rows[i].rowId == 0) {
             SmartTableRow *row = &table->rows[i];
 
             // 复制数据
-            for (int j = 0; j < table->column_count; j++) {
+            for (int j = 0; j < table->columnCount; j++) {
                 row->cells[j] = cells[j];
             }
 
-            row->row_id = table->next_row_id++;
+            row->rowId = table->nextRowId++;
             row->deleted = false;
-            row->created_at = time(nullptr);
-            row->updated_at = row->created_at;
-
-            table->row_count++;
+            row->createdAt = time(NULL);
+            row->updatedAt = row->createdAt;
+            
+            table->rowCount++;
 
             // 更新索引
-            for (int j = 0; j < table->index_count; j++) {
+            for (int j = 0; j < table->indexCount; j++) {
                 TableIndex *index = &table->indexes[j];
-                if (index->column_index < table->column_count) {
+                if (index->columnIndex < table->columnCount) {
                     // 简化：使用行ID作为索引键
-                    InsertIntoIndex(index, row->row_id);
+                    InsertIntoIndex(index, row->rowId);
                 }
             }
 
-            return row->row_id;
+            return row->rowId;
         }
     }
 
@@ -333,22 +333,22 @@ bool DataBaseOps::UpdateTableRow(int rowId, DataCell *newCells)
     }
 
     // 保存旧数据（用于事务回滚）
-    DataCell *oldCells = static_cast<DataCell*>(malloc(sizeof(DataCell) * table->column_count));
+    DataCell *oldCells = static_cast<DataCell*>(malloc(sizeof(DataCell) * table->columnCount));
     if (!oldCells) {
         return false;
     }
 
     // 使用std::copy替代memcpy
-    std::copy(row->cells.get(), row->cells.get() + table->column_count, oldCells);
+    std::copy(row->cells.get(), row->cells.get() + table->columnCount, oldCells);
 
     // 更新数据
-    for (int i = 0; i < table->column_count; i++) {
+    for (int i = 0; i < table->columnCount; i++) {
         if (!newCells[i].isNull) {
             row->cells[i] = newCells[i];
         }
     }
 
-    row->updated_at = time(nullptr);
+    row->updatedAt = time(nullptr);
 
     free(oldCells);
     return true;
@@ -362,45 +362,45 @@ bool DataBaseOps::DeleteTableRow(int rowId)
     }
 
     // 更新索引
-    for (int i = 0; i < table->index_count; i++) {
+    for (int i = 0; i < table->indexCount; i++) {
         TableIndex *index = &table->indexes[i];
         DeleteFromIndex(index, rowId);
     }
 
     row->deleted = true;
-    table->row_count--;
+    table->rowCount--;
 
     return true;
 }
 
 bool DataBaseOps::BeginTransaction()
 {
-    if (table->in_transaction) {
+    if (table->inTransaction) {
         return false;
     }
 
-    table->in_transaction = true;
+    table->inTransaction = true;
     return true;
 }
 
 bool DataBaseOps::CommitTransaction()
 {
-    if (!table->in_transaction) {
+    if (!table->inTransaction) {
         return false;
     }
 
-    table->in_transaction = false;
+    table->inTransaction = false;
     return true;
 }
 
 bool DataBaseOps::RollbackTransaction()
 {
-    if (!table->in_transaction) {
+    if (!table->inTransaction) {
         return false;
     }
 
     // 在实际系统中需要回滚所有更改
-    table->in_transaction = false;
+    table->inTransaction = false;
     return true;
 }
 
@@ -411,9 +411,9 @@ void DataBaseOps::PrintTableSchema()
     const int SCHEMA_FLAG_WIDTH = 8;
 
     printf("\n=== 表结构: %s ===\n", table->name);
-    printf("创建时间: %s\n", FormatDate(table->created_at));
-    printf("行数: %d\n", table->row_count);
-    printf("列数: %d\n\n", table->column_count);
+    printf("创建时间: %s\n", FormatDate(table->createdAt));
+    printf("行数: %d\n", table->rowCount);
+    printf("列数: %d\n\n", table->columnCount);
 
     printf("%-*s %-*s %-*s %-*s %-*s\n",
              static_cast<int>(SCHEMA_COLUMN_WIDTH), "列名",
@@ -423,14 +423,14 @@ void DataBaseOps::PrintTableSchema()
             static_cast<int>(SCHEMA_FLAG_WIDTH), "索引");
     printf("%s\n", "------------------------------------------------------------");
 
-    for (int i = 0; i < table->column_count; i++) {
+    for (int i = 0; i < table->columnCount; i++) {
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
                static_cast<int>(SCHEMA_COLUMN_WIDTH), col->name,
                 static_cast<int>(SCHEMA_TYPE_WIDTH), DataTypeToString(col->type),
-                static_cast<int>(SCHEMA_FLAG_WIDTH), col->not_null ? "YES" : "NO",
-                static_cast<int>(SCHEMA_FLAG_WIDTH), col->is_primary ? "YES" : "NO",
-                static_cast<int>(SCHEMA_FLAG_WIDTH), col->has_index ? "YES" : "NO");
+                static_cast<int>(SCHEMA_FLAG_WIDTH), col->notNull ? "YES" : "NO",
+                static_cast<int>(SCHEMA_FLAG_WIDTH), col->isPrimary ? "YES" : "NO",
+                static_cast<int>(SCHEMA_FLAG_WIDTH), col->hasIndex ? "YES" : "NO");
     }
 }
 
@@ -441,27 +441,27 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
     const int DATE_FORMAT_SIZE = 20;
 
     if (!result || result->error != ERR_NONE) {
-        printf("查询错误: %s\n", result->error_msg);
+        printf("查询错误: %s\n", result->errorMsg);
         return;
     }
 
     printf("\n查询结果 (%d 行):\n", result->rowCount);
 
     // 打印表头
-    for (int i = 0; i < result->column_count; i++) {
-        printf("%-*s", (int)QUERY_COLUMN_WIDTH, result->getColumnName(i));
-        if (i < result->column_count - 1) {
+    for (int i = 0; i < result->columnCount; i++) {
+        printf("%-*s", (int)QUERY_COLUMN_WIDTH, result->GetColumnName(i));
+        if (i < result->columnCount - 1) {
             printf(" | ");
         }
     }
     printf("\n");
 
     // 打印分隔线
-    for (int i = 0; i < result->column_count; i++) {
+    for (int i = 0; i < result->columnCount; i++) {
         for (int j = 0; j < QUERY_COLUMN_WIDTH; j++) {
             printf("-");
         }
-        if (i < result->column_count - 1) {
+        if (i < result->columnCount - 1) {
             printf("-+-");
         }
     }
@@ -470,7 +470,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
     const int PRECISION = 2;
     // 打印数据
     for (int i = 0; i < result->rowCount; i++) {
-        for (int j = 0; j < result->column_count; j++) {
+        for (int j = 0; j < result->columnCount; j++) {
             DataCell *cell = &result->rows[i][j];
 
             if (cell->isNull) {
@@ -499,7 +499,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
                 printf("%-20s", buffer);
             }
 
-            if (j < result->column_count - 1) {
+            if (j < result->columnCount - 1) {
                 printf(" | ");
             }
         }
@@ -511,7 +511,7 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 {
     const int MAX_QUERY_RESULTS = 100;
     std::vector<std::string> colNames;
-    for (int i = 0; i < table->column_count; i++) {
+    for (int i = 0; i < table->columnCount; i++) {
         std::string strTemp(table->columns[i].name);
         colNames.push_back(strTemp);
     }
@@ -521,11 +521,11 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
     int rowCount = 0;
 
     for (int i = 0; i < MAX_QUERY_RESULTS; i++) {
-        if (!table->rows[i].deleted && table->rows[i].row_id > 0) {
+        if (!table->rows[i].deleted && table->rows[i].rowId > 0) {
             // 简化：暂时不考虑WHERE条件
             DataCell *pCell = table->rows[i].cells.get();
             std::vector<DataCell> dataCellVec;
-            for (int j = 0; j < table->column_count; j++) {
+            for (int j = 0; j < table->columnCount; j++) {
                 DataCell item = pCell[j];
                 dataCellVec.push_back(item);
             }
@@ -534,8 +534,8 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
         }
     }
 
-    query_result = std::make_unique<SmartQueryResult>(table->column_count, colNames, data);
-    return query_result.get();
+    queryResult = std::make_unique<SmartQueryResult>(table->columnCount, colNames, data);
+    return queryResult.get();
 }
 
 // C接口实现
