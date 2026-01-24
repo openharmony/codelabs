@@ -31,8 +31,8 @@ static inline void FfrtDestroyFunctionWrapper(void* t)
     }
 }
 #define FFRT_STATIC_ASSERT(cond, msg) int x(int static_assertion_##msg[(cond) ? 1 : -1])
-static inline ffrt_function_header_t *ffrt_create_function_wrapper(const ffrt_function_t func,
-    const ffrt_function_t after_func, void *arg)
+static inline ffrt_function_header_t *FfrtCreateFunctionWrapper(const ffrt_function_t func,
+    const ffrt_function_t afterFunc, void *arg)
 {
     FFRT_STATIC_ASSERT(sizeof(CFunction) <= ffrt_auto_managed_function_storage_size,
         size_of_function_must_be_less_than_ffrt_auto_managed_function_storage_size);
@@ -41,7 +41,7 @@ static inline ffrt_function_header_t *ffrt_create_function_wrapper(const ffrt_fu
     f->header.exec = FfrtExecFunctionWrapper;
     f->header.destroy = FfrtDestroyFunctionWrapper;
     f->func = func;
-    f->afterFunc = after_func;
+    f->afterFunc = afterFunc;
     f->arg = arg;
     return (ffrt_function_header_t *)f;
 }
@@ -71,9 +71,9 @@ ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type)
     return queue;
 }
 
-void DestroyBankSystem(ffrt_queue_t queue_handle)
+void DestroyBankSystem(ffrt_queue_t queueHandle)
 {
-    ffrt_queue_destroy(queue_handle);
+    ffrt_queue_destroy(queueHandle);
     LOGI("destroy bank system successfully");
 }
 
@@ -81,13 +81,13 @@ void DestroyBankSystem(ffrt_queue_t queue_handle)
 ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
     ffrt_queue_priority_t level, int delay)
 {
-    ffrt_task_attr_t task_attr;
-    (void)ffrt_task_attr_init(&task_attr);
-    ffrt_task_attr_set_name(&task_attr, request.name);
-    ffrt_task_attr_set_queue_priority(&task_attr, level);
-    ffrt_task_attr_set_delay(&task_attr, delay);
+    ffrt_task_attr_t taskAttr;
+    (void)ffrt_task_attr_init(&taskAttr);
+    ffrt_task_attr_set_name(&taskAttr, request.name);
+    ffrt_task_attr_set_queue_priority(&taskAttr, level);
+    ffrt_task_attr_set_delay(&taskAttr, delay);
 
-    return ffrt_queue_submit_h(bank, ffrt_create_function_wrapper(func, NULL, request.arg), &task_attr);
+    return ffrt_queue_submit_h(bank, FfrtCreateFunctionWrapper(func, NULL, request.arg), &taskAttr);
 }
 
 // 封装等待队列任务函数
