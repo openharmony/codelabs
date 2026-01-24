@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // pages/SelectFavorites.ets - 直接在 ForEach 中构建
 import { ContactData } from '../model/ContactData';
 import { FavoriteManager } from '../model/FavoriteManager';
