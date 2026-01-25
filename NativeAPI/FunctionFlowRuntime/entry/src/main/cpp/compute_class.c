@@ -171,8 +171,6 @@ Matrix LuDecomposition(const Matrix *matrix);
 Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b);
 Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b);
 
-// 特征值/特征向量
-Matrix QrDecomposition(const Matrix *matrix);
 void QrAlgorithm(const Matrix *matrix, double *eigenvalues, Matrix *eigenvectors);
 
 // 数值积分
@@ -478,52 +476,6 @@ Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b)
 
     return x;
 }
-
-/* ========== QR分解实现 ========== */
-Matrix QrDecomposition(const Matrix *matrix)
-{
-    int m = matrix->rows;
-    int n = matrix->cols;
-    Matrix q = CreateMatrix(m, n);
-    Matrix r = CreateMatrix(n, n);
-    Matrix v = CopyMatrix(matrix);
-
-    for (int j = INIT_ZERO; j < n; j++) {
-        // 计算第j列的范数
-        double norm = INIT_VALUE_1;
-        for (int i = INIT_ZERO; i < m; i++) {
-            norm += v.data[i * n + j] * v.data[i * n + j];
-        }
-        norm = sqrt(norm);
-
-        // 构造Householder向量
-        r.data[j * n + j] = norm;
-
-        if (norm > EPSILON) {
-            for (int i = INIT_ZERO; i < m; i++) {
-                q.data[i * n + j] = norm != 0 ? v.data[i * n + j] / norm : 0;
-                q.data[i * n + j] = v.data[i * n + j] / norm;
-            }
-
-            // 更新剩余列
-            for (int k = j + INIT_ONE; k < n; k++) {
-                double dot = INIT_VALUE_1;
-                for (int i = INIT_ZERO; i < m; i++) {
-                    dot += q.data[i * n + j] * v.data[i * n + k];
-                }
-                r.data[j * n + k] = dot;
-
-                for (int i = INIT_ZERO; i < m; i++) {
-                    v.data[i * n + k] -= DEFAULT_MULTIPLIER * q.data[i * n + j] * dot;
-                }
-            }
-        }
-    }
-
-    DestroyMatrix(&v);
-    return q;  // 返回Q矩阵，R矩阵在过程中计算
-}
-
 /* ========== 数值积分实现 ========== */
 double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
 {
