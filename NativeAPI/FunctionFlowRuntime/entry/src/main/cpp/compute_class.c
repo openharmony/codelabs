@@ -310,14 +310,14 @@ void DestroyVector(Vector *vec)
 Matrix CopyMatrix(const Matrix *src)
 {
     Matrix dst = CreateMatrix(src->rows, src->cols);
-    memcpy(dst.data, src->data, src->rows * src->cols * sizeof(double));
+    std::memcpy(dst.data, src->data, src->rows * src->cols * sizeof(double));
     return dst;
 }
 
 Vector CopyVector(const Vector *src)
 {
     Vector dst = CreateVector(src->size);
-    memcpy(dst.data, src->data, src->size * sizeof(double));
+    std::memcpy(dst.data, src->data, src->size * sizeof(double));
     return dst;
 }
 
