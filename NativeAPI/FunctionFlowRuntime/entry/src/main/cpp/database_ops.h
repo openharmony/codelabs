@@ -127,11 +127,9 @@ public:
     SmartTableRow(int id, const std::vector<DataCell>& cellData)
         : rowId(id), deleted(false), cellCount(cellData.size())
     {
-
         time_t now = time(nullptr);
         createdAt = now;
         updatedAt = now;
-
         cells = std::make_unique<DataCell[]>(cellCount);
         for (size_t i = 0; i < cellCount; ++i) {
             cells[i] = cellData[i];  // 调用拷贝构造函数

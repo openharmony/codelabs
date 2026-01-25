@@ -17,6 +17,7 @@
 #include <algorithm>
 #include <sstream>
 #include <iomanip>
+#define SECUREC_ENABLE 1  // 启用安全函数
 #define ZERO 0
 #define THREE 3
 // C接口实现
@@ -392,7 +393,7 @@ void DataBaseOps::PrintTableSchema()
     printf("行数: %d\n", table->rowCount);
     printf("列数: %d\n\n", table->columnCount);
 
-    printf("%-*d %-*d %-*d %-*d %-*d\n",
+    printf("%-*s %-*s %-*s %-*s %-*s\n",
         static_cast<int>(schemaColumnWidth), "列名",
         static_cast<int>(schemaTypeWidth), "类型",
         static_cast<int>(schemaFlagWidth), "非空",
@@ -402,12 +403,12 @@ void DataBaseOps::PrintTableSchema()
 
     for (int i = 0; i < table->columnCount; i++) {
         ColumnDef *col = &table->columns[i];
-        printf("%-*d %-*d %-*d %-*d %-*d\n",
-            static_cast<int>(schemaColumnWidth), col->name,
-            static_cast<int>(schemaTypeWidth), DataTypeToString(col->type),
-            static_cast<int>(schemaFlagWidth), col->notNull ? "YES" : "NO",
-            static_cast<int>(schemaFlagWidth), col->isPrimary ? "YES" : "NO",
-            static_cast<int>(schemaFlagWidth), col->hasIndex ? "YES" : "NO");
+        printf("%-*s %-*s %-*s %-*s %-*s\n",
+            schemaColumnWidth, col->name,
+            schemaTypeWidth, DataTypeToString(col->type),
+            schemaFlagWidth, col->notNull ? "YES" : "NO",
+            schemaFlagWidth, col->isPrimary ? "YES" : "NO",
+            schemaFlagWidth, col->hasIndex ? "YES" : "NO");
     }
 }
 
