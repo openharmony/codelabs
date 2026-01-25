@@ -94,21 +94,11 @@ struct LightItemNote {
     const now = new Date();
     this.dateStr = this.formatDate(now);
     this.initDatabase();
-<<<<<<< HEAD
-=======
-    // 新增：监听全局状态变化
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
     itemStore.onDataCleared(this.dataClearedCallback);
     itemStore.onItemCountChange(this.itemCountChangedCallback);
   }
 
-<<<<<<< HEAD
   aboutToDisappear(): void {
-=======
-  // 新增：页面消失时
-  aboutToDisappear(): void {
-    // 移除全局状态监听
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
     itemStore.offDataCleared(this.dataClearedCallback);
     itemStore.offItemCountChange(this.itemCountChangedCallback);
   }
@@ -117,10 +107,6 @@ struct LightItemNote {
     try {
       await ItemRdb.getRdbStore(this.context);
       await this.refreshItemList();
-<<<<<<< HEAD
-=======
-      // 新增：初始化全局状态
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
       await itemStore.updateItemCount();
     } catch (err) {
       console.error("数据库初始化失败:", err);
@@ -300,18 +286,10 @@ struct LightItemNote {
     try {
       if (this.editingItemId !== -1) {
         await ItemRdb.update(itemData);
-<<<<<<< HEAD
-=======
-        // 触发全局状态更新
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         await itemStore.updateItemCount();
         promptAction.showToast({ message: '物品修改成功！', duration: 2000 });
       } else {
         await ItemRdb.insert(itemData);
-<<<<<<< HEAD
-=======
-        // 触发全局状态更新
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         await itemStore.updateItemCount();
         promptAction.showToast({ message: '物品添加成功！', duration: 2000 });
       }
@@ -361,13 +339,7 @@ struct LightItemNote {
         action: async () => {
           try {
             await ItemRdb.delete(id);
-<<<<<<< HEAD
             await itemStore.updateItemCount();
-=======
-            // 触发全局状态更新
-            await itemStore.updateItemCount();
-            // 关键修复1：立即本地过滤，实时更新UI
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             this.itemList = this.itemList.filter(item => item.id !== id);
             setTimeout(async () => {
               await this.refreshItemList();
@@ -382,28 +354,16 @@ struct LightItemNote {
     });
   }
 
-<<<<<<< HEAD
-=======
-  // 数据清空监听回调
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   private dataClearedCallback = (): void => {
     console.info('接收到数据清空事件，刷新列表');
     this.refreshItemList();
   };
 
-<<<<<<< HEAD
-=======
-  // 物品数量变化监听回调
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   private itemCountChangedCallback = (count: number): void => {
     console.info(`物品数量变化: ${count}个，刷新列表`);
     this.refreshItemList();
   };
 
-<<<<<<< HEAD
-=======
-  // 侧滑编辑+删除按钮
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder itemEnd(item: Item) {
     Row() {
       Button("编辑")
@@ -766,12 +726,13 @@ struct LightItemNote {
                   ListItem() {
                     Row() {
                       Column() {
+                          Stack() {
+                            Text(item.category.substring(0, 1))
+                              .fontSize(18)
+                              .fontWeight(FontWeight.Bold)
+                              .fontColor(Color.White)
 
-                          Text(item.category.substring(0, 1))
-                            .fontSize(18)
-                            .fontWeight(FontWeight.Bold)
-                            .fontColor(Color.White)
-
+                        }
                       }
                       .width(40)
                       .height(40)
@@ -853,18 +814,10 @@ struct LightItemNote {
         .tabBar(this.TabBuilder("物品列表", 1, "📋"))
 
         TabContent() {
-<<<<<<< HEAD
-=======
-          // 传递 itemList 数据给统计组件
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           StatisticsPage({ itemList: this.itemList })
         }
         .tabBar(this.TabBuilder("统计", 2, "📊"))
 
-<<<<<<< HEAD
-=======
-        // 标签页3：我的页面
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         TabContent() {
           MinePage()
         }
@@ -899,6 +852,7 @@ struct LightItemNote {
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .zIndex(3)
+            // 关键修改：改用 right/top 固定内边距，而非百分比x
             .position({ right: 16, top: 24 })
             .onClick(() => {
               console.log('关闭按钮点击，更新状态');

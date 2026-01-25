@@ -1,15 +1,9 @@
 import { promptAction } from '@kit.ArkUI';
-<<<<<<< HEAD
 import picker from '@ohos.file.picker'; // 图片选择器
 import { UserInfo, AppInfo } from '../model/types';
 import { itemStore } from '../store';
 import userInfoRdb from '../data/UserRdb';
 import common from '@ohos.app.ability.common';
-=======
-import { UserInfo, AppInfo } from '../model/types';
-import { itemStore } from '../store';
-
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
 @Component
 export struct MinePage {
   // 页面状态
@@ -18,7 +12,6 @@ export struct MinePage {
   @State showSuccessDialog: boolean = false;
   @State showHelpDialog: boolean = false;
   @State showEditDialog: boolean = false;
-<<<<<<< HEAD
   @State showAvatarSelectDialog: boolean = false; // 头像选择弹窗
   @State nicknameInput: string = ''; // 移除默认值，从数据库加载
   @State isClearing: boolean = false;
@@ -36,17 +29,6 @@ export struct MinePage {
     avatar: '',
     nickname: '',
     joinDate: ''
-=======
-  @State nicknameInput: string = '轻物志用户';
-  @State isClearing: boolean = false;
-  @State itemCount: number = 0;
-
-  // 用户信息
-  @State userInfo: UserInfo = {
-    avatar: '👤',
-    nickname: '轻物志用户',
-    joinDate: '2026年1月'
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   };
 
   // 应用信息
@@ -58,7 +40,6 @@ export struct MinePage {
     copyright: '© 2026 OpenHarmony课程小组'
   };
 
-<<<<<<< HEAD
   // ========== 页面生命周期（核心适配：无 id 逻辑） ==========
   async onCreate() {
     console.info('MinePage 创建，开始初始化数据');
@@ -109,7 +90,7 @@ export struct MinePage {
   }
 
   // 核心适配：加载用户信息时无需处理 id（UserRdb 已移除 id）
-
+  // 新增：加载用户信息前先初始化数据库（核心修复）
   private async loadUserInfo(): Promise<void> {
     try {
       console.info('开始从数据库加载用户信息（无 id 字段）');
@@ -173,97 +154,30 @@ export struct MinePage {
       }
     } catch (error) {
       console.error('检查物品数量失败:', error.message);
-=======
-  // ========== 页面生命周期 ==========
-  // 页面显示时
-  aboutToAppear(): void {
-    console.info('我的页面显示');
-    // 首次加载：从全局状态获取数据
-    this.loadFromStore();
-    // 监听全局状态变化
-    itemStore.onItemCountChange(this.handleItemCountChange);
-  }
-
-  // 页面消失时
-  aboutToDisappear(): void {
-    console.info('我的页面消失');
-    // 移除全局状态监听
-    itemStore.offItemCountChange(this.handleItemCountChange);
-  }
-
-  // ========== 全局状态处理 ==========
-  // 处理物品数量变化（监听回调）
-  private handleItemCountChange = (count: number): void => {
-    console.info(`接收到全局状态更新: ${count}个物品`);
-    this.itemCount = count;
-  };
-
-  // 从全局状态加载数据
-  private async loadFromStore(): Promise<void> {
-    console.info('从全局状态加载物品数量');
-    // 更新全局状态（会触发监听回调）
-    await itemStore.updateItemCount();
-  }
-
-  // ========== 核心功能方法 ==========
-  // 处理清空数据 - 总是先检查
-  private async handleClearData(): Promise<void> {
-    console.info('点击清空数据按钮');
-    try {
-      // 总是先刷新物品数量（从全局状态）
-      await itemStore.updateItemCount();
-      if (this.itemCount === 0) {
-        // 没有数据，提示用户
-        this.showNoDataDialog = true;
-      } else {
-        // 有数据，显示确认对话框
-        this.showConfirmDialog = true;
-      }
-    } catch (error) {
-      console.error('检查物品数量失败:', error);
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
       this.showErrorToast('检查数据失败');
     }
   }
 
-<<<<<<< HEAD
   private async executeClearData(): Promise<void> {
     if (this.isClearing) {
       return;
-=======
-  // 执行清空操作 - 使用 ItemStore 的方法
-  private async executeClearData(): Promise<void> {
-    if (this.isClearing) {
-      return; // 防止重复点击
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
     }
     this.isClearing = true;
     this.showConfirmDialog = false;
     try {
       console.info('开始清空数据库...');
-<<<<<<< HEAD
       await itemStore.clearAllItems();
       console.info('数据库清空成功');
       this.itemCount = 0;
       this.showSuccessDialog = true;
     } catch (error) {
       console.error('清空数据失败:', error.message);
-=======
-      // 使用 ItemStore 的方法清空数据库
-      await itemStore.clearAllItems();
-      console.info('数据库清空成功');
-      // 显示成功提示
-      this.showSuccessDialog = true;
-    } catch (error) {
-      console.error('清空数据失败:', error);
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
       this.showErrorToast('清空失败，请重试');
     } finally {
       this.isClearing = false;
     }
   }
 
-<<<<<<< HEAD
   // ========== 头像选择功能（核心适配：无 id 更新） ==========
   // 打开头像选择弹窗
   private openAvatarSelectDialog(): void {
@@ -346,9 +260,6 @@ export struct MinePage {
   }
 
   // ========== 提示工具方法 ==========
-=======
-  // 显示错误提示
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   private showErrorToast(message: string): void {
     try {
       promptAction.showToast({
@@ -356,40 +267,10 @@ export struct MinePage {
         duration: 1500
       });
     } catch (error) {
-<<<<<<< HEAD
       console.error('显示Toast出错:', error.message);
     }
   }
 
-=======
-      console.error('显示Toast出错:', error);
-    }
-  }
-
-  // 处理编辑资料
-  private handleEditProfile(): void {
-    this.nicknameInput = this.userInfo.nickname;
-    this.showEditDialog = true;
-  }
-
-  // 保存昵称修改
-  private saveNickname(): void {
-    if (this.nicknameInput.trim().length === 0) {
-      this.showErrorToast('昵称不能为空');
-      return;
-    }
-    if (this.nicknameInput.length > 12) {
-      this.showErrorToast('昵称不能超过12个字符');
-      return;
-    }
-    // 更新 @State 变量，触发UI刷新
-    this.userInfo.nickname = this.nicknameInput.trim();
-    this.showEditDialog = false;
-    this.showToast('昵称修改成功');
-  }
-
-  // 显示Toast消息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   private showToast(message: string): void {
     try {
       promptAction.showToast({
@@ -397,7 +278,6 @@ export struct MinePage {
         duration: 1500
       });
     } catch (error) {
-<<<<<<< HEAD
       console.error('显示Toast出错:', error.message);
     }
   }
@@ -414,6 +294,7 @@ export struct MinePage {
     });
   }
 
+  // ========== 构建方法（无 id 相关修改，仅保留适配注释） ==========
   @Builder
   private buildLoadingPlaceholder() {
     Column() {
@@ -431,6 +312,7 @@ export struct MinePage {
     .justifyContent(FlexAlign.Center)
   }
 
+  // 新增：用户信息加载占位符
   @Builder
   private buildUserInfoLoadingPlaceholder() {
     Column() {
@@ -459,33 +341,10 @@ export struct MinePage {
   }
 
   // 个人资料卡片（无 id 相关修改）
-=======
-      console.error('显示Toast出错:', error);
-    }
-  }
-
-  // 安全执行清空操作
-  private safeExecuteClearData(): void {
-    this.executeClearData().catch((error: Error) => {
-      console.error('执行清空操作出错:', error);
-    });
-  }
-
-  // 安全处理清空数据
-  private safeHandleClearData(): void {
-    this.handleClearData().catch((error: Error) => {
-      console.error('处理清空数据出错:', error);
-    });
-  }
-
-  // ========== 主要构建方法 ==========
-  // 个人资料
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildUserInfoCard() {
     Column() {
       Row({ space: 16 }) {
-<<<<<<< HEAD
         // 头像区域（可点击）
         Column() {
           if (this.isUserInfoLoading) {
@@ -578,77 +437,6 @@ export struct MinePage {
             }
             .margin({ top: 8 })
           }
-=======
-        // 简约头像
-        Column() {
-          Column() {
-            Text('👤')
-              .fontSize(40)
-              .fontColor('#4A6CF7')
-          }
-          .width(80)
-          .height(80)
-          .backgroundColor('#F0F5FF')
-          .borderRadius(40)
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-          .shadow({ radius: 6, color: '#20000000', offsetY: 3 })
-        }
-        .width(80)
-        .height(80)
-
-        // 用户信息
-        Column({ space: 8 }) {
-          // 昵称和编辑图标（内联设计）
-          Row({ space: 4 }) {
-            // 昵称（可点击）
-            Text(this.userInfo.nickname)
-              .fontSize(22)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#333')
-              .maxLines(1)
-              .textOverflow({ overflow: TextOverflow.Ellipsis })
-              .onClick(() => {
-                this.handleEditProfile();
-              })
-
-            // 小笔图标（可点击）
-            Text('✏️')
-              .fontSize(13)
-              .fontColor('#CCCCCC')
-              .margin({ left: 4 })
-              .opacity(0.7)
-              .onClick(() => {
-                this.handleEditProfile();
-              })
-          }
-          .width('100%')
-          .alignItems(VerticalAlign.Center)
-
-          // 加入时间和物品数量
-          Row({ space: 24 }) {
-            Column({ space: 2 }) {
-              Text('加入时间')
-                .fontSize(12)
-                .fontColor('#666')
-              Text(this.userInfo.joinDate)
-                .fontSize(14)
-                .fontColor('#333')
-                .fontWeight(FontWeight.Medium)
-            }
-
-            Column({ space: 2 }) {
-              Text('物品数量')
-                .fontSize(12)
-                .fontColor('#666')
-              Text(`${this.itemCount}个`)
-                .fontSize(14)
-                .fontColor('#333')
-                .fontWeight(FontWeight.Medium)
-            }
-          }
-          .margin({ top: 8 })
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         }
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Start)
@@ -662,7 +450,6 @@ export struct MinePage {
     .shadow({ radius: 12, color: '#10000000', offsetY: 4 })
   }
 
-<<<<<<< HEAD
   // 头像选择弹窗（无 id 相关修改）
   @Builder
   private buildAvatarSelectDialog() {
@@ -883,9 +670,6 @@ export struct MinePage {
   }
 
   // 数据管理卡片（无 id 相关修改）
-=======
-  // 数据管理卡片
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildDataManagementCard() {
     Column() {
@@ -896,22 +680,12 @@ export struct MinePage {
         .width('100%')
 
       Column() {
-<<<<<<< HEAD
         Row() {
-=======
-        // 直接构建清空数据项
-        Row() {
-          // 图标
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           Text('🗑️')
             .fontSize(20)
             .margin({ right: 12 })
             .width(24)
 
-<<<<<<< HEAD
-=======
-          // 内容
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           Column({ space: 2 }) {
             Text('清空所有数据')
               .fontSize(16)
@@ -923,10 +697,6 @@ export struct MinePage {
           }
           .layoutWeight(1)
 
-<<<<<<< HEAD
-=======
-          // 右侧箭头
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           Text('›')
             .fontSize(20)
             .fontColor('#999')
@@ -948,11 +718,7 @@ export struct MinePage {
     .margin({ bottom: 16 })
   }
 
-<<<<<<< HEAD
   // 关于与帮助卡片（无 id 相关修改）
-=======
-  // 关于与帮助卡片
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildAboutCard() {
     Column() {
@@ -963,10 +729,6 @@ export struct MinePage {
         .width('100%')
 
       Column() {
-<<<<<<< HEAD
-=======
-        // 应用信息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Row() {
           Text('📱')
             .fontSize(20)
@@ -992,10 +754,6 @@ export struct MinePage {
           .color('#F0F0F0')
           .margin({ left: 36, right: 0 })
 
-<<<<<<< HEAD
-=======
-        // 帮助
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Row() {
           Text('🎯')
             .fontSize(20)
@@ -1028,10 +786,6 @@ export struct MinePage {
           .color('#F0F0F0')
           .margin({ left: 36, right: 0 })
 
-<<<<<<< HEAD
-=======
-        // 开发者信息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Row() {
           Text('👨‍💻')
             .fontSize(20)
@@ -1063,11 +817,7 @@ export struct MinePage {
     .margin({ bottom: 16 })
   }
 
-<<<<<<< HEAD
   // 底部信息（无 id 相关修改）
-=======
-  // 底部信息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildFooter() {
     Column() {
@@ -1084,20 +834,11 @@ export struct MinePage {
     .alignItems(HorizontalAlign.Center)
   }
 
-<<<<<<< HEAD
   // 清空数据确认对话框（无 id 相关修改）
-=======
-  // ========== 对话框构建方法 ==========
-  // 清空数据确认对话框
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildConfirmDialog() {
     Column() {
       Column() {
-<<<<<<< HEAD
-=======
-        // 标题
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('确认清空数据')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
@@ -1106,20 +847,12 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 警告图标
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('⚠️')
           .fontSize(48)
           .margin({ bottom: 16 })
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 数据统计
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text(`当前共有 ${this.itemCount} 个物品记录`)
           .fontSize(14)
           .fontColor('#666')
@@ -1127,10 +860,6 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 警告说明
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('此操作将永久删除所有物品数据，且无法恢复！')
           .fontSize(14)
           .fontColor('#F53F3F')
@@ -1138,13 +867,7 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
         Row() {
-=======
-        // 按钮区域
-        Row() {
-          // 取消按钮
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           Button('取消')
             .layoutWeight(1)
             .height(44)
@@ -1157,10 +880,6 @@ export struct MinePage {
               this.showConfirmDialog = false;
             })
 
-<<<<<<< HEAD
-=======
-          // 确认清空按钮
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           Button('确认清空')
             .layoutWeight(1)
             .height(44)
@@ -1188,29 +907,17 @@ export struct MinePage {
     .zIndex(100)
   }
 
-<<<<<<< HEAD
   // 无数据提示对话框（无 id 相关修改）
-=======
-  // 无数据提示对话框
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildNoDataDialog() {
     Column() {
       Column() {
-<<<<<<< HEAD
-=======
-        // 信息图标
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('📭')
           .fontSize(48)
           .margin({ bottom: 16 })
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 标题
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('暂无数据')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
@@ -1219,10 +926,6 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 提示信息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('当前没有物品记录，无需清空')
           .fontSize(14)
           .fontColor('#666')
@@ -1230,10 +933,6 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 确定按钮
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Button('知道了')
           .width('100%')
           .height(44)
@@ -1259,29 +958,17 @@ export struct MinePage {
     .zIndex(101)
   }
 
-<<<<<<< HEAD
   // 清空成功对话框（无 id 相关修改）
-=======
-  // 清空成功对话框
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildSuccessDialog() {
     Column() {
       Column() {
-<<<<<<< HEAD
-=======
-        // 成功图标
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('✅')
           .fontSize(48)
           .margin({ bottom: 16 })
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 标题
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('数据已清空')
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
@@ -1290,10 +977,6 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 提示信息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Text('所有物品数据已被安全清除')
           .fontSize(14)
           .fontColor('#666')
@@ -1301,10 +984,6 @@ export struct MinePage {
           .width('100%')
           .textAlign(TextAlign.Center)
 
-<<<<<<< HEAD
-=======
-        // 确定按钮
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Button('知道了')
           .width('100%')
           .height(44)
@@ -1330,122 +1009,11 @@ export struct MinePage {
     .zIndex(102)
   }
 
-<<<<<<< HEAD
   // 帮助对话框（无 id 相关修改）
-=======
-  // 编辑资料对话框
-  @Builder
-  private buildEditDialog() {
-    Column() {
-      Column() {
-        // 标题
-        Text('编辑资料')
-          .fontSize(18)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333')
-          .margin({ bottom: 20 })
-          .width('100%')
-          .textAlign(TextAlign.Center)
-
-        // 头像
-        Row() {
-          Column() {
-            Text('👤')
-              .fontSize(32)
-              .fontColor('#4A6CF7')
-          }
-          .width(64)
-          .height(64)
-          .backgroundColor('#F0F5FF')
-          .borderRadius(32)
-          .justifyContent(FlexAlign.Center)
-          .alignItems(HorizontalAlign.Center)
-        }
-        .width('100%')
-        .margin({ bottom: 20 })
-        .justifyContent(FlexAlign.Center)
-
-        // 昵称编辑
-        Column() {
-          Text('昵称')
-            .fontSize(14)
-            .fontColor('#666')
-            .margin({ bottom: 8 })
-            .width('100%')
-            .textAlign(TextAlign.Start)
-
-          TextInput({ text: this.nicknameInput, placeholder: '请输入昵称' })
-            .width('100%')
-            .height(44)
-            .backgroundColor('#F8F9FA')
-            .fontSize(15)
-            .fontColor('#333')
-            .placeholderColor('#999')
-            .placeholderFont({ size: 15, weight: FontWeight.Normal })
-            .maxLength(12)
-            .borderRadius(8)
-            .padding({ left: 12, right: 12 })
-            .onChange((value: string) => {
-              this.nicknameInput = value;
-            })
-        }
-        .width('100%')
-        .margin({ bottom: 24 })
-
-        // 按钮区域
-        Row() {
-          // 取消按钮
-          Button('取消')
-            .layoutWeight(1)
-            .height(44)
-            .backgroundColor('#F0F2F5')
-            .fontColor('#666')
-            .fontSize(14)
-            .borderRadius(8)
-            .onClick(() => {
-              this.showEditDialog = false;
-            })
-
-          // 保存按钮
-          Button('保存')
-            .layoutWeight(1)
-            .height(44)
-            .backgroundColor('#4A6CF7')
-            .fontColor(Color.White)
-            .fontSize(14)
-            .borderRadius(8)
-            .margin({ left: 12 })
-            .onClick(() => {
-              this.saveNickname();
-            })
-        }
-      }
-      .padding(24)
-      .backgroundColor(Color.White)
-      .borderRadius(20)
-      .margin({ left: 24, right: 24 })
-      .shadow({ radius: 32, color: '#40000000' })
-    }
-    .width('100%')
-    .height('100%')
-    .backgroundColor('#80000000')
-    .justifyContent(FlexAlign.Center)
-    .position({ x: 0, y: 0 })
-    .zIndex(103)
-  }
-
-
-
-  // 帮助对话框
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildHelpDialog() {
     Column() {
       Column() {
-<<<<<<< HEAD
-=======
-        // 标题栏
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Row() {
           Text('🎯')
             .fontSize(24)
@@ -1459,10 +1027,6 @@ export struct MinePage {
         .margin({ bottom: 20 })
         .justifyContent(FlexAlign.Start)
 
-<<<<<<< HEAD
-=======
-        // 内容区域
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Scroll() {
           Column({ space: 16 }) {
             Column() {
@@ -1476,10 +1040,6 @@ export struct MinePage {
             .borderRadius(10)
             .width('100%')
 
-<<<<<<< HEAD
-=======
-            // 步骤1
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             Row({ space: 12 }) {
               Column() {
                 Text('1')
@@ -1512,10 +1072,6 @@ export struct MinePage {
             .backgroundColor('#F9FAFB')
             .borderRadius(10)
 
-<<<<<<< HEAD
-=======
-            // 步骤2
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             Row({ space: 12 }) {
               Column() {
                 Text('2')
@@ -1548,10 +1104,6 @@ export struct MinePage {
             .backgroundColor('#F9FAFB')
             .borderRadius(10)
 
-<<<<<<< HEAD
-=======
-            // 步骤3
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             Row({ space: 12 }) {
               Column() {
                 Text('3')
@@ -1584,10 +1136,6 @@ export struct MinePage {
             .backgroundColor('#F9FAFB')
             .borderRadius(10)
 
-<<<<<<< HEAD
-=======
-            // 步骤4
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             Row({ space: 12 }) {
               Column() {
                 Text('4')
@@ -1620,10 +1168,6 @@ export struct MinePage {
             .backgroundColor('#F9FAFB')
             .borderRadius(10)
 
-<<<<<<< HEAD
-=======
-            // 步骤5
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             Row({ space: 12 }) {
               Column() {
                 Text('5')
@@ -1656,10 +1200,6 @@ export struct MinePage {
             .backgroundColor('#F9FAFB')
             .borderRadius(10)
 
-<<<<<<< HEAD
-=======
-            // 使用建议
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
             Column() {
               Row() {
                 Text('💡')
@@ -1689,10 +1229,6 @@ export struct MinePage {
         .margin({ bottom: 20 })
         .scrollBar(BarState.Auto)
 
-<<<<<<< HEAD
-=======
-        // 开始使用按钮
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
         Button('开始使用')
           .width('100%')
           .height(44)
@@ -1721,11 +1257,7 @@ export struct MinePage {
     .zIndex(201)
   }
 
-<<<<<<< HEAD
   // 加载中遮罩（无 id 相关修改）
-=======
-  // 加载中遮罩
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   @Builder
   private buildLoadingOverlay() {
     Column() {
@@ -1747,29 +1279,15 @@ export struct MinePage {
     .zIndex(300)
   }
 
-<<<<<<< HEAD
   // ========== 主构建方法（无 id 相关修改） ==========
-=======
-  // ========== 主构建方法 ==========
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
   build() {
     Column() {
       // 滚动内容区域
       Scroll() {
         Column() {
-<<<<<<< HEAD
           this.buildUserInfoCard()
           this.buildDataManagementCard()
           this.buildAboutCard()
-=======
-          // 用户信息卡片
-          this.buildUserInfoCard()
-          // 数据管理卡片
-          this.buildDataManagementCard()
-          // 关于与帮助卡片
-          this.buildAboutCard()
-          // 底部版权信息
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
           this.buildFooter()
         }
         .padding({ left: 16, right: 16, bottom: 32 })
@@ -1777,7 +1295,6 @@ export struct MinePage {
       .scrollBar(BarState.Off)
       .layoutWeight(1)
 
-<<<<<<< HEAD
       // 弹窗和遮罩层
       if (this.showConfirmDialog) this.buildConfirmDialog()
       if (this.showNoDataDialog) this.buildNoDataDialog()
@@ -1786,37 +1303,6 @@ export struct MinePage {
       if (this.showHelpDialog) this.buildHelpDialog()
       if (this.showAvatarSelectDialog) this.buildAvatarSelectDialog()
       if (this.isClearing) this.buildLoadingOverlay()
-=======
-      // 3. 清空数据确认对话框
-      if (this.showConfirmDialog) {
-        this.buildConfirmDialog()
-      }
-
-      // 4. 无数据提示对话框
-      if (this.showNoDataDialog) {
-        this.buildNoDataDialog()
-      }
-
-      // 5. 清空成功对话框
-      if (this.showSuccessDialog) {
-        this.buildSuccessDialog()
-      }
-
-      // 6. 编辑资料对话框
-      if (this.showEditDialog) {
-        this.buildEditDialog()
-      }
-
-      // 7. 帮助对话框
-      if (this.showHelpDialog) {
-        this.buildHelpDialog()
-      }
-
-      // 8. 加载中遮罩
-      if (this.isClearing) {
-        this.buildLoadingOverlay()
-      }
->>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
     }
     .width('100%')
     .height('100%')
