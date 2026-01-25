@@ -17,7 +17,7 @@
 #include "native_log_wrapper.h"
 #include <string.h>
 #include <unistd.h>
-#include <stdio.h>
+#include <cstdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -309,15 +309,33 @@ void DestroyVector(Vector *vec)
 
 Matrix CopyMatrix(const Matrix *src)
 {
+    // 创建目标矩阵
     Matrix dst = CreateMatrix(src->rows, src->cols);
-    std::memcpy(dst.data, src->data, src->rows * src->cols * sizeof(double));
+
+    if (dst.data != NULL && src->data != NULL) {
+        // 计算总元素数量
+        int total_elements = src->rows * src->cols;
+
+        // 使用循环逐个复制元素
+        for (int i = 0; i < total_elements; ++i) {
+            dst.data[i] = src->data[i];
+        }
+    }
+
     return dst;
 }
-
 Vector CopyVector(const Vector *src)
 {
+    // 创建目标向量
     Vector dst = CreateVector(src->size);
-    std::memcpy(dst.data, src->data, src->size * sizeof(double));
+
+    if (dst.data != NULL && src->data != NULL) {
+        // 使用循环逐个复制元素
+        for (int i = 0; i < src->size; ++i) {
+            dst.data[i] = src->data[i];
+        }
+    }
+
     return dst;
 }
 
