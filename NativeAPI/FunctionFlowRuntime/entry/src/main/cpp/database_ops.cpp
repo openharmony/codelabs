@@ -18,6 +18,7 @@
 #include <sstream>
 #include <iomanip>
 #define ZERO 0
+#define THREE 3
 // C接口实现
 extern "C" {
 time_t ParseDate(const char *dateStr)
@@ -515,11 +516,9 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
         std::string strTemp(table->columns[i].name);
         colNames.push_back(strTemp);
     }
-
     // 收集符合条件的行
     std::vector<std::vector<DataCell>> data;
     int rowCount = 0;
-
     for (int i = 0; i < maxQueryResults; i++) {
         if (!table->rows[i].deleted && table->rows[i].rowId > 0) {
             // 简化：暂时不考虑WHERE条件
@@ -533,7 +532,6 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
             rowCount++;
         }
     }
-
     queryResult = std::make_unique<SmartQueryResult>(table->columnCount, colNames, data);
     return queryResult.get();
 }
@@ -624,7 +622,7 @@ int DatabaseOpsDemo()
     int id1 = ops->InsertTableRow(user1);
     int id2 = ops->InsertTableRow(user2);
     int id3 = ops->InsertTableRow(user3);
-    operationCount += 3;
+    operationCount += THREE;
 
     printf("插入完成: id1=%d, id2=%d, id3=%d\n", id1, id2, id3);
 

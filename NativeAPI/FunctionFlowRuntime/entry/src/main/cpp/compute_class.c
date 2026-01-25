@@ -237,7 +237,7 @@ double ChebyshevPoly(int n, double x);
 Vector RandomUniform(int n, double a, double b);
 Vector RandomNormal(int n, double mean, double stddev);
 Vector RandomExponential(int n, double lambda);
-Matrix RandomMatrix(int rows, int cols, double min_val, double maxVal);
+Matrix RandomMatrix(int rows, int cols, double minVal, double maxVal);
 
 // 工具函数
 void PrintMatrix(const Matrix *matrix, const char *name);
@@ -506,33 +506,33 @@ Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b)
     int n = matrix->rows;
 
     // 从LU分解中提取L和U
-    Matrix L = CreateMatrix(n, n);
-    Matrix U = CreateMatrix(n, n);
+    Matrix l = CreateMatrix(n, n);
+    Matrix u = CreateMatrix(n, n);
 
     for (int i = INIT_ZERO; i < n; i++) {
         for (int j = INIT_ZERO; j < n; j++) {
             if (i > j) {
-                L.data[i * n + j] = lu.data[i * n + j];
-                U.data[i * n + j] = INIT_VALUE_1;
+                l.data[i * n + j] = lu.data[i * n + j];
+                u.data[i * n + j] = INIT_VALUE_1;
             } else if (i == j) {
-                L.data[i * n + j] = INIT_VALUE_1;
-                U.data[i * n + j] = lu.data[i * n + j];
+                l.data[i * n + j] = INIT_VALUE_1;
+                u.data[i * n + j] = lu.data[i * n + j];
             } else {
-                L.data[i * n + j] = INIT_VALUE_1;
-                U.data[i * n + j] = lu.data[i * n + j];
+                l.data[i * n + j] = INIT_VALUE_1;
+                u.data[i * n + j] = lu.data[i * n + j];
             }
         }
     }
 
     // 解 Ly = b
-    Vector y = ForwardSubstitution(&L, b);
+    Vector y = ForwardSubstitution(&l, b);
 
     // 解 Ux = y
-    Vector x = BackwardSubstitution(&U, &y);
+    Vector x = BackwardSubstitution(&u, &y);
 
     DestroyMatrix(&lu);
-    DestroyMatrix(&L);
-    DestroyMatrix(&U);
+    DestroyMatrix(&l);
+    DestroyMatrix(&u);
     DestroyVector(&y);
 
     return x;
@@ -602,7 +602,7 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
     norm = sqrt(norm);
     for (int i = INIT_ZERO; i < n; i++) {
         if (norm != 0) {
-            b.data[i] /= norm;;
+            b.data[i] /= norm;
         } else {
             b.data[i] = 0;
         }
@@ -799,7 +799,6 @@ void Idft(const ComplexNum *input, double *output, int n)
         if (n != 0) {
             output[k] = real / n;
         }
-
     }
 }
 
@@ -922,11 +921,9 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
             e = (x < xm) ? b - x : a - x;
             d = GOLDEN_RATIO * e;
         }
-
         // 计算下一步
         double u = x + ((fabs(d) >= tol1) ? d : ((d > INIT_VALUE_1) ? tol1 : -tol1));
         double fu = f(u);
-
         // 更新区间
         if (fu <= fx) {
             if (u >= x) {
@@ -961,7 +958,8 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
     return x;
 }
 
-Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0, double learningRate, int iterations)
+Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0,
+                                double learningRate, int iterations)
 {
     Vector x = CopyVector(x0);
     Vector grad = CreateVector(x0->size);
@@ -985,14 +983,12 @@ Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradien
         for (int i = INIT_ZERO; i < x.size; i++) {
             x.data[i] -= learningRate * grad.data[i];
         }
-
         // 检查收敛
         double gradNorm = INIT_VALUE_1;
         for (int i = INIT_ZERO; i < x.size; i++) {
             gradNorm += grad.data[i] * grad.data[i];
         }
         gradNorm = sqrt(gradNorm);
-
         if (gradNorm < EPSILON) {
             break;
         }
@@ -1154,7 +1150,7 @@ Vector RandomNormal(int n, double mean, double stddev)
     return result;
 }
 
-double ff(double t, double y)
+double Ff(double t, double y)
 {
     return -y;
 }
@@ -1204,7 +1200,7 @@ void Compute(void *arg)
     printf("\n4. 测试微分方程求解:\n");
     // dy/dt = -y, y(0) = 1
 
-    Vector sol = SolveOdeRk4(ff, TEST_ODE_Y0, TEST_ODE_T0, TEST_ODE_TF, TEST_ODE_STEPS);
+    Vector sol = SolveOdeRk4(Ff, TEST_ODE_Y0, TEST_ODE_T0, TEST_ODE_TF, TEST_ODE_STEPS);
     printf("微分方程 y' = -y 在 t=1 的解: %.10f (理论值: %.10f)\n",
            sol.data[TEST_ODE_STEPS], exp(-INIT_VALUE_1));
 
@@ -1242,8 +1238,8 @@ void Compute(void *arg)
 
     // 测试9: 特殊函数
     printf("\n9. 测试特殊函数:\n");
-    double gamma_val = GammaFunction(TEST_GAMMA_ARG);
-    printf("Γ(5) = %.10f (理论值: 24.0)\n", gamma_val);
+    double gammaVal = GammaFunction(TEST_GAMMA_ARG);
+    printf("Γ(5) = %.10f (理论值: 24.0)\n", gammaVal);
 
     double erfVal = ErfFunction(TEST_ERF_ARG);
     printf("erf(1) = %.10f\n", erfVal);
