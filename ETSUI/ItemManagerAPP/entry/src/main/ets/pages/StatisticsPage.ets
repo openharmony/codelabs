@@ -653,7 +653,11 @@ export struct StatisticsPage {
                 .fontSize(16)
                 .fontWeight(FontWeight.Bold)
                 .fontColor(ThemeConfig.TEXT_SECONDARY)
+<<<<<<< HEAD
               Text("点击左下角添加你的第一件物品吧")
+=======
+              Text("点击右下角添加你的第一件物品吧")
+>>>>>>> d0bdc00cacd020ce75470fda7a548f84d8adc874
                 .fontSize(14)
                 .fontColor(ThemeConfig.TEXT_LIGHT)
                 .margin({ top: 8 })
