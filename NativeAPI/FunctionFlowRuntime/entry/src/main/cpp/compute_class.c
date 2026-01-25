@@ -17,7 +17,7 @@
 #include "native_log_wrapper.h"
 #include <string.h>
 #include <unistd.h>
-#include <cstdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
