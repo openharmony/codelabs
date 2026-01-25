@@ -2,11 +2,11 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "智能物品管理助手"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "轻物志应用入口"
     },
     {
       "name": "EntryAbility_label",

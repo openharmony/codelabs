@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2026 Huawei Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,16 +15,20 @@
  */
 import { promptAction } from '@kit.ArkUI';
 import common from '@ohos.app.ability.common';
+import picker from '@ohos.file.picker';
+import image from '@ohos.multimedia.image';
+import fs from '@ohos.file.fs';
 import { Item, ItemUseStatus, DEFAULT_CATEGORY_OPTIONS } from '../model/Item';
 import ItemRdb from '../data/ItemRdb';
+import { StatisticsPage } from './StatisticsPage';
+import { MinePage } from './MinePage';
+import { itemStore } from '../store';
 
-// 定义Select组件选项接口
 interface SelectOption {
   value: string;
   icon?: Resource;
 }
 
-// 表单卡片组件
 @Component
 struct FormCard {
   @Prop title: string = "";
@@ -56,11 +61,17 @@ struct FormCard {
 @Entry
 @Component
 struct LightItemNote {
-  // 状态变量
   @State currentTab: number = 0;
   @State itemList: Item[] = [];
   @State searchText: string = "";
-  @State editingItemId: number = -1; // 编辑状态标识：-1为非编辑
+  @State editingItemId: number = -1;
+
+  // 图片预览状态 - 关键修改
+  @State showImagePreview: boolean = false;
+  @State previewImagePath: string = "";
+  @State imageScale: number = 1; // 新增：图片缩放比例
+  @State imageOffsetX: number = 0; // 新增：图片X轴偏移
+  @State imageOffsetY: number = 0; // 新增：图片Y轴偏移
 
   // 表单状态
   @State itemName: string = "";
@@ -73,38 +84,40 @@ struct LightItemNote {
   @State dateStr: string = "";
   @State nameError: string = "";
   @State priceError: string = "";
+  @State itemImagePath: string = "";
 
-  // 选项列表
   private itemCategories: string[] = DEFAULT_CATEGORY_OPTIONS;
   private itemUseStatusOptions: ItemUseStatus[] = ["在用", "闲置", "已丢弃"];
-
-  // 应用上下文
   private context = getContext(this) as common.UIAbilityContext;
 
-  // 初始化
   aboutToAppear(): void {
     const now = new Date();
     this.dateStr = this.formatDate(now);
     this.initDatabase();
+    itemStore.onDataCleared(this.dataClearedCallback);
+    itemStore.onItemCountChange(this.itemCountChangedCallback);
   }
 
-  // 初始化数据库
+  aboutToDisappear(): void {
+    itemStore.offDataCleared(this.dataClearedCallback);
+    itemStore.offItemCountChange(this.itemCountChangedCallback);
+  }
+
   private async initDatabase(): Promise<void> {
     try {
       await ItemRdb.getRdbStore(this.context);
       await this.refreshItemList();
+      await itemStore.updateItemCount();
     } catch (err) {
       console.error("数据库初始化失败:", err);
       promptAction.showToast({ message: '数据初始化失败', duration: 2000 });
     }
   }
 
-  // 日期格式化
   private formatDate(date: Date): string {
     return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
   }
 
-  // 刷新物品列表（核心修复：强制触发UI更新）
   private async refreshItemList(): Promise<void> {
     if (!ItemRdb.isInitialized()) {
       console.warn("数据库未初始化，无法加载数据");
@@ -113,7 +126,6 @@ struct LightItemNote {
 
     try {
       const items = await ItemRdb.queryAll();
-      // 关键修复：创建新数组引用，强制鸿蒙状态管理检测到变化
       this.itemList = Array.from(items);
       console.info(`列表刷新成功，共${this.itemList.length}条数据`);
     } catch (err) {
@@ -122,7 +134,6 @@ struct LightItemNote {
     }
   }
 
-  // 显示日期选择器
   private showDatePicker(): void {
     DatePickerDialog.show({
       start: new Date("2010-1-1"),
@@ -140,7 +151,6 @@ struct LightItemNote {
     })
   }
 
-  // 表单校验
   private validateForm(): boolean {
     let isValid = true;
 
@@ -164,7 +174,6 @@ struct LightItemNote {
     return isValid;
   }
 
-  // 构建Select选项
   private getCategoryOptions(): SelectOption[] {
     const options: SelectOption[] = [];
     for (let i = 0; i < this.itemCategories.length; i++) {
@@ -173,9 +182,69 @@ struct LightItemNote {
     return options;
   }
 
-  // 开始编辑物品
+  private async selectItemImage(): Promise<void> {
+    try {
+      const photoPicker = new picker.PhotoViewPicker();
+      const selectOptions = new picker.PhotoSelectOptions();
+      selectOptions.maxSelectNumber = 1;
+      selectOptions.MIMEType = picker.PhotoViewMIMETypes.IMAGE_TYPE;
+
+      const result = await photoPicker.select(selectOptions);
+
+      if (result.photoUris && result.photoUris.length > 0) {
+        const imageUri = result.photoUris[0];
+        this.itemImagePath = imageUri;
+        promptAction.showToast({ message: '图片选择成功', duration: 1500 });
+      }
+    } catch (err) {
+      console.error("选择图片失败:", err);
+      promptAction.showToast({ message: '图片选择失败，请重试', duration: 2000 });
+    }
+  }
+
+  private removeItemImage(): void {
+    this.itemImagePath = "";
+    promptAction.showToast({ message: '图片已移除', duration: 1500 });
+  }
+
+  // 图片预览 - 关键修改
+  private previewImage(item: Item): void {
+    if (item.imagePath) {
+      this.previewImagePath = item.imagePath;
+      this.showImagePreview = true;
+      this.imageScale = 1; // 重置缩放
+      this.imageOffsetX = 0; // 重置偏移
+      this.imageOffsetY = 0;
+    } else {
+      promptAction.showToast({ message: '该物品暂无图片', duration: 1500 });
+    }
+  }
+
+  // 关闭预览 - 关键修改
+  private closeImagePreview(): void {
+    this.showImagePreview = false;
+    this.previewImagePath = "";
+    this.imageScale = 1;
+    this.imageOffsetX = 0;
+    this.imageOffsetY = 0;
+  }
+
+  // 图片缩放手势 - 新增
+  private onPinchGesture(event: GestureEvent): void {
+    if (event.scale !== undefined) {
+      this.imageScale = Math.max(0.5, Math.min(3, this.imageScale * event.scale));
+    }
+  }
+
+  // 图片平移手势 - 新增
+  private onPanGesture(event: GestureEvent): void {
+    if (event.offsetX !== undefined && event.offsetY !== undefined) {
+      this.imageOffsetX += event.offsetX;
+      this.imageOffsetY += event.offsetY;
+    }
+  }
+
   private startEdit(item: Item): void {
-    // 填充表单数据
     this.editingItemId = item.id;
     this.itemName = item.name;
     this.itemCategory = item.category;
@@ -185,21 +254,18 @@ struct LightItemNote {
     this.itemUseStatus = item.useStatus;
     this.dateStr = item.buyDate;
     this.selectedDate = new Date(item.buyDate);
+    this.itemImagePath = item.imagePath || "";
 
-    // 切换到添加/编辑标签页
     this.currentTab = 0;
     promptAction.showToast({ message: '进入编辑模式', duration: 1500 });
   }
 
-  // 新增/更新物品统一处理（核心修复：实时刷新列表）
   private async addItem(): Promise<void> {
-    // 表单校验
     if (!this.validateForm()) {
       promptAction.showToast({ message: '请检查表单填写', duration: 2000 });
       return;
     }
 
-    // 构建物品对象
     const itemData: Item = {
       id: this.editingItemId !== -1 ? this.editingItemId : Date.now(),
       name: this.itemName.trim(),
@@ -214,34 +280,27 @@ struct LightItemNote {
       returnDate: "",
       isPrecious: false,
       maintenanceDate: "",
-      imagePath: ""
+      imagePath: this.itemImagePath
     };
 
     try {
       if (this.editingItemId !== -1) {
-        // 编辑状态：执行更新
         await ItemRdb.update(itemData);
+        await itemStore.updateItemCount();
         promptAction.showToast({ message: '物品修改成功！', duration: 2000 });
       } else {
-        // 新增状态：执行插入
         await ItemRdb.insert(itemData);
+        await itemStore.updateItemCount();
         promptAction.showToast({ message: '物品添加成功！', duration: 2000 });
       }
 
-      // 关键修复：强制触发列表刷新
-      // 1. 先清空数组，让UI感知变化
       this.itemList = [];
-      // 2. 延迟100ms确保数据库操作完成，再重新加载数据
       setTimeout(async () => {
         await this.refreshItemList();
-        // 3. 再次创建新引用，双重保障
         this.itemList = [...this.itemList];
       }, 100);
 
-      // 重置表单并退出编辑状态
       this.resetForm();
-      // 可选：自动切回列表页，方便查看修改结果
-      // this.currentTab = 1;
     } catch (err) {
       console.error("操作失败:", err);
       promptAction.showToast({
@@ -251,7 +310,6 @@ struct LightItemNote {
     }
   }
 
-  // 重置表单
   private resetForm(): void {
     this.itemName = "";
     this.itemCategory = "";
@@ -263,11 +321,10 @@ struct LightItemNote {
     this.dateStr = this.formatDate(this.selectedDate);
     this.nameError = "";
     this.priceError = "";
-    // 退出编辑状态
+    this.itemImagePath = "";
     this.editingItemId = -1;
   }
 
-  // 删除物品（带确认弹窗，核心修复：实时刷新）
   private async deleteItem(id: number): Promise<void> {
     AlertDialog.show({
       title: '确认删除',
@@ -282,9 +339,8 @@ struct LightItemNote {
         action: async () => {
           try {
             await ItemRdb.delete(id);
-            // 关键修复1：立即本地过滤，实时更新UI
+            await itemStore.updateItemCount();
             this.itemList = this.itemList.filter(item => item.id !== id);
-            // 关键修复2：延迟刷新，确保数据一致性
             setTimeout(async () => {
               await this.refreshItemList();
             }, 100);
@@ -298,7 +354,16 @@ struct LightItemNote {
     });
   }
 
-  // 侧滑编辑+删除按钮
+  private dataClearedCallback = (): void => {
+    console.info('接收到数据清空事件，刷新列表');
+    this.refreshItemList();
+  };
+
+  private itemCountChangedCallback = (count: number): void => {
+    console.info(`物品数量变化: ${count}个，刷新列表`);
+    this.refreshItemList();
+  };
+
   @Builder itemEnd(item: Item) {
     Row() {
       Button("编辑")
@@ -324,7 +389,6 @@ struct LightItemNote {
     .justifyContent(FlexAlign.End)
   }
 
-  // 获取过滤后的物品列表
   private getFilteredItems(): Item[] {
     const keyword = this.searchText.trim().toLowerCase();
     if (!keyword) {
@@ -345,7 +409,6 @@ struct LightItemNote {
     return filteredItems;
   }
 
-  // 获取状态颜色
   private getStatusColor(status: ItemUseStatus): string {
     switch (status) {
       case '在用': return "#34C759";
@@ -355,7 +418,6 @@ struct LightItemNote {
     }
   }
 
-  // TabBar构建器
   @Builder TabBuilder(title: string, index: number, icon: string) {
     Column() {
       Text(icon)
@@ -375,7 +437,6 @@ struct LightItemNote {
     .backgroundColor(Color.White)
   }
 
-  // 获取分类颜色
   private getCategoryColor(category: string): string {
     const colors: Record<string, string> = {
       "数码产品": "#007AFF",
@@ -390,7 +451,6 @@ struct LightItemNote {
     return colors[category] || "#4A6CF7";
   }
 
-  // 获取状态背景色
   private getStatusBgColor(status: ItemUseStatus): string {
     switch (status) {
       case '在用': return "#E6F4EA";
@@ -402,7 +462,6 @@ struct LightItemNote {
 
   build() {
     Column() {
-      // 顶部标题栏（根据编辑状态动态修改）
       Row() {
         Text(this.editingItemId !== -1 ? "编辑物品" : "轻物志")
           .fontSize(20)
@@ -419,13 +478,10 @@ struct LightItemNote {
       .alignItems(VerticalAlign.Center)
       .justifyContent(FlexAlign.Center)
 
-      // 底部标签页
       Tabs({ index: this.currentTab, barPosition: BarPosition.End }) {
-        // 标签页1：添加/编辑物品
         TabContent() {
           Scroll() {
             Column() {
-              // 1. 物品名称
               FormCard({ title: "物品名称 *" }) {
                 Column() {
                   TextInput({ placeholder: "请输入物品名称", text: this.itemName })
@@ -447,7 +503,6 @@ struct LightItemNote {
                 }
               }
 
-              // 2. 物品分类
               FormCard({ title: "物品分类" }) {
                 Select(this.getCategoryOptions())
                   .value(this.itemCategory || "请选择分类")
@@ -462,7 +517,6 @@ struct LightItemNote {
                   })
               }
 
-              // 3. 购买日期
               FormCard({ title: "购买日期" }) {
                 Row() {
                   Text(this.dateStr)
@@ -480,7 +534,6 @@ struct LightItemNote {
                 })
               }
 
-              // 4. 价格
               FormCard({ title: "价格（元）*" }) {
                 Column() {
                   TextInput({ placeholder: "0.00", text: this.itemPrice })
@@ -510,7 +563,6 @@ struct LightItemNote {
                 }
               }
 
-              // 5. 存放位置
               FormCard({ title: "存放位置" }) {
                 TextInput({ placeholder: "例如：衣柜第一层", text: this.itemLocation })
                   .fontSize(16)
@@ -523,7 +575,6 @@ struct LightItemNote {
                   })
               }
 
-              // 6. 使用状态
               FormCard({ title: "使用状态" }) {
                 Flex({ wrap: FlexWrap.Wrap }) {
                   ForEach(this.itemUseStatusOptions, (status: ItemUseStatus) => {
@@ -547,7 +598,45 @@ struct LightItemNote {
                 }
               }
 
-              // 7. 备注
+              FormCard({ title: "物品图片" }) {
+                Column() {
+                  if (this.itemImagePath) {
+                    Stack() {
+                      Image(this.itemImagePath)
+                        .width("100%")
+                        .height(200)
+                        .objectFit(ImageFit.Cover)
+                        .borderRadius(8)
+
+                      Button("🗑️")
+                        .width(32)
+                        .height(32)
+                        .borderRadius(16)
+                        .backgroundColor(Color.Red)
+                        .fontColor(Color.White)
+                        .position({ right: 8, top: 8 })
+                        .onClick(() => this.removeItemImage())
+                    }
+                  } else {
+                    Column() {
+                      Text("📷")
+                        .fontSize(40)
+                        .margin({ bottom: 8 })
+                      Text("点击上传物品图片（可选）")
+                        .fontSize(14)
+                        .fontColor("#999999")
+                    }
+                    .width("100%")
+                    .height(200)
+                    .backgroundColor("#F5F7FA")
+                    .borderRadius(8)
+                    .justifyContent(FlexAlign.Center)
+                    .alignItems(HorizontalAlign.Center)
+                    .onClick(() => this.selectItemImage())
+                  }
+                }
+              }
+
               FormCard({ title: "备注" }) {
                 TextArea({ placeholder: "写点什么...", text: this.itemNote })
                   .fontSize(14)
@@ -560,7 +649,6 @@ struct LightItemNote {
                   })
               }
 
-              // 提交按钮（根据编辑状态动态调整）
               Button(this.editingItemId !== -1 ? "保存修改" : "添加物品")
                 .width("100%")
                 .height(50)
@@ -579,7 +667,6 @@ struct LightItemNote {
                   bottom: this.editingItemId !== -1 ? 16 : 32
                 })
 
-              // 编辑状态下显示取消按钮
               if (this.editingItemId !== -1) {
                 Button("取消修改")
                   .width("100%")
@@ -603,10 +690,8 @@ struct LightItemNote {
         }
         .tabBar(this.TabBuilder("添加", 0, "➕"))
 
-        // 标签页2：物品列表
         TabContent() {
           Column() {
-            // 顶部搜索栏
             Row() {
               Search({ value: this.searchText, placeholder: '搜索物品名称、分类、位置' })
                 .layoutWeight(1)
@@ -622,7 +707,6 @@ struct LightItemNote {
             .width("100%")
             .padding({ left: 16, right: 16, top: 12, bottom: 8 })
 
-            // 空状态
             if (this.getFilteredItems().length === 0) {
               Column() {
                 Text("📦")
@@ -637,17 +721,17 @@ struct LightItemNote {
               .justifyContent(FlexAlign.Center)
               .alignItems(HorizontalAlign.Center)
             } else {
-              // 物品列表
               List({ space: 0 }) {
                 ForEach(this.getFilteredItems(), (item: Item) => {
                   ListItem() {
                     Row() {
-                      // 左侧分类首字
                       Column() {
-                        Text(item.category.substring(0, 1))
-                          .fontSize(18)
-                          .fontWeight(FontWeight.Bold)
-                          .fontColor(Color.White)
+
+                          Text(item.category.substring(0, 1))
+                            .fontSize(18)
+                            .fontWeight(FontWeight.Bold)
+                            .fontColor(Color.White)
+
                       }
                       .width(40)
                       .height(40)
@@ -657,7 +741,6 @@ struct LightItemNote {
                       .alignItems(HorizontalAlign.Center)
                       .margin({ right: 12 })
 
-                      // 中间物品信息
                       Column({ space: 4 }) {
                         Row({ space: 8 }) {
                           Text(item.name)
@@ -668,7 +751,6 @@ struct LightItemNote {
                             .textOverflow({ overflow: TextOverflow.Ellipsis })
                             .layoutWeight(1)
 
-                          // 状态标签
                           Text(item.useStatus)
                             .fontSize(10)
                             .fontColor(this.getStatusColor(item.useStatus))
@@ -712,8 +794,8 @@ struct LightItemNote {
                     .backgroundColor(Color.White)
                     .borderRadius(12)
                     .shadow({ radius: 4, color: "#0D000000", offsetY: 2 })
+                    .onClick(() => this.previewImage(item))
                   }
-                  // 侧滑显示编辑和删除按钮
                   .swipeAction({ end: this.itemEnd(item) })
                   .margin({ bottom: 12 })
                 }, (item: Item) => item.id.toString())
@@ -729,7 +811,18 @@ struct LightItemNote {
           .backgroundColor("#F9FAFB")
         }
         .tabBar(this.TabBuilder("物品列表", 1, "📋"))
+
+        TabContent() {
+          StatisticsPage({ itemList: this.itemList })
+        }
+        .tabBar(this.TabBuilder("统计", 2, "📊"))
+
+        TabContent() {
+          MinePage()
+        }
+        .tabBar(this.TabBuilder("我的", 3, "👤"))
       }
+
       .barWidth("100%")
       .barHeight(60)
       .backgroundColor(Color.White)
@@ -737,6 +830,69 @@ struct LightItemNote {
       .onChange((index: number) => {
         this.currentTab = index;
       })
+
+
+      if (this.showImagePreview) {
+        Stack({ alignContent: Alignment.Center }) {
+          // 背景遮罩
+          Column()
+            .width('100%')
+            .height('100%')
+            .backgroundColor('rgba(0,0,0,0.85)')
+            .zIndex(1);
+
+          // 关闭按钮（最高层级 - 优化定位）
+          Button('X')
+            .width(60)
+            .height(40)
+            .borderRadius(20)
+            .backgroundColor(Color.Red)
+            .fontColor(Color.White)
+            .fontSize(18)
+            .fontWeight(FontWeight.Bold)
+            .zIndex(3)
+            .position({ right: 16, top: 24 })
+            .onClick(() => {
+              console.log('关闭按钮点击，更新状态');
+              this.showImagePreview = false;
+              this.previewImagePath = '';
+              this.imageScale = 1;
+              this.imageOffsetX = 0;
+              this.imageOffsetY = 0;
+            });
+
+          // 图片预览
+          Image(this.previewImagePath)
+            .width('90%')
+            .height('70%')
+            .objectFit(ImageFit.Contain)
+            .borderRadius(8)
+            .scale({ x: this.imageScale, y: this.imageScale })
+            .translate({ x: this.imageOffsetX, y: this.imageOffsetY })
+            .zIndex(2)
+            .gesture(
+              PinchGesture()
+                .onActionUpdate((event: GestureEvent) => {
+                  if (event.scale) {
+                    this.imageScale = Math.max(0.5, Math.min(3, this.imageScale * event.scale));
+                  }
+                })
+            )
+            .gesture(
+              PanGesture()
+                .onActionUpdate((event: GestureEvent) => {
+                  if (event.offsetX && event.offsetY) {
+                    this.imageOffsetX += event.offsetX;
+                    this.imageOffsetY += event.offsetY;
+                  }
+                })
+            );
+        }
+        .width('100%')
+        .height('100%')
+        .position({ left: 0, top: 0 })
+        .zIndex(999);
+      }
     }
     .width("100%")
     .height("100%")
