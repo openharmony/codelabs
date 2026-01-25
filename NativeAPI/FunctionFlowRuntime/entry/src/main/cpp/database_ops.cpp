@@ -538,7 +538,6 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 
 // C接口实现
 extern "C" {
-
 int DatabaseOpsDemo()
 {
     const int userColumnCount = 8;
