@@ -1244,27 +1244,22 @@ public:
         if (n <= 1) {
             return;
         }
-
         // 确定桶数量（根据CPU核心数优化）
         int bucketCount = min(n, static_cast<int>(thread::hardware_concurrency()) * 4);
         bucketCount = max(bucketCount, 4);  // 至少4个桶
         // 找到最小值和最大值
         int minVal = *min_element(arr.begin(), arr.end());
         int maxVal = *max_element(arr.begin(), arr.end());
-
         if (minVal == maxVal) {
             return;
         }
-
         // 创建桶
         vector<vector<int>> buckets(bucketCount);
-
         // 分配元素到桶中
         double range = 1.0;
         if (bucketCount != 0) {
             range = (double)(maxVal - minVal + 1) / bucketCount;
         }
-
         for (int val : arr) {
             int bucketIndex = 0;
             if (range != 0) {
@@ -1273,7 +1268,6 @@ public:
                 buckets[bucketIndex].push_back(val);
             }
         }
-
         // 并行排序每个桶
         vector<future<void>> futures;
         for (int i = 0; i < bucketCount; i++) {
@@ -1284,12 +1278,10 @@ public:
                     }));
             }
         }
-
         // 等待所有桶排序完成
         for (auto& f : futures) {
             f.wait();
         }
-
         // 合并结果
         int index = 0;
         for (int i = 0; i < bucketCount; i++) {

@@ -149,7 +149,7 @@ public:
         deleted(other.deleted),
         createdAt(other.createdAt),
         updatedAt(other.updatedAt)
-        {
+    {
 
         if (other.cells) {
             cells = std::make_unique<DataCell[]>(cellCount);
