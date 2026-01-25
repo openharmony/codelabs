@@ -995,7 +995,6 @@ private:
     void SortBucket(vector<int>& bucket)
     {
         int size = bucket.size();
-
         if (size <= SMALL_ARRAY_THRESHOLD) {
             // 小桶使用插入排序
             InsertionSort(bucket);
@@ -1239,7 +1238,8 @@ private:
     }
 
 public:
-    void Sort(vector<int>& arr) {
+    void Sort(vector<int>& arr)
+    {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1248,7 +1248,6 @@ public:
         // 确定桶数量（根据CPU核心数优化）
         int bucketCount = min(n, static_cast<int>(thread::hardware_concurrency()) * 4);
         bucketCount = max(bucketCount, 4);  // 至少4个桶
-
         // 找到最小值和最大值
         int minVal = *min_element(arr.begin(), arr.end());
         int maxVal = *max_element(arr.begin(), arr.end());
@@ -1501,10 +1500,10 @@ void BankBusinessBaseradixSort()
 class OptimizedRadixSort {
 private:
     // 获取数字在指定基数下的第k位
-    int GetDigit(int num, int k, int radix) 
+    int GetDigit(int num, int k, int radix)
     {
-        int shift_amount = k * static_cast<int>(log2(radix));
-        return (num >> shift_amount) & (radix - 1);
+        int shiftAmount = k * static_cast<int>(log2(radix));
+        return (num >> shiftAmount) & (radix - 1);
     }
 
     // 计算最大位数
@@ -1656,7 +1655,8 @@ private:
         }
     }
 
-    int GetDigit(int num, int d) {
+    int GetDigit(int num, int d)
+    {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
@@ -1717,7 +1717,9 @@ private:
     void SeparatePosNeg(vector<int>& arr)
     {
         int n = arr.size();
-        int left = 0, right = n - 1;
+        int left = 0;
+        int right = 0;
+        right = n - 1;
 
         while (left <= right) {
             while (left <= right && arr[left] < 0) {

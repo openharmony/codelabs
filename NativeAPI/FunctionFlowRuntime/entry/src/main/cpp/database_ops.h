@@ -201,21 +201,17 @@ public:
     SmartBPlusTreeNode(int degree, bool leaf)
         : maxDegree(degree), isLeaf(leaf), numKeys(0)
     {
-
         // 分配keys数组（B+树最多有maxDegree-1个key）
         int maxKeys = maxDegree - 1;
         keys = std::make_unique<int[]>(maxKeys);
-
         // 分配children数组（B+树最多有maxDegree个孩子）
         int maxChildren = isLeaf ? 0 : maxDegree;
         children = std::make_unique<std::shared_ptr<void>[]>(maxChildren);
-
         for (size_t i = 0; i < maxChildren; ++i) {
             children[i] = nullptr;
             // 或等价写法：children[i].reset();
         }
     }
-
 };
 
 #ifdef __cplusplus
