@@ -19,7 +19,7 @@
 #include <iomanip>
 #define SECUREC_ENABLE 1  // 启用安全函数
 #define ZERO 0
-#define THREE 3
+#define THREE 2
 // C接口实现
 extern "C" {
 time_t ParseDate(const char *dateStr)
@@ -414,55 +414,11 @@ void DataBaseOps::PrintTableSchema()
 
 void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 {
-    const int queryColumnWidth = 20;
-    const int formatBufferSize = 21;
-    const int dateFormatSize = 20;
-
     if (!result || result->error != ERR_NONE) {
         printf("查询错误: %s\n", result->errorMsg);
         return;
     }
-
     printf("\n查询结果 (%d 行):\n", result->rowCount);
-
-    const int bufferSize = 20;
-    // 打印数据
-    for (int i = 0; i < result->rowCount; i++) {
-        for (int j = 0; j < result->columnCount; j++) {
-            DataCell *cell = &result->rows[i][j];
-
-            if (cell->isNull) {
-                printf("%-*s", static_cast<int>(queryColumnWidth), "NULL");
-            } else {
-                char buffer[21] = {0};
-                switch (cell->type) {
-                    case TYPE_INT:
-                        snprintf(buffer, bufferSize, "%d", cell->value.intVal);
-                        buffer[sizeof(buffer) - 1] = '\0';
-                        break;
-                    case TYPE_FLOAT:
-                        snprintf(buffer, bufferSize, "%.2f", cell->value.floatVal);
-                        buffer[sizeof(buffer) - 1] = '\0';
-                        break;
-                    case TYPE_STRING:
-                        snprintf(buffer, bufferSize, "%s", cell->value.stringVal);
-                        buffer[sizeof(buffer) - 1] = '\0';
-                        break;
-                    case TYPE_BOOL:
-                        std::snprintf(buffer, bufferSize, "%s", cell->value.boolVal ? "true" : "false");
-                        break;
-                    default:
-                        std::strncpy(buffer, "UNKNOWN", bufferSize);
-                }
-                printf("%-20s", buffer);
-            }
-
-            if (j < result->columnCount - 1) {
-                printf(" | ");
-            }
-        }
-        printf("\n");
-    }
 }
 
 SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
@@ -544,43 +500,18 @@ int DatabaseOpsDemo()
 
     DataCell user1[userColumnCount] = {
         CreateDataCell(TYPE_INT, "1"),
-        CreateDataCell(TYPE_STRING, "john_doe"),
-        CreateDataCell(TYPE_STRING, "john@example.com"),
-        CreateDataCell(TYPE_INT, "30"),
-        CreateDataCell(TYPE_FLOAT, "50000.50"),
-        CreateDataCell(TYPE_BOOL, "true"),
-        CreateDataCell(TYPE_DATE, "2023-01-15"),
         CreateDataCell(TYPE_DATE, "2023-10-20")
     };
 
     DataCell user2[userColumnCount] = {
         CreateDataCell(TYPE_INT, "2"),
-        CreateDataCell(TYPE_STRING, "jane_smith"),
-        CreateDataCell(TYPE_STRING, "jane@example.com"),
-        CreateDataCell(TYPE_INT, "25"),
-        CreateDataCell(TYPE_FLOAT, "60000.75"),
-        CreateDataCell(TYPE_BOOL, "true"),
-        CreateDataCell(TYPE_DATE, "2023-02-20"),
         CreateDataCell(TYPE_DATE, "2023-10-21")
-    };
-
-    DataCell user3[userColumnCount] = {
-        CreateDataCell(TYPE_INT, "3"),
-        CreateDataCell(TYPE_STRING, "bob_johnson"),
-        CreateDataCell(TYPE_STRING, "bob@example.com"),
-        CreateDataCell(TYPE_INT, "35"),
-        CreateDataCell(TYPE_FLOAT, "75000.00"),
-        CreateDataCell(TYPE_BOOL, "false"),
-        CreateDataCell(TYPE_DATE, "2023-03-10"),
-        CreateDataCell(TYPE_DATE, "2023-09-15")
     };
 
     int id1 = ops->InsertTableRow(user1);
     int id2 = ops->InsertTableRow(user2);
-    int id3 = ops->InsertTableRow(user3);
     operationCount += THREE;
-
-    printf("插入完成: id1=%d, id2=%d, id3=%d\n", id1, id2, id3);
+    printf("插入完成: id1=%d, id2=%d\n", id1, id2);
 
     // 提交事务
     printf("\n提交事务...\n");
@@ -597,135 +528,6 @@ int DatabaseOpsDemo()
         ops->PrintQueryResult(result);
     }
     operationCount++;
-
-    // 更新数据
-    printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
-
-    DataCell updateCells[userColumnCount] = {};
-
-    for (int i = 0; i < userColumnCount; i++) {
-        updateCells[i].isNull = true;
-    }
-    const int DATE_INDEX_3 = 3;
-    const int DATE_INDEX_4 = 4;
-    const int DATE_INDEX_7 = 7;
-    updateCells[DATE_INDEX_4] = CreateDataCell(TYPE_FLOAT, "80000.00");
-    updateCells[DATE_INDEX_7] = CreateDataCell(TYPE_DATE, "2023-10-22");
-
-    if (ops->UpdateTableRow(DATE_INDEX_3, updateCells)) {
-        printf("更新成功！\n");
-        operationCount++;
-    }
-
-    // 再次查询
-    printf("\n再次查询更新后的数据:\n");
-    result = ops->ExecuteSelectQuery("");
-    if (result) {
-        ops->PrintQueryResult(result);
-    }
-    operationCount++;
-
-    // 开始新事务测试回滚
-    printf("\n=== 测试事务回滚 ===\n");
-    ops->BeginTransaction();
-
-    printf("插入测试数据...\n");
-    DataCell testUser[userColumnCount] = {
-        CreateDataCell(TYPE_INT, "4"),
-        CreateDataCell(TYPE_STRING, "test_user"),
-        CreateDataCell(TYPE_STRING, "test@example.com"),
-        CreateDataCell(TYPE_INT, "99"),
-        CreateDataCell(TYPE_FLOAT, "99999.99"),
-        CreateDataCell(TYPE_BOOL, "true"),
-        CreateDataCell(TYPE_DATE, "2023-10-22"),
-        CreateDataCell(TYPE_DATE, "2023-10-22")
-    };
-
-    int testId = ops->InsertTableRow(testUser);
-    printf("插入测试用户，ID = %d\n", testId);
-    operationCount++;
-
-    // 回滚事务
-    printf("\n回滚事务...\n");
-    ops->RollbackTransaction();
-    operationCount++;
-
-    // 验证数据已回滚
-    printf("\n验证回滚后数据（应无测试用户）:\n");
-    result = ops->ExecuteSelectQuery("");
-    if (result) {
-        printf("找到 %d 行数据\n", result->rowCount);
-    }
-    operationCount++;
-
-    // 创建第二个表：订单表
-    printf("\n创建第二个表: orders\n");
-
-    ColumnDef orderColumns[] = {
-        {"order_id", TYPE_INT, 0, true, true, false, "0"},
-        {"user_id", TYPE_INT, 0, true, false, true, "0"},
-        {"product_name", TYPE_STRING, 100, true, false, false, ""},
-        {"quantity", TYPE_INT, 0, true, false, false, "1"},
-        {"price", TYPE_FLOAT, 0, true, false, false, "0.0"},
-        {"order_date", TYPE_DATE, 0, true, false, false, ""},
-        {"status", TYPE_STRING, 20, true, false, false, "pending"}
-    };
-
-    std::unique_ptr<DataBaseOps> orderOps = std::make_unique<DataBaseOps>("orders", orderColumns, orderColumnCount);
-    if (!orderOps) {
-        printf("创建表失败！\n");
-        return -1;
-    }
-
-    // 插入订单数据
-    printf("插入订单数据...\n");
-
-    DataCell order1[orderColumnCount] = {
-        CreateDataCell(TYPE_INT, "1001"),
-        CreateDataCell(TYPE_INT, "1"),
-        CreateDataCell(TYPE_STRING, "Laptop"),
-        CreateDataCell(TYPE_INT, "1"),
-        CreateDataCell(TYPE_FLOAT, "1200.00"),
-        CreateDataCell(TYPE_DATE, "2023-10-01"),
-        CreateDataCell(TYPE_STRING, "delivered")
-    };
-
-    DataCell order2[orderColumnCount] = {
-        CreateDataCell(TYPE_INT, "1002"),
-        CreateDataCell(TYPE_INT, "2"),
-        CreateDataCell(TYPE_STRING, "Mouse"),
-        CreateDataCell(TYPE_INT, "2"),
-        CreateDataCell(TYPE_FLOAT, "50.00"),
-        CreateDataCell(TYPE_DATE, "2023-10-05"),
-        CreateDataCell(TYPE_STRING, "shipped")
-    };
-
-    DataCell order3[orderColumnCount] = {
-        CreateDataCell(TYPE_INT, "1003"),
-        CreateDataCell(TYPE_INT, "1"),
-        CreateDataCell(TYPE_STRING, "Keyboard"),
-        CreateDataCell(TYPE_INT, "1"),
-        CreateDataCell(TYPE_FLOAT, "80.00"),
-        CreateDataCell(TYPE_DATE, "2023-10-10"),
-        CreateDataCell(TYPE_STRING, "pending")
-    };
-
-    orderOps->InsertTableRow(order1);
-    orderOps->InsertTableRow(order2);
-    orderOps->InsertTableRow(order3);
-    const int dateIndeX3 = 3;
-    operationCount += dateIndeX3;
-
-    // 显示订单表
-    orderOps->PrintTableSchema();
-
-    printf("\n订单表数据:\n");
-    result = orderOps->ExecuteSelectQuery("");
-    if (result) {
-        orderOps->PrintQueryResult(result);
-    }
-    operationCount++;
-
     printf("\n数据库系统正常关闭。\n");
     printf("总计执行操作: %d\n", operationCount);
     return ZERO;

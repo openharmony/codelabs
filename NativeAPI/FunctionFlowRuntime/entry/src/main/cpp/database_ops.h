@@ -128,6 +128,9 @@ public:
         : rowId(id), deleted(false), cellCount(cellData.size())
     {
         time_t now = time(nullptr);
+        if (now == (time_t)-1) {
+            throw std::runtime_error("Failed to get current time");
+        }
         createdAt = now;
         updatedAt = now;
         cells = std::make_unique<DataCell[]>(cellCount);
