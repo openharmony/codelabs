@@ -453,7 +453,8 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 extern "C" {
 
 // 辅助函数: 打印系统信息
-static void PrintSystemInfo(int maxTableCount) {
+static void PrintSystemInfo(int maxTableCount)
+{
     printf("=== 简易关系型数据库系统启动 ===\n");
     printf("版本: 1.0.0\n");
     printf("最大表数: %d\n", maxTableCount);
@@ -461,17 +462,18 @@ static void PrintSystemInfo(int maxTableCount) {
     printf("最大列数: %d\n", MAX_COLUMNS);
     printf("页面大小: %d bytes\n\n", PAGE_SIZE);
 }
-
 // 辅助函数: 打印总结信息
-static void PrintSummary(int operationCount) {
+static void PrintSummary(int operationCount)
+{
     printf("\n数据库系统正常关闭。\n");
     printf("总计执行操作: %d\n", operationCount);
 }
 
 // 函数1: 创建用户表结构
-static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount) {
+static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount)
+{
     const int userColumnCount = 8;
-    
+
     printf("创建示例表: users\n");
 
     ColumnDef userColumns[] = {
@@ -485,8 +487,7 @@ static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount) {
         {"updated_at", TYPE_DATE, 0, false, false, false, ""}
     };
 
-    std::unique_ptr<DataBaseOps> ops = 
-        std::make_unique<DataBaseOps>("users", userColumns, userColumnCount);
+    std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", userColumns, userColumnCount);
     if (!ops) {
         printf("创建表失败！\n");
         return nullptr;
@@ -495,14 +496,17 @@ static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount) {
     // 创建索引
     ops->CreateTableIndex("username");
     ops->CreateTableIndex("email");
-    operationCount += 2; // 两次创建索引操作
+    operationCount += THREE; // 两次创建索引操作
 
     return ops;
 }
 
 // 函数2: 插入示例数据并执行事务
-static int InsertUserSampleData(DataBaseOps* ops, int& operationCount) {
-    if (!ops) return -1;
+static int InsertUserSampleData(DataBaseOps* ops, int& operationCount)
+{
+    if (!ops) {
+        return -1;
+    }
 
     // 开始事务
     printf("\n开始事务...\n");
@@ -545,19 +549,18 @@ static int InsertUserSampleData(DataBaseOps* ops, int& operationCount) {
     printf("\n提交事务...\n");
     ops->CommitTransaction();
     operationCount++;
-
     return (id1 > 0 && id2 > 0) ? 0 : -1;
 }
 
 // 函数3: 主函数 - 调用其他函数并控制流程
-int DatabaseOpsDemo() {
+int DatabaseOpsDemo()
+{
     const int maxTableCount = 50;
     const int formatBufferSize = 32;
     int operationCount = 0;
 
     // 打印系统信息
     PrintSystemInfo(maxTableCount);
-    
     // 创建用户表
     auto ops = CreateUserTable(operationCount);
     if (!ops) {
@@ -582,10 +585,8 @@ int DatabaseOpsDemo() {
         // delete result; 或使用适当的释放方法
     }
     operationCount++;
-
     // 打印总结信息
     PrintSummary(operationCount);
-    
     return 0; // 假设ZERO是0
 }
 
