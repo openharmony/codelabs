@@ -206,7 +206,7 @@ void FftReal(const double *input, ComplexNum *output, int n);
 double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol);
 double MinimizeBrent(double (*f)(double), double a, double b, double c, double tol);
 Vector MinimizeGradientDescent(double (*f)(const Vector*),
-    const Vector *gradient, const Vector *x0, double learning_rate, int iterations);
+    const Vector *gradient, const Vector *x0, double learningRate, int iterations);
 Vector MinimizeConjugateGradient(double (*f)(const Vector*),
     const Vector *gradient, const Matrix *matrix, const Vector *b,
     const Vector *x0, int iterations);
@@ -237,7 +237,7 @@ double ChebyshevPoly(int n, double x);
 Vector RandomUniform(int n, double a, double b);
 Vector RandomNormal(int n, double mean, double stddev);
 Vector RandomExponential(int n, double lambda);
-Matrix RandomMatrix(int rows, int cols, double min_val, double max_val);
+Matrix RandomMatrix(int rows, int cols, double min_val, double maxVal);
 
 // 工具函数
 void PrintMatrix(const Matrix *matrix, const char *name);
@@ -394,7 +394,7 @@ double MatrixDeterminant(const Matrix *matrix)
     if (matrix->rows != matrix->cols) {
         fprintf(stderr, "只有方阵才有行列式\n");
         exit(EXIT_FAILURE);
-    }else {
+    } else {
         int n = matrix->rows;
 
         // 1x1 矩阵
@@ -404,7 +404,8 @@ double MatrixDeterminant(const Matrix *matrix)
 
         // 2x2 矩阵
         if (n == INIT_TWO) {
-            return matrix->data[INIT_ZERO] * matrix->data[MATRIX_INDEX_OFFSET] - matrix->data[INIT_ONE] * matrix->data[INIT_TWO];
+            return matrix->data[INIT_ZERO] * matrix->data[MATRIX_INDEX_OFFSET] -
+                matrix->data[INIT_ONE] * matrix->data[INIT_TWO];
         }
 
         // 递归计算行列式
@@ -603,19 +604,19 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
         if (norm != 0) {
             b.data[i] /= norm;;
         } else {
-            b.data[i] = 0; 
+            b.data[i] = 0;
         }
     }
 
     // 幂迭代
     double eigenvalue = POWER_ITER_INIT_VAL;
     for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++) {
-        // 计算 Ab
-        Vector Ab = CreateVector(n);
+        // 计算 ab
+        Vector ab = CreateVector(n);
         for (int i = INIT_ZERO; i < n; i++) {
-            Ab.data[i] = POWER_ITER_INIT_VAL;
+            ab.data[i] = POWER_ITER_INIT_VAL;
             for (int j = INIT_ZERO; j < n; j++) {
-                Ab.data[i] += matrix->data[i * n + j] * b.data[j];
+                ab.data[i] += matrix->data[i * n + j] * b.data[j];
             }
         }
 
@@ -623,7 +624,7 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
         double numerator = POWER_ITER_INIT_VAL;
         double denominator = POWER_ITER_INIT_VAL;
         for (int i = INIT_ZERO; i < n; i++) {
-            numerator += b.data[i] * Ab.data[i];
+            numerator += b.data[i] * ab.data[i];
             denominator += b.data[i] * b.data[i];
         }
         double newEigenvalue = numerator / denominator;
@@ -635,7 +636,7 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
             for (int i = INIT_ZERO; i < n; i++) {
                 eigenvector->data[i] = b.data[i];
             }
-            DestroyVector(&Ab);
+            DestroyVector(&ab);
             break;
         }
 
@@ -644,14 +645,14 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
         // 归一化新向量
         norm = POWER_ITER_INIT_VAL;
         for (int i = INIT_ZERO; i < n; i++) {
-            norm += Ab.data[i] * Ab.data[i];
+            norm += ab.data[i] * ab.data[i];
         }
         norm = sqrt(norm);
         for (int i = INIT_ZERO; i < n; i++) {
-            b.data[i] = Ab.data[i] / norm;
+            b.data[i] = ab.data[i] / norm;
         }
 
-        DestroyVector(&Ab);
+        DestroyVector(&ab);
     }
 
     DestroyVector(&b);
@@ -679,7 +680,7 @@ double IntegrateSimpson(double (*f)(double), double a, double b, int n)
 {
     if (n % INIT_TWO != INIT_ZERO) {
         n++;
-     }
+    }
     // 确保n为偶数
     if (n == 0) {
         return 0;
@@ -724,8 +725,8 @@ double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
 
         // Richardson 外推
         for (int j = INIT_ONE; j <= k; j++) {
-            r[k][j] = r[k][j - INIT_ONE] + 
-                (r[k][j - INIT_ONE] - r[k - INIT_ONE][j - INIT_ONE]) / 
+            r[k][j] = r[k][j - INIT_ONE] +
+                (r[k][j - INIT_ONE] - r[k - INIT_ONE][j - INIT_ONE]) /
                 (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
         }
 
@@ -789,15 +790,15 @@ void Idft(const ComplexNum *input, double *output, int n)
         double imag = INIT_VALUE_1;
 
         for (int t = INIT_ZERO; t < n; t++) {
-             if (n != 0) {
+            if (n != 0) {
                 double angle = DEFAULT_MULTIPLIER * PI * k * t / n;
                 real += input[t].real * cos(angle) - input[t].imag * sin(angle);
                 imag += input[t].real * sin(angle) + input[t].imag * cos(angle);
-             }
+            }
         }
-         if (n != 0) {
+        if (n != 0) {
             output[k] = real / n;
-         }
+        }
 
     }
 }
@@ -805,8 +806,8 @@ void Idft(const ComplexNum *input, double *output, int n)
 void Fft(ComplexNum *data, int n)
 {
     if (n <= INIT_ONE) {
-         return;
-     }
+        return;
+    }
 
     // 分离偶数和奇数项
     ComplexNum *even = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
@@ -933,11 +934,11 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
             } else {
                 b = x;
             }
-            v = w; 
+            v = w;
             fv = fw;
-            w = x; 
+            w = x;
             fw = fx;
-            x = u; 
+            x = u;
             fx = fu;
         } else {
             if (u < x) {
@@ -951,7 +952,8 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
                 w = u;
                 fw = fu;
             } else if (fu <= fv || v == x || v == w) {
-                v = u; fv = fu;
+                v = u;
+                fv = fu;
             }
         }
     }
@@ -959,7 +961,7 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
     return x;
 }
 
-Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0, double learning_rate, int iterations)
+Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0, double learningRate, int iterations)
 {
     Vector x = CopyVector(x0);
     Vector grad = CreateVector(x0->size);
@@ -967,31 +969,31 @@ Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradien
     for (int iter = INIT_ZERO; iter < iterations; iter++) {
         // 计算梯度（简化：使用数值梯度）
         for (int i = INIT_ZERO; i < x.size; i++) {
-            Vector x_plus = CopyVector(&x);
-            Vector x_minus = CopyVector(&x);
+            Vector xPlus = CopyVector(&x);
+            Vector xMinus = CopyVector(&x);
 
-            x_plus.data[i] += EPSILON;
-            x_minus.data[i] -= EPSILON;
+            xPlus.data[i] += EPSILON;
+            xMinus.data[i] -= EPSILON;
 
-            grad.data[i] = (f(&x_plus) - f(&x_minus)) / (DEFAULT_MULTIPLIER * EPSILON);
+            grad.data[i] = (f(&xPlus) - f(&xMinus)) / (DEFAULT_MULTIPLIER * EPSILON);
 
-            DestroyVector(&x_plus);
-            DestroyVector(&x_minus);
+            DestroyVector(&xPlus);
+            DestroyVector(&xMinus);
         }
 
         // 更新参数
         for (int i = INIT_ZERO; i < x.size; i++) {
-            x.data[i] -= learning_rate * grad.data[i];
+            x.data[i] -= learningRate * grad.data[i];
         }
 
         // 检查收敛
-        double grad_norm = INIT_VALUE_1;
+        double gradNorm = INIT_VALUE_1;
         for (int i = INIT_ZERO; i < x.size; i++) {
-            grad_norm += grad.data[i] * grad.data[i];
+            gradNorm += grad.data[i] * grad.data[i];
         }
-        grad_norm = sqrt(grad_norm);
+        gradNorm = sqrt(gradNorm);
 
-        if (grad_norm < EPSILON) {
+        if (gradNorm < EPSILON) {
             break;
         }
     }
@@ -1017,24 +1019,24 @@ Vector PolynomialFit(const Vector *x, const Vector *y, int degree)
     }
 
     // 构造法方程 A^T A x = A^T y
-    Matrix AT = MatrixTranspose(&a);
-    Matrix ATA = MatrixMultiply(&AT, &a);
+    Matrix at = MatrixTranspose(&a);
+    Matrix ata = MatrixMultiply(&at, &a);
 
-    Vector ATy = CreateVector(m);
+    Vector aty = CreateVector(m);
     for (int i = INIT_ZERO; i < m; i++) {
-        ATy.data[i] = INIT_VALUE_1;
+        aty.data[i] = INIT_VALUE_1;
         for (int j = INIT_ZERO; j < n; j++) {
-            ATy.data[i] += AT.data[i * n + j] * y->data[j];
+            aty.data[i] += at.data[i * n + j] * y->data[j];
         }
     }
 
     // 求解法方程
-    Vector coeffs = SolveLinearSystemLu(&ATA, &ATy);
+    Vector coeffs = SolveLinearSystemLu(&ata, &aty);
 
     DestroyMatrix(&a);
-    DestroyMatrix(&AT);
-    DestroyMatrix(&ATA);
-    DestroyVector(&ATy);
+    DestroyMatrix(&at);
+    DestroyMatrix(&ata);
+    DestroyVector(&aty);
 
     return coeffs;
 }
@@ -1095,15 +1097,15 @@ double GammaFunction(double x)
     }
 
     x -= INIT_VALUE_1;
-    double A = coeffs[INIT_ZERO];
+    double a = coeffs[INIT_ZERO];
 
     for (int i = INIT_ONE; i < GAMMA_COEFF_COUNT; i++) {
-        A += coeffs[i] / (x + i);
+        a += coeffs[i] / (x + i);
     }
 
     double result = sqrt(DEFAULT_MULTIPLIER * PI) *
                     pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) *
-                    exp(-(x + g + GAMMA_APPROX_OFFSET)) * A;
+                    exp(-(x + g + GAMMA_APPROX_OFFSET)) * a;
     return result;
 }
 double BetaFunction(double a, double b)
@@ -1152,8 +1154,14 @@ Vector RandomNormal(int n, double mean, double stddev)
     return result;
 }
 
-double ff(double t, double y) { return -y; }
-double parabola(double x) { return x * x - INIT_VALUE_4 * x + INIT_VALUE_4; }
+double ff(double t, double y)
+{
+    return -y;
+}
+double Parabola(double x)
+{
+    return x * x - INIT_VALUE_4 * x + INIT_VALUE_4;
+}
 
 void Compute(void *arg)
 {
@@ -1163,28 +1171,28 @@ void Compute(void *arg)
 
     // 测试1: 矩阵运算
     printf("1. 测试矩阵运算:\n");
-    Matrix A = CreateMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
-    Matrix B = CreateMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
+    Matrix a = CreateMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
+    Matrix b = CreateMatrix(TEST_MATRIX_SIZE, TEST_MATRIX_SIZE);
 
     // 初始化矩阵
     for (int i = INIT_ZERO; i < TEST_MATRIX_SIZE; i++) {
         for (int j = INIT_ZERO; j < TEST_MATRIX_SIZE; j++) {
-            A.data[i * TEST_MATRIX_SIZE + j] = i * TEST_MATRIX_SIZE + j + INIT_ONE;
-            B.data[i * TEST_MATRIX_SIZE + j] = (i == j) ? INIT_VALUE_1 : INIT_VALUE_1;
+            a.data[i * TEST_MATRIX_SIZE + j] = i * TEST_MATRIX_SIZE + j + INIT_ONE;
+            b.data[i * TEST_MATRIX_SIZE + j] = (i == j) ? INIT_VALUE_1 : INIT_VALUE_1;
         }
     }
 
-    Matrix c = MatrixMultiply(&A, &B);
+    Matrix c = MatrixMultiply(&a, &b);
     printf("矩阵乘法测试通过\n");
 
     // 测试2: 线性方程组求解
     printf("\n2. 测试线性方程组求解:\n");
-    Vector b = CreateVector(TEST_VECTOR_SIZE);
-    b.data[INIT_ZERO] = INIT_VALUE_1;
-    b.data[INIT_ONE] = INIT_VALUE_2;
-    b.data[INIT_TWO] = INIT_VALUE_3;
+    Vector ab = CreateVector(TEST_VECTOR_SIZE);
+    ab.data[INIT_ZERO] = INIT_VALUE_1;
+    ab.data[INIT_ONE] = INIT_VALUE_2;
+    ab.data[INIT_TWO] = INIT_VALUE_3;
 
-    Vector x = SolveLinearSystemLu(&A, &b);
+    Vector x = SolveLinearSystemLu(&a, &ab);
     printf("线性方程组求解测试通过\n");
 
     // 测试3: 数值积分
@@ -1202,17 +1210,17 @@ void Compute(void *arg)
 
     // 测试5: 傅里叶变换
     printf("\n5. 测试傅里叶变换:\n");
-    double signal[TEST_FFT_SIZE] = {INIT_VALUE_1, INIT_VALUE_2, INIT_VALUE_3, INIT_VALUE_4, 
+    double signal[TEST_FFT_SIZE] = {INIT_VALUE_1, INIT_VALUE_2, INIT_VALUE_3, INIT_VALUE_4,
                                    INIT_VALUE_4, INIT_VALUE_3, INIT_VALUE_2, INIT_VALUE_1};
-    ComplexNum dft_output[TEST_FFT_SIZE];
-    Dft(signal, dft_output, TEST_FFT_SIZE);
+    ComplexNum dftOutput[TEST_FFT_SIZE];
+    Dft(signal, dftOutput, TEST_FFT_SIZE);
     printf("DFT计算完成\n");
 
     // 测试6: 优化算法
     printf("\n6. 测试优化算法:\n");
 
-    double minX = MinimizeGoldenSection(parabola, TEST_OPT_LOWER_BOUND, TEST_OPT_UPPER_BOUND, TEST_OPT_TOL);
-    printf("抛物线最小值点: x = %.10f, f(x) = %.10f\n", minX, parabola(minX));
+    double minX = MinimizeGoldenSection(Parabola, TEST_OPT_LOWER_BOUND, TEST_OPT_UPPER_BOUND, TEST_OPT_TOL);
+    printf("抛物线最小值点: x = %.10f, f(x) = %.10f\n", minX, Parabola(minX));
 
     // 测试7: 多项式拟合
     printf("\n7. 测试多项式拟合:\n");
@@ -1237,8 +1245,8 @@ void Compute(void *arg)
     double gamma_val = GammaFunction(TEST_GAMMA_ARG);
     printf("Γ(5) = %.10f (理论值: 24.0)\n", gamma_val);
 
-    double erf_val = ErfFunction(TEST_ERF_ARG);
-    printf("erf(1) = %.10f\n", erf_val);
+    double erfVal = ErfFunction(TEST_ERF_ARG);
+    printf("erf(1) = %.10f\n", erfVal);
 
     // 测试10: 随机数生成
     printf("\n10. 测试随机数生成:\n");
@@ -1252,10 +1260,10 @@ void Compute(void *arg)
     printf("正态分布样本均值: %.6f\n", mean);
 
     // 清理内存
-    DestroyMatrix(&A);
-    DestroyMatrix(&B);
+    DestroyMatrix(&a);
+    DestroyMatrix(&b);
     DestroyMatrix(&c);
-    DestroyVector(&b);
+    DestroyVector(&ab);
     DestroyVector(&x);
     DestroyVector(&sol);
     DestroyVector(&xs);
