@@ -115,7 +115,12 @@ char* DataBaseOps::FormatDate(time_t timestamp)
     static const int dateBufferSize = 20;
     static char buffer[dateBufferSize];
     struct tm *tmInfo = localtime(&timestamp);
-    strftime(buffer, dateBufferSize, "%Y-%m-%d %H:%M:%S", tmInfo);
+    size_t result = strftime(buffer, dateBufferSize, "%Y-%m-%d %H:%M:%S", tmInfo);
+    if (result == 0) {
+        // 处理返回值为0的情况，例如设置默认值或返回错误信息
+        buffer[0] = '\0';
+        return buffer;
+    }
     return buffer;
 }
 
@@ -387,7 +392,7 @@ void DataBaseOps::PrintTableSchema()
     printf("行数: %d\n", table->rowCount);
     printf("列数: %d\n\n", table->columnCount);
 
-    printf("%-*s %-*s %-*s %-*s %-*s\n",
+    printf("%-*d %-*d %-*d %-*d %-*d\n",
         static_cast<int>(schemaColumnWidth), "列名",
         static_cast<int>(schemaTypeWidth), "类型",
         static_cast<int>(schemaFlagWidth), "非空",
@@ -397,7 +402,7 @@ void DataBaseOps::PrintTableSchema()
 
     for (int i = 0; i < table->columnCount; i++) {
         ColumnDef *col = &table->columns[i];
-        printf("%-*s %-*s %-*s %-*s %-*s\n",
+        printf("%-*d %-*d %-*d %-*d %-*d\n",
             static_cast<int>(schemaColumnWidth), col->name,
             static_cast<int>(schemaTypeWidth), DataTypeToString(col->type),
             static_cast<int>(schemaFlagWidth), col->notNull ? "YES" : "NO",
@@ -419,27 +424,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 
     printf("\n查询结果 (%d 行):\n", result->rowCount);
 
-    // 打印表头
-    for (int i = 0; i < result->columnCount; i++) {
-        printf("%-*s", static_cast<int>(queryColumnWidth), result->GetColumnName(i));
-        if (i < result->columnCount - 1) {
-            printf(" | ");
-        }
-    }
-    printf("\n");
-
-    // 打印分隔线
-    for (int i = 0; i < result->columnCount; i++) {
-        for (int j = 0; j < queryColumnWidth; j++) {
-            printf("-");
-        }
-        if (i < result->columnCount - 1) {
-            printf("-+-");
-        }
-    }
-    printf("\n");
     const int bufferSize = 20;
-    const int precision = 2;
     // 打印数据
     for (int i = 0; i < result->rowCount; i++) {
         for (int j = 0; j < result->columnCount; j++) {
@@ -464,9 +449,6 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
                         break;
                     case TYPE_BOOL:
                         std::snprintf(buffer, bufferSize, "%s", cell->value.boolVal ? "true" : "false");
-                        break;
-                    case TYPE_DATE:
-                        std::strncpy(buffer, FormatDate(cell->value.dateVal), bufferSize);
                         break;
                     default:
                         std::strncpy(buffer, "UNKNOWN", bufferSize);
