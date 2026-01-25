@@ -617,8 +617,7 @@ void InsertionSortTemplate(vector<T>& arr, Compare comp = Compare())
 }
 
 // 使用示例
-struct Person
-{
+struct Person {
     string name;
     int age;
 
@@ -843,14 +842,13 @@ void SelectionSortTemplate(vector<T>& arr, Compare comp = Compare())
 }
 
 // 使用示例：按多个字段排序
-struct Student
-{
+struct Student {
     string name;
     int score;
     int age;
 
     // 按分数降序，年龄升序
-    bool operator<(const Student& other) const 
+    bool operator<(const Student& other) const
     {
         if (score != other.score) {
             return score > other.score;  // 分数高的在前
@@ -976,7 +974,7 @@ void BankBusinessBasebucketSortFloat()
 class OptimizedBucketSort {
 private:
     // 计算合适的桶数量
-    int calculateBucketCount(int n, int minVal, int maxVal)
+    int CalculateBucketCount(int n, int minVal, int maxVal)
     {
         if (n <= ONE_HUNDRED) {
             return TEN;  // 小数据量用较少桶
@@ -1050,7 +1048,7 @@ public:
         }
 
         // 计算桶数量
-        int bucketCount = calculateBucketCount(n, minVal, maxVal);
+        int bucketCount = CalculateBucketCount(n, minVal, maxVal);
 
         // 创建桶
         vector<vector<int>> buckets(bucketCount);
@@ -1264,13 +1262,13 @@ public:
 
         // 分配元素到桶中
         double range = 1.0;
-        if (bucketCount != 0){
+        if (bucketCount != 0) {
             range = (double)(maxVal - minVal + 1) / bucketCount;
         }
 
         for (int val : arr) {
             int bucketIndex = 0;
-            if (range != 0){
+            if (range != 0) {
                 bucketIndex = (val - minVal) / range;
                 bucketIndex = min(bucketIndex, bucketCount - 1);
                 buckets[bucketIndex].push_back(val);
@@ -1425,7 +1423,7 @@ int GetDigit(int num, int d)
     }
 
 // 获取数组中最大数字的位数
-int getMaxDigits(const vector<int>& arr) 
+int GetMaxDigits(const vector<int>& arr)
     {
     if (arr.empty()) {
         return 0;
@@ -1449,7 +1447,7 @@ void RadixSortLSD(vector<int>& arr)
         return;
     }
 
-    int maxDigits = getMaxDigits(arr);
+    int maxDigits = GetMaxDigits(arr);
     int n = arr.size();
 
     // 临时数组
@@ -1510,12 +1508,12 @@ private:
     }
 
     // 计算最大位数
-    int getMaxDigits(int maxVal, int radix)
+    int GetMaxDigits(int maxVal, int radix)
     {
-       int digits = 0;
-       while (maxVal > 0 && radix != 0) {
-        digits++;
-        maxVal /= radix;
+        int digits = 0;
+        while (maxVal > 0 && radix != 0) {
+            digits++;
+            maxVal /= radix;
         }
         return max(1, digits);
     }
@@ -1533,7 +1531,7 @@ public:
         int maxVal = *max_element(arr.begin(), arr.end());
 
         // 计算最大位数
-        int maxDigits = getMaxDigits(maxVal, radix);
+        int maxDigits = GetMaxDigits(maxVal, radix);
 
         // 临时数组
         vector<int> output(n);
@@ -1665,7 +1663,7 @@ private:
         return num % DECIMAL_BASE;
     }
 
-    int getMaxDigits(const vector<int>& arr)
+    int GetMaxDigits(const vector<int>& arr)
     {
         if (arr.empty()) {
             return 0;
@@ -1689,7 +1687,7 @@ public:
             return;
         }
 
-        int maxDigits = getMaxDigits(arr);
+        int maxDigits = GetMaxDigits(arr);
         MsdSort(arr, 0, arr.size() - 1, maxDigits, maxDigits);
     }
 };
@@ -1975,7 +1973,7 @@ private:
     {
         for (int i = low + 1; i <= high; i++) {
             for (int j = i; j > low; j--) {
-                if (compareStrings(arr[j], arr[j - 1], depth) < 0) {
+                if (CompareStrings(arr[j], arr[j - 1], depth) < 0) {
                     swap(arr[j], arr[j - 1]);
                 } else {
                     break;
@@ -1984,7 +1982,7 @@ private:
         }
     }
 
-    int compareStrings(const string& a, const string& b, int depth)
+    int CompareStrings(const string& a, const string& b, int depth)
     {
         int minLen = min(a.length(), b.length());
         for (int i = depth; i < minLen; i++) {
@@ -2036,19 +2034,19 @@ int SortClass::FfrtConcurrentQueue()
     auto task9 = bankQueue.Enter(BankBusinessBaseInsertionSortDec, "customer9",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task10 = bankQueue.Enter(BankBusinessInsertionSortBinary, "customer10",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task11 = bankQueue.Enter(BankBusinessInsertionSentinelSort, "customer11",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task12 = bankQueue.Enter(BankBusinessinsertionTemplateSort, "customer12",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
 
     auto task13 = bankQueue.Enter(BankBusinessBaseselectionSort, "customer13",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task14 = bankQueue.Enter(BankBusinessBaseselectionDecSort, "customer14",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task15 = bankQueue.Enter(BankBusinessBasebidirectionalSelectionSort, "customer15", 
+    auto task15 = bankQueue.Enter(BankBusinessBasebidirectionalSelectionSort, "customer15",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task16 = bankQueue.Enter(BankBusinessBaseSelectionSortDelayedSwap, "customer16", 
+    auto task16 = bankQueue.Enter(BankBusinessBaseSelectionSortDelayedSwap, "customer16",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task17 = bankQueue.Enter(BankBusinessBaseSelectionSortTemplate, "customer17",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);

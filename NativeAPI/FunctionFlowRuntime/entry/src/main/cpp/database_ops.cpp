@@ -185,7 +185,7 @@ SmartBPlusTreeNode* DataBaseOps::CreateBplusTreeNode(bool isLeaf, int order)
 
 TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
 {
-    const int BPLUS_TREE_ORDER = 4;
+    const int bplusTreeOrder = 4;
     if (table->indexCount >= MAX_INDEXES) {
         return nullptr;
     }
@@ -207,7 +207,7 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
     // 使用std::copy替代strncpy
     std::copy_n(columnName, MAX_COLUMN_NAME - 1, index->name);
     index->columnIndex = colIndex;
-    index->root = CreateBplusTreeNode(true, BPLUS_TREE_ORDER);
+    index->root = CreateBplusTreeNode(true, bplusTreeOrder);
     index->height = 1;
     index->keyCount = 0;
 
@@ -249,7 +249,7 @@ void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
 
 DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount)
 {
-    const int INITIAL_ROW_ID = 1;
+    const int initialRowId = 1;
     table = std::make_unique<DatabaseTable>();
     if (!table) {
         printf("no memory for DatabaseTable pointer");
@@ -260,7 +260,7 @@ DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCo
     // 使用std::copy替代strncpy
     std::copy_n(tableName, MAX_TABLE_NAME - 1, table->name);
     table->createdAt = time(nullptr);
-    table->nextRowId = INITIAL_ROW_ID;
+    table->nextRowId = initialRowId;
 
     // 复制列定义
     for (int i = 0; i < columnCount; i++) {
@@ -406,9 +406,9 @@ bool DataBaseOps::RollbackTransaction()
 
 void DataBaseOps::PrintTableSchema()
 {
-    const int SCHEMA_COLUMN_WIDTH = 20;
-    const int SCHEMA_TYPE_WIDTH = 10;
-    const int SCHEMA_FLAG_WIDTH = 8;
+    const int schemaColumnWidth = 20;
+    const int schemaTypeWidth = 10;
+    const int schemaFlagWidth = 8;
 
     printf("\n=== 表结构: %s ===\n", table->name);
     printf("创建时间: %s\n", FormatDate(table->createdAt));
@@ -416,21 +416,21 @@ void DataBaseOps::PrintTableSchema()
     printf("列数: %d\n\n", table->columnCount);
 
     printf("%-*s %-*s %-*s %-*s %-*s\n",
-        static_cast<int>(SCHEMA_COLUMN_WIDTH), "列名",
-        static_cast<int>(SCHEMA_TYPE_WIDTH), "类型",
-        static_cast<int>(SCHEMA_FLAG_WIDTH), "非空",
-        static_cast<int>(SCHEMA_FLAG_WIDTH), "主键",
-        static_cast<int>(SCHEMA_FLAG_WIDTH), "索引");
+        static_cast<int>(schemaColumnWidth), "列名",
+        static_cast<int>(schemaTypeWidth), "类型",
+        static_cast<int>(schemaFlagWidth), "非空",
+        static_cast<int>(schemaFlagWidth), "主键",
+        static_cast<int>(schemaFlagWidth), "索引");
     printf("%s\n", "------------------------------------------------------------");
 
     for (int i = 0; i < table->columnCount; i++) {
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
-            static_cast<int>(SCHEMA_COLUMN_WIDTH), col->name,
-            static_cast<int>(SCHEMA_TYPE_WIDTH), DataTypeToString(col->type),
-            static_cast<int>(SCHEMA_FLAG_WIDTH), col->notNull ? "YES" : "NO",
-            static_cast<int>(SCHEMA_FLAG_WIDTH), col->isPrimary ? "YES" : "NO",
-            static_cast<int>(SCHEMA_FLAG_WIDTH), col->hasIndex ? "YES" : "NO");
+            static_cast<int>(schemaColumnWidth), col->name,
+            static_cast<int>(schemaTypeWidth), DataTypeToString(col->type),
+            static_cast<int>(schemaFlagWidth), col->notNull ? "YES" : "NO",
+            static_cast<int>(schemaFlagWidth), col->isPrimary ? "YES" : "NO",
+            static_cast<int>(schemaFlagWidth), col->hasIndex ? "YES" : "NO");
     }
 }
 
@@ -467,7 +467,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
     }
     printf("\n");
     const int bufferSize = 20;
-    const int PRECISION = 2;
+    const int precision = 2;
     // 打印数据
     for (int i = 0; i < result->rowCount; i++) {
         for (int j = 0; j < result->columnCount; j++) {
@@ -477,7 +477,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
                 printf("%-*s", (int)queryColumnWidth, "NULL");
             } else {
                 char buffer[21] = {0};
-                switch(cell->type) {
+                switch (cell->type) {
                     case TYPE_INT:
                         snprintf(buffer, bufferSize, "%d", cell->value.intVal);
                         break;
@@ -509,7 +509,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 
 SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 {
-    const int MAX_QUERY_RESULTS = 100;
+    const int maxQueryResults = 100;
     std::vector<std::string> colNames;
     for (int i = 0; i < table->columnCount; i++) {
         std::string strTemp(table->columns[i].name);
@@ -520,7 +520,7 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
     std::vector<std::vector<DataCell>> data;
     int rowCount = 0;
 
-    for (int i = 0; i < MAX_QUERY_RESULTS; i++) {
+    for (int i = 0; i < maxQueryResults; i++) {
         if (!table->rows[i].deleted && table->rows[i].rowId > 0) {
             // 简化：暂时不考虑WHERE条件
             DataCell *pCell = table->rows[i].cells.get();

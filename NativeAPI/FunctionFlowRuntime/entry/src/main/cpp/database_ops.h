@@ -107,41 +107,41 @@ public:
     time_t createdAt;
     time_t updatedAt;
 
-    SmartTableRow() 
+    SmartTableRow()
     {
         cells = nullptr;
         cellCount = 0;
         rowId = 0;
         deleted = false;
     }
-    
-    SmartTableRow(int columnCnt) 
+
+    explicit SmartTableRow(int columnCnt)
     {
         cellCount = columnCnt;
         cells = std::make_unique<DataCell[]>(columnCnt);
         rowId = 0;
         deleted = false;
     }
-    
+
     // 构造函数1：从vector初始化
     SmartTableRow(int id, const std::vector<DataCell>& cellData)
-        : rowId(id), deleted(false), cellCount(cellData.size()) 
+        : rowId(id), deleted(false), cellCount(cellData.size())
     {
-        
+
         time_t now = time(nullptr);
         createdAt = now;
         updatedAt = now;
-        
+
         cells = std::make_unique<DataCell[]>(cellCount);
         for (size_t i = 0; i < cellCount; ++i) {
             cells[i] = cellData[i];  // 调用拷贝构造函数
         }
     }
-    
+
     // 构造函数2：从初始化列表
     SmartTableRow(int id, std::initializer_list<DataCell> initList)
         : SmartTableRow(id, std::vector<DataCell>(initList)) {}
-    
+
     // 深拷贝构造函数
     SmartTableRow(const SmartTableRow& other)
         : cellCount(other.cellCount),
@@ -149,7 +149,7 @@ public:
           deleted(other.deleted),
           createdAt(other.createdAt),
           updatedAt(other.updatedAt) {
-        
+
         if (other.cells) {
             cells = std::make_unique<DataCell[]>(cellCount);
             for (size_t i = 0; i < cellCount; ++i) {
@@ -157,19 +157,19 @@ public:
             }
         }
     }
-    
+
     // 深拷贝赋值运算符
-    SmartTableRow& operator=(const SmartTableRow& other) 
+    SmartTableRow& operator=(const SmartTableRow& other)
     {
         if (this != &other) {
             cells.reset();  // 释放原有内存
-            
+
             cellCount = other.cellCount;
             rowId = other.rowId;
             deleted = other.deleted;
             createdAt = other.createdAt;
             updatedAt = other.updatedAt;
-            
+
             if (other.cells) {
                 cells = std::make_unique<DataCell[]>(cellCount);
                 for (size_t i = 0; i < cellCount; ++i) {
@@ -187,35 +187,35 @@ public:
     // 使用unique_ptr管理动态数组
     std::unique_ptr<int[]> keys;
     std::unique_ptr<std::shared_ptr<void>[]> children;  // void*的智能指针版本
-    
+
     int numKeys;
     bool isLeaf;
-    
+
     // 使用weak_ptr避免循环引用
     std::weak_ptr<SmartBPlusTreeNode> nextPtr;
     std::weak_ptr<SmartBPlusTreeNode> parentPtr;
-    
+
     int maxDegree;
 
     // 构造函数
-    SmartBPlusTreeNode(int degree, bool leaf) 
-        : maxDegree(degree), isLeaf(leaf), numKeys(0) 
+    SmartBPlusTreeNode(int degree, bool leaf)
+        : maxDegree(degree), isLeaf(leaf), numKeys(0)
     {
-        
+
         // 分配keys数组（B+树最多有maxDegree-1个key）
         int maxKeys = maxDegree - 1;
         keys = std::make_unique<int[]>(maxKeys);
-        
+
         // 分配children数组（B+树最多有maxDegree个孩子）
         int maxChildren = isLeaf ? 0 : maxDegree;
         children = std::make_unique<std::shared_ptr<void>[]>(maxChildren);
-        
+
         for (size_t i = 0; i < maxChildren; ++i) {
             children[i] = nullptr;
             // 或等价写法：children[i].reset();
         }
     }
-    
+
 };
 
 #ifdef __cplusplus
@@ -294,7 +294,7 @@ public:
 
     SmartQueryResult(int cols,
                      const std::vector<std::string>& colNames,
-                     const std::vector<std::vector<DataCell>>& data) : columnCount(cols)  
+                     const std::vector<std::vector<DataCell>>& data) : columnCount(cols)
     {
         columnNames = std::make_unique<std::unique_ptr<char[]>[]>(columnCount);
         for (int i = 0; i < columnCount; i++) {
@@ -314,9 +314,9 @@ public:
             }
         }
     }
-    
+
     // 获取列名
-    const char* GetColumnName(int col) const 
+    const char* GetColumnName(int col) const
     {
         if (col < 0 || col >= columnCount || !columnNames || !columnNames[col]) {
             return "";
@@ -361,7 +361,7 @@ private:
     void DeleteFromIndex(TableIndex *index, int key);
     SmartTableRow* FindTableRow(int rowId);
 
-private:    
+private:
     // DatabaseTable *table;
     std::unique_ptr<DatabaseTable> table;
     std::unique_ptr<SmartQueryResult> queryResult;

@@ -22,7 +22,7 @@
 class SortClass {
 public:
     SortClass() = default;
-    SortClass(uint32_t version);
+    explicit SortClass(uint32_t version);
     ~SortClass();
     int FfrtConcurrentQueue();
 };
