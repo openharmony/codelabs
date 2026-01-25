@@ -163,7 +163,6 @@ Vector VectorSubtract(const Vector *vectorA, const Vector *vectorB);
 double VectorDot(const Vector *vectorA, const Vector *vectorB);
 Matrix MatrixTranspose(const Matrix *matrix);
 Matrix MatrixInverse(const Matrix *matrix);
-double MatrixDeterminant(const Matrix *matrix);
 
 // 线性方程组求解
 Vector SolveLinearSystem(const Matrix *matrix, const Vector *b);
@@ -175,8 +174,6 @@ Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b);
 // 特征值/特征向量
 Matrix QrDecomposition(const Matrix *matrix);
 void QrAlgorithm(const Matrix *matrix, double *eigenvalues, Matrix *eigenvectors);
-double PowerIteration(const Matrix *matrix, Vector *eigenvector);
-double InversePowerIteration(const Matrix *matrix, Vector *eigenvector, double sigma);
 
 // 数值积分
 double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n);
@@ -204,13 +201,8 @@ void FftReal(const double *input, ComplexNum *output, int n);
 
 // 优化算法
 double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol);
-double MinimizeBrent(double (*f)(double), double a, double b, double c, double tol);
 Vector MinimizeGradientDescent(double (*f)(const Vector*),
     const Vector *gradient, const Vector *x0, double learningRate, int iterations);
-Vector MinimizeConjugateGradient(double (*f)(const Vector*),
-    const Vector *gradient, const Matrix *matrix, const Vector *b,
-    const Vector *x0, int iterations);
-
 // 插值与逼近
 Vector PolynomialFit(const Vector *x, const Vector *y, int degree);
 double PolynomialEval(const Polynomial *p, double x);
@@ -282,7 +274,6 @@ Matrix CreateMatrix(int rows, int cols)
         fprintf(stderr, "内存分配失败\n");
         exit(EXIT_FAILURE);
     }
-    memset(mat.data, INIT_ZERO, rows * cols * sizeof(double));
     return mat;
 }
 
@@ -309,7 +300,6 @@ Vector CreateVector(int size)
         fprintf(stderr, "内存分配失败\n");
         exit(EXIT_FAILURE);
     }
-    memset(vec.data, INIT_ZERO, size * sizeof(double));
     return vec;
 }
 
@@ -387,55 +377,6 @@ Matrix MatrixTranspose(const Matrix *matrix)
     }
 
     return result;
-}
-
-double MatrixDeterminant(const Matrix *matrix)
-{
-    if (matrix->rows != matrix->cols) {
-        fprintf(stderr, "只有方阵才有行列式\n");
-        exit(EXIT_FAILURE);
-    } else {
-        int n = matrix->rows;
-
-        // 1x1 矩阵
-        if (n == INIT_ONE) {
-            return matrix->data[INIT_ZERO];
-        }
-
-        // 2x2 矩阵
-        if (n == INIT_TWO) {
-            return matrix->data[INIT_ZERO] * matrix->data[MATRIX_INDEX_OFFSET] -
-                matrix->data[INIT_ONE] * matrix->data[INIT_TWO];
-        }
-
-        // 递归计算行列式
-        double det = INIT_VALUE_1;
-        int sign = MATRIX_DET_SIGN_1;
-
-        for (int j = INIT_ZERO; j < n; j++) {
-            // 创建子矩阵
-            Matrix submat = CreateMatrix(n - INIT_ONE, n - INIT_ONE);
-            int subI = INIT_ZERO;
-
-            for (int i = INIT_ONE; i < n; i++) {
-                int subJ = INIT_ZERO;
-                for (int k = INIT_ZERO; k < n; k++) {
-                    if (k == j) {
-                        continue;
-                    }
-                    submat.data[subI * (n - INIT_ONE) + subJ] = matrix->data[i * n + k];
-                    subJ++;
-                }
-                subI++;
-            }
-
-            det += sign * matrix->data[j] * MatrixDeterminant(&submat);
-            sign = MATRIX_DET_SIGN_NEG;
-
-            DestroyMatrix(&submat);
-        } // 继续计算行列式的代码
-        return det;
-    }
 }
 
 /* ========== LU分解实现 ========== */
@@ -581,82 +522,6 @@ Matrix QrDecomposition(const Matrix *matrix)
 
     DestroyMatrix(&v);
     return q;  // 返回Q矩阵，R矩阵在过程中计算
-}
-
-/* ========== 特征值计算 ========== */
-double PowerIteration(const Matrix *matrix, Vector *eigenvector)
-{
-    int n = matrix->rows;
-    Vector b = CreateVector(n);
-
-    // 初始化随机向量
-    for (int i = INIT_ZERO; i < n; i++) {
-        b.data[i] = (double)rand() / RAND_MAX;
-    }
-
-    // 归一化
-    double norm = POWER_ITER_INIT_VAL;
-    for (int i = INIT_ZERO; i < n; i++) {
-        norm += b.data[i] * b.data[i];
-    }
-    norm = sqrt(norm);
-    for (int i = INIT_ZERO; i < n; i++) {
-        if (norm != 0) {
-            b.data[i] /= norm;
-        } else {
-            b.data[i] = 0;
-        }
-    }
-
-    // 幂迭代
-    double eigenvalue = POWER_ITER_INIT_VAL;
-    for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++) {
-        // 计算 ab
-        Vector ab = CreateVector(n);
-        for (int i = INIT_ZERO; i < n; i++) {
-            ab.data[i] = POWER_ITER_INIT_VAL;
-            for (int j = INIT_ZERO; j < n; j++) {
-                ab.data[i] += matrix->data[i * n + j] * b.data[j];
-            }
-        }
-
-        // 计算 Rayleigh 商
-        double numerator = POWER_ITER_INIT_VAL;
-        double denominator = POWER_ITER_INIT_VAL;
-        for (int i = INIT_ZERO; i < n; i++) {
-            numerator += b.data[i] * ab.data[i];
-            denominator += b.data[i] * b.data[i];
-        }
-        double newEigenvalue = numerator / denominator;
-
-        // 检查收敛
-        if (fabs(newEigenvalue - eigenvalue) < EPSILON) {
-            eigenvalue = newEigenvalue;
-            // 复制特征向量
-            for (int i = INIT_ZERO; i < n; i++) {
-                eigenvector->data[i] = b.data[i];
-            }
-            DestroyVector(&ab);
-            break;
-        }
-
-        eigenvalue = newEigenvalue;
-
-        // 归一化新向量
-        norm = POWER_ITER_INIT_VAL;
-        for (int i = INIT_ZERO; i < n; i++) {
-            norm += ab.data[i] * ab.data[i];
-        }
-        norm = sqrt(norm);
-        for (int i = INIT_ZERO; i < n; i++) {
-            b.data[i] = ab.data[i] / norm;
-        }
-
-        DestroyVector(&ab);
-    }
-
-    DestroyVector(&b);
-    return eigenvalue;
 }
 
 /* ========== 数值积分实现 ========== */
@@ -867,96 +732,6 @@ double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol
     return (a + b) / DEFAULT_MULTIPLIER;
 }
 
-double MinimizeBrent(double (*f)(double), double a, double b, double c, double tol)
-{
-    double x = b;
-    double fx = f(x);
-    double w = b;
-    double fw = fx;
-    double v = b;
-    double fv = fx;
-
-    double d = INIT_VALUE_1;
-    double e = INIT_VALUE_1;
-
-    for (int iter = INIT_ZERO; iter < MAX_ITERATIONS; iter++) {
-        double xm = (a + b) / DEFAULT_MULTIPLIER;
-        double tol1 = tol * fabs(x) + EPSILON;
-        double tol2 = DEFAULT_MULTIPLIER * tol1;
-
-        // 检查收敛
-        if (fabs(x - xm) <= (tol2 - BRENT_P_COEFF_1 * (b - a))) {
-            return x;
-        }
-
-        // 尝试抛物线插值
-        if (fabs(e) > tol1) {
-            double r = (x - w) * (fx - fv);
-            double q = (x - v) * (fx - fw);
-            double p = (x - v) * q - (x - w) * r;
-            q = BRENT_P_COEFF_2 * (q - r);
-
-            if (q > INIT_VALUE_1) {
-                p = -p;
-            }
-            q = fabs(q);
-
-            double etemp = e;
-            e = d;
-
-            // 检查抛物线步长是否可接受
-            if (fabs(p) < fabs(BRENT_P_COEFF_1 * q * etemp) && p > q * (a - x) && p < q * (b - x)) {
-                if (q != 0) {
-                    d = p / q;
-                    double u = x + d;
-                    if (u - a < tol2 || b - u < tol2) {
-                        d = (x < xm) ? tol1 : -tol1;
-                    }
-                }
-            } else {
-                e = (x < xm) ? b - x : a - x;
-                d = GOLDEN_RATIO * e;
-            }
-        } else {
-            e = (x < xm) ? b - x : a - x;
-            d = GOLDEN_RATIO * e;
-        }
-        // 计算下一步
-        double u = x + ((fabs(d) >= tol1) ? d : ((d > INIT_VALUE_1) ? tol1 : -tol1));
-        double fu = f(u);
-        // 更新区间
-        if (fu <= fx) {
-            if (u >= x) {
-                a = x;
-            } else {
-                b = x;
-            }
-            v = w;
-            fv = fw;
-            w = x;
-            fw = fx;
-            x = u;
-            fx = fu;
-        } else {
-            if (u < x) {
-                a = u;
-            } else {
-                b = u;
-            }
-            if (fu <= fw || w == x) {
-                v = w;
-                fv = fw;
-                w = u;
-                fw = fu;
-            } else if (fu <= fv || v == x || v == w) {
-                v = u;
-                fv = fu;
-            }
-        }
-    }
-
-    return x;
-}
 Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0,
                                double learningRate, int iterations)
 {
@@ -1217,43 +992,6 @@ void Compute(void *arg)
     double minX = MinimizeGoldenSection(Parabola, TEST_OPT_LOWER_BOUND, TEST_OPT_UPPER_BOUND, TEST_OPT_TOL);
     printf("抛物线最小值点: x = %.10f, f(x) = %.10f\n", minX, Parabola(minX));
 
-    // 测试7: 多项式拟合
-    printf("\n7. 测试多项式拟合:\n");
-    Vector xs = CreateVector(TEST_POLY_FIT_POINTS);
-    Vector ys = CreateVector(TEST_POLY_FIT_POINTS);
-
-    for (int i = INIT_ZERO; i < TEST_POLY_FIT_POINTS; i++) {
-        xs.data[i] = i;
-        ys.data[i] = INIT_TWO * i + INIT_ONE + TEST_NOISE_AMPLITUDE * ((double)rand() / RAND_MAX - DEFAULT_DIVISOR);
-    }
-
-    Vector coeffs = PolynomialFit(&xs, &ys, TEST_POLY_DEGREE_1);
-    printf("线性拟合: y = %.4f + %.4fx\n", coeffs.data[INIT_ZERO], coeffs.data[INIT_ONE]);
-
-    // 测试8: 统计分析
-    printf("\n8. 测试统计分析:\n");
-    Vector reg = LinearRegression(&xs, &ys);
-    printf("线性回归: 截距 = %.4f, 斜率 = %.4f\n", reg.data[INIT_ZERO], reg.data[INIT_ONE]);
-
-    // 测试9: 特殊函数
-    printf("\n9. 测试特殊函数:\n");
-    double gammaVal = GammaFunction(TEST_GAMMA_ARG);
-    printf("Γ(5) = %.10f (理论值: 24.0)\n", gammaVal);
-
-    double erfVal = ErfFunction(TEST_ERF_ARG);
-    printf("erf(1) = %.10f\n", erfVal);
-
-    // 测试10: 随机数生成
-    printf("\n10. 测试随机数生成:\n");
-    Vector rands = RandomNormal(TEST_RANDOM_SAMPLES, NORM_MEAN, NORM_STDDEV);
-
-    double mean = INIT_VALUE_1;
-    for (int i = INIT_ZERO; i < TEST_RANDOM_SAMPLES; i++) {
-        mean += rands.data[i];
-    }
-    mean /= TEST_RANDOM_SAMPLES;
-    printf("正态分布样本均值: %.6f\n", mean);
-
     // 清理内存
     DestroyMatrix(&a);
     DestroyMatrix(&b);
@@ -1261,12 +999,6 @@ void Compute(void *arg)
     DestroyVector(&ab);
     DestroyVector(&x);
     DestroyVector(&sol);
-    DestroyVector(&xs);
-    DestroyVector(&ys);
-    DestroyVector(&coeffs);
-    DestroyVector(&reg);
-    DestroyVector(&rands);
-
     printf("\n=== 所有测试完成 ===\n");
     g_computeRet = RET_SUCCESS;
 }

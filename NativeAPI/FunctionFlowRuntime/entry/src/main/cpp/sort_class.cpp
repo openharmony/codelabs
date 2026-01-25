@@ -1053,7 +1053,7 @@ public:
         vector<vector<int>> buckets(bucketCount);
 
         // 将元素分配到桶中
-        double range = bucketCount == 0 ? 0 : (double)(maxVal - minVal + 1) / bucketCount;
+        double range = bucketCount == 0 ? 0 : static_cast<double>(maxVal - minVal + 1) / bucketCount;
 
         for (int i = 0; i < n; i++) {
             int bucketIndex = (arr[i] - minVal) / range;
@@ -1258,7 +1258,7 @@ public:
         // 分配元素到桶中
         double range = 1.0;
         if (bucketCount != 0) {
-            range = (double)(maxVal - minVal + 1) / bucketCount;
+            range = static_cast<double>(maxVal - minVal + 1) / bucketCount;
         }
         for (int val : arr) {
             int bucketIndex = 0;
@@ -2037,33 +2037,6 @@ int SortClass::FfrtConcurrentQueue()
 
     auto task13 = bankQueue.Enter(BankBusinessBaseselectionSort, "customer13",
                                   ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task14 = bankQueue.Enter(BankBusinessBaseselectionDecSort, "customer14",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task15 = bankQueue.Enter(BankBusinessBasebidirectionalSelectionSort, "customer15",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task16 = bankQueue.Enter(BankBusinessBaseSelectionSortDelayedSwap, "customer16",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task17 = bankQueue.Enter(BankBusinessBaseSelectionSortTemplate, "customer17",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-
-    auto task18 = bankQueue.Enter(BankBusinessBasebucketSort, "customer18",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task19 = bankQueue.Enter(BankBusinessBasebucketSortFloat, "customer19",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task20 = bankQueue.Enter(BankBusinessBasebucketSortOptimized, "customer20",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-
-    auto task21 = bankQueue.Enter(BankBusinessBaseradixSort, "customer21",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task22 = bankQueue.Enter(BankBusinessradixSortOptimized, "customer22",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task23 = bankQueue.Enter(BankBusinessradixSortMSD, "customer23",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task24 = bankQueue.Enter(BankBusinessradixSortSigned, "customer24",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task25 = bankQueue.Enter(BankBusinessradixSortString, "customer25",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-
     // 等待所有的客户服务完成
     bankQueue.Wait(task1);
     bankQueue.Wait(task2);
@@ -2078,18 +2051,6 @@ int SortClass::FfrtConcurrentQueue()
     bankQueue.Wait(task11);
     bankQueue.Wait(task12);
     bankQueue.Wait(task13);
-    bankQueue.Wait(task14);
-    bankQueue.Wait(task15);
-    bankQueue.Wait(task16);
-    bankQueue.Wait(task17);
-    bankQueue.Wait(task18);
-    bankQueue.Wait(task19);
-    bankQueue.Wait(task20);
-    bankQueue.Wait(task21);
-    bankQueue.Wait(task22);
-    bankQueue.Wait(task23);
-    bankQueue.Wait(task24);
-    bankQueue.Wait(task25);
     LOGI("FfrtQueue results ");
     return RET_SUCCESS_6;
 }
