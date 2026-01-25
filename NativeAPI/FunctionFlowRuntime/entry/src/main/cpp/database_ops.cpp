@@ -448,10 +448,8 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
     queryResult = std::make_unique<SmartQueryResult>(table->columnCount, colNames, data);
     return queryResult.get();
 }
-
 // C接口实现
 extern "C" {
-
 // 辅助函数: 打印系统信息
 static void PrintSystemInfo(int maxTableCount)
 {
