@@ -201,8 +201,6 @@ void FftReal(const double *input, ComplexNum *output, int n);
 double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol);
 Vector MinimizeGradientDescent(double (*f)(const Vector*),
     const Vector *gradient, const Vector *x0, double learningRate, int iterations);
-// 插值与逼近
-Vector PolynomialFit(const Vector *x, const Vector *y, int degree);
 double PolynomialEval(const Polynomial *p, double x);
 Vector SplineInterpolation(const Vector *x, const Vector *y);
 double SplineEval(const Vector *x, const Vector *y, const Vector *coeffs, double xi);
@@ -723,46 +721,6 @@ Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradien
     DestroyVector(&grad);
     return x;
 }
-
-/* ========== 多项式拟合 ========== */
-Vector PolynomialFit(const Vector *x, const Vector *y, int degree)
-{
-    int n = x->size;
-    int m = degree + INIT_ONE;
-
-    // 构造范德蒙德矩阵
-    Matrix a = CreateMatrix(n, m);
-    for (int i = INIT_ZERO; i < n; i++) {
-        double power = INIT_VALUE_1;
-        for (int j = INIT_ZERO; j < m; j++) {
-            a.data[i * m + j] = power;
-            power *= x->data[i];
-        }
-    }
-
-    // 构造法方程 A^T A x = A^T y
-    Matrix at = MatrixTranspose(&a);
-    Matrix ata = MatrixMultiply(&at, &a);
-
-    Vector aty = CreateVector(m);
-    for (int i = INIT_ZERO; i < m; i++) {
-        aty.data[i] = INIT_VALUE_1;
-        for (int j = INIT_ZERO; j < n; j++) {
-            aty.data[i] += at.data[i * n + j] * y->data[j];
-        }
-    }
-
-    // 求解法方程
-    Vector coeffs = SolveLinearSystemLu(&ata, &aty);
-
-    DestroyMatrix(&a);
-    DestroyMatrix(&at);
-    DestroyMatrix(&ata);
-    DestroyVector(&aty);
-
-    return coeffs;
-}
-
 /* ========== 统计分析 ========== */
 Vector LinearRegression(Vector *x, Vector *y)
 {
