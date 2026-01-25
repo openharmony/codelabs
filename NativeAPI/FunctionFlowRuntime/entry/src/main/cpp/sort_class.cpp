@@ -2029,40 +2029,40 @@ int SortClass::FfrtConcurrentQueue()
     auto task9 = bankQueue.Enter(BankBusinessBaseInsertionSortDec, "customer9",
                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task10 = bankQueue.Enter(BankBusinessInsertionSortBinary, "customer10",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task11 = bankQueue.Enter(BankBusinessInsertionSentinelSort, "customer11",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task12 = bankQueue.Enter(BankBusinessinsertionTemplateSort, "customer12",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
 
     auto task13 = bankQueue.Enter(BankBusinessBaseselectionSort, "customer13",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task14 = bankQueue.Enter(BankBusinessBaseselectionDecSort, "customer14",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task15 = bankQueue.Enter(BankBusinessBasebidirectionalSelectionSort, "customer15",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task16 = bankQueue.Enter(BankBusinessBaseSelectionSortDelayedSwap, "customer16",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task17 = bankQueue.Enter(BankBusinessBaseSelectionSortTemplate, "customer17",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
 
     auto task18 = bankQueue.Enter(BankBusinessBasebucketSort, "customer18",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task19 = bankQueue.Enter(BankBusinessBasebucketSortFloat, "customer19",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task20 = bankQueue.Enter(BankBusinessBasebucketSortOptimized, "customer20",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
 
     auto task21 = bankQueue.Enter(BankBusinessBaseradixSort, "customer21",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task22 = bankQueue.Enter(BankBusinessradixSortOptimized, "customer22",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task23 = bankQueue.Enter(BankBusinessradixSortMSD, "customer23",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task24 = bankQueue.Enter(BankBusinessradixSortSigned, "customer24",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     auto task25 = bankQueue.Enter(BankBusinessradixSortString, "customer25",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
 
     // 等待所有的客户服务完成
     bankQueue.Wait(task1);
