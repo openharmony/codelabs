@@ -957,9 +957,8 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
 
     return x;
 }
-
 Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0,
-                              double learningRate, int iterations)
+                               double learningRate, int iterations)
 {
     Vector x = CopyVector(x0);
     Vector grad = CreateVector(x0->size);
