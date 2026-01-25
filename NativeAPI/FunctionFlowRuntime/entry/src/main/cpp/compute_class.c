@@ -223,7 +223,6 @@ double ChebyshevPoly(int n, double x);
 
 // 随机数生成
 Vector RandomUniform(int n, double a, double b);
-Vector RandomNormal(int n, double mean, double stddev);
 Vector RandomExponential(int n, double lambda);
 Matrix RandomMatrix(int rows, int cols, double minVal, double maxVal);
 
@@ -816,28 +815,6 @@ double ErfFunction(double x)
     double y = ERF_T_DIVISOR - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * exp(ERF_EXP_COEFF * x * x);
 
     return sign * y;
-}
-
-/* ========== 随机数生成 ========== */
-Vector RandomNormal(int n, double mean, double stddev)
-{
-    Vector result = CreateVector(n);
-
-    for (int i = INIT_ZERO; i < n; i += INIT_TWO) {
-        // Box-Muller 变换
-        double u1 = (double)rand() / RAND_MAX;
-        double u2 = (double)rand() / RAND_MAX;
-
-        double z0 = sqrt(BOX_MULLER_COEFF * log(u1)) * cos(DEFAULT_MULTIPLIER * PI * u2);
-        double z1 = sqrt(BOX_MULLER_COEFF * log(u1)) * sin(DEFAULT_MULTIPLIER * PI * u2);
-
-        result.data[i] = mean + stddev * z0;
-        if (i + INIT_ONE < n) {
-            result.data[i + INIT_ONE] = mean + stddev * z1;
-        }
-    }
-
-    return result;
 }
 
 double Ff(double t, double y)

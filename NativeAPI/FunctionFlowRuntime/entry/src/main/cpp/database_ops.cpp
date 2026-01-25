@@ -384,9 +384,9 @@ bool DataBaseOps::RollbackTransaction()
 
 void DataBaseOps::PrintTableSchema()
 {
-    const int schemaColumnWidth = 20;
-    const int schemaTypeWidth = 10;
-    const int schemaFlagWidth = 8;
+    int schemaColumnWidth = 20;
+    int schemaTypeWidth = 10;
+    int schemaFlagWidth = 8;
 
     printf("\n=== 表结构: %s ===\n", table->name);
     printf("创建时间: %s\n", FormatDate(table->createdAt));
@@ -394,11 +394,11 @@ void DataBaseOps::PrintTableSchema()
     printf("列数: %d\n\n", table->columnCount);
 
     printf("%-*s %-*s %-*s %-*s %-*s\n",
-        static_cast<int>(schemaColumnWidth), "列名",
-        static_cast<int>(schemaTypeWidth), "类型",
-        static_cast<int>(schemaFlagWidth), "非空",
-        static_cast<int>(schemaFlagWidth), "主键",
-        static_cast<int>(schemaFlagWidth), "索引");
+        schemaColumnWidth, "列名",
+        schemaTypeWidth, "类型",
+        schemaFlagWidth, "非空",
+        schemaFlagWidth, "主键",
+        schemaFlagWidth, "索引");
     printf("%s\n", "------------------------------------------------------------");
 
     for (int i = 0; i < table->columnCount; i++) {
@@ -451,22 +451,27 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 
 // C接口实现
 extern "C" {
-int DatabaseOpsDemo()
-{
-    const int userColumnCount = 8;
-    const int orderColumnCount = 8;
-    const int maxTableCount = 50;
-    const int formatBufferSize = 32;
 
-    int operationCount = 0;
+// 辅助函数: 打印系统信息
+static void PrintSystemInfo(int maxTableCount) {
     printf("=== 简易关系型数据库系统启动 ===\n");
     printf("版本: 1.0.0\n");
     printf("最大表数: %d\n", maxTableCount);
     printf("最大行数: %d\n", MAX_ROWS);
     printf("最大列数: %d\n", MAX_COLUMNS);
     printf("页面大小: %d bytes\n\n", PAGE_SIZE);
+}
 
-    // 创建示例表：用户表
+// 辅助函数: 打印总结信息
+static void PrintSummary(int operationCount) {
+    printf("\n数据库系统正常关闭。\n");
+    printf("总计执行操作: %d\n", operationCount);
+}
+
+// 函数1: 创建用户表结构
+static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount) {
+    const int userColumnCount = 8;
+    
     printf("创建示例表: users\n");
 
     ColumnDef userColumns[] = {
@@ -480,15 +485,24 @@ int DatabaseOpsDemo()
         {"updated_at", TYPE_DATE, 0, false, false, false, ""}
     };
 
-    std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", userColumns, userColumnCount);
+    std::unique_ptr<DataBaseOps> ops = 
+        std::make_unique<DataBaseOps>("users", userColumns, userColumnCount);
     if (!ops) {
         printf("创建表失败！\n");
-        return -1;
+        return nullptr;
     }
 
     // 创建索引
     ops->CreateTableIndex("username");
     ops->CreateTableIndex("email");
+    operationCount += 2; // 两次创建索引操作
+
+    return ops;
+}
+
+// 函数2: 插入示例数据并执行事务
+static int InsertUserSampleData(DataBaseOps* ops, int& operationCount) {
+    if (!ops) return -1;
 
     // 开始事务
     printf("\n开始事务...\n");
@@ -498,25 +512,63 @@ int DatabaseOpsDemo()
     // 插入示例数据
     printf("\n插入示例数据...\n");
 
+    const int userColumnCount = 8;
     DataCell user1[userColumnCount] = {
         CreateDataCell(TYPE_INT, "1"),
+        CreateDataCell(TYPE_STRING, "alice"),
+        CreateDataCell(TYPE_STRING, "alice@example.com"),
+        CreateDataCell(TYPE_INT, "25"),
+        CreateDataCell(TYPE_FLOAT, "50000.0"),
+        CreateDataCell(TYPE_BOOL, "true"),
+        CreateDataCell(TYPE_DATE, "2023-10-20"),
         CreateDataCell(TYPE_DATE, "2023-10-20")
     };
 
     DataCell user2[userColumnCount] = {
         CreateDataCell(TYPE_INT, "2"),
+        CreateDataCell(TYPE_STRING, "bob"),
+        CreateDataCell(TYPE_STRING, "bob@example.com"),
+        CreateDataCell(TYPE_INT, "30"),
+        CreateDataCell(TYPE_FLOAT, "60000.0"),
+        CreateDataCell(TYPE_BOOL, "true"),
+        CreateDataCell(TYPE_DATE, "2023-10-21"),
         CreateDataCell(TYPE_DATE, "2023-10-21")
     };
 
     int id1 = ops->InsertTableRow(user1);
     int id2 = ops->InsertTableRow(user2);
-    operationCount += THREE;
+    operationCount += 3; // 假设THREE是3
+
     printf("插入完成: id1=%d, id2=%d\n", id1, id2);
 
     // 提交事务
     printf("\n提交事务...\n");
     ops->CommitTransaction();
     operationCount++;
+
+    return (id1 > 0 && id2 > 0) ? 0 : -1;
+}
+
+// 函数3: 主函数 - 调用其他函数并控制流程
+int DatabaseOpsDemo() {
+    const int maxTableCount = 50;
+    const int formatBufferSize = 32;
+    int operationCount = 0;
+
+    // 打印系统信息
+    PrintSystemInfo(maxTableCount);
+    
+    // 创建用户表
+    auto ops = CreateUserTable(operationCount);
+    if (!ops) {
+        return -1;
+    }
+
+    // 插入示例数据
+    if (InsertUserSampleData(ops.get(), operationCount) < 0) {
+        printf("插入示例数据失败！\n");
+        return -1;
+    }
 
     // 显示表结构
     ops->PrintTableSchema();
@@ -526,11 +578,15 @@ int DatabaseOpsDemo()
     SmartQueryResult *result = ops->ExecuteSelectQuery("");
     if (result) {
         ops->PrintQueryResult(result);
+        // 假设需要释放result
+        // delete result; 或使用适当的释放方法
     }
     operationCount++;
-    printf("\n数据库系统正常关闭。\n");
-    printf("总计执行操作: %d\n", operationCount);
-    return ZERO;
+
+    // 打印总结信息
+    PrintSummary(operationCount);
+    
+    return 0; // 假设ZERO是0
 }
 
 } // extern "C"
