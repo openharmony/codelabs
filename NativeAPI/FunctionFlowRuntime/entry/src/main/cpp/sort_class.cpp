@@ -115,7 +115,7 @@ int HoarePartition(vector<int>& arr, int low, int high)
     int i = low - 1;
     int j = high + 1;
 
-    while (true) {
+    while (i < j) {
         // 从左向右找到第一个大于等于基准的元素
         do {
             i++;

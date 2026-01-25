@@ -625,8 +625,14 @@ void Fft(ComplexNum *data, int n)
 
     // 分离偶数和奇数项
     ComplexNum *even = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
+    if (even == NULL) {
+        return;
+    }
     ComplexNum *odd = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
-
+    if (odd == NULL) {
+        free(even);
+        return;
+    }
     for (int i = INIT_ZERO; i < n / FFT_SEPARATION_FACTOR; i++) {
         even[i] = data[i * FFT_SEPARATION_FACTOR];
         odd[i] = data[i * FFT_SEPARATION_FACTOR + INIT_ONE];
