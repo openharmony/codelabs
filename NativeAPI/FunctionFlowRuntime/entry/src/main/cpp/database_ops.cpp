@@ -56,7 +56,7 @@ DataCell CreateDataCell(DataType type, const char *value)
             cell.value.stringVal[MAX_STRING_LEN - 1] = '\0';
             break;
         case TYPE_BOOL:
-            cell.value.boolVal = (strcasecmp(value, "true") == 0 || 
+            cell.value.boolVal = (strcasecmp(value, "true") == 0 ||
                                    strcasecmp(value, "1") == 0);
             break;
         case TYPE_DATE:
@@ -113,10 +113,10 @@ DataType DataBaseOps::StringToDataType(const char *str)
 
 char* DataBaseOps::FormatDate(time_t timestamp)
 {
-    static const int DATE_BUFFER_SIZE = 20;
-    static char buffer[DATE_BUFFER_SIZE];
+    static const int dateBufferSize = 20;
+    static char buffer[dateBufferSize];
     struct tm *tmInfo = localtime(&timestamp);
-    strftime(buffer, DATE_BUFFER_SIZE, "%Y-%m-%d %H:%M:%S", tmInfo);
+    strftime(buffer, dateBufferSize, "%Y-%m-%d %H:%M:%S", tmInfo);
     return buffer;
 }
 
@@ -210,10 +210,10 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
     index->root = CreateBplusTreeNode(true, BPLUS_TREE_ORDER);
     index->height = 1;
     index->keyCount = 0;
-    
+
     table->columns[colIndex].hasIndex = true;
     table->indexCount++;
-    
+
     return index;
 }
 
@@ -304,9 +304,9 @@ int DataBaseOps::InsertTableRow(DataCell *cells)
 
             row->rowId = table->nextRowId++;
             row->deleted = false;
-            row->createdAt = time(NULL);
+            row->createdAt = time(nullptr);
             row->updatedAt = row->createdAt;
-            
+
             table->rowCount++;
 
             // 更新索引
@@ -416,29 +416,29 @@ void DataBaseOps::PrintTableSchema()
     printf("列数: %d\n\n", table->columnCount);
 
     printf("%-*s %-*s %-*s %-*s %-*s\n",
-             static_cast<int>(SCHEMA_COLUMN_WIDTH), "列名",
-            static_cast<int>(SCHEMA_TYPE_WIDTH), "类型",
-            static_cast<int>(SCHEMA_FLAG_WIDTH), "非空",
-            static_cast<int>(SCHEMA_FLAG_WIDTH), "主键",
-            static_cast<int>(SCHEMA_FLAG_WIDTH), "索引");
+        static_cast<int>(SCHEMA_COLUMN_WIDTH), "列名",
+        static_cast<int>(SCHEMA_TYPE_WIDTH), "类型",
+        static_cast<int>(SCHEMA_FLAG_WIDTH), "非空",
+        static_cast<int>(SCHEMA_FLAG_WIDTH), "主键",
+        static_cast<int>(SCHEMA_FLAG_WIDTH), "索引");
     printf("%s\n", "------------------------------------------------------------");
 
     for (int i = 0; i < table->columnCount; i++) {
         ColumnDef *col = &table->columns[i];
         printf("%-*s %-*s %-*s %-*s %-*s\n",
-               static_cast<int>(SCHEMA_COLUMN_WIDTH), col->name,
-                static_cast<int>(SCHEMA_TYPE_WIDTH), DataTypeToString(col->type),
-                static_cast<int>(SCHEMA_FLAG_WIDTH), col->notNull ? "YES" : "NO",
-                static_cast<int>(SCHEMA_FLAG_WIDTH), col->isPrimary ? "YES" : "NO",
-                static_cast<int>(SCHEMA_FLAG_WIDTH), col->hasIndex ? "YES" : "NO");
+            static_cast<int>(SCHEMA_COLUMN_WIDTH), col->name,
+            static_cast<int>(SCHEMA_TYPE_WIDTH), DataTypeToString(col->type),
+            static_cast<int>(SCHEMA_FLAG_WIDTH), col->notNull ? "YES" : "NO",
+            static_cast<int>(SCHEMA_FLAG_WIDTH), col->isPrimary ? "YES" : "NO",
+            static_cast<int>(SCHEMA_FLAG_WIDTH), col->hasIndex ? "YES" : "NO");
     }
 }
 
 void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 {
-    const int QUERY_COLUMN_WIDTH = 20;
+    const int queryColumnWidth = 20;
     const int formatBufferSize = 21;
-    const int DATE_FORMAT_SIZE = 20;
+    const int dateFormatSize = 20;
 
     if (!result || result->error != ERR_NONE) {
         printf("查询错误: %s\n", result->errorMsg);
@@ -449,7 +449,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 
     // 打印表头
     for (int i = 0; i < result->columnCount; i++) {
-        printf("%-*s", (int)QUERY_COLUMN_WIDTH, result->GetColumnName(i));
+        printf("%-*s", static_cast<int>(queryColumnWidth), result->GetColumnName(i));
         if (i < result->columnCount - 1) {
             printf(" | ");
         }
@@ -458,7 +458,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
 
     // 打印分隔线
     for (int i = 0; i < result->columnCount; i++) {
-        for (int j = 0; j < QUERY_COLUMN_WIDTH; j++) {
+        for (int j = 0; j < queryColumnWidth; j++) {
             printf("-");
         }
         if (i < result->columnCount - 1) {
@@ -466,7 +466,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
         }
     }
     printf("\n");
-    const int BUFFER_SIZE = 20;
+    const int bufferSize = 20;
     const int PRECISION = 2;
     // 打印数据
     for (int i = 0; i < result->rowCount; i++) {
@@ -474,27 +474,27 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
             DataCell *cell = &result->rows[i][j];
 
             if (cell->isNull) {
-                printf("%-*s", (int)QUERY_COLUMN_WIDTH, "NULL");
+                printf("%-*s", (int)queryColumnWidth, "NULL");
             } else {
                 char buffer[21] = {0};
                 switch(cell->type) {
                     case TYPE_INT:
-                        snprintf(buffer, BUFFER_SIZE, "%d", cell->value.intVal);
+                        snprintf(buffer, bufferSize, "%d", cell->value.intVal);
                         break;
                     case TYPE_FLOAT:
-                        snprintf(buffer, BUFFER_SIZE, "%.2f", cell->value.floatVal);
+                        snprintf(buffer, bufferSize, "%.2f", cell->value.floatVal);
                         break;
                     case TYPE_STRING:
-                        snprintf(buffer, BUFFER_SIZE, "%s", cell->value.stringVal);
+                        snprintf(buffer, bufferSize, "%s", cell->value.stringVal);
                         break;
                     case TYPE_BOOL:
-                        snprintf(buffer, BUFFER_SIZE, "%s", cell->value.boolVal ? "true" : "false");
+                        snprintf(buffer, bufferSize, "%s", cell->value.boolVal ? "true" : "false");
                         break;
                     case TYPE_DATE:
-                        strncpy(buffer, FormatDate(cell->value.dateVal), BUFFER_SIZE);
+                        strncpy(buffer, FormatDate(cell->value.dateVal), bufferSize);
                         break;
                     default:
-                        strncpy(buffer, "UNKNOWN", BUFFER_SIZE);
+                        strncpy(buffer, "UNKNOWN", bufferSize);
                 }
                 printf("%-20s", buffer);
             }
@@ -544,14 +544,14 @@ extern "C" {
 int DatabaseOpsDemo()
 {
     const int userColumnCount = 8;
-    const int ORDER_COLUMN_COUNT = 8;
-    const int MAX_TABLE_COUNT = 50;
+    const int orderColumnCount = 8;
+    const int maxTableCount = 50;
     const int formatBufferSize = 32;
 
     int operationCount = 0;
     printf("=== 简易关系型数据库系统启动 ===\n");
     printf("版本: 1.0.0\n");
-    printf("最大表数: %d\n", MAX_TABLE_COUNT);
+    printf("最大表数: %d\n", maxTableCount);
     printf("最大行数: %d\n", MAX_ROWS);
     printf("最大列数: %d\n", MAX_COLUMNS);
     printf("页面大小: %d bytes\n\n", PAGE_SIZE);
@@ -719,7 +719,7 @@ int DatabaseOpsDemo()
         {"status", TYPE_STRING, 20, true, false, false, "pending"}
     };
 
-    std::unique_ptr<DataBaseOps> orderOps = std::make_unique<DataBaseOps>("orders", orderColumns, ORDER_COLUMN_COUNT);
+    std::unique_ptr<DataBaseOps> orderOps = std::make_unique<DataBaseOps>("orders", orderColumns, orderColumnCount);
     if (!orderOps) {
         printf("创建表失败！\n");
         return -1;
@@ -728,7 +728,7 @@ int DatabaseOpsDemo()
     // 插入订单数据
     printf("插入订单数据...\n");
 
-    DataCell order1[ORDER_COLUMN_COUNT] = {
+    DataCell order1[orderColumnCount] = {
         CreateDataCell(TYPE_INT, "1001"),
         CreateDataCell(TYPE_INT, "1"),
         CreateDataCell(TYPE_STRING, "Laptop"),
@@ -738,7 +738,7 @@ int DatabaseOpsDemo()
         CreateDataCell(TYPE_STRING, "delivered")
     };
 
-    DataCell order2[ORDER_COLUMN_COUNT] = {
+    DataCell order2[orderColumnCount] = {
         CreateDataCell(TYPE_INT, "1002"),
         CreateDataCell(TYPE_INT, "2"),
         CreateDataCell(TYPE_STRING, "Mouse"),
@@ -748,7 +748,7 @@ int DatabaseOpsDemo()
         CreateDataCell(TYPE_STRING, "shipped")
     };
 
-    DataCell order3[ORDER_COLUMN_COUNT] = {
+    DataCell order3[orderColumnCount] = {
         CreateDataCell(TYPE_INT, "1003"),
         CreateDataCell(TYPE_INT, "1"),
         CreateDataCell(TYPE_STRING, "Keyboard"),
@@ -761,8 +761,8 @@ int DatabaseOpsDemo()
     orderOps->InsertTableRow(order1);
     orderOps->InsertTableRow(order2);
     orderOps->InsertTableRow(order3);
-    const int DATE_INDEX3 = 3;
-    operationCount += DATE_INDEX3;
+    const int dateIndeX3 = 3;
+    operationCount += dateIndeX3;
 
     // 显示订单表
     orderOps->PrintTableSchema();

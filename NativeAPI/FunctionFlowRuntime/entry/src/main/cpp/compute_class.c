@@ -187,13 +187,13 @@ double IntegrateMonteCarlo(double (*f)(double), double a, double b, int samples)
 
 // 微分方程求解
 Vector SolveOdeEuler(double (*f)(double, double), double y0,
-                  double t0, double tf, int steps);
+    double t0, double tf, int steps);
 Vector SolveOdeRk4(double (*f)(double, double), double y0,
-                  double t0, double tf, int steps);
+    double t0, double tf, int steps);
 Vector SolveOdeAdaptive(double (*f)(double, double), double y0,
-                  double t0, double tf, double tol);
+    double t0, double tf, double tol);
 Vector SolveOdeSystem(void (*f)(double, const Vector*, Vector*),
-                  const Vector *y0, double t0, double tf, int steps);
+    const Vector *y0, double t0, double tf, int steps);
 
 // 傅里叶变换
 void Dft(const double *input, ComplexNum *output, int n);
@@ -206,12 +206,10 @@ void FftReal(const double *input, ComplexNum *output, int n);
 double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol);
 double MinimizeBrent(double (*f)(double), double a, double b, double c, double tol);
 Vector MinimizeGradientDescent(double (*f)(const Vector*),
-                                 const Vector *gradient,
-                                 const Vector *x0, double learning_rate, int iterations);
+    const Vector *gradient, const Vector *x0, double learning_rate, int iterations);
 Vector MinimizeConjugateGradient(double (*f)(const Vector*),
-                                   const Vector *gradient,
-                                   const Matrix *matrix, const Vector *b,
-                                   const Vector *x0, int iterations);
+    const Vector *gradient, const Matrix *matrix, const Vector *b,
+    const Vector *x0, int iterations);
 
 // 插值与逼近
 Vector PolynomialFit(const Vector *x, const Vector *y, int degree);
@@ -224,7 +222,7 @@ Vector LinearRegression(Vector *x, Vector *y);
 double CorrelationCoefficient(const Vector *x, const Vector *y);
 Vector MovingAverage(const Vector *data, int window);
 void ComputeStatistics(const Vector *data, double *mean, double *variance,
-                       double *skewness, double *kurtosis);
+    double *skewness, double *kurtosis);
 
 // 特殊函数
 double GammaFunction(double x);
@@ -437,9 +435,6 @@ double MatrixDeterminant(const Matrix *matrix)
         } // 继续计算行列式的代码
         return det;
     }
-
-
-    
 }
 
 /* ========== LU分解实现 ========== */
@@ -547,44 +542,44 @@ Matrix QrDecomposition(const Matrix *matrix)
 {
     int m = matrix->rows;
     int n = matrix->cols;
-    Matrix Q = CreateMatrix(m, n);
-    Matrix R = CreateMatrix(n, n);
-    Matrix V = CopyMatrix(matrix);
+    Matrix q = CreateMatrix(m, n);
+    Matrix r = CreateMatrix(n, n);
+    Matrix v = CopyMatrix(matrix);
 
     for (int j = INIT_ZERO; j < n; j++) {
         // 计算第j列的范数
         double norm = INIT_VALUE_1;
         for (int i = INIT_ZERO; i < m; i++) {
-            norm += V.data[i * n + j] * V.data[i * n + j];
+            norm += v.data[i * n + j] * v.data[i * n + j];
         }
         norm = sqrt(norm);
 
         // 构造Householder向量
-        R.data[j * n + j] = norm;
+        r.data[j * n + j] = norm;
 
         if (norm > EPSILON) {
             for (int i = INIT_ZERO; i < m; i++) {
-                Q.data[i * n + j] = norm != 0 ? V.data[i * n + j] / norm : 0;
-                Q.data[i * n + j] = V.data[i * n + j] / norm;
+                q.data[i * n + j] = norm != 0 ? v.data[i * n + j] / norm : 0;
+                q.data[i * n + j] = v.data[i * n + j] / norm;
             }
 
             // 更新剩余列
             for (int k = j + INIT_ONE; k < n; k++) {
                 double dot = INIT_VALUE_1;
                 for (int i = INIT_ZERO; i < m; i++) {
-                    dot += Q.data[i * n + j] * V.data[i * n + k];
+                    dot += q.data[i * n + j] * v.data[i * n + k];
                 }
-                R.data[j * n + k] = dot;
+                r.data[j * n + k] = dot;
 
                 for (int i = INIT_ZERO; i < m; i++) {
-                    V.data[i * n + k] -= DEFAULT_MULTIPLIER * Q.data[i * n + j] * dot;
+                    v.data[i * n + k] -= DEFAULT_MULTIPLIER * q.data[i * n + j] * dot;
                 }
             }
         }
     }
 
-    DestroyMatrix(&V);
-    return Q;  // 返回Q矩阵，R矩阵在过程中计算
+    DestroyMatrix(&v);
+    return q;  // 返回Q矩阵，R矩阵在过程中计算
 }
 
 /* ========== 特征值计算 ========== */
@@ -631,11 +626,11 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
             numerator += b.data[i] * Ab.data[i];
             denominator += b.data[i] * b.data[i];
         }
-        double new_eigenvalue = numerator / denominator;
+        double newEigenvalue = numerator / denominator;
 
         // 检查收敛
-        if (fabs(new_eigenvalue - eigenvalue) < EPSILON) {
-            eigenvalue = new_eigenvalue;
+        if (fabs(newEigenvalue - eigenvalue) < EPSILON) {
+            eigenvalue = newEigenvalue;
             // 复制特征向量
             for (int i = INIT_ZERO; i < n; i++) {
                 eigenvector->data[i] = b.data[i];
@@ -644,7 +639,7 @@ double PowerIteration(const Matrix *matrix, Vector *eigenvector)
             break;
         }
 
-        eigenvalue = new_eigenvalue;
+        eigenvalue = newEigenvalue;
 
         // 归一化新向量
         norm = POWER_ITER_INIT_VAL;
@@ -707,11 +702,11 @@ double IntegrateSimpson(double (*f)(double), double a, double b, int n)
 
 double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
 {
-    double R[MAX_ITERATIONS][MAX_ITERATIONS];
+    double r[MAX_ITERATIONS][MAX_ITERATIONS];
     int k = INIT_ZERO;
 
     // 初始梯形公式
-    R[INIT_ZERO][INIT_ZERO] = (b - a) * (f(a) + f(b)) / DEFAULT_MULTIPLIER;
+    r[INIT_ZERO][INIT_ZERO] = (b - a) * (f(a) + f(b)) / DEFAULT_MULTIPLIER;
 
     for (k = INIT_ONE; k < MAX_ITERATIONS; k++) {
         // 计算梯形公式的递归
@@ -725,27 +720,27 @@ double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
             sum += f(x);
         }
 
-        R[k][INIT_ZERO] = ROMBERG_CONV_FACTOR * R[k - INIT_ONE][INIT_ZERO] + h * sum;
+        r[k][INIT_ZERO] = ROMBERG_CONV_FACTOR * r[k - INIT_ONE][INIT_ZERO] + h * sum;
 
         // Richardson 外推
         for (int j = INIT_ONE; j <= k; j++) {
-            R[k][j] = R[k][j - INIT_ONE] + 
-                      (R[k][j - INIT_ONE] - R[k - INIT_ONE][j - INIT_ONE]) / 
-                      (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
+            r[k][j] = r[k][j - INIT_ONE] + 
+                (r[k][j - INIT_ONE] - r[k - INIT_ONE][j - INIT_ONE]) / 
+                (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
         }
 
         // 检查收敛
-        if (k > INIT_ZERO && fabs(R[k][k] - R[k - INIT_ONE][k - INIT_ONE]) < tol) {
-            return R[k][k];
+        if (k > INIT_ZERO && fabs(r[k][k] - r[k - INIT_ONE][k - INIT_ONE]) < tol) {
+            return r[k][k];
         }
     }
 
-    return R[k - INIT_ONE][k - INIT_ONE];
+    return r[k - INIT_ONE][k - INIT_ONE];
 }
 
 /* ========== 微分方程求解 ========== */
 Vector SolveOdeRk4(double (*f)(double, double), double y0,
-                     double t0, double tf, int steps)
+    double t0, double tf, int steps)
 {
     double h = (tf - t0) / (steps != INIT_ZERO ? steps : INIT_ONE);
     Vector solution = CreateVector(steps + INIT_ONE);
@@ -902,8 +897,8 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
             q = BRENT_P_COEFF_2 * (q - r);
 
             if (q > INIT_VALUE_1) {
-                 p = -p;
-             }
+                p = -p;
+            }
             q = fabs(q);
 
             double etemp = e;
@@ -911,13 +906,13 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
 
             // 检查抛物线步长是否可接受
             if (fabs(p) < fabs(BRENT_P_COEFF_1 * q * etemp) && p > q * (a - x) && p < q * (b - x)) {
-               if (q != 0){
+                if (q != 0) {
                     d = p / q;
                     double u = x + d;
                     if (u - a < tol2 || b - u < tol2) {
                         d = (x < xm) ? tol1 : -tol1;
                     }
-               }
+                }
             } else {
                 e = (x < xm) ? b - x : a - x;
                 d = GOLDEN_RATIO * e;
@@ -934,19 +929,22 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
         // 更新区间
         if (fu <= fx) {
             if (u >= x) {
-                 a = x;
-             } else {
-                 b = x;
-             }
-            v = w; fv = fw;
-            w = x; fw = fx;
-            x = u; fx = fu;
+                a = x;
+            } else {
+                b = x;
+            }
+            v = w; 
+            fv = fw;
+            w = x; 
+            fw = fx;
+            x = u; 
+            fx = fu;
         } else {
             if (u < x) {
-                 a = u;
-             } else {
-                 b = u;
-             }
+                a = u;
+            } else {
+                b = u;
+            }
             if (fu <= fw || w == x) {
                 v = w;
                 fv = fw;

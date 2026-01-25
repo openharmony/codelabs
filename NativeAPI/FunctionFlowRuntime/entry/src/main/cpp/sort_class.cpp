@@ -850,7 +850,8 @@ struct Student
     int age;
 
     // 按分数降序，年龄升序
-    bool operator<(const Student& other) const {
+    bool operator<(const Student& other) const 
+    {
         if (score != other.score) {
             return score > other.score;  // 分数高的在前
         }
@@ -1262,19 +1263,25 @@ public:
         vector<vector<int>> buckets(bucketCount);
 
         // 分配元素到桶中
-        double range = (double)(maxVal - minVal + 1) / bucketCount;
+        double range = 1.0;
+        if (bucketCount != 0){
+            range = (double)(maxVal - minVal + 1) / bucketCount;
+        }
 
         for (int val : arr) {
-            int bucketIndex = (val - minVal) / range;
-            bucketIndex = min(bucketIndex, bucketCount - 1);
-            buckets[bucketIndex].push_back(val);
+            int bucketIndex = 0;
+            if (range != 0){
+                bucketIndex = (val - minVal) / range;
+                bucketIndex = min(bucketIndex, bucketCount - 1);
+                buckets[bucketIndex].push_back(val);
+            }
         }
 
         // 并行排序每个桶
         vector<future<void>> futures;
         for (int i = 0; i < bucketCount; i++) {
             if (!buckets[i].empty()) {
-                futures.push_back(async(launch::async, 
+                futures.push_back(async(launch::async,
                     [&buckets, i]() {
                         std::sort(buckets[i].begin(), buckets[i].end());
                     }));
@@ -1305,7 +1312,7 @@ private:
 
 public:
     // 通用桶排序
-    static void Sort(vector<T>& arr, 
+    static void Sort(vector<T>& arr,
                      int bucketCount,
                      HashFunction hashFunc,
                      function<bool(const T&, const T&)> comp = less<T>())
@@ -1376,19 +1383,19 @@ public:
     static void SortByFirstChar(vector<string>& arr)
     {
         // 按首字母分桶（26个字母+其他）
-        const int EMPTY_BUCKET_INDEX = 26;
-        const int EMPTY_BUCKET_INDEX_OTHER = 27;
-        vector<vector<string>> buckets(EMPTY_BUCKET_INDEX_OTHER);  // 26个字母 + 其他字符
+        const int emptyBucketIndex = 26;
+        const int emptyBucketIndexOther = 27;
+        vector<vector<string>> buckets(emptyBucketIndexOther);  // 26个字母 + 其他字符
 
         for (const auto& s : arr) {
             if (s.empty()) {
-                buckets[EMPTY_BUCKET_INDEX].push_back(s);  // 空字符串放到最后一个桶
+                buckets[emptyBucketIndex].push_back(s);  // 空字符串放到最后一个桶
             } else {
                 char firstChar = tolower(s[0]);
                 if (firstChar >= 'a' && firstChar <= 'z') {
                     buckets[firstChar - 'a'].push_back(s);
                 } else {
-                    buckets[EMPTY_BUCKET_INDEX].push_back(s);  // 非字母字符
+                    buckets[emptyBucketIndex].push_back(s);  // 非字母字符
                 }
             }
         }
@@ -1409,7 +1416,7 @@ public:
 };
 
 // 获取数字的第d位（从个位开始，d=1表示个位）
-int getDigit(int num, int d)
+int GetDigit(int num, int d)
     {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
@@ -1455,7 +1462,7 @@ void RadixSortLSD(vector<int>& arr)
 
         // 统计每个数字出现的次数
         for (int i = 0; i < n; i++) {
-            int d = getDigit(arr[i], digit);
+            int d = GetDigit(arr[i], digit);
             count[d]++;
         }
 
@@ -1466,7 +1473,7 @@ void RadixSortLSD(vector<int>& arr)
 
         // 从后向前遍历，保证稳定性
         for (int i = n - 1; i >= 0; i--) {
-            int d = getDigit(arr[i], digit);
+            int d = GetDigit(arr[i], digit);
             output[count[d] - 1] = arr[i];
             count[d]--;
         }
@@ -1496,7 +1503,8 @@ void BankBusinessBaseradixSort()
 class OptimizedRadixSort {
 private:
     // 获取数字在指定基数下的第k位
-    int getDigit(int num, int k, int radix) {
+    int GetDigit(int num, int k, int radix) 
+    {
         int shift_amount = k * static_cast<int>(log2(radix));
         return (num >> shift_amount) & (radix - 1);
     }
@@ -1536,7 +1544,7 @@ public:
 
             // 统计频率
             for (int i = 0; i < n; i++) {
-                int d = getDigit(arr[i], digit, radix);
+                int d = GetDigit(arr[i], digit, radix);
                 count[d]++;
             }
 
@@ -1547,7 +1555,7 @@ public:
 
             // 从后向前填充
             for (int i = n - 1; i >= 0; i--) {
-                int d = getDigit(arr[i], digit, radix);
+                int d = GetDigit(arr[i], digit, radix);
                 output[--count[d]] = arr[i];
             }
 
@@ -1584,8 +1592,8 @@ private:
     // 递归排序函数
     void MsdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
     {
-        const int DIGIT_COUNT = 10;  // 0-9
-        const int NUM_BUCKETS = 11;
+        const int digitCount = 10;  // 0-9
+        const int numBuckets = 11;
         if (left >= right || digit > maxDigit) {
             return;
         }
@@ -1598,25 +1606,25 @@ private:
         }
 
         // 计数数组
-        vector<int> count(DIGIT_COUNT + 1, 0);  // 0-9 + 一个额外位置
+        vector<int> count(digitCount + 1, 0);  // 0-9 + 一个额外位置
 
         // 临时数组
         vector<int> temp(n);
 
         // 统计频率（处理digit=0的情况）
         for (int i = left; i <= right; i++) {
-            int d = (digit == 0) ? 0 : getDigit(arr[i], digit);
+            int d = (digit == 0) ? 0 : GetDigit(arr[i], digit);
             count[d + 1]++;  // +1为负数预留位置
         }
 
         // 计算起始位置
-        for (int i = 1; i < NUM_BUCKETS; i++) {
+        for (int i = 1; i < numBuckets; i++) {
             count[i] += count[i - 1];
         }
 
         // 排序到临时数组
         for (int i = left; i <= right; i++) {
-            int d = (digit == 0) ? 0 : getDigit(arr[i], digit);
+            int d = (digit == 0) ? 0 : GetDigit(arr[i], digit);
             temp[count[d]++] = arr[i];
         }
 
@@ -1650,7 +1658,7 @@ private:
         }
     }
 
-    int getDigit(int num, int d) {
+    int GetDigit(int num, int d) {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
@@ -1761,7 +1769,7 @@ private:
             // 统计频率
             for (int i = start; i <= end; i++) {
                 int num = abs(arr[i]);
-                int d = getDigit(num, digit);
+                int d = GetDigit(num, digit);
                 count[d]++;
             }
 
@@ -1773,7 +1781,7 @@ private:
             // 从后向前填充
             for (int i = end; i >= start; i--) {
                 int num = abs(arr[i]);
-                int d = getDigit(num, digit);
+                int d = GetDigit(num, digit);
                 output[--count[d]] = arr[i];
             }
 
@@ -1784,7 +1792,7 @@ private:
         }
     }
 
-    int getDigit(int num, int d)
+    int GetDigit(int num, int d)
     {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
@@ -1850,7 +1858,7 @@ void BankBusinessradixSortSigned()
 class StringRadixSort {
 private:
     // 获取字符串的第k个字符，如果超出长度返回0
-    char getChar(const string& s, int k)
+    char GetChar(const string& s, int k)
     {
         if (k < s.length()) {
             return s[k];
@@ -1887,7 +1895,7 @@ public:
 
             // 统计频率
             for (int i = 0; i < n; i++) {
-                char c = getChar(arr[i], pos);
+                char c = GetChar(arr[i], pos);
                 count[c]++;
             }
 
@@ -1898,7 +1906,7 @@ public:
 
             // 从后向前填充
             for (int i = n - 1; i >= 0; i--) {
-                char c = getChar(arr[i], pos);
+                char c = GetChar(arr[i], pos);
                 output[--count[c]] = arr[i];
             }
 
@@ -1937,7 +1945,7 @@ private:
 
         // 统计频率
         for (int i = low; i <= high; i++) {
-            char c = getChar(arr[i], depth);
+            char c = GetChar(arr[i], depth);
             count[c + 2]++;  // +2为排序稳定性
         }
 
@@ -1948,7 +1956,7 @@ private:
 
         // 排序到临时数组
         for (int i = low; i <= high; i++) {
-            char c = getChar(arr[i], depth);
+            char c = GetChar(arr[i], depth);
             aux[count[c + 1]++] = arr[i];
         }
 
