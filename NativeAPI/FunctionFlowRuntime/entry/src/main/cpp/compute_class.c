@@ -959,7 +959,7 @@ double MinimizeBrent(double (*f)(double), double a, double b, double c, double t
 }
 
 Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0,
-                                double learningRate, int iterations)
+                              double learningRate, int iterations)
 {
     Vector x = CopyVector(x0);
     Vector grad = CreateVector(x0->size);
@@ -1207,7 +1207,7 @@ void Compute(void *arg)
     // 测试5: 傅里叶变换
     printf("\n5. 测试傅里叶变换:\n");
     double signal[TEST_FFT_SIZE] = {INIT_VALUE_1, INIT_VALUE_2, INIT_VALUE_3, INIT_VALUE_4,
-                                   INIT_VALUE_4, INIT_VALUE_3, INIT_VALUE_2, INIT_VALUE_1};
+                                    INIT_VALUE_4, INIT_VALUE_3, INIT_VALUE_2, INIT_VALUE_1};
     ComplexNum dftOutput[TEST_FFT_SIZE];
     Dft(signal, dftOutput, TEST_FFT_SIZE);
     printf("DFT计算完成\n");

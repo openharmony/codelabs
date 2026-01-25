@@ -145,10 +145,11 @@ public:
     // 深拷贝构造函数
     SmartTableRow(const SmartTableRow& other)
         : cellCount(other.cellCount),
-          rowId(other.rowId),
-          deleted(other.deleted),
-          createdAt(other.createdAt),
-          updatedAt(other.updatedAt) {
+        rowId(other.rowId),
+        deleted(other.deleted),
+        createdAt(other.createdAt),
+        updatedAt(other.updatedAt)
+        {
 
         if (other.cells) {
             cells = std::make_unique<DataCell[]>(cellCount);
