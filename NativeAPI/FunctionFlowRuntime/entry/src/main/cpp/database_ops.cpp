@@ -33,8 +33,6 @@ time_t ParseDate(const char *dateStr)
 DataCell CreateDataCell(DataType type, const char *value)
 {
     DataCell cell;
-    // 使用value initialization替代memset
-    memset((void *)&cell, 0, sizeof(cell));
     cell.type = type;
 
     if (value == nullptr || strcasecmp(value, "NULL") == 0) {
@@ -218,22 +216,6 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
     return index;
 }
 
-void DataBaseOps::InsertIntoIndex(TableIndex *index, int key)
-{
-    // 简化实现：在实际系统中需要实现完整的B+树插入算法
-    // 这里仅做演示
-    const int formatBufferSize = 32;
-    char buffer[formatBufferSize];
-    // 使用std::ostringstream替代snprintf
-    std::ostringstream oss;
-    oss << "Index insert: key=" << key << "\n";
-    std::string message = oss.str();
-    std::copy(message.begin(), message.end(), buffer);
-    buffer[message.size()] = '\0';
-    printf("%s", buffer);
-    index->keyCount++;
-}
-
 void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
 {
     const int formatBufferSize = 32;
@@ -307,18 +289,7 @@ int DataBaseOps::InsertTableRow(DataCell *cells)
             row->deleted = false;
             row->createdAt = time(nullptr);
             row->updatedAt = row->createdAt;
-
             table->rowCount++;
-
-            // 更新索引
-            for (int j = 0; j < table->indexCount; j++) {
-                TableIndex *index = &table->indexes[j];
-                if (index->columnIndex < table->columnCount) {
-                    // 简化：使用行ID作为索引键
-                    InsertIntoIndex(index, row->rowId);
-                }
-            }
-
             return row->rowId;
         }
     }
@@ -475,27 +446,30 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
             DataCell *cell = &result->rows[i][j];
 
             if (cell->isNull) {
-                printf("%-*s", (int)queryColumnWidth, "NULL");
+                printf("%-*s", static_cast<int>(queryColumnWidth), "NULL");
             } else {
                 char buffer[21] = {0};
                 switch (cell->type) {
                     case TYPE_INT:
                         snprintf(buffer, bufferSize, "%d", cell->value.intVal);
+                        buffer[sizeof(buffer) - 1] = '\0';
                         break;
                     case TYPE_FLOAT:
                         snprintf(buffer, bufferSize, "%.2f", cell->value.floatVal);
+                        buffer[sizeof(buffer) - 1] = '\0';
                         break;
                     case TYPE_STRING:
                         snprintf(buffer, bufferSize, "%s", cell->value.stringVal);
+                        buffer[sizeof(buffer) - 1] = '\0';
                         break;
                     case TYPE_BOOL:
-                        snprintf(buffer, bufferSize, "%s", cell->value.boolVal ? "true" : "false");
+                        std::snprintf(buffer, bufferSize, "%s", cell->value.boolVal ? "true" : "false");
                         break;
                     case TYPE_DATE:
-                        strncpy(buffer, FormatDate(cell->value.dateVal), bufferSize);
+                        std::strncpy(buffer, FormatDate(cell->value.dateVal), bufferSize);
                         break;
                     default:
-                        strncpy(buffer, "UNKNOWN", bufferSize);
+                        std::strncpy(buffer, "UNKNOWN", bufferSize);
                 }
                 printf("%-20s", buffer);
             }
@@ -644,9 +618,7 @@ int DatabaseOpsDemo()
     // 更新数据
     printf("\n更新数据: UPDATE users SET salary = 80000.00 WHERE id = 3\n");
 
-    DataCell updateCells[userColumnCount];
-    // 使用value initialization替代memset
-    memset(static_cast<void*>(updateCells), 0, sizeof(updateCells));
+    DataCell updateCells[userColumnCount] = {};
 
     for (int i = 0; i < userColumnCount; i++) {
         updateCells[i].isNull = true;

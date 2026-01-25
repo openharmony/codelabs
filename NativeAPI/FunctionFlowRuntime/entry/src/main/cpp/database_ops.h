@@ -150,7 +150,6 @@ public:
           createdAt(other.createdAt),
           updatedAt(other.updatedAt)
     {
-
         if (other.cells) {
             cells = std::make_unique<DataCell[]>(cellCount);
             for (size_t i = 0; i < cellCount; ++i) {
@@ -158,7 +157,6 @@ public:
             }
         }
     }
-
     // 深拷贝赋值运算符
     SmartTableRow& operator=(const SmartTableRow& other)
     {
@@ -276,7 +274,6 @@ typedef struct {
 #ifdef __cplusplus
 }
 #endif
-
 class SmartQueryResult {
 public:
     // 使用unique_ptr管理二维数组
@@ -297,7 +294,6 @@ public:
         for (int i = 0; i < columnCount; i++) {
             if (i < static_cast<int>(colNames.size()) && !colNames[i].empty()) {
                 columnNames[i] = std::make_unique<char[]>(colNames[i].size() + 1);
-                    strcpy(columnNames[i].get(), colNames[i].c_str());
             }
         }
 
@@ -354,7 +350,6 @@ private:
     void FreeDataCell(DataCell *cell);
     int CompareDataCells(const DataCell *a, const DataCell *b);
     SmartBPlusTreeNode* CreateBplusTreeNode(bool isLeaf, int order);
-    void InsertIntoIndex(TableIndex *index, int key);
     void DeleteFromIndex(TableIndex *index, int key);
     SmartTableRow* FindTableRow(int rowId);
 
