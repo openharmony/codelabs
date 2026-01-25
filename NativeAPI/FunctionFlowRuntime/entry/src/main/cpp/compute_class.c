@@ -311,31 +311,26 @@ Matrix CopyMatrix(const Matrix *src)
 {
     // 创建目标矩阵
     Matrix dst = CreateMatrix(src->rows, src->cols);
-
     if (dst.data != NULL && src->data != NULL) {
         // 计算总元素数量
-        int total_elements = src->rows * src->cols;
-
+        int totalElements = src->rows * src->cols;
         // 使用循环逐个复制元素
-        for (int i = 0; i < total_elements; ++i) {
+        for (int i = 0; i < totalElements; ++i) {
             dst.data[i] = src->data[i];
         }
     }
-
     return dst;
 }
 Vector CopyVector(const Vector *src)
 {
     // 创建目标向量
     Vector dst = CreateVector(src->size);
-
     if (dst.data != NULL && src->data != NULL) {
         // 使用循环逐个复制元素
         for (int i = 0; i < src->size; ++i) {
             dst.data[i] = src->data[i];
         }
     }
-
     return dst;
 }
 
