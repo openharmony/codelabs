@@ -1,6 +1,3 @@
-﻿/*
- * Copyright (c) 2026 Beijing Institute of Technology.
- */
 import { appTasks } from '@ohos/hvigor-ohos-plugin';
 
 export default {
