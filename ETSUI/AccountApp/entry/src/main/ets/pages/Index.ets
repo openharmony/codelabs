@@ -85,9 +85,9 @@ struct Index {
     });
   }
 
-  // --- 【找回】核心功能：密码健康分析 ---
+
   analyzeSecurity(list: Array<AppAccount>): void {
-    // 特殊情况：如果没有账号，默认为 100 分（或者 0 分，看你定义，通常空仓没有风险）
+    // 1. 空列表处理：默认为 100 分
     if (list.length === 0) {
       this.securityScore = 100;
       this.weakCount = 0;
@@ -95,67 +95,70 @@ struct Index {
       return;
     }
 
-    let weak = 0;
-    let safeCount = 0; // 记录强密码数量
-    const pwdMap = new Map<string, number>();
+    let lowCount = 0;    // 低强度数量
+    let mediumCount = 0; // 中强度数量
+    let highCount = 0;   // 高强度数量
+
     let duplicates = 0;
+    const pwdMap = new Map<string, number>();
 
     list.forEach(item => {
       const pwd = item.getPassword();
 
-      // 1. 统计重复逻辑（保持不变）
+      // --- A. 统计重复 ---
       if (pwdMap.has(pwd)) {
         let count = pwdMap.get(pwd);
-        if (count !== undefined) {
-          pwdMap.set(pwd, count + 1);
-        }
+        if (count !== undefined) pwdMap.set(pwd, count + 1);
       } else {
         pwdMap.set(pwd, 1);
       }
 
-      // 2. 【修改点】检查弱密码标准
-      // 原来是 < 6，现在改为 < 8，且增加了对纯符号的简单判断（可选）
-      const isShort = pwd.length < 8; // 修改位置：长度标准提高到 8
-      const isSimple = /^[0-9]+$/.test(pwd) || /^[a-zA-Z]+$/.test(pwd); // 纯数字或纯字母
+      // --- B. 计算单条密码强度 (复用 AccountInputPage 的逻辑) ---
+      let itemScore = 0;
+      // 长度加分
+      if (pwd.length >= 8) itemScore += 1; // 基础长度
+      if (pwd.length >= 10) itemScore += 1; // 较长
 
-      if (isShort || isSimple) {
-        weak++;
+      // 字符类型加分
+      if (/[a-z]/.test(pwd)) itemScore += 1; // 小写
+      if (/[A-Z]/.test(pwd)) itemScore += 1; // 大写
+      if (/[0-9]/.test(pwd)) itemScore += 1; // 数字
+      if (/[^a-zA-Z0-9]/.test(pwd)) itemScore += 2; // 特殊符号(权重高)
+
+      // --- C. 归类 (低/中/高) ---
+      // 评分标准：<3分=低, <5分=中, >=5分=高
+      if (itemScore < 3) {
+        lowCount++;
+      } else if (itemScore < 5) {
+        mediumCount++;
       } else {
-        safeCount++; // 统计强密码
+        highCount++;
       }
     });
 
-    // 计算重复数
+    // --- D. 计算重复总数 ---
     pwdMap.forEach((count) => {
       if (count > 1) duplicates += (count - 1);
     });
 
-    // 3. 【修改点】全新的算分逻辑
-    // 逻辑变更：不再是从 100 分里扣，而是计算“健康比例”。
-    // 公式：(强密码账号 / 总账号数) * 100 - 额外惩罚
+    // --- E. 【核心】加权计算总分 ---
+    // 算法：( (高*100) + (中*60) + (低*0) ) / 总数量
+    // 这样能准确反映整体账号质量
+    let totalPoints = (highCount * 100) + (mediumCount * 60) + (lowCount * 0);
+    let averageScore = totalPoints / list.length;
 
-    let total = list.length;
+    // --- F. 扣除重复项惩罚 ---
+    // 每个重复项扣 5 分 (可自行调整权重)
+    let finalScore = averageScore - (duplicates * 5);
 
-    // 基础分：基于健康账号的占比。
-    // 例如：1个强，1个弱。基础分 = (1/2)*100 = 50分。
-    // 如果你删除了那个强账号：基础分 = (0/1)*100 = 0分。-> 解决了“删除强账号分数不降”的问题。
-    let baseScore = (safeCount / total) * 100;
-
-    // 额外惩罚：为了让“弱密码”和“重复”看起来更严重，在比例分基础上继续扣分
-    // 修改位置：大幅增加了扣分权重
-    let penalty = 0;
-    if (weak > 0) penalty += (weak * 5);        // 每个弱密码额外再扣 5 分
-    if (duplicates > 0) penalty += (duplicates * 10); // 每个重复额外再扣 10 分
-
-    let finalScore = baseScore - penalty;
-
-    // 兜底：分数不能小于 0
+    // 兜底：范围限制在 0-100
     if (finalScore < 0) finalScore = 0;
+    if (finalScore > 100) finalScore = 100;
 
     // 更新状态
-    this.weakCount = weak;
+    this.weakCount = lowCount; // 这里把"低强度"的数量作为"弱密码"显示
     this.duplicateCount = duplicates;
-    this.securityScore = Math.floor(finalScore); // 取整
+    this.securityScore = Math.floor(finalScore);
   }
 
   filterData(): void {
