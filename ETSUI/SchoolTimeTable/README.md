@@ -12,6 +12,7 @@
 - **统计分析**：提供简单的课程统计功能（如每周课时数）。
 - **个性化**：支持设置当前周次、学期开始日期等。
 
+
 ## 开发环境
 - **IDE**: DevEco Studio
 - **OpenHarmony SDK**: API 12 (5.0.0 Release)
@@ -56,3 +57,6 @@ ETSUI/SchoolTimeTable
 
 ## 许可证
 本项目遵循 Apache License 2.0 协议。
+
+## 演示视频
+![演示图片.gif](https://raw.gitcode.com/user-images/assets/9035837/1611fac7-c18a-49e6-be24-679a2c40419d/演示图片.gif '演示图片.gif')
