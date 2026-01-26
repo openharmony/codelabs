@@ -1,8 +1,10 @@
 // 在Dashboard页面顶部添加导入
 import { ContactManager } from './ContactManager';
 import { DataManager } from './DataManager';
+import { StepManager } from './StepManager';
 import { ContactsItem } from '../model/ContactModel';
 import { CalendarEvent } from '../model/EventModel';
+import { StepRecord } from '../model/StepModel';
 import common from '@ohos.app.ability.common';
 
 // 跳转页面入口函数
@@ -28,19 +30,28 @@ struct Dashboard {
   @Local pendingEventsCount: number = 0;
   @Local allEvents: CalendarEvent[] = [];
 
+  // 步数统计相关状态变量
+  @Local todaySteps: number = 0;
+  @Local stepGoal: number = 8000;
+  @Local goalMet: boolean = false;
+  @Local weeklyAvgSteps: number = 0;
+
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
   // 添加ContactManager实例
   private contactManager: ContactManager = ContactManager.getInstance();
   // 添加DataManager实例
   private dataManager: DataManager = DataManager.getInstance(this.context);
+  // 添加StepManager实例
+  private stepManager: StepManager = StepManager.getInstance(this.context);
 
   async aboutToAppear() {
     // 加载联系人数据
     await this.loadContactData();
     // 加载日程数据
-    // this.dataManager = DataManager.getInstance(this.context);
     await this.loadEventData();
+    // 加载步数数据
+    await this.loadStepData();
   }
 
   // 加载联系人数据
@@ -101,6 +112,41 @@ struct Dashboard {
     } catch (error) {
       console.error('加载日程数据失败:', error);
     }
+  }
+
+  // 加载步数数据
+  async loadStepData() {
+    try {
+      // 获取今天的步数记录
+      const today = this.getCurrentDate();
+      const stepResult = await this.stepManager.getStepRecordByDate(today);
+      
+      if (stepResult.success && stepResult.data) {
+        const stepRecord = stepResult.data as StepRecord;
+        this.todaySteps = stepRecord.steps;
+        this.goalMet = stepRecord.steps >= this.stepGoal;
+      } else {
+        // 如果今天没有记录，保持默认值
+        this.todaySteps = 0;
+        this.goalMet = false;
+      }
+      
+      // 获取最近7天的平均步数
+      const stepStats = await this.stepManager.getStepStats(7);
+      this.weeklyAvgSteps = stepStats.avgSteps;
+      
+    } catch (error) {
+      console.error('加载步数数据失败:', error);
+    }
+  }
+
+  // 获取当前日期字符串 (YYYY-MM-DD)
+  getCurrentDate(): string {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
   // 格式化时间显示
@@ -333,30 +379,10 @@ struct Dashboard {
             offsetY: 2,
           })
 
-          // 2 buttons
-          Row(){
-            Button('联系人管理')
-              .backgroundColor('#1F62A8')
-              .width('47%')
-              .onClick(() => {
-                this.pathStack.pushPathByName("Contact", null, false)
-              })
-            Blank().width('6%')
-            Button('日历与日程')
-              .backgroundColor('#34C759')
-              .width('47%')
-              .onClick(() => {
-                this.pathStack.pushPathByName("Calendar", null, false)
-              })
-          }
-          .width('100%')
-          .height(50)
-          .margin({top: 15, bottom: 15})
-
-          // Quote
+          // 步数统计
           Column(){
             Row(){
-              Text('每日箴言')
+              Text('步数统计')
                 .width('100%')
                 .fontSize(20)
                 .fontWeight(FontWeight.Medium)
@@ -368,17 +394,36 @@ struct Dashboard {
               .margin({ left: 16, right: 16 })
               .margin({ top: 10, bottom: 10 })
             Row(){
-              Text('种一棵树最好的时间是十年前，其次是现在')
-                .width('100%')
-                .fontSize(16)
-                .fontWeight(FontWeight.Normal)
-                .fontColor('#333333')
+              Column(){
+                Text(`${this.todaySteps.toLocaleString()} 步`)
+                  .width('100%')
+                  .fontSize(16)
+                  .fontWeight(FontWeight.Normal)
+                Text(this.goalMet ? '今日目标达成！' : `距目标还差 ${(this.stepGoal - this.todaySteps).toLocaleString()} 步`)
+                  .width('100%')
+                  .fontSize(12)
+                  .fontColor(this.goalMet ? '#34C759' : '#FF9500')
+                  .margin({top: 4})
+              }
+              .width('50%')
+              Column(){
+                Text(`${this.weeklyAvgSteps.toLocaleString()} 步`)
+                  .width('100%')
+                  .fontSize(16)
+                  .fontWeight(FontWeight.Normal)
+                Text('周平均步数')
+                  .width('100%')
+                  .fontSize(12)
+                  .fontColor('#666666')
+                  .margin({top: 4})
+              }
             }
           }
           .width('100%')
           .height(120)
           .backgroundColor('#FEFEFE')
           .border({radius: 12})
+          .margin({top: 20})
           .padding(16)
           .shadow({
             radius: 6,
@@ -386,6 +431,34 @@ struct Dashboard {
             offsetX: 0,
             offsetY: 2,
           })
+
+          // 2 buttons
+          Row(){
+            Button('联系人管理')
+              .backgroundColor('#1F62A8')
+              .width('30%')
+              .onClick(() => {
+                this.pathStack.pushPathByName("Contact", null, false)
+              })
+            Blank().width('6%')
+            Button('日历与日程')
+              .backgroundColor('#34C759')
+              .width('30%')
+              .onClick(() => {
+                this.pathStack.pushPathByName("Calendar", null, false)
+              })
+            Blank().width('6%')
+            Button('步数记录')
+              .backgroundColor('#FF6B6B')
+              .width('30%')
+              .onClick(() => {
+                this.pathStack.pushPathByName("StepTracker", null, false)
+              })
+          }
+          .width('100%')
+          .height(50)
+          .margin({top: 15, bottom: 15})
+
         }
         .width('100%')
         .padding(16)

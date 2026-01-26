@@ -101,19 +101,19 @@ struct EventEdit {
 
         this.getUIContext().getPromptAction().showToast({
           message: '事件加载成功',
-          duration: 2000
+          duration: 1000
         });
       } else if (result.error) {
         this.getUIContext().getPromptAction().showToast({
           message: `加载失败: ${result.error}`,
-          duration: 3000
+          duration: 1000
         });
       }
     } catch (error) {
       console.error('加载事件数据失败:', error);
       this.getUIContext().getPromptAction().showToast({
         message: '加载事件失败',
-        duration: 3000
+        duration: 1500
       });
     }
   }
@@ -271,11 +271,6 @@ struct EventEdit {
         this.showTimePicker = true
       })
     }
-
-    // 时间选择器弹窗
-    if (this.showTimePicker) {
-      // this.buildTimePickerDialog()
-    }
   }
 
   // 时间选择器弹窗
@@ -319,11 +314,6 @@ struct EventEdit {
             selected: this.startTime
           })
             .onChange((time: TimePickerResult)  => {
-              // const newStartTime = new Date()
-              // newStartTime.setHours(time.hour)
-              // newStartTime.setMinutes(time.minute)
-              // this.startTime = newStartTime
-              // 修改现有Date对象的时分，保留日期
               this.startTime.setHours(time.hour);
               this.startTime.setMinutes(time.minute);
               this.startTime = new Date(this.startTime.getTime());
@@ -345,12 +335,6 @@ struct EventEdit {
             selected: this.endTime
           })
             .onChange((time: TimePickerResult) => {
-              // 使用TimePickerResult类型
-              // const newEndTime = new Date()
-              // newEndTime.setHours(time.hour)
-              // newEndTime.setMinutes(time.minute)
-              // this.endTime = newEndTime
-              // 修改时分，不改变日期
               this.endTime.setHours(time.hour);
               this.endTime.setMinutes(time.minute);
               // 触发UI更新
@@ -491,11 +475,6 @@ struct EventEdit {
         this.showReminderPicker = true
       })
     }
-
-    // 提醒选择弹窗
-    if (this.showReminderPicker) {
-      // this.buildReminderPicker()
-    }
   }
 
   // 提醒选择器
@@ -569,11 +548,6 @@ struct EventEdit {
         this.closeAllPickers();
         this.showRepeatPicker = true
       })
-    }
-
-    // 重复选择弹窗
-    if (this.showRepeatPicker) {
-      // this.buildRepeatPicker()
     }
   }
 

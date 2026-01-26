@@ -33,3 +33,22 @@ export const SQL_CREATE_INDEXES = [
   `CREATE INDEX IF NOT EXISTS idx_calendar_id ON calendar_events(calendar_id)`,
   `CREATE INDEX IF NOT EXISTS idx_completed ON calendar_events(completed)`
 ];
+
+// 步数记录表SQL
+export const SQL_CREATE_STEP_TABLE = `
+  CREATE TABLE IF NOT EXISTS step_records (
+    id TEXT PRIMARY KEY,
+    date TEXT NOT NULL UNIQUE,  -- 日期唯一，每天只能有一条记录
+    steps INTEGER DEFAULT 0,
+    calories REAL DEFAULT 0.0,
+    distance REAL DEFAULT 0.0,
+    created_time INTEGER NOT NULL,
+    updated_time INTEGER NOT NULL
+  )
+`;
+
+// 步数记录表索引
+export const SQL_CREATE_STEP_INDEXES = [
+  `CREATE INDEX IF NOT EXISTS idx_step_date ON step_records(date)`,
+  `CREATE INDEX IF NOT EXISTS idx_steps ON step_records(steps)`
+];
