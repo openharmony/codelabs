@@ -10,7 +10,7 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
+      "value": "LifeTrack"
     },
     {
       "name": "place_call_permission_reason",
@@ -18,7 +18,7 @@
     },
     {
       "name": "activity_motion_permission_reason",
-      "value": "用于获取您的运动步数数据"
+      "value": "用于收集运动数据"
     },
     {
       "name": "keep_background_running_reason",
