@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/MediaSearch",
+    "pages/MediaDetail",
+    "pages/Login",
+    "pages/MyPage",
+    "pages/RankPage",
+    "pages/MyFavorites",
+    "pages/PostDetail"
+  ]
+}
