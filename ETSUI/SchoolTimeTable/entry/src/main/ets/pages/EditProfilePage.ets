@@ -91,16 +91,16 @@ struct EditProfilePage {
         // 复制文件到沙箱
         const file = fs.openSync(uri, fs.OpenMode.READ_ONLY);
         const destFile = fs.openSync(destPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC);
-        
+
         // 读取并写入
         const bufferSize = 4096;
         let buffer = new ArrayBuffer(bufferSize);
         let readLen = fs.readSync(file.fd, buffer);
         while (readLen > 0) {
-            fs.writeSync(destFile.fd, buffer, { length: readLen });
-            readLen = fs.readSync(file.fd, buffer);
+          fs.writeSync(destFile.fd, buffer, { length: readLen });
+          readLen = fs.readSync(file.fd, buffer);
         }
-        
+
         fs.closeSync(file);
         fs.closeSync(destFile);
 
@@ -165,7 +165,7 @@ struct EditProfilePage {
                   Circle({ width: 100, height: 100 })
                     .fill(this.currentAvatarColor)
                 } else if (this.currentAvatarColor.startsWith('file://') || this.currentAvatarColor.startsWith('/')) {
-                   Image(this.currentAvatarColor)
+                  Image(this.currentAvatarColor)
                     .width(100)
                     .height(100)
                     .borderRadius(50)

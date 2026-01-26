@@ -41,13 +41,13 @@ struct RegisterPage {
             .fontColor('#333333')
             .width('100%')
             .margin({ bottom: 8 })
-          
+
           Text('注册以开始使用课程表助手')
             .fontSize(16)
             .fontColor('#999999')
             .width('100%')
             .margin({ bottom: 40 })
-          
+
           // Inputs
           Column({ space: 24 }) {
             // Username
@@ -72,7 +72,7 @@ struct RegisterPage {
               .onChange((value: string) => {
                 this.password = value;
               })
-            
+
             // Confirm Password
             TextInput({ placeholder: '再次输入密码' })
               .type(InputType.Password)
@@ -87,7 +87,7 @@ struct RegisterPage {
           }
           .width('100%')
           .margin({ bottom: 40 })
-          
+
           // Buttons
           Column({ space: 16 }) {
             Button('注册', { type: ButtonType.Normal, stateEffect: true })
@@ -104,12 +104,12 @@ struct RegisterPage {
                   promptAction.showToast({ message: '请输入账号和密码' });
                   return;
                 }
-                
+
                 if (this.password !== this.confirmPassword) {
                   promptAction.showToast({ message: '两次密码输入不一致' });
                   return;
                 }
-                
+
                 try {
                   const result = await this.courseService.register(this.username, this.password);
                   console.info('Register result:', result);
@@ -134,7 +134,7 @@ struct RegisterPage {
                   promptAction.showToast({ message: '注册异常' });
                 }
               })
-              
+
             Row() {
               Text('已有账号？ ')
                 .fontSize(14)

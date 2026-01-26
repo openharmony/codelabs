@@ -26,19 +26,24 @@ struct AboutPage {
           .fontColor('#333333')
           .layoutWeight(1)
           .textAlign(TextAlign.Center)
-        
+
         // Placeholder for symmetry
         Row().width(40)
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 12,
+        bottom: 12
+      })
       .backgroundColor('#FFFFFF')
 
       Scroll() {
         Column() {
           // App Logo and Info
           Column() {
-            Image($r('app.media.startIcon')) 
+            Image($r('app.media.startIcon'))
               .width(80)
               .height(80)
               .borderRadius(16)
@@ -62,9 +67,9 @@ struct AboutPage {
           // Info List
           Column() {
             this.InfoItem('功能介绍', '一款基于 OpenHarmony 的简洁课程表应用，支持多周课程管理、桌面卡片、导入导出等功能。')
-            
+
             Divider().color('#F0F0F0').margin({ left: 16, right: 16 })
-            
+
             // Developer Team
             Column() {
               Text('开发者团队')
@@ -86,7 +91,7 @@ struct AboutPage {
           .backgroundColor('#FFFFFF')
           .borderRadius(16)
           .padding({ top: 8, bottom: 8 })
-          
+
           // Copyright
           Text('Copyright © 2026 Beijing Institute of Technology.\nAll Rights Reserved.')
             .fontSize(12)
@@ -114,16 +119,16 @@ struct AboutPage {
           .fontSize(15)
           .fontColor('#333333')
           .fontWeight(FontWeight.Medium)
-        
+
         Blank()
-        
+
         Text(id)
           .fontSize(14)
           .fontColor('#666666')
       }
       .width('100%')
       .margin({ bottom: 4 })
-      
+
       Text(email)
         .fontSize(13)
         .fontColor('#999999')
@@ -141,7 +146,7 @@ struct AboutPage {
         .fontColor('#333333')
         .width('100%')
         .margin({ bottom: 8 })
-      
+
       Text(content)
         .fontSize(14)
         .fontColor('#666666')

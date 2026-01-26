@@ -42,16 +42,16 @@ export struct ExportCourseDialog {
       // 课程的星期 (1-7) -> 数组索引 (1-7)
       const dayIndex = course.day;
       const courseText = `${course.name}\n${course.location}`;
-      
+
       for (let section = course.startSection; section <= course.endSection; section++) {
         if (section <= this.maxSection) {
           // 节次 (1-based) -> 数组索引 (0-based)
           const rowIndex = section - 1;
           // 如果该格子已有内容（冲突），则追加
           if (this.previewData[rowIndex][dayIndex]) {
-             this.previewData[rowIndex][dayIndex] += `\n\n${courseText}`;
+            this.previewData[rowIndex][dayIndex] += `\n\n${courseText}`;
           } else {
-             this.previewData[rowIndex][dayIndex] = courseText;
+            this.previewData[rowIndex][dayIndex] = courseText;
           }
         }
       }
@@ -61,12 +61,12 @@ export struct ExportCourseDialog {
   private async exportToExcel() {
     try {
       const courses = this.courseService.getAllCourses();
-      
+
       // 1. 生成 CSV 内容 (符合导入格式标准)
       let csvContent = '\uFEFF'; // BOM for Excel UTF-8
       // 表头：课程名,教室,教师,星期(1-7),开始节次,结束节次,周数范围
       csvContent += '课程名称,上课地点,授课教师,星期,开始节次,结束节次,周数范围\n';
-      
+
       // 数据行
       courses.forEach(course => {
         const row = [
@@ -93,13 +93,13 @@ export struct ExportCourseDialog {
       // 2. 创建文件保存选择器
       const documentSaveOptions = new picker.DocumentSaveOptions();
       documentSaveOptions.newFileNames = ['课程表.csv'];
-      documentSaveOptions.fileSuffixChoices = ['.csv']; 
+      documentSaveOptions.fileSuffixChoices = ['.csv'];
 
       const documentViewPicker = new picker.DocumentViewPicker();
-      
+
       // 3. 用户选择保存路径
       const documentSaveResult = await documentViewPicker.save(documentSaveOptions);
-      
+
       if (documentSaveResult && documentSaveResult.length > 0) {
         const uri = documentSaveResult[0];
         // 4. 写入文件
@@ -153,7 +153,7 @@ export struct ExportCourseDialog {
                   .backgroundColor('#F0F0F0')
               })
             }
-            
+
             // 内容
             ForEach(this.previewData, (row: string[], index: number) => {
               Row() {

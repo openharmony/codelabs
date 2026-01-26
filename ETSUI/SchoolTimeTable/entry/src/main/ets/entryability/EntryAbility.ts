@@ -1,7 +1,8 @@
 import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import AppStorage from '@ohos.app.ability.AppStorage';
+
+// import AppStorage from '@ohos.app.ability.AppStorage';
 
 const DOMAIN = 0x0000;
 
@@ -12,12 +13,12 @@ export default class EntryAbility extends UIAbility {
     } catch (err) {
       hilog.error(DOMAIN, 'testTag', 'Failed to set colorMode. Cause: %{public}s', JSON.stringify(err));
     }
-    
+
     // 初始化全局用户信息
     AppStorage.SetOrCreate<string>('userName', '学生');
     AppStorage.SetOrCreate<string>('signature', '认真上课，天天向上！');
     AppStorage.SetOrCreate<string>('userAvatar', 'bit_logo');
-    
+
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
   }
 

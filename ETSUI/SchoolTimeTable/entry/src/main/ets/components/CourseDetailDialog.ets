@@ -12,10 +12,8 @@ export struct CourseDetailDialog {
   @Link show: boolean;
   courseId: string = '';
   private courseService: CourseDataService = CourseDataService.getInstance();
-  
   @State course: Course | null = null;
   @State isEditing: boolean = false;
-  
   @State courseName: string = '';
   @State courseLocation: string = '';
   @State courseTeacher: string = '';
@@ -27,7 +25,6 @@ export struct CourseDetailDialog {
   @State startWeek: number = 1;
   @State endWeek: number = 18;
   @State courseCredit: number = 0;
-  
   private colors: string[] = ColorConstants.MACARON_COLORS;
 
   aboutToAppear(): void {
@@ -59,9 +56,9 @@ export struct CourseDetailDialog {
           .fontSize(22)
           .fontWeight(FontWeight.Bold)
           .fontColor('#333333')
-        
+
         Blank()
-        
+
         if (!this.isEditing) {
           Button() {
             Row() {
@@ -75,7 +72,12 @@ export struct CourseDetailDialog {
           }
           .backgroundColor('#F0F7FF')
           .borderRadius(20)
-          .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+          .padding({
+            left: 12,
+            right: 12,
+            top: 6,
+            bottom: 6
+          })
           .onClick(() => {
             this.isEditing = true;
           })
@@ -83,7 +85,7 @@ export struct CourseDetailDialog {
       }
       .width('100%')
       .margin({ bottom: 24 })
-      
+
       Scroll() {
         Column({ space: 16 }) {
           if (this.isEditing) {
@@ -95,7 +97,7 @@ export struct CourseDetailDialog {
         .width('100%')
       }
       .layoutWeight(1)
-      
+
       Row() {
         Button(this.isEditing ? '取消' : '关闭')
           .fontSize(16)
@@ -112,7 +114,7 @@ export struct CourseDetailDialog {
               this.show = false;
             }
           })
-        
+
         if (this.isEditing) {
           Button('保存')
             .fontSize(16)
@@ -171,19 +173,29 @@ export struct CourseDetailDialog {
           .fontWeight(FontWeight.Bold)
           .fontColor('#333333')
           .width('100%')
-        
+
         Row() {
           Text(this.courseService.getWeekDayName(this.course?.day || WeekDay.MONDAY))
             .fontSize(14)
             .fontColor('#FFFFFF')
-            .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+            .padding({
+              left: 12,
+              right: 12,
+              top: 6,
+              bottom: 6
+            })
             .backgroundColor(this.course?.color || '#007DFF')
             .borderRadius(12)
-          
+
           Text(`第${this.course?.startSection}-${this.course?.endSection}节`)
             .fontSize(14)
             .fontColor('#FFFFFF')
-            .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+            .padding({
+              left: 12,
+              right: 12,
+              top: 6,
+              bottom: 6
+            })
             .backgroundColor(this.course?.color || '#007DFF')
             .borderRadius(12)
             .margin({ left: 8 })
@@ -194,7 +206,7 @@ export struct CourseDetailDialog {
       .padding(20)
       .backgroundColor('#F8F9FA')
       .borderRadius(16)
-      
+
       Column({ space: 12 }) {
         this.DetailItem('📍', '上课地点', this.course?.location || '')
         this.DetailItem('👨‍🏫', '授课教师', this.course?.teacher || '')
@@ -217,12 +229,12 @@ export struct CourseDetailDialog {
       Text(icon)
         .fontSize(20)
         .width(40)
-      
+
       Column({ space: 4 }) {
         Text(label)
           .fontSize(12)
           .fontColor('#999999')
-        
+
         Text(value)
           .fontSize(16)
           .fontColor('#333333')
@@ -243,21 +255,21 @@ export struct CourseDetailDialog {
       this.InputField('课程名称', this.courseName, (value: string) => {
         this.courseName = value;
       })
-      
+
       this.InputField('上课地点', this.courseLocation, (value: string) => {
         this.courseLocation = value;
       })
-      
+
       this.InputField('授课教师', this.courseTeacher, (value: string) => {
         this.courseTeacher = value;
       })
-      
+
       this.DaySelector()
-      
+
       this.SectionSelector()
-      
+
       this.ColorSelector()
- 
+
       this.RemarkInput()
     }
     .width('100%')
@@ -269,14 +281,19 @@ export struct CourseDetailDialog {
       Text('备注')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       TextArea({ placeholder: '请输入备注', text: this.courseRemark })
         .fontSize(16)
         .fontColor('#333333')
         .backgroundColor('#F5F5F5')
         .borderRadius(8)
         .height(100)
-        .padding({ left: 12, right: 12, top: 10, bottom: 10 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 10,
+          bottom: 10
+        })
         .onChange((value: string) => {
           this.courseRemark = value;
         })
@@ -291,13 +308,18 @@ export struct CourseDetailDialog {
       Text(label)
         .fontSize(14)
         .fontColor('#666666')
-      
+
       TextInput({ placeholder: `请输入${label}`, text: value })
         .fontSize(16)
         .fontColor('#333333')
         .backgroundColor('#F5F5F5')
         .borderRadius(8)
-        .padding({ left: 12, right: 12, top: 10, bottom: 10 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 10,
+          bottom: 10
+        })
         .onChange((value: string) => {
           onChange(value);
         })
@@ -312,7 +334,7 @@ export struct CourseDetailDialog {
       Text('星期')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.SpaceBetween }) {
         ForEach([1, 2, 3, 4, 5, 6, 7], (day: number) => {
           Button(this.courseService.getWeekDayName(day as WeekDay))
@@ -339,13 +361,13 @@ export struct CourseDetailDialog {
       Text('节次')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       Row() {
         Column() {
           Text('开始')
             .fontSize(12)
             .fontColor('#999999')
-          
+
           Select(this.getSectionOptions())
             .selected(this.startSection - 1)
             .value(`${this.startSection}节`)
@@ -360,17 +382,17 @@ export struct CourseDetailDialog {
             })
         }
         .layoutWeight(1)
-        
+
         Text('至')
           .fontSize(14)
           .fontColor('#666666')
           .margin({ left: 12, right: 12 })
-        
+
         Column() {
           Text('结束')
             .fontSize(12)
             .fontColor('#999999')
-          
+
           Select(this.getEndSectionOptions())
             .selected(this.endSection - this.startSection)
             .value(`${this.endSection}节`)
@@ -416,7 +438,7 @@ export struct CourseDetailDialog {
       Text('课程颜色')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       Flex({ wrap: FlexWrap.Wrap }) {
         ForEach(this.colors, (color: string) => {
           Button()
@@ -439,8 +461,6 @@ export struct CourseDetailDialog {
     .alignItems(HorizontalAlign.Start)
   }
 
-
-
   private saveCourse(): void {
     if (!this.courseName.trim() || !this.course) {
       return;
@@ -462,7 +482,7 @@ export struct CourseDetailDialog {
       });
       return;
     }
-    
+
     const updatedCourse: Course = {
       id: this.course.id,
       name: this.courseName,
@@ -478,7 +498,7 @@ export struct CourseDetailDialog {
       endWeek: this.endWeek,
       credit: this.courseCredit
     };
-    
+
     this.courseService.updateCourse(updatedCourse);
     this.isEditing = false;
     this.show = false;
