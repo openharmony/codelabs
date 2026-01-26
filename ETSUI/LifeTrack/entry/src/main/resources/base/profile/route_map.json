@@ -47,6 +47,14 @@
       "data": {
         "description": "this is ContactEditPage"
       }
+    },
+    {
+      "name": "StepTracker",
+      "pageSourceFile": "src/main/ets/pages/StepTrackerPage.ets",
+      "buildFunction": "StepTrackerBuilder",
+      "data": {
+        "description" : "this is StepTrackerPage"
+      }
     }
   ]
 }

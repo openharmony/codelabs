@@ -58,6 +58,34 @@
           ],
           "when": "always"
         }
+      },
+      {
+        "name": "ohos.permission.ACTIVITY_MOTION",
+        "reason": "$string:activity_motion_permission_reason",
+        "usedScene": {
+          "abilities": [
+            "StepTracker"
+          ],
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
+        "reason": "$string:keep_background_running_reason",
+        "usedScene": {
+          "abilities": [
+            "StepTracker"
+          ],
+          "when": "always"
+        }
+      }
+    ],
+    "definePermissions": [
+      {
+        "name": "ohos.permission.KEEP_BACKGROUND_RUNNING",
+        "grantMode": "system_grant",
+        "availableLevel": "system_core",
+        "description": "允许应用在后台持续运行"
       }
     ]
   }
