@@ -24,6 +24,7 @@ struct Index {
   onCoursesChange() {
     this.coursesRefreshFlag++;
   }
+
   @State courses: Course[] = [];
   @State addCourseDay: WeekDay = WeekDay.MONDAY;
   @State addCourseSection: number = 1;
@@ -166,7 +167,7 @@ struct Index {
           initialDay: this.addCourseDay,
           initialSection: this.addCourseSection
         })
-        .zIndex(999)
+          .zIndex(999)
       }
 
       if (this.showCourseDetail) {
@@ -432,6 +433,7 @@ struct Index {
                 .margin({ left: 4 })
             }
             .margin({ bottom: 2 })
+
             Row() {
               Text(course.teacher)
                 .fontSize(12)
@@ -594,37 +596,37 @@ struct Index {
 
           // 2.2 Course Grid
           Row() {
-             ForEach(this.weekDays, (day: WeekDay) => {
-                // Each Day Column
-                Stack({ alignContent: Alignment.Top }) {
-                   // Background Lines for slots
-                   Column() {
-                      ForEach(this.timeSlots, () => {
-                         Column()
-                           .height(this.SLOT_HEIGHT)
-                           .width('100%')
-                           .border({ width: { bottom: 1 }, color: '#F5F5F5' })
-                      })
-                   }
-                   .width('100%')
-
-                   // Courses for this day
-                   ForEach(this.allCourses
-                     .filter(c => c.day === day)
-                     .filter(c => !this.searchKeyword || c.name.includes(this.searchKeyword)),
-                     (course: Course) => {
-                      this.WeekCourseCard(course)
-                   })
-
-                   // Click handler for empty space (optional, to add course)
-                   // Since Stack layers, we can put a transparent layer or just handle clicks on the day column?
-                   // But finding the section is tricky without coordinates.
-                   // For now, let's just show the courses.
+            ForEach(this.weekDays, (day: WeekDay) => {
+              // Each Day Column
+              Stack({ alignContent: Alignment.Top }) {
+                // Background Lines for slots
+                Column() {
+                  ForEach(this.timeSlots, () => {
+                    Column()
+                      .height(this.SLOT_HEIGHT)
+                      .width('100%')
+                      .border({ width: { bottom: 1 }, color: '#F5F5F5' })
+                  })
                 }
-                .layoutWeight(1)
-                .height(this.timeSlots.length * this.SLOT_HEIGHT)
-                .border({ width: { right: 1 }, color: '#F0F0F0' })
-             })
+                .width('100%')
+
+                // Courses for this day
+                ForEach(this.allCourses
+                  .filter(c => c.day === day)
+                  .filter(c => !this.searchKeyword || c.name.includes(this.searchKeyword)),
+                  (course: Course) => {
+                    this.WeekCourseCard(course)
+                  })
+
+                // Click handler for empty space (optional, to add course)
+                // Since Stack layers, we can put a transparent layer or just handle clicks on the day column?
+                // But finding the section is tricky without coordinates.
+                // For now, let's just show the courses.
+              }
+              .layoutWeight(1)
+              .height(this.timeSlots.length * this.SLOT_HEIGHT)
+              .border({ width: { right: 1 }, color: '#F0F0F0' })
+            })
           }
           .layoutWeight(1)
         }

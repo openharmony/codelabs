@@ -4,7 +4,8 @@
     "type": "entry",
     "description": "$string:module_desc",
     "mainElement": "EntryAbility",
-    "deviceTypes": ["default"
+    "deviceTypes": [
+      "default"
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
@@ -52,15 +53,15 @@
       {
         "name": "ohos.permission.GET_NETWORK_INFO"
       },
-//      {
-//        "name": "ohos.permission.NOTIFICATION_CONTROLLER",
-//        "reason": "$string:notification_permission_reason",
-//        "usedScene": {
-//          "abilities": [
-//            "EntryAbility"
-//          ],
-//        }
-//      },
+      //      {
+      //        "name": "ohos.permission.NOTIFICATION_CONTROLLER",
+      //        "reason": "$string:notification_permission_reason",
+      //        "usedScene": {
+      //          "abilities": [
+      //            "EntryAbility"
+      //          ],
+      //        }
+      //      },
       {
         "name": "ohos.permission.PUBLISH_AGENT_REMINDER"
       }

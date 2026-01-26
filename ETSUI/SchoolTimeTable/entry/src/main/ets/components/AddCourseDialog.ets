@@ -15,7 +15,6 @@ export struct AddCourseDialog {
   @Prop initialDay: WeekDay = WeekDay.MONDAY;
   @Prop initialSection: number = 1;
   private courseService: CourseDataService = CourseDataService.getInstance();
-  
   @State courseName: string = '';
   @State courseLocation: string = '';
   @State courseTeacher: string = '';
@@ -27,7 +26,6 @@ export struct AddCourseDialog {
   @State startWeek: number = 1;
   @State endWeek: number = 18;
   @State courseCredit: number = 0;
-
   private colors: string[] = ColorConstants.MACARON_COLORS;
 
   onShowChange(): void {
@@ -56,33 +54,33 @@ export struct AddCourseDialog {
         .width('100%')
         .textAlign(TextAlign.Center)
         .margin({ bottom: 20 })
-      
+
       Scroll() {
         Column({ space: 16 }) {
           this.InputField('课程名称', this.courseName, (value: string) => {
             this.courseName = value;
           })
-          
+
           this.InputField('上课地点', this.courseLocation, (value: string) => {
             this.courseLocation = value;
           })
-          
+
           this.InputField('授课教师', this.courseTeacher, (value: string) => {
             this.courseTeacher = value;
           })
-          
+
           this.DaySelector()
-          
+
           this.SectionSelector()
 
           this.ColorSelector()
-          
+
           this.RemarkInput()
         }
         .width('100%')
       }
       .layoutWeight(1)
-      
+
       Row() {
         Button('取消')
           .fontSize(16)
@@ -95,7 +93,7 @@ export struct AddCourseDialog {
             this.show = false;
             this.resetForm();
           })
-        
+
         Button('保存')
           .fontSize(16)
           .fontColor('#FFFFFF')
@@ -124,13 +122,18 @@ export struct AddCourseDialog {
       Text(label)
         .fontSize(14)
         .fontColor('#666666')
-      
+
       TextInput({ placeholder: `请输入${label}`, text: value })
         .fontSize(16)
         .fontColor('#333333')
         .backgroundColor('#F5F5F5')
         .borderRadius(8)
-        .padding({ left: 12, right: 12, top: 10, bottom: 10 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 10,
+          bottom: 10
+        })
         .onChange((value: string) => {
           onChange(value);
         })
@@ -145,7 +148,7 @@ export struct AddCourseDialog {
       Text('星期')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.SpaceBetween }) {
         ForEach([1, 2, 3, 4, 5, 6, 7], (day: number) => {
           Button(this.courseService.getWeekDayName(day as WeekDay))
@@ -172,13 +175,13 @@ export struct AddCourseDialog {
       Text('节次')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       Row() {
         Column() {
           Text('开始')
             .fontSize(12)
             .fontColor('#999999')
-          
+
           Select(this.getSectionOptions())
             .selected(this.startSection - 1)
             .value(`${this.startSection}节`)
@@ -193,17 +196,17 @@ export struct AddCourseDialog {
             })
         }
         .layoutWeight(1)
-        
+
         Text('至')
           .fontSize(14)
           .fontColor('#666666')
           .margin({ left: 12, right: 12 })
-        
+
         Column() {
           Text('结束')
             .fontSize(12)
             .fontColor('#999999')
-          
+
           Select(this.getEndSectionOptions())
             .selected(this.endSection - this.startSection)
             .value(`${this.endSection}节`)
@@ -249,7 +252,7 @@ export struct AddCourseDialog {
       Text('课程颜色')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       Flex({ wrap: FlexWrap.Wrap }) {
         ForEach(this.colors, (color: string) => {
           Button()
@@ -278,14 +281,19 @@ export struct AddCourseDialog {
       Text('备注')
         .fontSize(14)
         .fontColor('#666666')
-      
+
       TextArea({ placeholder: '请输入课程备注（可选）', text: this.courseRemark })
         .fontSize(16)
         .fontColor('#333333')
         .backgroundColor('#F5F5F5')
         .borderRadius(8)
         .height(100)
-        .padding({ left: 12, right: 12, top: 10, bottom: 10 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 10,
+          bottom: 10
+        })
         .onChange((value: string) => {
           this.courseRemark = value;
         })
@@ -316,7 +324,7 @@ export struct AddCourseDialog {
       });
       return;
     }
-    
+
     const currentSemester = this.courseService.getCurrentSemester();
     const newCourse: Course = {
       id: Date.now().toString(),

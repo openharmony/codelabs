@@ -11,7 +11,7 @@ export class ColorConstants {
     '#6C5B7B', // 深紫
     '#355C7D', // 深蓝灰
     '#99B898', // 抹茶绿
-    '#FECEAB'  // 杏色
+    '#FECEAB'// 杏色
   ];
 
   static getRandomColor(): string {

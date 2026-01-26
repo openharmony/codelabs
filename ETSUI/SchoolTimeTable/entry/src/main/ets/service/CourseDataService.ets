@@ -58,10 +58,10 @@ export class CourseDataService {
       console.info('Initializing CourseDataService preferences...');
       this.preferences = await preferences.getPreferences(context, 'course_schedule');
       console.info('Preferences initialized successfully.');
-      
+
       this.currentUser = (await this.preferences.get('current_user', '')) as string;
       console.info(`Current user loaded: ${this.currentUser}`);
-      
+
       await this.loadCourses(); // 加载课程到 AppStorage
       await this.loadSemesters();
       await this.loadSettings();
@@ -145,7 +145,7 @@ export class CourseDataService {
         const key = this.getUserKey('courses');
         const coursesJson = await this.preferences.get(key, '[]') as string;
         courses = JSON.parse(coursesJson);
-        
+
         // 数据清洗：检查并修复重复 ID
         const idSet = new Set<string>();
         let hasDuplicate = false;
@@ -156,11 +156,11 @@ export class CourseDataService {
           }
           idSet.add(course.id);
         });
-        
+
         // 如果发现重复并修复了，需要保存回去
         if (hasDuplicate && this.preferences) {
-           await this.preferences.put(key, JSON.stringify(courses));
-           await this.preferences.flush();
+          await this.preferences.put(key, JSON.stringify(courses));
+          await this.preferences.flush();
         }
 
       } catch (error) {
@@ -186,8 +186,10 @@ export class CourseDataService {
 
   // --- 核心修改：保存课程 (从 AppStorage 获取最新数据持久化) ---
   private async saveCoursesToPreferences(courses: Course[]): Promise<void> {
-    if (!this.preferences) return;
-      try {
+    if (!this.preferences) {
+      return;
+    }
+    try {
       const key = this.getUserKey('courses');
       await this.preferences.put(key, JSON.stringify(courses));
       await this.preferences.flush();
@@ -282,7 +284,7 @@ export class CourseDataService {
 
   getCoursesByDay(day: WeekDay): Course[] {
     return this.getAllCourses().filter(course =>
-      course.day === day
+    course.day === day
     );
   }
 
@@ -320,7 +322,7 @@ export class CourseDataService {
     const newList = [...currentList, course];
 
     AppStorage.Set(COURSE_LIST_KEY, newList); // 1. 触发 UI 刷新
-    this.saveCoursesToPreferences(newList);   // 2. 异步保存
+    this.saveCoursesToPreferences(newList); // 2. 异步保存
   }
 
   updateCourse(course: Course): void {
@@ -346,7 +348,7 @@ export class CourseDataService {
     const newList: Course[] = [];
     AppStorage.SetOrCreate(COURSE_LIST_KEY, newList);
     await this.saveCoursesToPreferences(newList);
-    
+
     // 标记为已初始化，防止被误判为首次安装而恢复默认数据
     if (this.preferences) {
       const isInitializedKey = this.getUserKey('is_initialized');

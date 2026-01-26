@@ -17,7 +17,8 @@ interface ValidationResult {
 struct DeleteConfirmDialog {
   controller?: CustomDialogController;
   section: number = 1;
-  onConfirm: () => void = () => {};
+  onConfirm: () => void = () => {
+  };
 
   build() {
     Column() {
@@ -73,10 +74,10 @@ struct DeleteConfirmDialog {
 struct TimeSlotDialog {
   controller?: CustomDialogController;
   timeSlot: TimeSlot = { section: 1, startTime: '08:00', endTime: '08:45' };
-  onSave: (timeSlot: TimeSlot) => void = (timeSlot: TimeSlot) => {};
+  onSave: (timeSlot: TimeSlot) => void = (timeSlot: TimeSlot) => {
+  };
   existingTimeSlots: TimeSlot[] = [];
   isNew: boolean = false;
-
   @State selectedSection: number = 1;
   @State selectedStartHour: number = 8;
   @State selectedStartMinute: number = 0;
@@ -84,7 +85,6 @@ struct TimeSlotDialog {
   @State selectedEndMinute: number = 45;
   @State errorMessage: string = '';
   @State successMessage: string = '';
-
   private hours: SelectOption[] = [];
   private minutes: SelectOption[] = [];
   private sections: SelectOption[] = [];
@@ -92,7 +92,7 @@ struct TimeSlotDialog {
   aboutToAppear(): void {
     this.errorMessage = '';
     this.successMessage = '';
-    
+
     this.hours = Array.from({ length: 24 }, (_: Object, i: number): SelectOption => {
       return { value: i.toString().padStart(2, '0') };
     });
@@ -100,25 +100,25 @@ struct TimeSlotDialog {
     this.minutes = Array.from({ length: 60 }, (_: Object, i: number): SelectOption => {
       return { value: i.toString().padStart(2, '0') };
     });
-    
-    const maxSection = this.existingTimeSlots.length > 0 
-      ? Math.max(...this.existingTimeSlots.map(t => t.section)) 
+
+    const maxSection = this.existingTimeSlots.length > 0
+      ? Math.max(...this.existingTimeSlots.map(t => t.section))
       : 0;
-    
+
     this.sections = Array.from({ length: maxSection + 1 }, (_: Object, i: number): SelectOption => {
       return { value: i.toString() };
     });
-    
+
     if (this.isNew) {
       this.selectedSection = 1;
     } else {
       this.selectedSection = this.timeSlot.section;
     }
-    
+
     const startParts = this.timeSlot.startTime.split(':');
     this.selectedStartHour = parseInt(startParts[0]);
     this.selectedStartMinute = parseInt(startParts[1]);
-    
+
     const endParts = this.timeSlot.endTime.split(':');
     this.selectedEndHour = parseInt(endParts[0]);
     this.selectedEndMinute = parseInt(endParts[1]);
@@ -201,7 +201,7 @@ struct TimeSlotDialog {
           Text('开始时间')
             .fontSize(14)
             .fontColor('#666666')
-          
+
           Row({ space: 12 }) {
             // 小时选择
             Row() {
@@ -217,7 +217,7 @@ struct TimeSlotDialog {
                 .layoutWeight(1)
                 .backgroundColor('#F5F5F5')
                 .borderRadius(8)
-              
+
               Text('时')
                 .fontSize(16)
                 .fontColor('#333333')
@@ -225,7 +225,7 @@ struct TimeSlotDialog {
             }
             .layoutWeight(1)
             .alignItems(VerticalAlign.Center)
-            
+
             // 分钟选择
             Row() {
               Select(this.minutes)
@@ -240,7 +240,7 @@ struct TimeSlotDialog {
                 .layoutWeight(1)
                 .backgroundColor('#F5F5F5')
                 .borderRadius(8)
-              
+
               Text('分')
                 .fontSize(16)
                 .fontColor('#333333')
@@ -258,7 +258,7 @@ struct TimeSlotDialog {
           Text('结束时间')
             .fontSize(14)
             .fontColor('#666666')
-          
+
           Row({ space: 12 }) {
             // 小时选择
             Row() {
@@ -274,7 +274,7 @@ struct TimeSlotDialog {
                 .layoutWeight(1)
                 .backgroundColor('#F5F5F5')
                 .borderRadius(8)
-              
+
               Text('时')
                 .fontSize(16)
                 .fontColor('#333333')
@@ -282,7 +282,7 @@ struct TimeSlotDialog {
             }
             .layoutWeight(1)
             .alignItems(VerticalAlign.Center)
-            
+
             // 分钟选择
             Row() {
               Select(this.minutes)
@@ -297,7 +297,7 @@ struct TimeSlotDialog {
                 .layoutWeight(1)
                 .backgroundColor('#F5F5F5')
                 .borderRadius(8)
-              
+
               Text('分')
                 .fontSize(16)
                 .fontColor('#333333')
@@ -340,7 +340,7 @@ struct TimeSlotDialog {
               this.successMessage = '';
               return;
             }
-            
+
             this.errorMessage = '';
             this.successMessage = '保存成功';
             const updatedTimeSlot: TimeSlot = {
@@ -349,7 +349,7 @@ struct TimeSlotDialog {
               endTime: this.formatTime(this.selectedEndHour, this.selectedEndMinute)
             };
             this.onSave(updatedTimeSlot);
-            
+
             setTimeout(() => {
               if (this.controller) {
                 this.controller.close();
@@ -417,7 +417,7 @@ struct SettingsPage {
       });
       return;
     }
-    
+
     this.timeSlotDialogController = new CustomDialogController({
       builder: TimeSlotDialog({
         timeSlot: { section: 1, startTime: '08:00', endTime: '08:45' },
@@ -450,23 +450,23 @@ struct SettingsPage {
   private async updateTimeSlot(timeSlot: TimeSlot): Promise<void> {
     console.info('updateTimeSlot called for section: ' + timeSlot.section);
     console.info('New time: ' + timeSlot.startTime + ' - ' + timeSlot.endTime);
-    
+
     const validation = this.validateTimeSlot(timeSlot.startTime, timeSlot.endTime, timeSlot.section);
     if (!validation.valid) {
       console.error('Validation failed: ' + validation.message);
       return;
     }
-    
+
     const index = this.timeSlots.findIndex(t => t.section === timeSlot.section);
     console.info('Found index: ' + index);
-    
+
     if (index !== -1) {
       const newTimeSlots = [...this.timeSlots];
       newTimeSlots[index] = timeSlot;
       this.timeSlots = this.sortTimeSlots(newTimeSlots);
       this.refreshFlag++;
       console.info('Updated timeSlots array and refreshFlag');
-      
+
       await this.courseService.setTimeSlots(this.timeSlots);
       console.info('Updated time slot in storage');
     }
@@ -481,11 +481,11 @@ struct SettingsPage {
       }
       return timeA[1] - timeB[1];
     });
-    
+
     for (let i = 0; i < sorted.length; i++) {
       sorted[i].section = i + 1;
     }
-    
+
     return sorted;
   }
 
@@ -547,22 +547,22 @@ struct SettingsPage {
       console.error('Validation failed: ' + validation.message);
       return;
     }
-    
+
     const newTimeSlots = [...this.timeSlots, newTimeSlot];
-    
+
     this.timeSlots = this.sortTimeSlots(newTimeSlots);
     this.refreshFlag++;
-    
+
     await this.courseService.setTimeSlots(this.timeSlots);
     console.info('Added new time slot');
   }
 
   private async deleteTimeSlot(section: number): Promise<void> {
     const newTimeSlots = this.timeSlots.filter(t => t.section !== section);
-    
+
     this.timeSlots = this.sortTimeSlots(newTimeSlots);
     this.refreshFlag++;
-    
+
     await this.courseService.setTimeSlots(this.timeSlots);
     console.info('Deleted time slot: section ' + section);
   }
@@ -581,19 +581,24 @@ struct SettingsPage {
         .onClick(() => {
           router.back();
         })
-        
+
         Text('设置')
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .fontColor('#333333')
           .layoutWeight(1)
-        
+
         Blank()
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 12,
+        bottom: 12
+      })
       .backgroundColor('#FFFFFF')
-      
+
       this.TimeSlotSettings()
     }
     .width('100%')
@@ -610,7 +615,7 @@ struct SettingsPage {
           .fontWeight(FontWeight.Bold)
           .fontColor('#333333')
           .layoutWeight(1)
-        
+
         Button() {
           Row() {
             Text('+')
@@ -623,13 +628,23 @@ struct SettingsPage {
         }
         .backgroundColor('#007DFF')
         .borderRadius(20)
-        .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8
+        })
         .onClick(() => {
           this.showInsertSectionDialog();
         })
       }
       .width('100%')
-      .padding({ left: 20, right: 20, top: 20, bottom: 20 })
+      .padding({
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20
+      })
 
       List() {
         ForEach(this.timeSlots, (timeSlot: TimeSlot, index: number) => {
@@ -652,7 +667,7 @@ struct SettingsPage {
                 .onClick(() => {
                   this.showTimeSlotDialog(timeSlot);
                 })
-              
+
               Button() {
                 Text('删除')
                   .fontSize(14)

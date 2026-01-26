@@ -32,7 +32,12 @@ struct StatisticsPage {
           this.CourseList()
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 16
+        })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Auto)
@@ -71,7 +76,12 @@ struct StatisticsPage {
         .height(40)
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 12,
+      bottom: 12
+    })
     .backgroundColor('#FFFFFF')
   }
 
@@ -103,7 +113,7 @@ struct StatisticsPage {
         .fontSize(28)
         .fontWeight(FontWeight.Bold)
         .fontColor(color)
-      
+
       Text(title)
         .fontSize(14)
         .fontColor('#666666')
@@ -170,7 +180,6 @@ struct StatisticsPage {
     .width('100%')
     .padding({ top: 8, bottom: 8 })
   }
-
 
   @Builder
   CourseList() {

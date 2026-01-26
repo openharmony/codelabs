@@ -32,12 +32,12 @@ struct LoginPage {
             .fontWeight(FontWeight.Bold)
             .fontColor('#333333')
             .margin({ bottom: 8 })
-          
+
           Text('登录您的账号以继续')
             .fontSize(16)
             .fontColor('#999999')
             .margin({ bottom: 48 })
-          
+
           // Inputs
           Column({ space: 24 }) {
             // Username Input
@@ -65,7 +65,7 @@ struct LoginPage {
           }
           .width('100%')
           .margin({ bottom: 40 })
-          
+
           // Buttons
           Column({ space: 16 }) {
             Button('登录', { type: ButtonType.Normal, stateEffect: true })

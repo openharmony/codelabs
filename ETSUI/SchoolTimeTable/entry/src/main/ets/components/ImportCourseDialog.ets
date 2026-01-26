@@ -18,7 +18,7 @@ export struct ImportCourseDialog {
       const documentSelectOptions = new picker.DocumentSelectOptions();
       // 建议选择文件
       documentSelectOptions.maxSelectNumber = 1;
-      
+
       const documentViewPicker = new picker.DocumentViewPicker();
       const documentSelectResult = await documentViewPicker.select(documentSelectOptions);
 
@@ -29,10 +29,10 @@ export struct ImportCourseDialog {
         const buf = new ArrayBuffer(fileStat.size);
         fs.readSync(file.fd, buf);
         fs.closeSync(file);
-        
+
         const decoder = util.TextDecoder.create('utf-8', { ignoreBOM: true });
         this.importContent = decoder.decodeWithStream(new Uint8Array(buf));
-        
+
         promptAction.showToast({ message: '文件读取成功', duration: 1500 });
       }
     } catch (error) {
@@ -43,7 +43,9 @@ export struct ImportCourseDialog {
 
   private parseCsv(content: string): Course[] {
     const lines = content.split(/\r\n|\n|\r/).filter(line => line.trim() !== '');
-    if (lines.length < 2) return []; // 至少要有表头和一行数据
+    if (lines.length < 2) {
+      return [];
+    } // 至少要有表头和一行数据
 
     const courses: Course[] = [];
     const colors: string[] = ColorConstants.MACARON_COLORS;
@@ -54,12 +56,16 @@ export struct ImportCourseDialog {
       // 使用正则分割 CSV，处理引号内的逗号
       // 匹配逗号，前提是该逗号后面紧跟着偶数个引号（即不在引号对内部）
       const parts = line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
-      
-      if (parts.length < 6) continue;
+
+      if (parts.length < 6) {
+        continue;
+      }
 
       try {
         const clean = (s: string) => {
-          if (!s) return '';
+          if (!s) {
+            return '';
+          }
           let val = s.trim();
           // 去除首尾引号
           if (val.startsWith('"') && val.endsWith('"')) {
@@ -68,14 +74,14 @@ export struct ImportCourseDialog {
           // 处理双引号转义 ("" -> ")
           return val.replace(/""/g, '"');
         };
-        
+
         const name = clean(parts[0]);
         const location = clean(parts[1]);
         const teacher = clean(parts[2]);
         const day = parseInt(parts[3].trim());
         const startSection = parseInt(parts[4].trim());
         const endSection = parseInt(parts[5].trim());
-        
+
         // 可选字段
         let startWeek = 1;
         let endWeek = 18;
@@ -88,7 +94,8 @@ export struct ImportCourseDialog {
           }
         }
 
-        if (name && !isNaN(day) && day >= 1 && day <= 7 && !isNaN(startSection) && startSection > 0 && !isNaN(endSection) && endSection >= startSection) {
+        if (name && !isNaN(day) && day >= 1 && day <= 7 && !isNaN(startSection) && startSection > 0 &&
+          !isNaN(endSection) && endSection >= startSection) {
           const course: Course = {
             id: util.generateRandomUUID(true) + '_' + i, // 添加索引确保唯一性
             name: name,
@@ -99,7 +106,7 @@ export struct ImportCourseDialog {
             endSection: endSection,
             color: colors[courses.length % colors.length], // 循环分配颜色
             remark: '',
-            semester: '', 
+            semester: '',
             startWeek: startWeek,
             endWeek: endWeek,
             credit: 0
@@ -141,7 +148,7 @@ export struct ImportCourseDialog {
         // 尝试作为 CSV 解析
         newCourses = this.parseCsv(content);
         if (newCourses.length === 0) {
-             throw new Error('未识别到有效的 CSV 数据');
+          throw new Error('未识别到有效的 CSV 数据');
         }
       }
 
@@ -175,19 +182,21 @@ export struct ImportCourseDialog {
   }
 
   private checkConflict(courseA: Course, courseB: Course): boolean {
-    if (courseA.day !== courseB.day) return false;
+    if (courseA.day !== courseB.day) {
+      return false;
+    }
     return (courseA.startSection <= courseB.endSection) && (courseA.endSection >= courseB.startSection);
   }
 
   private isSameCourse(courseA: Course, courseB: Course): boolean {
     return courseA.name === courseB.name &&
-           courseA.location === courseB.location &&
-           courseA.teacher === courseB.teacher &&
-           courseA.day === courseB.day &&
-           courseA.startSection === courseB.startSection &&
-           courseA.endSection === courseB.endSection &&
-           courseA.startWeek === courseB.startWeek &&
-           courseA.endWeek === courseB.endWeek;
+      courseA.location === courseB.location &&
+      courseA.teacher === courseB.teacher &&
+      courseA.day === courseB.day &&
+      courseA.startSection === courseB.startSection &&
+      courseA.endSection === courseB.endSection &&
+      courseA.startWeek === courseB.startWeek &&
+      courseA.endWeek === courseB.endWeek;
   }
 
   private processAppendCourses(newCourses: Course[], currentCourses: Course[], initialCount: number) {
@@ -213,7 +222,7 @@ export struct ImportCourseDialog {
 
     if (conflictIndex !== -1) {
       const oldCourse = currentCourses[conflictIndex];
-      
+
       // 检查是否完全一致
       if (this.isSameCourse(oldCourse, newCourse)) {
         // 完全一致，直接跳过，不提示冲突
@@ -225,7 +234,7 @@ export struct ImportCourseDialog {
       const isInternalConflict = conflictIndex >= initialCount;
       const conflictTitle = isInternalConflict ? '导入文件内部冲突' : '与现有课程冲突';
       const conflictSource = isInternalConflict ? '【文件内已有】' : '【原课程】';
-      
+
       AlertDialog.show({
         title: conflictTitle,
         message: `检测到时间冲突：\n\n${conflictSource}${oldCourse.name}\n时间：周${oldCourse.day} 第${oldCourse.startSection}-${oldCourse.endSection}节\n\n【新课程】${newCourse.name}\n时间：周${newCourse.day} 第${newCourse.startSection}-${newCourse.endSection}节\n\n是否使用新课程覆盖？`,
@@ -270,7 +279,7 @@ export struct ImportCourseDialog {
         .fontSize(12)
         .fontColor('#999999')
         .margin({ bottom: 4 })
-      
+
       Text('例如: 高等数学,A101,张三,1,1,2')
         .fontSize(12)
         .fontColor('#999999')
@@ -298,9 +307,9 @@ export struct ImportCourseDialog {
           .onClick(() => {
             this.selectFile();
           })
-          
+
         Blank()
-        
+
         Button('清空')
           .fontSize(14)
           .fontColor('#666666')
