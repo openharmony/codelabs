@@ -110,11 +110,6 @@ struct SplashPage {
         .justifyContent(FlexAlign.Center)
         .alignItems(HorizontalAlign.Center)
 
-        // Footer Copyright
-        Text('Copyright © 2026 BIT Course Helper')
-          .fontSize(12)
-          .fontColor('#CCCCCC')
-          .margin({ bottom: 32 })
       }
       .width('100%')
       .height('100%')
