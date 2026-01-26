@@ -106,14 +106,6 @@ struct AboutPage {
           .borderRadius(16)
           .padding({ top: 8, bottom: 8 })
 
-          // Copyright
-          Text('Copyright © 2026 Beijing Institute of Technology.\nAll Rights Reserved.')
-            .fontSize(12)
-            .fontColor('#CCCCCC')
-            .margin({ top: 40, bottom: 20 })
-            .textAlign(TextAlign.Center)
-            .width('80%')
-
         }
         .width('100%')
         .padding(16)
