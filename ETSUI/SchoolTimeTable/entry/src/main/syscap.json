@@ -6,6 +6,9 @@
   },
   "production": {
     "removedSysCaps": [
+      "SystemCapability.BundleManager.AppDomainVerify",
+      "SystemCapability.Test.PerfTest",
+      "SystemCapability.Multimedia.Media.AVTranscoder",
       "SystemCapability.Multimedia.AVSession.ExtendedDisplayCast",
       "SystemCapability.ArkUi.Graphics3D",
       "SystemCapability.Telephony.CellularData",
