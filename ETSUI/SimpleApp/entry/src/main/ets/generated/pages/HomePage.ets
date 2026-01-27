@@ -26,7 +26,6 @@ export struct HomePage {
   build() {
     Scroll(this.scroller) {
       Column() {
-        SearchNotificationModule()
         MultiFunctionEntryModule()
         PromotionalBannerModule()
         ProductRecommendationModule()

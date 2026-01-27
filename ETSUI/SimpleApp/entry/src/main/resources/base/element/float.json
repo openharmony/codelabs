@@ -5,5 +5,20 @@
   }, {
     "name" : "page_text_font_size",
     "value" : "50fp"
+  }, {
+    "name" : "corner_radius_level1",
+    "value" : "5fp"
+  }, {
+    "name" : "corner_radius_level2",
+    "value" : "5fp"
+  }, {
+    "name" : "corner_radius_level4",
+    "value" : "5fp"
+  }, {
+    "name" : "corner_radius_level6",
+    "value" : "5fp"
+  }, {
+    "name" : "corner_radius_level8",
+    "value" : "5fp"
   } ]
 }
