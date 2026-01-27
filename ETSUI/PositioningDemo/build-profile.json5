@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "D:/Location2/key_restore/loc_test.p12",
-          "storePassword": "0000001BED7003DE3EFDAC6F5C22FFBA376D7D5D6B3C2CBFAD413A9AB93747835532FDE24E70F0F865935C",
+          "storeFile": "D:/software/aaa/key_restore/loc_test.p12",
+          "storePassword": "0000001B4078B274C909AE9B6ED476214F7DD5FBC62DB10E0FA797A5308DA7856B7DC8230E7C6E0D0F3B0E",
           "keyAlias": "loc_test",
-          "keyPassword": "0000001B2CCC2607068801CDF4CFC08201B5E8504616219D4420CF05461427D7404B92313395AFF8950E49",
+          "keyPassword": "0000001B38257011BCEE99FA7968E592D99DB2F11FE218019D7C7542DEE9E5D170E357981F9683AA11C800",
           "signAlg": "SHA256withECDSA",
-          "profile": "D:/Location2/key_restore/loc_testDebug.p7b",
-          "certpath": "D:/Location2/key_restore/loc_test.cer"
+          "profile": "D:/software/aaa/key_restore/loc_testDebug.p7b",
+          "certpath": "D:/software/aaa/key_restore/loc_test.cer"
         }
       }
     ],
@@ -19,7 +19,7 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "targetSdkVersion": "6.0.2(22)",
+        "targetSdkVersion": "6.0.1(21)",
         "compatibleSdkVersion": "5.1.0(18)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {

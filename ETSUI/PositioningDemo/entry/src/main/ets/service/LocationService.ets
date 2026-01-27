@@ -1,6 +1,12 @@
 import { LocationInfo } from '../model/SportModel';
 import { geoLocationManager } from '@kit.LocationKit';
-import { abilityAccessCtrl, Permissions } from '@kit.AbilityKit';
+import { abilityAccessCtrl, Permissions, Context } from '@kit.AbilityKit';
+
+// 定义定位结果类型，包含是否是位置开关关闭的错误
+export interface LocationResult {
+  location: LocationInfo | null;
+  isLocationSwitchOff: boolean;
+}
 
 export class LocationService {
   private locationChange: (location: LocationInfo) => void = () => {};
@@ -24,35 +30,50 @@ export class LocationService {
     this.locationChange = callback;
     
     try {
+      // 根据不同场景调整位置请求参数
+      // 对于模拟器环境，使用更宽松的参数以提高成功率
       const requestInfo: geoLocationManager.LocationRequest = {
-        'priority': geoLocationManager.LocationRequestPriority.FIRST_FIX,
-        'scenario': geoLocationManager.LocationRequestScenario.UNSET,
-        'timeInterval': 1,
-        'distanceInterval': 0,
-        'maxAccuracy': 0
+        priority: geoLocationManager.LocationRequestPriority.FIRST_FIX,
+        scenario: geoLocationManager.LocationRequestScenario.NAVIGATION,
+        timeInterval: 2, // 缩短时间间隔，获取更频繁的位置更新
+        distanceInterval: 5, // 缩短距离间隔
+        maxAccuracy: 100, // 放宽精度要求，提高模拟器上的成功率
       };
 
+      console.log('请求位置更新, 参数:', requestInfo);
+      
+      // 使用on方法监听位置变化
       await geoLocationManager.on('locationChange', requestInfo, (location) => {
         console.log('收到位置更新:', location);
-        const locationInfo = new LocationInfo(
-          location.latitude,
-          location.longitude,
-          location.altitude,
-          location.accuracy,
-          location.speed,
-          location.timeStamp,
-          0,
-          0,
-          0
-        );
-        this.locationChange(locationInfo);
+        console.log('持续定位速度信息:', location.speed, '速度类型:', typeof location.speed);
+        
+        // 检查位置数据是否有效
+        if (location && location.latitude && location.longitude) {
+          const speed = location.speed !== undefined ? location.speed : 0;
+          console.log('持续定位使用的速度值:', speed);
+          
+          const locationInfo = new LocationInfo(
+            location.latitude,
+            location.longitude,
+            location.altitude || 0,
+            location.accuracy || 0,
+            speed,
+            location.timeStamp || Date.now(),
+            0,
+            0,
+            0
+          );
+          this.locationChange(locationInfo);
+        } else {
+          console.error('收到无效位置数据:', location);
+        }
       });
 
       this.isTracking = true;
       console.log('位置追踪已启动');
       return true;
     } catch (err) {
-      console.error('启动位置追踪失败:', err);
+      console.error('启动位置更新失败:', JSON.stringify(err));
       return false;
     }
   }
@@ -65,6 +86,66 @@ export class LocationService {
         console.log('位置追踪已停止');
       } catch (err) {
         console.error('停止位置追踪失败:', err);
+      }
+    }
+  }
+  
+  // 获取当前定位方法
+  async getCurrentLocation(): Promise<LocationResult> {
+    try {
+      console.log('开始获取单次定位');
+      
+      // 为单次定位请求添加适合模拟器的参数配置
+      // 放宽精度要求，提高在模拟器上的成功率
+      const requestInfo: geoLocationManager.LocationRequest = {
+        priority: geoLocationManager.LocationRequestPriority.FIRST_FIX,
+        scenario: geoLocationManager.LocationRequestScenario.DAILY_LIFE_SERVICE,
+        maxAccuracy: 200, // 放宽精度要求，提高模拟器上的成功率
+        timeInterval: 3000, // 适当延长时间间隔
+        distanceInterval: 0 // 不限制距离间隔
+      };
+      
+      console.log('使用参数获取单次定位:', requestInfo);
+      
+      // 尝试获取真实定位
+      const location = await geoLocationManager.getCurrentLocation(requestInfo);
+      console.log('获取到单次定位:', location);
+      console.log('定位速度信息:', location.speed, '速度类型:', typeof location.speed);
+      
+      if (location && location.latitude && location.longitude) {
+        const speed = location.speed !== undefined ? location.speed : 0;
+        console.log('使用的速度值:', speed);
+        
+        const locationInfo = new LocationInfo(
+          location.latitude,
+          location.longitude,
+          location.altitude || 0,
+          location.accuracy || 0,
+          speed,
+          location.timeStamp || Date.now(),
+          0,
+          0,
+          0
+        );
+        return { location: locationInfo, isLocationSwitchOff: false };
+      }
+      
+      // 真实定位失败，返回空位置
+      console.log('真实定位失败，返回空位置');
+      return { location: null, isLocationSwitchOff: false };
+    } catch (err) {
+      console.error('获取单次定位失败:', JSON.stringify(err));
+      
+      // 检查是否是位置开关关闭的错误
+      const errorStr = JSON.stringify(err);
+      const isLocationSwitchOff = errorStr.includes('code":3301100') || errorStr.includes('The location switch is off');
+      
+      if (isLocationSwitchOff) {
+        console.error('位置开关处于关闭状态');
+        return { location: null, isLocationSwitchOff: true };
+      } else {
+        console.error('位置服务可能未开启或定位失败');
+        return { location: null, isLocationSwitchOff: false };
       }
     }
   }
