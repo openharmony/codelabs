@@ -13,17 +13,16 @@
  * limitations under the License.
  */
 #include "database_ops.h"
-#include <memory>
 #include <algorithm>
-#include <sstream>
 #include <iomanip>
-#define SECUREC_ENABLE 1  // 启用安全函数
+#include <memory>
+#include <sstream>
+#define SECUREC_ENABLE 1 // 启用安全函数
 #define ZERO 0
 #define THREE 2
 // C接口实现
 extern "C" {
-time_t ParseDate(const char *dateStr)
-{
+time_t ParseDate(const char *dateStr) {
     struct tm tm = {0};
     if (strptime(dateStr, "%Y-%m-%d", &tm) != nullptr) {
         return mktime(&tm);
@@ -31,8 +30,7 @@ time_t ParseDate(const char *dateStr)
     return 0;
 }
 
-DataCell CreateDataCell(DataType type, const char *value)
-{
+DataCell CreateDataCell(DataType type, const char *value) {
     DataCell cell;
     cell.type = type;
 
@@ -44,27 +42,26 @@ DataCell CreateDataCell(DataType type, const char *value)
     cell.isNull = false;
 
     switch (type) {
-        case TYPE_INT:
-            cell.value.intVal = std::stoi(value);
-            break;
-        case TYPE_FLOAT:
-            cell.value.floatVal = std::stod(value);
-            break;
-        case TYPE_STRING:
-            // 使用std::copy替代strncpy
-            std::copy_n(value, MAX_STRING_LEN - 1, cell.value.stringVal);
-            cell.value.stringVal[MAX_STRING_LEN - 1] = '\0';
-            break;
-        case TYPE_BOOL:
-            cell.value.boolVal = (strcasecmp(value, "true") == 0 ||
-                                   strcasecmp(value, "1") == 0);
-            break;
-        case TYPE_DATE:
-            cell.value.dateVal = ParseDate(value);
-            break;
-        default:
-            cell.isNull = true;
-            break;
+    case TYPE_INT:
+        cell.value.intVal = std::stoi(value);
+        break;
+    case TYPE_FLOAT:
+        cell.value.floatVal = std::stod(value);
+        break;
+    case TYPE_STRING:
+        // 使用std::copy替代strncpy
+        std::copy_n(value, MAX_STRING_LEN - 1, cell.value.stringVal);
+        cell.value.stringVal[MAX_STRING_LEN - 1] = '\0';
+        break;
+    case TYPE_BOOL:
+        cell.value.boolVal = (strcasecmp(value, "true") == 0 || strcasecmp(value, "1") == 0);
+        break;
+    case TYPE_DATE:
+        cell.value.dateVal = ParseDate(value);
+        break;
+    default:
+        cell.isNull = true;
+        break;
     }
 
     return cell;
@@ -73,26 +70,24 @@ DataCell CreateDataCell(DataType type, const char *value)
 } // extern "C"
 
 /* ========== 辅助函数 ========== */
-const char* DataBaseOps::DataTypeToString(DataType type)
-{
+const char *DataBaseOps::DataTypeToString(DataType type) {
     switch (type) {
-        case TYPE_INT:
-            return "INT";
-        case TYPE_FLOAT:
-            return "FLOAT";
-        case TYPE_STRING:
-            return "STRING";
-        case TYPE_BOOL:
-            return "BOOL";
-        case TYPE_DATE:
-            return "DATE";
-        default:
-            return "UNKNOWN";
+    case TYPE_INT:
+        return "INT";
+    case TYPE_FLOAT:
+        return "FLOAT";
+    case TYPE_STRING:
+        return "STRING";
+    case TYPE_BOOL:
+        return "BOOL";
+    case TYPE_DATE:
+        return "DATE";
+    default:
+        return "UNKNOWN";
     }
 }
 
-DataType DataBaseOps::StringToDataType(const char *str)
-{
+DataType DataBaseOps::StringToDataType(const char *str) {
     if (strcasecmp(str, "int") == 0) {
         return TYPE_INT;
     }
@@ -111,8 +106,7 @@ DataType DataBaseOps::StringToDataType(const char *str)
     return TYPE_NULL;
 }
 
-char* DataBaseOps::FormatDate(time_t timestamp)
-{
+char *DataBaseOps::FormatDate(time_t timestamp) {
     static const int dateBufferSize = 20;
     static char buffer[dateBufferSize];
     struct tm *tmInfo = localtime(&timestamp);
@@ -125,8 +119,7 @@ char* DataBaseOps::FormatDate(time_t timestamp)
     return buffer;
 }
 
-void DataBaseOps::FreeDataCell(DataCell *cell)
-{
+void DataBaseOps::FreeDataCell(DataCell *cell) {
     if (cell) {
         if (cell->type == TYPE_STRING && !cell->isNull) {
             // 字符串在栈上，无需释放
@@ -134,8 +127,7 @@ void DataBaseOps::FreeDataCell(DataCell *cell)
     }
 }
 
-int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
-{
+int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b) {
     if (a->isNull && b->isNull) {
         return 0;
     }
@@ -151,35 +143,34 @@ int DataBaseOps::CompareDataCells(const DataCell *a, const DataCell *b)
     }
 
     switch (a->type) {
-        case TYPE_INT:
-            return a->value.intVal - b->value.intVal;
-        case TYPE_FLOAT:
-            if (a->value.floatVal < b->value.floatVal) {
-                return -1;
-            }
-            if (a->value.floatVal > b->value.floatVal) {
-                return 1;
-            }
-            return 0;
-        case TYPE_STRING:
-            return strcmp(a->value.stringVal, b->value.stringVal);
-        case TYPE_BOOL:
-            return a->value.boolVal - b->value.boolVal;
-        case TYPE_DATE:
-            if (a->value.dateVal < b->value.dateVal) {
-                return -1;
-            }
-            if (a->value.dateVal > b->value.dateVal) {
-                return 1;
-            }
-            return 0;
-        default:
-            return 0;
+    case TYPE_INT:
+        return a->value.intVal - b->value.intVal;
+    case TYPE_FLOAT:
+        if (a->value.floatVal < b->value.floatVal) {
+            return -1;
+        }
+        if (a->value.floatVal > b->value.floatVal) {
+            return 1;
+        }
+        return 0;
+    case TYPE_STRING:
+        return strcmp(a->value.stringVal, b->value.stringVal);
+    case TYPE_BOOL:
+        return a->value.boolVal - b->value.boolVal;
+    case TYPE_DATE:
+        if (a->value.dateVal < b->value.dateVal) {
+            return -1;
+        }
+        if (a->value.dateVal > b->value.dateVal) {
+            return 1;
+        }
+        return 0;
+    default:
+        return 0;
     }
 }
 
-SmartBPlusTreeNode* DataBaseOps::CreateBplusTreeNode(bool isLeaf, int order)
-{
+SmartBPlusTreeNode *DataBaseOps::CreateBplusTreeNode(bool isLeaf, int order) {
     std::shared_ptr<SmartBPlusTreeNode> sNode = std::make_shared<SmartBPlusTreeNode>(order, isLeaf);
     if (!sNode) {
         return nullptr;
@@ -188,8 +179,7 @@ SmartBPlusTreeNode* DataBaseOps::CreateBplusTreeNode(bool isLeaf, int order)
     return sNode.get();
 }
 
-TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
-{
+TableIndex *DataBaseOps::CreateTableIndex(const char *columnName) {
     const int bplusTreeOrder = 4;
     if (table->indexCount >= MAX_INDEXES) {
         return nullptr;
@@ -222,8 +212,7 @@ TableIndex* DataBaseOps::CreateTableIndex(const char *columnName)
     return index;
 }
 
-void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
-{
+void DataBaseOps::DeleteFromIndex(TableIndex *index, int key) {
     const int formatBufferSize = 32;
     char buffer[formatBufferSize];
     // 使用std::ostringstream替代snprintf
@@ -236,8 +225,7 @@ void DataBaseOps::DeleteFromIndex(TableIndex *index, int key)
     index->keyCount--;
 }
 
-DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount)
-{
+DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount) {
     const int initialRowId = 1;
     table = std::make_unique<DatabaseTable>();
     if (!table) {
@@ -266,8 +254,7 @@ DataBaseOps::DataBaseOps(const char *tableName, ColumnDef *columns, int columnCo
 
 DataBaseOps::~DataBaseOps() {}
 
-SmartTableRow* DataBaseOps::FindTableRow(int rowId)
-{
+SmartTableRow *DataBaseOps::FindTableRow(int rowId) {
     for (int i = 0; i < table->rowCount; i++) {
         if (!table->rows[i].deleted && table->rows[i].rowId == rowId) {
             return &table->rows[i];
@@ -276,8 +263,7 @@ SmartTableRow* DataBaseOps::FindTableRow(int rowId)
     return nullptr;
 }
 
-int DataBaseOps::InsertTableRow(DataCell *cells)
-{
+int DataBaseOps::InsertTableRow(DataCell *cells) {
     if (table->rowCount >= MAX_ROWS) {
         return -1;
     }
@@ -303,15 +289,14 @@ int DataBaseOps::InsertTableRow(DataCell *cells)
     return -1;
 }
 
-bool DataBaseOps::UpdateTableRow(int rowId, DataCell *newCells)
-{
+bool DataBaseOps::UpdateTableRow(int rowId, DataCell *newCells) {
     SmartTableRow *row = FindTableRow(rowId);
     if (!row) {
         return false;
     }
 
     // 保存旧数据（用于事务回滚）
-    DataCell *oldCells = static_cast<DataCell*>(malloc(sizeof(DataCell) * table->columnCount));
+    DataCell *oldCells = static_cast<DataCell *>(malloc(sizeof(DataCell) * table->columnCount));
     if (!oldCells) {
         return false;
     }
@@ -332,8 +317,7 @@ bool DataBaseOps::UpdateTableRow(int rowId, DataCell *newCells)
     return true;
 }
 
-bool DataBaseOps::DeleteTableRow(int rowId)
-{
+bool DataBaseOps::DeleteTableRow(int rowId) {
     SmartTableRow *row = FindTableRow(rowId);
     if (!row) {
         return false;
@@ -351,8 +335,7 @@ bool DataBaseOps::DeleteTableRow(int rowId)
     return true;
 }
 
-bool DataBaseOps::BeginTransaction()
-{
+bool DataBaseOps::BeginTransaction() {
     if (table->inTransaction) {
         return false;
     }
@@ -361,8 +344,7 @@ bool DataBaseOps::BeginTransaction()
     return true;
 }
 
-bool DataBaseOps::CommitTransaction()
-{
+bool DataBaseOps::CommitTransaction() {
     if (!table->inTransaction) {
         return false;
     }
@@ -371,8 +353,7 @@ bool DataBaseOps::CommitTransaction()
     return true;
 }
 
-bool DataBaseOps::RollbackTransaction()
-{
+bool DataBaseOps::RollbackTransaction() {
     if (!table->inTransaction) {
         return false;
     }
@@ -382,8 +363,7 @@ bool DataBaseOps::RollbackTransaction()
     return true;
 }
 
-void DataBaseOps::PrintTableSchema()
-{
+void DataBaseOps::PrintTableSchema() {
     int schemaColumnWidth = 20;
     int schemaTypeWidth = 10;
     int schemaFlagWidth = 8;
@@ -393,27 +373,19 @@ void DataBaseOps::PrintTableSchema()
     printf("行数: %d\n", table->rowCount);
     printf("列数: %d\n\n", table->columnCount);
 
-    printf("%-*s %-*s %-*s %-*s %-*s\n",
-        schemaColumnWidth, "列名",
-        schemaTypeWidth, "类型",
-        schemaFlagWidth, "非空",
-        schemaFlagWidth, "主键",
-        schemaFlagWidth, "索引");
+    printf("%-*s %-*s %-*s %-*s %-*s\n", schemaColumnWidth, "列名", schemaTypeWidth, "类型", schemaFlagWidth, "非空",
+           schemaFlagWidth, "主键", schemaFlagWidth, "索引");
     printf("%s\n", "------------------------------------------------------------");
 
     for (int i = 0; i < table->columnCount; i++) {
         ColumnDef *col = &table->columns[i];
-        printf("%-*s %-*s %-*s %-*s %-*s\n",
-            schemaColumnWidth, col->name,
-            schemaTypeWidth, DataTypeToString(col->type),
-            schemaFlagWidth, col->notNull ? "YES" : "NO",
-            schemaFlagWidth, col->isPrimary ? "YES" : "NO",
-            schemaFlagWidth, col->hasIndex ? "YES" : "NO");
+        printf("%-*s %-*s %-*s %-*s %-*s\n", schemaColumnWidth, col->name, schemaTypeWidth, DataTypeToString(col->type),
+               schemaFlagWidth, col->notNull ? "YES" : "NO", schemaFlagWidth, col->isPrimary ? "YES" : "NO",
+               schemaFlagWidth, col->hasIndex ? "YES" : "NO");
     }
 }
 
-void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
-{
+void DataBaseOps::PrintQueryResult(SmartQueryResult *result) {
     if (!result || result->error != ERR_NONE) {
         printf("查询错误: %s\n", result->errorMsg);
         return;
@@ -421,8 +393,7 @@ void DataBaseOps::PrintQueryResult(SmartQueryResult *result)
     printf("\n查询结果 (%d 行):\n", result->rowCount);
 }
 
-SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
-{
+SmartQueryResult *DataBaseOps::ExecuteSelectQuery(const char *whereClause) {
     const int maxQueryResults = 100;
     std::vector<std::string> colNames;
     for (int i = 0; i < table->columnCount; i++) {
@@ -451,8 +422,7 @@ SmartQueryResult* DataBaseOps::ExecuteSelectQuery(const char *whereClause)
 // C接口实现
 extern "C" {
 // 辅助函数: 打印系统信息
-static void PrintSystemInfo(int maxTableCount)
-{
+static void PrintSystemInfo(int maxTableCount) {
     printf("=== 简易关系型数据库系统启动 ===\n");
     printf("版本: 1.0.0\n");
     printf("最大表数: %d\n", maxTableCount);
@@ -461,29 +431,22 @@ static void PrintSystemInfo(int maxTableCount)
     printf("页面大小: %d bytes\n\n", PAGE_SIZE);
 }
 // 辅助函数: 打印总结信息
-static void PrintSummary(int operationCount)
-{
+static void PrintSummary(int operationCount) {
     printf("\n数据库系统正常关闭。\n");
     printf("总计执行操作: %d\n", operationCount);
 }
 
 // 函数1: 创建用户表结构
-static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount)
-{
+static std::unique_ptr<DataBaseOps> CreateUserTable(int &operationCount) {
     const int userColumnCount = 8;
 
     printf("创建示例表: users\n");
 
     ColumnDef userColumns[] = {
-        {"id", TYPE_INT, 0, true, true, false, "0"},
-        {"username", TYPE_STRING, 50, true, false, true, ""},
-        {"email", TYPE_STRING, 100, true, false, true, ""},
-        {"age", TYPE_INT, 0, false, false, false, "0"},
-        {"salary", TYPE_FLOAT, 0, false, false, false, "0.0"},
-        {"is_active", TYPE_BOOL, 0, false, false, false, "true"},
-        {"created_at", TYPE_DATE, 0, false, false, false, ""},
-        {"updated_at", TYPE_DATE, 0, false, false, false, ""}
-    };
+        {"id", TYPE_INT, 0, true, true, false, "0"},           {"username", TYPE_STRING, 50, true, false, true, ""},
+        {"email", TYPE_STRING, 100, true, false, true, ""},    {"age", TYPE_INT, 0, false, false, false, "0"},
+        {"salary", TYPE_FLOAT, 0, false, false, false, "0.0"}, {"is_active", TYPE_BOOL, 0, false, false, false, "true"},
+        {"created_at", TYPE_DATE, 0, false, false, false, ""}, {"updated_at", TYPE_DATE, 0, false, false, false, ""}};
 
     std::unique_ptr<DataBaseOps> ops = std::make_unique<DataBaseOps>("users", userColumns, userColumnCount);
     if (!ops) {
@@ -500,8 +463,7 @@ static std::unique_ptr<DataBaseOps> CreateUserTable(int& operationCount)
 }
 
 // 函数2: 插入示例数据并执行事务
-static int InsertUserSampleData(DataBaseOps* ops, int& operationCount)
-{
+static int InsertUserSampleData(DataBaseOps *ops, int &operationCount) {
     if (!ops) {
         return -1;
     }
@@ -515,27 +477,23 @@ static int InsertUserSampleData(DataBaseOps* ops, int& operationCount)
     printf("\n插入示例数据...\n");
 
     const int userColumnCount = 8;
-    DataCell user1[userColumnCount] = {
-        CreateDataCell(TYPE_INT, "1"),
-        CreateDataCell(TYPE_STRING, "alice"),
-        CreateDataCell(TYPE_STRING, "alice@example.com"),
-        CreateDataCell(TYPE_INT, "25"),
-        CreateDataCell(TYPE_FLOAT, "50000.0"),
-        CreateDataCell(TYPE_BOOL, "true"),
-        CreateDataCell(TYPE_DATE, "2023-10-20"),
-        CreateDataCell(TYPE_DATE, "2023-10-20")
-    };
+    DataCell user1[userColumnCount] = {CreateDataCell(TYPE_INT, "1"),
+                                       CreateDataCell(TYPE_STRING, "alice"),
+                                       CreateDataCell(TYPE_STRING, "alice@example.com"),
+                                       CreateDataCell(TYPE_INT, "25"),
+                                       CreateDataCell(TYPE_FLOAT, "50000.0"),
+                                       CreateDataCell(TYPE_BOOL, "true"),
+                                       CreateDataCell(TYPE_DATE, "2023-10-20"),
+                                       CreateDataCell(TYPE_DATE, "2023-10-20")};
 
-    DataCell user2[userColumnCount] = {
-        CreateDataCell(TYPE_INT, "2"),
-        CreateDataCell(TYPE_STRING, "bob"),
-        CreateDataCell(TYPE_STRING, "bob@example.com"),
-        CreateDataCell(TYPE_INT, "30"),
-        CreateDataCell(TYPE_FLOAT, "60000.0"),
-        CreateDataCell(TYPE_BOOL, "true"),
-        CreateDataCell(TYPE_DATE, "2023-10-21"),
-        CreateDataCell(TYPE_DATE, "2023-10-21")
-    };
+    DataCell user2[userColumnCount] = {CreateDataCell(TYPE_INT, "2"),
+                                       CreateDataCell(TYPE_STRING, "bob"),
+                                       CreateDataCell(TYPE_STRING, "bob@example.com"),
+                                       CreateDataCell(TYPE_INT, "30"),
+                                       CreateDataCell(TYPE_FLOAT, "60000.0"),
+                                       CreateDataCell(TYPE_BOOL, "true"),
+                                       CreateDataCell(TYPE_DATE, "2023-10-21"),
+                                       CreateDataCell(TYPE_DATE, "2023-10-21")};
 
     int id1 = ops->InsertTableRow(user1);
     int id2 = ops->InsertTableRow(user2);
@@ -551,8 +509,7 @@ static int InsertUserSampleData(DataBaseOps* ops, int& operationCount)
 }
 
 // 函数3: 主函数 - 调用其他函数并控制流程
-int DatabaseOpsDemo()
-{
+int DatabaseOpsDemo() {
     const int maxTableCount = 50;
     const int formatBufferSize = 32;
     int operationCount = 0;

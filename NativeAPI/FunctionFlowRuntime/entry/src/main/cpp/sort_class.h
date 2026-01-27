@@ -27,4 +27,4 @@ public:
     int FfrtConcurrentQueue();
 };
 
-#endif //FUNCTIONFLOWRUNTIME_SORT_CLASS_H
+#endif // FUNCTIONFLOWRUNTIME_SORT_CLASS_H

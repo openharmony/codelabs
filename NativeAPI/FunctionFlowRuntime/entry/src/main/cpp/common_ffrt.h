@@ -21,7 +21,7 @@ typedef struct {
     ffrt_function_header_t header;
     ffrt_function_t func;
     ffrt_function_t afterFunc;
-    void* arg;
+    void *arg;
 } CFunction;
 
 typedef struct {
@@ -34,8 +34,8 @@ typedef struct {
 #define TYPE_SERIAL 1
 
 // 封装提交队列任务函数
-ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
-    ffrt_queue_priority_t level, int delay);
+ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request, ffrt_queue_priority_t level,
+                                 int delay);
 void WaitForRequest(ffrt_task_handle_t task);
 
 // type: 0代表并发调度，非0代表串行调度

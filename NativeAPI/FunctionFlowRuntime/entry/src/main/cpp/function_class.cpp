@@ -12,20 +12,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "function_class_cpp.h"
 #include "bank_queue_system.h"
+#include "database_ops.h"
+#include "function_class_cpp.h"
 #include "native_log_wrapper.h"
 #include <string>
 #include <unistd.h>
-#include "database_ops.h"
 #define SLEEP_DURATION_MS 100
 #define THOUSAND 1000
-#define RET_SUCCESS_1  1
-#define RET_SUCCESS_2  2
-#define TYPE_CONCURRENT  0
+#define RET_SUCCESS_1 1
+#define RET_SUCCESS_2 2
+#define TYPE_CONCURRENT 0
 #define TYPE_SERIAL 1
-#define TWO  2
-#define THREE  3
+#define TWO 2
+#define THREE 3
 
 /* 定义三个全局变量返回值 */
 static int g_bankBusiness1Ret = -1;
@@ -34,60 +34,45 @@ static int g_bankBusiness2Ret = -1;
 static int g_bankBusinessVip2Ret = -1;
 static int g_bankBusinessNewRet = -1;
 
-FunctionClass::FunctionClass(uint32_t version)
-{
-    LOGI("FunctionClass::FunctionClass %d", version);
-}
+FunctionClass::FunctionClass(uint32_t version) { LOGI("FunctionClass::FunctionClass %d", version); }
 
-FunctionClass::~FunctionClass()
-{
-    LOGI("FunctionClass::~FunctionClass");
-}
+FunctionClass::~FunctionClass() { LOGI("FunctionClass::~FunctionClass"); }
 
 class Test {
 public:
-    int Add(int a, int b)
-    {
-        return a + b;
-    }
+    int Add(int a, int b) { return a + b; }
 };
 
-void BankBusiness1()
-{
+void BankBusiness1() {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
     g_bankBusiness1Ret = 0;
 }
 
-void BankBusinessVip1()
-{
+void BankBusinessVip1() {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
     g_bankBusinessVip1Ret = 0;
 }
 
-void BankBusiness2()
-{
+void BankBusiness2() {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
     g_bankBusiness2Ret = 0;
 }
 
-void BankBusinessVip2()
-{
+void BankBusinessVip2() {
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
     g_bankBusinessVip2Ret = 0;
 }
 
-void BankBusinessNew()
-{
+void BankBusinessNew() {
     DatabaseOpsDemo();
     LOGI("saving or withdraw VIP");
     g_bankBusinessNewRet = 0;
 }
-int FunctionClass::FfrtSerialQueue()
-{
+int FunctionClass::FfrtSerialQueue() {
     // type传1，代表串行调度
     LOGI("FfrtQueue start ");
     BankQueueSystem bankQueue(TYPE_SERIAL, "Bank", TWO);
@@ -112,8 +97,7 @@ int FunctionClass::FfrtSerialQueue()
     }
 }
 
-int FunctionClass::FfrtConcurrentQueue()
-{
+int FunctionClass::FfrtConcurrentQueue() {
     // type传0，代表并发调度
     BankQueueSystem bankQueue(TYPE_CONCURRENT, "Bank", THREE);
 

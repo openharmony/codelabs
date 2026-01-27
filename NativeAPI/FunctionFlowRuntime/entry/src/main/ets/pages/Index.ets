@@ -12,12 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import { FunctionClass } from 'libentry.so';
-import { SortClass } from 'libentry.so';
-import libaki from 'libentry.so';
-
-const DOMAIN = 0x0000;
+import libaki, { FunctionClass, SortClass } from 'libentry.so';
 
 export const sleep = (delay: number = 200) => new Promise<void>((resolve) => setTimeout(resolve, delay));
 
