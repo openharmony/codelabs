@@ -44,5 +44,14 @@
   }, {
     "name" : "internet_permission_reason",
     "value" : "用于浏览器搜索功能"
+  }, {
+    "name" : "start_abilities_permission_reason",
+    "value" : "用于启动其他系统应用"
+  }, {
+    "name" : "start_invisible_ability_permission_reason",
+    "value" : "用于启动系统后台应用"
+  }, {
+    "name" : "alarm_permission_reason",
+    "value" : "用于创建闹钟提醒"
   } ]
 }

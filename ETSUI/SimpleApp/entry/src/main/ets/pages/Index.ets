@@ -95,14 +95,14 @@ struct HistoryDialog {
         case '相机':
           SystemAppLauncher.launchCamera(context);
           break;
-        case '音乐':
-          SystemAppLauncher.launchMusic(context);
+        case '备忘录':
+          SystemAppLauncher.launchMemo(context);
           break;
         case '照片':
           SystemAppLauncher.launchGallery(context);
           break;
-        case '购物':
-          SystemAppLauncher.launchBrowser(context, 'https://www.taobao.com');
+        case '时钟':
+          SystemAppLauncher.launchClock(context);
           break;
         case '设置':
           SystemAppLauncher.launchSettings(context);
@@ -251,9 +251,9 @@ struct HistoryDialog {
     const colorMap: Record<string, string> = {
       '通讯': '#FF9500',
       '相机': '#007AFF',
-      '音乐': '#5856D6',
+      '备忘录': '#FFD700',
       '照片': '#FF2D55',
-      '购物': '#FF3B30',
+      '时钟': '#FF9500',
       '设置': '#8E8E93'
     };
     return colorMap[appName] || '#007AFF';
@@ -265,7 +265,7 @@ struct HistoryDialog {
 struct Index {
   // 状态变量
   @State userName: string = '用户';
-  @State searchText: string = '';
+
   @State progressValue: number = 0.6;
   @State switchValue: boolean = true;
   @State sliderValue: number = 50;
@@ -325,16 +325,16 @@ struct Index {
       case '相机':
         SystemAppLauncher.launchCamera(context);
         break;
-      case '音乐':
-        SystemAppLauncher.launchMusic(context);
+      case '备忘录':
+        SystemAppLauncher.launchMemo(context);
         break;
       case '照片':
         // 启动图库应用
         SystemAppLauncher.launchGallery(context);
         break;
-      case '购物':
-        // 启动浏览器到购物网站
-        SystemAppLauncher.launchBrowser(context, 'https://www.taobao.com');
+      case '时钟':
+        // 启动时钟应用
+        SystemAppLauncher.launchClock(context);
         break;
       case '设置':
         SystemAppLauncher.launchSettings(context);
@@ -349,37 +349,15 @@ struct Index {
     const packageMap: Record<string, string> = {
       '通讯': 'com.ohos.contacts',
       '相机': 'com.ohos.camera',
-      '音乐': 'com.ohos.music',
-      '照片': 'com.huawei.hmos.photos',
-      '购物': 'com.ohos.browser',
+      '备忘录': 'com.ohos.note',
+      '照片': 'com.huawei.hmos.gallery',
+      '时钟': 'com.huawei.android.deskclock',
       '设置': 'com.huawei.hmos.settings'
     };
     return packageMap[featureName] || '';
   }
   
-  // 执行搜索功能
-  performSearch(): void {
-    const context = this.getUIContext()?.getHostContext() as common.UIAbilityContext;
-    
-    if (!context) {
-      console.error('上下文获取失败');
-      return;
-    }
-    
-    // 检查搜索内容是否为空
-    if (!this.searchText || this.searchText.trim() === '') {
-      console.log('搜索内容为空');
-      return;
-    }
-    
-    // 构建百度搜索URL
-    const searchUrl = 'https://www.baidu.com/s?wd=' + encodeURIComponent(this.searchText.trim());
-    
-    // 启动浏览器进行搜索
-    SystemAppLauncher.launchBrowser(context, searchUrl);
-    
-    console.log('搜索内容:', this.searchText, 'URL:', searchUrl);
-  }
+
   
   // 显示最近使用记录
   showRecentUsage(): void {
@@ -394,8 +372,7 @@ struct Index {
         // 1. 顶部导航栏
         this.buildTopBar()
         
-        // 2. 搜索栏
-        this.buildSearchBar()
+      
         
         // 3. 轮播图区域
         this.buildBannerSection()
@@ -458,34 +435,7 @@ struct Index {
     .backgroundColor('#FFFFFF')
   }
   
-  // 搜索栏
-  @Builder
-  buildSearchBar() {
-    Row() {
-      TextInput({ placeholder: '搜索内容...', text: this.searchText })
-        .layoutWeight(1)
-        .height(40)
-        .backgroundColor('#F8F8F8')
-        .borderRadius(20)
-        .padding({ left: 16, right: 16 })
-        .onChange((value: string) => {
-          this.searchText = value;
-        })
-      
-      Button('搜索', { type: ButtonType.Normal })
-        .width(80)
-        .height(40)
-        .margin({ left: 8 })
-        .backgroundColor('#007AFF')
-        .fontColor('#FFFFFF')
-        .borderRadius(20)
-        .onClick(() => {
-          this.performSearch();
-        })
-    }
-    .width('100%')
-    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
-  }
+
   
   // 轮播图区域 - 水平滚动展示
   @Builder
@@ -602,9 +552,9 @@ struct Index {
         ForEach([
           new FeatureItem('📱', '通讯', '#FF9500'),
           new FeatureItem('📸', '相机', '#007AFF'),
-          new FeatureItem('🎵', '音乐', '#5856D6'),
+          new FeatureItem('📝', '备忘录', '#FFD700'),
           new FeatureItem('📚', '照片', '#FF2D55', $r('app.media.ic_learning_image')),
-          new FeatureItem('🛒', '购物', '#FF3B30'),
+          new FeatureItem('⏰', '时钟', '#FF9500'),
           new FeatureItem('⚙️', '设置', '#8E8E93')
         ], (item: FeatureItem, index: number) => {
           GridItem() {
