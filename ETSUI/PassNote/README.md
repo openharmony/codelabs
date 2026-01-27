@@ -1,5 +1,5 @@
 # PassNote 
-基于 OpenHarmony 的多功能轻量级密码与个人信息管理应用 Demo
+基于 OpenHarmony 的多方式管理应用 Demo
 
 ## 项目简介
 
