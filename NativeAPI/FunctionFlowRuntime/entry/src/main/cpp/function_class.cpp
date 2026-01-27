@@ -43,36 +43,42 @@ public:
     int Add(int a, int b) { return a + b; }
 };
 
-void BankBusiness1() {
+void BankBusiness1()
+{
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
     g_bankBusiness1Ret = 0;
 }
 
-void BankBusinessVip1() {
+void BankBusinessVip1()
+{
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
     g_bankBusinessVip1Ret = 0;
 }
 
-void BankBusiness2() {
+void BankBusiness2()
+{
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
     g_bankBusiness2Ret = 0;
 }
 
-void BankBusinessVip2() {
+void BankBusinessVip2()
+{
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
     g_bankBusinessVip2Ret = 0;
 }
 
-void BankBusinessNew() {
+void BankBusinessNew()
+{
     DatabaseOpsDemo();
     LOGI("saving or withdraw VIP");
     g_bankBusinessNewRet = 0;
 }
-int FunctionClass::FfrtSerialQueue() {
+int FunctionClass::FfrtSerialQueue()
+{
     // type传1，代表串行调度
     LOGI("FfrtQueue start ");
     BankQueueSystem bankQueue(TYPE_SERIAL, "Bank", TWO);
@@ -97,7 +103,8 @@ int FunctionClass::FfrtSerialQueue() {
     }
 }
 
-int FunctionClass::FfrtConcurrentQueue() {
+int FunctionClass::FfrtConcurrentQueue()
+{
     // type传0，代表并发调度
     BankQueueSystem bankQueue(TYPE_CONCURRENT, "Bank", THREE);
 

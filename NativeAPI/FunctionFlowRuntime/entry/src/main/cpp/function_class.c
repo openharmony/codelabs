@@ -23,19 +23,22 @@
 /* 定义三个全局变量返回值 */
 static int g_bankBusinessRet = -1;
 static int g_bankBusinessVipRet = -1;
-void BankBusiness(void *arg) {
+void BankBusiness(void *arg)
+{
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw ordinary customer");
     g_bankBusinessRet = 0;
 }
 
-void BankBusinessVip(void *arg) {
+void BankBusinessVip(void *arg)
+{
     usleep(SLEEP_DURATION_MS * THOUSAND);
     LOGI("saving or withdraw VIP");
     g_bankBusinessVipRet = 0;
 }
 
-int ProcessFfrtQueue() {
+int ProcessFfrtQueue()
+{
     // 串行调度
     ffrt_queue_t bank = CreateBankSystem("Bank", 2, 1);
     if (!bank) {

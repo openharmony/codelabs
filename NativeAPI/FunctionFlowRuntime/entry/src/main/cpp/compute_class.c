@@ -236,14 +236,16 @@ struct ParaStruct {
 struct ParaStruct g_para1;
 struct ParaStruct g_para2;
 
-void Add(void *arg) {
+void Add(void *arg)
+{
     struct ParaStruct *para1 = (struct ParaStruct *)arg;
     int a = para1->a;
     int b = para1->b;
     g_addRet = RET_SUCCESS;
 }
 
-void Sub(void *arg) {
+void Sub(void *arg)
+{
     struct ParaStruct *para2 = (struct ParaStruct *)arg;
     int a = para2->a;
     int b = para2->b;
@@ -251,7 +253,8 @@ void Sub(void *arg) {
 }
 
 /* ========== 内存管理实现 ========== */
-Matrix CreateMatrix(int rows, int cols) {
+Matrix CreateMatrix(int rows, int cols)
+{
     Matrix mat;
     mat.rows = rows;
     mat.cols = cols;
@@ -263,7 +266,8 @@ Matrix CreateMatrix(int rows, int cols) {
     return mat;
 }
 
-void DestroyMatrix(Matrix *mat) {
+void DestroyMatrix(Matrix *mat)
+{
     if (mat->data != NULL) {
         free(mat->data);
         mat->data = NULL;
@@ -272,7 +276,8 @@ void DestroyMatrix(Matrix *mat) {
     mat->cols = INIT_ZERO;
 }
 
-Vector CreateVector(int size) {
+Vector CreateVector(int size)
+{
     Vector vec;
     vec.size = size;
     if (size <= 0) {
@@ -287,7 +292,8 @@ Vector CreateVector(int size) {
     return vec;
 }
 
-void DestroyVector(Vector *vec) {
+void DestroyVector(Vector *vec)
+{
     if (vec->data != NULL) {
         free(vec->data);
         vec->data = NULL;
@@ -295,7 +301,8 @@ void DestroyVector(Vector *vec) {
     vec->size = INIT_ZERO;
 }
 
-Matrix CopyMatrix(const Matrix *src) {
+Matrix CopyMatrix(const Matrix *src)
+{
     // 创建目标矩阵
     Matrix dst = CreateMatrix(src->rows, src->cols);
     if (dst.data != NULL && src->data != NULL) {
@@ -308,7 +315,8 @@ Matrix CopyMatrix(const Matrix *src) {
     }
     return dst;
 }
-Vector CopyVector(const Vector *src) {
+Vector CopyVector(const Vector *src)
+{
     // 创建目标向量
     Vector dst = CreateVector(src->size);
     if (dst.data != NULL && src->data != NULL) {
@@ -321,7 +329,8 @@ Vector CopyVector(const Vector *src) {
 }
 
 /* ========== 基本运算实现 ========== */
-Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB) {
+Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB)
+{
     if (matrixA->rows != matrixB->rows || matrixA->cols != matrixB->cols) {
         fprintf(stderr, "矩阵维度不匹配\n");
         exit(EXIT_FAILURE);
@@ -337,7 +346,8 @@ Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB) {
     return result;
 }
 
-Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB) {
+Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB)
+{
     if (matrixA->cols != matrixB->rows) {
         fprintf(stderr, "矩阵维度不匹配，无法相乘\n");
         exit(EXIT_FAILURE);
@@ -358,7 +368,8 @@ Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB) {
     return result;
 }
 
-Matrix MatrixTranspose(const Matrix *matrix) {
+Matrix MatrixTranspose(const Matrix *matrix)
+{
     Matrix result = CreateMatrix(matrix->cols, matrix->rows);
 
     for (int i = INIT_ZERO; i < matrix->rows; i++) {
@@ -371,7 +382,8 @@ Matrix MatrixTranspose(const Matrix *matrix) {
 }
 
 /* ========== LU分解实现 ========== */
-Matrix LuDecomposition(const Matrix *matrix) {
+Matrix LuDecomposition(const Matrix *matrix)
+{
     if (matrix->rows != matrix->cols) {
         fprintf(stderr, "LU分解需要方阵\n");
         exit(EXIT_FAILURE);
@@ -398,7 +410,8 @@ Matrix LuDecomposition(const Matrix *matrix) {
     return lu;
 }
 
-Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b) {
+Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b)
+{
     int n = lowerMatrix->rows;
     Vector x = CreateVector(n);
 
@@ -413,7 +426,8 @@ Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b) {
     return x;
 }
 
-Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b) {
+Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b)
+{
     int n = upperMatrix->rows;
     Vector x = CreateVector(n);
 
@@ -429,7 +443,8 @@ Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b) {
 }
 
 /* ========== 线性方程组求解 ========== */
-Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b) {
+Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b)
+{
     Matrix lu = LuDecomposition(matrix);
     int n = matrix->rows;
 
@@ -466,7 +481,8 @@ Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b) {
     return x;
 }
 /* ========== 数值积分实现 ========== */
-double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n) {
+double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
+{
     if (n == 0) {
         return 0;
     }
@@ -481,7 +497,8 @@ double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n) {
     return sum * h;
 }
 
-double IntegrateSimpson(double (*f)(double), double a, double b, int n) {
+double IntegrateSimpson(double (*f)(double), double a, double b, int n)
+{
     if (n % INIT_TWO != INIT_ZERO) {
         n++;
     }
@@ -505,7 +522,8 @@ double IntegrateSimpson(double (*f)(double), double a, double b, int n) {
     return sum * h / SIMPSON_DIVISOR;
 }
 
-double IntegrateRomberg(double (*f)(double), double a, double b, double tol) {
+double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
+{
     double r[MAX_ITERATIONS][MAX_ITERATIONS];
     int k = INIT_ZERO;
 
@@ -542,7 +560,8 @@ double IntegrateRomberg(double (*f)(double), double a, double b, double tol) {
 }
 
 /* ========== 微分方程求解 ========== */
-Vector SolveOdeRk4(double (*f)(double, double), double y0, double t0, double tf, int steps) {
+Vector SolveOdeRk4(double (*f)(double, double), double y0, double t0, double tf, int steps)
+{
     double h = (tf - t0) / (steps != INIT_ZERO ? steps : INIT_ONE);
     Vector solution = CreateVector(steps + INIT_ONE);
 
@@ -566,7 +585,8 @@ Vector SolveOdeRk4(double (*f)(double, double), double y0, double t0, double tf,
 }
 
 /* ========== 傅里叶变换实现 ========== */
-void Dft(const double *input, ComplexNum *output, int n) {
+void Dft(const double *input, ComplexNum *output, int n)
+{
     for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
         double imag = INIT_VALUE_1;
@@ -582,7 +602,8 @@ void Dft(const double *input, ComplexNum *output, int n) {
     }
 }
 
-void Idft(const ComplexNum *input, double *output, int n) {
+void Idft(const ComplexNum *input, double *output, int n)
+{
     for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
         double imag = INIT_VALUE_1;
@@ -600,7 +621,8 @@ void Idft(const ComplexNum *input, double *output, int n) {
     }
 }
 
-void Fft(ComplexNum *data, int n) {
+void Fft(ComplexNum *data, int n)
+{
     if (n <= INIT_ONE) {
         return;
     }
@@ -644,7 +666,8 @@ void Fft(ComplexNum *data, int n) {
 }
 
 /* ========== 优化算法实现 ========== */
-double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol) {
+double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol)
+{
     double c = b - GOLDEN_RATIO * (b - a);
     double d = a + GOLDEN_RATIO * (b - a);
     double fc = f(c);
@@ -670,7 +693,8 @@ double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol
 }
 
 Vector MinimizeGradientDescent(double (*f)(const Vector *), const Vector *gradient, const Vector *x0,
-                               double learningRate, int iterations) {
+                               double learningRate, int iterations)
+{
     Vector x = CopyVector(x0);
     Vector grad = CreateVector(x0->size);
 
@@ -708,7 +732,8 @@ Vector MinimizeGradientDescent(double (*f)(const Vector *), const Vector *gradie
     return x;
 }
 /* ========== 统计分析 ========== */
-Vector LinearRegression(Vector *x, Vector *y) {
+Vector LinearRegression(Vector *x, Vector *y)
+{
     int n = x->size;
     double sumX = 0.0;
     double sumY = 0.0;
@@ -741,7 +766,8 @@ Vector LinearRegression(Vector *x, Vector *y) {
     return result;
 }
 /* ========== 特殊函数实现 ========== */
-double GammaFunction(double x) {
+double GammaFunction(double x)
+{
     // Lanczos 近似
     const double g = GAMMA_G;
     const double coeffs[] = {0.99999999999980993,  676.5203681218851,     -1259.1392167224028,
@@ -765,7 +791,8 @@ double GammaFunction(double x) {
 }
 double BetaFunction(double a, double b) { return GammaFunction(a) * GammaFunction(b) / GammaFunction(a + b); }
 
-double ErfFunction(double x) {
+double ErfFunction(double x)
+{
     // Abramowitz and Stegun 近似
     const double a1 = 0.254829592;
     const double a2 = -0.284496736;
@@ -786,7 +813,8 @@ double ErfFunction(double x) {
 double Ff(double t, double y) { return -y; }
 double Parabola(double x) { return x * x - INIT_VALUE_4 * x + INIT_VALUE_4; }
 
-void Compute(void *arg) {
+void Compute(void *arg)
+{
     printf("=== 高性能科学计算库测试 ===\n\n");
 
     srand(time(NULL));
@@ -854,7 +882,8 @@ void Compute(void *arg) {
     g_computeRet = RET_SUCCESS;
 }
 
-int ComputeFfrtQueue() {
+int ComputeFfrtQueue()
+{
     // 并行调度
     ffrt_queue_t bank = CreateBankSystem("Bank", INIT_TWO, TYPE_CONCURRENT);
     if (!bank) {
