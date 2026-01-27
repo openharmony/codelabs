@@ -19,10 +19,13 @@ export class FunctionClass {
 
   FfrtConcurrentQueue(): number;
 }
+
 export class SortClass {
   constructor(version: number)
-  FfrtConcurrentQueue():number;
+
+  FfrtConcurrentQueue(): number;
 }
+
 export const Add: (a: number, b: number) => number;
 
 export const ProcessFfrtQueue: () => number;

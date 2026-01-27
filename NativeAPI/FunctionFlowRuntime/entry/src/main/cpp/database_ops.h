@@ -16,9 +16,9 @@
 #ifndef FUNCTIONFLOWRUNTIME_DATABASE_OPS_H
 #define FUNCTIONFLOWRUNTIME_DATABASE_OPS_H
 
+#include <cstdbool>
 #include <cstdio>
 #include <cstdlib>
-#include <cstdbool>
 #include <ctime>
 #include <string>
 #include <vector>
@@ -40,14 +40,7 @@ extern "C" {
 #define PAGE_SIZE 4096
 
 /* ========== 数据类型枚举 ========== */
-typedef enum {
-    TYPE_INT,
-    TYPE_FLOAT,
-    TYPE_STRING,
-    TYPE_BOOL,
-    TYPE_DATE,
-    TYPE_NULL
-} DataType;
+typedef enum { TYPE_INT, TYPE_FLOAT, TYPE_STRING, TYPE_BOOL, TYPE_DATE, TYPE_NULL } DataType;
 
 /* ========== 错误码枚举 ========== */
 typedef enum {
@@ -73,7 +66,7 @@ typedef enum {
 typedef struct {
     char name[MAX_COLUMN_NAME];
     DataType type;
-    int length;          // 对于字符串类型
+    int length; // 对于字符串类型
     bool notNull;
     bool isPrimary;
     bool hasIndex;
@@ -100,23 +93,21 @@ typedef struct {
 /* ========== 表行结构 ========== */
 class SmartTableRow {
 public:
-    std::unique_ptr<DataCell[]> cells;  // 使用unique_ptr管理数组
+    std::unique_ptr<DataCell[]> cells; // 使用unique_ptr管理数组
     size_t cellCount;                  // 数组大小
     int rowId;
     bool deleted;
     time_t createdAt;
     time_t updatedAt;
 
-    SmartTableRow()
-    {
+    SmartTableRow() {
         cells = nullptr;
         cellCount = 0;
         rowId = 0;
         deleted = false;
     }
 
-    explicit SmartTableRow(int columnCnt)
-    {
+    explicit SmartTableRow(int columnCnt) {
         cellCount = columnCnt;
         cells = std::make_unique<DataCell[]>(columnCnt);
         rowId = 0;
@@ -124,9 +115,8 @@ public:
     }
 
     // 构造函数1：从vector初始化
-    SmartTableRow(int id, const std::vector<DataCell>& cellData)
-        : rowId(id), deleted(false), cellCount(cellData.size())
-    {
+    SmartTableRow(int id, const std::vector<DataCell> &cellData)
+        : rowId(id), deleted(false), cellCount(cellData.size()) {
         time_t now = time(nullptr);
         if (now == static_cast<time_t>(-1)) {
             throw std::runtime_error("Failed to get current time");
@@ -135,7 +125,7 @@ public:
         updatedAt = now;
         cells = std::make_unique<DataCell[]>(cellCount);
         for (size_t i = 0; i < cellCount; ++i) {
-            cells[i] = cellData[i];  // 调用拷贝构造函数
+            cells[i] = cellData[i]; // 调用拷贝构造函数
         }
     }
 
@@ -144,13 +134,9 @@ public:
         : SmartTableRow(id, std::vector<DataCell>(initList)) {}
 
     // 深拷贝构造函数
-    SmartTableRow(const SmartTableRow& other)
-        : cellCount(other.cellCount),
-          rowId(other.rowId),
-          deleted(other.deleted),
-          createdAt(other.createdAt),
-          updatedAt(other.updatedAt)
-    {
+    SmartTableRow(const SmartTableRow &other)
+        : cellCount(other.cellCount), rowId(other.rowId), deleted(other.deleted), createdAt(other.createdAt),
+          updatedAt(other.updatedAt) {
         if (other.cells) {
             cells = std::make_unique<DataCell[]>(cellCount);
             for (size_t i = 0; i < cellCount; ++i) {
@@ -159,10 +145,9 @@ public:
         }
     }
     // 深拷贝赋值运算符
-    SmartTableRow& operator=(const SmartTableRow& other)
-    {
+    SmartTableRow &operator=(const SmartTableRow &other) {
         if (this != &other) {
-            cells.reset();  // 释放原有内存
+            cells.reset(); // 释放原有内存
 
             cellCount = other.cellCount;
             rowId = other.rowId;
@@ -186,7 +171,7 @@ class SmartBPlusTreeNode {
 public:
     // 使用unique_ptr管理动态数组
     std::unique_ptr<int[]> keys;
-    std::unique_ptr<std::shared_ptr<void>[]> children;  // void*的智能指针版本
+    std::unique_ptr<std::shared_ptr<void>[]> children; // void*的智能指针版本
 
     int numKeys;
     bool isLeaf;
@@ -198,9 +183,7 @@ public:
     int maxDegree;
 
     // 构造函数
-    SmartBPlusTreeNode(int degree, bool leaf)
-        : maxDegree(degree), isLeaf(leaf), numKeys(0)
-    {
+    SmartBPlusTreeNode(int degree, bool leaf) : maxDegree(degree), isLeaf(leaf), numKeys(0) {
         // 分配keys数组（B+树最多有maxDegree-1个key）
         int maxKeys = maxDegree - 1;
         keys = std::make_unique<int[]>(maxKeys);
@@ -287,10 +270,8 @@ public:
     ErrorCode error;
     char errorMsg[MAX_ERROR_MSG];
 
-    SmartQueryResult(int cols,
-                     const std::vector<std::string>& colNames,
-                     const std::vector<std::vector<DataCell>>& data) : columnCount(cols)
-    {
+    SmartQueryResult(int cols, const std::vector<std::string> &colNames, const std::vector<std::vector<DataCell>> &data)
+        : columnCount(cols) {
         columnNames = std::make_unique<std::unique_ptr<char[]>[]>(columnCount);
         for (int i = 0; i < columnCount; i++) {
             if (i < static_cast<int>(colNames.size()) && !colNames[i].empty()) {
@@ -310,8 +291,7 @@ public:
     }
 
     // 获取列名
-    const char* GetColumnName(int col) const
-    {
+    const char *GetColumnName(int col) const {
         if (col < 0 || col >= columnCount || !columnNames || !columnNames[col]) {
             return "";
         }
@@ -344,15 +324,15 @@ DataCell CreateDataCell(DataType type, const char *value);
 class DataBaseOps {
 private:
     /* ========== 辅助函数 ========== */
-    const char* DataTypeToString(DataType type);
+    const char *DataTypeToString(DataType type);
     DataType StringToDataType(const char *str);
 
-    char* FormatDate(time_t timestamp);
+    char *FormatDate(time_t timestamp);
     void FreeDataCell(DataCell *cell);
     int CompareDataCells(const DataCell *a, const DataCell *b);
-    SmartBPlusTreeNode* CreateBplusTreeNode(bool isLeaf, int order);
+    SmartBPlusTreeNode *CreateBplusTreeNode(bool isLeaf, int order);
     void DeleteFromIndex(TableIndex *index, int key);
-    SmartTableRow* FindTableRow(int rowId);
+    SmartTableRow *FindTableRow(int rowId);
 
 private:
     // DatabaseTable *table;
@@ -362,9 +342,9 @@ private:
 public:
     DataBaseOps(const char *tableName, ColumnDef *columns, int columnCount);
     ~DataBaseOps();
-    TableIndex* CreateTableIndex(const char *columnName);
+    TableIndex *CreateTableIndex(const char *columnName);
     bool DeleteTableRow(int rowId);
-    SmartQueryResult* ExecuteSelectQuery(const char *whereClause);
+    SmartQueryResult *ExecuteSelectQuery(const char *whereClause);
     bool BeginTransaction();
     bool CommitTransaction();
     bool RollbackTransaction();
@@ -384,4 +364,4 @@ int DatabaseOpsDemo();
 }
 #endif
 
-#endif //FUNCTIONFLOWRUNTIME_DATABASE_OPS_H
+#endif // FUNCTIONFLOWRUNTIME_DATABASE_OPS_H

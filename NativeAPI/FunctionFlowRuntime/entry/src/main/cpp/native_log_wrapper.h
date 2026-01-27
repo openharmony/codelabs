@@ -16,24 +16,27 @@
 #define APPLICATION_NATIVE_HANWUJIPROXY_LOGUTILS
 #include "hilog/log.h"
 #define LOG_DOMAIN 0X000001
-#define LOG_TAG "PR_411"
+#define LOG_TAG "PR_FFRT"
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-inline const char *GetRawFileName(const char *path)
-{
+inline const char *GetRawFileName(const char *path) {
     char ch = '/';
     const char *start = path;
     // get end of the string
-    while (*start) { start++; }
-    while (start > path && *start != ch) { start--; }
+    while (*start) {
+        start++;
+    }
+    while (start > path && *start != ch) {
+        start--;
+    }
     return (*start == ch) ? start : path;
 }
-    
-#define PRINT_OHOS_HILOG(op, fmt, ...)                                                          \
-    OH_LOG_Print(LOG_APP, op, LOG_DOMAIN, LOG_TAG, "[%{public}s-(%{public}s:%{public}d)] " fmt, \
-        __FUNCTION__, GetRawFileName(__FILE__), __LINE__, ##__VA_ARGS__)
+
+#define PRINT_OHOS_HILOG(op, fmt, ...)                                                                                 \
+    OH_LOG_Print(LOG_APP, op, LOG_DOMAIN, LOG_TAG, "[%{public}s-(%{public}s:%{public}d)] " fmt, __FUNCTION__,          \
+                 GetRawFileName(__FILE__), __LINE__, ##__VA_ARGS__)
 
 #define LOG(fmt, ...) PRINT_OHOS_HILOG(LOG_INFO, fmt, ##__VA_ARGS__)
 #define LOGE(fmt, ...) PRINT_OHOS_HILOG(LOG_ERROR, fmt, ##__VA_ARGS__)
@@ -46,4 +49,4 @@ inline const char *GetRawFileName(const char *path)
 }
 #endif
 
-#endif //application_native_hanwujiproxy_LogUtils
+#endif // application_native_hanwujiproxy_LogUtils

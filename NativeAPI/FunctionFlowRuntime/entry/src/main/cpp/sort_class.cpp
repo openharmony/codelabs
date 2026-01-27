@@ -15,15 +15,15 @@
 #include "sort_class.h"
 #include "bank_queue_system.h"
 #include "native_log_wrapper.h"
-#include <string>
-#include <unistd.h>
-#include <iostream>
-#include <vector>
+#include <algorithm>
 #include <chrono>
 #include <functional>
-#include <algorithm>
+#include <iostream>
 #include <random>
+#include <string>
 #include <thread>
+#include <unistd.h>
+#include <vector>
 #define ZERO 0
 #define TWO 2
 #define THREE 3
@@ -31,45 +31,38 @@
 #define FIFTY 50
 #define ONE_HUNDRED 100
 #define FIVE_THOUSAND 5000
-#define MAX_MATRIX_SIZE        1000
-#define RET_SUCCESS_6         6
+#define MAX_MATRIX_SIZE 1000
+#define RET_SUCCESS_6 6
 using namespace std;
 
 // 常量定义
 namespace {
-    constexpr int SLEEP_TIME_US = 100 * 1000; // 100ms
-    constexpr int DEFAULT_QUEUE_PRIORITY = 0;
-    constexpr int SMALL_ARRAY_THRESHOLD = 16;
-    constexpr int MEDIUM_ARRAY_THRESHOLD = 100;
-    constexpr int MAX_BUCKET_COUNT = 1000;
-    constexpr int MIN_BUCKET_COUNT = 10;
-    constexpr int DEFAULT_RADIX = 256;
-    constexpr int ASCII_CHAR_COUNT = 256;
-    constexpr int ALPHABET_SIZE = 26;
-    constexpr int TEST_SIZE_SMALL = 1000;
-    constexpr int TEST_SIZE_MEDIUM = 10000;
-    constexpr int TEST_SIZE_LARGE = 50000;
-    constexpr int TEST_SIZE_XLARGE = 100000;
-    constexpr int TEST_MAX_VALUE = 1000000;
-    constexpr int DECIMAL_BASE = 10;
-    constexpr int DEFAULT_SORT_VERSION = 25;
-}
+constexpr int SLEEP_TIME_US = 100 * 1000; // 100ms
+constexpr int DEFAULT_QUEUE_PRIORITY = 0;
+constexpr int SMALL_ARRAY_THRESHOLD = 16;
+constexpr int MEDIUM_ARRAY_THRESHOLD = 100;
+constexpr int MAX_BUCKET_COUNT = 1000;
+constexpr int MIN_BUCKET_COUNT = 10;
+constexpr int DEFAULT_RADIX = 256;
+constexpr int ASCII_CHAR_COUNT = 256;
+constexpr int ALPHABET_SIZE = 26;
+constexpr int TEST_SIZE_SMALL = 1000;
+constexpr int TEST_SIZE_MEDIUM = 10000;
+constexpr int TEST_SIZE_LARGE = 50000;
+constexpr int TEST_SIZE_XLARGE = 100000;
+constexpr int TEST_MAX_VALUE = 1000000;
+constexpr int DECIMAL_BASE = 10;
+constexpr int DEFAULT_SORT_VERSION = 25;
+} // namespace
 
-SortClass::SortClass(uint32_t version)
-{
-    LOGI("SortClass::SortClass %d", version);
-}
+SortClass::SortClass(uint32_t version) { LOGI("SortClass::SortClass %d", version); }
 
-SortClass::~SortClass()
-{
-    LOGI("FunctionClass::~FunctionClass");
-}
+SortClass::~SortClass() { LOGI("FunctionClass::~FunctionClass"); }
 
 // Lomuto分区法 - 简单但效率较低
-int LomutoPartition(vector<int>& arr, int low, int high)
-{
-    int pivot = arr[high];  // 选择最后一个元素作为基准
-    int i = low - 1;  // 较小元素的索引
+int LomutoPartition(vector<int> &arr, int low, int high) {
+    int pivot = arr[high]; // 选择最后一个元素作为基准
+    int i = low - 1;       // 较小元素的索引
     for (int j = low; j < high; j++) {
         // 如果当前元素小于或等于基准
         if (arr[j] <= pivot) {
@@ -78,12 +71,11 @@ int LomutoPartition(vector<int>& arr, int low, int high)
         }
     }
     swap(arr[i + 1], arr[high]);
-    return i + 1;  // 返回基准的最终位置
+    return i + 1; // 返回基准的最终位置
 }
 
 // 递归快速排序（Lomuto版本）
-void QuickSortLomuto(vector<int>& arr, int low, int high)
-{
+void QuickSortLomuto(vector<int> &arr, int low, int high) {
     if (low < high) {
         int pi = LomutoPartition(arr, low, high);
         QuickSortLomuto(arr, low, pi - 1);
@@ -91,8 +83,7 @@ void QuickSortLomuto(vector<int>& arr, int low, int high)
     }
 }
 
-void BankBusiness()
-{
+void BankBusiness() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw ordinary customer");
 
@@ -109,9 +100,8 @@ void BankBusiness()
 }
 
 // Hoare分区法 - 效率更高，交换次数更少
-int HoarePartition(vector<int>& arr, int low, int high)
-{
-    int pivot = arr[low + (high - low) / 2];  // 选择中间元素作为基准
+int HoarePartition(vector<int> &arr, int low, int high) {
+    int pivot = arr[low + (high - low) / 2]; // 选择中间元素作为基准
     int i = low - 1;
     int j = high + 1;
 
@@ -137,17 +127,15 @@ int HoarePartition(vector<int>& arr, int low, int high)
 }
 
 // 递归快速排序（Hoare版本）
-void QuickSortHoare(vector<int>& arr, int low, int high)
-{
+void QuickSortHoare(vector<int> &arr, int low, int high) {
     if (low < high) {
         int pi = HoarePartition(arr, low, high);
-        QuickSortHoare(arr, low, pi);      // 注意：这里包含pi
+        QuickSortHoare(arr, low, pi); // 注意：这里包含pi
         QuickSortHoare(arr, pi + 1, high);
     }
 }
 
-void BankBusinessVIP()
-{
+void BankBusinessVIP() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -163,8 +151,7 @@ void BankBusinessVIP()
 }
 
 // 插入排序 - 用于小数组优化
-void InsertionSort(vector<int>& arr, int low, int high)
-{
+void InsertionSort(vector<int> &arr, int low, int high) {
     for (int i = low + 1; i <= high; i++) {
         int key = arr[i];
         int j = i - 1;
@@ -178,8 +165,7 @@ void InsertionSort(vector<int>& arr, int low, int high)
 }
 
 // 随机选择基准元素，避免最坏情况
-int MedianOfThree(vector<int>& arr, int low, int high)
-{
+int MedianOfThree(vector<int> &arr, int low, int high) {
     int mid = low + (high - low) / 2;
 
     // 对三个元素进行排序
@@ -199,8 +185,7 @@ int MedianOfThree(vector<int>& arr, int low, int high)
 }
 
 // 三向切分快速排序（应对大量重复元素）
-void ThreeWayQuickSort(vector<int>& arr, int low, int high)
-{
+void ThreeWayQuickSort(vector<int> &arr, int low, int high) {
     // 小数组优化：当数组大小小于等于16时使用插入排序
     if (high - low <= SMALL_ARRAY_THRESHOLD) {
         InsertionSort(arr, low, high);
@@ -234,8 +219,7 @@ void ThreeWayQuickSort(vector<int>& arr, int low, int high)
 }
 
 // 快速排序包装函数（推荐使用）
-void QuickSort(vector<int>& arr)
-{
+void QuickSort(vector<int> &arr) {
     if (arr.size() <= 1) {
         return;
     }
@@ -244,8 +228,7 @@ void QuickSort(vector<int>& arr)
     ThreeWayQuickSort(arr, 0, arr.size() - 1);
 }
 
-void BankBusinessNew11()
-{
+void BankBusinessNew11() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -261,8 +244,7 @@ void BankBusinessNew11()
 }
 
 // 基础冒泡排序
-void BubbleSortBasic(vector<int>& arr)
-{
+void BubbleSortBasic(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 0; i < n - 1; i++) {
@@ -275,8 +257,7 @@ void BubbleSortBasic(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseBubble()
-{
+void BankBusinessBaseBubble() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -292,12 +273,11 @@ void BankBusinessBaseBubble()
 }
 
 // 优化版本1：增加提前结束判断
-void BubbleSortOptimized(vector<int>& arr)
-{
+void BubbleSortOptimized(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 0; i < n - 1; i++) {
-        bool swapped = false;  // 标记本轮是否发生交换
+        bool swapped = false; // 标记本轮是否发生交换
 
         for (int j = 0; j < n - 1 - i; j++) {
             if (arr[j] > arr[j + 1]) {
@@ -308,13 +288,12 @@ void BubbleSortOptimized(vector<int>& arr)
 
         // 如果本轮没有发生交换，说明数组已经有序
         if (!swapped) {
-            break;  // 提前结束排序
+            break; // 提前结束排序
         }
     }
 }
 
-void BankBusinessOptimizeBubble1()
-{
+void BankBusinessOptimizeBubble1() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -330,18 +309,17 @@ void BankBusinessOptimizeBubble1()
 }
 
 // 优化版本2：记录最后交换位置
-void BubbleSortOptimized2(vector<int>& arr)
-{
+void BubbleSortOptimized2(vector<int> &arr) {
     int n = arr.size();
-    int lastSwapIndex = n - 1;  // 记录最后一次交换的位置
+    int lastSwapIndex = n - 1; // 记录最后一次交换的位置
 
     while (lastSwapIndex > 0) {
-        int currentSwapIndex = 0;  // 当前轮最后交换的位置
+        int currentSwapIndex = 0; // 当前轮最后交换的位置
 
         for (int j = 0; j < lastSwapIndex; j++) {
             if (arr[j] > arr[j + 1]) {
                 swap(arr[j], arr[j + 1]);
-                currentSwapIndex = j;  // 更新最后交换位置
+                currentSwapIndex = j; // 更新最后交换位置
             }
         }
 
@@ -355,8 +333,7 @@ void BubbleSortOptimized2(vector<int>& arr)
     }
 }
 
-void BankBusinessOptimizeBubble2()
-{
+void BankBusinessOptimizeBubble2() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -372,8 +349,7 @@ void BankBusinessOptimizeBubble2()
 }
 
 // 鸡尾酒排序（双向冒泡排序）
-void CocktailSort(vector<int>& arr)
-{
+void CocktailSort(vector<int> &arr) {
     int n = arr.size();
     int left = 0;
     int right = n - 1;
@@ -388,7 +364,7 @@ void CocktailSort(vector<int>& arr)
                 swapped = true;
             }
         }
-        right--;  // 右边界缩小
+        right--; // 右边界缩小
 
         // 如果没有发生交换，提前结束
         if (!swapped) {
@@ -404,7 +380,7 @@ void CocktailSort(vector<int>& arr)
                 swapped = true;
             }
         }
-        left++;  // 左边界缩小
+        left++; // 左边界缩小
 
         // 如果没有发生交换，提前结束
         if (!swapped) {
@@ -413,8 +389,7 @@ void CocktailSort(vector<int>& arr)
     }
 }
 
-void BankBusinessOptimizeCock()
-{
+void BankBusinessOptimizeCock() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -430,18 +405,17 @@ void BankBusinessOptimizeCock()
 }
 
 // 基础插入排序 - 升序
-void InsertionSortBasic(vector<int>& arr)
-{
+void InsertionSortBasic(vector<int> &arr) {
     int n = arr.size();
 
     // 从第二个元素开始（第一个元素视为已排序）
     for (int i = 1; i < n; i++) {
-        int key = arr[i];  // 当前要插入的元素
-        int j = i - 1;      // 已排序部分的最后一个元素索引
+        int key = arr[i]; // 当前要插入的元素
+        int j = i - 1;    // 已排序部分的最后一个元素索引
 
         // 在已排序部分中找到合适位置
         while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];  // 元素后移
+            arr[j + 1] = arr[j]; // 元素后移
             j--;
         }
 
@@ -450,8 +424,7 @@ void InsertionSortBasic(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseInsertionSort()
-{
+void BankBusinessBaseInsertionSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -467,8 +440,7 @@ void BankBusinessBaseInsertionSort()
 }
 
 // 插入排序 - 降序
-void InsertionSortDescending(vector<int>& arr)
-{
+void InsertionSortDescending(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 1; i < n; i++) {
@@ -485,8 +457,7 @@ void InsertionSortDescending(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseInsertionSortDec()
-{
+void BankBusinessBaseInsertionSortDec() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -502,8 +473,7 @@ void BankBusinessBaseInsertionSortDec()
 }
 
 // 使用二分查找优化插入位置查找
-void InsertionSortBinarySearch(vector<int>& arr)
-{
+void InsertionSortBinarySearch(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 1; i < n; i++) {
@@ -533,8 +503,7 @@ void InsertionSortBinarySearch(vector<int>& arr)
     }
 }
 
-void BankBusinessInsertionSortBinary()
-{
+void BankBusinessInsertionSortBinary() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -550,8 +519,7 @@ void BankBusinessInsertionSortBinary()
 }
 
 // 哨兵优化版本
-void InsertionSortWithSentinel(vector<int>& arr)
-{
+void InsertionSortWithSentinel(vector<int> &arr) {
     int n = arr.size();
     if (n <= 1) {
         return;
@@ -581,8 +549,7 @@ void InsertionSortWithSentinel(vector<int>& arr)
     }
 }
 
-void BankBusinessInsertionSentinelSort()
-{
+void BankBusinessInsertionSentinelSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -598,9 +565,8 @@ void BankBusinessInsertionSentinelSort()
 }
 
 // 泛型插入排序模板
-template<typename T, typename Compare = std::less<T>>
-void InsertionSortTemplate(vector<T>& arr, Compare comp = Compare())
-{
+template <typename T, typename Compare = std::less<T>>
+void InsertionSortTemplate(vector<T> &arr, Compare comp = Compare()) {
     int n = arr.size();
 
     for (int i = 1; i < n; i++) {
@@ -621,14 +587,10 @@ struct Person {
     string name;
     int age;
 
-    bool operator<(const Person& other) const
-    {
-        return age < other.age;
-    }
+    bool operator<(const Person &other) const { return age < other.age; }
 };
 
-void BankBusinessinsertionTemplateSort()
-{
+void BankBusinessinsertionTemplateSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -644,8 +606,7 @@ void BankBusinessinsertionTemplateSort()
 }
 
 // 基础选择排序 - 升序
-void SelectionSortBasic(vector<int>& arr)
-{
+void SelectionSortBasic(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 0; i < n - 1; i++) {
@@ -666,8 +627,7 @@ void SelectionSortBasic(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseselectionSort()
-{
+void BankBusinessBaseselectionSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -683,8 +643,7 @@ void BankBusinessBaseselectionSort()
 }
 
 // 选择排序 - 降序（找最大值）
-void SelectionSortDescending(vector<int>& arr)
-{
+void SelectionSortDescending(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 0; i < n - 1; i++) {
@@ -702,8 +661,7 @@ void SelectionSortDescending(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseselectionDecSort()
-{
+void BankBusinessBaseselectionDecSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -719,8 +677,7 @@ void BankBusinessBaseselectionDecSort()
 }
 
 // 双向选择排序（鸡尾酒选择排序）
-void BidirectionalSelectionSort(vector<int>& arr)
-{
+void BidirectionalSelectionSort(vector<int> &arr) {
     int n = arr.size();
     int left = 0;
     int right = n - 1;
@@ -759,8 +716,7 @@ void BidirectionalSelectionSort(vector<int>& arr)
     }
 }
 
-void BankBusinessBasebidirectionalSelectionSort()
-{
+void BankBusinessBasebidirectionalSelectionSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -776,8 +732,7 @@ void BankBusinessBasebidirectionalSelectionSort()
 }
 
 // 记录位置最后再交换的版本
-void SelectionSortDelayedSwap(vector<int>& arr)
-{
+void SelectionSortDelayedSwap(vector<int> &arr) {
     int n = arr.size();
 
     for (int i = 0; i < n - 1; i++) {
@@ -804,8 +759,7 @@ void SelectionSortDelayedSwap(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseSelectionSortDelayedSwap()
-{
+void BankBusinessBaseSelectionSortDelayedSwap() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -821,9 +775,8 @@ void BankBusinessBaseSelectionSortDelayedSwap()
 }
 
 // 泛型选择排序模板
-template<typename T, typename Compare = std::less<T>>
-void SelectionSortTemplate(vector<T>& arr, Compare comp = Compare())
-{
+template <typename T, typename Compare = std::less<T>>
+void SelectionSortTemplate(vector<T> &arr, Compare comp = Compare()) {
     int n = arr.size();
 
     for (int i = 0; i < n - 1; i++) {
@@ -848,17 +801,15 @@ struct Student {
     int age;
 
     // 按分数降序，年龄升序
-    bool operator<(const Student& other) const
-    {
+    bool operator<(const Student &other) const {
         if (score != other.score) {
-            return score > other.score;  // 分数高的在前
+            return score > other.score; // 分数高的在前
         }
-        return age < other.age;  // 年龄小的在前
+        return age < other.age; // 年龄小的在前
     }
 };
 
-void BankBusinessBaseSelectionSortTemplate()
-{
+void BankBusinessBaseSelectionSortTemplate() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -874,8 +825,7 @@ void BankBusinessBaseSelectionSortTemplate()
 }
 
 // 基础桶排序 - 假设输入是[0, maxValue]范围内的均匀分布
-void BucketSortBasic(vector<int>& arr, int maxValue = 100)
-{
+void BucketSortBasic(vector<int> &arr, int maxValue = 100) {
     int n = arr.size();
     if (n <= 1) {
         return;
@@ -906,8 +856,7 @@ void BucketSortBasic(vector<int>& arr, int maxValue = 100)
     }
 }
 
-void BankBusinessBasebucketSort()
-{
+void BankBusinessBasebucketSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -923,8 +872,7 @@ void BankBusinessBasebucketSort()
 }
 
 // 桶排序 - 针对[0, 1)范围内的浮点数
-void BucketSortFloat(vector<double>& arr)
-{
+void BucketSortFloat(vector<double> &arr) {
     int n = arr.size();
     if (n <= 1) {
         return;
@@ -936,7 +884,7 @@ void BucketSortFloat(vector<double>& arr)
     // 2. 将每个元素放入对应的桶
     for (int i = 0; i < n; i++) {
         // 假设arr[i]在[0, 1)范围内
-        int bucketIndex = n * arr[i];  // 乘以n得到桶索引
+        int bucketIndex = n * arr[i]; // 乘以n得到桶索引
         buckets[bucketIndex].push_back(arr[i]);
     }
 
@@ -954,13 +902,12 @@ void BucketSortFloat(vector<double>& arr)
     }
 }
 
-void BankBusinessBasebucketSortFloat()
-{
+void BankBusinessBasebucketSortFloat() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
     // 简单示例
-     vector<double> arr = {0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434};
+    vector<double> arr = {0.897, 0.565, 0.656, 0.1234, 0.665, 0.3434};
 
     // 测试基础浮点桶排序版本
     auto start = chrono::high_resolution_clock::now();
@@ -974,26 +921,24 @@ void BankBusinessBasebucketSortFloat()
 class OptimizedBucketSort {
 private:
     // 计算合适的桶数量
-    int CalculateBucketCount(int n, int minVal, int maxVal)
-    {
+    int CalculateBucketCount(int n, int minVal, int maxVal) {
         if (n <= ONE_HUNDRED) {
-            return TEN;  // 小数据量用较少桶
+            return TEN; // 小数据量用较少桶
         }
         if (maxVal - minVal <= MAX_BUCKET_COUNT) {
-            return FIFTY;  // 数据范围小
+            return FIFTY; // 数据范围小
         }
 
         // 根据数据规模动态计算桶数量
         int bucketCount = sqrt(n);
-        bucketCount = min(bucketCount, MAX_BUCKET_COUNT);  // 上限1000个桶
-        bucketCount = max(bucketCount, MIN_BUCKET_COUNT);    // 下限10个桶
+        bucketCount = min(bucketCount, MAX_BUCKET_COUNT); // 上限1000个桶
+        bucketCount = max(bucketCount, MIN_BUCKET_COUNT); // 下限10个桶
 
         return bucketCount;
     }
 
     // 根据桶大小选择排序算法
-    void SortBucket(vector<int>& bucket)
-    {
+    void SortBucket(vector<int> &bucket) {
         int size = bucket.size();
         if (size <= SMALL_ARRAY_THRESHOLD) {
             // 小桶使用插入排序
@@ -1007,8 +952,7 @@ private:
         }
     }
 
-    void InsertionSort(vector<int>& arr)
-    {
+    void InsertionSort(vector<int> &arr) {
         int n = arr.size();
         for (int i = 1; i < n; i++) {
             int key = arr[i];
@@ -1022,8 +966,7 @@ private:
     }
 
 public:
-    void Sort(vector<int>& arr)
-    {
+    void Sort(vector<int> &arr) {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1057,7 +1000,7 @@ public:
 
         for (int i = 0; i < n; i++) {
             int bucketIndex = (arr[i] - minVal) / range;
-            bucketIndex = min(bucketIndex, bucketCount - 1);  // 防止越界
+            bucketIndex = min(bucketIndex, bucketCount - 1); // 防止越界
             buckets[bucketIndex].push_back(arr[i]);
         }
 
@@ -1082,8 +1025,7 @@ public:
 class TestDataGenerator {
 public:
     // 生成均匀分布的整数
-    static vector<int> generateUniformInt(int size, int minVal = 0, int maxVal = 1000)
-    {
+    static vector<int> generateUniformInt(int size, int minVal = 0, int maxVal = 1000) {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1096,8 +1038,7 @@ public:
     }
 
     // 生成高斯分布的整数
-    static vector<int> generateGaussianInt(int size, double mean = 500, double stddev = 100)
-    {
+    static vector<int> generateGaussianInt(int size, double mean = 500, double stddev = 100) {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1110,8 +1051,7 @@ public:
     }
 
     // 生成指数分布的整数
-    static vector<int> generateExponentialInt(int size, double lambda = 0.01)
-    {
+    static vector<int> generateExponentialInt(int size, double lambda = 0.01) {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1124,8 +1064,7 @@ public:
     }
 
     // 生成浮点数[0, 1)
-    static vector<double> generateUniformDouble(int size)
-    {
+    static vector<double> generateUniformDouble(int size) {
         vector<double> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1138,8 +1077,7 @@ public:
     }
 
     // 生成随机字符串
-    static vector<string> generateRandomStrings(int size, int maxLength = 10)
-    {
+    static vector<string> generateRandomStrings(int size, int maxLength = 10) {
         vector<string> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1158,8 +1096,7 @@ public:
     }
 
     // 生成包含负数的随机整数
-    static vector<int> generateSignedInts(int size)
-    {
+    static vector<int> generateSignedInts(int size) {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1172,8 +1109,7 @@ public:
     }
 
     // 生成固定位数的整数
-    static vector<int> generateFixedDigitInts(int size, int digits)
-    {
+    static vector<int> generateFixedDigitInts(int size, int digits) {
         vector<int> data(size);
         random_device rd;
         mt19937 gen(rd());
@@ -1193,18 +1129,13 @@ public:
     }
 };
 
-void BankBusinessBasebucketSortOptimized()
-{
+void BankBusinessBasebucketSortOptimized() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
     // 简单示例
     vector<int> sizes = {TEST_SIZE_SMALL, TEST_SIZE_MEDIUM, TEST_SIZE_LARGE, TEST_SIZE_XLARGE};
-    vector<pair<string, vector<int>>> testCases = {
-        {"均匀分布", {}},
-        {"高斯分布", {}},
-        {"指数分布", {}}
-    };
+    vector<pair<string, vector<int>>> testCases = {{"均匀分布", {}}, {"高斯分布", {}}, {"指数分布", {}}};
 
     OptimizedBucketSort bucketSorter;
     // 测试优化桶排序版本
@@ -1232,21 +1163,17 @@ void BankBusinessBasebucketSortOptimized()
 class ParallelBucketSort {
 private:
     // 并行排序单个桶
-    void ParallelSortBucket(vector<int>& bucket)
-    {
-        std::sort(bucket.begin(), bucket.end());
-    }
+    void ParallelSortBucket(vector<int> &bucket) { std::sort(bucket.begin(), bucket.end()); }
 
 public:
-    void Sort(vector<int>& arr)
-    {
+    void Sort(vector<int> &arr) {
         int n = arr.size();
         if (n <= 1) {
             return;
         }
         // 确定桶数量（根据CPU核心数优化）
         int bucketCount = min(n, static_cast<int>(thread::hardware_concurrency()) * 4);
-        bucketCount = max(bucketCount, 4);  // 至少4个桶
+        bucketCount = max(bucketCount, 4); // 至少4个桶
         // 找到最小值和最大值
         int minVal = *min_element(arr.begin(), arr.end());
         int maxVal = *max_element(arr.begin(), arr.end());
@@ -1272,14 +1199,12 @@ public:
         vector<future<void>> futures;
         for (int i = 0; i < bucketCount; i++) {
             if (!buckets[i].empty()) {
-                futures.push_back(async(launch::async,
-                    [&buckets, i]() {
-                        std::sort(buckets[i].begin(), buckets[i].end());
-                    }));
+                futures.push_back(
+                    async(launch::async, [&buckets, i]() { std::sort(buckets[i].begin(), buckets[i].end()); }));
             }
         }
         // 等待所有桶排序完成
-        for (auto& f : futures) {
+        for (auto &f : futures) {
             f.wait();
         }
         // 合并结果
@@ -1294,19 +1219,15 @@ public:
 };
 
 // 泛型桶排序模板
-template<typename T>
-class GenericBucketSort {
+template <typename T> class GenericBucketSort {
 private:
     // 哈希函数接口
-    using HashFunction = function<int(const T&, int)>;
+    using HashFunction = function<int(const T &, int)>;
 
 public:
     // 通用桶排序
-    static void Sort(vector<T>& arr,
-                     int bucketCount,
-                     HashFunction hashFunc,
-                     function<bool(const T&, const T&)> comp = less<T>())
-    {
+    static void Sort(vector<T> &arr, int bucketCount, HashFunction hashFunc,
+                     function<bool(const T &, const T &)> comp = less<T>()) {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1316,21 +1237,21 @@ public:
         vector<vector<T>> buckets(bucketCount);
 
         // 将元素分配到桶中
-        for (const T& item : arr) {
+        for (const T &item : arr) {
             int bucketIndex = hashFunc(item, bucketCount);
             bucketIndex = max(0, min(bucketIndex, bucketCount - 1));
             buckets[bucketIndex].push_back(item);
         }
 
         // 对每个桶排序
-        for (auto& bucket : buckets) {
+        for (auto &bucket : buckets) {
             std::sort(bucket.begin(), bucket.end(), comp);
         }
 
         // 合并结果
         int index = 0;
-        for (const auto& bucket : buckets) {
-            for (const T& item : bucket) {
+        for (const auto &bucket : buckets) {
+            for (const T &item : bucket) {
                 arr[index++] = item;
             }
         }
@@ -1340,11 +1261,10 @@ public:
 // 字符串桶排序示例
 class StringBucketSorter {
 public:
-    static void SortByLength(vector<string>& arr)
-    {
+    static void SortByLength(vector<string> &arr) {
         // 按字符串长度分桶
         int maxLength = 0;
-        for (const auto& s : arr) {
+        for (const auto &s : arr) {
             maxLength = max(maxLength, (int)s.length());
         }
 
@@ -1352,53 +1272,52 @@ public:
         vector<vector<string>> buckets(maxLength + 1);
 
         // 分配字符串到桶中
-        for (const auto& s : arr) {
+        for (const auto &s : arr) {
             buckets[s.length()].push_back(s);
         }
 
         // 对每个桶内的字符串按字典序排序
-        for (auto& bucket : buckets) {
+        for (auto &bucket : buckets) {
             sort(bucket.begin(), bucket.end());
         }
 
         // 合并结果
         int index = 0;
-        for (const auto& bucket : buckets) {
-            for (const auto& s : bucket) {
+        for (const auto &bucket : buckets) {
+            for (const auto &s : bucket) {
                 arr[index++] = s;
             }
         }
     }
 
-    static void SortByFirstChar(vector<string>& arr)
-    {
+    static void SortByFirstChar(vector<string> &arr) {
         // 按首字母分桶（26个字母+其他）
         const int emptyBucketIndex = 26;
         const int emptyBucketIndexOther = 27;
-        vector<vector<string>> buckets(emptyBucketIndexOther);  // 26个字母 + 其他字符
+        vector<vector<string>> buckets(emptyBucketIndexOther); // 26个字母 + 其他字符
 
-        for (const auto& s : arr) {
+        for (const auto &s : arr) {
             if (s.empty()) {
-                buckets[emptyBucketIndex].push_back(s);  // 空字符串放到最后一个桶
+                buckets[emptyBucketIndex].push_back(s); // 空字符串放到最后一个桶
             } else {
                 char firstChar = tolower(s[0]);
                 if (firstChar >= 'a' && firstChar <= 'z') {
                     buckets[firstChar - 'a'].push_back(s);
                 } else {
-                    buckets[emptyBucketIndex].push_back(s);  // 非字母字符
+                    buckets[emptyBucketIndex].push_back(s); // 非字母字符
                 }
             }
         }
 
         // 对每个桶排序
-        for (auto& bucket : buckets) {
+        for (auto &bucket : buckets) {
             sort(bucket.begin(), bucket.end());
         }
 
         // 合并结果
         int index = 0;
-        for (const auto& bucket : buckets) {
-            for (const auto& s : bucket) {
+        for (const auto &bucket : buckets) {
+            for (const auto &s : bucket) {
                 arr[index++] = s;
             }
         }
@@ -1406,17 +1325,15 @@ public:
 };
 
 // 获取数字的第d位（从个位开始，d=1表示个位）
-int GetDigit(int num, int d)
-    {
-        for (int i = 1; i < d; i++) {
-            num /= DECIMAL_BASE;
-        }
-        return num % DECIMAL_BASE;
+int GetDigit(int num, int d) {
+    for (int i = 1; i < d; i++) {
+        num /= DECIMAL_BASE;
     }
+    return num % DECIMAL_BASE;
+}
 
 // 获取数组中最大数字的位数
-int GetMaxDigits(const vector<int>& arr)
-    {
+int GetMaxDigits(const vector<int> &arr) {
     if (arr.empty()) {
         return 0;
     }
@@ -1429,12 +1346,11 @@ int GetMaxDigits(const vector<int>& arr)
         maxVal /= DECIMAL_BASE;
     }
 
-    return max(1, digits);  // 至少1位
+    return max(1, digits); // 至少1位
 }
 
 // LSD基数排序 - 十进制
-void RadixSortLSD(vector<int>& arr)
-{
+void RadixSortLSD(vector<int> &arr) {
     if (arr.size() <= 1) {
         return;
     }
@@ -1473,8 +1389,7 @@ void RadixSortLSD(vector<int>& arr)
     }
 }
 
-void BankBusinessBaseradixSort()
-{
+void BankBusinessBaseradixSort() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -1493,15 +1408,13 @@ void BankBusinessBaseradixSort()
 class OptimizedRadixSort {
 private:
     // 获取数字在指定基数下的第k位
-    int GetDigit(int num, int k, int radix)
-    {
+    int GetDigit(int num, int k, int radix) {
         int shiftAmount = k * static_cast<int>(log2(radix));
         return (num >> shiftAmount) & (radix - 1);
     }
 
     // 计算最大位数
-    int GetMaxDigits(int maxVal, int radix)
-    {
+    int GetMaxDigits(int maxVal, int radix) {
         int digits = 0;
         while (maxVal > 0 && radix != 0) {
             digits++;
@@ -1512,8 +1425,7 @@ private:
 
 public:
     // 通用基数排序，radix必须是2的幂（2,4,8,16,32,64,128,256）
-    void Sort(vector<int>& arr, int radix = DEFAULT_RADIX)
-    {
+    void Sort(vector<int> &arr, int radix = DEFAULT_RADIX) {
         int n = arr.size();
         if (n <= 1) {
             return;
@@ -1555,8 +1467,7 @@ public:
     }
 };
 
-void BankBusinessradixSortOptimized()
-{
+void BankBusinessradixSortOptimized() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -1580,9 +1491,8 @@ void BankBusinessradixSortOptimized()
 class MSDRadixSort {
 private:
     // 递归排序函数
-    void MsdSort(vector<int>& arr, int left, int right, int digit, int maxDigit)
-    {
-        const int digitCount = 10;  // 0-9
+    void MsdSort(vector<int> &arr, int left, int right, int digit, int maxDigit) {
+        const int digitCount = 10; // 0-9
         const int numBuckets = 11;
         if (left >= right || digit > maxDigit) {
             return;
@@ -1596,7 +1506,7 @@ private:
         }
 
         // 计数数组
-        vector<int> count(digitCount + 1, 0);  // 0-9 + 一个额外位置
+        vector<int> count(digitCount + 1, 0); // 0-9 + 一个额外位置
 
         // 临时数组
         vector<int> temp(n);
@@ -1604,7 +1514,7 @@ private:
         // 统计频率（处理digit=0的情况）
         for (int i = left; i <= right; i++) {
             int d = (digit == 0) ? 0 : GetDigit(arr[i], digit);
-            count[d + 1]++;  // +1为负数预留位置
+            count[d + 1]++; // +1为负数预留位置
         }
 
         // 计算起始位置
@@ -1634,8 +1544,7 @@ private:
         }
     }
 
-    void InsertionSort(vector<int>& arr, int left, int right)
-    {
+    void InsertionSort(vector<int> &arr, int left, int right) {
         for (int i = left + 1; i <= right; i++) {
             int key = arr[i];
             int j = i - 1;
@@ -1648,16 +1557,14 @@ private:
         }
     }
 
-    int GetDigit(int num, int d)
-    {
+    int GetDigit(int num, int d) {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
         return num % DECIMAL_BASE;
     }
 
-    int GetMaxDigits(const vector<int>& arr)
-    {
+    int GetMaxDigits(const vector<int> &arr) {
         if (arr.empty()) {
             return 0;
         }
@@ -1674,8 +1581,7 @@ private:
     }
 
 public:
-    void Sort(vector<int>& arr)
-    {
+    void Sort(vector<int> &arr) {
         if (arr.size() <= 1) {
             return;
         }
@@ -1685,8 +1591,7 @@ public:
     }
 };
 
-void BankBusinessradixSortMSD()
-{
+void BankBusinessradixSortMSD() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -1707,8 +1612,7 @@ void BankBusinessradixSortMSD()
 class SignedRadixSort {
 private:
     // 分离正负数
-    void SeparatePosNeg(vector<int>& arr)
-    {
+    void SeparatePosNeg(vector<int> &arr) {
         int n = arr.size();
         int left = 0;
         int right = 0;
@@ -1729,8 +1633,7 @@ private:
     }
 
     // 对绝对值进行基数排序
-    void RadixSortAbsolute(vector<int>& arr, int start, int end)
-    {
+    void RadixSortAbsolute(vector<int> &arr, int start, int end) {
         if (start >= end) {
             return;
         }
@@ -1785,8 +1688,7 @@ private:
         }
     }
 
-    int GetDigit(int num, int d)
-    {
+    int GetDigit(int num, int d) {
         for (int i = 1; i < d; i++) {
             num /= DECIMAL_BASE;
         }
@@ -1794,8 +1696,7 @@ private:
     }
 
 public:
-    void Sort(vector<int>& arr)
-    {
+    void Sort(vector<int> &arr) {
         if (arr.size() <= 1) {
             return;
         }
@@ -1829,8 +1730,7 @@ public:
     }
 };
 
-void BankBusinessradixSortSigned()
-{
+void BankBusinessradixSortSigned() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -1851,19 +1751,17 @@ void BankBusinessradixSortSigned()
 class StringRadixSort {
 private:
     // 获取字符串的第k个字符，如果超出长度返回0
-    char GetChar(const string& s, int k)
-    {
+    char GetChar(const string &s, int k) {
         if (k < s.length()) {
             return s[k];
         }
-        return 0;  // 空字符表示字符串结束
+        return 0; // 空字符表示字符串结束
     }
 
     // 获取最大字符串长度
-    int getMaxLength(const vector<string>& arr)
-    {
+    int getMaxLength(const vector<string> &arr) {
         int maxLen = 0;
-        for (const auto& s : arr) {
+        for (const auto &s : arr) {
             maxLen = max(maxLen, (int)s.length());
         }
         return maxLen;
@@ -1871,8 +1769,7 @@ private:
 
 public:
     // LSD字符串排序
-    void SortLSD(vector<string>& arr)
-    {
+    void SortLSD(vector<string> &arr) {
         if (arr.size() <= 1) {
             return;
         }
@@ -1909,8 +1806,7 @@ public:
     }
 
     // MSD字符串排序
-    void SortMSD(vector<string>& arr)
-    {
+    void SortMSD(vector<string> &arr) {
         if (arr.size() <= 1) {
             return;
         }
@@ -1918,8 +1814,7 @@ public:
     }
 
 private:
-    void MsdSort(vector<string>& arr, int low, int high, int depth)
-    {
+    void MsdSort(vector<string> &arr, int low, int high, int depth) {
         if (low >= high) {
             return;
         }
@@ -1931,7 +1826,7 @@ private:
         }
 
         // 计数数组，+1用于空字符
-        vector<int> count(ASCII_CHAR_COUNT + 2, 0);  // 0-255 + 2个额外位置
+        vector<int> count(ASCII_CHAR_COUNT + 2, 0); // 0-255 + 2个额外位置
 
         // 临时数组
         vector<string> aux(high - low + 1);
@@ -1939,7 +1834,7 @@ private:
         // 统计频率
         for (int i = low; i <= high; i++) {
             char c = GetChar(arr[i], depth);
-            count[c + 2]++;  // +2为排序稳定性
+            count[c + 2]++; // +2为排序稳定性
         }
 
         // 计算起始位置
@@ -1964,8 +1859,7 @@ private:
         }
     }
 
-    void InsertionSort(vector<string>& arr, int low, int high, int depth)
-    {
+    void InsertionSort(vector<string> &arr, int low, int high, int depth) {
         for (int i = low + 1; i <= high; i++) {
             for (int j = i; j > low; j--) {
                 if (CompareStrings(arr[j], arr[j - 1], depth) < 0) {
@@ -1977,8 +1871,7 @@ private:
         }
     }
 
-    int CompareStrings(const string& a, const string& b, int depth)
-    {
+    int CompareStrings(const string &a, const string &b, int depth) {
         int minLen = min(a.length(), b.length());
         for (int i = depth; i < minLen; i++) {
             if (a[i] != b[i]) {
@@ -1989,8 +1882,7 @@ private:
     }
 };
 
-void BankBusinessradixSortString()
-{
+void BankBusinessradixSortString() {
     usleep(SLEEP_TIME_US);
     LOGI("saving or withdraw VIP");
 
@@ -2006,8 +1898,7 @@ void BankBusinessradixSortString()
     cout << "  字符串基数排序:  " << duration.count() << " 微秒" << endl;
 }
 
-int SortClass::FfrtConcurrentQueue()
-{
+int SortClass::FfrtConcurrentQueue() {
     // type传1，代表串行调度
     BankQueueSystem bankQueue(0, "Bank", DEFAULT_SORT_VERSION);
 
@@ -2017,26 +1908,26 @@ int SortClass::FfrtConcurrentQueue()
     auto task3 = bankQueue.Enter(BankBusinessVIP, "customer3 vip", ffrt_queue_priority_high, DEFAULT_QUEUE_PRIORITY);
 
     auto task4 = bankQueue.Enter(BankBusinessBaseBubble, "customer4", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task5 = bankQueue.Enter(BankBusinessOptimizeBubble1, "customer5",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task6 = bankQueue.Enter(BankBusinessOptimizeBubble2, "customer6",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task7 = bankQueue.Enter(BankBusinessOptimizeCock, "customer7",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task5 =
+        bankQueue.Enter(BankBusinessOptimizeBubble1, "customer5", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task6 =
+        bankQueue.Enter(BankBusinessOptimizeBubble2, "customer6", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task7 =
+        bankQueue.Enter(BankBusinessOptimizeCock, "customer7", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
 
-    auto task8 = bankQueue.Enter(BankBusinessBaseInsertionSort, "customer8",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task9 = bankQueue.Enter(BankBusinessBaseInsertionSortDec, "customer9",
-                                 ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task10 = bankQueue.Enter(BankBusinessInsertionSortBinary, "customer10",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task11 = bankQueue.Enter(BankBusinessInsertionSentinelSort, "customer11",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
-    auto task12 = bankQueue.Enter(BankBusinessinsertionTemplateSort, "customer12",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task8 =
+        bankQueue.Enter(BankBusinessBaseInsertionSort, "customer8", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task9 =
+        bankQueue.Enter(BankBusinessBaseInsertionSortDec, "customer9", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task10 =
+        bankQueue.Enter(BankBusinessInsertionSortBinary, "customer10", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task11 = bankQueue.Enter(BankBusinessInsertionSentinelSort, "customer11", ffrt_queue_priority_low,
+                                  DEFAULT_QUEUE_PRIORITY);
+    auto task12 = bankQueue.Enter(BankBusinessinsertionTemplateSort, "customer12", ffrt_queue_priority_low,
+                                  DEFAULT_QUEUE_PRIORITY);
 
-    auto task13 = bankQueue.Enter(BankBusinessBaseselectionSort, "customer13",
-                                  ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
+    auto task13 =
+        bankQueue.Enter(BankBusinessBaseselectionSort, "customer13", ffrt_queue_priority_low, DEFAULT_QUEUE_PRIORITY);
     // 等待所有的客户服务完成
     bankQueue.Wait(task1);
     bankQueue.Wait(task2);

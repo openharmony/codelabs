@@ -19,7 +19,7 @@
 extern "C" {
 #endif
 
-    int ComputeFfrtQueue();
+int ComputeFfrtQueue();
 
 #ifdef __cplusplus
 }

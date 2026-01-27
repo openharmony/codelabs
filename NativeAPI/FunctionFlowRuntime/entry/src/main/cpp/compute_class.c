@@ -12,103 +12,102 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "function_class.h"
 #include "common_ffrt.h"
+#include "function_class.h"
 #include "native_log_wrapper.h"
-#include <string.h>
-#include <unistd.h>
+#include <complex.h>
+#include <float.h>
+#include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 #include <time.h>
-#include <stdbool.h>
-#include <complex.h>
-#include <float.h>
+#include <unistd.h>
 
 /* ========== 常量定义 ========== */
-#define ONE                    1
-#define TWO                    2
-#define THREE                  3
-#define FIVE                   5
-#define RET_SUCCESS_5          5
+#define ONE 1
+#define TWO 2
+#define THREE 3
+#define FIVE 5
+#define RET_SUCCESS_5 5
 
-#define MAX_MATRIX_SIZE        1000
-#define MAX_VECTOR_SIZE        10000
-#define MAX_ITERATIONS         10000
-#define EPSILON                (1e-12)
-#define PI                     (3.14159265358979323846)
-#define GOLDEN_RATIO           (1.618033988749895)
-#define MAX_OPT_VARS           100
-#define MAX_POLY_DEGREE        50
+#define MAX_MATRIX_SIZE 1000
+#define MAX_VECTOR_SIZE 10000
+#define MAX_ITERATIONS 10000
+#define EPSILON (1e-12)
+#define PI (3.14159265358979323846)
+#define GOLDEN_RATIO (1.618033988749895)
+#define MAX_OPT_VARS 100
+#define MAX_POLY_DEGREE 50
 #define MAX_INTEGRATION_POINTS 1000
-#define TEST_MATRIX_SIZE       3
-#define TEST_VECTOR_SIZE       3
-#define TEST_FFT_SIZE          8
-#define TEST_INTEGRAL_STEPS    100
-#define TEST_ODE_STEPS         100
-#define TEST_OPT_TOL           (1e-6)
-#define TEST_POLY_FIT_POINTS   10
-#define TEST_RANDOM_SAMPLES    1000
-#define TEST_POLY_DEGREE_1     1
-#define TEST_NOISE_AMPLITUDE   (0.1)
-#define TEST_OPT_LOWER_BOUND   0
-#define TEST_OPT_UPPER_BOUND   5
-#define TEST_ODE_Y0            (1.0)
-#define TEST_ODE_T0            (0.0)
-#define TEST_ODE_TF            (1.0)
-#define TEST_GAMMA_ARG         (5.0)
-#define TEST_ERF_ARG          (1.0)
-#define GAMMA_G                (7.0)
-#define GAMMA_COEFF_COUNT      9
-#define ERF_COEFF_COUNT        5
-#define DFT_SIN_COEFF          (-1.0)
-#define DFT_COS_COEFF          (1.0)
-#define SIMPSON_EVEN_COEFF     (2.0)
-#define SIMPSON_ODD_COEFF      (4.0)
-#define SIMPSON_DIVISOR        (3.0)
-#define RK4_DIVISOR            (6.0)
-#define RK4_HALF               (0.5)
-#define RK4_K2_COEFF           (2.0)
-#define RK4_K3_COEFF           (2.0)
-#define POWER_ITER_INIT_VAL    (0.0)
-#define RANDOM_MAX_RANGE       (1.0)
-#define RANDOM_MIN_RANGE       (0.0)
-#define INIT_ZERO              0
-#define INIT_ONE               1
-#define INIT_TWO               2
-#define INIT_THREE             3
-#define INIT_VALUE_1           (1.0)
-#define INIT_VALUE_2           (2.0)
-#define INIT_VALUE_3           (3.0)
-#define INIT_VALUE_4           (4.0)
-#define MATRIX_DET_SIGN_1      1
-#define MATRIX_DET_SIGN_NEG    (-1)
-#define MATRIX_INDEX_OFFSET    3
-#define FFT_SEPARATION_FACTOR  2
-#define ROMBERG_BASE           (4.0)
-#define ROMBERG_POWER_BASE     (2.0)
-#define ROMBERG_CONV_FACTOR    (0.5)
-#define BRENT_P_COEFF_1        (0.5)
-#define BRENT_P_COEFF_2        (2.0)
+#define TEST_MATRIX_SIZE 3
+#define TEST_VECTOR_SIZE 3
+#define TEST_FFT_SIZE 8
+#define TEST_INTEGRAL_STEPS 100
+#define TEST_ODE_STEPS 100
+#define TEST_OPT_TOL (1e-6)
+#define TEST_POLY_FIT_POINTS 10
+#define TEST_RANDOM_SAMPLES 1000
+#define TEST_POLY_DEGREE_1 1
+#define TEST_NOISE_AMPLITUDE (0.1)
+#define TEST_OPT_LOWER_BOUND 0
+#define TEST_OPT_UPPER_BOUND 5
+#define TEST_ODE_Y0 (1.0)
+#define TEST_ODE_T0 (0.0)
+#define TEST_ODE_TF (1.0)
+#define TEST_GAMMA_ARG (5.0)
+#define TEST_ERF_ARG (1.0)
+#define GAMMA_G (7.0)
+#define GAMMA_COEFF_COUNT 9
+#define ERF_COEFF_COUNT 5
+#define DFT_SIN_COEFF (-1.0)
+#define DFT_COS_COEFF (1.0)
+#define SIMPSON_EVEN_COEFF (2.0)
+#define SIMPSON_ODD_COEFF (4.0)
+#define SIMPSON_DIVISOR (3.0)
+#define RK4_DIVISOR (6.0)
+#define RK4_HALF (0.5)
+#define RK4_K2_COEFF (2.0)
+#define RK4_K3_COEFF (2.0)
+#define POWER_ITER_INIT_VAL (0.0)
+#define RANDOM_MAX_RANGE (1.0)
+#define RANDOM_MIN_RANGE (0.0)
+#define INIT_ZERO 0
+#define INIT_ONE 1
+#define INIT_TWO 2
+#define INIT_THREE 3
+#define INIT_VALUE_1 (1.0)
+#define INIT_VALUE_2 (2.0)
+#define INIT_VALUE_3 (3.0)
+#define INIT_VALUE_4 (4.0)
+#define MATRIX_DET_SIGN_1 1
+#define MATRIX_DET_SIGN_NEG (-1)
+#define MATRIX_INDEX_OFFSET 3
+#define FFT_SEPARATION_FACTOR 2
+#define ROMBERG_BASE (4.0)
+#define ROMBERG_POWER_BASE (2.0)
+#define ROMBERG_CONV_FACTOR (0.5)
+#define BRENT_P_COEFF_1 (0.5)
+#define BRENT_P_COEFF_2 (2.0)
 #define REGRESSION_DENOM_COEFF (1.0)
-#define GAMMA_APPROX_OFFSET    (0.5)
-#define ERF_SIGN_POS           1
-#define ERF_SIGN_NEG           (-1)
-#define ERF_T_DIVISOR          (1.0)
-#define ERF_EXP_COEFF          (-1.0)
-#define BOX_MULLER_COEFF       (-2.0)
-#define NORM_MEAN              (0.0)
-#define NORM_STDDEV            (1.0)
-#define RET_SUCCESS            0
-#define RET_FAILURE            (-1)
-#define FFRT_QUEUE_PRIORITY    ffrt_queue_priority_low
-#define FFRT_QUEUE_FLAG        0
-#define DEFAULT_STRIDE         1
-#define DEFAULT_INCREMENT      1
-#define DEFAULT_DECREMENT      1
-#define DEFAULT_MULTIPLIER     (2.0)
-#define DEFAULT_DIVISOR        (2.0)
+#define GAMMA_APPROX_OFFSET (0.5)
+#define ERF_SIGN_POS 1
+#define ERF_SIGN_NEG (-1)
+#define ERF_T_DIVISOR (1.0)
+#define ERF_EXP_COEFF (-1.0)
+#define BOX_MULLER_COEFF (-2.0)
+#define NORM_MEAN (0.0)
+#define NORM_STDDEV (1.0)
+#define RET_SUCCESS 0
+#define RET_FAILURE (-1)
+#define FFRT_QUEUE_PRIORITY ffrt_queue_priority_low
+#define FFRT_QUEUE_FLAG 0
+#define DEFAULT_STRIDE 1
+#define DEFAULT_INCREMENT 1
+#define DEFAULT_DECREMENT 1
+#define DEFAULT_MULTIPLIER (2.0)
+#define DEFAULT_DIVISOR (2.0)
 
 /* ========== 数据结构 ========== */
 typedef struct {
@@ -181,14 +180,10 @@ double IntegrateGaussian(double (*f)(double), double a, double b, int n);
 double IntegrateMonteCarlo(double (*f)(double), double a, double b, int samples);
 
 // 微分方程求解
-Vector SolveOdeEuler(double (*f)(double, double), double y0,
-    double t0, double tf, int steps);
-Vector SolveOdeRk4(double (*f)(double, double), double y0,
-    double t0, double tf, int steps);
-Vector SolveOdeAdaptive(double (*f)(double, double), double y0,
-    double t0, double tf, double tol);
-Vector SolveOdeSystem(void (*f)(double, const Vector*, Vector*),
-    const Vector *y0, double t0, double tf, int steps);
+Vector SolveOdeEuler(double (*f)(double, double), double y0, double t0, double tf, int steps);
+Vector SolveOdeRk4(double (*f)(double, double), double y0, double t0, double tf, int steps);
+Vector SolveOdeAdaptive(double (*f)(double, double), double y0, double t0, double tf, double tol);
+Vector SolveOdeSystem(void (*f)(double, const Vector *, Vector *), const Vector *y0, double t0, double tf, int steps);
 
 // 傅里叶变换
 void Dft(const double *input, ComplexNum *output, int n);
@@ -199,8 +194,8 @@ void FftReal(const double *input, ComplexNum *output, int n);
 
 // 优化算法
 double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol);
-Vector MinimizeGradientDescent(double (*f)(const Vector*),
-    const Vector *gradient, const Vector *x0, double learningRate, int iterations);
+Vector MinimizeGradientDescent(double (*f)(const Vector *), const Vector *gradient, const Vector *x0,
+                               double learningRate, int iterations);
 double PolynomialEval(const Polynomial *p, double x);
 Vector SplineInterpolation(const Vector *x, const Vector *y);
 double SplineEval(const Vector *x, const Vector *y, const Vector *coeffs, double xi);
@@ -209,8 +204,7 @@ double SplineEval(const Vector *x, const Vector *y, const Vector *coeffs, double
 Vector LinearRegression(Vector *x, Vector *y);
 double CorrelationCoefficient(const Vector *x, const Vector *y);
 Vector MovingAverage(const Vector *data, int window);
-void ComputeStatistics(const Vector *data, double *mean, double *variance,
-    double *skewness, double *kurtosis);
+void ComputeStatistics(const Vector *data, double *mean, double *variance, double *skewness, double *kurtosis);
 
 // 特殊函数
 double GammaFunction(double x);
@@ -242,16 +236,14 @@ struct ParaStruct {
 struct ParaStruct g_para1;
 struct ParaStruct g_para2;
 
-void Add(void *arg)
-{
+void Add(void *arg) {
     struct ParaStruct *para1 = (struct ParaStruct *)arg;
     int a = para1->a;
     int b = para1->b;
     g_addRet = RET_SUCCESS;
 }
 
-void Sub(void *arg)
-{
+void Sub(void *arg) {
     struct ParaStruct *para2 = (struct ParaStruct *)arg;
     int a = para2->a;
     int b = para2->b;
@@ -259,12 +251,11 @@ void Sub(void *arg)
 }
 
 /* ========== 内存管理实现 ========== */
-Matrix CreateMatrix(int rows, int cols)
-{
+Matrix CreateMatrix(int rows, int cols) {
     Matrix mat;
     mat.rows = rows;
     mat.cols = cols;
-    mat.data = (double*)malloc(rows * cols * sizeof(double));
+    mat.data = (double *)malloc(rows * cols * sizeof(double));
     if (mat.data == NULL) {
         fprintf(stderr, "内存分配失败\n");
         exit(EXIT_FAILURE);
@@ -272,8 +263,7 @@ Matrix CreateMatrix(int rows, int cols)
     return mat;
 }
 
-void DestroyMatrix(Matrix *mat)
-{
+void DestroyMatrix(Matrix *mat) {
     if (mat->data != NULL) {
         free(mat->data);
         mat->data = NULL;
@@ -282,15 +272,14 @@ void DestroyMatrix(Matrix *mat)
     mat->cols = INIT_ZERO;
 }
 
-Vector CreateVector(int size)
-{
+Vector CreateVector(int size) {
     Vector vec;
     vec.size = size;
     if (size <= 0) {
         fprintf(stderr, "无效的内存申请大小\n");
         exit(EXIT_FAILURE);
     }
-    vec.data = (double*)malloc(size * sizeof(double));
+    vec.data = (double *)malloc(size * sizeof(double));
     if (vec.data == NULL) {
         fprintf(stderr, "内存分配失败\n");
         exit(EXIT_FAILURE);
@@ -298,8 +287,7 @@ Vector CreateVector(int size)
     return vec;
 }
 
-void DestroyVector(Vector *vec)
-{
+void DestroyVector(Vector *vec) {
     if (vec->data != NULL) {
         free(vec->data);
         vec->data = NULL;
@@ -307,8 +295,7 @@ void DestroyVector(Vector *vec)
     vec->size = INIT_ZERO;
 }
 
-Matrix CopyMatrix(const Matrix *src)
-{
+Matrix CopyMatrix(const Matrix *src) {
     // 创建目标矩阵
     Matrix dst = CreateMatrix(src->rows, src->cols);
     if (dst.data != NULL && src->data != NULL) {
@@ -321,8 +308,7 @@ Matrix CopyMatrix(const Matrix *src)
     }
     return dst;
 }
-Vector CopyVector(const Vector *src)
-{
+Vector CopyVector(const Vector *src) {
     // 创建目标向量
     Vector dst = CreateVector(src->size);
     if (dst.data != NULL && src->data != NULL) {
@@ -335,8 +321,7 @@ Vector CopyVector(const Vector *src)
 }
 
 /* ========== 基本运算实现 ========== */
-Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB)
-{
+Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB) {
     if (matrixA->rows != matrixB->rows || matrixA->cols != matrixB->cols) {
         fprintf(stderr, "矩阵维度不匹配\n");
         exit(EXIT_FAILURE);
@@ -352,8 +337,7 @@ Matrix MatrixAdd(const Matrix *matrixA, const Matrix *matrixB)
     return result;
 }
 
-Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB)
-{
+Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB) {
     if (matrixA->cols != matrixB->rows) {
         fprintf(stderr, "矩阵维度不匹配，无法相乘\n");
         exit(EXIT_FAILURE);
@@ -374,8 +358,7 @@ Matrix MatrixMultiply(const Matrix *matrixA, const Matrix *matrixB)
     return result;
 }
 
-Matrix MatrixTranspose(const Matrix *matrix)
-{
+Matrix MatrixTranspose(const Matrix *matrix) {
     Matrix result = CreateMatrix(matrix->cols, matrix->rows);
 
     for (int i = INIT_ZERO; i < matrix->rows; i++) {
@@ -388,8 +371,7 @@ Matrix MatrixTranspose(const Matrix *matrix)
 }
 
 /* ========== LU分解实现 ========== */
-Matrix LuDecomposition(const Matrix *matrix)
-{
+Matrix LuDecomposition(const Matrix *matrix) {
     if (matrix->rows != matrix->cols) {
         fprintf(stderr, "LU分解需要方阵\n");
         exit(EXIT_FAILURE);
@@ -416,8 +398,7 @@ Matrix LuDecomposition(const Matrix *matrix)
     return lu;
 }
 
-Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b)
-{
+Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b) {
     int n = lowerMatrix->rows;
     Vector x = CreateVector(n);
 
@@ -432,8 +413,7 @@ Vector ForwardSubstitution(const Matrix *lowerMatrix, const Vector *b)
     return x;
 }
 
-Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b)
-{
+Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b) {
     int n = upperMatrix->rows;
     Vector x = CreateVector(n);
 
@@ -449,8 +429,7 @@ Vector BackwardSubstitution(const Matrix *upperMatrix, const Vector *b)
 }
 
 /* ========== 线性方程组求解 ========== */
-Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b)
-{
+Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b) {
     Matrix lu = LuDecomposition(matrix);
     int n = matrix->rows;
 
@@ -487,8 +466,7 @@ Vector SolveLinearSystemLu(const Matrix *matrix, const Vector *b)
     return x;
 }
 /* ========== 数值积分实现 ========== */
-double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
-{
+double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n) {
     if (n == 0) {
         return 0;
     }
@@ -503,8 +481,7 @@ double IntegrateTrapezoidal(double (*f)(double), double a, double b, int n)
     return sum * h;
 }
 
-double IntegrateSimpson(double (*f)(double), double a, double b, int n)
-{
+double IntegrateSimpson(double (*f)(double), double a, double b, int n) {
     if (n % INIT_TWO != INIT_ZERO) {
         n++;
     }
@@ -528,8 +505,7 @@ double IntegrateSimpson(double (*f)(double), double a, double b, int n)
     return sum * h / SIMPSON_DIVISOR;
 }
 
-double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
-{
+double IntegrateRomberg(double (*f)(double), double a, double b, double tol) {
     double r[MAX_ITERATIONS][MAX_ITERATIONS];
     int k = INIT_ZERO;
 
@@ -553,8 +529,7 @@ double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
         // Richardson 外推
         for (int j = INIT_ONE; j <= k; j++) {
             r[k][j] = r[k][j - INIT_ONE] +
-                (r[k][j - INIT_ONE] - r[k - INIT_ONE][j - INIT_ONE]) /
-                (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
+                      (r[k][j - INIT_ONE] - r[k - INIT_ONE][j - INIT_ONE]) / (pow(ROMBERG_BASE, j) - INIT_VALUE_1);
         }
 
         // 检查收敛
@@ -567,9 +542,7 @@ double IntegrateRomberg(double (*f)(double), double a, double b, double tol)
 }
 
 /* ========== 微分方程求解 ========== */
-Vector SolveOdeRk4(double (*f)(double, double), double y0,
-    double t0, double tf, int steps)
-{
+Vector SolveOdeRk4(double (*f)(double, double), double y0, double t0, double tf, int steps) {
     double h = (tf - t0) / (steps != INIT_ZERO ? steps : INIT_ONE);
     Vector solution = CreateVector(steps + INIT_ONE);
 
@@ -593,8 +566,7 @@ Vector SolveOdeRk4(double (*f)(double, double), double y0,
 }
 
 /* ========== 傅里叶变换实现 ========== */
-void Dft(const double *input, ComplexNum *output, int n)
-{
+void Dft(const double *input, ComplexNum *output, int n) {
     for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
         double imag = INIT_VALUE_1;
@@ -610,8 +582,7 @@ void Dft(const double *input, ComplexNum *output, int n)
     }
 }
 
-void Idft(const ComplexNum *input, double *output, int n)
-{
+void Idft(const ComplexNum *input, double *output, int n) {
     for (int k = INIT_ZERO; k < n; k++) {
         double real = INIT_VALUE_1;
         double imag = INIT_VALUE_1;
@@ -629,18 +600,17 @@ void Idft(const ComplexNum *input, double *output, int n)
     }
 }
 
-void Fft(ComplexNum *data, int n)
-{
+void Fft(ComplexNum *data, int n) {
     if (n <= INIT_ONE) {
         return;
     }
 
     // 分离偶数和奇数项
-    ComplexNum *even = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
+    ComplexNum *even = (ComplexNum *)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
     if (even == NULL) {
         return;
     }
-    ComplexNum *odd = (ComplexNum*)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
+    ComplexNum *odd = (ComplexNum *)malloc(n / FFT_SEPARATION_FACTOR * sizeof(ComplexNum));
     if (odd == NULL) {
         free(even);
         return;
@@ -674,8 +644,7 @@ void Fft(ComplexNum *data, int n)
 }
 
 /* ========== 优化算法实现 ========== */
-double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol)
-{
+double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol) {
     double c = b - GOLDEN_RATIO * (b - a);
     double d = a + GOLDEN_RATIO * (b - a);
     double fc = f(c);
@@ -700,9 +669,8 @@ double MinimizeGoldenSection(double (*f)(double), double a, double b, double tol
     return (a + b) / DEFAULT_MULTIPLIER;
 }
 
-Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradient, const Vector *x0,
-                               double learningRate, int iterations)
-{
+Vector MinimizeGradientDescent(double (*f)(const Vector *), const Vector *gradient, const Vector *x0,
+                               double learningRate, int iterations) {
     Vector x = CopyVector(x0);
     Vector grad = CreateVector(x0->size);
 
@@ -740,8 +708,7 @@ Vector MinimizeGradientDescent(double (*f)(const Vector*), const Vector *gradien
     return x;
 }
 /* ========== 统计分析 ========== */
-Vector LinearRegression(Vector *x, Vector *y)
-{
+Vector LinearRegression(Vector *x, Vector *y) {
     int n = x->size;
     double sumX = 0.0;
     double sumY = 0.0;
@@ -774,21 +741,12 @@ Vector LinearRegression(Vector *x, Vector *y)
     return result;
 }
 /* ========== 特殊函数实现 ========== */
-double GammaFunction(double x)
-{
+double GammaFunction(double x) {
     // Lanczos 近似
     const double g = GAMMA_G;
-    const double coeffs[] = {
-        0.99999999999980993,
-        676.5203681218851,
-        -1259.1392167224028,
-        771.32342877765313,
-        -176.61502916214059,
-        12.507343278686905,
-        -0.13857109526572012,
-        9.9843695780195716e-6,
-        1.5056327351493116e-7
-    };
+    const double coeffs[] = {0.99999999999980993,  676.5203681218851,     -1259.1392167224028,
+                             771.32342877765313,   -176.61502916214059,   12.507343278686905,
+                             -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7};
 
     if (x < DEFAULT_DIVISOR) {
         return PI / (sin(PI * x) * GammaFunction(INIT_VALUE_1 - x));
@@ -801,25 +759,20 @@ double GammaFunction(double x)
         a += coeffs[i] / (x + i);
     }
 
-    double result = sqrt(DEFAULT_MULTIPLIER * PI) *
-                    pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) *
+    double result = sqrt(DEFAULT_MULTIPLIER * PI) * pow(x + g + GAMMA_APPROX_OFFSET, x + GAMMA_APPROX_OFFSET) *
                     exp(-(x + g + GAMMA_APPROX_OFFSET)) * a;
     return result;
 }
-double BetaFunction(double a, double b)
-{
-    return GammaFunction(a) * GammaFunction(b) / GammaFunction(a + b);
-}
+double BetaFunction(double a, double b) { return GammaFunction(a) * GammaFunction(b) / GammaFunction(a + b); }
 
-double ErfFunction(double x)
-{
+double ErfFunction(double x) {
     // Abramowitz and Stegun 近似
-    const double a1 =  0.254829592;
+    const double a1 = 0.254829592;
     const double a2 = -0.284496736;
-    const double a3 =  1.421413741;
+    const double a3 = 1.421413741;
     const double a4 = -1.453152027;
-    const double a5 =  1.061405429;
-    const double p  =  0.3275911;
+    const double a5 = 1.061405429;
+    const double p = 0.3275911;
 
     int sign = (x < INIT_VALUE_1) ? ERF_SIGN_NEG : ERF_SIGN_POS;
     x = fabs(x);
@@ -830,17 +783,10 @@ double ErfFunction(double x)
     return sign * y;
 }
 
-double Ff(double t, double y)
-{
-    return -y;
-}
-double Parabola(double x)
-{
-    return x * x - INIT_VALUE_4 * x + INIT_VALUE_4;
-}
+double Ff(double t, double y) { return -y; }
+double Parabola(double x) { return x * x - INIT_VALUE_4 * x + INIT_VALUE_4; }
 
-void Compute(void *arg)
-{
+void Compute(void *arg) {
     printf("=== 高性能科学计算库测试 ===\n\n");
 
     srand(time(NULL));
@@ -881,8 +827,7 @@ void Compute(void *arg)
     // dy/dt = -y, y(0) = 1
 
     Vector sol = SolveOdeRk4(Ff, TEST_ODE_Y0, TEST_ODE_T0, TEST_ODE_TF, TEST_ODE_STEPS);
-    printf("微分方程 y' = -y 在 t=1 的解: %.10f (理论值: %.10f)\n",
-           sol.data[TEST_ODE_STEPS], exp(-INIT_VALUE_1));
+    printf("微分方程 y' = -y 在 t=1 的解: %.10f (理论值: %.10f)\n", sol.data[TEST_ODE_STEPS], exp(-INIT_VALUE_1));
 
     // 测试5: 傅里叶变换
     printf("\n5. 测试傅里叶变换:\n");
@@ -909,8 +854,7 @@ void Compute(void *arg)
     g_computeRet = RET_SUCCESS;
 }
 
-int ComputeFfrtQueue()
-{
+int ComputeFfrtQueue() {
     // 并行调度
     ffrt_queue_t bank = CreateBankSystem("Bank", INIT_TWO, TYPE_CONCURRENT);
     if (!bank) {
