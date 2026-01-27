@@ -15,8 +15,6 @@
 import { promptAction } from '@kit.ArkUI';
 import common from '@ohos.app.ability.common';
 import picker from '@ohos.file.picker';
-import image from '@ohos.multimedia.image';
-import fs from '@ohos.file.fs';
 import { Item, ItemUseStatus, DEFAULT_CATEGORY_OPTIONS } from '../model/Item';
 import ItemRdb from '../data/ItemRdb';
 import { StatisticsPage } from './StatisticsPage';
