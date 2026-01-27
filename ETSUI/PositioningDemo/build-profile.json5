@@ -1,0 +1,56 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "storeFile": "D:/Location2/key_restore/loc_test.p12",
+          "storePassword": "0000001BED7003DE3EFDAC6F5C22FFBA376D7D5D6B3C2CBFAD413A9AB93747835532FDE24E70F0F865935C",
+          "keyAlias": "loc_test",
+          "keyPassword": "0000001B2CCC2607068801CDF4CFC08201B5E8504616219D4420CF05461427D7404B92313395AFF8950E49",
+          "signAlg": "SHA256withECDSA",
+          "profile": "D:/Location2/key_restore/loc_testDebug.p7b",
+          "certpath": "D:/Location2/key_restore/loc_test.cer"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "6.0.2(22)",
+        "compatibleSdkVersion": "5.1.0(18)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
