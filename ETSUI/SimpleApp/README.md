@@ -239,9 +239,8 @@ export struct HomePage {
     Scroll(this.scroller) {
       Column() {
         MultiFunctionEntryModule()
-         // 添加新模块
+        NewFeatureIntroductionModule()           // 添加新模块
         PromotionalBannerModule()
-        // ... 其他模块
       }
     }
   }
