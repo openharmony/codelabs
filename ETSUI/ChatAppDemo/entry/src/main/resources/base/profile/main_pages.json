@@ -5,6 +5,8 @@
     "pages/Main",
     "pages/Login",
     "pages/Chat",
-    "pages/AddPost"
+    "pages/AddPost",
+    "pages/NewFriends",
+    "pages/AddFriends"
   ]
 }
