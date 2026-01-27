@@ -13,51 +13,49 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
-import { Routes } from '../constants/Routes';
-import { Contact } from '../model/Contact';
-import { ContactService } from '../service/ContactService';
+import router from '@ohos.router'
+import promptAction from '@ohos.promptAction'
+import { Routes } from '../constants/Routes'
+import { Contact } from '../model/Contact'
+import { ContactService } from '../service/ContactService'
 
 @Entry
-@Component
 struct ContactDetailPage {
-  @State contact: Contact = new Contact('', '');
-  @State isLoading: boolean = true;
-  private contactId: string = '';
+  @State contact: Contact = new Contact('', '')
+  @State isLoading: boolean = true
+  private contactId: string = ''
 
-  aboutToAppear() {
-    const params = router.getParams() as Record<string, string>;
+  aboutToAppear(): void {
+    const params = router.getParams() as Record<string, string>
 
     // 【修改】只接收 contactId
     if (params && params['contactId']) {
-      this.contactId = params['contactId'];
-      this.fetchContactDetail();
+      this.contactId = params['contactId']
+      this.fetchContactDetail()
     } else if (params && params['contact']) {
-      // 兼容旧版本传参方式
       try {
-        const passedContact = JSON.parse(params['contact']) as Contact;
-        this.contact = passedContact;
-        this.contactId = passedContact.id;
-        this.fetchContactDetail();
+        const passedContact = JSON.parse(params['contact']) as Contact
+        this.contact = passedContact
+        this.contactId = passedContact.id
+        this.fetchContactDetail()
       } catch (e) {
-        console.error("解析联系人数据失败");
+        console.error('[ContactDetailPage] 解析联系人数据失败')
       }
     }
   }
 
-  onPageShow() {
+  onPageShow(): void {
     // 每次显示页面重新获取,确保从编辑页返回后数据是最新的
     if (this.contactId) {
-      this.fetchContactDetail();
+      this.fetchContactDetail()
     }
   }
 
-  async fetchContactDetail() {
-    this.isLoading = true;
+  async fetchContactDetail(): Promise<void> {
+    this.isLoading = true
     try {
-      const allContacts = await ContactService.getAllContacts();
-      const found = allContacts.find(item => item.id === this.contactId);
+      const allContacts = await ContactService.getAllContacts()
+      const found = allContacts.find((item: Contact): boolean => item.id === this.contactId)
 
       if (found) {
         // 【关键点】创建新对象赋值,确保响应式更新
@@ -67,58 +65,58 @@ struct ContactDetailPage {
           phone: found.phone,
           email: found.email || '',
           remark: found.remark || ''
-        } as Contact;
-        console.info('[ContactDetailPage] 加载联系人详情成功:', this.contact.name);
+        } as Contact
+        console.info('[ContactDetailPage] 加载联系人详情成功:', this.contact.name)
       } else {
-        console.warn('[ContactDetailPage] 未找到联系人,ID:', this.contactId);
-        promptAction.showToast({ message: '联系人不存在' });
-        router.back();
+        console.warn('[ContactDetailPage] 未找到联系人,ID:', this.contactId)
+        promptAction.showToast({ message: '联系人不存在' })
+        router.back()
       }
     } catch (err) {
-      console.error('获取联系人详情失败: ' + JSON.stringify(err));
-      promptAction.showToast({ message: '加载失败' });
+      console.error('[ContactDetailPage] 获取联系人详情失败:', JSON.stringify(err))
+      promptAction.showToast({ message: '加载失败' })
     } finally {
-      this.isLoading = false;
+      this.isLoading = false
     }
   }
 
-  handleEdit() {
+  handleEdit(): void {
     router.pushUrl({
       url: Routes.CONTACT_EDIT,
       params: { contactId: this.contactId }
-    });
+    })
   }
 
-  handleDelete() {
+  handleDelete(): void {
     AlertDialog.show({
       title: '删除联系人',
       message: `确定要删除联系人"${this.contact.name}"吗?`,
       primaryButton: {
         value: '取消',
-        action: () => {}
+        action: (): void => {}
       },
       secondaryButton: {
         value: '删除',
         fontColor: Color.Red,
-        action: async () => {
+        action: async (): Promise<void> => {
           try {
-            await ContactService.deleteContact(this.contactId);
-            promptAction.showToast({ message: '已成功删除' });
+            await ContactService.deleteContact(this.contactId)
+            promptAction.showToast({ message: '已成功删除' })
 
-            // 【关键修改】触发全局刷新标志
-            AppStorage.Set('contactListRefreshFlag', Date.now());
+            // 【关键修改】触发全局刷新标志 - 使用 PersistentStorage
+            PersistentStorage.PersistProp('contactListRefreshFlag', Date.now())
 
-            router.back();
+            router.back()
           } catch (err) {
-            console.error('删除失败:', JSON.stringify(err));
-            promptAction.showToast({ message: '删除失败,请检查权限' });
+            console.error('[ContactDetailPage] 删除失败:', JSON.stringify(err))
+            promptAction.showToast({ message: '删除失败,请检查权限' })
           }
         }
       }
-    });
+    })
   }
 
-  build() {
+  build(): void {
     Navigation() {
       Column() {
         if (this.isLoading) {
@@ -181,12 +179,12 @@ struct ContactDetailPage {
               .backgroundColor('#FFEBEE')
               .width('46%')
               .height(45)
-              .onClick(() => this.handleDelete())
+              .onClick((): void => this.handleDelete())
 
             Button('编辑')
               .width('46%')
               .height(45)
-              .onClick(() => this.handleEdit())
+              .onClick((): void => this.handleEdit())
           }
           .width('100%')
           .justifyContent(FlexAlign.SpaceBetween)
@@ -197,11 +195,12 @@ struct ContactDetailPage {
       .height('100%')
       .backgroundColor('#F1F3F5')
     }
-    .title("联系人详情")
+    .title('联系人详情')
     .titleMode(NavigationTitleMode.Mini)
   }
 
-  @Builder DetailItem(label: string, value: string) {
+  @Builder
+  DetailItem(label: string, value: string): void {
     Row() {
       Text(label)
         .width(80)
@@ -216,3 +215,4 @@ struct ContactDetailPage {
     .padding(18)
   }
 }
+

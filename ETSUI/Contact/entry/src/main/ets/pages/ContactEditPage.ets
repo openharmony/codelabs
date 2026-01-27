@@ -20,7 +20,6 @@ import { Contact } from '../model/Contact';
 import { ContactService } from '../service/ContactService';
 
 @Entry
-@Component
 struct ContactEditPage {
   // 状态变量
   @State contactId: string = '';
