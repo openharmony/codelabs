@@ -15,14 +15,16 @@
 #include "common_ffrt.h"
 #include "native_log_wrapper.h"
 
-static inline void FfrtExecFunctionWrapper(void *t) {
+static inline void FfrtExecFunctionWrapper(void *t)
+{
     CFunction *f = (CFunction *)t;
     if (f->func) {
         f->func(f->arg);
     }
 }
 
-static inline void FfrtDestroyFunctionWrapper(void *t) {
+static inline void FfrtDestroyFunctionWrapper(void *t)
+{
     CFunction *f = (CFunction *)t;
     if (f->afterFunc) {
         f->afterFunc(f->arg);
@@ -30,7 +32,8 @@ static inline void FfrtDestroyFunctionWrapper(void *t) {
 }
 #define FFRT_STATIC_ASSERT(cond, msg) int x(int static_assertion_##msg[(cond) ? 1 : -1])
 static inline ffrt_function_header_t *FfrtCreateFunctionWrapper(const ffrt_function_t func,
-                                                                const ffrt_function_t afterFunc, void *arg) {
+                                                                const ffrt_function_t afterFunc, void *arg)
+{
     FFRT_STATIC_ASSERT(sizeof(CFunction) <= ffrt_auto_managed_function_storage_size,
                        size_of_function_must_be_less_than_ffrt_auto_managed_function_storage_size);
 
@@ -43,7 +46,8 @@ static inline ffrt_function_header_t *FfrtCreateFunctionWrapper(const ffrt_funct
     return (ffrt_function_header_t *)f;
 }
 
-ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type) {
+ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type)
+{
     ffrt_queue_attr_t queueAttr;
     (void)ffrt_queue_attr_init(&queueAttr);
     ffrt_queue_attr_set_max_concurrency(&queueAttr, concurrency);
@@ -67,14 +71,16 @@ ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type) {
     return queue;
 }
 
-void DestroyBankSystem(ffrt_queue_t queueHandle) {
+void DestroyBankSystem(ffrt_queue_t queueHandle)
+{
     ffrt_queue_destroy(queueHandle);
     LOGI("destroy bank system successfully");
 }
 
 // 封装提交队列任务函数
 ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request, ffrt_queue_priority_t level,
-                                 int delay) {
+                                 int delay)
+{
     ffrt_task_attr_t taskAttr;
     (void)ffrt_task_attr_init(&taskAttr);
     ffrt_task_attr_set_name(&taskAttr, request.name);

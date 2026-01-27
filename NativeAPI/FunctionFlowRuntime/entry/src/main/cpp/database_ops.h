@@ -100,14 +100,16 @@ public:
     time_t createdAt;
     time_t updatedAt;
 
-    SmartTableRow() {
+    SmartTableRow()
+    {
         cells = nullptr;
         cellCount = 0;
         rowId = 0;
         deleted = false;
     }
 
-    explicit SmartTableRow(int columnCnt) {
+    explicit SmartTableRow(int columnCnt)
+    {
         cellCount = columnCnt;
         cells = std::make_unique<DataCell[]>(columnCnt);
         rowId = 0;
@@ -115,8 +117,8 @@ public:
     }
 
     // 构造函数1：从vector初始化
-    SmartTableRow(int id, const std::vector<DataCell> &cellData)
-        : rowId(id), deleted(false), cellCount(cellData.size()) {
+    SmartTableRow(int id, const std::vector<DataCell> &cellData) : rowId(id), deleted(false), cellCount(cellData.size())
+    {
         time_t now = time(nullptr);
         if (now == static_cast<time_t>(-1)) {
             throw std::runtime_error("Failed to get current time");
@@ -130,13 +132,15 @@ public:
     }
 
     // 构造函数2：从初始化列表
-    SmartTableRow(int id, std::initializer_list<DataCell> initList)
-        : SmartTableRow(id, std::vector<DataCell>(initList)) {}
+    SmartTableRow(int id, std::initializer_list<DataCell> initList) : SmartTableRow(id, std::vector<DataCell>(initList))
+    {
+    }
 
     // 深拷贝构造函数
     SmartTableRow(const SmartTableRow &other)
         : cellCount(other.cellCount), rowId(other.rowId), deleted(other.deleted), createdAt(other.createdAt),
-          updatedAt(other.updatedAt) {
+          updatedAt(other.updatedAt)
+    {
         if (other.cells) {
             cells = std::make_unique<DataCell[]>(cellCount);
             for (size_t i = 0; i < cellCount; ++i) {
@@ -145,7 +149,8 @@ public:
         }
     }
     // 深拷贝赋值运算符
-    SmartTableRow &operator=(const SmartTableRow &other) {
+    SmartTableRow &operator=(const SmartTableRow &other)
+    {
         if (this != &other) {
             cells.reset(); // 释放原有内存
 
@@ -183,7 +188,8 @@ public:
     int maxDegree;
 
     // 构造函数
-    SmartBPlusTreeNode(int degree, bool leaf) : maxDegree(degree), isLeaf(leaf), numKeys(0) {
+    SmartBPlusTreeNode(int degree, bool leaf) : maxDegree(degree), isLeaf(leaf), numKeys(0)
+    {
         // 分配keys数组（B+树最多有maxDegree-1个key）
         int maxKeys = maxDegree - 1;
         keys = std::make_unique<int[]>(maxKeys);
@@ -271,7 +277,8 @@ public:
     char errorMsg[MAX_ERROR_MSG];
 
     SmartQueryResult(int cols, const std::vector<std::string> &colNames, const std::vector<std::vector<DataCell>> &data)
-        : columnCount(cols) {
+        : columnCount(cols)
+    {
         columnNames = std::make_unique<std::unique_ptr<char[]>[]>(columnCount);
         for (int i = 0; i < columnCount; i++) {
             if (i < static_cast<int>(colNames.size()) && !colNames[i].empty()) {
@@ -291,7 +298,8 @@ public:
     }
 
     // 获取列名
-    const char *GetColumnName(int col) const {
+    const char *GetColumnName(int col) const
+    {
         if (col < 0 || col >= columnCount || !columnNames || !columnNames[col]) {
             return "";
         }

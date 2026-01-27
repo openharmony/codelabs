@@ -21,7 +21,8 @@
 extern "C" {
 #endif
 
-inline const char *GetRawFileName(const char *path) {
+inline const char *GetRawFileName(const char *path)
+{
     char ch = '/';
     const char *start = path;
     // get end of the string

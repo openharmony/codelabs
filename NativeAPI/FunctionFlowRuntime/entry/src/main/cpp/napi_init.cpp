@@ -12,16 +12,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <aki/jsbind.h>
-#include "function_class_cpp.h"
-#include "function_class.h"
 #include "compute_class.h"
+#include "function_class.h"
+#include "function_class_cpp.h"
 #include "sort_class.h"
+#include <aki/jsbind.h>
 
-int Add(int a, int b)
-{
-    return a + b;
-}
+int Add(int a, int b) { return a + b; }
 
 // Step 2 注册 FFI 特性
 JSBIND_GLOBAL()
@@ -31,13 +28,15 @@ JSBIND_GLOBAL()
     JSBIND_FUNCTION(ComputeFfrtQueue);
 }
 
-JSBIND_CLASS(FunctionClass) {
+JSBIND_CLASS(FunctionClass)
+{
     JSBIND_CONSTRUCTOR<int>();
     JSBIND_METHOD(FfrtSerialQueue);
     JSBIND_METHOD(FfrtConcurrentQueue);
 }
 
-JSBIND_CLASS(SortClass) {
+JSBIND_CLASS(SortClass)
+{
     JSBIND_CONSTRUCTOR<int>();
     JSBIND_METHOD(FfrtConcurrentQueue);
 }
