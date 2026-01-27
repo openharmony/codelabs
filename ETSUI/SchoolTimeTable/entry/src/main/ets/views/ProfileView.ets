@@ -14,7 +14,6 @@
  */
 import { router } from '@kit.ArkUI';
 import { CourseDataService } from '../service/CourseDataService';
-import { UserInfo } from '../model/CourseModel';
 import promptAction from '@ohos.promptAction';
 import { ExportCourseDialog } from '../components/ExportCourseDialog';
 import { ImportCourseDialog } from '../components/ImportCourseDialog';

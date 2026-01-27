@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 import { CourseDataService } from '../service/CourseDataService';
-import { Course, WeekDay } from '../model/CourseModel';
 import promptAction from '@ohos.promptAction';
 import picker from '@ohos.file.picker';
 import fs from '@ohos.file.fs';

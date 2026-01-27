@@ -14,7 +14,6 @@
  */
 import router from '@ohos.router';
 import { CourseDataService } from '../service/CourseDataService';
-import { UserInfo } from '../model/CourseModel';
 
 @Entry
 @Component
