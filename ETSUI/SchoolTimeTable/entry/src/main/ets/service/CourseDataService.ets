@@ -19,7 +19,6 @@ import {
   Semester,
   CourseStatistics,
   AppSettings,
-  AppTheme,
   ExportData,
   UserInfo
 } from '../model/CourseModel';

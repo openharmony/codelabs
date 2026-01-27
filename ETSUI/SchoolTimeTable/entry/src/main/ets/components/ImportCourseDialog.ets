@@ -17,7 +17,6 @@ import { Course, ExportData } from '../model/CourseModel';
 import promptAction from '@ohos.promptAction';
 import picker from '@ohos.file.picker';
 import fs from '@ohos.file.fs';
-import { BusinessError } from '@ohos.base';
 import util from '@ohos.util';
 import { ColorConstants } from '../model/ColorConstants';
 
