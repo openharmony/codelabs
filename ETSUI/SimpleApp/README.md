@@ -220,7 +220,7 @@ buildResponsiveLayout() {
 ```typescript
 // 在 generated/view/ 目录下创建新模块
 @Component
-export struct NewFeatureModule {
+export struct NewFeatureIntroductionModule {
   @Consume('appPathStack') appPathStack: NavPathStack;
   
   build() {
@@ -239,7 +239,7 @@ export struct HomePage {
     Scroll(this.scroller) {
       Column() {
         MultiFunctionEntryModule()
-        NewFeatureModule()           // 添加新模块
+        NewFeatureIntroductionModule()           // 添加新模块
         PromotionalBannerModule()
         // ... 其他模块
       }
@@ -295,4 +295,4 @@ const themeConfig = {
 
 ---
 
-**注意**: 本项目为 OpenHarmony 开发学习演示用途，展示了模块化应用架构的最佳实践。实际部署时请根据具体需求进行适当修改和安全加固。
+**注意**: 本项目为 OpenHarmony 开发学习演示用途，展示了模块化应用架构的展示。实际部署时请根据具体需求进行调整和加强安全措施。
