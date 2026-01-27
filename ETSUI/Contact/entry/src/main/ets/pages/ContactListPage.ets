@@ -13,11 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import router from '@ohos.router'
 import { Routes } from '../constants/Routes'
 import { Contact } from '../model/Contact'
 import { ContactService } from '../service/ContactService'
-import { pinyin } from 'pinyin-pro' // 【新增】导入拼音库
 
 // 在应用入口或公共文件定义全局刷新标志
 PersistentStorage.PersistProp('contactListRefreshFlag', 0)
@@ -29,7 +43,6 @@ interface ContactGroup {
 }
 
 @Entry
-@Component
 struct ContactListPage {
   @State contactList: Contact[] = []
   @State filteredContactList: Contact[] = []
@@ -41,13 +54,13 @@ struct ContactListPage {
   private lastRefreshFlag: number = 0
   private scroller: Scroller = new Scroller()
 
-  aboutToAppear() {
+  aboutToAppear(): void {
     this.lastRefreshFlag = this.refreshFlag
     this.loadData()
   }
 
   // 监听刷新标志变化
-  aboutToUpdate() {
+  aboutToUpdate(): void {
     if (this.refreshFlag !== this.lastRefreshFlag) {
       console.info('[ContactListPage] 检测到刷新标志变化,重新加载数据')
       this.lastRefreshFlag = this.refreshFlag
@@ -55,11 +68,11 @@ struct ContactListPage {
     }
   }
 
-  onPageShow() {
+  onPageShow(): void {
     this.loadData()
   }
 
-  async loadData() {
+  async loadData(): Promise<void> {
     this.isLoading = true
 
     try {
@@ -74,41 +87,21 @@ struct ContactListPage {
     }
   }
 
-  // 【修改】使用 pinyin-pro 获取拼音首字母
+  // 获取首字母：英文字母返回大写，其他字符统一返回 #
   getFirstLetter(name: string): string {
-    if (!name || name.length === 0) return '#'
-
-    try {
-      // 获取第一个字符的拼音首字母
-      const firstChar = name.charAt(0)
-
-      // 判断是否为英文字母
-      if (/^[A-Za-z]$/.test(firstChar)) {
-        return firstChar.toUpperCase()
-      }
-
-      // 使用 pinyin-pro 获取拼音首字母
-      const pinyinResult = pinyin(firstChar, {
-        pattern: 'first', // 只返回首字母
-        toneType: 'none', // 不带音调
-        type: 'string' // 返回字符串
-      })
-
-      // 将结果转换为大写
-      const letter = pinyinResult.toUpperCase()
-
-      // 验证是否为 A-Z
-      if (/^[A-Z]$/.test(letter)) {
-        return letter
-      }
-
-      // 如果不是标准字母,归类到 #
-      return '#'
-
-    } catch (error) {
-      console.error('[ContactListPage] 获取拼音失败:', error)
+    if (!name || name.length === 0) {
       return '#'
     }
+
+    const firstChar = name.charAt(0)
+
+    // 判断是否为英文字母
+    if (/^[A-Za-z]$/.test(firstChar)) {
+      return firstChar.toUpperCase()
+    }
+
+    // 其他字符（包括中文）统一返回 #
+    return '#'
   }
 
   // 对联系人进行分组
@@ -116,87 +109,86 @@ struct ContactListPage {
     const groupMap = new Map<string, Contact[]>()
 
     // 按首字母分组
-    contacts.forEach(contact => {
+    contacts.forEach((contact: Contact) => {
       const letter = this.getFirstLetter(contact.name)
       if (!groupMap.has(letter)) {
         groupMap.set(letter, [])
       }
-      groupMap.get(letter)!.push(contact)
+      const group = groupMap.get(letter)
+      if (group !== undefined) {
+        group.push(contact)
+      }
     })
 
     // 转换为数组并排序
     const groups: ContactGroup[] = []
 
     // 将 # 放在最后
-    const letters = Array.from(groupMap.keys()).sort((a, b) => {
-      if (a === '#') return 1
-      if (b === '#') return -1
+    const letters = Array.from(groupMap.keys()).sort((a: string, b: string): number => {
+      if (a === '#') {
+        return 1
+      }
+      if (b === '#') {
+        return -1
+      }
       return a.localeCompare(b)
     })
 
-    letters.forEach(letter => {
-      const contactsInGroup = groupMap.get(letter)!
-      // 组内按名字的拼音排序
-      contactsInGroup.sort((a, b) => {
-        const pinyinA = pinyin(a.name, { toneType: 'none', type: 'string' })
-        const pinyinB = pinyin(b.name, { toneType: 'none', type: 'string' })
-        return pinyinA.localeCompare(pinyinB)
-      })
-      groups.push({
-        letter: letter,
-        contacts: contactsInGroup
-      })
+    letters.forEach((letter: string) => {
+      const contactsInGroup = groupMap.get(letter)
+      if (contactsInGroup !== undefined) {
+        // 组内按名字字母序排序
+        contactsInGroup.sort((a: Contact, b: Contact): number => {
+          const nameA = a.name || ''
+          const nameB = b.name || ''
+          return nameA.localeCompare(nameB)
+        })
+        groups.push({
+          letter: letter,
+          contacts: contactsInGroup
+        })
+      }
     })
 
     return groups
   }
 
   // 过滤联系人的方法
-  filterContacts() {
+  filterContacts(): void {
     if (!this.searchText || this.searchText.trim() === '') {
       this.filteredContactList = this.contactList
     } else {
       const keyword = this.searchText.toLowerCase().trim()
-      this.filteredContactList = this.contactList.filter(contact => {
-        const nameMatch = contact.name?.toLowerCase().includes(keyword)
-        const phoneMatch = contact.phone?.includes(keyword)
+      this.filteredContactList = this.contactList.filter((contact: Contact): boolean => {
+        const nameMatch = contact.name?.toLowerCase().includes(keyword) ?? false
+        const phoneMatch = contact.phone?.includes(keyword) ?? false
 
-        // 【新增】支持拼音搜索
-        let pinyinMatch = false
-        try {
-          const fullPinyin = pinyin(contact.name, { toneType: 'none', type: 'string' }).toLowerCase()
-          const firstLetters = pinyin(contact.name, { pattern: 'first', toneType: 'none', type: 'string' }).toLowerCase()
-          pinyinMatch = fullPinyin.includes(keyword) || firstLetters.includes(keyword)
-        } catch (error) {
-          console.error('[ContactListPage] 拼音搜索失败:', error)
-        }
-
-        return nameMatch || phoneMatch || pinyinMatch
+        return nameMatch || phoneMatch
       })
     }
 
     // 更新分组数据
     this.contactGroups = this.groupContacts(this.filteredContactList)
-    this.alphabetList = this.contactGroups.map(group => group.letter)
+    this.alphabetList = this.contactGroups.map((group: ContactGroup): string => group.letter)
 
     console.info('[ContactListPage] 过滤后联系人数量:', this.filteredContactList.length)
     console.info('[ContactListPage] 字母索引:', this.alphabetList)
   }
 
   // 处理搜索输入变化
-  handleSearchChange(value: string) {
+  handleSearchChange(value: string): void {
     this.searchText = value
     this.filterContacts()
   }
 
   // 清空搜索
-  clearSearch() {
+  clearSearch(): void {
     this.searchText = ''
     this.filterContacts()
   }
 
   // 处理字母索引点击
-  handleAlphabetSelect(index: number) {
+  handleAlphabetSelect(index: number): void {
     const letter = this.alphabetList[index]
     console.info('[ContactListPage] 选中字母:', letter)
 
@@ -210,7 +202,7 @@ struct ContactListPage {
     this.scroller.scrollToIndex(targetIndex)
   }
 
-  build() {
+  build(): void {
     Navigation() {
       Stack({ alignContent: Alignment.End }) {
         Column({ space: 0 }) {
@@ -218,7 +210,7 @@ struct ContactListPage {
           Row() {
             Search({
               value: this.searchText,
-              placeholder: '搜索姓名、拼音或手机号' // 【修改】提示支持拼音搜索
+              placeholder: '搜索姓名或手机号'
             })
               .searchButton('搜索')
               .width('100%')
@@ -297,7 +289,7 @@ struct ContactListPage {
             List({ space: 0, scroller: this.scroller }) {
               ForEach(
                 this.contactGroups,
-                (group: ContactGroup, groupIndex: number) => {
+                (group: ContactGroup) => {
                   // 分组标题
                   ListItemGroup({
                     header: this.GroupHeader(group.letter),
@@ -359,11 +351,11 @@ struct ContactListPage {
                           })
                         })
                       },
-                      (item: Contact) => item.key || item.id || ''
+                      (item: Contact): string => item.key || item.id || ''
                     )
                   }
                 },
-                (group: ContactGroup) => group.letter
+                (group: ContactGroup): string => group.letter
               )
             }
             .width('100%')
@@ -423,7 +415,7 @@ struct ContactListPage {
 
   // 分组标题Builder
   @Builder
-  GroupHeader(letter: string) {
+  GroupHeader(letter: string): void {
     Row() {
       Text(letter)
         .fontSize(14)

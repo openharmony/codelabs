@@ -17,14 +17,13 @@ import router from '@ohos.router';
 import { Routes } from '../constants/Routes';
 
 @Entry
-@Component
 struct Index {
-  onPageShow() {
+  onPageShow(): void {
     // 自动跳转到列表页
     router.replaceUrl({ url: Routes.CONTACT_LIST })
   }
 
-  build() {
+  build(): void {
     Row() {
       Column() {
         Text('正在加载联系人...')

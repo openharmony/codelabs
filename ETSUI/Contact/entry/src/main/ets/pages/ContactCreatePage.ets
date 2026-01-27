@@ -20,7 +20,6 @@ import { Contact } from '../model/Contact'
 import { ContactService } from '../service/ContactService'
 
 @Entry
-@Component
 struct ContactCreatePage {
   @State name: string = ''
   @State phone: string = ''
@@ -28,7 +27,7 @@ struct ContactCreatePage {
   @State remark: string = ''
   @State isSubmitting: boolean = false
 
-  async handleSave() {
+  async handleSave(): Promise<void> {
     if (!this.name.trim() || !this.phone.trim()) {
       promptAction.showToast({ message: '姓名和手机号不能为空' })
       return
@@ -48,12 +47,12 @@ struct ContactCreatePage {
 
       promptAction.showToast({ message: '保存成功' })
 
-      setTimeout(() => {
+      setTimeout((): void => {
         router.back()
       }, 500)
 
     } catch (err) {
-      const error = err as BusinessError;
+      const error = err as BusinessError
       console.error('[ContactCreatePage] 保存失败:', error)
       promptAction.showToast({
         message: `保存失败: ${error.message || '未知错误'}`
@@ -63,7 +62,7 @@ struct ContactCreatePage {
     }
   }
 
-  build() {
+  build(): void {
     Navigation() {
       Column() {
         List() {
@@ -72,7 +71,9 @@ struct ContactCreatePage {
               '姓名',
               '请输入姓名',
               this.name,
-              (val) => this.name = val
+              (val: string): void => {
+                this.name = val
+              }
             )
           }
 
@@ -81,7 +82,9 @@ struct ContactCreatePage {
               '手机',
               '请输入手机号',
               this.phone,
-              (val) => this.phone = val,
+              (val: string): void => {
+                this.phone = val
+              },
               InputType.PhoneNumber
             )
           }
@@ -91,7 +94,9 @@ struct ContactCreatePage {
               '邮箱',
               '请输入邮箱（选填）',
               this.email,
-              (val) => this.email = val,
+              (val: string): void => {
+                this.email = val
+              },
               InputType.Email
             )
           }
@@ -101,7 +106,9 @@ struct ContactCreatePage {
               '备注',
               '请输入备注（选填）',
               this.remark,
-              (val) => this.remark = val
+              (val: string): void => {
+                this.remark = val
+              }
             )
           }
         }
@@ -115,7 +122,9 @@ struct ContactCreatePage {
           .height(44)
           .margin({ top: 20 })
           .enabled(!this.isSubmitting)
-          .onClick(() => this.handleSave())
+          .onClick((): void => {
+            this.handleSave()  // 不使用 await，只是触发
+          })
       }
       .width('100%')
       .height('100%')
@@ -135,7 +144,7 @@ struct ContactCreatePage {
     value: string,
     onValueChange: (val: string) => void,
     type: InputType = InputType.Normal
-  ) {
+  ): void {
     Row() {
       Text(label)
         .width(64)
