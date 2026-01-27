@@ -1,9 +1,9 @@
 import { LocationInfo } from '../model/SportModel';
 
 export class PathGradientTool {
-  static getPathColors(points: LocationInfo[], colorInterval: number): string[] | null {
+  static getPathColors(points: LocationInfo[], colorInterval: number): string[] {
     if (!points || points.length < 2) {
-      return null;
+      return [];
     }
 
     console.log('PathGradientTool: 开始计算颜色, 点数:', points.length, '间隔:', colorInterval);

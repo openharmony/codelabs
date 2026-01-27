@@ -38,29 +38,28 @@ struct HistoryPage {
           })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 20, bottom: 20 })
+      .padding({ left: 16, right: 16, top: 16, bottom: 16 })
 
       if (this.sportRecords.length === 0) {
         Column() {
           Text('暂无运动记录')
             .fontSize(16)
             .fontColor('#999999')
-            .margin({ top: 40 })
         }
         .width('100%')
         .height('100%')
         .justifyContent(FlexAlign.Center)
       } else {
-        List({ space: 12 }) {
+        List({ space: 10 }) {
           ForEach(this.sportRecords, (record: SportData, index: number) => {
             ListItem() {
               this.RecordItem(record, index)
             }
+            .margin({ left: 16, right: 16 })
           }, (record: SportData, index: number) => `${index}_${record.startTime}`)
         }
         .width('100%')
         .layoutWeight(1)
-        .padding({ left: 16, right: 16 })
       }
     }
     .width('100%')
@@ -114,6 +113,15 @@ struct HistoryPage {
     .backgroundColor('#FFFFFF')
     .borderRadius(12)
     .shadow({ radius: 8, color: '#1A000000', offsetX: 0, offsetY: 2 })
+    .onClick(() => {
+      console.log('点击了运动记录:', record);
+      router.pushUrl({
+        url: 'pages/HistoryDetailPage',
+        params: {
+          record: JSON.stringify(record)
+        }
+      });
+    })
   }
 
   @Builder
