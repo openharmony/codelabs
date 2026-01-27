@@ -1,3 +1,4 @@
+import { router } from '@kit.ArkUI'; // 引入路由模块
 import { ContactGroup } from './ContactGroup'
 import { NavTitle } from './NavTitle'
 import { ContactModel } from '../viewmodel/ContactModel'
@@ -105,24 +106,30 @@ export struct Contact {
   private scroller: Scroller = new Scroller()
 
   @Builder
-  buildItem(image: Resource, title: string) {
+  buildItem(image: Resource, title: string, onClick?: () => void) {
     Row() {
       Image(image)
         .width(40)
         .height(40)
         .borderRadius(6)
-        .margin({
-          left: 10
-        })
+        .margin({ left: 10 })
       Text(title)
         .fontWeight(500)
-        .margin({
-          left: 10
-        })
-    }.width('96%')
-    .height(50)
+        .margin({ left: 10 })
+      Blank()
+      Image($r('sys.media.ohos_ic_public_arrow_right')) // 使用系统右箭头
+        .width(20)
+        .height(20)
+        .margin({ right: 10 })
+        .opacity(0.3)
+    }
+    .width('100%')
+    .height(55)
+    .backgroundColor(Color.White)
+    .onClick(() => {
+      if (onClick) onClick();
+    })
   }
-
   @Builder
   buildListItemHeader(index: string) {
     Row() {
@@ -144,7 +151,10 @@ export struct Contact {
           NavTitle({ title: '通讯录' })
           List({ space: 10 }) {
             ListItem() {
-              this.buildItem($r('app.media.new_friend'), '新的朋友')
+              // 修改点：添加跳转到 NewFriends 页面
+              this.buildItem($r('app.media.new_friend'), '新的朋友', () => {
+                router.pushUrl({ url: 'pages/NewFriends' })
+              })
             }
 
             ListItem() {
