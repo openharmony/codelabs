@@ -2,6 +2,7 @@ import router from '@ohos.router';
 import { UserService } from '../service/UserService';
 import { StatisticsService } from '../service/StatisticsService';
 import { HistoryService } from '../service/HistoryService';
+import { PlanService } from '../service/PlanService';
 import { UserInfo, UserStatistics } from '../model/UserModel';
 import { common } from '@kit.AbilityKit';
 
@@ -30,14 +31,21 @@ struct ProfilePage {
   @State weeklyFrequency: number = 0;
   @State isLoaded: boolean = false;
 
+  @State totalPlans: number = 0;
+  @State activePlans: number = 0;
+  @State completedPlans: number = 0;
+  @State averageCompletionRate: number = 0;
+
   private userService: UserService = new UserService();
   private historyService: HistoryService = new HistoryService();
   private statisticsService: StatisticsService = new StatisticsService(this.historyService);
+  private planService: PlanService = new PlanService(this.historyService);
 
   async aboutToAppear() {
     const context = getContext(this) as common.UIAbilityContext;
     await this.userService.init(context);
     await this.historyService.init(context);
+    await this.planService.init(context);
     this.isLoaded = true;
     await this.loadData();
   }
@@ -93,6 +101,13 @@ struct ProfilePage {
 
     this.activityDays = await this.statisticsService.calculateActivityDays(30);
     this.weeklyFrequency = await this.statisticsService.calculateWeeklyFrequency();
+
+    // 加载训练计划统计
+    const planStatistics = await this.planService.getPlanStatistics();
+    this.totalPlans = planStatistics.totalPlans;
+    this.activePlans = planStatistics.activePlans;
+    this.completedPlans = planStatistics.completedPlans;
+    this.averageCompletionRate = planStatistics.averageCompletionRate;
   }
 
   build() {
@@ -103,6 +118,7 @@ struct ProfilePage {
           this.UserInfoCard()
           this.OverviewCard()
           this.SportTypeCard()
+          this.PlanCard()
           this.SettingsCard()
         }
         .padding(16)
@@ -558,6 +574,130 @@ struct ProfilePage {
     }
     .width('100%')
     .padding({ top: 10, bottom: 10 })
+  }
+
+  @Builder
+  PlanCard() {
+    Column() {
+      Row() {
+        Text('训练计划')
+          .fontSize(16)
+          .fontWeight(FontWeight.Bold)
+          .fontColor('#333333')
+        Blank()
+        Text('查看全部 >')
+          .fontSize(14)
+          .fontColor('#4ECDC4')
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/PlanPage' });
+          })
+      }
+      .width('100%')
+      .margin({ bottom: 16 })
+
+      Row() {
+        // 总计划数
+        Column() {
+          Row() {
+            Text('📋')
+              .fontSize(20)
+              .margin({ right: 6 })
+            Text(this.totalPlans + ' 个')
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#4ECDC4')
+          }
+          .margin({ bottom: 4 })
+          Text('总计划')
+            .fontSize(12)
+            .fontColor('#999999')
+        }
+        .width('48%')
+        .padding(14)
+        .backgroundColor('#F8F9FA')
+        .borderRadius(12)
+        .alignItems(HorizontalAlign.Start)
+
+        // 进行中计划
+        Column() {
+          Row() {
+            Text('🏃')
+              .fontSize(20)
+              .margin({ right: 6 })
+            Text(this.activePlans + ' 个')
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FF6B6B')
+          }
+          .margin({ bottom: 4 })
+          Text('进行中')
+            .fontSize(12)
+            .fontColor('#999999')
+        }
+        .width('48%')
+        .padding(14)
+        .backgroundColor('#F8F9FA')
+        .borderRadius(12)
+        .alignItems(HorizontalAlign.Start)
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.SpaceBetween)
+      .margin({ bottom: 12 })
+
+      Row() {
+        // 已完成计划
+        Column() {
+          Row() {
+            Text('✅')
+              .fontSize(20)
+              .margin({ right: 6 })
+            Text(this.completedPlans + ' 个')
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#4CAF50')
+          }
+          .margin({ bottom: 4 })
+          Text('已完成')
+            .fontSize(12)
+            .fontColor('#999999')
+        }
+        .width('48%')
+        .padding(14)
+        .backgroundColor('#F8F9FA')
+        .borderRadius(12)
+        .alignItems(HorizontalAlign.Start)
+
+        // 平均完成度
+        Column() {
+          Row() {
+            Text('📊')
+              .fontSize(20)
+              .margin({ right: 6 })
+            Text(this.averageCompletionRate + '%')
+              .fontSize(16)
+              .fontWeight(FontWeight.Bold)
+              .fontColor('#FFA502')
+          }
+          .margin({ bottom: 4 })
+          Text('平均完成度')
+            .fontSize(12)
+            .fontColor('#999999')
+        }
+        .width('48%')
+        .padding(14)
+        .backgroundColor('#F8F9FA')
+        .borderRadius(12)
+        .alignItems(HorizontalAlign.Start)
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.SpaceBetween)
+    }
+    .width('100%')
+    .padding(20)
+    .backgroundColor('#FFFFFF')
+    .borderRadius(16)
+    .margin({ bottom: 16 })
+    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
   }
 
   @Builder

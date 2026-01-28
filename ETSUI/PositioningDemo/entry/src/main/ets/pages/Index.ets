@@ -2,6 +2,8 @@ import { LocationService } from '../service/LocationService';
 import { SportService } from '../service/SportService';
 import { ReminderService } from '../service/ReminderService';
 import { HistoryService } from '../service/HistoryService';
+import { StatisticsService } from '../service/StatisticsService';
+import { AchievementService } from '../service/AchievementService';
 import { SportType, SportData, RouteData, LocationInfo } from '../model/SportModel';
 import { SportControlButton } from '../components/SportControlButton';
 import { RouteMap } from '../components/RouteMapInner';
@@ -29,6 +31,8 @@ struct Index {
   private reminderService: ReminderService = new ReminderService();
   private sportService: SportService = new SportService(this.reminderService);
   private historyService: HistoryService = new HistoryService();
+  private statisticsService: StatisticsService = new StatisticsService(this.historyService);
+  private achievementService: AchievementService = new AchievementService(this.historyService, this.statisticsService);
   private simulationTimer: number = -1;
   private uiUpdateTimer: number = -1;
   private routeMapController?: map.MapComponentController;
@@ -43,6 +47,10 @@ struct Index {
     }).catch((error: Error) => {
       console.error('初始化历史服务失败:', error);
     });
+    
+    // 初始化成就服务
+    await this.achievementService.init(context);
+    console.log('成就服务已初始化');
     
     // 初始化提醒服务
     this.reminderService.init(context);
@@ -291,6 +299,13 @@ struct Index {
           .margin({ right: 12 })
           .onClick(() => {
             router.pushUrl({ url: 'pages/HistoryPage' });
+          })
+
+        Text('🏆')
+          .fontSize(20)
+          .margin({ right: 12 })
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/AchievementPage' });
           })
 
         if (this.isRunning && !this.isPaused) {
@@ -597,7 +612,20 @@ struct Index {
     this.currentLocation = null;
     
     if (finalData) {
-      this.historyService.saveSportRecord(finalData);
+      this.historyService.saveSportRecord(finalData).then(async () => {
+        // 检查并更新成就
+        const newlyUnlocked = await this.achievementService.checkAndUpdateAchievements(finalData);
+        if (newlyUnlocked.length > 0) {
+          console.log(`解锁了 ${newlyUnlocked.length} 个成就`);
+          // 显示成就解锁提示
+          promptAction.showToast({
+            message: `🎉 解锁了 ${newlyUnlocked.length} 个成就！`,
+            duration: 3000
+          });
+        }
+      }).catch((error: Error) => {
+        console.error('保存记录或检查成就失败:', error);
+      });
       this.showSportSummary(finalData);
     }
   }

@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "D:/key_restore/loc_test.p12",
-          "storePassword": "0000001B7E0E4D02E5E2891EE7CF2F033673DF7C61B18FFE7E1A7EDCA60F6D3233B9D372CF7D35372F90F4",
+          "storeFile": "D:/Huawei/project/key_restore/key_restore/loc_test.p12",
+          "storePassword": "0000001BCBA73C870358A2A74F3788A932F9601735EF94CED01A991D1EFCA2DD6705F52B84DF195DC2D634",
           "keyAlias": "loc_test",
-          "keyPassword": "0000001BB44919AAF78F30C83DD2279C13B7394D8528CBD3CADD6026F7EC2FE12C54506719E9D35FF04A3B",
+          "keyPassword": "0000001B4747854181155A4E9BE5ADBB8B3EEF6D00DBE439CBE53502A46E32B41E422BBE14799B4EB295FC",
           "signAlg": "SHA256withECDSA",
-          "profile": "D:/key_restore/loc_testDebug.p7b",
-          "certpath": "D:/key_restore/loc_test.cer"
+          "profile": "D:/Huawei/project/key_restore/key_restore/loc_testDebug.p7b",
+          "certpath": "D:/Huawei/project/key_restore/key_restore/loc_test.cer"
         }
       }
     ],
