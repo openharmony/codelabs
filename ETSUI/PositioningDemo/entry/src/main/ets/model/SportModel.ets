@@ -40,6 +40,17 @@ export class LocationInfo {
   }
 }
 
+// 添加时间序列数据结构
+export class DataPoint {
+  timestamp: number;
+  value: number;
+
+  constructor(timestamp: number, value: number) {
+    this.timestamp = timestamp;
+    this.value = value;
+  }
+}
+
 export class SportData {
   type: SportType = SportType.RUNNING;
   distance: number = 0;
@@ -48,6 +59,8 @@ export class SportData {
   averageSpeed: number = 0;
   currentSpeed: number = 0;
   startTime: number = 0;
+  speedData: DataPoint[] = [];      // 速度时间序列数据
+  caloriesData: DataPoint[] = [];    // 卡路里时间序列数据
   endTime: number = 0;
   route: RoutePoint[] = [];
 

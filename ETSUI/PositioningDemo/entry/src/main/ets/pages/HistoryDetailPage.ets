@@ -1,6 +1,7 @@
-import { SportData, RouteData, LocationInfo } from '../model/SportModel';
+import { SportData, RouteData, LocationInfo, DataPoint } from '../model/SportModel';
 import router from '@ohos.router';
 import { RouteMapInner } from '../components/RouteMapInner';
+import { ChartComponent } from '../components/ChartComponent';
 // 移除可能不存在的导入，使用默认值
 
 @Entry
@@ -25,7 +26,21 @@ struct HistoryDetailPage {
       if (parsedParams.record) {
         recordJson = parsedParams.record;
         this.sportRecord = JSON.parse(recordJson) as SportData;
-        console.log('获取到运动记录:', this.sportRecord);
+        console.log('获取到运动记录 - 类型:', this.sportRecord.type, '距离:', this.sportRecord.distance, '米', '时间:', this.sportRecord.duration, '毫秒', '卡路里:', this.sportRecord.calories, 'kcal');
+        console.log('速度数据点数量:', this.sportRecord.speedData ? this.sportRecord.speedData.length : 0);
+        console.log('卡路里数据点数量:', this.sportRecord.caloriesData ? this.sportRecord.caloriesData.length : 0);
+        if (this.sportRecord.speedData && this.sportRecord.speedData.length > 0) {
+          console.log('前5个速度数据点:');
+          this.sportRecord.speedData.slice(0, 5).forEach((point, index) => {
+            console.log(`  数据点${index + 1} - 时间戳:`, point.timestamp, '速度:', point.value, 'm/s');
+          });
+        }
+        if (this.sportRecord.caloriesData && this.sportRecord.caloriesData.length > 0) {
+          console.log('前5个卡路里数据点:');
+          this.sportRecord.caloriesData.slice(0, 5).forEach((point, index) => {
+            console.log(`  数据点${index + 1} - 时间戳:`, point.timestamp, '卡路里:', point.value, 'kcal');
+          });
+        }
         
         // 初始化routeData，用于显示轨迹
         if (this.sportRecord && this.sportRecord.route) {
@@ -78,113 +93,148 @@ struct HistoryDetailPage {
       .width('100%')
       .padding({ left: 16, right: 16, top: 16, bottom: 16 })
 
-      if (this.sportRecord) {
-        // 运动概览卡片
+      // 添加滚动组件
+      Scroll() {
         Column() {
-          Text(this.getSportTypeName(this.sportRecord.type))
-            .fontSize(20)
-            .fontWeight(700)
-            .fontColor('#333333')
-            .margin({ bottom: 6 })
+          if (this.sportRecord) {
+            // 运动概览卡片
+            Column() {
+              Text(this.getSportTypeName(this.sportRecord.type))
+                .fontSize(20)
+                .fontWeight(700)
+                .fontColor('#333333')
+                .margin({ bottom: 6 })
 
-          Text(this.formatDate(this.sportRecord.startTime))
-            .fontSize(14)
-            .fontColor('#999999')
+              Text(this.formatDate(this.sportRecord.startTime))
+                .fontSize(14)
+                .fontColor('#999999')
+                .margin({ bottom: 12 })
+
+              // 运动数据概览
+              Row() {
+                this.StatItem('距离', this.formatDistance(this.sportRecord.distance), '#FF6B6B')
+                this.StatItem('时间', this.formatDuration(this.sportRecord.duration), '#4ECDC4')
+                this.StatItem('平均速度', this.formatSpeed(this.sportRecord.averageSpeed), '#45B7D1')
+                this.StatItem('卡路里', this.formatCalories(this.sportRecord.calories), '#FFA502')
+              }
+              .width('100%')
+              .justifyContent(FlexAlign.SpaceAround)
+            }
+            .width('100%')
+            .padding(16)
+            .backgroundColor('#FFFFFF')
+            .borderRadius(16)
+            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
             .margin({ bottom: 12 })
 
-          // 运动数据概览
-          Row() {
-            this.StatItem('距离', this.formatDistance(this.sportRecord.distance), '#FF6B6B')
-            this.StatItem('时间', this.formatDuration(this.sportRecord.duration), '#4ECDC4')
-            this.StatItem('平均速度', this.formatSpeed(this.sportRecord.averageSpeed), '#45B7D1')
-            this.StatItem('卡路里', this.formatCalories(this.sportRecord.calories), '#FFA502')
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.SpaceAround)
-        }
-        .width('100%')
-        .padding(16)
-        .backgroundColor('#FFFFFF')
-        .borderRadius(16)
-        .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
-        .margin({ bottom: 12 })
+            // 运动轨迹地图
+            Column() {
+              Text('📍 运动轨迹')
+                .fontSize(18)
+                .fontWeight(700)
+                .fontColor('#333333')
+                .margin({ bottom: 10 })
 
-        // 运动轨迹地图
-        Column() {
-          Text('📍 运动轨迹')
-            .fontSize(18)
-            .fontWeight(700)
-            .fontColor('#333333')
-            .margin({ bottom: 10 })
-
-          RouteMapInner({
-            routeData: $routeData
-          })
-        }
-        .width('100%')
-        .padding(16)
-        .backgroundColor('#FFFFFF')
-        .borderRadius(16)
-        .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
-        .margin({ bottom: 12 })
-
-        // 速度曲线（简化版，只显示文本信息）
-        Column() {
-          Text('📈 运动数据')
-            .fontSize(18)
-            .fontWeight(700)
-            .fontColor('#333333')
+              RouteMapInner({
+                routeData: $routeData
+              })
+            }
+            .width('100%')
+            .padding(16)
+            .backgroundColor('#FFFFFF')
+            .borderRadius(16)
+            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
             .margin({ bottom: 12 })
 
-          // 速度信息
-          Row() {
-            Text('最高速度:')
-              .fontSize(16)
-              .fontColor('#666666')
-            Blank()
-            Text(`${(this.sportRecord.currentSpeed || 0).toFixed(1)} m/s`)
-              .fontSize(16)
-              .fontWeight(700)
-              .fontColor('#45B7D1')
-          }
-          .width('100%')
-          .padding({ top: 10, bottom: 10 })
+            // 速度变化图表
+            if (this.sportRecord.speedData && this.sportRecord.speedData.length > 0) {
+              ChartComponent({
+                data: this.sportRecord.speedData,
+                title: '速度变化趋势',
+                xLabel: '时间',
+                yLabel: '速度 (m/s)',
+                color: '#4ECDC4'
+              })
+              .width('100%')
+              .margin({ bottom: 12 })
+            }
 
-          // 路线信息
-          Row() {
-            Text('路线点数量:')
-              .fontSize(16)
-              .fontColor('#666666')
-            Blank()
-            Text(`${this.sportRecord.route ? this.sportRecord.route.length : 0} 个`)
-              .fontSize(16)
-              .fontWeight(700)
-              .fontColor('#333333')
+            // 卡路里增长图表
+            if (this.sportRecord.caloriesData && this.sportRecord.caloriesData.length > 0) {
+              ChartComponent({
+                data: this.sportRecord.caloriesData,
+                title: '卡路里增长趋势',
+                xLabel: '时间',
+                yLabel: '卡路里',
+                color: '#FF6B6B'
+              })
+              .width('100%')
+              .margin({ bottom: 12 })
+            }
+
+            // 运动数据详情
+            Column() {
+              Text('📈 运动数据')
+                .fontSize(18)
+                .fontWeight(700)
+                .fontColor('#333333')
+                .margin({ bottom: 12 })
+
+              // 速度信息
+              Row() {
+                Text('最高速度:')
+                  .fontSize(16)
+                  .fontColor('#666666')
+                Blank()
+                Text(`${(this.sportRecord.currentSpeed || 0).toFixed(1)} m/s`)
+                  .fontSize(16)
+                  .fontWeight(700)
+                  .fontColor('#45B7D1')
+              }
+              .width('100%')
+              .padding({ top: 10, bottom: 10 })
+
+              // 路线信息
+              Row() {
+                Text('路线点数量:')
+                  .fontSize(16)
+                  .fontColor('#666666')
+                Blank()
+                Text(`${this.sportRecord.route ? this.sportRecord.route.length : 0} 个`)
+                  .fontSize(16)
+                  .fontWeight(700)
+                  .fontColor('#333333')
+              }
+              .width('100%')
+              .padding({ top: 10, bottom: 10 })
+            }
+            .width('100%')
+            .padding(16)
+            .backgroundColor('#FFFFFF')
+            .borderRadius(16)
+            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
+            .margin({ bottom: 24 })
+          } else {
+            // 加载失败提示
+            Column() {
+              Text('加载运动记录失败')
+                .fontSize(16)
+                .fontColor('#999999')
+            }
+            .width('100%')
+            .height(300)
+            .justifyContent(FlexAlign.Center)
           }
-          .width('100%')
-          .padding({ top: 10, bottom: 10 })
         }
         .width('100%')
-        .padding(16)
-        .backgroundColor('#FFFFFF')
-        .borderRadius(16)
-        .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
-      } else {
-        // 加载失败提示
-        Column() {
-          Text('加载运动记录失败')
-            .fontSize(16)
-            .fontColor('#999999')
-        }
-        .width('100%')
-        .height('100%')
-        .justifyContent(FlexAlign.Center)
+        .padding({ left: 16, right: 16 })
       }
+      .width('100%')
+      .height('100%')
     }
     .width('100%')
     .height('100%')
     .backgroundColor('#F8F9FA')
-    .padding({ top: 16, left: 16, right: 16, bottom: 16 })
   }
 
   @Builder

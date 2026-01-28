@@ -1,4 +1,5 @@
-import { SportType, SportData, RoutePoint, LocationInfo } from '../model/SportModel';
+import { SportType, SportData, RoutePoint, LocationInfo, DataPoint } from '../model/SportModel';
+import { ReminderService } from './ReminderService';
 
 export class SportService {
   private currentSportData: SportData | null = null;
@@ -13,6 +14,12 @@ export class SportService {
   private pauseStartTime: number = 0;
   private totalPauseDuration: number = 0;
   private isPaused: boolean = false;
+  private reminderService: ReminderService;
+  
+  constructor(reminderService?: ReminderService) {
+    this.reminderService = reminderService || new ReminderService();
+    console.log('SportService 构造函数 - ReminderService 实例:', this.reminderService);
+  }
 
   startSport(type: SportType): SportData {
     this.startTime = Date.now();
@@ -38,6 +45,10 @@ export class SportService {
     // 启动定时器，每秒更新一次运动数据
     this.startUpdateTimer();
     
+    // 启动提醒服务并触发运动开始提醒
+    this.reminderService.startReminderService();
+    this.reminderService.onSportStart();
+    
     console.log('运动服务已启动:', this.currentSportData);
     return this.currentSportData;
   }
@@ -55,7 +66,22 @@ export class SportService {
         const currentDuration = totalTime - this.totalPauseDuration;
         this.currentSportData.duration = currentDuration;
         
-        console.log('定时器更新运动数据，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '持续时间:', currentDuration);
+        // 计算卡路里
+        const calories = this.calculateCalories(this.totalDistance, currentDuration, this.currentSportData.type);
+        this.currentSportData.calories = calories;
+        
+        // 记录速度和卡路里数据
+        const speedDataPoint = new DataPoint(Date.now(), this.currentSportData.currentSpeed);
+        const caloriesDataPoint = new DataPoint(Date.now(), calories);
+        this.currentSportData.speedData.push(speedDataPoint);
+        this.currentSportData.caloriesData.push(caloriesDataPoint);
+        console.log('记录速度数据点 - 时间戳:', speedDataPoint.timestamp, '速度:', speedDataPoint.value, 'm/s');
+        console.log('记录卡路里数据点 - 时间戳:', caloriesDataPoint.timestamp, '卡路里:', caloriesDataPoint.value, 'kcal');
+        
+        // 触发提醒服务的运动数据更新处理
+        this.reminderService.onSportDataUpdate(this.currentSportData);
+        
+        console.log('定时器更新运动数据，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '持续时间:', currentDuration, '速度:', this.currentSportData.currentSpeed, '卡路里:', calories);
       }
     }, 1000);
   }
@@ -144,6 +170,9 @@ export class SportService {
       this.currentSportData.type
     );
 
+    // 触发提醒服务的运动数据更新处理
+    this.reminderService.onSportDataUpdate(this.currentSportData);
+
     console.log('运动数据已更新:', this.currentSportData);
   }
 
@@ -194,6 +223,9 @@ export class SportService {
     const totalTime = this.currentSportData.endTime - this.startTime;
     const actualDuration = totalTime - this.totalPauseDuration;
     this.currentSportData.duration = actualDuration;
+
+    // 触发提醒服务的运动结束处理
+    this.reminderService.onSportEnd();
 
     console.log('运动已停止，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '实际运动时间:', actualDuration);
     const finalData = this.currentSportData;
@@ -265,4 +297,10 @@ export class SportService {
   formatCalories(calories: number): string {
     return `${calories.toFixed(0)} kcal`;
   }
-}
+
+  // 获取提醒服务实例
+  getReminderService(): ReminderService {
+    console.log('SportService.getReminderService - 返回的实例:', this.reminderService);
+    return this.reminderService;
+  }
+} 

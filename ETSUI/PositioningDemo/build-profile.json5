@@ -5,13 +5,13 @@
         "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "storeFile": "D:/software/aaa/key_restore/loc_test.p12",
-          "storePassword": "0000001B4078B274C909AE9B6ED476214F7DD5FBC62DB10E0FA797A5308DA7856B7DC8230E7C6E0D0F3B0E",
+          "storeFile": "D:/key_restore/loc_test.p12",
+          "storePassword": "0000001B7E0E4D02E5E2891EE7CF2F033673DF7C61B18FFE7E1A7EDCA60F6D3233B9D372CF7D35372F90F4",
           "keyAlias": "loc_test",
-          "keyPassword": "0000001B38257011BCEE99FA7968E592D99DB2F11FE218019D7C7542DEE9E5D170E357981F9683AA11C800",
+          "keyPassword": "0000001BB44919AAF78F30C83DD2279C13B7394D8528CBD3CADD6026F7EC2FE12C54506719E9D35FF04A3B",
           "signAlg": "SHA256withECDSA",
-          "profile": "D:/software/aaa/key_restore/loc_testDebug.p7b",
-          "certpath": "D:/software/aaa/key_restore/loc_test.cer"
+          "profile": "D:/key_restore/loc_testDebug.p7b",
+          "certpath": "D:/key_restore/loc_test.cer"
         }
       }
     ],
