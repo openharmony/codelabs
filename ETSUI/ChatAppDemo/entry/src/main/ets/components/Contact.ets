@@ -191,11 +191,28 @@ export struct Contact {
 
           List({ space: 10, scroller: this.scroller }) {
             ForEach(this.contactGroups, (contactGroup: ContactGroup) => {
+              // ... 原有代码 ...
               ListItemGroup({ header: this.buildListItemHeader(contactGroup.index) }) {
                 ForEach(contactGroup.contacts, (contact: ContactModel) => {
-                  this.buildItem(contact.avatar, contact.name)
+                  // 关键修改：添加点击回调，跳转到 Chat 页面
+                  this.buildItem(contact.avatar, contact.name, () => {
+                    router.pushUrl({
+                      url: 'pages/Chat',
+                      params: {
+                        contact: {
+                          id: contact.phoneNumber, // 用手机号作为唯一 ID
+                          avatar: contact.avatar,
+                          nickName: contact.name,
+                          content: '', // 初始内容为空
+                          time: '',
+                          isSelf: false
+                        }
+                      }
+                    })
+                  })
                 })
               }
+              // ... 原有代码 ...
             })
           }.width('100%')
           .height(400)
