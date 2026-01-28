@@ -279,6 +279,13 @@ struct Index {
       Blank()
 
       Row() {
+        Text('👤')
+          .fontSize(20)
+          .margin({ right: 12 })
+          .onClick(() => {
+            router.pushUrl({ url: 'pages/ProfilePage' });
+          })
+
         Text('📊')
           .fontSize(20)
           .margin({ right: 12 })
