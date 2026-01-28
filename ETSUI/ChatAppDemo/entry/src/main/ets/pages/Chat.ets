@@ -16,18 +16,22 @@ struct Chat {
   @State inputText: string = '';
   private scroller: Scroller = new Scroller();
 
+  // entry/src/main/ets/pages/Chat.ets
+
   async aboutToAppear() {
     const params = router.getParams() as Record<string, Object>;
-    if (params && params.contact) {
+    if (params && params.contact && this.currentUser) {
       const contact = params.contact as Message;
+      this.targetPhone = contact.id; // 对方手机号
       this.chatTarget = contact.nickName;
       this.targetAvatar = contact.avatar;
-      this.targetPhone = contact.id; // 【修复 2】将路由带过来的 id 赋值给 targetPhone
 
-      if (dbManager.chat && this.currentUser) {
-        // 加载历史记录时，传入当前用户和目标用户，防止混淆
-        // 注意：这里的 queryHistoryByContact 逻辑需要匹配 ChatHandler
-        this.messageList = await dbManager.chat.queryHistoryByContact(this.targetPhone);
+      // 重点：传入对方ID和我自己的手机号
+      if(dbManager.chat){
+        this.messageList = await dbManager.chat.queryHistoryByContact(
+          this.targetPhone,
+          this.currentUser.phoneNumber
+        );
       }
     }
   }
@@ -39,34 +43,37 @@ struct Chat {
     const content = this.inputText;
     const timeStr = `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`;
 
-    // 生成两个不同的 ID，防止主键冲突
-    const baseId = Date.now().toString();
+    // // 生成两个不同的 ID，防止主键冲突
+    // const baseId = Date.now().toString();
+    // const myPhone = this.currentUser.phoneNumber;
+    // const targetPhone = this.targetPhone; // 确保这是对方手机号
+
+    if (!this.inputText || !this.currentUser) return;
     const myPhone = this.currentUser.phoneNumber;
-    const targetPhone = this.targetPhone; // 确保这是对方手机号
+    const targetPhone = this.targetPhone;
+    const baseId = Date.now().toString();
 
-    if (dbManager.chat) {
-      // 1. 存给我自己
-      await dbManager.chat.insertMessage({
-        id: baseId + "_me",      // 唯一 ID
-        avatar: this.targetAvatar,
-        nickName: targetPhone,   // 列表按对方手机号分组
-        content: content,
-        time: timeStr,
-        isSelf: true
-      }, myPhone);
+    if(!dbManager.chat) return;
 
-      // 2. 存给对方
-      await dbManager.chat.insertMessage({
-        id: baseId + "_ta",      // 唯一 ID
-        avatar: this.currentUser.avatarPath || $r('app.media.user_default'),
-        nickName: myPhone,       // 对方列表显示我的手机号
-        content: content,
-        time: timeStr,
-        isSelf: false
-      }, targetPhone);
+    // 1. 存给我自己（owner 是我，nickName 是对方）
+    await dbManager.chat.insertMessage({
+      id: baseId + "_1",
+      avatar: this.targetAvatar,
+      nickName: targetPhone,
+      content: this.inputText,
+      time: "12:00", // 建议用动态时间
+      isSelf: true
+    }, myPhone);
 
-      console.info(`消息已存入。发送者:${myPhone}, 接收者:${targetPhone}`);
-    }
+    // 2. 存给对方（owner 是对方，nickName 是我）
+    await dbManager.chat.insertMessage({
+      id: baseId + "_2",
+      avatar: this.currentUser.avatarPath || $r('app.media.user_default'),
+      nickName: myPhone,
+      content: this.inputText,
+      time: "12:00",
+      isSelf: false
+    }, targetPhone);
 
     // UI 更新...
     this.messageList.push({
