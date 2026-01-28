@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { DailyData } from '../model/information'
-import promptAction from '@ohos.promptAction'
+import { DailyData } from '../model/information';
+import promptAction from '@ohos.promptAction';
 import { HealthDao, HealthRecord } from '../common/database/HealthDao';
 import { RdbManager } from '../common/database/RdbManager';
 import { WaterDao } from '../common/database/WaterDao';
@@ -31,16 +31,13 @@ export struct Main {
   @State @Watch('calculateAll') isMale: boolean = true
   @State @Watch('calculateAll') age: number = 25
   @State isDataReady: boolean = false
-
   // --- 页面计算用的临时状态 ---
   @State bmi: number = 0
-
   // --- 全局链接 ---
   @StorageLink('targetCalories') targetCalories: number = 2000
   @StorageLink('targetWater') targetWater: number = 2000
   @StorageLink('targetExercise') targetExercise: number = 2 // 单位为15min
   @StorageLink('healthHistory') historyData: Record<string, DailyData> = {}
-
   private healthDao = new HealthDao();
   private waterDao = new WaterDao();
   private today: string = this.getTodayStr();
@@ -166,16 +163,28 @@ export struct Main {
 
   // --- 辅助显示 ---
   getBMIStatus(): string {
-    if (this.bmi < 18.5) return '偏瘦'
-    if (this.bmi < 24) return '正常'
-    if (this.bmi < 28) return '超重'
+    if (this.bmi < 18.5) {
+      return '偏瘦'
+    }
+    if (this.bmi < 24) {
+      return '正常'
+    }
+    if (this.bmi < 28) {
+      return '超重'
+    }
     return '肥胖'
   }
 
   getBMIColor(): string {
-    if (this.bmi < 18.5) return '#3F51B5'
-    if (this.bmi < 24) return '#00C853'
-    if (this.bmi < 28) return '#FFAB00'
+    if (this.bmi < 18.5) {
+      return '#3F51B5'
+    }
+    if (this.bmi < 24) {
+      return '#00C853'
+    }
+    if (this.bmi < 28) {
+      return '#FFAB00'
+    }
     return '#FF5252'
   }
 
@@ -245,10 +254,12 @@ export struct Main {
               min: 10,
               max: 35
             })
-              .startAngle(210).endAngle(150)
-              .colors([[ '#3F51B5', 0.2 ], [ '#00C853', 0.3 ], [ '#FFAB00', 0.2 ], [ '#FF5252', 0.3 ]])
+              .startAngle(210)
+              .endAngle(150)
+              .colors([['#3F51B5', 0.2], ['#00C853', 0.3], ['#FFAB00', 0.2], ['#FF5252', 0.3]])
               .strokeWidth(20)
-              .width(200).height(200)
+              .width(200)
+              .height(200)
 
             Column() {
               Text(this.bmi.toFixed(1))
@@ -381,7 +392,8 @@ export struct Main {
   }
 
   // --- UI Builders (简单的性别选择不需要做成组件) ---
-  @Builder GenderRow() {
+  @Builder
+  GenderRow() {
     Row() {
       Text('性别')
         .fontSize(14 * this.fontScale)
@@ -394,7 +406,8 @@ export struct Main {
     }.width('100%').height(50)
   }
 
-  @Builder GenderButton(isMaleBtn: boolean, text: string) {
+  @Builder
+  GenderButton(isMaleBtn: boolean, text: string) {
     Text(text)
       .fontSize(14 * this.fontScale)
       .fontColor(this.isMale === isMaleBtn ? '#FFF' : '#666')
@@ -439,7 +452,9 @@ struct InputRow {
         .fontSize(16 * this.fontScale)
         .fontColor('#007DFF')
         .onChange((v) => {
-          if (v === '') return
+          if (v === '') {
+            return
+          }
           const num = Number(v)
           if (!isNaN(num)) {
             // 修改 Link 会触发父组件 Main 的 @Watch

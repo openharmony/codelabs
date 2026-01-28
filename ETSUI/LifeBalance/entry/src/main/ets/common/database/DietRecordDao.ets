@@ -32,7 +32,9 @@ export class DietRecordDao {
   // 1. 插入一条记录
   async insertRecord(record: DietRecord): Promise<boolean> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return false;
+    if (!store) {
+      return false;
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       'id': record.id,
@@ -56,7 +58,9 @@ export class DietRecordDao {
   // 2. 根据 ID 删除记录
   async deleteRecord(id: string): Promise<boolean> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return false;
+    if (!store) {
+      return false;
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('id', id);
@@ -73,7 +77,9 @@ export class DietRecordDao {
   // 3. 根据日期查询记录 (核心功能)
   async getRecordsByDate(dateStr: string): Promise<DietRecord[]> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('record_date', dateStr); // 查询特定日期
@@ -97,10 +103,13 @@ export class DietRecordDao {
     resultSet.close(); // 记得关闭
     return result;
   }
+
   // --- 获取过去7天的每日总热量 ---
   async getWeeklyStats(): Promise<GeneratedTypeLiteralInterface_1[]> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
 
     const result: GeneratedTypeLiteralInterface_2[] = [];
 
@@ -108,7 +117,9 @@ export class DietRecordDao {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      const dateStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+      const dateStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate()
+        .toString()
+        .padStart(2, '0')}`;
 
       // 查询那一天的总和
       // 注意：这里为了简化逻辑使用了循环查询，更高效的做法是使用 SQL 的 GROUP BY，但在 RdbPredicates 里比较麻烦

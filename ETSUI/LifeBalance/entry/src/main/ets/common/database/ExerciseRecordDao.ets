@@ -12,8 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ExerciseRecord } from "../../model/ExerciseModel";
-import { RdbManager } from "./RdbManager";
+import { ExerciseRecord } from '../../model/ExerciseModel';
+import { RdbManager } from './RdbManager';
 import relationalStore from '@ohos.data.relationalStore';
 
 // 定义返回给图表的数据接口
@@ -38,7 +38,9 @@ export class ExerciseRecordDao {
   // 1. 插入一条记录
   async insertRecord(record: ExerciseRecord): Promise<boolean> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return false;
+    if (!store) {
+      return false;
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       'id': record.id,
@@ -61,7 +63,9 @@ export class ExerciseRecordDao {
   // 2. 根据 ID 删除记录
   async deleteRecord(id: string): Promise<boolean> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return false;
+    if (!store) {
+      return false;
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('id', id);
@@ -78,7 +82,9 @@ export class ExerciseRecordDao {
   // 3. 根据日期查询记录 (核心功能)
   async getRecordsByDate(dateStr: string): Promise<ExerciseRecord[]> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('record_date', dateStr); // 查询特定日期
@@ -105,7 +111,9 @@ export class ExerciseRecordDao {
   // --- 获取过去7天的每日总热量 ---
   async getWeeklyCaloriesStats(): Promise<GeneratedTypeLiteralInterface_1[]> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
 
     const result: GeneratedTypeLiteralInterface_2[] = [];
 
@@ -113,7 +121,9 @@ export class ExerciseRecordDao {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      const dateStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+      const dateStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate()
+        .toString()
+        .padStart(2, '0')}`;
 
       // 查询那一天的总和
       // 注意：这里为了简化逻辑使用了循环查询，更高效的做法是使用 SQL 的 GROUP BY，但在 RdbPredicates 里比较麻烦
@@ -139,7 +149,9 @@ export class ExerciseRecordDao {
   // --- 获取过去7天的每日总时间 ---
   async getWeeklyTimeStats(): Promise<GeneratedTypeLiteralInterface_1[]> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
 
     const result: GeneratedTypeLiteralInterface_2[] = [];
 
@@ -147,7 +159,9 @@ export class ExerciseRecordDao {
     for (let i = 6; i >= 0; i--) {
       const d = new Date();
       d.setDate(d.getDate() - i);
-      const dateStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+      const dateStr = `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate()
+        .toString()
+        .padStart(2, '0')}`;
 
       // 查询那一天的总和
       // 注意：这里为了简化逻辑使用了循环查询，更高效的做法是使用 SQL 的 GROUP BY，但在 RdbPredicates 里比较麻烦
@@ -166,12 +180,15 @@ export class ExerciseRecordDao {
 
     return result;
   }
+
   //  【新增】专门给周趋势图表使用的方法 (返回格式优化为 MM-DD)
   //   ExercisePage.ets 里的 openWeekTrend() 调用的就是这个方法
   // =========================================================================
   async getWeeklyStats(): Promise<WeeklyStatsItem[]> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
 
     const result: WeeklyStatsItem[] = [];
 
@@ -184,7 +201,7 @@ export class ExerciseRecordDao {
       const day = d.getDate().toString().padStart(2, '0');
 
       const fullDateStr = `${y}-${m}-${day}`; // 数据库查询用：YYYY-MM-DD
-      const shortDateStr = `${m}-${day}`;     // 图表显示用：MM-DD (这样图表X轴不会太挤)
+      const shortDateStr = `${m}-${day}`; // 图表显示用：MM-DD (这样图表X轴不会太挤)
 
       let predicates = new relationalStore.RdbPredicates(this.tableName);
       predicates.equalTo('record_date', fullDateStr);

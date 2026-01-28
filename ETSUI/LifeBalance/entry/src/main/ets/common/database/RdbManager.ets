@@ -19,7 +19,6 @@ export class RdbManager {
   private static instance: RdbManager;
   private rdbStore: relationalStore.RdbStore | null = null;
   private tableName: string = 'diet_record';
-
   // 建表 SQL 语句
   // 注意：date 字段我们改名叫 record_date 以免和 SQL 关键字冲突
   private sqlCreateTable = `CREATE TABLE IF NOT EXISTS ${this.tableName} (
@@ -31,13 +30,11 @@ export class RdbManager {
     totalCalories INTEGER,
     record_date TEXT
   )`;
-
   private sqlCreateWaterTable = `CREATE TABLE IF NOT EXISTS water_record (
     record_date TEXT PRIMARY KEY,
     actual_water INTEGER,
     goal_water INTEGER
   )`;
-
   private sqlCreateExerciseTable = `CREATE TABLE IF NOT EXISTS exercise_record (
     id TEXT PRIMARY KEY,
     exerciseId INTEGER,
@@ -46,7 +43,6 @@ export class RdbManager {
     totalCalories INTEGER,
     record_date TEXT
   )`;
-
   private sqlCreateHealthTable = `CREATE TABLE IF NOT EXISTS health_data (
     record_date TEXT PRIMARY KEY,
     height REAL,
@@ -67,7 +63,9 @@ export class RdbManager {
 
   // 初始化数据库 (通常在 UIAbility 或页面加载时调用)
   async init(context: common.Context): Promise<void> {
-    if (this.rdbStore) return;
+    if (this.rdbStore) {
+      return;
+    }
 
     const config: relationalStore.StoreConfig = {
       name: 'LifeBalance.db', // 数据库文件名
@@ -91,14 +89,11 @@ export class RdbManager {
       console.error(`[RdbManager] Init failed: ${JSON.stringify(err)}`);
     }
   }
-  private getLocalDateStr(date: Date): string {
-    const y = date.getFullYear();
-    const m = (date.getMonth() + 1).toString().padStart(2, '0');
-    const d = date.getDate().toString().padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  }
+
   async insertMockData() {
-    if (!this.rdbStore) return;
+    if (!this.rdbStore) {
+      return;
+    }
 
     // 1. 确定起点：昨天 (今天 - 1天)
     // 关键点：设置时间为中午 12:00，防止凌晨时区偏移问题
@@ -136,7 +131,7 @@ export class RdbManager {
     // 循环 6 次，生成 6 天的历史数据
     for (let i = 0; i < 6; i++) {
       let d = new Date(startDate); // 基于"昨天"
-      d.setDate(d.getDate() - i);  // 往前推 i 天
+      d.setDate(d.getDate() - i); // 往前推 i 天
 
       let dateStr = this.getLocalDateStr(d);
       let timestamp = d.getTime();
@@ -191,7 +186,15 @@ export class RdbManager {
     }
     console.info('[RdbManager] 6天历史数据模拟完成！');
   }
+
   getRdbStore(): relationalStore.RdbStore | null {
     return this.rdbStore;
+  }
+
+  private getLocalDateStr(date: Date): string {
+    const y = date.getFullYear();
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const d = date.getDate().toString().padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 }

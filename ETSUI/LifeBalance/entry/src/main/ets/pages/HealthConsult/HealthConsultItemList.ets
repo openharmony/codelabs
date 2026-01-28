@@ -12,9 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { HealthConsultWithFavoriteData, queryHealthConsultItem } from "../../model/HealthConsultModel";
-import HealthConsultItem from "./HealthConsultItem";
-import NoMoreLayout from "./NoMoreLayout";
+import { HealthConsultWithFavoriteData, queryHealthConsultItem } from '../../model/HealthConsultModel';
+import HealthConsultItem from './HealthConsultItem';
+import NoMoreLayout from './NoMoreLayout';
 import router from '@ohos.router';
 
 /**
@@ -26,7 +26,6 @@ export default struct HealthConsultItemList {
   @Watch('changeContent') @Link searchText: string;
   @Watch('changeContent') @Link forceReload: boolean;
   currentTabIndex: number = 0;
-
   // 1. 【新增】引入全局字体缩放
   @StorageProp('appFontScale') fontScale: number = 1.0;
 
@@ -53,7 +52,8 @@ export default struct HealthConsultItemList {
     .justifyContent(FlexAlign.Center)
   }
 
-  @Builder ListLayout() {
+  @Builder
+  ListLayout() {
     List() {
       ForEach(this.itemArray, (item: HealthConsultWithFavoriteData) => {
         ListItem() {

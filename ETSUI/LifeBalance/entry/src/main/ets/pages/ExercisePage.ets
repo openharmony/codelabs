@@ -34,16 +34,21 @@ export struct ExercisePage {
   @State selectedDate: Date = new Date();
   @StorageProp('targetExercise') currentGlobalTarget: number = 2;
   @State displayTarget: number = 2;
-
   // 1. 引入缩放变量
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   // 【新增】用来存储周统计数据
   @State weeklyStats: WeeklyStatsItem[] = [];
-
-  private exerciseDao: ExerciseRecordDao = new ExerciseRecordDao();
-  private healthDao: HealthDao = new HealthDao();
-
+  // 【新增】周趋势弹窗控制器
+  trendDialogController: CustomDialogController = new CustomDialogController({
+    builder: WeekTrendDialog({
+      weeklyData: this.weeklyStats, // 传入数据
+      title: '本周运动消耗趋势', // 自定义标题
+      unit: 'kcal'                  // 单位
+    }),
+    alignment: DialogAlignment.Center,
+    customStyle: false,
+    autoCancel: true
+  });
   // 运动选择弹窗
   addDialogController: CustomDialogController = new CustomDialogController({
     builder: ExerciseSelectorDialog({
@@ -57,18 +62,9 @@ export struct ExercisePage {
     customStyle: false,
     autoCancel: true
   });
+  private exerciseDao: ExerciseRecordDao = new ExerciseRecordDao();
+  private healthDao: HealthDao = new HealthDao();
 
-  // 【新增】周趋势弹窗控制器
-  trendDialogController: CustomDialogController = new CustomDialogController({
-    builder: WeekTrendDialog({
-      weeklyData: this.weeklyStats, // 传入数据
-      title: '本周运动消耗趋势',     // 自定义标题
-      unit: 'kcal'                  // 单位
-    }),
-    alignment: DialogAlignment.Center,
-    customStyle: false,
-    autoCancel: true
-  });
   getTodayStr(): string {
     const now = new Date();
     const y = now.getFullYear();
@@ -76,6 +72,7 @@ export struct ExercisePage {
     const d = now.getDate().toString().padStart(2, '0');
     return `${y}-${m}-${d}`;
   }
+
   async aboutToAppear() {
     const context = getContext(this) as common.UIAbilityContext;
     await RdbManager.getInstance().init(context);
@@ -253,6 +250,7 @@ export struct ExercisePage {
           })
       }
       .alignItems(HorizontalAlign.Start)
+
       Blank()
       Row() {
         Image($r('app.media.ic_public_arrow_left'))
@@ -329,6 +327,7 @@ export struct ExercisePage {
             .fontColor(Color.White)
         }
         .alignItems(HorizontalAlign.Start)
+
         Blank()
         Column() {
           Text('已运动 (分钟)')
@@ -347,7 +346,8 @@ export struct ExercisePage {
       Progress({
         value: this.getTotalTime(),
         total: this.displayTarget === 0 ? 1 : this.displayTarget,
-        type: ProgressType.Linear }
+        type: ProgressType.Linear
+      }
       )
         .width('100%')
         .style({
@@ -361,7 +361,8 @@ export struct ExercisePage {
     .padding(20)
     .linearGradient({
       angle: 135,
-      colors: [[ '#00C6FF', 0.0 ], [ '#0072FF', 1.0 ]] }
+      colors: [['#00C6FF', 0.0], ['#0072FF', 1.0]]
+    }
     )
     .borderRadius(20)
   }
@@ -383,6 +384,7 @@ export struct ExercisePage {
           .fontColor('#777')
       }
       .alignItems(HorizontalAlign.Start)
+
       Blank()
       Text(`${item.totalCalories}`)
         .fontSize(16 * this.fontScale)
@@ -412,6 +414,8 @@ export struct ExercisePage {
       bottomRight: 12
     })
     .margin({ bottom: 8 })
-    .onClick(() => { this.deleteRecord(recordId); })
+    .onClick(() => {
+      this.deleteRecord(recordId);
+    })
   }
 }

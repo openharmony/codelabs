@@ -13,32 +13,29 @@
  * limitations under the License.
  */
 import promptAction from '@ohos.promptAction';
-import { ExerciseCategory, ExerciseItem, EXERCISE_DATABASE, getExercisesByCategory } from '../../model/ExerciseModel';
+import { EXERCISE_DATABASE, ExerciseCategory, ExerciseItem, getExercisesByCategory } from '../../model/ExerciseModel';
 
 @CustomDialog
 export struct ExerciseSelectorDialog {
   controller: CustomDialogController;
-  onConfirm: (item: ExerciseItem, count: number) => void = () => {};
-
   @State currentCategoryIndex: number = 0;
   @State expandedId: number = -1;
   @State count: number = 1;
-
   // 1. 引入全局字体缩放
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   @State keyword: string = '';
   @State searchResults: ExerciseItem[] = [];
-
   @State customName: string = ''
   @State customCalories: string = ''
-
   private categories: ExerciseCategory[] = [
     ExerciseCategory.AEROBIC, ExerciseCategory.STRENGTH_TRAINING,
     ExerciseCategory.YOGA_FLEXIBILITY, ExerciseCategory.BALL_SPORTS,
     ExerciseCategory.OUTDOOR_RECREATION, ExerciseCategory.DAILY_ACTIVITIES,
     ExerciseCategory.CUSTOM
   ];
+
+  onConfirm: (item: ExerciseItem, count: number) => void = () => {
+  };
 
   handleSearch(value: string) {
     this.keyword = value;
@@ -90,7 +87,7 @@ export struct ExerciseSelectorDialog {
               .width(60)
               .opacity(0.2)
               .grayscale(1)
-              .margin({top: 50})
+              .margin({ top: 50 })
             Text('未找到相关运动')
               .fontSize(14 * this.fontScale)
               .fontColor('#999')
@@ -106,15 +103,15 @@ export struct ExerciseSelectorDialog {
           ForEach(
             this.categories,
             (cat: ExerciseCategory, index: number) => {
-            TabContent() {
-              if (cat === ExerciseCategory.CUSTOM) {
-                this.CustomInputForm()
-              } else {
-                this.ExerciseListBuilder(getExercisesByCategory(cat))
+              TabContent() {
+                if (cat === ExerciseCategory.CUSTOM) {
+                  this.CustomInputForm()
+                } else {
+                  this.ExerciseListBuilder(getExercisesByCategory(cat))
+                }
               }
-            }
-            .tabBar(this.TabItem(cat, index))
-          })
+              .tabBar(this.TabItem(cat, index))
+            })
         }
         .barMode(BarMode.Scrollable)
         .height(450)
@@ -158,6 +155,7 @@ export struct ExerciseSelectorDialog {
                     .fontColor('#999')
                 }
               }.alignItems(HorizontalAlign.Start)
+
               Blank()
               Text(`${item.calories} kcal`)
                 .fontSize(16 * this.fontScale)
@@ -165,7 +163,12 @@ export struct ExerciseSelectorDialog {
                 .fontColor(this.expandedId === item.id ? '#007DFF' : '#333')
             }
             .width('100%')
-            .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+            .padding({
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 12
+            })
             .backgroundColor(this.expandedId === item.id ? '#F0F7FF' : Color.White)
             .onClick(() => {
               animateTo({ duration: 300, curve: Curve.FastOutSlowIn }, () => {
@@ -206,8 +209,16 @@ export struct ExerciseSelectorDialog {
                       .fontSize(14 * this.fontScale)
                       .fontWeight(FontWeight.Bold)
                   }
-                  .onInc(() => { if (this.count < 12 * 4) this.count += 1 })
-                  .onDec(() => { if (this.count > 1) this.count -= 1 })
+                  .onInc(() => {
+                    if (this.count < 12 * 4) {
+                      this.count += 1
+                    }
+                  })
+                  .onDec(() => {
+                    if (this.count > 1) {
+                      this.count -= 1
+                    }
+                  })
                   .height(30)
                   .width(140)
 
@@ -262,12 +273,21 @@ export struct ExerciseSelectorDialog {
             .fontSize(14 * this.fontScale)
             .fontWeight(FontWeight.Bold)
         }
-        .onInc(() => { if (this.count < 12 * 4) this.count += 1 })
-        .onDec(() => { if (this.count > 1) this.count -= 1 })
+        .onInc(() => {
+          if (this.count < 12 * 4) {
+            this.count += 1
+          }
+        })
+        .onDec(() => {
+          if (this.count > 1) {
+            this.count -= 1
+          }
+        })
         .height(30)
         .width(140)
       }
       .width('100%')
+
       Button('确认添加')
         .width('100%')
         .margin({ top: 10 })

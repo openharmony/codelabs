@@ -41,9 +41,10 @@ class HealthConsultFavoriteModel {
   async deletePreferences() {
     try {
       await dataPreferences.deletePreferences(context, 'HealthPreferences');
-    } catch(err) {
+    } catch (err) {
       console.error(`Failed to delete preferences, Cause: ${err}`);
-    };
+    }
+    ;
     preference = preferenceTemp;
   }
 

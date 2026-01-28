@@ -27,13 +27,10 @@ export class WaterChartData {
 @CustomDialog
 export struct WaterTrendDialog {
   controller: CustomDialogController;
-
   @Prop data: WaterChartData[] = [];
   @Prop title: string = '近7天饮水趋势';
-
   // 1. 【新增】引入全局字体缩放比例
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
 
@@ -89,7 +86,9 @@ export struct WaterTrendDialog {
       h
     );
 
-    if (this.data.length === 0) return;
+    if (this.data.length === 0) {
+      return;
+    }
 
     // 计算最大值
     const maxVal = Math.max(

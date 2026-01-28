@@ -28,14 +28,11 @@ export class WeeklyData {
 @CustomDialog
 export struct WeekTrendDialog {
   controller: CustomDialogController;
-
   @Prop weeklyData: WeeklyData[] = [];
   @Prop title: string = '近7天趋势';
   @Prop unit: string = '';
-
   // 2. 【新增】引入全局字体缩放比例
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
 
@@ -90,7 +87,9 @@ export struct WeekTrendDialog {
       h
     );
 
-    if (this.weeklyData.length === 0) return;
+    if (this.weeklyData.length === 0) {
+      return;
+    }
 
     // 默认最大值逻辑
     const defaultMax = this.title.includes('运动') ? 500 : 2500;

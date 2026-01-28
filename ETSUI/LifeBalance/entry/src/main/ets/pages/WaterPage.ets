@@ -15,7 +15,7 @@
 import { WaterDao, WaterRecord } from '../common/database/WaterDao';
 import { RdbManager } from '../common/database/RdbManager';
 import promptAction from '@ohos.promptAction';
-import { WaterTrendDialog, WaterChartData } from './WaterTrendDialog';
+import { WaterChartData, WaterTrendDialog } from './WaterTrendDialog';
 
 interface TimeInfo {
   timePercent: number;
@@ -30,15 +30,13 @@ export struct WaterPage {
   @StorageProp('appFontScale') fontScale: number = 1.0;
   @State weeklyData: WaterChartData[] = [];
   @State selectedDate: Date = new Date();
-
   // 【修改点1】移除 @State 设置变量，改为内部固定常量
+  dialogController: CustomDialogController | null = null;
   // 每天分为 6 个时段进行检查（约每2小时一次），防止频繁弹窗打扰
   private readonly REMIND_COUNT: number = 6;
   private readonly WAKE_START_HOUR: number = 8;
   private readonly WAKE_END_HOUR: number = 20;
-
   private lastNotifiedStep: number = -1;
-
   // 样式常量
   private readonly COLOR_PRIMARY: string = '#007DFF';
   private readonly COLOR_BACKGROUND: string = '#F1F7FF';
@@ -48,9 +46,7 @@ export struct WaterPage {
   private readonly BUTTON_SHADOW_COLOR: string = '#10000000';
   private readonly BUTTON_RADIUS: number = 15;
   private readonly SHADOW_RADIUS: number = 4;
-
   private waterDao = new WaterDao();
-  dialogController: CustomDialogController | null = null;
 
   getSelectedDateStr(): string {
     const y = this.selectedDate.getFullYear();
@@ -76,7 +72,9 @@ export struct WaterPage {
 
   async aboutToAppear() {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return;
+    if (!store) {
+      return;
+    }
     await this.refreshData();
 
     // 如果是今天，检查是否需要弹窗提醒
@@ -123,7 +121,9 @@ export struct WaterPage {
   }
 
   async addWater(amount: number) {
-    if (amount <= 0) return;
+    if (amount <= 0) {
+      return;
+    }
     this.actualWater += amount;
     const record: WaterRecord = {
       date: this.getSelectedDateStr(),
@@ -144,7 +144,9 @@ export struct WaterPage {
   }
 
   calculatePercent(): number {
-    if (this.goalWater <= 0) return 0;
+    if (this.goalWater <= 0) {
+      return 0;
+    }
     const percent = Math.floor((this.actualWater / this.goalWater) * 100);
     return Math.min(percent, 100);
   }
@@ -158,8 +160,12 @@ export struct WaterPage {
     start.setHours(this.WAKE_START_HOUR, 0, 0, 0);
     end.setHours(this.WAKE_END_HOUR, 0, 0, 0);
 
-    if (now <= start) return { timePercent: 0, stepIndex: -1 };
-    if (now >= end) return { timePercent: 100, stepIndex: this.REMIND_COUNT - 1 };
+    if (now <= start) {
+      return { timePercent: 0, stepIndex: -1 };
+    }
+    if (now >= end) {
+      return { timePercent: 100, stepIndex: this.REMIND_COUNT - 1 };
+    }
 
     const passed = now.getTime() - start.getTime();
     const total = end.getTime() - start.getTime();
@@ -171,13 +177,17 @@ export struct WaterPage {
   }
 
   async checkAndNotify() {
-    if (this.getSelectedDateStr() !== this.getSystemTodayStr()) return;
+    if (this.getSelectedDateStr() !== this.getSystemTodayStr()) {
+      return;
+    }
     // 【修改点2】移除开关判断，默认总是检查（只要是在今天）
 
     const info = this.getTimeInfo();
 
     // 如果当前时间段（例如 10:00-12:00）已经提醒过了，就不再打扰
-    if (info.stepIndex <= this.lastNotifiedStep) return;
+    if (info.stepIndex <= this.lastNotifiedStep) {
+      return;
+    }
 
     const drinkPercent = this.calculatePercent();
 
@@ -252,6 +262,7 @@ export struct WaterPage {
           .onClick(() => this.openTrendDialog())
       }
       .alignItems(HorizontalAlign.Start)
+
       Blank()
       Row() {
         Image($r('app.media.ic_public_arrow_left'))
@@ -276,7 +287,12 @@ export struct WaterPage {
           .onClick(() => this.changeDate(1))
       }
       .backgroundColor(this.COLOR_CARD_BG)
-      .padding({ left: 8, right: 8, top: 6, bottom: 6 })
+      .padding({
+        left: 8,
+        right: 8,
+        top: 6,
+        bottom: 6
+      })
       .borderRadius(16)
     }
     .width('100%')
@@ -365,7 +381,9 @@ export struct WaterPage {
         .backgroundColor(this.COLOR_PRIMARY)
         .onClick(() => {
           const val = Number(this.inputWater);
-          if (val > 0) this.addWater(val);
+          if (val > 0) {
+            this.addWater(val);
+          }
         })
     }
   }

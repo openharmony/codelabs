@@ -20,11 +20,9 @@ struct SettingsPage {
   // 关联全局存储的 appFontScale (缩放系数)
   // 当 UI 修改这个值时，PersistenceStorage 会自动持久化，所有 @StorageProp 的页面都会更新
   @StorageLink('appFontScale') fontScale: number = 1.0;
-
   // 滑块的进度值 (0, 1, 2, 3)
   // 我们将用这个整数值来映射到具体的缩放倍率 (0.85, 1.0, 1.15, 1.30)
   @State sliderValue: number = 1;
-
   // 映射关系配置
   private readonly STEP_MAP = [0.85, 1.0, 1.15, 1.30];
   private readonly TEXT_MAP = ['小', '标准', '大', '超大'];
@@ -70,9 +68,11 @@ struct SettingsPage {
         ListItem() {
           this.ChatBubble(false, '你好，请问这个字体大小看得清吗？')
         }
+
         ListItem() {
           this.ChatBubble(true, '这是当前的显示效果，你可以拖动下方的滑块进行调整。')
         }
+
         ListItem() {
           this.ChatBubble(false, '好的，我觉得这个功能非常实用！')
         }
@@ -140,7 +140,8 @@ struct SettingsPage {
   }
 
   // 聊天气泡组件 (仅作展示用)
-  @Builder ChatBubble(isSelf: boolean, content: string) {
+  @Builder
+  ChatBubble(isSelf: boolean, content: string) {
     Row() {
       if (isSelf) {
         Blank()
@@ -149,7 +150,12 @@ struct SettingsPage {
           .fontColor(Color.White)
           .backgroundColor('#007DFF')
           .padding(12)
-          .borderRadius({ topLeft: 12, topRight: 0, bottomLeft: 12, bottomRight: 12 })
+          .borderRadius({
+            topLeft: 12,
+            topRight: 0,
+            bottomLeft: 12,
+            bottomRight: 12
+          })
           .constraintSize({ maxWidth: '75%' })
 
         Image($r('app.media.startIcon')) // 你的头像资源
@@ -171,7 +177,12 @@ struct SettingsPage {
           .fontColor('#333')
           .backgroundColor(Color.White)
           .padding(12)
-          .borderRadius({ topLeft: 0, topRight: 12, bottomLeft: 12, bottomRight: 12 })
+          .borderRadius({
+            topLeft: 0,
+            topRight: 12,
+            bottomLeft: 12,
+            bottomRight: 12
+          })
           .constraintSize({ maxWidth: '75%' })
         Blank()
       }

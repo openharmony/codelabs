@@ -32,7 +32,6 @@ export struct StatisticsComponent {
   @State weeklyWeightList: HealthChartData[] = []
   @State weeklyExerciseList: HealthChartData[] = []
   @State isRefreshing: boolean = true
-
   // --- DAO 实例 ---
   private waterDao = new WaterDao()
   private dietDao = new DietRecordDao()
@@ -44,12 +43,7 @@ export struct StatisticsComponent {
   async aboutToAppear() {
     this.refreshStats()
   }
-  private getLocalDateStr(date: Date): string {
-    const y = date.getFullYear();
-    const m = (date.getMonth() + 1).toString().padStart(2, '0');
-    const d = date.getDate().toString().padStart(2, '0');
-    return `${y}-${m}-${d}`;
-  }
+
   async refreshStats() {
     this.isRefreshing = true
     let waterList: HealthChartData[] = []
@@ -124,9 +118,11 @@ export struct StatisticsComponent {
               Rect()
                 .width(14)
                 .height(Math.min((item.value / max) * 120, 120))
-                .fill(color).borderRadius(7)
+                .fill(color)
+                .borderRadius(7)
                 .animation({ duration: 600, curve: Curve.FastOutSlowIn })
             }
+
             Text(item.date).fontSize(10).margin({ top: 8 }).fontColor('#999')
           }
         })
@@ -187,7 +183,9 @@ export struct StatisticsComponent {
 
   // --- 绘图逻辑微调 ---
   drawWeightLine(data: HealthChartData[]) {
-    if (data.length === 0) return
+    if (data.length === 0) {
+      return
+    }
 
     // 这一步确保 Canvas 内部尺寸与显示尺寸一致，防止坐标偏移
     const width = this.context.width
@@ -239,7 +237,9 @@ export struct StatisticsComponent {
 
       this.StatRow('最新体重记录', this.getLatestWeightStr(), '#52C41A')
     }
-    .padding(20).backgroundColor(Color.White).borderRadius(20)
+    .padding(20)
+    .backgroundColor(Color.White)
+    .borderRadius(20)
     .shadow({ radius: 10, color: '#05000000' })
     .margin({ bottom: 20 })
   }
@@ -251,6 +251,7 @@ export struct StatisticsComponent {
         Circle({ width: 6, height: 6 }).fill(color).margin({ right: 8 })
         Text(label).fontColor('#666').fontSize(14)
       }
+
       Blank()
       Text(value).fontWeight(FontWeight.Bold).fontSize(16)
     }.width('100%')
@@ -259,8 +260,17 @@ export struct StatisticsComponent {
   // 辅助计算函数
   getAverage(list: HealthChartData[]): number {
     const validData = list.filter(v => v.value > 0)
-    if (validData.length === 0) return 0
+    if (validData.length === 0) {
+      return 0
+    }
     const sum = validData.reduce((s, x) => s + x.value, 0)
     return Math.round(sum / validData.length)
+  }
+
+  private getLocalDateStr(date: Date): string {
+    const y = date.getFullYear();
+    const m = (date.getMonth() + 1).toString().padStart(2, '0');
+    const d = date.getDate().toString().padStart(2, '0');
+    return `${y}-${m}-${d}`;
   }
 }

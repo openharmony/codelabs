@@ -12,10 +12,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { HealthConsultData } from "../../model/HealthConsultModel";
-import { HEALTH_TAB_ID_TO_NAME } from "../../model/HealthConsultTabModel";
-import promptAction from '@ohos.promptAction'
-import HealthConsultFavoriteModel from "../../model/HealthConsultFavoriteModel";
+import { HealthConsultData } from '../../model/HealthConsultModel';
+import { HEALTH_TAB_ID_TO_NAME } from '../../model/HealthConsultTabModel';
+import promptAction from '@ohos.promptAction';
+import HealthConsultFavoriteModel from '../../model/HealthConsultFavoriteModel';
 
 /**
  * The health consult list item component.
@@ -24,7 +24,6 @@ import HealthConsultFavoriteModel from "../../model/HealthConsultFavoriteModel";
 export default struct HealthConsultItem {
   healthConsultData: HealthConsultData | null = null;
   @State isFavorite: boolean = false;
-
   // 1. 【新增】接收外部传入的缩放比例
   @Prop fontScale: number = 1.0;
 
