@@ -6,6 +6,13 @@ import { Profile } from '../components/Profile'
 @Component
 struct Main {
   @State curIndex: number = 0
+  onPageShow() {
+    if (this.curIndex === 0) {
+      // 触发 ChatList 重新加载数据
+      // 你可以在 ChatList 组件上加一个变量来触发刷新，或者使用 AppStorage
+      AppStorage.setOrCreate('updateChatList', Date.now());
+    }
+  }
 
   @Builder buildTabBar(title: string, normalImage: Resource, selectedImage: Resource, index: number) {
     Column() {
