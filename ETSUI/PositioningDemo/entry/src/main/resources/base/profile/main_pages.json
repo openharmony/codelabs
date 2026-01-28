@@ -5,6 +5,9 @@
     "pages/HistoryDetailPage",
     "pages/ProfilePage",
     "pages/PersonalInfoPage",
-    "pages/StatisticsPage"
+    "pages/StatisticsPage",
+    "pages/AchievementPage",
+    "pages/PlanPage",
+    "pages/PlanDetailPage"
   ]
 }
