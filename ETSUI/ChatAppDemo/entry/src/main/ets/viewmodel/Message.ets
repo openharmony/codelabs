@@ -2,7 +2,7 @@
 
 export default interface Message {
   id: string;
-  avatar: Resource;
+  avatar: ResourceStr;
   nickName: string;
   content: string; // 聊天具体内容
   time: string;
