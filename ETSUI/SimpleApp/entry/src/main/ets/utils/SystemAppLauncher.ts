@@ -23,7 +23,6 @@ import { BusinessError } from '@kit.BasicServicesKit';
 import { promptAction } from '@kit.ArkUI';
 
 export class SystemAppLauncher {
-
   /**
    * 启动系统通讯录
    */
@@ -111,7 +110,7 @@ export class SystemAppLauncher {
       { bundleName: 'com.huawei.hmos.settings', abilityName: 'com.huawei.hmos.settings.MainAbility' }, // HMS设置
       { bundleName: 'com.hmos.settings', abilityName: 'com.hmos.settings.MainAbility' }, // HMS设置
       { bundleName: 'com.ohos.settings', abilityName: 'com.ohos.settings.MainAbility' }, // 标准HarmonyOS设置
-      { bundleName: 'com.android.settings', abilityName: 'com.android.settings.MainActivity' } // Android兼容包名
+      { bundleName: 'com.android.settings', abilityName: 'com.android.settings.MainActivity' }// Android兼容包名
     ];
 
     const tryLaunch = (index: number) => {
@@ -200,7 +199,7 @@ export class SystemAppLauncher {
       { bundleName: 'com.ohos.note', abilityName: 'MainAbility' }, // 标准HarmonyOS备忘录
       { bundleName: 'com.huawei.hmos.notes', abilityName: 'MainAbility' }, // HMS备忘录
       { bundleName: 'com.huawei.notes', abilityName: 'MainAbility' }, // 华为备忘录
-      { bundleName: 'com.android.notes', abilityName: 'MainActivity' } // Android兼容包名
+      { bundleName: 'com.android.notes', abilityName: 'MainActivity' }// Android兼容包名
     ];
 
     const tryLaunch = (index: number) => {
@@ -273,7 +272,7 @@ export class SystemAppLauncher {
       { bundleName: 'com.ohos.photos', abilityName: 'com.ohos.photos.MainAbility' }, // 标准HarmonyOS图库
       { bundleName: 'com.huawei.hmos.photos', abilityName: 'com.huawei.hmos.photos.MainAbility' }, // HMS照片
       { bundleName: 'com.huawei.gallery', abilityName: 'com.huawei.gallery.MainAbility' }, // 华为图库
-      { bundleName: 'com.android.gallery3d', abilityName: 'com.android.gallery3d.MainActivity' } // Android兼容包名
+      { bundleName: 'com.android.gallery3d', abilityName: 'com.android.gallery3d.MainActivity' }// Android兼容包名
     ];
 
     const tryLaunch = (index: number) => {

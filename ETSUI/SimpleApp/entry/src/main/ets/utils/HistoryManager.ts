@@ -38,21 +38,21 @@ export class HistoryManager {
       const pref = await preferences.getPreferences(context, 'history');
       const historyStr = await pref.get(this.KEY, '[]') as string;
       let history: AppUsageRecord[] = JSON.parse(historyStr);
-      
+
       // 移除重复记录（相同应用）
       history = history.filter(item => item.appName !== record.appName);
-      
+
       // 添加新记录到开头
       history.unshift(record);
-      
+
       // 限制记录数量
       if (history.length > this.MAX_RECORDS) {
         history = history.slice(0, this.MAX_RECORDS);
       }
-      
+
       await pref.put(this.KEY, JSON.stringify(history));
       await pref.flush();
-      
+
       console.log('历史记录添加成功:', record.appName);
     } catch (error) {
       console.error('添加历史记录失败:', error);
@@ -93,7 +93,7 @@ export class HistoryManager {
   static formatTime(timestamp: number): string {
     const now = Date.now();
     const diff = now - timestamp;
-    
+
     if (diff < 60000) { // 1分钟内
       return '刚刚';
     } else if (diff < 3600000) { // 1小时内
