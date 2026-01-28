@@ -16,8 +16,6 @@
 #include "database_ops.h"
 #include "function_class_cpp.h"
 #include "native_log_wrapper.h"
-#include <string>
-#include <unistd.h>
 #define SLEEP_DURATION_MS 100
 #define THOUSAND 1000
 #define RET_SUCCESS_1 1

@@ -15,8 +15,7 @@
 #ifndef OHOS_SIMPLE_FUNCTIONCLASS_H
 #define OHOS_SIMPLE_FUNCTIONCLASS_H
 
-#include "aki/function.h"
-#include <aki/jsbind.h>
+#include "stdint.h"
 
 class FunctionClass {
 public:

@@ -17,8 +17,6 @@
 #define FUNCTIONFLOWRUNTIME_SORT_CLASS_H
 
 #include "aki/function.h"
-#include <aki/jsbind.h>
-
 class SortClass {
 public:
     SortClass() = default;

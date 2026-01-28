@@ -15,15 +15,8 @@
 #include "sort_class.h"
 #include "bank_queue_system.h"
 #include "native_log_wrapper.h"
-#include <algorithm>
-#include <chrono>
-#include <functional>
 #include <iostream>
 #include <random>
-#include <string>
-#include <thread>
-#include <unistd.h>
-#include <vector>
 #define ZERO 0
 #define TWO 2
 #define THREE 3

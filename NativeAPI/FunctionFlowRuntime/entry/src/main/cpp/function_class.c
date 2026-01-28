@@ -12,11 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include "function_class.h"
 #include "common_ffrt.h"
 #include "native_log_wrapper.h"
-#include <string.h>
-#include <unistd.h>
 #define RET_SUCCESS_4 4
 #define SLEEP_DURATION_MS 100
 #define THOUSAND 1000

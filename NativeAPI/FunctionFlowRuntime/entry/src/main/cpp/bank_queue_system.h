@@ -16,8 +16,6 @@
 #define OHOS_SIMPLE_BANKQUEUESYSTEM_H
 
 #include "ffrt/ffrt.h"
-#include <iostream>
-#include <unistd.h>
 
 class BankQueueSystem {
 private:
