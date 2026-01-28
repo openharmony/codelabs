@@ -6,23 +6,25 @@
             <policy name="projectPolicy" desc="">
                 <policyitem type="copyright" name="Huawei Device Co., Ltd." path=".*" desc=""/>
                 <policyitem type="copyright" name="OpenAtom Foundation" path=".*" desc=""/>
+                <policyitem type="compatibility" name="huawei" path=".*" desc="Allow huawei link"/>
             </policy>
         </policylist>
         <filefilterlist>
             <filefilter name="binaryFileType" desc="Binary files">
                 <filteritem type="filename" name="*.jpg"/>
+                <filteritem type="filename" name="*.jpeg"/>
                 <filteritem type="filename" name="*.png"/>
                 <filteritem type="filename" name="*.gif"/>
                 <filteritem type="filename" name="*.mp4"/>
                 <filteritem type="filename" name="*.mp3"/>
-                <filteritem type="filename" name="*.webp"/>
+                <filteritem type="filename" name="*.wav"/> <filteritem type="filename" name="*.webp"/>
                 <filteritem type="filename" name="*.json"/>
                 <filteritem type="filename" name="*.json5"/>
             </filefilter>
             <filefilter name="defaultPolicyFilter" desc="Filters for default policy">
                 <filteritem type="filepath" name="build/.*" desc="Build output"/>
                 <filteritem type="filepath" name="node_modules/.*" desc="Node modules"/>
-            </filefilter>
+                <filteritem type="filepath" name=".*/resources/rawfile/.*" desc="Rawfiles"/> </filefilter>
         </filefilterlist>
     </oatconfig>
 </configuration>
