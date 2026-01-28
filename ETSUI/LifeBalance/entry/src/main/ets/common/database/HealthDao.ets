@@ -31,7 +31,9 @@ export class HealthDao {
 
   async saveHealthRecord(record: HealthRecord): Promise<void> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return;
+    if (!store) {
+      return;
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       'record_date': record.date,
@@ -49,7 +51,9 @@ export class HealthDao {
 
   async getLatestRecord(): Promise<HealthRecord | null> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return null;
+    if (!store) {
+      return null;
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     // 关键：按日期倒序排列，确保拿到的是最新存入的那一条
@@ -79,7 +83,9 @@ export class HealthDao {
 
   async getHealthByDate(dateStr: string): Promise<HealthRecord | null> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return null;
+    if (!store) {
+      return null;
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('record_date', dateStr);

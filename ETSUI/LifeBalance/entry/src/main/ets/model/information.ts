@@ -28,8 +28,26 @@ export interface DailyData {
 
 export class UserStore {
   private static staticData: Record<string, DailyData> = {
-    '2026-01-19': { height: 175, weight: 70.5, age: 25, bmi: 23.02, bmr: 1700, recommendedWater: 2000, actualWater: 2100, exerciseDuration: 30},
-    '2026-01-18': { height: 175, weight: 71.0, age: 25, bmi: 23.18, bmr: 1700, recommendedWater: 2000, actualWater: 1800, exerciseDuration: 30}
+    '2026-01-19': {
+      height: 175,
+      weight: 70.5,
+      age: 25,
+      bmi: 23.02,
+      bmr: 1700,
+      recommendedWater: 2000,
+      actualWater: 2100,
+      exerciseDuration: 30
+    },
+    '2026-01-18': {
+      height: 175,
+      weight: 71.0,
+      age: 25,
+      bmi: 23.18,
+      bmr: 1700,
+      recommendedWater: 2000,
+      actualWater: 1800,
+      exerciseDuration: 30
+    }
   }
 
   static init() {
@@ -61,7 +79,11 @@ export class UserStore {
       history[today].recommendedWater = newTarget;
     } else {
       history[today] = {
-        height: 175, weight: weight, age: 25, bmi: 0, bmr: 0,
+        height: 175,
+        weight: weight,
+        age: 25,
+        bmi: 0,
+        bmr: 0,
         recommendedWater: newTarget,
         actualWater: 0,
         exerciseDuration: 0

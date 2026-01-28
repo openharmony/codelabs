@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { UserStore, DailyData } from '../../model/information';
+import { DailyData } from '../../model/information';
 import { HealthDao } from '../../common/database/HealthDao';
 import { WaterDao } from '../../common/database/WaterDao';
 import { DietRecordDao } from '../../common/database/DietRecordDao';
@@ -22,6 +22,12 @@ import { ExerciseRecordDao } from '../../common/database/ExerciseRecordDao';
 export struct CalendarComponent {
   @State dayData: DailyData | null = null
   @State isLoading: boolean = false
+  @StorageProp('globalDataUpdate') @Watch('onUpdateData') updateSignal: number = 0
+  private healthDao = new HealthDao()
+  private waterDao = new WaterDao()
+  private dietDao = new DietRecordDao()
+  private exerciseDao = new ExerciseRecordDao()
+
   @State selectedDate: string = ((d) => {
     const y = d.getFullYear();
     const m = (d.getMonth() + 1).toString().padStart(2, '0');
@@ -29,20 +35,15 @@ export struct CalendarComponent {
     return `${y}-${m}-${day}`;
   })(new Date())
 
-  @StorageProp('globalDataUpdate') @Watch('onUpdateData') updateSignal: number = 0
-
-  private healthDao = new HealthDao()
-  private waterDao = new WaterDao()
-  private dietDao = new DietRecordDao()
-  private exerciseDao = new ExerciseRecordDao()
-
   async aboutToAppear() {
     this.loadDataByDate(this.selectedDate)
   }
+
   onUpdateData() {
     console.info('[Calendar] 监听到数据更新信号，正在刷新...');
     this.loadDataByDate(this.selectedDate);
   }
+
   async loadDataByDate(dateStr: string) {
     this.isLoading = true;
     this.dayData = null;
@@ -225,7 +226,10 @@ export struct CalendarComponent {
 
     }
     .id(`card_${this.selectedDate}`)
-    .padding(20).backgroundColor(Color.White).borderRadius(20).width('100%')
+    .padding(20)
+    .backgroundColor(Color.White)
+    .borderRadius(20)
+    .width('100%')
     .shadow({ radius: 15, color: '#15000000' })
   }
 

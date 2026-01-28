@@ -18,18 +18,15 @@ import promptAction from '@ohos.promptAction';
 @Component
 export struct DashboardPage {
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   // 双向绑定全局存储
   @StorageLink('user_gender') @Watch('calculateAll') gender: number = 1;
   @StorageLink('user_height') @Watch('calculateAll') heightVal: number = 170;
   @StorageLink('user_weight') @Watch('calculateAll') weightVal: number = 65;
   @StorageLink('user_age') @Watch('calculateAll') age: number = 25;
-
   // 目标数据
   @StorageLink('targetCalories') targetCalories: number = 2000;
   @StorageLink('targetWater') targetWater: number = 2000;
   @StorageLink('targetExercise') targetExercise: number = 2;
-
   @State bmi: number = 0;
 
   aboutToAppear() {
@@ -147,10 +144,12 @@ export struct DashboardPage {
 
             Stack({ alignContent: Alignment.Bottom }) {
               Gauge({ value: this.bmi, min: 10, max: 35 })
-                .startAngle(210).endAngle(150)
-                .colors([[ '#3F51B5', 0.2 ], [ '#00C853', 0.3 ], [ '#FFAB00', 0.2 ], [ '#FF5252', 0.3 ]])
+                .startAngle(210)
+                .endAngle(150)
+                .colors([['#3F51B5', 0.2], ['#00C853', 0.3], ['#FFAB00', 0.2], ['#FF5252', 0.3]])
                 .strokeWidth(20)
-                .width(220).height(220)
+                .width(220)
+                .height(220)
 
               // 中间数值
               Column() {
@@ -227,22 +226,35 @@ export struct DashboardPage {
 
   // --- 辅助逻辑 ---
   getBMIStatus(): string {
-    if (this.bmi < 18.5) return '偏瘦';
-    if (this.bmi < 24) return '正常';
-    if (this.bmi < 28) return '超重';
+    if (this.bmi < 18.5) {
+      return '偏瘦';
+    }
+    if (this.bmi < 24) {
+      return '正常';
+    }
+    if (this.bmi < 28) {
+      return '超重';
+    }
     return '肥胖';
   }
 
   getBMIColor(): string {
-    if (this.bmi < 18.5) return '#3F51B5';
-    if (this.bmi < 24) return '#00C853';
-    if (this.bmi < 28) return '#FFAB00';
+    if (this.bmi < 18.5) {
+      return '#3F51B5';
+    }
+    if (this.bmi < 24) {
+      return '#00C853';
+    }
+    if (this.bmi < 28) {
+      return '#FFAB00';
+    }
     return '#FF5252';
   }
 
   // --- UI 构建器 ---
 
-  @Builder GenderRow() {
+  @Builder
+  GenderRow() {
     Row() {
       Text('性别').fontSize(14 * this.fontScale).fontWeight(FontWeight.Medium)
       Blank()
@@ -255,12 +267,18 @@ export struct DashboardPage {
     .height(50)
   }
 
-  @Builder GenderButton(val: number, text: string) {
+  @Builder
+  GenderButton(val: number, text: string) {
     Text(text)
       .fontSize(14 * this.fontScale)
       .fontColor(this.gender === val ? '#FFF' : '#666')
       .backgroundColor(this.gender === val ? '#007DFF' : '#F0F0F0')
-      .padding({ left: 15, right: 15, top: 6, bottom: 6 })
+      .padding({
+        left: 15,
+        right: 15,
+        top: 6,
+        bottom: 6
+      })
       .borderRadius(15)
       .onClick(() => {
         this.gender = val;
@@ -268,7 +286,8 @@ export struct DashboardPage {
       })
   }
 
-  @Builder InputRow(label: string, val: number, unit: string, onChange: (v: number) => void) {
+  @Builder
+  InputRow(label: string, val: number, unit: string, onChange: (v: number) => void) {
     Row() {
       Text(label).fontSize(14 * this.fontScale).fontWeight(FontWeight.Medium)
       Blank()
@@ -295,7 +314,8 @@ export struct DashboardPage {
   }
 
   // 【修改点】优化了 GoalCard 的样式，增加了 Padding
-  @Builder GoalCard(title: string, val: string, unit: string, color: string) {
+  @Builder
+  GoalCard(title: string, val: string, unit: string, color: string) {
     Column() {
       // 标题
       Text(title)

@@ -20,7 +20,6 @@ export struct MeditationPage {
   @State currentVideo: VideoItem = VIDEO_DATA[0];
   @State playRate: number = 1.0;
   private controller: VideoController = new VideoController();
-
   private rates: number[] = [
     0.75,
     1.0,

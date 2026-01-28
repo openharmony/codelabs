@@ -12,11 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
+import { AbilityConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { UserStore } from '../model/information';
 import { RdbManager } from '../common/database/RdbManager';
+
 const DOMAIN = 0x0000;
 
 export default class EntryAbility extends UIAbility {

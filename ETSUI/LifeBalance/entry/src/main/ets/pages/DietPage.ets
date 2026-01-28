@@ -14,7 +14,7 @@
  */
 import { DietRecord, FoodItem, MealTime } from '../model/DietModel';
 import { FoodSelectorDialog } from './Diet/FoodSelector';
-import { WeekTrendDialog, WeeklyData } from './Diet/WeekTrendChart'; // 确保这里引入正确
+import { WeeklyData, WeekTrendDialog } from './Diet/WeekTrendChart'; // 确保这里引入正确
 import promptAction from '@ohos.promptAction';
 import { RdbManager } from '../common/database/RdbManager';
 import { DietRecordDao } from '../common/database/DietRecordDao';
@@ -24,24 +24,26 @@ import common from '@ohos.app.ability.common';
 @Component
 export struct DietPage {
   @State dietRecords: DietRecord[] = [];
-
   // 【修改】原有的 targetCalories 改名为 globalTarget，仅作为“今天”的兜底值
   @StorageProp('targetCalories') currentGlobalTarget: number = 2000;
-
   // 【新增】界面真正显示的“当日目标”，随日期变化
   @State dailyTarget: number = 2000;
-
   // 【新增】引入年龄和性别，用于现场计算 BMR
   @StorageProp('userAge') userAge: number = 25;
   @StorageProp('isMale') isMale: boolean = true;
-
   @State selectedDate: Date = new Date();
   @StorageProp('appFontScale') fontScale: number = 1.0;
   @State weeklyStats: WeeklyData[] = [];
-
-  private dietDao: DietRecordDao = new DietRecordDao();
-  private healthDao: HealthDao = new HealthDao(); // 【新增】实例化
-
+  trendDialogController: CustomDialogController = new CustomDialogController({
+    builder: WeekTrendDialog({
+      weeklyData: this.weeklyStats,
+      title: '近7天摄入趋势',
+      unit: 'kcal'
+    }),
+    alignment: DialogAlignment.Center,
+    customStyle: false,
+    autoCancel: true
+  });
   addDialogController: CustomDialogController = new CustomDialogController({
     builder: FoodSelectorDialog({
       onConfirm: (item: FoodItem, count: number, meal: MealTime): Promise<void> => this.addRecord(item, count, meal)
@@ -54,17 +56,9 @@ export struct DietPage {
     customStyle: false,
     autoCancel: true
   });
+  private dietDao: DietRecordDao = new DietRecordDao();
+  private healthDao: HealthDao = new HealthDao(); // 【新增】实例化
 
-  trendDialogController: CustomDialogController = new CustomDialogController({
-    builder: WeekTrendDialog({
-      weeklyData: this.weeklyStats,
-      title: '近7天摄入趋势',
-      unit: 'kcal'
-    }),
-    alignment: DialogAlignment.Center,
-    customStyle: false,
-    autoCancel: true
-  });
   getTodayStr(): string {
     const now = new Date();
     const y = now.getFullYear();
@@ -72,6 +66,7 @@ export struct DietPage {
     const d = now.getDate().toString().padStart(2, '0');
     return `${y}-${m}-${d}`;
   }
+
   async aboutToAppear() {
     const context = getContext(this) as common.UIAbilityContext;
     await RdbManager.getInstance().init(context);
@@ -101,8 +96,7 @@ export struct DietPage {
       else if (healthData.weight > 0 && healthData.height > 0) {
         // 现场计算公式：BMR * 1.2
         this.dailyTarget = this.calculateTarget(healthData.weight, healthData.height);
-      }
-      else {
+      } else {
         this.dailyTarget = 0; // 有记录但无效
       }
     } else {
@@ -322,6 +316,7 @@ export struct DietPage {
               .fontColor(Color.White)
           }
           .alignItems(HorizontalAlign.Start)
+
           Blank()
           Column() {
             Text('已摄入 (kcal)')
@@ -358,7 +353,7 @@ export struct DietPage {
     .borderRadius(20)
     .linearGradient({
       angle: 135,
-      colors: [[ '#00C6FF', 0.0 ], [ '#0072FF', 1.0 ]]
+      colors: [['#00C6FF', 0.0], ['#0072FF', 1.0]]
     })
     .margin({
       left: 16,
@@ -402,7 +397,9 @@ export struct DietPage {
           .borderStyle(BorderStyle.Dashed)
           .borderWidth(1)
           .borderColor('#EEE')
-          .onClick(() => { this.addDialogController.open(); })
+          .onClick(() => {
+            this.addDialogController.open();
+          })
       }
     }
   }
@@ -424,6 +421,7 @@ export struct DietPage {
           .fontColor('#999')
       }
       .alignItems(HorizontalAlign.Start)
+
       Blank()
       Text(`${item.totalCalories}`)
         .fontSize(16 * this.fontScale)
@@ -453,6 +451,8 @@ export struct DietPage {
       bottomRight: 12
     })
     .margin({ bottom: 8 })
-    .onClick(() => { this.deleteRecord(recordId); })
+    .onClick(() => {
+      this.deleteRecord(recordId);
+    })
   }
 }

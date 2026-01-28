@@ -12,37 +12,33 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { FOOD_DATABASE, FoodCategory, FoodItem, MealTime, getFoodsByCategory } from '../../model/DietModel';
+import { FOOD_DATABASE, FoodCategory, FoodItem, getFoodsByCategory, MealTime } from '../../model/DietModel';
 import promptAction from '@ohos.promptAction';
 
 @CustomDialog
 export struct FoodSelectorDialog {
   controller: CustomDialogController;
-  onConfirm: (item: FoodItem, count: number, meal: MealTime) => void = () => {};
-
   @State currentCategoryIndex: number = 0;
   @State selectedMeal: MealTime = MealTime.SNACK;
   @State expandedId: number = -1;
   @State count: number = 1;
-
   // 1. 引入全局字体缩放
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   @State keyword: string = '';
   @State searchResults: FoodItem[] = [];
-
   @State customName: string = ''
   @State customCalories: string = ''
   @State customUnit: string = '份'
-
   private categories: FoodCategory[] = [
     FoodCategory.STAPLE, FoodCategory.MEAT, FoodCategory.VEGETABLE,
     FoodCategory.FRUIT, FoodCategory.DRINK, FoodCategory.SNACK, FoodCategory.CUSTOM
   ];
-
   private mealTypes: MealTime[] = [
     MealTime.BREAKFAST, MealTime.LUNCH, MealTime.DINNER, MealTime.SNACK
   ];
+
+  onConfirm: (item: FoodItem, count: number, meal: MealTime) => void = () => {
+  };
 
   aboutToAppear() {
     this.selectedMeal = this.guessMealTime();
@@ -50,9 +46,15 @@ export struct FoodSelectorDialog {
 
   guessMealTime(): MealTime {
     const hour = new Date().getHours();
-    if (hour >= 5 && hour < 10) return MealTime.BREAKFAST;
-    if (hour >= 10 && hour < 15) return MealTime.LUNCH;
-    if (hour >= 15 && hour < 20) return MealTime.DINNER;
+    if (hour >= 5 && hour < 10) {
+      return MealTime.BREAKFAST;
+    }
+    if (hour >= 10 && hour < 15) {
+      return MealTime.LUNCH;
+    }
+    if (hour >= 15 && hour < 20) {
+      return MealTime.DINNER;
+    }
     return MealTime.SNACK;
   }
 
@@ -129,7 +131,7 @@ export struct FoodSelectorDialog {
               .width(60)
               .opacity(0.2)
               .grayscale(1)
-              .margin({top: 50})
+              .margin({ top: 50 })
             Text('未找到相关食物')
               .fontSize(14 * this.fontScale)
               .fontColor('#999')
@@ -196,6 +198,7 @@ export struct FoodSelectorDialog {
                     .fontColor('#999')
                 }
               }.alignItems(HorizontalAlign.Start)
+
               Blank()
               Text(`${item.calories} kcal`)
                 .fontSize(16 * this.fontScale)
@@ -216,13 +219,13 @@ export struct FoodSelectorDialog {
                 curve: Curve.FastOutSlowIn
               },
                 () => {
-                if (this.expandedId === item.id) {
-                  this.expandedId = -1;
-                } else {
-                  this.expandedId = item.id;
-                  this.count = 1;
-                }
-              })
+                  if (this.expandedId === item.id) {
+                    this.expandedId = -1;
+                  } else {
+                    this.expandedId = item.id;
+                    this.count = 1;
+                  }
+                })
             })
 
             // 展开内容
@@ -374,6 +377,7 @@ export struct FoodSelectorDialog {
           .layoutWeight(1)
           .height(45)
       }
+
       Button('确认添加')
         .width('100%')
         .margin({ top: 10 })
@@ -415,12 +419,14 @@ struct NutritionPieChart {
   @Prop carbs: number;
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
+
   build() {
     Canvas(this.context)
       .width('100%')
       .height('100%')
       .onReady(() => this.drawPie())
   }
+
   drawPie() {
     const total = this.protein + this.fat + this.carbs;
     if (total <= 0) {
@@ -470,7 +476,8 @@ struct NutritionPieChart {
       '#007DFF'
     );
 
-    this.context.beginPath(); this.context.arc(
+    this.context.beginPath();
+    this.context.arc(
       cx,
       cy,
       r * 0.6,
@@ -480,6 +487,7 @@ struct NutritionPieChart {
     this.context.fillStyle = '#F0F7FF';
     this.context.fill();
   }
+
   drawSlice(
     cx: number,
     cy: number,

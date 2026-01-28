@@ -12,12 +12,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Main } from './MainPage'
-import { WaterPage } from './WaterPage'
-import { DietPage } from './DietPage'
+import { Main } from './MainPage';
+import { WaterPage } from './WaterPage';
+import { DietPage } from './DietPage';
 // import { MeditationChoicePage } from './Meditation/MeditationChoicePage'
 import { KnowledgePage } from './healthConsult';
-import { ExercisePage } from './ExercisePage'
+import { ExercisePage } from './ExercisePage';
 
 @Entry
 @Component

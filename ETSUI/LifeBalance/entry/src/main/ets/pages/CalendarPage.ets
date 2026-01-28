@@ -20,11 +20,11 @@ import { DailyData } from '../model/information'
 @Component
 export struct CalendarMainPage {
   @State currentIndex: number = 0
+  @StorageLink('healthHistory') historyData: Record<string, DailyData> = {}
   private controller: TabsController = new TabsController()
 
-  @StorageLink('healthHistory') historyData: Record<string, DailyData> = {}
-
-  @Builder TabBuilder(title: string, index: number) {
+  @Builder
+  TabBuilder(title: string, index: number) {
     Column() {
       Text(title)
         .fontColor(this.currentIndex === index ? '#007DFF' : '#666')

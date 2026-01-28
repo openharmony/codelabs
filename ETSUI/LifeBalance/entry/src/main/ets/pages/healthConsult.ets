@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { HealthTabData, HEALTH_TAB_DATA } from '../model/HealthConsultTabModel';
+import { HEALTH_TAB_DATA, HealthTabData } from '../model/HealthConsultTabModel';
 import HealthConsultItemList from './HealthConsult/HealthConsultItemList';
 
 @Component
@@ -21,11 +21,11 @@ export struct KnowledgePage {
   @State searchText: string = '';
   @State currentTabIndex: number = 0;
   @State forceReload: boolean = false;
-
   // 1. 引入缩放变量
   @StorageProp('appFontScale') fontScale: number = 1.0;
 
-  @Builder TabBuilder(index: number) {
+  @Builder
+  TabBuilder(index: number) {
     Column() {
       Text(this.tabBarArray[index].name)
         .height('100%')
@@ -46,8 +46,9 @@ export struct KnowledgePage {
           .fontWeight(FontWeight.Bold)
           .margin({ bottom: 8 })
 
-        Search({ value:
-        this.searchText,
+        Search({
+          value:
+          this.searchText,
           placeholder: '搜索：饮食、运动...'
         })
           .width('100%')

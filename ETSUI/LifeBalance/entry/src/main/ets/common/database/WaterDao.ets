@@ -26,7 +26,9 @@ export class WaterDao {
 
   async saveWaterRecord(record: WaterRecord): Promise<boolean> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return false;
+    if (!store) {
+      return false;
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       'record_date': record.date,
@@ -45,7 +47,9 @@ export class WaterDao {
 
   async getWaterByDate(dateStr: string): Promise<WaterRecord | null> {
     const store = RdbManager.getInstance().getRdbStore();
-    if (!store) return null;
+    if (!store) {
+      return null;
+    }
 
     let predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('record_date', dateStr);
@@ -67,6 +71,7 @@ export class WaterDao {
     }
     return null;
   }
+
   // --- 新增方法：批量查询日期列表 ---
   async getWaterBatch(dateList: string[]): Promise<WaterRecord[]> {
     const results: WaterRecord[] = [];

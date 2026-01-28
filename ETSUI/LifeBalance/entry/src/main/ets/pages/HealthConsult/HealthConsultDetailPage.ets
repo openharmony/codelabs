@@ -22,10 +22,8 @@ import webview from '@ohos.web.webview';
 @Component
 export default struct HealthConsultDetailPage {
   @State articleFile: string = '';
-
   // 1. 【新增】引入全局缩放变量
   @StorageProp('appFontScale') fontScale: number = 1.0;
-
   controller: webview.WebviewController = new webview.WebviewController();
 
   onPageShow() {
