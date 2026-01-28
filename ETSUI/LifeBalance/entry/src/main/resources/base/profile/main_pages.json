@@ -1,0 +1,12 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/CalendarPage",
+    "pages/Meditation/MindfulnessPage",
+    "pages/Meditation/MeditationPage",
+    "pages/Meditation/MeditationVideoPage",
+    "pages/Meditation/MeditationVideoPlayPage",
+    "pages/HealthConsult/HealthConsultDetailPage",
+    "pages/Mine/SettingsPage"
+  ]
+}
