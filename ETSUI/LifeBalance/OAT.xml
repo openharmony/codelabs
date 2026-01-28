@@ -9,22 +9,44 @@
                 <policyitem type="compatibility" name="huawei" path=".*" desc="Allow huawei link"/>
             </policy>
         </policylist>
+
         <filefilterlist>
-            <filefilter name="binaryFileType" desc="Binary files">
+            <filefilter name="binaryFileTypePolicyFilter" desc="Binary files policy">
                 <filteritem type="filename" name="*.jpg"/>
-                <filteritem type="filename" name="*.jpeg"/>
                 <filteritem type="filename" name="*.png"/>
                 <filteritem type="filename" name="*.gif"/>
                 <filteritem type="filename" name="*.mp4"/>
                 <filteritem type="filename" name="*.mp3"/>
-                <filteritem type="filename" name="*.wav"/> <filteritem type="filename" name="*.webp"/>
+                <filteritem type="filename" name="*.wav"/>
+                <filteritem type="filename" name="*.webp"/>
+            </filefilter>
+
+            <filefilter name="defaultPolicyFilter" desc="Filters for license header policies">
+                <filteritem type="filename" name="*.jpg"/>
+                <filteritem type="filename" name="*.png"/>
+                <filteritem type="filename" name="*.mp4"/>
+                <filteritem type="filename" name="*.mp3"/>
+                <filteritem type="filename" name="*.wav"/>
                 <filteritem type="filename" name="*.json"/>
                 <filteritem type="filename" name="*.json5"/>
-            </filefilter>
-            <filefilter name="defaultPolicyFilter" desc="Filters for default policy">
+
+                <filteritem type="filepath" name="entry/src/main/resources/rawfile/.*" desc="Rawfiles"/>
+
                 <filteritem type="filepath" name="build/.*" desc="Build output"/>
                 <filteritem type="filepath" name="node_modules/.*" desc="Node modules"/>
-                <filteritem type="filepath" name=".*/resources/rawfile/.*" desc="Rawfiles"/> </filefilter>
+                <filteritem type="filepath" name="oh_modules/.*" desc="Ohos modules"/>
+            </filefilter>
+
+            <filefilter name="copyrightPolicyFilter" desc="Filters for copyright header policies">
+                <filteritem type="filename" name="*.jpg"/>
+                <filteritem type="filename" name="*.png"/>
+                <filteritem type="filename" name="*.mp4"/>
+                <filteritem type="filename" name="*.mp3"/>
+                <filteritem type="filename" name="*.wav"/>
+                <filteritem type="filename" name="*.json"/>
+                <filteritem type="filename" name="*.json5"/>
+                <filteritem type="filepath" name="entry/src/main/resources/rawfile/.*" desc="Rawfiles"/>
+            </filefilter>
         </filefilterlist>
     </oatconfig>
 </configuration>
