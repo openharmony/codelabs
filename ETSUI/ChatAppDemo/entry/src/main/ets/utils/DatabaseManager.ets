@@ -1,13 +1,14 @@
 import { relationalStore } from '@kit.ArkData';
 import { common } from '@kit.AbilityKit';
-import { UserModel } from '../viewmodel/UserModel';
 import { UserHandler } from './UserHandler';
+import { FriendHandler } from './FriendHandler';
 
 export class DatabaseManager {
   private store: relationalStore.RdbStore | null = null;
 
   // 核心：将子模块暴露出来
   public user: UserHandler | null = null;
+  public friend: FriendHandler | null = null;
   // public chat: ChatHandler | null = null; // 后续可以加聊天记录表
 
   // 修改后的数据库名
@@ -16,24 +17,50 @@ export class DatabaseManager {
     securityLevel: relationalStore.SecurityLevel.S1
   };
 
+  //初始化数据库
   async initDB(context: common.Context) {
-    // 简单的判断：如果已经初始化过了，就不再重复执行
-    if (this.store && this.user) return;
+    if (this.store && this.user && this.friend) return;
 
-    const SQL_CREATE_TABLE = `CREATE TABLE IF NOT EXISTS User (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      avatarPath TEXT,
-      nickName TEXT,
-      country TEXT,
-      phoneNumber TEXT,
-      password TEXT
-    )`;
+    // 1. 定义建表语句
+    const SQL_CREATE_USER = `CREATE TABLE IF NOT EXISTS User (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    avatarPath TEXT,
+    nickName TEXT,
+    country TEXT,
+    phoneNumber TEXT,
+    password TEXT
+  )`;
+
+    const SQL_CREATE_FRIEND_REQUEST = `CREATE TABLE IF NOT EXISTS FriendRequest (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fromPhone TEXT,
+    toPhone TEXT,
+    fromName TEXT,
+    message TEXT,
+    status INTEGER
+  )`;
+
+    const SQL_CREATE_FRIEND = `CREATE TABLE IF NOT EXISTS Friend (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    myPhone TEXT,
+    friendPhone TEXT
+  )`;
 
     try {
-      this.store = await relationalStore.getRdbStore(context, this.STORE_CONFIG);
-      this.user = new UserHandler(this.store);
-      await this.store.executeSql(SQL_CREATE_TABLE);
-      console.info('ChatDatabase 初始化成功');
+      // 2. 获取 store 实例
+      const storeInstance = await relationalStore.getRdbStore(context, this.STORE_CONFIG);
+      this.store = storeInstance;
+
+      // 3. 实例化处理器
+      this.user = new UserHandler(storeInstance);
+      this.friend = new FriendHandler(storeInstance);
+
+      // 4. 依次执行建表语句
+      await this.store.executeSql(SQL_CREATE_USER);
+      await this.store.executeSql(SQL_CREATE_FRIEND_REQUEST);
+      await this.store.executeSql(SQL_CREATE_FRIEND);
+
+      console.info('ChatDatabase: 所有表初始化成功');
     } catch (err) {
       console.error('数据库初始化失败，错误码:', err.code);
     }

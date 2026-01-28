@@ -91,8 +91,6 @@ export class UserHandler {
     return users;
   }
 
-  // UserHandler.ets
-
   /**
    * 检查手机号是否已存在
    * @param phoneNumber 待检查的手机号
@@ -113,5 +111,35 @@ export class UserHandler {
       console.error('校验手机号失败:', JSON.stringify(err));
       return false;
     }
+  }
+
+  /**
+   * 根据手机号列表批量查询用户信息
+   * @param phoneNumbers 手机号数组，例如 ['138...','139...']
+   */
+  async queryUsersByPhones(phoneNumbers: string[]): Promise<UserModel[]> {
+    const users: UserModel[] = [];
+    if (!this.store || phoneNumbers.length === 0) return users;
+
+    let predicates = new relationalStore.RdbPredicates('User');
+    // 使用 in 语句：WHERE phoneNumber IN ('138...', '139...')
+    predicates.in('phoneNumber', phoneNumbers);
+
+    try {
+      let resultSet = await this.store.query(predicates);
+      while (resultSet.goToNextRow()) {
+        users.push({
+          avatarPath: resultSet.getString(resultSet.getColumnIndex('avatarPath')),
+          nickName: resultSet.getString(resultSet.getColumnIndex('nickName')),
+          country: resultSet.getString(resultSet.getColumnIndex('country')),
+          phoneNumber: resultSet.getString(resultSet.getColumnIndex('phoneNumber')),
+          password: resultSet.getString(resultSet.getColumnIndex('password'))
+        });
+      }
+      resultSet.close();
+    } catch (err) {
+      console.error('批量查询用户失败:', JSON.stringify(err));
+    }
+    return users;
   }
 }

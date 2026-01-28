@@ -170,22 +170,22 @@ struct Register {
         }
         .justifyContent(FlexAlign.Center)
 
-        // Button('打印数据库全量数据')
-        //   .onClick(async () => {
-        //
-        //     const allUsers = await dbManager.user?.queryAllUsers();
-        //     console.log('Test: Total users after insert:', allUsers?.length);
-        //
-        //     if (allUsers && allUsers.length > 0) {
-        //       console.info('======= 数据库用户列表 =======');
-        //       allUsers.forEach((user, index) => {
-        //         console.info(`[用户 ${index + 1}] 昵称: ${user.nickName}, 手机: ${user.phoneNumber}, 路径: ${user.avatarPath}`);
-        //       });
-        //       console.info('============================');
-        //     } else {
-        //       console.warn('数据库目前是空的哦！');
-        //     }
-        //   })
+        Button('打印数据库全量数据')
+          .onClick(async () => {
+
+            const allUsers = await dbManager.user?.queryAllUsers();
+            console.log('Test: Total users after insert:', allUsers?.length);
+
+            if (allUsers && allUsers.length > 0) {
+              console.info('======= 数据库用户列表 =======');
+              allUsers.forEach((user, index) => {
+                console.info(`[用户 ${index + 1}] 昵称: ${user.nickName}, 手机: ${user.phoneNumber}, 路径: ${user.avatarPath}`);
+              });
+              console.info('============================');
+            } else {
+              console.warn('数据库目前是空的哦！');
+            }
+          })
 
       }
       .width('100%')

@@ -4,6 +4,7 @@
  * 状态：已实现
  */
 import router from '@ohos.router'
+import { UserModel } from '../viewmodel/UserModel'
 
 // 个人信息接口
 interface UserInfo {
@@ -21,6 +22,10 @@ interface MenuItem {
 
 @Component
 export struct Profile {
+
+  // @StorageProp 是单向绑定（只读），@StorageLink 是双向绑定
+  @StorageProp('currentUser') user: UserModel | null = null;
+
   // 模拟个人信息数据
   private userInfo: UserInfo = {
     avatar: $r('app.media.user1'), // 使用现有资源
@@ -48,23 +53,25 @@ export struct Profile {
     Column() {
       // 顶部个人信息区域
       Column() {
-        // 头像
-        Image(this.userInfo.avatar)
-          .width(80)
-          .height(80)
-          .borderRadius(40)
-          .margin({ bottom: 12 })
+        if(this.user){
+          // 头像
+          Image(this.user.avatarPath)
+            .width(80)
+            .height(80)
+            .borderRadius(40)
+            .margin({ bottom: 12 })
 
-        // 昵称
-        Text(this.userInfo.nickName)
-          .fontSize(18)
-          .fontWeight(700)
-          .margin({ bottom: 8 })
+          // 昵称
+          Text(this.user.nickName)
+            .fontSize(18)
+            .fontWeight(700)
+            .margin({ bottom: 8 })
 
-        // 地区
-        Text(this.userInfo.region)
-          .fontSize(12)
-          .fontColor('#666666')
+          // 地区
+          Text(this.user.country)
+            .fontSize(12)
+            .fontColor('#666666')
+        }
       }
       .width('100%')
       .height(160)

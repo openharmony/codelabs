@@ -1,32 +1,33 @@
 import { router, promptAction } from '@kit.ArkUI';
-
-interface UserResult {
-  name: string;
-  wechatId: string;
-  avatar: Resource;
-}
+import { dbManager } from '../utils/DatabaseManager';
+import { UserModel } from '../viewmodel/UserModel';
 
 @Entry
 @Component struct AddFriends {
   @State searchText: string = '';
-  @State searchResult: UserResult | null = null;
+  // 搜索结果直接使用 UserModel 类型
+  @State searchResult: UserModel | null = null;
 
-  // 模拟数据库
-  private mockUsers: UserResult[] = [
-    { name: 'HarmonyOS高手', wechatId: 'user2', avatar: $r('app.media.user12') },
-    { name: '华为开发者', wechatId: 'user1', avatar: $r('app.media.user11') }
-  ];
+  // 获取当前登录用户，作为“申请人”
+  @StorageProp('currentUser') currentUser: UserModel | null = null;
 
-  handleSearch() {
-    // 模拟搜索逻辑
-    const result = this.mockUsers.find(u => u.wechatId === this.searchText || u.name.includes(this.searchText));
-    if (result) {
-      this.searchResult = result;
+  async handleSearch() {
+    if (this.searchText.trim() === '') return;
+
+    // 1. 调用 UserHandler 里的查询方法
+    const user = await dbManager.user?.queryUserByPhone(this.searchText);
+
+    if (user) {
+      // 2. 检查是不是搜到了自己（不能加自己为好友）
+      if (user.phoneNumber === this.currentUser?.phoneNumber) {
+        promptAction.showToast({ message: '不能添加自己为好友哦' });
+        this.searchResult = null;
+        return;
+      }
+      this.searchResult = user;
     } else {
       this.searchResult = null;
-      if (this.searchText.length > 0) {
-        promptAction.showToast({ message: '未找到该用户' });
-      }
+      promptAction.showToast({ message: '未找到该用户，请检查手机号' });
     }
   }
 
@@ -47,27 +48,68 @@ interface UserResult {
         .onChange((val) => this.searchText = val)
         .onSubmit(() => this.handleSearch())
 
-      Text(`我的微信号：wx_123456`).fontSize(14).fontColor(Color.Gray).margin({ bottom: 20 })
+      Text(`我的手机号：${this.currentUser?.phoneNumber || '未登录'}`)
+        .fontSize(14)
+        .fontColor(Color.Gray)
+        .margin({ bottom: 20 })
 
       // 搜索结果展示
       if (this.searchResult) {
         Column() {
-          Row() {Image(this.searchResult.avatar).width(50).height(50).borderRadius(5)
+          Row() {
+            // 头像使用数据库存的路径，alt 是兜底图
+            Image(this.searchResult.avatarPath)
+              .width(50).height(50).borderRadius(5)
+              .alt($r('app.media.user_default'))
+
             Column() {
-              Text(this.searchResult.name).fontSize(16).fontWeight(FontWeight.Bold)
-              Text(`微信号: ${this.searchResult.wechatId}`).fontSize(14).fontColor(Color.Gray)
+              Text(this.searchResult.nickName).fontSize(16).fontWeight(FontWeight.Bold)
+              Text(`手机号: ${this.searchResult.phoneNumber}`).fontSize(14).fontColor(Color.Gray)
             }.alignItems(HorizontalAlign.Start).margin({ left: 15 }).layoutWeight(1)
 
             Button('添加')
               .height(30)
               .backgroundColor('#07C160')
-              .onClick(() => promptAction.showToast({ message: '申请已发送' }))
+              .onClick(async () => {
+                if (!this.currentUser) {
+                  promptAction.showToast({ message: '登录状态异常' });
+                  return;
+                }
+
+                // 拦截：是否已经是好友
+                const alreadyFriend = await dbManager.friend?.isFriend(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
+                if (alreadyFriend) {
+                  promptAction.showToast({ message: '对方已经是你的好友了' });
+                  return;
+                }
+
+                // 拦截：是否已经发送过申请且对方未处理
+                const isPending = await dbManager.friend?.checkRequestExists(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
+                if (isPending) {
+                  promptAction.showToast({ message: '申请已发送，请耐心等待对方通过' });
+                  return;
+                }
+
+                // 调用 FriendHandler 发送申请
+                try {
+                  await dbManager.friend?.sendRequest({
+                    fromPhone: this.currentUser.phoneNumber,
+                    toPhone: this.searchResult!.phoneNumber,
+                    fromName: this.currentUser.nickName,
+                    message: '你好，我是' + this.currentUser.nickName,
+                    status: 0
+                  });
+                  promptAction.showToast({ message: '申请已发送' });
+                  // 发送完可以考虑延迟返回或清空结果
+                } catch (e) {
+                  promptAction.showToast({ message: '发送失败，请重试' });
+                }
+              })
           }
           .width('100%')
           .padding(15)
           .backgroundColor(Color.White)
         }
-        .width('100%')
       } else if (this.searchText === '') {
         // 展示一些默认的入口
         this.buildMenuOption($r('app.media.qrcode'), '扫一扫', '扫描二维码名片')

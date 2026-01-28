@@ -1,4 +1,5 @@
 export interface ContactModel {
-  avatar: Resource
-  name: string
+  avatar: string | Resource;
+  name: string;
+  phoneNumber: string; // 唯一标识
 }
