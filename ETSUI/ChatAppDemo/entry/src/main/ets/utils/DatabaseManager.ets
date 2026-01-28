@@ -4,6 +4,7 @@ import { common } from '@kit.AbilityKit';
 import { UserHandler } from '../utils/UserHandler';
 import { FriendHandler } from '../utils/FriendHandler';
 import { ChatHandler } from '../utils/ChatHandler';
+import {PostHandler} from '../utils/PostHandler'
 import Message from '../viewmodel/Message';
 
 export class DatabaseManager {
@@ -11,6 +12,7 @@ export class DatabaseManager {
   public user: UserHandler | null = null;
   public friend: FriendHandler | null = null;
   public chat: ChatHandler | null = null;
+  public postHandler : PostHandler|null = null
 
   private readonly STORE_CONFIG: relationalStore.StoreConfig = {
     name: 'ChatDatabase.db',
@@ -35,6 +37,23 @@ export class DatabaseManager {
                               isSelf INTEGER,
                               avatar TEXT
                               )`;
+    const SQL_CREATE_POST = `CREATE TABLE IF NOT EXISTS Post (
+                              id INTEGER PRIMARY KEY,
+                              owner TEXT,
+                              avatar TEXT,
+                              nickname TEXT,     -- 发帖人的昵称
+                              publishTime TEXT,
+                              content TEXT,
+                              image TEXT,
+                              likeCount INTEGER,
+                              isLiked INTEGER,
+                              comments TEXT
+                              )`;
+    const SQL_CREATE_LIKE = `CREATE TABLE IF NOT EXISTS LikeRecord (
+                              id INTEGER PRIMARY KEY AUTOINCREMENT,
+                              postId INTEGER,
+                              userPhone TEXT
+                              )`;
 
     try {
       const storeInstance = await relationalStore.getRdbStore(context, this.STORE_CONFIG);
@@ -45,11 +64,13 @@ export class DatabaseManager {
       await this.store.executeSql(SQL_CREATE_FRIEND_REQUEST);
       await this.store.executeSql(SQL_CREATE_FRIEND);
       await this.store.executeSql(SQL_CREATE_CHAT);
+      await this.store.executeSql(SQL_CREATE_POST);
 
       // 实例化处理器
       this.user = new UserHandler(storeInstance);
       this.friend = new FriendHandler(storeInstance);
       this.chat = new ChatHandler(storeInstance);
+      this.postHandler = new PostHandler(storeInstance);
 
       // 预填充数据逻辑改为按需填充（或在登录后填充）
       // await this.prePopulateChatData();
