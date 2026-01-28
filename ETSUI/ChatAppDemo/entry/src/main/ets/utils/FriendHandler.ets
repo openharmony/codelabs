@@ -136,4 +136,23 @@ export class FriendHandler {
     }
   }
 
+  async queryFriendsPhones(myPhone: string): Promise<string[]> {
+    if (!this.store) return [];
+
+    let predicates = new relationalStore.RdbPredicates('Friend');
+    predicates.equalTo('myPhone', myPhone);
+
+    let friendPhones: string[] = [];
+    try {
+      let resultSet = await this.store.query(predicates);
+      while (resultSet.goToNextRow()) {
+        friendPhones.push(resultSet.getString(resultSet.getColumnIndex('friendPhone')));
+      }
+      resultSet.close();
+    } catch (e) {
+      console.error('获取好友手机号列表失败', JSON.stringify(e));
+    }
+    return friendPhones;
+  }
+
 }
