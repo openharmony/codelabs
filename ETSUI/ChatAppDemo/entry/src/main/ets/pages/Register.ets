@@ -3,6 +3,9 @@ import Prompt from '@system.prompt'
 import router from '@ohos.router'
 import { dbManager } from '../utils/DatabaseManager';
 import { UserModel } from '../viewmodel/UserModel'
+// import { BusinessError } from '@kit.BasicServicesKit';
+import { LocationPickerDialog } from '../components/LocationPickerDialog';
+
 @Entry
 @Component
 struct Register {
@@ -13,6 +16,32 @@ struct Register {
   @State password: string = ''
   @State isAgree: boolean = false
   private photoPicker = new picker.PhotoViewPicker()
+
+  // 定义弹窗控制器
+  dialogController: CustomDialogController = new CustomDialogController({
+    builder: LocationPickerDialog({
+      confirm: (province: string, city: string) => {
+        this.country = `中国 ${province} ${city}`
+      }
+    }),
+    alignment: DialogAlignment.Bottom, // 底部弹出
+    customStyle: true // 使用自定义样式
+  })
+
+  // 利用生命周期钩子
+  onPageShow() {
+    // 获取从 LocationSelectPage 返回时的参数
+    const params = router.getParams() as Record<string, string>;
+    if (params && params.province) {
+      // 这里的 key 要和 LocationSelectPage 中 back 传的 key 一致
+      const countryName = params.country || '中国';
+      const provinceName = params.province;
+      this.country = `${countryName} ${provinceName}`;
+
+      // 顺手清理掉 params，防止下次进入页面误触发（代码严谨性加分）
+      // router.getParams() 在某些版本是只读的，通常 back 传参是一次性的
+    }
+  }
 
   build() {
     Row() {
@@ -39,7 +68,25 @@ struct Register {
 
         Column() {
           MyTextInput({ label: '昵称', placeholder: '例如: 陈晨', text: $nickName, type: InputType.Normal })
-          MyTextInput({ label: '国家/地区', placeholder: '中国大陆(+86)', text: $country, type: InputType.Normal })
+          // MyTextInput({ label: '国家/地区', placeholder: '中国大陆(+86)', text: $country, type: InputType.Normal })
+          Column() {
+            Row() {
+              Text('国家/地区')
+                .width(80)
+                .fontSize(18)
+
+              Text(this.country === '' ? '请选择地区' : this.country)
+                .fontSize(18)
+                .fontColor(this.country === '' ? Color.Gray : Color.Black)
+                .layoutWeight(1)
+                .onClick(() => {
+                  this.dialogController.open()
+                })
+            }
+            .padding({ top: 10, bottom: 10 })
+
+            Divider().margin({ bottom: 10 })
+          }
           MyTextInput({ label: '手机号', placeholder: '请填写手机号', text: $phoneNumber, type: InputType.Number })
           MyTextInput({ label: '密码', placeholder: '请填写密码', text: $password, type: InputType.Password })
 
@@ -170,22 +217,22 @@ struct Register {
         }
         .justifyContent(FlexAlign.Center)
 
-        Button('打印数据库全量数据')
-          .onClick(async () => {
-
-            const allUsers = await dbManager.user?.queryAllUsers();
-            console.log('Test: Total users after insert:', allUsers?.length);
-
-            if (allUsers && allUsers.length > 0) {
-              console.info('======= 数据库用户列表 =======');
-              allUsers.forEach((user, index) => {
-                console.info(`[用户 ${index + 1}] 昵称: ${user.nickName}, 手机: ${user.phoneNumber}, 路径: ${user.avatarPath}`);
-              });
-              console.info('============================');
-            } else {
-              console.warn('数据库目前是空的哦！');
-            }
-          })
+        // Button('打印数据库全量数据')
+        //   .onClick(async () => {
+        //
+        //     const allUsers = await dbManager.user?.queryAllUsers();
+        //     console.log('Test: Total users after insert:', allUsers?.length);
+        //
+        //     if (allUsers && allUsers.length > 0) {
+        //       console.info('======= 数据库用户列表 =======');
+        //       allUsers.forEach((user, index) => {
+        //         console.info(`[用户 ${index + 1}] 昵称: ${user.nickName}, 手机: ${user.phoneNumber}, 路径: ${user.avatarPath}`);
+        //       });
+        //       console.info('============================');
+        //     } else {
+        //       console.warn('数据库目前是空的哦！');
+        //     }
+        //   })
 
       }
       .width('100%')
