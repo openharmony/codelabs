@@ -15,15 +15,8 @@
 #include "common_ffrt.h"
 #include "function_class.h"
 #include "native_log_wrapper.h"
-#include <complex.h>
-#include <float.h>
-#include <math.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
 
 /* ========== 常量定义 ========== */
 #define ONE 1
