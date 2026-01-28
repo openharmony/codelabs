@@ -6,18 +6,30 @@
         "material": {
           "certpath": "C:/Users/34315/.ohos/config/openharmony/default_SimpleApp_1uZ3IsQeSM6IIXNthWBXOi8ATI_laBSTJotZsLwaW9Q=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001B9F4BD237ECA5369E5AF631E1ACED258B0B82E49AD3C21D69600ECBB1F18332D4BE0DE7503F07FB",
+          "keyPassword": "0000001BD2ECE21F4C7ADE91C971440064AC26C67ADF2CF141F896334E670982E61201B774B5FB0C124786",
           "profile": "C:/Users/34315/.ohos/config/openharmony/default_SimpleApp_1uZ3IsQeSM6IIXNthWBXOi8ATI_laBSTJotZsLwaW9Q=.p7b",
           "signAlg": "SHA256withECDSA",
           "storeFile": "C:/Users/34315/.ohos/config/openharmony/default_SimpleApp_1uZ3IsQeSM6IIXNthWBXOi8ATI_laBSTJotZsLwaW9Q=.p12",
-          "storePassword": "0000001B6FA96D34B82AE577509207431E001F979D31657126C63CC17B9DB599274DC5EA6BB8AC527FC4FA"
+          "storePassword": "0000001B9BECFD0A95D14AC996BE47436EE0BAF2107FE00D3082260707D29DB18BEBF22F956924E3BB1F42"
+        }
+      },
+      {
+        "name": "8Ro8SV66NFCfYl15YT5kkP7T3ow2AyhIf8xTQgVWzmc",
+        "material": {
+          "certpath": "C:/Users/34315/.ohos/config/openharmony/auto_ohos_8Ro8SV66NFCfYl15YT5kkP7T3ow2AyhIf8xTQgVWzmc_SimpleApp_com.example.myapplication.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B596EC24EA93B57514972067BED9C8D97C7EB1BBB20AAB4B3A60862D5ED8808F3DCA17E4EE4CB1F",
+          "profile": "C:/Users/34315/.ohos/config/openharmony/auto_ohos_8Ro8SV66NFCfYl15YT5kkP7T3ow2AyhIf8xTQgVWzmc_SimpleApp_com.example.myapplication.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:/Users/34315/.ohos/config/openharmony/auto_ohos_8Ro8SV66NFCfYl15YT5kkP7T3ow2AyhIf8xTQgVWzmc_SimpleApp_com.example.myapplication.p12",
+          "storePassword": "0000001B2E42653C50711C95D3963D4F796CB7CB1FFCF8D9F167B50E5331BB9BC867E08DC4FFD00B40FBA8"
         }
       }
     ],
     "products": [
       {
         "name": "default",
-        "signingConfig": "default",
+        "signingConfig": "8Ro8SV66NFCfYl15YT5kkP7T3ow2AyhIf8xTQgVWzmc",
         "targetSdkVersion": 18,
         "compatibleSdkVersion": 18,
         "compileSdkVersion": 18,

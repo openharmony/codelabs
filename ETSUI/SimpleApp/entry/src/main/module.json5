@@ -56,14 +56,6 @@
         }
       },
       {
-        "name": "ohos.permission.MODIFY_AUDIO_SETTINGS",
-        "reason": "$string:audio_permission_reason",
-        "usedScene": {
-          "abilities": ["EntryAbility"],
-          "when": "inuse"
-        }
-      },
-      {
         "name": "ohos.permission.INTERNET",
         "reason": "$string:internet_permission_reason",
         "usedScene": {
@@ -74,6 +66,22 @@
       {
         "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
         "reason": "$string:alarm_permission_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.READ_MEDIA",
+        "reason": "$string:read_media_permission_reason",
+        "usedScene": {
+          "abilities": ["EntryAbility"],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.DISTRIBUTED_DATASYNC",
+        "reason": "$string:clock_permission_reason",
         "usedScene": {
           "abilities": ["EntryAbility"],
           "when": "inuse"

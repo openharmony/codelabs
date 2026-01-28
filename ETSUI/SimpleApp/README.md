@@ -68,7 +68,7 @@ SimpleApp/
 ### 环境要求
 
 - **DevEco Studio**: 6.0.1 或更高版本
-- **OpenHarmony SDK**: API 版本 20
+- **OpenHarmony SDK**: API 版本 18
 - **Node.js**: 18+ (用于包管理)
 
 ### 开发环境搭建
@@ -104,7 +104,7 @@ SimpleApp/
 
 ### 1. 系统应用启动
 
-项目集成了6个常用系统应用的启动功能，通过 `SystemAppLauncher` 工具类实现：
+项目集成了5个常用系统应用的启动功能，通过 `SystemAppLauncher` 工具类实现：
 
 ```typescript
 // 启动通讯录
@@ -118,9 +118,6 @@ SystemAppLauncher.launchMemo(context);
 
 // 启动图库
 SystemAppLauncher.launchGallery(context);
-
-// 启动时钟
-SystemAppLauncher.launchClock(context);
 
 // 启动设置
 SystemAppLauncher.launchSettings(context);
@@ -189,7 +186,7 @@ buildResponsiveLayout() {
 
 ### MultiFunctionEntryModule - 常用功能模块
 
-- 6个系统应用入口的网格布局
+- 5个系统应用入口的网格布局
 - 使用 Grid 和 LazyForEach 优化性能
 - 支持点击启动相应应用
 
@@ -265,7 +262,7 @@ const themeConfig = {
 
 - **设备类型**：手机、平板
 - **OpenHarmony版本**：5.1.1及以上版本
-- **API版本**：19及以上
+- **API版本**：18及以上
 - **权限要求**：相机权限、网络权限（如需要）
 
 ## 🔒 权限说明
