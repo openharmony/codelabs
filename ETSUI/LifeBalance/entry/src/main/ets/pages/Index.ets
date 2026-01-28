@@ -15,7 +15,7 @@
 import { Main } from './MainPage'
 import { WaterPage } from './WaterPage'
 import { DietPage } from './DietPage'
-import { MeditationChoicePage } from './Meditation/MeditationChoicePage'
+// import { MeditationChoicePage } from './Meditation/MeditationChoicePage'
 import { KnowledgePage } from './healthConsult';
 import { ExercisePage } from './ExercisePage'
 
@@ -47,10 +47,6 @@ struct MainPage {
 
         TabContent() {
           ExercisePage()
-        }
-
-        TabContent() {
-          MeditationChoicePage()
         }
 
         TabContent() {
@@ -92,13 +88,8 @@ struct MainPage {
           $r('app.media.icon')
         )
         this.tabItem(
-          '冥想',
-          4,
-          $r('app.media.icon')
-        )
-        this.tabItem(
           '咨询',
-          5,
+          4,
           $r('app.media.icon')
         )
       }

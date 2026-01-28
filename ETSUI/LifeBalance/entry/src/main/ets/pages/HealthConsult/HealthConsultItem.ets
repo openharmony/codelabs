@@ -78,21 +78,6 @@ export default struct HealthConsultItem {
         .textOverflow({ overflow: TextOverflow.Ellipsis })
         .width('100%')
 
-
-      Grid() {
-        ForEach(this.healthConsultData!.images, (itemImg: Resource) => {
-          GridItem() {
-            Image(itemImg)
-              .objectFit(ImageFit.Cover)
-              .borderRadius(8)
-          }
-        }, (itemImg: Resource, index?: number) => JSON.stringify(itemImg) + index)
-      }
-      .columnsTemplate('1fr '.repeat(this.healthConsultData!.images.length))
-      .columnsGap(5)
-      .rowsTemplate('1fr')
-      .height(80 * this.fontScale)
-      .width('100%')
     }
     .padding({
       left: 12,
