@@ -58,7 +58,7 @@
 
 ## 🛠️ 技术栈
 
-- **操作系统**: OpenHarmony 和 HarmonyOS
+- **操作系统**: OpenHarmony
 - **开发语言**: ArkTS (TypeScript)
 - **UI 框架**: ArkUI (声明式开发)
 - **数据存储**:
@@ -95,7 +95,7 @@ LifeBalance/
 
 ## 🚀 快速开始
 
-1. **环境准备**：确保已安装最新版 DevEco Studio 及 HarmonyOS SDK 或 OpenHarmony SDK。
+1. **环境准备**：请确保已安装最新版 DevEco Studio 及 OpenHarmony SDK。
 2. **克隆项目**：下载项目代码/克隆git至本地。
 3. **同步依赖**：打开项目，等待 Sync 过程完成。
 4. **运行**：连接真机或模拟器，点击 `Run 'entry'`。
