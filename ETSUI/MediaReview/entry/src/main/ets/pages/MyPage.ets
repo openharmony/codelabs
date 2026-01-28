@@ -41,7 +41,6 @@ export struct MyPageComp {
   @State private name: string = ''
   @State private password: string = ''
   @State private password2: string = ''
-
   private readonly defaultAvatarKey: string = 'user'
 
   // 读取路由参数（提示文案、登录成功后是否返回）并加载用户态

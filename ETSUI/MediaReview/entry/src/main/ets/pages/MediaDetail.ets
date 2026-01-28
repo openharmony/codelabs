@@ -76,7 +76,6 @@ struct BookDetail {
   @State private userName: string = ''
   @State private userAvatarKey: string = 'user'
   @State private isFavorited: boolean = false
-
   private dialogController: CustomDialogController | null = null
 
   private readonly bookReviews: Review[] = [
