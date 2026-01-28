@@ -87,9 +87,6 @@ struct HistoryDialog {
         case '照片':
           SystemAppLauncher.launchGallery(context);
           break;
-        case '时钟':
-          SystemAppLauncher.launchClock(context);
-          break;
         case '设置':
           SystemAppLauncher.launchSettings(context);
           break;
@@ -239,7 +236,6 @@ struct HistoryDialog {
       '相机': '#007AFF',
       '备忘录': '#FFD700',
       '照片': '#FF2D55',
-      '时钟': '#FF9500',
       '设置': '#8E8E93'
     };
     return colorMap[appName] || '#007AFF';
@@ -254,7 +250,6 @@ struct Index {
 
   @State progressValue: number = 0.6;
   @State switchValue: boolean = true;
-  @State sliderValue: number = 50;
   @State selectedTab: number = 0;
   @State listData: string[] = ['项目1', '项目2', '项目3', '项目4', '项目5'];
   @State isExpanded: boolean = false;
@@ -318,10 +313,6 @@ struct Index {
         // 启动图库应用
         SystemAppLauncher.launchGallery(context);
         break;
-      case '时钟':
-        // 启动时钟应用
-        SystemAppLauncher.launchClock(context);
-        break;
       case '设置':
         SystemAppLauncher.launchSettings(context);
         break;
@@ -337,7 +328,6 @@ struct Index {
       '相机': 'com.ohos.camera',
       '备忘录': 'com.ohos.note',
       '照片': 'com.huawei.hmos.gallery',
-      '时钟': 'com.huawei.android.deskclock',
       '设置': 'com.huawei.hmos.settings'
     };
     return packageMap[featureName] || '';
@@ -540,7 +530,6 @@ struct Index {
           new FeatureItem('📸', '相机', '#007AFF'),
           new FeatureItem('📝', '备忘录', '#FFD700'),
           new FeatureItem('📚', '照片', '#FF2D55', $r('app.media.ic_learning_image')),
-          new FeatureItem('⏰', '时钟', '#FF9500'),
           new FeatureItem('⚙️', '设置', '#8E8E93')
         ], (item: FeatureItem, index: number) => {
           GridItem() {
@@ -581,7 +570,7 @@ struct Index {
       .columnsGap(16)
       .rowsGap(16)
       .width('100%')
-      .height(240)
+      .height(280)
       .padding({ left: 16, right: 16 })
     }
     .margin({ top: 16 })
@@ -671,35 +660,7 @@ struct Index {
         .backgroundColor('#FFFFFF')
         .borderRadius(12)
         
-        // 滑块组件
-        Column() {
-          Row() {
-            Text('音量调节')
-              .fontSize(16)
-            Text(this.sliderValue.toString())
-              .fontSize(16)
-              .fontColor('#007AFF')
-          }
-          .width('100%')
-          .justifyContent(FlexAlign.SpaceBetween)
-          
-          Slider({
-            value: this.sliderValue,
-            min: 0,
-            max: 100,
-            step: 1,
-            style: SliderStyle.OutSet
-          })
-            .width('100%')
-            .onChange((value: number) => {
-              this.sliderValue = value;
-            })
-        }
-        .width('100%')
-        .padding(16)
-        .backgroundColor('#FFFFFF')
-        .borderRadius(12)
-        .margin({ top: 12 })
+
         
 
       }
@@ -777,7 +738,7 @@ struct Index {
         .fontSize(14)
         .fontColor('#999999')
       
-      Text('版本 1.0.0 • 2024年')
+      Text('版本 1.0.0 • 2026年')
         .fontSize(12)
         .fontColor('#CCCCCC')
         .margin({ top: 4 })

@@ -36,9 +36,6 @@
     "name" : "camera_permission_reason",
     "value" : "用于启动相机应用"
   }, {
-    "name" : "audio_permission_reason",
-    "value" : "用于调节音量设置"
-  }, {
     "name" : "gallery_permission_reason",
     "value" : "用于启动图库应用"
   }, {
@@ -53,5 +50,11 @@
   }, {
     "name" : "alarm_permission_reason",
     "value" : "用于创建闹钟提醒"
+  }, {
+    "name" : "read_media_permission_reason",
+    "value" : "用于读取媒体文件以启动图库应用"
+  }, {
+    "name" : "clock_permission_reason",
+    "value" : "用于启动系统时钟应用"
   } ]
 }
