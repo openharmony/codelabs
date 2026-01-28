@@ -12,13 +12,12 @@ struct Chat {
   private scroller: Scroller = new Scroller();
 
   async aboutToAppear() {
-    // 获取从 ChatList 传递过来的联系人参数
     const params = router.getParams() as Record<string, Object>;
     if (params && params.contact) {
       const contact = params.contact as Message;
       this.chatTarget = contact.nickName;
 
-      // 加载历史记录（目前演示加载该联系人的初始消息）
+      // 初始加载一条对方的消息作为演示
       const initMsg: Message = {
         id: 'init_' + contact.id,
         avatar: contact.avatar,
@@ -38,9 +37,7 @@ struct Chat {
         Image($r('app.media.back'))
           .width(24).height(24)
           .margin({ left: 15 })
-          .onClick(() => {
-            router.back();
-          })
+          .onClick(() => router.back())
 
         Text(this.chatTarget)
           .fontSize(18).fontWeight(FontWeight.Bold).margin({ left: 10 })
@@ -58,22 +55,21 @@ struct Chat {
       }
       .layoutWeight(1)
       .width('100%')
-      .padding({ left: 10, right: 10 })
+      .backgroundColor('#EDEDED') // 类似微信的聊天背景色
       .edgeEffect(EdgeEffect.Spring)
 
       // 3. 底部输入区域
       Row() {
-        TextInput({ text: this.inputText, placeholder: '请输入消息...' })
+        TextInput({ text: this.inputText, placeholder: '请输入...' })
           .layoutWeight(1)
           .height(40)
           .backgroundColor(Color.White)
+          .borderRadius(4)
           .onChange((value: string) => this.inputText = value)
 
         Button('发送')
           .margin({ left: 10 })
-          .onClick(() => {
-            this.sendMessage();
-          })
+          .onClick(() => this.sendMessage())
       }
       .width('100%')
       .padding(10)
@@ -83,40 +79,64 @@ struct Chat {
     .height('100%')
   }
 
+  // 精修版气泡组件
   @Builder MessageBubble(msg: Message) {
     Row() {
-      if (msg.isSelf) Blank()
+      if (msg.isSelf) {
+        // --- 自己发送的消息（靠右） ---
+        Row() {
+          Blank() // 占据左侧空间
+          Column() {
+            Text(msg.content)
+              .fontSize(16)
+              .fontColor('#181818')
+              .padding(10)
+              .backgroundColor('#95EC69') // 微信绿
+              .borderRadius(6)
+          }
+          .margin({ right: 10 })
+          .constraintSize({ maxWidth: '70%' }) // 限制气泡最大宽度
 
-      Row() {
-        if (!msg.isSelf) Image(msg.avatar).width(40).height(40).borderRadius(5)
-
-        Column() {
-          Text(msg.content)
-            .fontSize(16)
-            .padding(10)
-            .backgroundColor(msg.isSelf ? '#95EC69' : Color.White)
-            .borderRadius(8)
+          Image(msg.avatar)
+            .width(42).height(42).borderRadius(4)
         }
-        .alignItems(msg.isSelf ? HorizontalAlign.End : HorizontalAlign.Start)
-        .margin({ left: 8, right: 8 })
+        .width('100%')
+        .alignItems(VerticalAlign.Top)
+        .padding({ left: 50, right: 15 }) // 左侧留白给对方头像位
+      } else {
+        // --- 对方发送的消息（靠左） ---
+        Row() {
+          Image(msg.avatar)
+            .width(42).height(42).borderRadius(4)
 
-        if (msg.isSelf) Image(msg.avatar).width(40).height(40).borderRadius(5)
+          Column() {
+            Text(msg.content)
+              .fontSize(16)
+              .fontColor('#181818')
+              .padding(10)
+              .backgroundColor(Color.White) // 微信白
+              .borderRadius(6)
+          }
+          .margin({ left: 10 })
+          .constraintSize({ maxWidth: '70%' }) // 限制气泡最大宽度
+          .alignItems(HorizontalAlign.Start)
+
+          Blank() // 占据右侧空间
+        }
+        .width('100%')
+        .alignItems(VerticalAlign.Top)
+        .padding({ left: 15, right: 50 }) // 右侧留白给对方头像位
       }
-      .alignItems(VerticalAlign.Top)
-      .margin({ top: 10, bottom: 10 })
-
-      if (!msg.isSelf) Blank()
     }
     .width('100%')
+    .margin({ top: 12, bottom: 12 })
   }
 
-  // 发送逻辑
   async sendMessage() {
     if (this.inputText.trim().length > 0) {
       const now = new Date();
       const timeStr = `${now.getHours()}:${now.getMinutes()}`;
 
-      // 创建 UI 显示的消息对象
       const newMsg: Message = {
         id: Date.now().toString(),
         avatar: $r('app.media.user_default'), // 确保资源存在
@@ -126,17 +146,13 @@ struct Chat {
         isSelf: true
       };
 
-      // 1. 更新 UI
       this.messageList.push(newMsg);
 
-      // 2. 持久化到数据库
       if (dbManager.chat) {
-        // 【核心修复】：不再使用 ...newMsg 展开运算符
-        // 手动构建用于存入数据库的消息对象，并将 nickName 设为当前聊天对象
         const dbMsg: Message = {
           id: newMsg.id,
           avatar: newMsg.avatar,
-          nickName: this.chatTarget, // 这里存入对方名字，确保 ChatList 分组正确
+          nickName: this.chatTarget,
           content: newMsg.content,
           time: newMsg.time,
           isSelf: newMsg.isSelf
@@ -145,9 +161,7 @@ struct Chat {
       }
 
       this.inputText = '';
-      setTimeout(() => {
-        this.scroller.scrollEdge(Edge.Bottom);
-      }, 100);
+      this.scroller.scrollEdge(Edge.Bottom);
     }
   }
 }
