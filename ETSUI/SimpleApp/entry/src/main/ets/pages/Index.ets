@@ -22,7 +22,7 @@ class FeatureItem {
   imagePath?: Resource = undefined;
   title: string = '';
   color: string = '';
-  
+
   constructor(icon: string, title: string, color: string, imagePath?: Resource) {
     this.icon = icon;
     this.title = title;
@@ -72,7 +72,7 @@ struct HistoryDialog {
   private async handleHistoryItemClick(item: AppUsageRecord): Promise<void> {
     try {
       const context = getContext(this) as common.UIAbilityContext;
-      
+
       // 根据应用名称启动相应应用
       switch (item.appName) {
         case '通讯':
@@ -93,11 +93,11 @@ struct HistoryDialog {
         default:
           console.log('未知应用:', item.appName);
       }
-      
+
       // 关闭弹窗
       this.controller.close();
       console.log('启动应用:', item.appName);
-      
+
     } catch (error) {
       console.error('启动应用失败:', error);
     }
@@ -111,7 +111,7 @@ struct HistoryDialog {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .layoutWeight(1)
-        
+
         Button() {
           Text('×')
             .fontSize(20)
@@ -125,7 +125,12 @@ struct HistoryDialog {
         })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 12 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 12
+      })
 
       // 历史记录列表
       if (this.historyList.length > 0) {
@@ -136,7 +141,7 @@ struct HistoryDialog {
               Circle({ width: 36, height: 36 })
                 .fill(this.getAppColor(item.appName))
                 .margin({ right: 12 })
-                
+
               Column({ space: 4 }) {
                 Text(item.appName)
                   .fontSize(16)
@@ -148,7 +153,7 @@ struct HistoryDialog {
                   .textAlign(TextAlign.Start)
               }
               .layoutWeight(1)
-              
+
               // 右侧箭头指示
               Text('→')
                 .fontSize(16)
@@ -187,33 +192,33 @@ struct HistoryDialog {
       // 底部操作按钮
       Row() {
         Button('清除记录')
-        .layoutWeight(1)
-        .height(40)
-        .backgroundColor('#FF3B30')
-        .fontColor(Color.White)
-        .borderRadius(20)
-        .margin({ right: 8 })
-        .onClick(async () => {
-          try {
-            const context = getContext(this) as common.UIAbilityContext;
-            await HistoryManager.clearRecords(context);
-            this.historyList = [];
-            console.log('历史记录已清除');
-          } catch (error) {
-            console.error('清除记录失败:', error);
-          }
-        })
+          .layoutWeight(1)
+          .height(40)
+          .backgroundColor('#FF3B30')
+          .fontColor(Color.White)
+          .borderRadius(20)
+          .margin({ right: 8 })
+          .onClick(async () => {
+            try {
+              const context = getContext(this) as common.UIAbilityContext;
+              await HistoryManager.clearRecords(context);
+              this.historyList = [];
+              console.log('历史记录已清除');
+            } catch (error) {
+              console.error('清除记录失败:', error);
+            }
+          })
 
         Button('关闭')
-        .layoutWeight(1)
-        .height(40)
-        .backgroundColor('#007AFF')
-        .fontColor(Color.White)
-        .borderRadius(20)
-        .margin({ left: 8 })
-        .onClick(() => {
-          this.controller.close();
-        })
+          .layoutWeight(1)
+          .height(40)
+          .backgroundColor('#007AFF')
+          .fontColor(Color.White)
+          .borderRadius(20)
+          .margin({ left: 8 })
+          .onClick(() => {
+            this.controller.close();
+          })
       }
       .width('100%')
       .padding({ left: 16, right: 16, bottom: 16 })
@@ -247,13 +252,11 @@ struct HistoryDialog {
 struct Index {
   // 状态变量
   @State userName: string = '用户';
-
   @State progressValue: number = 0.6;
   @State switchValue: boolean = true;
   @State selectedTab: number = 0;
   @State listData: string[] = ['项目1', '项目2', '项目3', '项目4', '项目5'];
   @State isExpanded: boolean = false;
-  
   // 历史记录弹窗控制器
   historyDialogController: CustomDialogController = new CustomDialogController({
     builder: HistoryDialog({}),
@@ -261,7 +264,7 @@ struct Index {
     offset: { dx: -16, dy: 80 },
     customStyle: true
   });
-  
+
   // 获取按下状态的颜色
   getPressedColor(color: string): string {
     // 简单的颜色映射
@@ -279,26 +282,26 @@ struct Index {
   // 处理功能卡片点击
   async handleFeatureClick(featureName: string): Promise<void> {
     const context = this.getUIContext()?.getHostContext() as common.UIAbilityContext;
-    
+
     if (!context) {
       console.error('上下文获取失败');
       return;
     }
-    
+
     // 记录使用历史
     const record: AppUsageRecord = {
       appName: featureName,
       timestamp: Date.now(),
       packageName: this.getPackageNameByFeature(featureName)
     };
-    
+
     try {
       await HistoryManager.addRecord(context, record);
       console.log('使用记录已保存:', featureName);
     } catch (error) {
       console.error('保存使用记录失败:', error);
     }
-    
+
     switch (featureName) {
       case '通讯':
         SystemAppLauncher.launchContacts(context);
@@ -320,7 +323,7 @@ struct Index {
         console.log('未知功能:', featureName);
     }
   }
-  
+
   // 根据功能名称获取包名
   private getPackageNameByFeature(featureName: string): string {
     const packageMap: Record<string, string> = {
@@ -332,39 +335,36 @@ struct Index {
     };
     return packageMap[featureName] || '';
   }
-  
 
-  
   // 显示最近使用记录
   showRecentUsage(): void {
     this.historyDialogController.open();
     console.log('显示最近使用记录');
   }
-  
+
   // 构建函数
   build() {
     Scroll() {
       Column() {
         // 1. 顶部导航栏
         this.buildTopBar()
-        
-      
-        
+
+
         // 3. 轮播图区域
         this.buildBannerSection()
-        
+
         // 4. 功能卡片区域
         this.buildFeatureCards()
-        
+
         // 5. 数据展示区域
         this.buildDataSection()
-        
+
         // 6. 交互组件区域
         this.buildInteractiveSection()
-        
+
         // 7. 列表展示区域
         this.buildListSection()
-        
+
         // 8. 底部信息区域
         this.buildFooterSection()
       }
@@ -375,7 +375,7 @@ struct Index {
     .scrollBar(BarState.Auto)
     .backgroundColor('#F5F5F5')
   }
-  
+
   // 顶部导航栏
   @Builder
   buildTopBar() {
@@ -390,7 +390,7 @@ struct Index {
           .fontColor('#333333')
       }
       .layoutWeight(1)
-      
+
       // 四叶草按钮 - 最近使用功能
       Button() {
         Text('🍀')
@@ -407,12 +407,15 @@ struct Index {
       })
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 12,
+      bottom: 12
+    })
     .backgroundColor('#FFFFFF')
   }
-  
 
-  
   // 轮播图区域 - 水平滚动展示
   @Builder
   buildBannerSection() {
@@ -422,7 +425,7 @@ struct Index {
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
           .layoutWeight(1)
-        
+
         Text('查看更多')
           .fontSize(14)
           .fontColor('#007AFF')
@@ -432,7 +435,7 @@ struct Index {
       }
       .width('100%')
       .padding({ left: 16, right: 16 })
-      
+
       // 水平滚动容器
       Scroll() {
         Row({ space: 12 }) {
@@ -444,7 +447,12 @@ struct Index {
           this.buildBannerItem('产品更新', '#34C759', '功能优化，体验升级')
           this.buildBannerItem('用户反馈', '#5856D6', '意见收集，改进产品')
         }
-        .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 8
+        })
       }
       .scrollable(ScrollDirection.Horizontal)
       .scrollBar(BarState.Auto)
@@ -452,7 +460,7 @@ struct Index {
       .width('100%')
     }
   }
-  
+
   @Builder
   buildBannerItem(title: string, color: string, subtitle: string) {
     Column({ space: 8 }) {
@@ -463,7 +471,7 @@ struct Index {
         .textAlign(TextAlign.Start)
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-      
+
       Text(subtitle)
         .fontSize(12)
         .fontColor('#FFFFFF')
@@ -471,7 +479,7 @@ struct Index {
         .textAlign(TextAlign.Start)
         .maxLines(2)
         .textOverflow({ overflow: TextOverflow.Ellipsis })
-        
+
       // 添加指示箭头和更多信息
       Row() {
         Text('立即查看')
@@ -512,7 +520,7 @@ struct Index {
       console.log('点击推荐项:', title);
     })
   }
-  
+
   // 功能卡片区域
   @Builder
   buildFeatureCards() {
@@ -522,7 +530,7 @@ struct Index {
         .fontWeight(FontWeight.Bold)
         .alignSelf(ItemAlign.Start)
         .margin({ left: 16, bottom: 12 })
-      
+
       // 网格布局
       Grid() {
         ForEach([
@@ -542,7 +550,7 @@ struct Index {
                   .margin({ bottom: 8 })
                   .objectFit(ImageFit.Contain)
                   .interpolation(ImageInterpolation.High)  // 高质量插值
-                  .renderMode(ImageRenderMode.Original)    // 保持原始质量
+                  .renderMode(ImageRenderMode.Original) // 保持原始质量
               } else {
                 // 使用文本图标显示
                 Text(item.icon)
@@ -575,7 +583,7 @@ struct Index {
     }
     .margin({ top: 16 })
   }
-  
+
   // 数据展示区域
   @Builder
   buildDataSection() {
@@ -585,7 +593,7 @@ struct Index {
         .fontWeight(FontWeight.Bold)
         .alignSelf(ItemAlign.Start)
         .margin({ left: 16, bottom: 12 })
-      
+
       Row() {
         this.buildDataCard('今日步数', '8,542', '步', '#34C759')
         this.buildDataCard('心率', '72', 'bpm', '#FF3B30')
@@ -598,7 +606,7 @@ struct Index {
     }
     .margin({ top: 16 })
   }
-  
+
   @Builder
   buildDataCard(title: string, value: string, unit: string, color: string) {
     Column() {
@@ -616,6 +624,7 @@ struct Index {
           .alignSelf(ItemAlign.End)
           .margin({ bottom: 4 })
       }
+
       Progress({
         value: this.progressValue,
         total: 1.0,
@@ -632,7 +641,7 @@ struct Index {
     .padding(12)
     .justifyContent(FlexAlign.SpaceBetween)
   }
-  
+
   // 交互组件区域
   @Builder
   buildInteractiveSection() {
@@ -642,7 +651,7 @@ struct Index {
         .fontWeight(FontWeight.Bold)
         .alignSelf(ItemAlign.Start)
         .margin({ left: 16, bottom: 12 })
-      
+
       Column() {
         // 开关组件
         Row() {
@@ -659,9 +668,6 @@ struct Index {
         .padding(16)
         .backgroundColor('#FFFFFF')
         .borderRadius(12)
-        
-
-        
 
       }
       .width('100%')
@@ -669,7 +675,7 @@ struct Index {
     }
     .margin({ top: 16 })
   }
-  
+
   // 列表展示区域
   @Builder
   buildListSection() {
@@ -679,7 +685,7 @@ struct Index {
         .fontWeight(FontWeight.Bold)
         .alignSelf(ItemAlign.Start)
         .margin({ left: 16, bottom: 12 })
-      
+
       Column() {
         ForEach(this.listData, (item: string, index: number) => {
           this.buildListItem(item, index)
@@ -690,14 +696,14 @@ struct Index {
     }
     .margin({ top: 16 })
   }
-  
+
   @Builder
   buildListItem(title: string, index: number) {
     Row() {
       Circle({ width: 40, height: 40 })
         .fill('#007AFF')
         .margin({ right: 12 })
-      
+
       Column({ space: 4 }) {
         Text(title)
           .fontSize(16)
@@ -709,7 +715,7 @@ struct Index {
           .textOverflow({ overflow: TextOverflow.Ellipsis })
       }
       .layoutWeight(1)
-      
+
       Text('08:30')
         .fontSize(12)
         .fontColor('#999999')
@@ -724,7 +730,7 @@ struct Index {
       console.log('点击列表项:', title);
     })
   }
-  
+
   // 底部信息区域
   @Builder
   buildFooterSection() {
@@ -733,11 +739,11 @@ struct Index {
         .strokeWidth(1)
         .color('#E0E0E0')
         .margin({ top: 24, bottom: 16 })
-      
+
       Text('OpenHarmony 综合界面示例')
         .fontSize(14)
         .fontColor('#999999')
-      
+
       Text('版本 1.0.0 • 2026年')
         .fontSize(12)
         .fontColor('#CCCCCC')
