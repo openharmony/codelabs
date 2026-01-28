@@ -25,7 +25,6 @@ struct MyFavorites {
   // 我的收藏：从数据库读取收藏列表，再映射到本地内置条目用于展示
   @State private items: (Book | Movie)[] = []
   @State private userName: string = ''
-
   // 进入页面：先读用户，再拉收藏
   async aboutToAppear() {
     await this.loadUser()

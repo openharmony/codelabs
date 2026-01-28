@@ -24,7 +24,6 @@ struct RankPage {
   @State currentRank: string = '口碑榜Top10'
   @State rankType: 'book' | 'movie' = 'book'
   @State ranks: string[] = []
-
   // 读取路由参数，决定展示图书榜或电影榜
   aboutToAppear() {
     const params = router.getParams() as Record<string, Object> | undefined

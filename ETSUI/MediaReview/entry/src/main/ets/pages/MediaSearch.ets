@@ -25,7 +25,6 @@ struct BookSearch {
   @State private selectedCategory: string = '全部'
   @State private wantIds: string[] = []
   @State private searchType: 'book' | 'movie' = 'book'
-
   @State private categories: string[] = ['全部', '计算机', '科学技术', '数学']
   private items: (Book | Movie)[] = initialBooks
 
