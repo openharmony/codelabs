@@ -15,7 +15,7 @@
 #ifndef OHOS_SIMPLE_FUNCTIONCLASS_H
 #define OHOS_SIMPLE_FUNCTIONCLASS_H
 
-#include "stdint.h"
+#include "cstdint"
 
 class FunctionClass {
 public:

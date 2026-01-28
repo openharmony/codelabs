@@ -16,7 +16,7 @@
 #ifndef FUNCTIONFLOWRUNTIME_SORT_CLASS_H
 #define FUNCTIONFLOWRUNTIME_SORT_CLASS_H
 
-#include "stdint.h"
+#include "cstdint"
 class SortClass {
 public:
     SortClass() = default;
