@@ -1,9 +1,11 @@
 import { LocationService } from '../service/LocationService';
 import { SportService } from '../service/SportService';
+import { ReminderService } from '../service/ReminderService';
 import { HistoryService } from '../service/HistoryService';
 import { SportType, SportData, RouteData, LocationInfo } from '../model/SportModel';
 import { SportControlButton } from '../components/SportControlButton';
 import { RouteMap } from '../components/RouteMapInner';
+import { ReminderSettingComponent } from '../components/ReminderSettingComponent';
 import { common } from '@kit.AbilityKit';
 import router from '@ohos.router';
 import { map } from '@kit.MapKit';
@@ -24,7 +26,8 @@ struct Index {
   @State selectedMode: string = '自由跑';
   
   private locationService: LocationService = new LocationService();
-  private sportService: SportService = new SportService();
+  private reminderService: ReminderService = new ReminderService();
+  private sportService: SportService = new SportService(this.reminderService);
   private historyService: HistoryService = new HistoryService();
   private simulationTimer: number = -1;
   private uiUpdateTimer: number = -1;
@@ -40,6 +43,12 @@ struct Index {
     }).catch((error: Error) => {
       console.error('初始化历史服务失败:', error);
     });
+    
+    // 初始化提醒服务
+    this.reminderService.init(context);
+    console.log('提醒服务已初始化');
+    console.log('ReminderService 实例:', this.reminderService);
+    console.log('SportService 使用的 ReminderService 实例:', this.sportService.getReminderService());
     
     // 页面初始化时自动获取当前定位
     try {
@@ -165,6 +174,12 @@ struct Index {
           }
           
           this.SportTypeSelector()
+          
+          // 提醒设置组件
+          ReminderSettingComponent({
+            reminderService: this.reminderService
+          })
+          .margin({ bottom: 16 })
           
           this.MapArea()
           
@@ -715,8 +730,6 @@ struct Index {
       ]
     }).then(() => {
       this.sportData = null;
-    }).catch((error: Error) => {
-      console.error('显示对话框失败:', error);
     });
   }
 
@@ -796,15 +809,6 @@ struct Index {
             });
           }
         }
-      });
-    }).catch((error: Error) => {
-      console.error('请求权限出错:', error);
-      this.errorMessage = '请求权限出错: ' + JSON.stringify(error);
-      
-      // 显示权限错误提示
-      promptAction.showToast({
-        message: '权限请求失败',
-        duration: 2000
       });
     });
   }
