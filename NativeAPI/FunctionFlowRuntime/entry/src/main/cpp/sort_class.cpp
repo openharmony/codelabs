@@ -15,6 +15,7 @@
 #include "sort_class.h"
 #include "bank_queue_system.h"
 #include "native_log_wrapper.h"
+#include <future>
 #include <iostream>
 #include <random>
 #define ZERO 0

@@ -14,6 +14,7 @@
  */
 #include "common_ffrt.h"
 #include "native_log_wrapper.h"
+#include <unistd.h>
 #define RET_SUCCESS_4 4
 #define SLEEP_DURATION_MS 100
 #define THOUSAND 1000
