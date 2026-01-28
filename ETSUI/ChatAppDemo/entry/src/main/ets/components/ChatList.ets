@@ -3,20 +3,27 @@ import Message from '../viewmodel/Message';
 import { NavTitle } from './NavTitle';
 import { dbManager } from '../utils/DatabaseManager';
 import router from '@ohos.router';
+import { UserModel } from '../viewmodel/UserModel'; // 确保引入 UserModel
 
 @Component
 export struct ChatList {
+  // 1. 获取当前登录用户信息，解决账号混淆的关键
+  @StorageProp('refresh_list_flag') @Watch('onRefresh') flag: number = 0;
+  @StorageProp('currentUser') currentUser: UserModel | null = null;
   @State messages: Message[] = [];
 
-  async aboutToAppear() {
-    await this.refresh();
+  onRefresh() {
+    this.refreshData();
   }
 
-  async refresh() {
-    if (dbManager.chat) {
-      // 完全从数据库读取，不再有任何硬编码图片
-      this.messages = await dbManager.chat.queryChatList();
+  async refreshData() {
+    if (dbManager.chat && this.currentUser) {
+      this.messages = await dbManager.chat.queryChatList(this.currentUser.phoneNumber);
     }
+  }
+
+  async aboutToAppear() {
+    this.refreshData();
   }
 
   build() {
@@ -27,7 +34,9 @@ export struct ChatList {
         ForEach(this.messages, (msg: Message) => {
           ListItem() {
             Row() {
+              // 这里的 avatar 已经是数据库里存的 ResourceStr
               Image(msg.avatar).width(48).height(48).borderRadius(6)
+                .alt($r('app.media.user_default')) // 增加兜底
               Column() {
                 Row() {
                   Text(msg.nickName).fontSize(16).fontWeight(700).fontColor('#181818')

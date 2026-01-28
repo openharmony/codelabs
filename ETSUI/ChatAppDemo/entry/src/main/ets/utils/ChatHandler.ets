@@ -9,59 +9,63 @@ export class ChatHandler {
     this.store = store;
   }
 
-  /**
-   * 插入新消息
-   * 由于 avatar 是 ResourceStr，不管是 $r() 还是 string 都可以直接存储
-   */
-  async insertMessage(msg: Message) {
+  async insertMessage(msg: Message, owner: string) {
     const valueBucket: relationalStore.ValuesBucket = {
       'id': msg.id,
+      'owner': owner, // 标记这条记录属于哪个手机号的用户
       'nickName': msg.nickName,
       'content': msg.content,
       'time': msg.time,
       'isSelf': msg.isSelf ? 1 : 0,
-      'avatar': msg.avatar.toString() // 统一转为字符串存入数据库
+      'avatar': msg.avatar.toString()
     };
     return await this.store.insert('ChatHistory', valueBucket);
   }
 
   /**
-   * 获取首页聊天列表（每个联系人仅显示最新一条）
+   * 获取首页列表：只查属于我自己的记录
    */
-  async queryChatList(): Promise<Message[]> {
+  async queryChatList(myPhone: string): Promise<Message[]> {
     const list: Message[] = [];
-    // SQL 逻辑：按昵称分组取最新的消息 ID，再查出对应的完整记录
-    const SQL = `SELECT * FROM ChatHistory WHERE id IN (SELECT MAX(id) FROM ChatHistory GROUP BY nickName) ORDER BY id DESC`;
+    // 更加严谨的 SQL：先按人分组找最后一笔，再关联出完整行
+    const SQL = `SELECT * FROM ChatHistory
+               WHERE owner = '${myPhone}'
+               GROUP BY nickName
+               HAVING id = MAX(id)
+               ORDER BY id DESC`;
 
     try {
       let res = await this.store.querySql(SQL);
+      console.info(`查询 owner=${myPhone} 的列表，查到条数: ${res.rowCount}`);
+
       while (res.goToNextRow()) {
-        const item: Message = {
+        list.push({
           id: res.getString(res.getColumnIndex('id')),
           nickName: res.getString(res.getColumnIndex('nickName')),
           content: res.getString(res.getColumnIndex('content')),
           time: res.getString(res.getColumnIndex('time')),
-          // 核心：直接读取 string，由于接口是 ResourceStr，这里可以直接赋值，不再报错
           avatar: res.getString(res.getColumnIndex('avatar')),
           isSelf: res.getLong(res.getColumnIndex('isSelf')) === 1
-        };
-        list.push(item);
+        });
       }
       res.close();
     } catch (e) {
-      console.error('ChatHandler: queryChatList error', JSON.stringify(e));
+      console.error("SQL查询失败: " + JSON.stringify(e));
     }
     return list;
   }
 
   /**
-   * 获取与特定好友的所有历史记录
+   * 修复点：确保参数名与函数体内的变量名一致
+   * 这里我们把参数名定为 contactId (即对方的手机号/标识)
    */
-  async queryHistoryByContact(nickName: string): Promise<Message[]> {
+  async queryHistoryByContact(contactId: string): Promise<Message[]> {
     const list: Message[] = [];
     const predicates = new relationalStore.RdbPredicates('ChatHistory');
-    predicates.equalTo('nickName', nickName);
-    predicates.orderByAsc('id'); // 聊天记录按时间正序排列
+
+    // 关键：这里使用传进来的参数 contactId
+    predicates.equalTo('nickName', contactId);
+    predicates.orderByAsc('id');
 
     try {
       let res = await this.store.query(predicates);
