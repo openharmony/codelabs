@@ -16,7 +16,7 @@
 #ifndef FUNCTIONFLOWRUNTIME_SORT_CLASS_H
 #define FUNCTIONFLOWRUNTIME_SORT_CLASS_H
 
-#include "aki/function.h"
+#include "stdint.h"
 class SortClass {
 public:
     SortClass() = default;
