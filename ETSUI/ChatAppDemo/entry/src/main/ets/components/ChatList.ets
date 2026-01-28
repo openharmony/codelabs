@@ -8,22 +8,19 @@ import { UserModel } from '../viewmodel/UserModel'; // 确保引入 UserModel
 @Component
 export struct ChatList {
   // 1. 获取当前登录用户信息，解决账号混淆的关键
-  @StorageProp('refresh_list_flag') @Watch('onRefresh') flag: number = 0;
   @StorageProp('currentUser') currentUser: UserModel | null = null;
+  @StorageProp('refresh_flag') @Watch('refresh') flag: number = 0;
   @State messages: Message[] = [];
 
-  onRefresh() {
-    this.refreshData();
+  async aboutToAppear() {
+    await this.refresh();
   }
 
-  async refreshData() {
+  async refresh() {
     if (dbManager.chat && this.currentUser) {
+      // 核心：只查 owner 为当前登录人的列表
       this.messages = await dbManager.chat.queryChatList(this.currentUser.phoneNumber);
     }
-  }
-
-  async aboutToAppear() {
-    this.refreshData();
   }
 
   build() {
@@ -50,7 +47,14 @@ export struct ChatList {
             .onClick(() => {
               router.pushUrl({
                 url: 'pages/Chat',
-                params: { contact: msg }
+                params: {
+                  contact: {
+                    id: msg.nickName, // 此处的 nickName 在库中存的是手机号
+                    nickName: msg.nickName,
+                    avatar: msg.avatar,
+                    // ...其他字段
+                  }
+                }
               })
             })
           }
