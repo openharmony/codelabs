@@ -66,7 +66,7 @@ export class DatabaseManager {
       await this.store.executeSql(SQL_CREATE_FRIEND);
       await this.store.executeSql(SQL_CREATE_CHAT);
       await this.store.executeSql(SQL_CREATE_POST);
-
+      await this.store.executeSql(SQL_CREATE_LIKE);
       // 实例化处理器
       this.user = new UserHandler(storeInstance);
       this.friend = new FriendHandler(storeInstance);

@@ -99,8 +99,7 @@ export class PostHandler {
     return await this.store.update(valueBucket, predicates);
   }
 
-  async toggleLike(postId: number, myPhone: string): Promise<boolean> {
-    // 检查是否已经点过赞
+  async toggleLike(postId: number, myPhone: string): Promise<number> {
     let predicates = new relationalStore.RdbPredicates('LikeRecord');
     predicates.equalTo('postId', postId).and().equalTo('userPhone', myPhone);
     let resultSet = await this.store.query(predicates);
@@ -108,15 +107,20 @@ export class PostHandler {
     resultSet.close();
 
     if (hasLiked) {
-      // 如果已赞，则取消：删除记录，点赞数-1
       await this.store.delete(predicates);
-      await this.store.executeSql(`UPDATE Post SET likeCount = likeCount - 1 WHERE id = ?`, [postId]);
-      return false; // 返回最新状态：未点赞
+      await this.store.executeSql(`UPDATE Post SET likeCount = CASE WHEN likeCount > 0 THEN likeCount - 1 ELSE 0 END WHERE id = ?`, [postId]);
     } else {
-      // 如果未赞，则点赞：插入记录，点赞数+1
       await this.store.insert('LikeRecord', { postId: postId, userPhone: myPhone });
       await this.store.executeSql(`UPDATE Post SET likeCount = likeCount + 1 WHERE id = ?`, [postId]);
-      return true; // 返回最新状态：已点赞
     }
+
+    // 关键：重新查询最新的点赞数并返回
+    let queryPredicates = new relationalStore.RdbPredicates('Post');
+    queryPredicates.equalTo('id', postId);
+    let postResult = await this.store.query(queryPredicates);
+    postResult.goToFirstRow();
+    let count = postResult.getLong(postResult.getColumnIndex('likeCount'));
+    postResult.close();
+    return count; // 返回真实的数字
   }
 }
