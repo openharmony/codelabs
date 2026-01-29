@@ -7,6 +7,9 @@
     "pages/Chat",
     "pages/AddPost",
     "pages/NewFriends",
-    "pages/AddFriends"
+    "pages/AddFriends",
+    "pages/LicenseAgreement",
+    "pages/AboutWechat",
+    "pages/Settings"
   ]
 }

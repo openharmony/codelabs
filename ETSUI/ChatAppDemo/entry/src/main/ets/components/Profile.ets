@@ -7,11 +7,11 @@ import router from '@ohos.router'
 import { UserModel } from '../viewmodel/UserModel'
 
 // 个人信息接口
-interface UserInfo {
-  avatar: Resource
-  nickName: string
-  region: string
-}
+// interface UserInfo {
+//   avatar: Resource
+//   nickName: string
+//   region: string
+// }
 
 // 功能菜单项接口
 interface MenuItem {
@@ -27,18 +27,21 @@ export struct Profile {
   @StorageProp('currentUser') user: UserModel | null = null;
 
   // 模拟个人信息数据
-  private userInfo: UserInfo = {
-    avatar: $r('app.media.user1'), // 使用现有资源
-    nickName: '微信用户',
-    region: '中国 北京'
-  }
+  // private userInfo: UserInfo = {
+  //   avatar: $r('app.media.user1'), // 使用现有资源
+  //   nickName: '微信用户',
+  //   region: '中国 北京'
+  // }
 
   // 功能菜单数据
   private menuItems: MenuItem[][] = [
     [
-      { icon: $r('app.media.user7'), title: '关于微信' }
+      { icon: $r('app.media.user7'), title: '关于我们' },
+      { icon: $r('app.media.settings'), title: '设置' }
     ]
   ]
+
+
 
   // 退出登录函数
   private handleLogout(): void {
@@ -114,9 +117,13 @@ export struct Profile {
               .justifyContent(FlexAlign.Center)
               .padding(12)
               .onClick(() => {
-                if (item.title === '关于微信') {
+                if (item.title === '关于我们') {
                   router.pushUrl({
                     url: 'pages/AboutWechat'
+                  })
+                }else if (item.title === '设置') {
+                  router.pushUrl({
+                    url: 'pages/Settings'
                   })
                 }
               })

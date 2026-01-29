@@ -31,7 +31,7 @@ struct Main {
     Tabs() {
       TabContent() {
         ChatList()
-      }.tabBar(this.buildTabBar('微信', $r("app.media.main_0_normal"), $r("app.media.main_0_select"), 0))
+      }.tabBar(this.buildTabBar('聊天', $r("app.media.main_0_normal"), $r("app.media.main_0_select"), 0))
 
       TabContent() {
         Contact()
