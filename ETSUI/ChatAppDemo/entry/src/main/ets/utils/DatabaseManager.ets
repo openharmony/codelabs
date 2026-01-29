@@ -23,9 +23,22 @@ export class DatabaseManager {
     if (this.store && this.user && this.friend && this.chat) return;
 
     // 1. 修改建表语句：增加 owner 字段（用于隔离不同账号的记录）
-    const SQL_CREATE_USER = `CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY AUTOINCREMENT, avatarPath TEXT, nickName TEXT, country TEXT, phoneNumber TEXT, password TEXT)`;
-    const SQL_CREATE_FRIEND_REQUEST = `CREATE TABLE IF NOT EXISTS FriendRequest (id INTEGER PRIMARY KEY AUTOINCREMENT, fromPhone TEXT, toPhone TEXT, fromName TEXT, message TEXT, status INTEGER)`;
-    const SQL_CREATE_FRIEND = `CREATE TABLE IF NOT EXISTS Friend (id INTEGER PRIMARY KEY AUTOINCREMENT, myPhone TEXT, friendPhone TEXT)`;
+    const SQL_CREATE_USER = `CREATE TABLE IF NOT EXISTS User (
+                              id INTEGER PRIMARY KEY AUTOINCREMENT,
+                              avatarPath TEXT, nickName TEXT,
+                              country TEXT, phoneNumber TEXT,
+                              password TEXT)`;
+    const SQL_CREATE_FRIEND_REQUEST = `CREATE TABLE IF NOT EXISTS FriendRequest (
+                              id INTEGER PRIMARY KEY AUTOINCREMENT,
+                              fromPhone TEXT,
+                              toPhone TEXT,
+                              fromName TEXT,
+                              message TEXT,
+                              status INTEGER)`;
+    const SQL_CREATE_FRIEND = `CREATE TABLE IF NOT EXISTS Friend (
+                              id INTEGER PRIMARY KEY AUTOINCREMENT,
+                              myPhone TEXT,
+                              friendPhone TEXT)`;
 
     // 重点修改：ChatHistory 增加 owner 字段
     const SQL_CREATE_CHAT = `CREATE TABLE IF NOT EXISTS ChatHistory (

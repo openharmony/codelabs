@@ -31,16 +31,28 @@ export struct ChatList {
   // 显式声明返回类型为 Promise<void>
   // entry/src/main/ets/components/ChatList.ets
 
+  // async refreshData(): Promise<void> {
+  //   if (dbManager.chat && this.currentUser) {
+  //     console.info('ChatList 开始刷新数据...');
+  //     const newList = await dbManager.chat.queryChatList(this.currentUser.phoneNumber);
+  //
+  //     // 强制触发 UI 更新：先赋值为空，再赋值新数组（可选，如果数据量大不建议）
+  //     // 或者直接赋值，但确保 ForEach 的 Key (item.id) 对应的是最新消息的 ID
+  //     this.messages = newList;
+  //
+  //     console.info(`刷新完成，最新一条内容为: ${this.messages[0]?.content}`);
+  //   }
+  // }
+
   async refreshData(): Promise<void> {
     if (dbManager.chat && this.currentUser) {
-      console.info('ChatList 开始刷新数据...');
+      console.info('ChatList: 开始查询最新数据...');
       const newList = await dbManager.chat.queryChatList(this.currentUser.phoneNumber);
 
-      // 强制触发 UI 更新：先赋值为空，再赋值新数组（可选，如果数据量大不建议）
-      // 或者直接赋值，但确保 ForEach 的 Key (item.id) 对应的是最新消息的 ID
-      this.messages = newList;
+      // 关键点 1：使用展开运算符 [...] 重新生成数组地址，强制 ArkUI 检测到变化
+      this.messages = [...newList];
 
-      console.info(`刷新完成，最新一条内容为: ${this.messages[0]?.content}`);
+      console.info(`ChatList: 刷新完成，当前列表数量: ${this.messages.length}`);
     }
   }
 
@@ -81,7 +93,7 @@ export struct ChatList {
               });
             })
           }
-        }, (item: Message) => item.id)
+        }, (item: Message) => item.id + item.content)
       }
       .divider({ strokeWidth: 0.5, color: '#EEEEEE', startMargin: 76 })
       .layoutWeight(1)
