@@ -49,7 +49,7 @@ export default class EntryAbility extends UIAbility {
 
     // 在进入页面前，先尝试申请权限
     this.requestContactPermissions().then((): void => {
-      windowStage.loadContent('pages/Index', (err: BusinessError): void => {
+      windowStage.loadContent('pages/Index', (err: BusinessError<void>): void => {
         if (err.code) {
           hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err))
           return
