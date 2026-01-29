@@ -9,7 +9,8 @@
     "pages/NewFriends",
     "pages/AddFriends",
     "pages/LicenseAgreement",
-    "pages/AboutWechat",
-    "pages/Settings"
+    "pages/AboutUs",
+    "pages/Settings",
+    "pages/ChangePassword"
   ]
 }

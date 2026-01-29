@@ -31,14 +31,14 @@ struct Settings {
         // 切换语言
         ListItem() {
           this.SettingItem('多语言切换', () => {
-            router.pushUrl({ url: 'pages/LanguageSettings' }) // 替换为你实际的路径
+            router.pushUrl({ url: 'pages/LanguageSettings' })
           })
         }
 
         // 修改密码
         ListItem() {
           this.SettingItem('修改密码', () => {
-            router.pushUrl({ url: 'pages/ChangePassword' }) // 替换为你实际的路径
+            router.pushUrl({ url: 'pages/ChangePassword' })
           })
         }
 
@@ -46,6 +46,7 @@ struct Settings {
         ListItem() {
           this.SettingItem('关于我们', () => {
             // 暂时留空或弹个窗
+            router.pushUrl({ url: 'pages/AboutUs' })
           })
         }
       }

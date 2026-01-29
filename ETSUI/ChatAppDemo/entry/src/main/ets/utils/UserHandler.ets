@@ -142,4 +142,27 @@ export class UserHandler {
     }
     return users;
   }
+
+  // 在处理用户表的类中增加
+  async updateUser(user: UserModel): Promise<number> {
+    const valueBucket: relationalStore.ValuesBucket = {
+      'nickName': user.nickName,
+      'avatarPath': user.avatarPath,
+      'password': user.password,
+      'country': user.country
+      // 手机号通常作为查询条件，不轻易修改
+    };
+
+    let predicates = new relationalStore.RdbPredicates('User');
+    predicates.equalTo('phoneNumber', user.phoneNumber);
+
+    // 执行更新并返回受影响的行数
+    try {
+      return await this.store.update(valueBucket, predicates);
+    } catch (e) {
+      // TODO: Implement error handling.
+      console.error('更新密码失败:', JSON.stringify(e));
+      return -1;
+    }
+  }
 }
