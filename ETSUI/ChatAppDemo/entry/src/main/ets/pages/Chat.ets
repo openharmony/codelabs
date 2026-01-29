@@ -1,5 +1,6 @@
 // entry/src/main/ets/pages/Chat.ets
-import router from '@ohos.router';
+import { router } from '@kit.ArkUI';
+import { emitter } from '@kit.BasicServicesKit';
 import { UserModel } from '../viewmodel/UserModel'; // 确保引入了 UserModel
 import Message from '../viewmodel/Message';
 import { dbManager } from '../utils/DatabaseManager';
@@ -8,79 +9,82 @@ import { dbManager } from '../utils/DatabaseManager';
 @Component
 struct Chat {
   @StorageProp('currentUser') currentUser: UserModel | null = null;
-
-  @State chatTarget: string = '聊天';
+  @State chatTarget: string = '';
+  @State targetPhone: string = '';
   @State targetAvatar: ResourceStr = $r('app.media.user_default');
-  @State targetPhone: string = ''; // 新增：保存对方的手机号用于数据库查询
   @State messageList: Message[] = [];
   @State inputText: string = '';
   private scroller: Scroller = new Scroller();
 
+  // 显式声明返回类型为 Promise<void>
   // entry/src/main/ets/pages/Chat.ets
 
-  async aboutToAppear() {
+  async aboutToAppear(): Promise<void> {
     const params = router.getParams() as Record<string, Object>;
     if (params && params.contact && this.currentUser) {
       const contact = params.contact as Message;
-      this.targetPhone = contact.id; // 对方手机号
+
+      // 1. 接收从 ChatList 传过来的 id (即手机号)
+      this.targetPhone = contact.id;
       this.chatTarget = contact.nickName;
       this.targetAvatar = contact.avatar;
 
-      // 重点：传入对方ID和我自己的手机号
-      if(dbManager.chat){
-        this.messageList = await dbManager.chat.queryHistoryByContact(
+      console.info(`正在查询历史：我的手机号[${this.currentUser.phoneNumber}], 对方手机号[${this.targetPhone}]`);
+
+      if (dbManager.chat) {
+        // 2. 调用查询函数
+        const history: Message[] = await dbManager.chat.queryHistoryByContact(
           this.targetPhone,
           this.currentUser.phoneNumber
         );
+
+        this.messageList = history;
+        console.info(`查询到历史消息数量: ${this.messageList.length}`);
+
+        // 3. 滚动到底部
+        setTimeout((): void => {
+          this.scroller.scrollEdge(Edge.Bottom);
+        }, 100);
       }
     }
   }
 
-  // 发送消息逻辑
-  async sendMessage() {
-    if (this.inputText.trim().length === 0 || !this.currentUser) return;
+  // 核心修改：增加 : Promise<void>
+  async sendMessage(): Promise<void> {
+    if (this.inputText.trim().length === 0 || !this.currentUser || !dbManager.chat) return;
 
-    const content = this.inputText;
-    const timeStr = `${new Date().getHours().toString().padStart(2, '0')}:${new Date().getMinutes().toString().padStart(2, '0')}`;
+    const myPhone: string = this.currentUser.phoneNumber;
+    const myName: string = this.currentUser.nickName;
+    const baseId: string = Date.now().toString();
+    const timeStr: string = `${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2, '0')}`;
 
-    // // 生成两个不同的 ID，防止主键冲突
-    // const baseId = Date.now().toString();
-    // const myPhone = this.currentUser.phoneNumber;
-    // const targetPhone = this.targetPhone; // 确保这是对方手机号
-
-    if (!this.inputText || !this.currentUser) return;
-    const myPhone = this.currentUser.phoneNumber;
-    const targetPhone = this.targetPhone;
-    const baseId = Date.now().toString();
-
-    if(!dbManager.chat) return;
-
-    // 1. 存给我自己（owner 是我，nickName 是对方）
+    // 数据库插入逻辑...
     await dbManager.chat.insertMessage({
-      id: baseId + "_1",
+      id: baseId + "_me",
       avatar: this.targetAvatar,
-      nickName: targetPhone,
+      nickName: this.chatTarget,
       content: this.inputText,
-      time: "12:00", // 建议用动态时间
+      time: timeStr,
       isSelf: true
-    }, myPhone);
+    }, myPhone, this.targetPhone);
 
-    // 2. 存给对方（owner 是对方，nickName 是我）
     await dbManager.chat.insertMessage({
-      id: baseId + "_2",
+      id: baseId + "_ta",
       avatar: this.currentUser.avatarPath || $r('app.media.user_default'),
-      nickName: myPhone,
+      nickName: myName,
       content: this.inputText,
-      time: "12:00",
+      time: timeStr,
       isSelf: false
-    }, targetPhone);
+    }, this.targetPhone, myPhone);
 
-    // UI 更新...
+    // 发送 emitter 刷新通知
+    emitter.emit({ eventId: 10002 });
+
     this.messageList.push({
       id: baseId + "_me",
       avatar: this.currentUser.avatarPath || $r('app.media.user_default'),
       nickName: '我',
-      content: content,
+      content: this.inputText,
       time: timeStr,
       isSelf: true
     });

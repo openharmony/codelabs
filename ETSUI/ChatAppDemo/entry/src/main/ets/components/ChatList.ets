@@ -3,23 +3,44 @@ import Message from '../viewmodel/Message';
 import { NavTitle } from './NavTitle';
 import { dbManager } from '../utils/DatabaseManager';
 import router from '@ohos.router';
+import { emitter } from '@kit.BasicServicesKit';
 import { UserModel } from '../viewmodel/UserModel'; // 确保引入 UserModel
 
 @Component
 export struct ChatList {
-  // 1. 获取当前登录用户信息，解决账号混淆的关键
   @StorageProp('currentUser') currentUser: UserModel | null = null;
-  @StorageProp('refresh_flag') @Watch('refresh') flag: number = 0;
   @State messages: Message[] = [];
 
-  async aboutToAppear() {
-    await this.refresh();
+  // 显式声明返回类型为 Promise<void>
+  async aboutToAppear(): Promise<void> {
+    await this.refreshData();
+
+    // 订阅 10002 刷新事件
+    // 回调函数也要补齐类型，或者声明为 async (): Promise<void>
+    emitter.on({ eventId: 10002 }, async (): Promise<void> => {
+      console.info('ChatList 监听到 emitter 事件');
+      await this.refreshData();
+    });
   }
 
-  async refresh() {
+  // 普通函数声明返回类型为 void
+  aboutToDisappear(): void {
+    emitter.off(10002);
+  }
+
+  // 显式声明返回类型为 Promise<void>
+  // entry/src/main/ets/components/ChatList.ets
+
+  async refreshData(): Promise<void> {
     if (dbManager.chat && this.currentUser) {
-      // 核心：只查 owner 为当前登录人的列表
-      this.messages = await dbManager.chat.queryChatList(this.currentUser.phoneNumber);
+      console.info('ChatList 开始刷新数据...');
+      const newList = await dbManager.chat.queryChatList(this.currentUser.phoneNumber);
+
+      // 强制触发 UI 更新：先赋值为空，再赋值新数组（可选，如果数据量大不建议）
+      // 或者直接赋值，但确保 ForEach 的 Key (item.id) 对应的是最新消息的 ID
+      this.messages = newList;
+
+      console.info(`刷新完成，最新一条内容为: ${this.messages[0]?.content}`);
     }
   }
 
@@ -45,17 +66,19 @@ export struct ChatList {
             }
             .width('100%').padding(16).backgroundColor(Color.White)
             .onClick(() => {
+              console.info('准备跳转，当前点击的消息对象:', JSON.stringify(msg));
               router.pushUrl({
                 url: 'pages/Chat',
                 params: {
                   contact: {
-                    id: msg.nickName, // 此处的 nickName 在库中存的是手机号
+                    // 关键点：ChatList 里的 msg.id 必须是对方的手机号
+                    id: msg.id,
                     nickName: msg.nickName,
                     avatar: msg.avatar,
-                    // ...其他字段
-                  }
+                    // ... 其他字段
+                  } as Message
                 }
-              })
+              });
             })
           }
         }, (item: Message) => item.id)

@@ -30,8 +30,9 @@ export class DatabaseManager {
     // 重点修改：ChatHistory 增加 owner 字段
     const SQL_CREATE_CHAT = `CREATE TABLE IF NOT EXISTS ChatHistory (
                               id TEXT PRIMARY KEY,
-                              owner TEXT,      -- 新增：记录这条消息归属于哪个登录账号
-                              nickName TEXT,   -- 对方的昵称/手机号
+                              owner TEXT,
+                              targetPhone TEXT,
+                              nickName TEXT,
                               content TEXT,
                               time TEXT,
                               isSelf INTEGER,
