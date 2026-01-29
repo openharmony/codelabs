@@ -11,6 +11,7 @@
     "pages/LicenseAgreement",
     "pages/AboutUs",
     "pages/Settings",
-    "pages/ChangePassword"
+    "pages/ChangePassword",
+    "pages/EditProfile"
   ]
 }

@@ -37,6 +37,7 @@ export struct Profile {
   private menuItems: MenuItem[][] = [
     [
       // { icon: $r('app.media.user7'), title: '关于我们' },
+      { icon: $r('app.media.edit'), title: '编辑' },
       { icon: $r('app.media.settings'), title: '设置' }
     ]
   ]
@@ -122,9 +123,15 @@ export struct Profile {
                     url: 'pages/Settings'
                   })
                 }
+                else if (item.title === '编辑') {
+                  router.pushUrl({
+                    url: 'pages/EditProfile'
+                  })
+                }
+
                 // else if (item.title === '关于我们') {
                 //   router.pushUrl({
-                //     url: 'pages/AboutWechat'
+                //     url: 'pages/AboutUs'
                 //   })
                 // }
               })
