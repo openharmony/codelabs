@@ -161,21 +161,34 @@ export struct Contact {
             ListItemGroup({ header: this.buildListItemHeader(contactGroup.index) }) {
               ForEach(contactGroup.contacts, (contact: ContactModel) => {
                 ListItem() {
-                  this.buildItem(contact.avatar, contact.name, () => {
-                    // 跳转逻辑：传递 Message 结构参数
-                    router.pushUrl({
-                      url: 'pages/Chat',
-                      params: {
-                        contact: {
-                          id: contact.phoneNumber,
-                          avatar: contact.avatar,
-                          nickName: contact.name,
-                          content: '',
-                          time: '',
-                          isSelf: false
-                        } as Message
+                  // this.buildItem(contact.avatar, contact.name, () => {
+                  //   // 跳转逻辑：传递 Message 结构参数
+                  //   router.pushUrl({
+                  //     url: 'pages/Chat',
+                  //     params: {
+                  //       contact: {
+                  //         id: contact.phoneNumber,
+                  //         avatar: contact.avatar,
+                  //         nickName: contact.name,
+                  //         content: '',
+                  //         time: '',
+                  //         isSelf: false
+                  //       } as Message
+                  //     }
+                  //   })
+                  // })
+                  this.buildItem(contact.avatar, contact.name, async () => {
+                    // 1. 先通过手机号查询完整的用户信息（包含地区等）
+                    if (dbManager.user) {
+                      const userDetail = await dbManager.user.queryUserByPhone(contact.phoneNumber);
+                      if (userDetail) {
+                        // 2. 跳转到好友详情页
+                        router.pushUrl({
+                          url: 'pages/FriendDetail',
+                          params: { friend: userDetail }
+                        });
                       }
-                    })
+                    }
                   })
                 }
               }, (item: ContactModel) => item.phoneNumber)

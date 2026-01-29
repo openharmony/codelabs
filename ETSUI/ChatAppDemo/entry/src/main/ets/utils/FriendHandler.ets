@@ -155,4 +155,25 @@ export class FriendHandler {
     return friendPhones;
   }
 
+  /**
+   * 删除好友关系（双向删除）
+   */
+  async deleteFriend(myPhone: string, friendPhone: string): Promise<void> {
+    if (!this.store) return;
+
+    try {
+      const predicates = new relationalStore.RdbPredicates('Friend');
+      // 删除两条记录：我与他，他与我
+      predicates.beginWrap()
+        .equalTo('myPhone', myPhone).and().equalTo('friendPhone', friendPhone)
+        .or()
+        .equalTo('myPhone', friendPhone).and().equalTo('friendPhone', myPhone)
+        .endWrap();
+
+      await this.store.delete(predicates);
+      console.info(`[DB] 成功删除好友关系: ${myPhone} <-> ${friendPhone}`);
+    } catch (err) {
+      console.error('[DB] 删除好友失败', JSON.stringify(err));
+    }
+  }
 }
