@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 import { common } from '@kit.AbilityKit';
-import { BusinessError } from '@kit.BasicServicesKit';
 import { SystemAppLauncher } from '../utils/SystemAppLauncher';
 import { HistoryManager, AppUsageRecord } from '../utils/HistoryManager';
 

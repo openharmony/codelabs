@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 
-import { SearchNotificationModule } from '../view/SearchNotificationModule';
 import { MultiFunctionEntryModule } from '../view/MultiFunctionEntryModule';
 import { PromotionalBannerModule } from '../view/PromotionalBannerModule';
 import { ProductRecommendationModule } from '../view/ProductRecommendationModule';
