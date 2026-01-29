@@ -23,7 +23,6 @@ import { RdbUtil } from '../utils/RdbUtil'
 struct Login {
   @State private tip: string = ''
   @State private name: string = ''
-
   private readonly defaultAvatarKey: string = 'user'
 
   aboutToAppear(): void {
