@@ -27,7 +27,6 @@ export struct CommunityComp {
   @State private newPostTags: string = ''
   @State private userName: string = ''
   @State private userAvatarKey: string = 'user'
-  
   // 外部触发刷新（例如登录态变化后）
   @Prop @Watch('onTriggerChange') updateTrigger: number = 0
 
