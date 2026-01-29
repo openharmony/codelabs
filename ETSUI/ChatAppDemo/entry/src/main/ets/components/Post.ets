@@ -3,6 +3,7 @@ import router from '@ohos.router';
 import { PostItem, CommentItem, initPostData } from '../viewmodel/PostModel';
 import { dbManager } from '../utils/DatabaseManager';
 import { UserModel } from '../viewmodel/UserModel'
+import { promptAction } from '@kit.ArkUI';
 
 @Component
 export struct Post {
@@ -50,21 +51,43 @@ export struct Post {
     }
   }
 
-  // 提交评论（同步数据库）
+  // Post.ets 内部方法
   async submitComment() {
+    // 1. 校验输入内容
     if (this.tempComment.trim().length === 0) return;
+
+    // 2. 校验登录状态（确保评论能关联到人）
+    if (!this.currentUser) {
+      promptAction.showToast({ message: '请先登录后再评论' });
+      return;
+    }
+
     let index = this.posts.findIndex(p => p.id === this.editingPostId);
     if (index !== -1) {
+      // 3. 构造与账号绑定的评论对象
       const newComment: CommentItem = {
-        userId: 999,
-        userName: '我',
+        // 这里的字段名需对应你的 CommentItem 接口定义
+        userId: Number(this.currentUser.phoneNumber), // 使用手机号作为唯一标识
+        userName: this.currentUser.nickName || '匿名用户', // 绑定当前昵称
         commentContent: this.tempComment
       };
+
+      // 4. 更新内存数据
+      // 注意：由于 @Observed/@ObjectLink 机制，建议先备份再推送
       this.posts[index].comments.push(newComment);
 
-      // 更新数据库
-      await dbManager.postHandler?.updatePost(this.posts[index]);
+      try {
+        // 5. 同步到数据库
+        if (dbManager.postHandler) {
+          await dbManager.postHandler.updatePost(this.posts[index]);
+          promptAction.showToast({ message: '评论成功' });
+        }
+      } catch (e) {
+        console.error('Comment Error:', JSON.stringify(e));
+        promptAction.showToast({ message: '评论保存失败' });
+      }
 
+      // 6. 刷新 UI 并关闭输入框
       this.posts = [...this.posts];
       this.closeCommentInput();
     }
