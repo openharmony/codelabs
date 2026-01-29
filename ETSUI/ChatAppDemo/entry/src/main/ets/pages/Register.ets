@@ -116,6 +116,9 @@ struct Register {
                 .fontSize(14)
                 .fontColor(Color.Grey)
               Span('《软件许可及服务协议》')
+                .onClick(()=>{
+                  router.pushUrl({ url: 'pages/LicenseAgreement' });
+                })
                 .fontColor(Color.Blue)
                 .fontSize(14)
             }
