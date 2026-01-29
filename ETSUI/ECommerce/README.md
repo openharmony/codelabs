@@ -11,11 +11,11 @@
 - 个人中心：代金券余额展示、收货地址、收藏列表、足迹列表
 - 本地持久化：使用 RDB 保存用户/商品/购物车/地址/订单/收藏/足迹/登录会话等数据
 
-本应用的运行效果如下图所示：
 
-![](demo-gif/function_display_1.gif)
 
-![](demo-gif/function_display_2.gif)
+
+
+
 
 # 搭建 OpenHarmony 环境
 
@@ -403,7 +403,7 @@ const ok = await RdbUtil.updateOrderStatus(this.detail.order.id, nextStatus)
 评论页通过路由参数接收 `product`，并使用 `AppStorage(commentStore)` 做本地存储。初始化时会为该商品注入种子评论，之后所有操作都会写回存储。
 
 - 取参与加载：
-  
+
 ```typescript
 aboutToAppear() {
   const params = router.getParams() as Record<string, Object>
@@ -418,10 +418,12 @@ private loadComments() {
   AppStorage.setOrCreate('commentStore', store)
   this.comments = (store[key] || []).slice()
 }
-  ```
+```
+
 - 发表评论/回复与删除（需登录，且删除仅限用户本人）：
-```typescript
-private send() {
+  
+  ```typescript
+  private send() {
   if (!this.ensureLoggedIn()) return
   const text = (this.inputText || '').trim()
   if (!text) return
@@ -448,7 +450,8 @@ private send() {
   this.inputText = ''
   this.clearReplyTarget()
   this.persist()
-}
+  }
+  ```
 
 private deleteById(id: string) {
   if (!this.ensureLoggedIn()) return
@@ -459,8 +462,8 @@ private deleteById(id: string) {
   this.comments = this.comments.filter(c => c.id !== id && c.parentId !== id)
   this.persist()
 }
-```
 
+```
 ## 本地数据存储（RdbUtil）
 
 项目使用 `@kit.ArkData` 的 `relationalStore` 做本地持久化，应用启动时由 `EntryAbility` 初始化数据库；`RdbUtil` 内部缓存 `rdbStore/context`，商品/收藏/足迹等读取优先走 RDB，若结果为空再回退到 `memUsers/memProducts/memCart/...` 作为内存兜底。
