@@ -31,6 +31,7 @@ struct AddPost {
       console.error('Database Error: postHandler is null');
       return;
     }
+
     const newPost = new PostItem(
       Date.now(),
       this.currentUser.avatarPath || '', // 确保不是 undefined
@@ -45,11 +46,18 @@ struct AddPost {
 
     if (dbManager.postHandler) {
       try {
-        await dbManager.postHandler.insertPost(newPost, this.currentUser.phoneNumber || '');
+        // 1. 核心修改：接收 insertPost 返回的数据库真实 ID
+        const realId = await dbManager.postHandler.insertPost(newPost, this.currentUser.phoneNumber || '');
+
+        // 2. 关键：将真实 ID 回填给对象
+        newPost.id = realId;
+
+        // 3. 再更新 UI 内存数组，这样点赞和评论就能找到正确的 ID 了
         this.posts = [newPost, ...this.posts];
+
         router.back();
       } catch (e) {
-        console.error('PublishError', JSON.stringify(e)); // 401 通常就在这里发生
+        console.error('PublishError', JSON.stringify(e));
       }
     }
   }
