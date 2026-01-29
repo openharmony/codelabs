@@ -36,7 +36,7 @@ export struct Profile {
   // 功能菜单数据
   private menuItems: MenuItem[][] = [
     [
-      { icon: $r('app.media.user7'), title: '关于我们' },
+      // { icon: $r('app.media.user7'), title: '关于我们' },
       { icon: $r('app.media.settings'), title: '设置' }
     ]
   ]
@@ -117,15 +117,16 @@ export struct Profile {
               .justifyContent(FlexAlign.Center)
               .padding(12)
               .onClick(() => {
-                if (item.title === '关于我们') {
-                  router.pushUrl({
-                    url: 'pages/AboutWechat'
-                  })
-                }else if (item.title === '设置') {
+                if (item.title === '设置') {
                   router.pushUrl({
                     url: 'pages/Settings'
                   })
                 }
+                // else if (item.title === '关于我们') {
+                //   router.pushUrl({
+                //     url: 'pages/AboutWechat'
+                //   })
+                // }
               })
             })
           }
