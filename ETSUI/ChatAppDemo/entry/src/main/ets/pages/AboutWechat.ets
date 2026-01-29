@@ -1,5 +1,5 @@
 /**
- * 关于微信页面
+ * 关于本APP页面
  * 负责人：待分配
  * 状态：已实现
  */
@@ -25,7 +25,7 @@ struct AboutWechat {
         })
 
         // 页面标题
-        Text('关于微信')
+        Text('关于聊天APP')
           .fontSize(18)
           .fontWeight(700)
           .flexGrow(1)
@@ -43,14 +43,14 @@ struct AboutWechat {
 
       // 内容区域
       Column() {
-        // 微信图标
+        // APP图标
         Image($r('app.media.user7'))
           .width(80)
           .height(80)
           .margin({ bottom: 16 })
 
-        // 微信名称
-        Text('微信')
+        // APP名称
+        Text('聊天APP')
           .fontSize(20)
           .fontWeight(700)
           .margin({ bottom: 8 })
