@@ -9,12 +9,13 @@ export class ChatHandler {
     this.store = store;
   }
 
-  // 插入消息：增加 owner 字段用于标识这条记录属于谁
-  async insertMessage(msg: Message, owner: string) {
+  // 显式声明返回类型 Promise<number>
+  async insertMessage(msg: Message, owner: string, targetPhone: string): Promise<number> {
     const valueBucket: relationalStore.ValuesBucket = {
       'id': msg.id,
       'owner': owner,
-      'nickName': msg.nickName, // 对 owner 而言，对方的标识
+      'targetPhone': targetPhone,
+      'nickName': msg.nickName,
       'content': msg.content,
       'time': msg.time,
       'isSelf': msg.isSelf ? 1 : 0,
@@ -23,14 +24,20 @@ export class ChatHandler {
     return await this.store.insert('ChatHistory', valueBucket);
   }
 
-  // 查询首页列表：只查询属于“我”的记录，并按聊天对象分组
+  // 显式声明返回类型 Promise<Message[]>
+  // entry/src/main/ets/db/ChatHandler.ets
+
   async queryChatList(myPhone: string): Promise<Message[]> {
     const list: Message[] = [];
+    // 核心逻辑：先过滤 owner，然后通过子查询找到每个 targetPhone 对应的最大 ID（即最新消息）
     const SQL = `SELECT * FROM ChatHistory
+               WHERE owner = '${myPhone}'
+               AND id IN (
+                 SELECT MAX(id) FROM ChatHistory
                  WHERE owner = '${myPhone}'
-                 GROUP BY nickName
-                 HAVING id = MAX(id)
-                 ORDER BY id DESC`;
+                 GROUP BY targetPhone
+               )
+               ORDER BY id DESC`; // 确保最新的聊天排在列表最上方
 
     let res = await this.store.querySql(SQL);
     while (res.goToNextRow()) {
@@ -40,16 +47,29 @@ export class ChatHandler {
     return list;
   }
 
-  // 查询对话详情：查询“我”与“特定对象”的所有聊天记录
-  async queryHistoryByContact(contactPhone: string, myPhone: string): Promise<Message[]> {
+  // 显式声明返回类型 Promise<Message[]>
+  async queryHistoryByContact(targetPhone: string, myPhone: string): Promise<Message[]> {
+    const list: Message[] = [];
+    // 必须使用谓词查询，严禁使用带 GROUP BY 的原生 SQL 查历史
     const predicates = new relationalStore.RdbPredicates('ChatHistory');
-    predicates.equalTo('owner', myPhone).and().equalTo('nickName', contactPhone);
+
+    predicates.equalTo('owner', myPhone)        // 我看到的
+      .and()
+      .equalTo('targetPhone', targetPhone); // 对方发给我的，或我发给对方的
+
+    // 必须按 ID 升序，否则消息顺序会乱
     predicates.orderByAsc('id');
 
     let res = await this.store.query(predicates);
-    const list: Message[] = [];
     while (res.goToNextRow()) {
-      list.push(this.parseRow(res));
+      list.push({
+        id: res.getString(res.getColumnIndex('id')),
+        nickName: res.getString(res.getColumnIndex('nickName')),
+        content: res.getString(res.getColumnIndex('content')),
+        time: res.getString(res.getColumnIndex('time')),
+        avatar: res.getString(res.getColumnIndex('avatar')),
+        isSelf: res.getLong(res.getColumnIndex('isSelf')) === 1
+      });
     }
     res.close();
     return list;
@@ -57,7 +77,8 @@ export class ChatHandler {
 
   private parseRow(res: relationalStore.ResultSet): Message {
     return {
-      id: res.getString(res.getColumnIndex('id')),
+      // 核心修复：列表显示的 ID 必须设为对方的手机号
+      id: res.getString(res.getColumnIndex('targetPhone')), // 这里极其重要！确保跳转传的是手机号
       nickName: res.getString(res.getColumnIndex('nickName')),
       content: res.getString(res.getColumnIndex('content')),
       time: res.getString(res.getColumnIndex('time')),
