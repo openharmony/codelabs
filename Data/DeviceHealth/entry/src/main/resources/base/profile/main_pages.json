@@ -1,6 +1,6 @@
 {
   "src": [
-    "pages/SettingsPage"
-
+    "pages/SettingsPage",
+    "pages/MainPage"
   ]
 }
