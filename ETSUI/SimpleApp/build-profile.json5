@@ -5,7 +5,7 @@
     "products": [
       {
         "name": "default",
-        "signingConfig": "8Ro8SV66NFCfYl15YT5kkP7T3ow2AyhIf8xTQgVWzmc",
+        "signingConfig": "default",
         "targetSdkVersion": 18,
         "compatibleSdkVersion": 18,
         "compileSdkVersion": 18,
