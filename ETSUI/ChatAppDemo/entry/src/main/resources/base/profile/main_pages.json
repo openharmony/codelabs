@@ -12,6 +12,7 @@
     "pages/AboutUs",
     "pages/Settings",
     "pages/ChangePassword",
-    "pages/EditProfile"
+    "pages/EditProfile",
+    "pages/FriendDetail"
   ]
 }

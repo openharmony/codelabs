@@ -4,6 +4,7 @@ import { emitter } from '@kit.BasicServicesKit';
 import { UserModel } from '../viewmodel/UserModel'; // 确保引入了 UserModel
 import Message from '../viewmodel/Message';
 import { dbManager } from '../utils/DatabaseManager';
+import { promptAction } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -15,6 +16,7 @@ struct Chat {
   @State messageList: Message[] = [];
   @State inputText: string = '';
   private scroller: Scroller = new Scroller();
+  @State isFriend: boolean = true; // 新增：记录好友状态
 
   // 显式声明返回类型为 Promise<void>
   // entry/src/main/ets/pages/Chat.ets
@@ -29,9 +31,14 @@ struct Chat {
       this.chatTarget = contact.nickName;
       this.targetAvatar = contact.avatar;
 
+      // 【新增】进入页面时检查好友关系
+      if (dbManager.friend) {
+        this.isFriend = await dbManager.friend.isFriend(this.currentUser.phoneNumber, this.targetPhone);
+      }
+
       console.info(`正在查询历史：我的手机号[${this.currentUser.phoneNumber}], 对方手机号[${this.targetPhone}]`);
 
-      if (dbManager.chat) {
+      if (this.isFriend &&dbManager.chat) {
         // 2. 调用查询函数
         const history: Message[] = await dbManager.chat.queryHistoryByContact(
           this.targetPhone,
@@ -52,7 +59,10 @@ struct Chat {
   // 核心修改：增加 : Promise<void>
   async sendMessage(): Promise<void> {
     if (this.inputText.trim().length === 0 || !this.currentUser || !dbManager.chat) return;
-
+    if (!this.isFriend) {
+      promptAction.showToast({ message: '对方不是你的好友，消息发送失败' });
+      return;
+    }
     const myPhone: string = this.currentUser.phoneNumber;
     const myName: string = this.currentUser.nickName;
     const baseId: string = Date.now().toString();
@@ -116,11 +126,23 @@ struct Chat {
 
       // 3. 底部输入栏
       Row() {
-        TextInput({ text: this.inputText, placeholder: '请输入...' })
-          .layoutWeight(1).height(40).backgroundColor(Color.White)
-          .onChange((v) => this.inputText = v)
-        Button('发送').margin({ left: 10 })
-          .onClick(() => this.sendMessage())
+        if (this.isFriend) {
+          // 是好友：正常显示输入框
+          TextInput({ text: this.inputText, placeholder: '请输入...' })
+            .layoutWeight(1).height(40).backgroundColor(Color.White)
+            .onChange((v: string) => this.inputText = v)
+          Button('发送').margin({ left: 10 })
+            .onClick((): void => { this.sendMessage() })
+        } else {
+          // 不是好友：显示提示文本或禁用状态
+          Row() {
+            Text('对方不是你的好友，无法发送消息')
+              .fontSize(14).fontColor(Color.Gray)
+          }
+          .justifyContent(FlexAlign.Center)
+          .width('100%')
+          .height(40)
+        }
       }.padding(10).backgroundColor('#F7F7F7')
     }.width('100%').height('100%')
   }
