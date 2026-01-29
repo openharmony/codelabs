@@ -27,9 +27,29 @@ export class ChatHandler {
   // 显式声明返回类型 Promise<Message[]>
   // entry/src/main/ets/db/ChatHandler.ets
 
+  // async queryChatList(myPhone: string): Promise<Message[]> {
+  //   const list: Message[] = [];
+  //   // 核心逻辑：先过滤 owner，然后通过子查询找到每个 targetPhone 对应的最大 ID（即最新消息）
+  //   const SQL = `SELECT * FROM ChatHistory
+  //              WHERE owner = '${myPhone}'
+  //              AND id IN (
+  //                SELECT MAX(id) FROM ChatHistory
+  //                WHERE owner = '${myPhone}'
+  //                GROUP BY targetPhone
+  //              )
+  //              ORDER BY id DESC`; // 确保最新的聊天排在列表最上方
+  //
+  //   let res = await this.store.querySql(SQL);
+  //   while (res.goToNextRow()) {
+  //     list.push(this.parseRow(res));
+  //   }
+  //   res.close();
+  //   return list;
+  // }
+
   async queryChatList(myPhone: string): Promise<Message[]> {
     const list: Message[] = [];
-    // 核心逻辑：先过滤 owner，然后通过子查询找到每个 targetPhone 对应的最大 ID（即最新消息）
+    // 核心：查询 owner 是我的记录中，每个 targetPhone 对应的最新一条（无论是我发的还是对方发的）
     const SQL = `SELECT * FROM ChatHistory
                WHERE owner = '${myPhone}'
                AND id IN (
@@ -37,7 +57,7 @@ export class ChatHandler {
                  WHERE owner = '${myPhone}'
                  GROUP BY targetPhone
                )
-               ORDER BY id DESC`; // 确保最新的聊天排在列表最上方
+               ORDER BY id DESC`;
 
     let res = await this.store.querySql(SQL);
     while (res.goToNextRow()) {
