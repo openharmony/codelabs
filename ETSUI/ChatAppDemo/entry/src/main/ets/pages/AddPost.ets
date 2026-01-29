@@ -21,8 +21,16 @@ struct AddPost {
    */
   // AddPost.ets 中的核心插入逻辑补充
   async publish() {
-    if (!this.currentUser) return;
-
+    if (!this.currentUser)
+    {
+      promptAction.showToast({ message: '请先登录后再发表' });
+      return;
+    }
+    if (!dbManager.postHandler) {
+      promptAction.showToast({ message: '数据库初始化失败' });
+      console.error('Database Error: postHandler is null');
+      return;
+    }
     const newPost = new PostItem(
       Date.now(),
       this.currentUser.avatarPath || '', // 确保不是 undefined

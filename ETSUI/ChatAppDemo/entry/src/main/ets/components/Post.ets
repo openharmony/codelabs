@@ -37,15 +37,15 @@ export struct Post {
     const myPhone = this.currentUser.phoneNumber;
 
     if (dbManager.postHandler) {
-      // 调用新的点赞逻辑
-      const newIsLiked = await dbManager.postHandler.toggleLike(postId, myPhone);
+      // 此时 result 是最新的点赞总数
+      const newCount = await dbManager.postHandler.toggleLike(postId, myPhone);
 
-      // 更新内存中的 UI 状态
       let index = this.posts.findIndex(p => p.id === postId);
       if (index !== -1) {
-        this.posts[index].isLiked = newIsLiked;
-        this.posts[index].likeCount += newIsLiked ? 1 : -1;
-        this.posts = [...this.posts]; // 强制刷新渲染
+        this.posts[index].likeCount = newCount;
+        // 这里的 isLiked 状态建议根据数据库的 hasLiked 逻辑同步，或者直接取反
+        this.posts[index].isLiked = !this.posts[index].isLiked;
+        this.posts = [...this.posts];
       }
     }
   }
