@@ -25,7 +25,7 @@ export struct ChatList {
 
   build() {
     Column() {
-      NavTitle({ title: '微信' })
+      NavTitle({ title: '聊天' })
 
       List() {
         ForEach(this.messages, (msg: Message) => {
