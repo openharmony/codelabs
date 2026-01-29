@@ -13,8 +13,8 @@
  * limitations under the License.
  */
 #include "common_ffrt.h"
-#include "function_class.h"
 #include "native_log_wrapper.h"
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
