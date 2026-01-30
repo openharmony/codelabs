@@ -58,7 +58,7 @@ export struct ChatList {
 
   build() {
     Column() {
-      NavTitle({ title: '聊天' })
+      NavTitle({ title: $r("app.string.tab_chat") })
 
       List() {
         ForEach(this.messages, (msg: Message) => {

@@ -1,10 +1,10 @@
 import { router } from '@kit.ArkUI';
 
 interface AgreementSection {
-  titleZh: string;
-  titleEn: string;
-  contentZh: string;
-  contentEn: string;
+  titleZh: ResourceStr;
+  titleEn: ResourceStr;
+  contentZh: ResourceStr;
+  contentEn: ResourceStr;
 }
 
 @Entry

@@ -5,6 +5,7 @@ import { dbManager } from '../utils/DatabaseManager';
 import { UserModel } from '../viewmodel/UserModel'
 // import { BusinessError } from '@kit.BasicServicesKit';
 import { LocationPickerDialog } from '../components/LocationPickerDialog';
+import { promptAction } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -34,7 +35,7 @@ struct Register {
     const params = router.getParams() as Record<string, string>;
     if (params && params.province) {
       // 这里的 key 要和 LocationSelectPage 中 back 传的 key 一致
-      const countryName = params.country || '中国';
+      const countryName = params.country || $r('app.string.label_china');
       const provinceName = params.province;
       this.country = `${countryName} ${provinceName}`;
 
@@ -46,7 +47,7 @@ struct Register {
   build() {
     Row() {
       Column() {
-        Text('手机号注册')
+        Text($r('app.string.title_phone_reg'))
           .fontSize(26)
           .fontWeight(500)
 
@@ -67,15 +68,15 @@ struct Register {
           })
 
         Column() {
-          MyTextInput({ label: '昵称', placeholder: '例如: 陈晨', text: $nickName, type: InputType.Normal })
-          // MyTextInput({ label: '国家/地区', placeholder: '中国大陆(+86)', text: $country, type: InputType.Normal })
+          MyTextInput({ label: $r('app.string.label_nickname'), placeholder: $r('app.string.hint_example_name'), text: $nickName, type: InputType.Normal })
+          // MyTextInput({ label: $r('app.string.label_country_region'), placeholder: $r('app.string.label_mainland_china'), text: $country, type: InputType.Normal })
           Column() {
             Row() {
-              Text('国家/地区')
+              Text($r('app.string.label_country_region'))
                 .width(80)
                 .fontSize(18)
 
-              Text(this.country === '' ? '请选择地区' : this.country)
+              Text(this.country === '' ? $r('app.string.toast_select_region') : this.country)
                 .fontSize(18)
                 .fontColor(this.country === '' ? Color.Gray : Color.Black)
                 .layoutWeight(1)
@@ -87,8 +88,8 @@ struct Register {
 
             Divider().margin({ bottom: 10 })
           }
-          MyTextInput({ label: '手机号', placeholder: '请填写手机号', text: $phoneNumber, type: InputType.Number })
-          MyTextInput({ label: '密码', placeholder: '请填写密码', text: $password, type: InputType.Password })
+          MyTextInput({ label: $r('app.string.label_phone'), placeholder: $r('app.string.hint_fill_phone'), text: $phoneNumber, type: InputType.Number })
+          MyTextInput({ label: $r('app.string.label_pwd'), placeholder: $r('app.string.hint_fill_pwd'), text: $password, type: InputType.Password })
 
         }.width('80%')
         .justifyContent(FlexAlign.SpaceBetween)
@@ -112,10 +113,10 @@ struct Register {
 
           Column() {
             Text() {
-              Span('我已阅读同意')
+              Span($r('app.string.label_read_agree'))
                 .fontSize(14)
                 .fontColor(Color.Grey)
-              Span('《软件许可及服务协议》')
+              Span($r('app.string.label_license_agreement'))
                 .onClick(()=>{
                   router.pushUrl({ url: 'pages/LicenseAgreement' });
                 })
@@ -123,7 +124,7 @@ struct Register {
                 .fontSize(14)
             }
 
-            Text('本页面手机的信息仅用于注册账号')
+            Text($r('app.string.label_register_notice'))
               .fontColor(Color.Grey)
               .fontSize(14)
           }
@@ -133,7 +134,7 @@ struct Register {
         })
 
         Row() {
-          Button('同意并继续')
+          Button($r('app.string.btn_agree_continue'))
             .type(ButtonType.Normal)
             .borderRadius(10)
             .margin({ top: 20 })
@@ -144,37 +145,64 @@ struct Register {
             .onClick(async () => {
               let err = ''
               if (this.nickName.trim() == '') {
-                err += '昵称不能为空;'
+                //err += $r('app.string.error_nickname_empty')
+                promptAction.showToast({
+                  message: $r('app.string.error_nickname_empty')
+                });
+                return
               }
               if (this.country.trim() == '') {
-                err += '国家不能为空;'
+                //err += $r('app.string.error_country_empty')
+                promptAction.showToast({
+                  message: $r('app.string.error_country_empty')
+                });
+                return
               }
               if (this.phoneNumber.trim() == '') {
-                err += '手机号不能为空;'
+                //err += $r('app.string.error_phone_empty')
+                promptAction.showToast({
+                  message: $r('app.string.error_phone_empty')
+                });
+                return
               }else if (this.phoneNumber.length !== 11 || !/^\d+$/.test(this.phoneNumber)) {
                 // 长度不是11位，或者 包含非数字字符
-                err += '请输入正确的11位数字手机号;';
+                //err += $r('app.string.error_phone_format');
+                promptAction.showToast({
+                  message: $r('app.string.error_phone_format')
+                });
+                return
               }
 
               if (this.password.trim() == '') {
-                err += '密码不能为空;'
+                //err += $r('app.string.error_pwd_empty')
+                promptAction.showToast({
+                  message: $r('app.string.error_pwd_empty')
+                });
+                return
               }
 
               if (!this.isAgree) {
-                err += '请先同意注册协议'
-              }
-              if (err != '') {
-                Prompt.showToast({
-                  message: err
-                })
+                //err += $r('app.string.toast_agree_protocol')
+                promptAction.showToast({
+                  message: $r('app.string.toast_agree_protocol')
+                });
                 return
               }
+              // if (err != '') {
+              //   Prompt.showToast({
+              //    message: err
+              //   })
+              //   return
+              // }
 
               // --- 手机号重复校验 ---
               try {
                 const isExists = await dbManager.user?.isPhoneNumberExists(this.phoneNumber);
                 if (isExists) {
-                  Prompt.showToast({ message: '该手机号已注册，请直接登录' });
+                  //Prompt.showToast({ message: $r('app.string.toast_already_registered').toString() });
+                  promptAction.showToast({
+                    message: $r('app.string.toast_already_registered')
+                  });
                   return; // 发现重复，拦截后续操作
                 }
               } catch (e) {
@@ -202,15 +230,22 @@ struct Register {
                 const rowId = await dbManager.user?.insertUser(userData); // 3. 异步写入数据库
                 console.log('Test: RowId returned:', rowId); // 如果这里返回了数字，说明存进去了
 
-                Prompt.showToast({ message: '注册成功' })
-
+                //Prompt.showToast({ message: $r('app.string.toast_reg_success').toString() })
+                promptAction.showToast({
+                  message: $r('app.string.toast_reg_success'),
+                  duration: 2000
+                });
                 // 延迟一下再返回，确保用户能看到提示
                 setTimeout(() => {
                   router.back()
                 }, 1000)
 
               } catch (e) {
-                Prompt.showToast({ message: '数据库写入失败' })
+                //Prompt.showToast({ message: $r('app.string.error_db_write').toString() })
+                promptAction.showToast({
+                  message: $r('app.string.error_db_write'),
+                  duration: 2000
+                });
                 console.error('Insert error:', JSON.stringify(e))
               }
 
@@ -247,9 +282,9 @@ struct Register {
 
 @Component
 struct MyTextInput {
-  @Prop label: string
-  @Prop placeholder: string
-  @Link text: string
+  @Prop label: ResourceStr
+  @Prop placeholder: ResourceStr
+  @Link text: ResourceStr
   type: InputType = InputType.Normal
 
   build() {

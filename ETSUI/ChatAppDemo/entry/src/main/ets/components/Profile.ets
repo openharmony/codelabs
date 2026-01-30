@@ -9,14 +9,15 @@ import { UserModel } from '../viewmodel/UserModel'
 // 个人信息接口
 // interface UserInfo {
 //   avatar: Resource
-//   nickName: string
-//   region: string
+//   nickName: ResourceStr
+//   region: ResourceStr
 // }
 
 // 功能菜单项接口
 interface MenuItem {
+  index?: number
   icon: Resource
-  title: string
+  title: ResourceStr
   badge?: number
 }
 
@@ -29,16 +30,16 @@ export struct Profile {
   // 模拟个人信息数据
   // private userInfo: UserInfo = {
   //   avatar: $r('app.media.user1'), // 使用现有资源
-  //   nickName: '微信用户',
-  //   region: '中国 北京'
+  //   nickName: $r('app.string.label_default_user'),
+  //   region: $r('app.string.label_default_location')
   // }
 
   // 功能菜单数据
   private menuItems: MenuItem[][] = [
     [
-      // { icon: $r('app.media.user7'), title: '关于我们' },
-      { icon: $r('app.media.edit'), title: '编辑' },
-      { icon: $r('app.media.settings'), title: '设置' }
+      // { icon: $r('app.media.user7'), title: $r('app.string.label_about_us') },
+      { index:0, icon: $r('app.media.edit'), title: $r('app.string.btn_edit') },
+      { index:1, icon: $r('app.media.settings'), title: $r('app.string.label_settings') }
     ]
   ]
 
@@ -118,18 +119,19 @@ export struct Profile {
               .justifyContent(FlexAlign.Center)
               .padding(12)
               .onClick(() => {
-                if (item.title === '设置') {
-                  router.pushUrl({
-                    url: 'pages/Settings'
-                  })
-                }
-                else if (item.title === '编辑') {
+                if (item.index === 0) {
                   router.pushUrl({
                     url: 'pages/EditProfile'
                   })
                 }
+                else if (item.index === 1) {
+                  router.pushUrl({
+                    url: 'pages/Settings'
+                  })
+                }
 
-                // else if (item.title === '关于我们') {
+
+                // else if (item.title === $r('app.string.label_about_us')) {
                 //   router.pushUrl({
                 //     url: 'pages/AboutUs'
                 //   })
@@ -148,7 +150,7 @@ export struct Profile {
 
       // 退出登录按钮
       Button() {
-        Text('退出登录')
+        Text($r('app.string.btn_logout'))
           .fontSize(16)
           .fontColor('#FFFFFF')
       }

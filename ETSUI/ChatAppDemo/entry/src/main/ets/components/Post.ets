@@ -58,7 +58,7 @@ export struct Post {
 
     // 2. 校验登录状态（确保评论能关联到人）
     if (!this.currentUser) {
-      promptAction.showToast({ message: '请先登录后再评论' });
+      promptAction.showToast({ message: $r('app.string.toast_login_required') });
       return;
     }
 
@@ -80,11 +80,11 @@ export struct Post {
         // 5. 同步到数据库
         if (dbManager.postHandler) {
           await dbManager.postHandler.updatePost(this.posts[index]);
-          promptAction.showToast({ message: '评论成功' });
+          promptAction.showToast({ message: $r('app.string.toast_comment_success') });
         }
       } catch (e) {
         console.error('Comment Error:', JSON.stringify(e));
-        promptAction.showToast({ message: '评论保存失败' });
+        promptAction.showToast({ message: $r('app.string.toast_comment_fail') });
       }
 
       // 6. 刷新 UI 并关闭输入框
@@ -103,8 +103,8 @@ export struct Post {
       Column() {
         // 导航栏
         Row() {
-          Text('动态广场').fontSize(22).fontWeight(FontWeight.Bold)
-          Button('发布动态', { type: ButtonType.Capsule })
+          Text($r('app.string.title_post_square')).fontSize(22).fontWeight(FontWeight.Bold)
+          Button($r('app.string.btn_publish_post'), { type: ButtonType.Capsule })
             .height(30)
             .onClick(() => router.pushUrl({ url: 'pages/AddPost' }))
         }
@@ -125,7 +125,7 @@ export struct Post {
           }
           .layoutWeight(1).edgeEffect(EdgeEffect.Spring)
         } else {
-          Column() { Text('空空如也...').fontColor('#999') }.layoutWeight(1).justifyContent(FlexAlign.Center)
+          Column() { Text($r('app.string.label_empty_list')).fontColor('#999') }.layoutWeight(1).justifyContent(FlexAlign.Center)
         }
       }
       .width('100%').height('100%').backgroundColor('#F5F5F5')
@@ -135,9 +135,9 @@ export struct Post {
         Column() {
           Rect().width('100%').layoutWeight(1).fillOpacity(0).onClick(() => this.closeCommentInput())
           Row() {
-            TextInput({ placeholder: '写下你的评论...', text: this.tempComment })
+            TextInput({ placeholder: $r('app.string.hint_write_comment'), text: this.tempComment })
               .layoutWeight(1).onChange(v => this.tempComment = v)
-            Button('发送').margin({ left: 10 }).onClick(() => this.submitComment())
+            Button($r('app.string.btn_send')).margin({ left: 10 }).onClick(() => this.submitComment())
           }
           .width('100%').padding(12).backgroundColor(Color.White)
         }

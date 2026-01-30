@@ -60,13 +60,13 @@ struct Chat {
   async sendMessage(): Promise<void> {
     if (this.inputText.trim().length === 0 || !this.currentUser || !dbManager.chat) return;
     if (!this.isFriend) {
-      promptAction.showToast({ message: '对方不是你的好友，消息发送失败' });
+      promptAction.showToast({ message: $r('app.string.toast_not_friend_fail') });
       return;
     }
-    const myPhone: string = this.currentUser.phoneNumber;
-    const myName: string = this.currentUser.nickName;
-    const baseId: string = Date.now().toString();
-    const timeStr: string = `${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2, '0')}`;
+    const myPhone: ResourceStr = this.currentUser.phoneNumber;
+    const myName: ResourceStr = this.currentUser.nickName;
+    const baseId: ResourceStr = Date.now().toString();
+    const timeStr: ResourceStr = `${new Date().getHours()}:${new Date().getMinutes().toString().padStart(2, '0')}`;
 
     // 数据库插入逻辑...
     await dbManager.chat.insertMessage({
@@ -128,7 +128,7 @@ struct Chat {
       Row() {
         if (this.isFriend) {
           // 是好友：正常显示输入框
-          TextInput({ text: this.inputText, placeholder: '请输入...' })
+          TextInput({ text: this.inputText, placeholder: $r('app.string.hint_enter_msg') })
             .layoutWeight(1).height(40).backgroundColor(Color.White)
             .onChange((v: string) => this.inputText = v)
           Button('发送').margin({ left: 10 })
@@ -136,7 +136,7 @@ struct Chat {
         } else {
           // 不是好友：显示提示文本或禁用状态
           Row() {
-            Text('对方不是你的好友，无法发送消息')
+            Text($r('app.string.toast_cant_send_msg'))
               .fontSize(14).fontColor(Color.Gray)
           }
           .justifyContent(FlexAlign.Center)

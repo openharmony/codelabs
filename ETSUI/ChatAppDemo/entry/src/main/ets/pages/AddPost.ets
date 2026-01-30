@@ -23,11 +23,11 @@ struct AddPost {
   async publish() {
     if (!this.currentUser)
     {
-      promptAction.showToast({ message: '请先登录后再发表' });
+      promptAction.showToast({ message: $r('app.string.toast_login_to_post') });
       return;
     }
     if (!dbManager.postHandler) {
-      promptAction.showToast({ message: '数据库初始化失败' });
+      promptAction.showToast({ message: $r('app.string.error_db_init') });
       console.error('Database Error: postHandler is null');
       return;
     }
@@ -83,16 +83,16 @@ struct AddPost {
     Column() {
       // --- 顶部导航 ---
       Row() {
-        Text('取消')
+        Text($r('app.string.btn_cancel'))
           .fontSize(16)
           .fontColor('#666')
           .onClick(() => router.back())
 
-        Text('发表动态')
+        Text($r('app.string.title_publish_moment'))
           .fontSize(18)
           .fontWeight(FontWeight.Bold)
 
-        Button('发表', { type: ButtonType.Capsule })
+        Button($r('app.string.btn_publish'), { type: ButtonType.Capsule })
           .width(70)
           .height(32)
           .enabled(this.content.trim().length > 0 || this.selectImage !== '')
@@ -103,7 +103,7 @@ struct AddPost {
       .padding(16)
 
       // --- 输入区 ---
-      TextArea({ placeholder: '这一刻的想法...', text: this.content })
+      TextArea({ placeholder: $r('app.string.hint_post_idea'), text: this.content })
         .height(180)
         .margin({ bottom: 20 })
         .onChange(v => this.content = v)
@@ -134,7 +134,7 @@ struct AddPost {
             Text('+')
               .fontSize(40)
               .fontColor('#CCC')
-            Text('上传图片')
+            Text($r('app.string.btn_upload_image'))
               .fontSize(14)
               .fontColor('#999')
           }

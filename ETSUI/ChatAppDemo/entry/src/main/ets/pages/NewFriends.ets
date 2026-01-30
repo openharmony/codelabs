@@ -33,16 +33,16 @@ struct NewFriends {
         Image($r('sys.media.ohos_ic_back'))
           .width(24).height(24)
           .onClick(() => router.back())
-        Text('新的朋友').fontSize(18).fontWeight(FontWeight.Bold).margin({ left: 15 })
+        Text($r('app.string.label_new_friends')).fontSize(18).fontWeight(FontWeight.Bold).margin({ left: 15 })
         Blank()
-        Text('添加朋友')
+        Text($r('app.string.title_add_friends'))
           .fontColor('#576B95')
           .fontSize(16)          .onClick(() => router.pushUrl({ url: 'pages/AddFriends' }))
       }
       .width('100%').padding(15).backgroundColor('#F1F3F5')
 
       // 搜索入口
-      Search({ placeholder: '账号/手机号' })        .margin(10)
+      Search({ placeholder: $r('app.string.hint_account_phone') })        .margin(10)
         .onClick(() => router.pushUrl({ url: 'pages/AddFriends' }))
 
       List() {
@@ -63,18 +63,18 @@ struct NewFriends {
               if (item.status === 0) {
                 // 待处理状态
                 Row() {
-                  Button('接受').height(30).fontSize(14).backgroundColor('#07C160').margin({ right: 5 })
+                  Button($r('app.string.btn_accept')).height(30).fontSize(14).backgroundColor('#07C160').margin({ right: 5 })
                     .onClick(async () => {
                       await this.handleAction(item, 1, index);
                     })
-                  Button('拒绝').height(30).fontSize(14).backgroundColor('#CD0000')
+                  Button($r('app.string.btn_reject')).height(30).fontSize(14).backgroundColor('#CD0000')
                     .onClick(async () => {
                       await this.handleAction(item, 2, index);
                     })
                 }
               } else {
                 // 已处理状态（1:已添加, 2:已拒绝）
-                Text(item.status === 1 ? '已添加' : '已拒绝')
+                Text(item.status === 1 ? $r('app.string.label_added') : $r('app.string.label_rejected'))
                   .fontColor(Color.Gray)
                   .fontSize(14)
               }
@@ -109,14 +109,14 @@ struct NewFriends {
       // ArkTS 的数组索引更新有时不触发渲染，保险做法是整体重新赋值一次
       this.requests = [...this.requests];
 
-      promptAction.showToast({ message: newStatus === 1 ? '已通过申请' : '已拒绝' });
+      promptAction.showToast({ message: newStatus === 1 ? $r('app.string.toast_approved') : $r('app.string.label_rejected') });
 
       if (newStatus === 1) { // 如果是接受好友
         // 发送更新通知
         emitter.emit({ eventId: 10001 });
       }
     } catch (e) {
-      promptAction.showToast({ message: '操作失败' });
+      promptAction.showToast({ message: $r('app.string.toast_op_fail') });
     }
 
   }

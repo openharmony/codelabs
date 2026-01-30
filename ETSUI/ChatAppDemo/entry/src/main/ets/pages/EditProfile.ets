@@ -75,10 +75,10 @@ struct EditProfile {
         Image($r('app.media.back'))
           .width(24).height(24)
           .onClick(() => router.back())
-        Text('个人信息')
+        Text($r('app.string.title_edit_profile'))
           .fontSize(20).fontWeight(FontWeight.Bold).margin({ left: 16 })
         Blank()
-        Text('保存')
+        Text($r('app.string.btn_save'))
           .fontSize(16).fontColor(Color.Blue)
           .onClick(() => this.handleSave())
       }
@@ -92,7 +92,7 @@ struct EditProfile {
           .margin({ top: 30, bottom: 10 })
           .objectFit(ImageFit.Cover)
 
-        Text('点击更换头像')
+        Text($r('app.string.label_change_avatar'))
           .fontSize(14).fontColor(Color.Blue)
           .onClick(() => this.selectImage())
       }
@@ -102,18 +102,18 @@ struct EditProfile {
       List() {
         // 昵称编辑
         ListItem() {
-          this.InfoItem('昵称', this.tempNickname, true)
+          this.InfoItem($r('app.string.label_nickname'), this.tempNickname, true)
         }
         // 地区选择
         ListItem() {
-          // this.InfoItem('地区', this.tempLocation, false, () => {
+          // this.InfoItem($r('app.string.label_region'), this.tempLocation, false, () => {
           //   this.dialogController.open()
           // })
           Row() {
-            Text('地区').width(80).fontSize(16)
+            Text($r('app.string.label_region')).width(80).fontSize(16)
 
             // 直接在这里引用 this.tempLocation，不要通过函数传参
-            Text(this.tempLocation || '未设置')
+            Text(this.tempLocation || $r('app.string.label_not_set'))
               .layoutWeight(1)
               .textAlign(TextAlign.End)
               .fontColor('#666')
@@ -134,7 +134,7 @@ struct EditProfile {
   }
 
   // 封装信息条目
-  @Builder InfoItem(label: string, value: string, isInput: boolean, onClick?: () => void) {
+  @Builder InfoItem(label: ResourceStr, value: ResourceStr, isInput: boolean, onClick?: () => void) {
     Row() {
       Text(label).width(80).fontSize(16).fontColor('#333')
 
@@ -146,7 +146,7 @@ struct EditProfile {
           .backgroundColor(Color.Transparent)
           .onChange((v) => this.tempNickname = v)
       } else {
-        Text(value || '未设置')
+        Text(value || $r('app.string.label_not_set'))
           .layoutWeight(1)
           .fontColor('#666')
           .textAlign(TextAlign.End)
@@ -173,17 +173,17 @@ struct EditProfile {
       if (dbManager.user) {
         const rows = await dbManager.user.updateUser(this.currentUser);
         if (rows > 0) {
-          promptAction.showToast({ message: '个人信息更新成功' });
+          promptAction.showToast({ message: $r('app.string.toast_profile_updated') });
           // 更新 AppStorage 强制刷新全局 UI
           AppStorage.Set('currentUser', this.currentUser);
           setTimeout(() => router.back(), 1000);
         } else {
-          promptAction.showToast({ message: '更新失败，请重试' });
+          promptAction.showToast({ message: $r('app.string.toast_update_fail') });
         }
       }
     } catch (e) {
       console.error('Save Profile Error: ' + JSON.stringify(e));
-      promptAction.showToast({ message: '操作异常' });
+      promptAction.showToast({ message: $r('app.string.toast_exception') });
     }
   }
 }

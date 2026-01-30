@@ -20,14 +20,14 @@ import { UserModel } from '../viewmodel/UserModel';
     if (user) {
       // 2. 检查是不是搜到了自己（不能加自己为好友）
       if (user.phoneNumber === this.currentUser?.phoneNumber) {
-        promptAction.showToast({ message: '不能添加自己为好友哦' });
+        promptAction.showToast({ message: $r('app.string.toast_cant_add_self') });
         this.searchResult = null;
         return;
       }
       this.searchResult = user;
     } else {
       this.searchResult = null;
-      promptAction.showToast({ message: '未找到该用户，请检查手机号' });
+      promptAction.showToast({ message: $r('app.string.toast_user_not_found') });
     }
   }
 
@@ -38,17 +38,17 @@ import { UserModel } from '../viewmodel/UserModel';
         Image($r('sys.media.ohos_ic_back'))
           .width(24).height(24)
           .onClick(() => router.back())
-        Text('添加朋友').fontSize(18).fontWeight(FontWeight.Bold).margin({ left: 15 })
+        Text($r('app.string.title_add_friends')).fontSize(18).fontWeight(FontWeight.Bold).margin({ left: 15 })
       }
       .width('100%').padding(15)
 
       // 搜索框
-      Search({ placeholder: '账号/手机号', value: this.searchText })
+      Search({ placeholder: $r('app.string.hint_account_phone'), value: this.searchText })
         .margin(15)
         .onChange((val) => this.searchText = val)
         .onSubmit(() => this.handleSearch())
 
-      Text(`我的手机号：${this.currentUser?.phoneNumber || '未登录'}`)
+      Text(`我的手机号：${this.currentUser?.phoneNumber || $r('app.string.label_not_logged_in')}`)
         .fontSize(14)
         .fontColor(Color.Gray)
         .margin({ bottom: 20 })
@@ -67,26 +67,26 @@ import { UserModel } from '../viewmodel/UserModel';
               Text(`手机号: ${this.searchResult.phoneNumber}`).fontSize(14).fontColor(Color.Gray)
             }.alignItems(HorizontalAlign.Start).margin({ left: 15 }).layoutWeight(1)
 
-            Button('添加')
+            Button($r('app.string.btn_add'))
               .height(30)
               .backgroundColor('#07C160')
               .onClick(async () => {
                 if (!this.currentUser) {
-                  promptAction.showToast({ message: '登录状态异常' });
+                  promptAction.showToast({ message: $r('app.string.toast_login_exception') });
                   return;
                 }
 
                 // 拦截：是否已经是好友
                 const alreadyFriend = await dbManager.friend?.isFriend(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
                 if (alreadyFriend) {
-                  promptAction.showToast({ message: '对方已经是你的好友了' });
+                  promptAction.showToast({ message: $r('app.string.toast_already_friend') });
                   return;
                 }
 
                 // 拦截：是否已经发送过申请且对方未处理
                 const isPending = await dbManager.friend?.checkRequestExists(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
                 if (isPending) {
-                  promptAction.showToast({ message: '申请已发送，请耐心等待对方通过' });
+                  promptAction.showToast({ message: $r('app.string.toast_request_sent') });
                   return;
                 }
 
@@ -96,13 +96,13 @@ import { UserModel } from '../viewmodel/UserModel';
                     fromPhone: this.currentUser.phoneNumber,
                     toPhone: this.searchResult!.phoneNumber,
                     fromName: this.currentUser.nickName,
-                    message: '你好，我是' + this.currentUser.nickName,
+                    message: "你好,我是" + this.currentUser.nickName,
                     status: 0
                   });
-                  promptAction.showToast({ message: '申请已发送' });
+                  promptAction.showToast({ message: $r('app.string.toast_sent_success') });
                   // 发送完可以考虑延迟返回或清空结果
                 } catch (e) {
-                  promptAction.showToast({ message: '发送失败，请重试' });
+                  promptAction.showToast({ message: $r('app.string.toast_send_fail') });
                 }
               })
           }
@@ -112,8 +112,8 @@ import { UserModel } from '../viewmodel/UserModel';
         }
       } else if (this.searchText === '') {
         // 展示一些默认的入口
-        this.buildMenuOption($r('app.media.qrcode'), '扫一扫', '扫描二维码名片')
-        this.buildMenuOption($r('app.media.contactpp'), '手机联系人', '添加或邀请通讯录中的朋友')
+        this.buildMenuOption($r('app.media.qrcode'), $r('app.string.label_scan'), $r('app.string.label_scan_desc'))
+        this.buildMenuOption($r('app.media.contactpp'), $r('app.string.label_phone_contacts'), $r('app.string.label_phone_contacts_desc'))
       }
     }
     .width('100%')
@@ -121,7 +121,7 @@ import { UserModel } from '../viewmodel/UserModel';
     .backgroundColor('#F1F3F5')  }
 
   @Builder
-  buildMenuOption(icon: Resource, title: string, subTitle: string) {
+  buildMenuOption(icon: Resource, title: ResourceStr, subTitle: ResourceStr) {
     Row() {
       Image(icon).width(25).height(25).margin({ left: 15 })
       Column() {

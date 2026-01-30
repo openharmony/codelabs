@@ -7,14 +7,14 @@ import router from '@ohos.router'
 
 @Entry
 @Component
-struct AboutWechat {
+struct AboutUs {
   build() {
     Column() {
       // 顶部导航栏
       Row() {
         // 返回按钮
         Button() {
-          Text('返回')
+          Text($r('app.string.btn_back'))
             .fontSize(16)
             .fontColor('#007AFF')
         }
@@ -25,7 +25,7 @@ struct AboutWechat {
         })
 
         // 页面标题
-        Text('关于聊天APP')
+        Text($r('app.string.title_about_app'))
           .fontSize(18)
           .fontWeight(700)
           .flexGrow(1)
@@ -50,19 +50,19 @@ struct AboutWechat {
           .margin({ bottom: 16 })
 
         // APP名称
-        Text('聊天APP')
+        Text($r('app.string.label_app_name'))
           .fontSize(20)
           .fontWeight(700)
           .margin({ bottom: 8 })
 
         // 版本信息
-        Text('版本 8.0.28')
+        Text($r('app.string.label_version'))
           .fontSize(14)
           .fontColor('#666666')
           .margin({ bottom: 24 })
 
         // 版权信息
-        Text('© 2025 Tencent. All rights reserved.')
+        Text('© 2026 Open Harmony. All rights reserved.')
           .fontSize(12)
           .fontColor('#999999')
       }
