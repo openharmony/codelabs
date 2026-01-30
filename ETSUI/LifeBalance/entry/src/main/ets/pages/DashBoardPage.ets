@@ -36,7 +36,7 @@ export struct DashboardPage {
   calculateAll() {
     const h_meter = this.heightVal / 100;
     // 1. 增加前置校验：如果身高或体重未输入（为0），则所有目标归零
-    if (this.heightVal <= 0 || this.weightVal <= 0) {
+    if (this.heightVal < 50 || this.weightVal <= 0) {
       this.bmi = 0;
       this.targetCalories = 0;
       this.targetWater = 0;
@@ -298,8 +298,8 @@ export struct DashboardPage {
     Row() {
       Text(label).fontSize(14 * this.fontScale).fontWeight(FontWeight.Medium)
       Blank()
-
-      TextInput({ text: val ? val.toString() : '' })
+      // 确保显示为空而非 0
+      TextInput({ text: val === 0 ? '' : val.toString() })
         .type(InputType.Number)
         .textAlign(TextAlign.End)
         .backgroundColor(Color.Transparent)
@@ -307,17 +307,16 @@ export struct DashboardPage {
         .fontSize(16 * this.fontScale)
         .fontColor('#007DFF')
         .onChange((value) => {
-          const num = Number(value);
+          // 修改点：如果为空字符串，传入 0
+          const num = value === '' ? 0 : Number(value);
           if (!isNaN(num)) {
             onChange(num);
             this.calculateAll();
           }
         })
-
       Text(unit).fontSize(12 * this.fontScale).fontColor('#999').margin({ left: 5 })
     }
-    .width('100%')
-    .height(50)
+    .width('100%').height(50)
   }
 
   // 【修改点】优化了 GoalCard 的样式，增加了 Padding
