@@ -47,7 +47,7 @@ struct SettingsPage {
     Column() {
       // 1. 标题栏
       Row() {
-        Image($r('app.media.icon')) // 使用你已有的图标或返回图标
+        Image($r('app.media.startIcon')) // 使用你已有的图标或返回图标
           .width(24)
           .height(24)
           .margin({ right: 16 })
@@ -165,7 +165,7 @@ struct SettingsPage {
           .margin({ left: 10 })
           .backgroundColor('#DDD')
       } else {
-        Image($r('app.media.icon')) // 对方头像
+        Image($r('app.media.startIcon')) // 对方头像
           .width(40)
           .height(40)
           .borderRadius(20)

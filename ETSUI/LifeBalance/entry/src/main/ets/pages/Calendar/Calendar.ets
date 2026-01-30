@@ -264,7 +264,7 @@ export struct CalendarComponent {
   @Builder
   renderEmptyState() {
     Column({ space: 10 }) {
-      Image($r('app.media.icon')).width(100).height(100).opacity(0.1).grayscale(1)
+      Image($r('app.media.startIcon')).width(100).height(100).opacity(0.1).grayscale(1)
       Text(`${this.selectedDate}`).fontSize(16).fontColor('#999')
       Text('这一天没有留下健康脚印').fontSize(14).fontColor('#CCC')
     }.width('100%').margin({ top: 80 })
