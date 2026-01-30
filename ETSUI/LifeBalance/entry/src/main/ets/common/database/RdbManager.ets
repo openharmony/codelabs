@@ -81,7 +81,7 @@ export class RdbManager {
         await this.rdbStore.executeSql(this.sqlCreateTable);
         await this.rdbStore.executeSql(this.sqlCreateWaterTable);
         await this.rdbStore.executeSql(this.sqlCreateExerciseTable)
-        await this.insertMockData(); // 虚拟数据插入
+        // await this.insertMockData(); // 虚拟数据插入
         this.rdbStore.version = 1;
       }
       console.info('[RdbManager] Database initialized');
