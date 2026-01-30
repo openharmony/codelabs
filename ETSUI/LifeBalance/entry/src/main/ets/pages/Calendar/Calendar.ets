@@ -27,7 +27,6 @@ export struct CalendarComponent {
   private waterDao = new WaterDao()
   private dietDao = new DietRecordDao()
   private exerciseDao = new ExerciseRecordDao()
-
   @State selectedDate: string = ((d) => {
     const y = d.getFullYear();
     const m = (d.getMonth() + 1).toString().padStart(2, '0');

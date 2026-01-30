@@ -31,8 +31,6 @@ export struct DietPage {
   @State selectedDate: Date = new Date();
   @StorageProp('appFontScale') fontScale: number = 1.0;
   @State weeklyStats: WeeklyData[] = [];
-  // 1. 【新增】用于控制弹窗默认选中的餐别
-  @State currentSelectedMeal: MealTime = MealTime.SNACK;
   trendDialogController: CustomDialogController = new CustomDialogController({
     builder: WeekTrendDialog({
       weeklyData: this.weeklyStats,
@@ -43,6 +41,9 @@ export struct DietPage {
     customStyle: false,
     autoCancel: true
   });
+  // 1. 【新增】用于控制弹窗默认选中的餐别
+  @State currentSelectedMeal: MealTime = MealTime.SNACK;
+  @StorageProp('globalDataUpdate') @Watch('onUpdateData') updateSignal: number = 0;
   addDialogController: CustomDialogController = new CustomDialogController({
     builder: FoodSelectorDialog({
       // 2. 【修改】将状态变量传给弹窗，实现父子同步
@@ -59,6 +60,12 @@ export struct DietPage {
   });
   private dietDao: DietRecordDao = new DietRecordDao();
   private healthDao: HealthDao = new HealthDao();
+
+  // 添加监听回调函数
+  onUpdateData() {
+    console.info('[DietPage] 监听到数据更新信号，正在刷新...');
+    this.refreshData(); // 重新加载数据库中的建议目标
+  }
 
   getTodayStr(): string {
     const now = new Date();

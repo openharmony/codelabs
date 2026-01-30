@@ -33,7 +33,6 @@ export struct ExerciseSelectorDialog {
     ExerciseCategory.OUTDOOR_RECREATION, ExerciseCategory.DAILY_ACTIVITIES,
     ExerciseCategory.CUSTOM
   ];
-
   onConfirm: (item: ExerciseItem, count: number) => void = () => {
   };
 

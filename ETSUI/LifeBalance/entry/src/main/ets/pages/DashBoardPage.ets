@@ -13,7 +13,6 @@
  * limitations under the License.
  */
 import router from '@ohos.router';
-import promptAction from '@ohos.promptAction';
 
 @Component
 export struct DashboardPage {
@@ -36,6 +35,14 @@ export struct DashboardPage {
   // --- 核心算法 ---
   calculateAll() {
     const h_meter = this.heightVal / 100;
+    // 1. 增加前置校验：如果身高或体重未输入（为0），则所有目标归零
+    if (this.heightVal <= 0 || this.weightVal <= 0) {
+      this.bmi = 0;
+      this.targetCalories = 0;
+      this.targetWater = 0;
+      this.targetExercise = 0;
+      return; // 直接返回，不再执行后续逻辑
+    }
     if (h_meter > 0) {
       this.bmi = parseFloat((this.weightVal / (h_meter * h_meter)).toFixed(1));
     } else {
@@ -143,7 +150,7 @@ export struct DashboardPage {
               .margin({ bottom: 15 })
 
             Stack({ alignContent: Alignment.Bottom }) {
-              Gauge({ value: this.bmi, min: 10, max: 35 })
+              Gauge({ value: Math.min(this.bmi, 35), min: 10, max: 35 })
                 .startAngle(210)
                 .endAngle(150)
                 .colors([['#3F51B5', 0.2], ['#00C853', 0.3], ['#FFAB00', 0.2], ['#FF5252', 0.3]])
