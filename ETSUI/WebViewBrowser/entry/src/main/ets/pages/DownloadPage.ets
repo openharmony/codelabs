@@ -15,6 +15,7 @@
 
 import { DownloadItem, DownloadManager, downloadManager, DownloadState, DownloadListener } from '../manager/DownloadManager';
 import { promptAction } from '@kit.ArkUI';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 @Builder
 export function DownloadPageBuilder() {
@@ -41,7 +42,10 @@ export struct DownloadPage {
         this.refreshList();
       },
       onError: (item: DownloadItem, msg: string) => {
-        promptAction.showToast({ message: `下载错误: ${msg}` });
+        promptAction.openToast({ message: `下载错误: ${msg}` })
+          .catch((err: BusinessError) => {
+            console.error('显示Toast失败:', err);
+          });
         this.refreshList();
       }
     };
@@ -133,7 +137,7 @@ export struct DownloadPage {
   @Builder
   EmptyView() {
     Column({ space: 16 }) {
-      Image($r('app.media.web'))
+      Image($r('app.media.download'))
         .width(64)
         .height(64)
         .fillColor('#8E8E93')
@@ -153,7 +157,7 @@ export struct DownloadPage {
     Column({ space: 8 }) {
       // 头部：文件名和状态
       Row() {
-        Image($r('app.media.web')) // 文件图标占位
+        Image($r('app.media.download')) // 文件图标占位
           .width(32)
           .height(32)
           .fillColor('#007AFF')
@@ -175,8 +179,8 @@ export struct DownloadPage {
             if(item.isSavedToTarget) {
               Text('已保存')
                 .fontSize(10)
-                .fontColor("#FFFFFF")
-                .backgroundColor("324123")
+                .fontColor($r('sys.color.comp_background_list_card'))
+                .backgroundColor("#324123")
                 .padding({left: 4, right: 4, top: 1, bottom: 1})
                 .borderRadius(4)
             }
@@ -231,7 +235,10 @@ export struct DownloadPage {
     const result = await downloadManager.openDownloadItem(item);
 
     if(!result) {
-      promptAction.showToast({message: "Could't Open!!!"});
+      promptAction.openToast({message: "无法打开文件"})
+        .catch((err: BusinessError) => {
+          console.error('显示Toast失败:', err);
+        });
     }
   }
 
