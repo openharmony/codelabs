@@ -96,7 +96,7 @@ export default struct HealthConsultItemList {
   @Builder
   renderEmptyState() {
     Column() {
-      Image($r('app.media.icon')).width(60).opacity(0.2)
+      Image($r('app.media.startIcon')).width(60).opacity(0.2)
       // 4. 空状态文字适配
       Text('未找到相关健康知识')
         .fontSize(14 * this.fontScale)

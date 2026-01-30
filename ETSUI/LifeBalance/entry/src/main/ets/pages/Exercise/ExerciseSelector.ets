@@ -83,7 +83,7 @@ export struct ExerciseSelectorDialog {
       if (this.keyword.length > 0) {
         if (this.searchResults.length === 0) {
           Column() {
-            Image($r('app.media.icon'))
+            Image($r('app.media.startIcon'))
               .width(60)
               .opacity(0.2)
               .grayscale(1)
