@@ -407,7 +407,7 @@ export struct DietPage {
   @Builder
   FoodItemRow(item: DietRecord) {
     Row() {
-      Image($r('app.media.icon'))
+      Image($r('app.media.startIcon'))
         .width(40)
         .height(40)
         .backgroundColor('#F0F0F0')

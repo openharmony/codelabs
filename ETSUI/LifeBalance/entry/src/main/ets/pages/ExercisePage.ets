@@ -370,7 +370,7 @@ export struct ExercisePage {
   @Builder
   ExerciseItemRow(item: ExerciseRecord) {
     Row() {
-      Image($r('app.media.icon'))
+      Image($r('app.media.startIcon'))
         .width(40)
         .height(40)
         .backgroundColor('#F0F0F0')

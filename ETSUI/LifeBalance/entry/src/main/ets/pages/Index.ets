@@ -75,22 +75,22 @@ struct MainPage {
         this.tabItem(
           '饮水',
           1,
-          $r('app.media.icon')
+          $r('app.media.startIcon')
         )
         this.tabItem(
           '饮食',
           2,
-          $r('app.media.icon')
+          $r('app.media.startIcon')
         )
         this.tabItem(
           '运动',
           3,
-          $r('app.media.icon')
+          $r('app.media.startIcon')
         )
         this.tabItem(
           '咨询',
           4,
-          $r('app.media.icon')
+          $r('app.media.startIcon')
         )
       }
       .width('100%')
