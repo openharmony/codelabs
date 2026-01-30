@@ -33,7 +33,7 @@
 
 ### 硬件要求
 
-- **开发板类型**：润和 RK3568 开发板（或其他支持的 OpenHarmony 设备）
+- **开发板类型**：润和 RK3568 开发板（或兼容的 OpenHarmony 设备）
 - **OpenHarmony 系统**：5.0 Release 及以上
 
 ### 环境搭建步骤
@@ -42,7 +42,7 @@
 
 1. **搭建开发环境**
    - 参考 [工具准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-tools-overview-V5)，完成 DevEco Studio 的安装和开发环境配置
-   - 开发环境配置完成后，参考 [使用工程向导创建工程](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-create-new-project-V5)（模板选择 "Empty Ability"）
+   - 开发环境配置完成后，参考 [创建新项目](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-create-new-project-V5)（模板选择 "Empty Ability"）
 
 2. **获取项目代码**
    ```bash
