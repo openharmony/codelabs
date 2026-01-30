@@ -2,6 +2,7 @@ import { ChatList } from '../components/ChatList'
 import { Contact } from '../components/Contact'
 import { Post } from '../components/Post'
 import { Profile } from '../components/Profile'
+
 @Entry
 @Component
 struct Main {
@@ -14,7 +15,7 @@ struct Main {
     }
   }
 
-  @Builder buildTabBar(title: string, normalImage: Resource, selectedImage: Resource, index: number) {
+  @Builder buildTabBar(title: Resource, normalImage: Resource, selectedImage: Resource, index: number) {
     Column() {
       Image(this.curIndex == index ? selectedImage : normalImage)
         .width(28)
@@ -31,19 +32,19 @@ struct Main {
     Tabs() {
       TabContent() {
         ChatList()
-      }.tabBar(this.buildTabBar('聊天', $r("app.media.main_0_normal"), $r("app.media.main_0_select"), 0))
+      }.tabBar(this.buildTabBar($r("app.string.tab_chat"), $r("app.media.main_0_normal"), $r("app.media.main_0_select"), 0))
 
       TabContent() {
         Contact()
-      }.tabBar(this.buildTabBar('通讯录', $r("app.media.main_1_normal"), $r("app.media.main_1_select"), 1))
+      }.tabBar(this.buildTabBar($r("app.string.tab_contacts"), $r("app.media.main_1_normal"), $r("app.media.main_1_select"), 1))
 
       TabContent() {
         Post()
-      }.tabBar(this.buildTabBar('动态', $r("app.media.main_2_normal"), $r("app.media.main_2_select"), 2))
+      }.tabBar(this.buildTabBar($r("app.string.tab_moments"), $r("app.media.main_2_normal"), $r("app.media.main_2_select"), 2))
 
       TabContent() {
         Profile()
-      }.tabBar(this.buildTabBar('我', $r("app.media.main_3_normal"), $r("app.media.main_3_select"), 3))
+      }.tabBar(this.buildTabBar($r("app.string.label_me"), $r("app.media.main_3_normal"), $r("app.media.main_3_select"), 3))
 
     }.width('100%')
     .height('100%')

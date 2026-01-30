@@ -1,4 +1,3 @@
-// entry/src/main/ets/pages/Contact.ets
 import { router, promptAction } from '@kit.ArkUI';
 import { ContactGroup } from './ContactGroup'
 import { NavTitle } from './NavTitle'
@@ -7,7 +6,6 @@ import { UserModel } from '../viewmodel/UserModel';
 import { dbManager } from '../utils/DatabaseManager';
 import { emitter } from '@kit.BasicServicesKit';
 import { PINYIN_MAP } from '../utils/PinyinData';
-import Message from '../viewmodel/Message'; // 确保导入 Message 接口
 
 @Component
 export struct Contact {
@@ -91,7 +89,7 @@ export struct Contact {
 
   // 修改 image 类型为 ResourceStr 以匹配数据库路径和本地资源
   @Builder
-  buildItem(image: ResourceStr, title: string, onClick?: () => void) {
+  buildItem(image: ResourceStr, title: ResourceStr, onClick?: () => void) {
     Row() {
       Image(image)
         .width(40)
@@ -118,7 +116,7 @@ export struct Contact {
   }
 
   @Builder
-  buildListItemHeader(index: string) {
+  buildListItemHeader(index: ResourceStr) {
     Row() {
       Text(index)
         .fontWeight(700)
@@ -133,24 +131,24 @@ export struct Contact {
   build() {
     Stack({ alignContent: Alignment.End }) {
       Column() {
-        NavTitle({ title: '通讯录' })
+        NavTitle({ title: $r("app.string.tab_contacts") })
 
         List({ scroller: this.scroller }) {
           // 1. 固定功能项
           ListItemGroup() {
             ListItem() {
               Column() {
-                this.buildItem($r('app.media.new_friend'), '新的朋友', () => {
+                this.buildItem($r('app.media.new_friend'), $r('app.string.label_new_friends'), () => {
                   router.pushUrl({ url: 'pages/NewFriends' })
                 })
-                this.buildItem($r('app.media.group_chat'), '群聊', () => {
-                  promptAction.showToast({ message: '此功能尚未开发' });
+                this.buildItem($r('app.media.group_chat'), $r('app.string.label_group_chat'), () => {
+                  promptAction.showToast({ message: $r('app.string.toast_not_developed') });
                 })
-                this.buildItem($r('app.media.tag'), '标签', () => {
-                  promptAction.showToast({ message: '此功能尚未开发' });
+                this.buildItem($r('app.media.tag'), $r('app.string.label_tags'), () => {
+                  promptAction.showToast({ message: $r('app.string.toast_not_developed') });
                 })
-                this.buildItem($r('app.media.official_account'), '公众号', () => {
-                  promptAction.showToast({ message: '此功能尚未开发' });
+                this.buildItem($r('app.media.official_account'), $r('app.string.label_official_accounts'), () => {
+                  promptAction.showToast({ message: $r('app.string.toast_not_developed') });
                 })
               }
             }
@@ -193,7 +191,7 @@ export struct Contact {
                 }
               }, (item: ContactModel) => item.phoneNumber)
             }
-          }, (item: ContactGroup) => item.index)
+          }, (item: ContactGroup) => item.index.toString())
         }
         .width('100%')
         .layoutWeight(1)
@@ -206,7 +204,7 @@ export struct Contact {
       // 3. 索引栏
       if (this.contactGroups.length > 0) {
         AlphabetIndexer({
-          arrayValue: this.contactGroups.map(g => g.index),
+          arrayValue: this.contactGroups.map(g => g.index.toString()),
           selected: 0
         })
           .color(Color.Black)

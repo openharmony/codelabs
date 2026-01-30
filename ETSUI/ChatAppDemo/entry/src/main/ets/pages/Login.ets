@@ -1,4 +1,4 @@
-import { router, Prompt } from '@kit.ArkUI';
+import { router, Prompt, promptAction } from '@kit.ArkUI';
 import { dbManager } from '../utils/DatabaseManager';
 import { UserModel } from '../viewmodel/UserModel';
 
@@ -14,29 +14,29 @@ struct Login {
 
   build() {
     Column({ space: 20 }) {
-      Text('欢迎登录')
+      Text($r('app.string.title_welcome_login'))
         .fontSize(30)
         .fontWeight(FontWeight.Bold)
         .margin({ top: 50, bottom: 30 })
 
-      TextInput({ placeholder: '请输入手机号', text: this.phoneNumber })
+      TextInput({ placeholder: $r('app.string.hint_enter_phone'), text: this.phoneNumber })
         .type(InputType.PhoneNumber)
         .onChange((v) => this.phoneNumber = v)
         .width('90%')
 
-      TextInput({ placeholder: '请输入密码', text: this.password })
+      TextInput({ placeholder: $r('app.string.hint_enter_pwd'), text: this.password })
         .type(InputType.Password)
         .onChange((v) => this.password = v)
         .width('90%')
 
-      Button('登录')
+      Button($r('app.string.btn_login'))
         .width('90%')
         .height(50)
         .onClick(async () => {
           await this.handleLogin();
         })
 
-      Text('还没有账号？点击注册')
+      Text($r('app.string.btn_go_register'))
         .fontColor(Color.Blue)
         .onClick(() => {
           router.pushUrl({ url: 'pages/Register' });
@@ -48,27 +48,38 @@ struct Login {
 
   async handleLogin() {
     if (this.phoneNumber === '' || this.password === '') {
-      Prompt.showToast({ message: '请填写完整信息' });
+      //Prompt.showToast({ message: $r('app.string.toast_fill_complete').toString() });
+      promptAction.showToast({
+        message: $r('app.string.toast_fill_complete'),
+        duration: 2000
+      });
       return;
     }
 
-    // 1. 从数据库查询用户
+    // 从数据库查询用户
     const user = await dbManager.user?.queryUserByPhone(this.phoneNumber);
 
     if (user && user.password === this.password) {
-      // 2. 登录成功：更新 AppStorage
+      // 登录成功：更新 AppStorage
       // 这行代码执行后，currentUser 就不再是 null，PersistentStorage 会同步将其存入磁盘
       this.currentUser = user;
 
-      Prompt.showToast({ message: '登录成功' });
-
-      // 3. 跳转到主页 (假设路径为 pages/Index)
+      // Prompt.showToast({ message: $r('app.string.toast_login_success').toString() });
+      promptAction.showToast({
+        message: $r('app.string.toast_login_success'),
+        duration: 2000
+      });
+      // 跳转到主页
       setTimeout(() => {
         router.replaceUrl({ url: 'pages/Main' });
       }, 1000);
 
     } else {
-      Prompt.showToast({ message: '手机号或密码错误' });
+      //Prompt.showToast({ message: $r('app.string.toast_login_fail').toString() });
+      promptAction.showToast({
+        message: $r('app.string.toast_login_fail'),
+        duration: 2000
+      });
     }
   }
 }

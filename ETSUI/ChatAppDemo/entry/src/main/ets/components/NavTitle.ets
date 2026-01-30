@@ -1,6 +1,6 @@
 @Component
 export struct NavTitle {
-  @Prop title: string
+  @Prop title: Resource
   build() {
     Row() {
       Text(this.title)

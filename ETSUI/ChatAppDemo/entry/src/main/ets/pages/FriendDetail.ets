@@ -27,7 +27,7 @@ struct FriendDetail {
     // 发送信号刷新通讯录 (10001)
     emitter.emit({ eventId: 10001 });
 
-    promptAction.showToast({ message: '已成功删除好友' });
+    promptAction.showToast({ message: $r('app.string.toast_friend_deleted') });
     router.back();
   }
 
@@ -46,11 +46,11 @@ struct FriendDetail {
           .width(70).height(70).borderRadius(10)
 
         Column() {
-          Text(this.friend?.nickName || '未知用户')
+          Text(this.friend?.nickName || $r('app.string.label_unknown_user'))
             .fontSize(22).fontWeight(FontWeight.Bold)
           Text(`手机号: ${this.friend?.phoneNumber || ''}`)
             .fontSize(14).fontColor(Color.Gray).margin({ top: 5 })
-          Text(`地区: ${this.friend?.country || '未知'}`)
+          Text(`地区: ${this.friend?.country || $r('app.string.label_unknown')}`)
             .fontSize(14).fontColor(Color.Gray).margin({ top: 2 })
         }
         .alignItems(HorizontalAlign.Start).margin({ left: 20 })
@@ -62,7 +62,7 @@ struct FriendDetail {
       // 3. 底部功能按钮
       Column() {
         // 发消息按钮
-        Button('发消息', { type: ButtonType.Normal })
+        Button($r('app.string.btn_send_msg'), { type: ButtonType.Normal })
           .width('100%').height(50).backgroundColor(Color.White)
           .fontColor('#576B95').fontWeight(600)
           .onClick(() => {
@@ -82,7 +82,7 @@ struct FriendDetail {
         Divider().color('#F1F3F5').strokeWidth(1).margin({ left: 20, right: 20 })
 
         // 删除好友按钮
-        Button('删除好友', { type: ButtonType.Normal })
+        Button($r('app.string.btn_delete_friend'), { type: ButtonType.Normal })
           .width('100%').height(50).backgroundColor(Color.White)
           .fontColor('#FA5151').fontWeight(600)
           .onClick(() => {

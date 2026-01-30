@@ -21,18 +21,18 @@ export struct LocationPickerDialog {
     Column() {
       // 头部操作栏
       Row() {
-        Text('取消')
+        Text($r('app.string.btn_cancel'))
           .fontSize(16)
           .fontColor(Color.Grey)
           .onClick(() => {
             this.controller.close()
           })
 
-        Text('选择地区')
+        Text($r('app.string.title_select_region'))
           .fontSize(18)
           .fontWeight(FontWeight.Medium)
 
-        Text('确定')
+        Text($r('app.string.btn_confirm'))
           .fontSize(16)
           .fontColor(Color.Blue)
           .onClick(() => {

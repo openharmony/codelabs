@@ -2,6 +2,7 @@ import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.Ab
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { dbManager } from '../utils/DatabaseManager';
+import { I18nManager } from '../common/I18nManager';
 
 const DOMAIN = 0x0000;
 
@@ -11,7 +12,8 @@ export default class EntryAbility extends UIAbility {
     // 开启持久化：将 AppStorage 中的 'currentUser' 链接到磁盘
     // 自动处理数据的存取
     PersistentStorage.persistProp('currentUser', null);
-
+    // 启动时加载持久化的语言设置
+    I18nManager.initLanguage();
     try {
       dbManager.initDB(this.context);
       hilog.info(DOMAIN, 'testTag', 'Database initialized in EntryAbility');

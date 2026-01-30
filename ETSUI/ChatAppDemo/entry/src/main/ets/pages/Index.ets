@@ -11,7 +11,7 @@ struct Index {
         .height('80%')
 
       Row() {
-        Button('登录')
+        Button($r('app.string.btn_login'))
           .commonBtn()
           .backgroundColor(Color.Green)
           .fontColor(Color.White)
@@ -21,7 +21,7 @@ struct Index {
             })
           })
 
-        Button('注册')
+        Button($r('app.string.btn_register'))
           .commonBtn()
           .backgroundColor(Color.White)
           .fontColor(Color.Grey)

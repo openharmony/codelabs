@@ -14,7 +14,7 @@ struct Settings {
             router.back()
           })
 
-        Text('设置')
+        Text($r('app.string.label_settings'))
           .fontSize(20)
           .fontWeight(FontWeight.Bold)
           .margin({ left: 16 })
@@ -30,21 +30,21 @@ struct Settings {
       List() {
         // 切换语言
         ListItem() {
-          this.SettingItem('多语言切换', () => {
+          this.SettingItem($r('app.string.btn_lang_switch'), () => {
             router.pushUrl({ url: 'pages/LanguageSettings' })
           })
         }
 
         // 修改密码
         ListItem() {
-          this.SettingItem('修改密码', () => {
+          this.SettingItem($r('app.string.title_change_pwd'), () => {
             router.pushUrl({ url: 'pages/ChangePassword' })
           })
         }
 
         // 关于我们
         ListItem() {
-          this.SettingItem('关于我们', () => {
+          this.SettingItem($r('app.string.label_about_us'), () => {
             // 暂时留空或弹个窗
             router.pushUrl({ url: 'pages/AboutUs' })
           })
@@ -61,7 +61,7 @@ struct Settings {
   }
 
   // 封装设置项组件
-  @Builder SettingItem(title: string, action: () => void) {
+  @Builder SettingItem(title: ResourceStr, action: () => void) {
     Row() {
       Text(title)
         .fontSize(16)

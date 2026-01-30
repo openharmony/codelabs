@@ -13,6 +13,7 @@
     "pages/Settings",
     "pages/ChangePassword",
     "pages/EditProfile",
-    "pages/FriendDetail"
+    "pages/FriendDetail",
+    "pages/LanguageSettings"
   ]
 }
