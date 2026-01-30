@@ -11,6 +11,7 @@
  * limitations under the License.
  */
 
+// StepManager.ets - 步数记录管理器
 import { StepDao } from '../dao/StepDao';
 import { StepRecord, StepStats, StepResult, StepTrend, StepGoal } from '../model/StepModel';
 import common from '@ohos.app.ability.common';

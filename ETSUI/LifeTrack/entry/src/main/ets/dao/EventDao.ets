@@ -15,7 +15,8 @@
 import relationalStore from '@ohos.data.relationalStore';
 import common from '@ohos.app.ability.common';
 import { CalendarEvent } from '../model/EventModel';
-import { DATABASE_CONFIG, SQL_CREATE_EVENTS_TABLE, SQL_CREATE_INDEXES } from './DatabaseConfig';
+import { EventInstance } from '../model/EventTypes';
+import { DATABASE_CONFIG, SQL_CREATE_EVENTS_TABLE, SQL_CREATE_INDEXES, SQL_CREATE_EVENT_INSTANCES_TABLE, SQL_CREATE_INSTANCE_INDEXES } from './DatabaseConfig';
 import util from '@ohos.util';
 
 export class EventDao {
@@ -35,11 +36,19 @@ export class EventDao {
     try {
       this.rdbStore = await relationalStore.getRdbStore(this.context, DATABASE_CONFIG);
 
-      // 创建表
+      // 创建表（主事件）
       await this.rdbStore.executeSql(SQL_CREATE_EVENTS_TABLE);
+
+      // 创建事件实例表
+      await this.rdbStore.executeSql(SQL_CREATE_EVENT_INSTANCES_TABLE);
 
       // 创建索引
       for (const sql of SQL_CREATE_INDEXES) {
+        await this.rdbStore.executeSql(sql);
+      }
+
+      // 创建实例表索引
+      for (const sql of SQL_CREATE_INSTANCE_INDEXES) {
         await this.rdbStore.executeSql(sql);
       }
 
@@ -71,6 +80,21 @@ export class EventDao {
     };
   }
 
+  // 将 EventInstance 转换为数据库值对象
+  private instanceToValueBucket(instance: EventInstance): relationalStore.ValuesBucket {
+    const now = Date.now();
+    return {
+      id: instance.id,
+      original_id: instance.originalId,
+      title: instance.title,
+      description: instance.description || '',
+      instance_time: instance.instanceTime,
+      completed: instance.completed ? 1 : 0,
+      created_time: now,
+      updated_time: now
+    };
+  }
+
   // 将数据库行转换为Event对象
   private rowToEvent(resultSet: relationalStore.ResultSet): CalendarEvent {
     return {
@@ -88,6 +112,18 @@ export class EventDao {
       completed: resultSet.getLong(resultSet.getColumnIndex('completed')) === 1,
       created: resultSet.getLong(resultSet.getColumnIndex('created_time')),
       updated: resultSet.getLong(resultSet.getColumnIndex('updated_time'))
+    };
+  }
+
+  // 将数据库行转换为 EventInstance 对象
+  private rowToEventInstance(resultSet: relationalStore.ResultSet): EventInstance {
+    return {
+      id: resultSet.getString(resultSet.getColumnIndex('id')),
+      originalId: resultSet.getString(resultSet.getColumnIndex('original_id')),
+      title: resultSet.getString(resultSet.getColumnIndex('title')),
+      description: resultSet.getString(resultSet.getColumnIndex('description')),
+      instanceTime: resultSet.getLong(resultSet.getColumnIndex('instance_time')),
+      completed: resultSet.getLong(resultSet.getColumnIndex('completed')) === 1
     };
   }
 
@@ -150,6 +186,39 @@ export class EventDao {
     }
   }
 
+  // 批量保存事件实例
+  async saveEventInstances(instances: EventInstance[]): Promise<boolean> {
+    if (instances.length === 0) {
+      return true;
+    }
+
+    const rdbStore = await this.initDatabase();
+
+    try {
+      await rdbStore.beginTransaction();
+
+      for (const instance of instances) {
+        const valueBucket = this.instanceToValueBucket(instance);
+        const predicates = new relationalStore.RdbPredicates('event_instances');
+        predicates.equalTo('id', instance.id);
+
+        const updated = await rdbStore.update(valueBucket, predicates);
+        if (updated === 0) {
+          await rdbStore.insert('event_instances', valueBucket);
+        }
+      }
+
+      await rdbStore.commit();
+      console.info(`Successfully saved ${instances.length} event instances`);
+      return true;
+
+    } catch (err) {
+      await rdbStore.rollback(0);
+      console.error(`Failed to save event instances: ${JSON.stringify(err)}`);
+      return false;
+    }
+  }
+
   // 根据ID查询单个日程
   async getEventById(id: string): Promise<CalendarEvent | null> {
     const rdbStore = await this.initDatabase();
@@ -177,6 +246,34 @@ export class EventDao {
     } catch (err) {
       console.error(`Failed to get event by id ${id}: ${JSON.stringify(err)}`);
       return null;
+    }
+  }
+
+  // 根据原始事件ID获取所有实例
+  async getEventInstancesByOriginalId(originalId: string): Promise<EventInstance[]> {
+    const rdbStore = await this.initDatabase();
+    const instances: EventInstance[] = [];
+
+    try {
+      const predicates = new relationalStore.RdbPredicates('event_instances');
+      predicates.equalTo('original_id', originalId);
+      predicates.orderByAsc('instance_time');
+
+      const resultSet = await rdbStore.query(
+        predicates,
+        ['id', 'original_id', 'title', 'description', 'instance_time', 'completed']
+      );
+
+      while (await resultSet.goToNextRow()) {
+        instances.push(this.rowToEventInstance(resultSet));
+      }
+
+      resultSet.close();
+      return instances;
+
+    } catch (err) {
+      console.error(`Failed to get event instances: ${JSON.stringify(err)}`);
+      return [];
     }
   }
 
@@ -211,6 +308,53 @@ export class EventDao {
     }
   }
 
+  // 获取某个时间范围内的实例
+  async getEventInstancesByDateRange(startDate: number, endDate: number): Promise<EventInstance[]> {
+    const rdbStore = await this.initDatabase();
+    const instances: EventInstance[] = [];
+
+    try {
+      const predicates = new relationalStore.RdbPredicates('event_instances');
+      predicates.greaterThanOrEqualTo('instance_time', startDate);
+      predicates.lessThanOrEqualTo('instance_time', endDate);
+      predicates.orderByAsc('instance_time');
+
+      const resultSet = await rdbStore.query(
+        predicates,
+        ['id', 'original_id', 'title', 'description', 'instance_time', 'completed']
+      );
+
+      while (await resultSet.goToNextRow()) {
+        instances.push(this.rowToEventInstance(resultSet));
+      }
+
+      resultSet.close();
+      return instances;
+
+    } catch (err) {
+      console.error(`Failed to get event instances by date range: ${JSON.stringify(err)}`);
+      return [];
+    }
+  }
+
+  // 删除指定原始事件的所有实例
+  async deleteEventInstancesByOriginalId(originalId: string): Promise<boolean> {
+    const rdbStore = await this.initDatabase();
+
+    try {
+      const predicates = new relationalStore.RdbPredicates('event_instances');
+      predicates.equalTo('original_id', originalId);
+
+      const deletedRows = await rdbStore.delete(predicates);
+      console.info(`Deleted ${deletedRows} event instances for original event: ${originalId}`);
+      return deletedRows > 0;
+
+    } catch (err) {
+      console.error(`Failed to delete event instances: ${JSON.stringify(err)}`);
+      return false;
+    }
+  }
+
   // 删除日程
   async deleteEvent(id: string): Promise<boolean> {
     const rdbStore = await this.initDatabase();
@@ -224,6 +368,23 @@ export class EventDao {
 
     } catch (err) {
       console.error(`Failed to delete event ${id}: ${JSON.stringify(err)}`);
+      return false;
+    }
+  }
+
+  // 删除指定实例
+  async deleteEventInstance(instanceId: string): Promise<boolean> {
+    const rdbStore = await this.initDatabase();
+
+    try {
+      const predicates = new relationalStore.RdbPredicates('event_instances');
+      predicates.equalTo('id', instanceId);
+
+      const deletedRows = await rdbStore.delete(predicates);
+      return deletedRows > 0;
+
+    } catch (err) {
+      console.error(`Failed to delete event instance: ${JSON.stringify(err)}`);
       return false;
     }
   }
@@ -283,4 +444,60 @@ export class EventDao {
       return false;
     }
   }
+
+  // 更新实例完成状态
+  async updateEventInstanceCompletion(instanceId: string, completed: boolean): Promise<boolean> {
+    const rdbStore = await this.initDatabase();
+
+    try {
+      await rdbStore.beginTransaction();
+
+      const valueBucket: relationalStore.ValuesBucket = {
+        completed: completed ? 1 : 0,
+        updated_time: Date.now()
+      };
+
+      const predicates = new relationalStore.RdbPredicates('event_instances');
+      predicates.equalTo('id', instanceId);
+
+      const updated = await rdbStore.update(valueBucket, predicates);
+      await rdbStore.commit();
+
+      return updated > 0;
+
+    } catch (err) {
+      await rdbStore.rollback(0);
+      console.error(`Failed to update event instance completion: ${JSON.stringify(err)}`);
+      return false;
+    }
+  }
+
+  // 获取所有未完成的实例
+  async getPendingEventInstances(): Promise<EventInstance[]> {
+    const rdbStore = await this.initDatabase();
+    const instances: EventInstance[] = [];
+
+    try {
+      const predicates = new relationalStore.RdbPredicates('event_instances');
+      predicates.equalTo('completed', 0);
+      predicates.orderByAsc('instance_time');
+
+      const resultSet = await rdbStore.query(
+        predicates,
+        ['id', 'original_id', 'title', 'description', 'instance_time', 'completed']
+      );
+
+      while (await resultSet.goToNextRow()) {
+        instances.push(this.rowToEventInstance(resultSet));
+      }
+
+      resultSet.close();
+      return instances;
+
+    } catch (err) {
+      console.error(`Failed to get pending event instances: ${JSON.stringify(err)}`);
+      return [];
+    }
+  }
 }
+

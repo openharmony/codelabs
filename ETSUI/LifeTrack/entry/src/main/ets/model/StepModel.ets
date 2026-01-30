@@ -12,6 +12,7 @@
  */
 
 // StepModel.ets - 步数记录数据模型
+import { OperationResult } from './ContactModel';
 
 // 步数记录接口
 export interface StepRecord {

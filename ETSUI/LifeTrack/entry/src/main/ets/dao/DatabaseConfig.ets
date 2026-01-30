@@ -40,11 +40,34 @@ export const SQL_CREATE_EVENTS_TABLE = `
   )
 `;
 
+// 事件实例表SQL（新增）
+export const SQL_CREATE_EVENT_INSTANCES_TABLE = `
+  CREATE TABLE IF NOT EXISTS event_instances (
+    id TEXT PRIMARY KEY,
+    original_id TEXT NOT NULL,
+    title TEXT NOT NULL,
+    description TEXT,
+    instance_time INTEGER NOT NULL,
+    completed INTEGER DEFAULT 0,
+    created_time INTEGER NOT NULL,
+    updated_time INTEGER NOT NULL,
+    FOREIGN KEY (original_id) REFERENCES calendar_events(id) ON DELETE CASCADE
+  )
+`;
+
+
 // 创建索引提高查询性能
 export const SQL_CREATE_INDEXES = [
   `CREATE INDEX IF NOT EXISTS idx_start_time ON calendar_events(start_time)`,
   `CREATE INDEX IF NOT EXISTS idx_calendar_id ON calendar_events(calendar_id)`,
   `CREATE INDEX IF NOT EXISTS idx_completed ON calendar_events(completed)`
+];
+
+// 事件实例表索引（新增）
+export const SQL_CREATE_INSTANCE_INDEXES = [
+  `CREATE INDEX IF NOT EXISTS idx_instance_original_id ON event_instances(original_id)`,
+  `CREATE INDEX IF NOT EXISTS idx_instance_time ON event_instances(instance_time)`,
+  `CREATE INDEX IF NOT EXISTS idx_instance_completed ON event_instances(completed)`
 ];
 
 // 步数记录表SQL

@@ -11,6 +11,7 @@
  * limitations under the License.
  */
 
+// StepTrackerPage.ets - 步数记录页面
 import { StepManager } from './StepManager';
 import { StepRecord, StepTrend } from '../model/StepModel';
 import common from '@ohos.app.ability.common';
@@ -687,6 +688,27 @@ struct StepTracker {
 
   build() {
     NavDestination() {
+      Row({ space: 0 }){
+        // 返回按钮
+        Button('返回')
+          .fontSize(16)
+          .fontColor('#007AFF')
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            this.pathStack.replacePathByName("Dashboard", null, false)
+          })
+        Text('步数记录')
+          .fontSize(18)
+          .fontWeight(FontWeight.Medium)
+          .layoutWeight(1)
+          .textAlign(TextAlign.Center)
+        Blank()
+          .width(54)
+      }
+      .padding({ left: 6, right: 6, top: 10, bottom: 10 })
+      .width('100%')
+      .backgroundColor(Color.White)
+
       Scroll() {
         Column({ space: 16 }) {
           // 今日统计
@@ -750,7 +772,7 @@ struct StepTracker {
       // 目标设置弹窗
       this.buildGoalSettingDialog()
     }
-    .title('步数记录')
+    .hideBackButton(true)
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack;
     })

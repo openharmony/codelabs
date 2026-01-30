@@ -331,7 +331,7 @@ struct Contact {
       initial: ''
     }
     console.log('添加联系人')
-    this.pathStack.pushPathByName("ContactEdit", contact, false)
+    this.pathStack.replacePathByName("ContactEdit", contact, false)
   }
 
   // 编辑联系人
@@ -342,7 +342,7 @@ struct Contact {
     }
 
     console.log('编辑联系人:', this.selectedContact.name)
-    this.pathStack.pushPathByName("ContactEdit", this.selectedContact, false)
+    this.pathStack.replacePathByName("ContactEdit", this.selectedContact, false)
   }
 
   // 删除联系人
@@ -390,7 +390,7 @@ struct Contact {
             .fontColor('#007AFF')
             .backgroundColor(Color.Transparent)
             .onClick(() => {
-              this.pathStack.pushPathByName("Dashboard", null, false)
+              this.pathStack.replacePathByName("Dashboard", null, false)
             })
           Text('联系人')
             .fontSize(18)

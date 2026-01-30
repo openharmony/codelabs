@@ -11,7 +11,7 @@
  * limitations under the License.
  */
 
-// 事件数据模型
+// Event.ts
 export interface CalendarEvent {
   id: string;           // 主键
   title: string;         // 标题

@@ -44,7 +44,7 @@ struct ContactEdit {
 
   // 返回上一页
   goBack() {
-    this.pathStack.pushPathByName('Contact', null, false);
+    this.pathStack.replacePathByName('Contact', null, false);
   }
 
   // 保存联系人

@@ -61,7 +61,7 @@
       },
       {
         "name": "ohos.permission.ACTIVITY_MOTION",
-        "reason": "$string:activity_motion_permission_reason",
+        "reason": "$string:motion_permission_reason",
         "usedScene": {
           "abilities": [
             "StepTracker"
@@ -78,6 +78,36 @@
           ],
           "when": "always"
         }
+      },
+      {
+        "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
+        "reason": "$string:reminder_permission_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.NOTIFICATION_CONTROLLER",
+        "reason": "$string:notification_permission_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "always"
+        }
+      },
+      {
+        "name": "ohos.permission.NOTIFICATION_AGENT_CONTROLLER",
+        "reason": "$string:notification_agent_reason",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "always"
+        }
       }
     ],
     "definePermissions": [
@@ -86,6 +116,18 @@
         "grantMode": "system_grant",
         "availableLevel": "system_core",
         "description": "允许应用在后台持续运行"
+      },
+      {
+        "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
+        "grantMode": "system_grant",
+        "availableLevel": "system_core",
+        "description": "允许应用发布代理提醒"
+      },
+      {
+        "name": "ohos.permission.NOTIFICATION_CONTROLLER",
+        "grantMode": "system_grant",
+        "availableLevel": "system_core",
+        "description": "允许应用控制通知"
       }
     ]
   }
