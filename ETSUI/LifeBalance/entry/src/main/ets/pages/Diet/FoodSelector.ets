@@ -19,10 +19,10 @@ import promptAction from '@ohos.promptAction';
 export struct FoodSelectorDialog {
   controller: CustomDialogController;
   @State currentCategoryIndex: number = 0;
-  @State selectedMeal: MealTime = MealTime.SNACK;
+  // 1. 【修改】改为 @Link，接收父组件传入的选中项
+  @Link selectedMeal: MealTime;
   @State expandedId: number = -1;
   @State count: number = 1;
-  // 1. 引入全局字体缩放
   @StorageProp('appFontScale') fontScale: number = 1.0;
   @State keyword: string = '';
   @State searchResults: FoodItem[] = [];
@@ -36,27 +36,8 @@ export struct FoodSelectorDialog {
   private mealTypes: MealTime[] = [
     MealTime.BREAKFAST, MealTime.LUNCH, MealTime.DINNER, MealTime.SNACK
   ];
-
   onConfirm: (item: FoodItem, count: number, meal: MealTime) => void = () => {
   };
-
-  aboutToAppear() {
-    this.selectedMeal = this.guessMealTime();
-  }
-
-  guessMealTime(): MealTime {
-    const hour = new Date().getHours();
-    if (hour >= 5 && hour < 10) {
-      return MealTime.BREAKFAST;
-    }
-    if (hour >= 10 && hour < 15) {
-      return MealTime.LUNCH;
-    }
-    if (hour >= 15 && hour < 20) {
-      return MealTime.DINNER;
-    }
-    return MealTime.SNACK;
-  }
 
   handleSearch(value: string) {
     this.keyword = value;
@@ -104,18 +85,15 @@ export struct FoodSelectorDialog {
         bottom: 10
       }).justifyContent(FlexAlign.SpaceBetween)
 
-      // 3. 【核心修复】搜索栏适配
+      // 3. 搜索栏适配
       Search({
         placeholder: '搜索食物名称...',
         value: this.keyword
       })
         .width('90%')
-        // 高度也需要随字体适度变大，否则字大了框装不下
         .height(40 * this.fontScale)
         .margin({ bottom: 10 })
-        // 【关键】设置输入文字大小
         .textFont({ size: 14 * this.fontScale })
-        // 【关键】设置提示文字（placeholder）大小
         .placeholderFont({ size: 14 * this.fontScale })
         .onChange((value) => {
           this.handleSearch(value);

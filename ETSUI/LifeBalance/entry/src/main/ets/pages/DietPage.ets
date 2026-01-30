@@ -14,26 +14,25 @@
  */
 import { DietRecord, FoodItem, MealTime } from '../model/DietModel';
 import { FoodSelectorDialog } from './Diet/FoodSelector';
-import { WeeklyData, WeekTrendDialog } from './Diet/WeekTrendChart'; // 确保这里引入正确
+import { WeeklyData, WeekTrendDialog } from './Diet/WeekTrendChart';
 import promptAction from '@ohos.promptAction';
 import { RdbManager } from '../common/database/RdbManager';
 import { DietRecordDao } from '../common/database/DietRecordDao';
-import { HealthDao } from '../common/database/HealthDao'; // 【新增】引入 HealthDao
+import { HealthDao } from '../common/database/HealthDao';
 import common from '@ohos.app.ability.common';
 
 @Component
 export struct DietPage {
   @State dietRecords: DietRecord[] = [];
-  // 【修改】原有的 targetCalories 改名为 globalTarget，仅作为“今天”的兜底值
   @StorageProp('targetCalories') currentGlobalTarget: number = 2000;
-  // 【新增】界面真正显示的“当日目标”，随日期变化
   @State dailyTarget: number = 2000;
-  // 【新增】引入年龄和性别，用于现场计算 BMR
   @StorageProp('userAge') userAge: number = 25;
   @StorageProp('isMale') isMale: boolean = true;
   @State selectedDate: Date = new Date();
   @StorageProp('appFontScale') fontScale: number = 1.0;
   @State weeklyStats: WeeklyData[] = [];
+  // 1. 【新增】用于控制弹窗默认选中的餐别
+  @State currentSelectedMeal: MealTime = MealTime.SNACK;
   trendDialogController: CustomDialogController = new CustomDialogController({
     builder: WeekTrendDialog({
       weeklyData: this.weeklyStats,
@@ -46,6 +45,8 @@ export struct DietPage {
   });
   addDialogController: CustomDialogController = new CustomDialogController({
     builder: FoodSelectorDialog({
+      // 2. 【修改】将状态变量传给弹窗，实现父子同步
+      selectedMeal: $currentSelectedMeal,
       onConfirm: (item: FoodItem, count: number, meal: MealTime): Promise<void> => this.addRecord(item, count, meal)
     }),
     alignment: DialogAlignment.Bottom,
@@ -57,7 +58,7 @@ export struct DietPage {
     autoCancel: true
   });
   private dietDao: DietRecordDao = new DietRecordDao();
-  private healthDao: HealthDao = new HealthDao(); // 【新增】实例化
+  private healthDao: HealthDao = new HealthDao();
 
   getTodayStr(): string {
     const now = new Date();
@@ -65,6 +66,21 @@ export struct DietPage {
     const m = (now.getMonth() + 1).toString().padStart(2, '0');
     const d = now.getDate().toString().padStart(2, '0');
     return `${y}-${m}-${d}`;
+  }
+
+  // 3. 【新增】原 FoodSelectorDialog 里的猜测逻辑移到这里
+  guessMealTime(): MealTime {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 10) {
+      return MealTime.BREAKFAST;
+    }
+    if (hour >= 10 && hour < 15) {
+      return MealTime.LUNCH;
+    }
+    if (hour >= 15 && hour < 20) {
+      return MealTime.DINNER;
+    }
+    return MealTime.SNACK;
   }
 
   async aboutToAppear() {
@@ -77,51 +93,33 @@ export struct DietPage {
     this.refreshData();
   }
 
-  // 【核心修改】刷新数据逻辑
   async refreshData() {
     const dateStr = this.getSelectedDateStr();
-
-    // 1. 加载饮食记录
     this.dietRecords = await this.dietDao.getRecordsByDate(dateStr);
-
-    // 2. 加载当天的健康档案（为了获取历史的目标值）
     const healthData = await this.healthDao.getHealthByDate(dateStr);
 
     if (healthData) {
-      // 场景A：当天已经归档了目标热量，直接用
       if (healthData.targetCalories > 0) {
         this.dailyTarget = healthData.targetCalories;
-      }
-      // 场景B：当天有记录，但目标是0（可能是只记了水，还没生成目标），尝试补救计算
-      else if (healthData.weight > 0 && healthData.height > 0) {
-        // 现场计算公式：BMR * 1.2
+      } else if (healthData.weight > 0 && healthData.height > 0) {
         this.dailyTarget = this.calculateTarget(healthData.weight, healthData.height);
       } else {
-        this.dailyTarget = 0; // 有记录但无效
+        this.dailyTarget = 0;
       }
     } else {
-      // 场景C：当天完全没有健康档案
-      const now = new Date();
-      const y = now.getFullYear();
-      const m = (now.getMonth() + 1).toString().padStart(2, '0');
-      const d = now.getDate().toString().padStart(2, '0');
-      const todayStr = `${y}-${m}-${d}`;
+      const todayStr = this.getTodayStr();
       if (dateStr === todayStr) {
-        // 如果是今天，就用当前的全局目标
         this.dailyTarget = this.currentGlobalTarget;
       } else {
-        // 如果是过去/未来且无记录，显示0
         this.dailyTarget = 0;
       }
     }
   }
 
-  // 【新增】辅助计算函数 (Mifflin-St Jeor 公式)
   calculateTarget(weight: number, height: number): number {
-    // BMR = 10*W + 6.25*H - 5*A + (5 or -161)
     let bmr = 10 * weight + 6.25 * height - 5 * this.userAge;
     bmr += this.isMale ? 5 : -161;
-    return Math.round(bmr * 1.2); // 假设静坐少动系数 1.2
+    return Math.round(bmr * 1.2);
   }
 
   async openWeekTrend() {
@@ -192,7 +190,7 @@ export struct DietPage {
   build() {
     Column() {
       this.DateNavigator()
-      this.DashboardCard() // 卡片现在会使用 this.dailyTarget
+      this.DashboardCard()
 
       Scroll() {
         Column({ space: 20 }) {
@@ -227,6 +225,8 @@ export struct DietPage {
       })
       .backgroundColor('#007DFF')
       .onClick(() => {
+        // 4. 【修改】点击全局加号时，猜测一个餐别
+        this.currentSelectedMeal = this.guessMealTime();
         this.addDialogController.open();
       })
     }
@@ -303,13 +303,11 @@ export struct DietPage {
   DashboardCard() {
     Stack() {
       Column() {
-        // --- 上半部分：文字信息栏 ---
         Row() {
           Column() {
             Text('推荐上限 (kcal)')
               .fontSize(12 * this.fontScale)
               .fontColor('#EEE')
-            // 【修改】这里使用 dailyTarget，不再是全局的 targetCalories
             Text(`${this.dailyTarget}`)
               .fontSize(20 * this.fontScale)
               .fontWeight(FontWeight.Bold)
@@ -325,20 +323,16 @@ export struct DietPage {
             Text(`${this.getTotalIntake()}`)
               .fontSize(24 * this.fontScale)
               .fontWeight(FontWeight.Bold)
-              // 【修改】比较时也使用 dailyTarget
               .fontColor(this.getTotalIntake() > this.dailyTarget && this.dailyTarget > 0 ? '#FFCCC7' : Color.White)
           }
           .alignItems(HorizontalAlign.End)
         }
         .width('100%')
 
-        // --- 中间间距 ---
         Blank().height(15 * this.fontScale)
 
-        // --- 下半部分：进度条 ---
         Progress({
           value: this.getTotalIntake(),
-          // 【修改】防止除以0，如果 dailyTarget 是 0，进度条设为 1 或 0
           total: this.dailyTarget > 0 ? this.dailyTarget : 1,
           type: ProgressType.Linear
         })
@@ -398,6 +392,8 @@ export struct DietPage {
           .borderWidth(1)
           .borderColor('#EEE')
           .onClick(() => {
+            // 5. 【修改】点击特定餐别添加时，强制设置餐别
+            this.currentSelectedMeal = meal;
             this.addDialogController.open();
           })
       }
