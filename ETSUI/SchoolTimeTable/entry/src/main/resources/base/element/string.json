@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "课程表"
+    },
+    {
+      "name": "download_permission_reason",
+      "value": "需要访问下载目录以保存下载的文件"
+    },
+    {
+      "name": "file_access_permission_reason",
+      "value": "需要管理应用文件，提供文件操作功能"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "需要发送通知，以便及时向用户推送重要信息"
+    }
+  ]
+}
