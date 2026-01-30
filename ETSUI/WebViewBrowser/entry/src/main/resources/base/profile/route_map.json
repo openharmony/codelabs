@@ -31,6 +31,14 @@
       "data": {
         "description": "统计信息页面"
       }
+    },
+    {
+      "name": "DownloadPage",
+      "pageSourceFile": "src/main/ets/pages/DownloadPage.ets",
+      "buildFunction": "DownloadPageBuilder",
+      "data": {
+        "description": "下载管理页面"
+      }
     }
   ]
 }

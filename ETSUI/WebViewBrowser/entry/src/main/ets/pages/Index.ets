@@ -521,7 +521,7 @@ struct Index {
           Button() {
             Column() {
               Stack() {
-                Image($r('app.media.web'))
+                Image($r('app.media.download'))
                   .width(20)
                   .height(20)
                   .fillColor(this.darkMode ? '#FFFFFF' : '#666666')

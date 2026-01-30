@@ -120,6 +120,16 @@ export class DownloadManager {
 
     try {
       // 1. 确定文件名
+      // 如果提供了建议名称，先尝试解码
+      if (suggestedName) {
+        try {
+          suggestedName = decodeURIComponent(suggestedName);
+        } catch (decodeError) {
+          // 如果解码失败，使用原始名称
+          hilog.warn(DOMAIN, TAG, `Failed to decode suggested name: ${suggestedName}`);
+        }
+      }
+
       // 优先使用建议名称，否则从URL解析
       let rawFileName = suggestedName || this.getFileNameFromUrl(url);
 
@@ -362,6 +372,13 @@ export class DownloadManager {
       let name = parts[parts.length - 1];
       if (name.includes('?')) {
         name = name.split('?')[0];
+      }
+      // 解码URL编码的文件名（如中文字符）
+      try {
+        name = decodeURIComponent(name);
+      } catch (decodeError) {
+        // 如果解码失败，使用原始名称
+        hilog.warn(DOMAIN, TAG, `Failed to decode filename: ${name}`);
       }
       return name || `download_${Date.now()}`;
     } catch (e) {
