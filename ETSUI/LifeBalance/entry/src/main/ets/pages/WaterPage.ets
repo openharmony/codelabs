@@ -30,6 +30,7 @@ export struct WaterPage {
   @StorageProp('appFontScale') fontScale: number = 1.0;
   @State weeklyData: WaterChartData[] = [];
   @State selectedDate: Date = new Date();
+  @StorageProp('globalDataUpdate') @Watch('onUpdateData') updateSignal: number = 0;
   // 【修改点1】移除 @State 设置变量，改为内部固定常量
   dialogController: CustomDialogController | null = null;
   // 每天分为 6 个时段进行检查（约每2小时一次），防止频繁弹窗打扰
@@ -47,6 +48,10 @@ export struct WaterPage {
   private readonly BUTTON_RADIUS: number = 15;
   private readonly SHADOW_RADIUS: number = 4;
   private waterDao = new WaterDao();
+
+  onUpdateData() {
+    this.refreshData();
+  }
 
   getSelectedDateStr(): string {
     const y = this.selectedDate.getFullYear();

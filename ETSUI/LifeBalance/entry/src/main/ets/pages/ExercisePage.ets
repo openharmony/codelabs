@@ -49,6 +49,7 @@ export struct ExercisePage {
     customStyle: false,
     autoCancel: true
   });
+  @StorageProp('globalDataUpdate') @Watch('onUpdateData') updateSignal: number = 0;
   // 运动选择弹窗
   addDialogController: CustomDialogController = new CustomDialogController({
     builder: ExerciseSelectorDialog({
@@ -64,6 +65,12 @@ export struct ExercisePage {
   });
   private exerciseDao: ExerciseRecordDao = new ExerciseRecordDao();
   private healthDao: HealthDao = new HealthDao();
+
+  // 添加监听回调函数
+  onUpdateData() {
+    console.info('[ExercisePage] 监听到数据更新信号，正在刷新...');
+    this.refreshData(); // 重新加载数据库中的建议运动目标
+  }
 
   getTodayStr(): string {
     const now = new Date();

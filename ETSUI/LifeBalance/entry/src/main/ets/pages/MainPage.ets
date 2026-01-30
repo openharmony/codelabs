@@ -34,9 +34,9 @@ export struct Main {
   // --- 页面计算用的临时状态 ---
   @State bmi: number = 0
   // --- 全局链接 ---
-  @StorageLink('targetCalories') targetCalories: number = 2000
-  @StorageLink('targetWater') targetWater: number = 2000
-  @StorageLink('targetExercise') targetExercise: number = 2 // 单位为15min
+  @StorageLink('targetCalories') targetCalories: number = 0
+  @StorageLink('targetWater') targetWater: number = 0
+  @StorageLink('targetExercise') targetExercise: number = 0 // 单位为15min
   @StorageLink('healthHistory') historyData: Record<string, DailyData> = {}
   private healthDao = new HealthDao();
   private waterDao = new WaterDao();
@@ -92,6 +92,14 @@ export struct Main {
 
   // --- 核心算法 ---
   calculateAll() {
+    // 1. 增加前置校验：如果身高或体重未输入（为0），则所有目标归零
+    if (this.userHeight <= 0 || this.userWeight <= 0) {
+      this.bmi = 0;
+      this.targetCalories = 0;
+      this.targetWater = 0;
+      this.targetExercise = 0;
+      return;
+    }
     // 1. BMI 计算
     const h_meter = this.userHeight / 100
     if (h_meter > 0) {
@@ -250,7 +258,7 @@ export struct Main {
 
           Stack({ alignContent: Alignment.Bottom }) {
             Gauge({
-              value: this.bmi,
+              value: Math.min(this.bmi, 35), // 限制最大值为35，防止指针回弹
               min: 10,
               max: 35
             })

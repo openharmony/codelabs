@@ -36,8 +36,9 @@ export default class EntryAbility extends UIAbility {
     PersistentStorage.persistProp('user_height', 170);
     PersistentStorage.persistProp('user_weight', 65);
     PersistentStorage.persistProp('user_age', 25);
-    PersistentStorage.persistProp('targetCalories', 2000);
-    PersistentStorage.persistProp('targetWater', 2000);
+    PersistentStorage.persistProp('targetCalories', 0);
+    PersistentStorage.persistProp('targetWater', 0);
+    PersistentStorage.persistProp('targetExercise', 0); // 将初始值 2 改为 0
   }
 
 
