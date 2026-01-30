@@ -93,7 +93,7 @@ export struct Main {
   // --- 核心算法 ---
   calculateAll() {
     // 1. 增加前置校验：如果身高或体重未输入（为0），则所有目标归零
-    if (this.userHeight <= 0 || this.userWeight <= 0) {
+    if (this.userHeight < 50 || this.userWeight <= 0) {
       this.bmi = 0;
       this.targetCalories = 0;
       this.targetWater = 0;
@@ -447,33 +447,28 @@ struct InputRow {
 
   build() {
     Row() {
-      // label 标签字体适配
-      Text(this.label)
-        .fontSize(14 * this.fontScale)
-        .fontWeight(FontWeight.Medium)
+      Text(this.label).fontSize(14 * this.fontScale).fontWeight(FontWeight.Medium)
       Blank()
-      TextInput({ text: this.value.toString() })
+      // 修改点：如果 value 是 0，显示为空字符串，这样更符合“删除后为空”的体验
+      TextInput({ text: this.value === 0 ? '' : this.value.toString() })
         .type(InputType.Number)
         .textAlign(TextAlign.End)
         .backgroundColor(Color.Transparent)
-        .width(80 * this.fontScale) // 输入框宽度也可以适当伸缩
+        .width(80 * this.fontScale)
         .fontSize(16 * this.fontScale)
         .fontColor('#007DFF')
         .onChange((v) => {
+          // 修改点：如果输入为空，显式赋值为 0，从而触发 calculateAll 的拦截逻辑
           if (v === '') {
-            return
+            this.value = 0;
+            return;
           }
-          const num = Number(v)
+          const num = Number(v);
           if (!isNaN(num)) {
-            // 修改 Link 会触发父组件 Main 的 @Watch
-            this.value = num
+            this.value = num;
           }
         })
-      // 单位文本适配
-      Text(this.unit)
-        .fontSize(12 * this.fontScale)
-        .fontColor('#999')
-        .margin({ left: 5 })
+      Text(this.unit).fontSize(12 * this.fontScale).fontColor('#999').margin({ left: 5 })
     }
     .width('100%').height(50)
   }
