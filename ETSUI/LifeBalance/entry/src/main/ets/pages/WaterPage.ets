@@ -313,7 +313,7 @@ export struct WaterPage {
         .style({ strokeWidth: 20 * this.fontScale })
         .color(this.COLOR_PRIMARY)
       Column() {
-        Image($r('app.media.icon'))
+        Image($r('app.media.startIcon'))
           .width(40)
           .height(40)
           .margin({ bottom: 10 })
