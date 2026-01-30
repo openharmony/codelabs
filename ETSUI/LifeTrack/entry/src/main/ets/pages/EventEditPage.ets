@@ -11,15 +11,18 @@
  * limitations under the License.
  */
 
+// EventEditPage.ets
 import { DataManager } from './DataManager';
 import { CalendarEvent } from '../model/EventModel'
+import { ReminderOption, RepeatOption } from '../model/EventTypes';
 import common from '@ohos.app.ability.common'
 import util from '@ohos.util';
+import router from '@ohos.router';
 
-interface ReminderOption {
-  label: string,
-  minutes: number
-}
+// interface ReminderOption {
+//   label: string,
+//   minutes: number
+// }
 
 @Builder
 export function EventEditBuilder() {
@@ -28,6 +31,7 @@ export function EventEditBuilder() {
 
 @ComponentV2
 struct EventEdit {
+  //导航栈
   pathStack: NavPathStack = new NavPathStack();
 
   // 状态变量
@@ -39,14 +43,17 @@ struct EventEdit {
   @Local location: string = ''
   @Local calendarId: string = 'default' // 默认日历ID
   @Local selectedColor: string = '#FF3B30' // 默认红色
-  @Local reminderIndex: number = 0
-  @Local repeatIndex: number = 0
   @Local completed: boolean = false
   @Local showTimePicker: boolean = false
-  @Local showReminderPicker: boolean = false
-  @Local showRepeatPicker: boolean = false
   @Local editEventId: string = '0'  // 0表示新增，大于0表示编辑现有事件
   @Local createdTime: number = 0;
+
+  // 提醒设置
+  @Local reminderIndex: number = 0
+  @Local showReminderPicker: boolean = false
+  // 重复设置
+  @Local repeatIndex: number = 0
+  @Local showRepeatPicker: boolean = false
 
   @Local para: CalendarEvent = {
     id: '0',
@@ -72,7 +79,15 @@ struct EventEdit {
 
   // 留着备用
   aboutToAppear() {
-
+    // 如果是编辑模式，检查是否有传入的事件ID
+    const params = router.getParams() as Record<string, string>;
+    if (params && params['eventId'] && params['eventId'] !== '0') {
+      this.editEventId = params['eventId'];
+      this.loadEventData(this.editEventId);
+    } else {
+      // 新建模式，设置默认时间
+      this.setDefaultTimes();
+    }
   }
 
   // 设置默认时间（当前时间开始，持续1小时）
@@ -101,46 +116,31 @@ struct EventEdit {
         this.completed = event.completed;
         this.createdTime = event.created;
 
-        // 设置提醒选项
-        const reminderIndex = this.reminderOptions.findIndex(
-          option => option.minutes === event.reminder
-        );
-        this.reminderIndex = reminderIndex >= 0 ? reminderIndex : 0;
+        // 设置提醒选项索引
+        this.reminderIndex = this.dataManager.getReminderIndexByMinutes(event.reminder);
 
-        // 设置重复选项
-        const repeatIndex = this.repeatOptions.indexOf(event.repeatRule);
-        this.repeatIndex = repeatIndex >= 0 ? repeatIndex : 0;
+        // 设置重复选项索引
+        this.repeatIndex = this.dataManager.getRepeatIndexByRule(event.repeatRule);
 
         this.getUIContext().getPromptAction().showToast({
           message: '事件加载成功',
-          duration: 1000
+          duration: 2000
         });
       } else if (result.error) {
         this.getUIContext().getPromptAction().showToast({
           message: `加载失败: ${result.error}`,
-          duration: 1000
+          duration: 3000
         });
       }
     } catch (error) {
       console.error('加载事件数据失败:', error);
       this.getUIContext().getPromptAction().showToast({
         message: '加载事件失败',
-        duration: 1500
+        duration: 3000
       });
     }
   }
 
-  // 选项数据
-  private reminderOptions: Array<ReminderOption> = [
-    {label: '不提醒', minutes: -1},
-    {label: '开始时', minutes: 0},
-    {label: '提前5分钟', minutes: 5},
-    {label: '提前10分钟', minutes: 10},
-    {label: '提前30分钟', minutes: 30},
-    {label: '提前1小时', minutes: 60},
-    {label: '提前1天', minutes: 1440}
-  ]
-  private repeatOptions: string[] = ['一次性活动', '每天', '每周']
   private colorOptions: string[] = ['#FF3B30', '#FFCC00', '#007AFF', '#34C759']
   private colorNames: string[] = ['红', '黄', '蓝', '绿']
 
@@ -171,7 +171,7 @@ struct EventEdit {
             created: 0,
             updated: 0
           }
-          this.pathStack.pushPathByName('Calendar', eventData, null)
+          this.pathStack.replacePathByName('Calendar', eventData, null)
         })
 
       Text(this.editEventId === '0' ? '新建事件' : '编辑事件')
@@ -283,6 +283,11 @@ struct EventEdit {
         this.showTimePicker = true
       })
     }
+
+    // 时间选择器弹窗
+    if (this.showTimePicker) {
+      // this.buildTimePickerDialog()
+    }
   }
 
   // 时间选择器弹窗
@@ -326,6 +331,11 @@ struct EventEdit {
             selected: this.startTime
           })
             .onChange((time: TimePickerResult)  => {
+              // const newStartTime = new Date()
+              // newStartTime.setHours(time.hour)
+              // newStartTime.setMinutes(time.minute)
+              // this.startTime = newStartTime
+              // 修改现有Date对象的时分，保留日期
               this.startTime.setHours(time.hour);
               this.startTime.setMinutes(time.minute);
               this.startTime = new Date(this.startTime.getTime());
@@ -347,6 +357,12 @@ struct EventEdit {
             selected: this.endTime
           })
             .onChange((time: TimePickerResult) => {
+              // 使用TimePickerResult类型
+              // const newEndTime = new Date()
+              // newEndTime.setHours(time.hour)
+              // newEndTime.setMinutes(time.minute)
+              // this.endTime = newEndTime
+              // 修改时分，不改变日期
               this.endTime.setHours(time.hour);
               this.endTime.setMinutes(time.minute);
               // 触发UI更新
@@ -469,7 +485,7 @@ struct EventEdit {
         .width('100%')
 
       Row() {
-        Text(this.reminderOptions[this.reminderIndex].label)
+        Text(this.dataManager.getReminderOptions()[this.reminderIndex].label)
           .fontSize(14)
           .fontColor('#333333')
           .layoutWeight(1)
@@ -487,6 +503,11 @@ struct EventEdit {
         this.showReminderPicker = true
       })
     }
+
+    // 提醒选择弹窗
+    if (this.showReminderPicker) {
+      this.buildReminderPicker()
+    }
   }
 
   // 提醒选择器
@@ -501,7 +522,7 @@ struct EventEdit {
 
       // 选项列表
       Column() {
-        ForEach(this.reminderOptions, (option: ReminderOption, index: number) => {
+        ForEach(this.dataManager.getReminderOptions(), (option: ReminderOption, index: number) => {
           Row() {
             Text(option.label)
               .fontSize(16)
@@ -523,6 +544,17 @@ struct EventEdit {
           })
         })
       }
+
+      // 取消按钮
+      Button('取消')
+        .fontSize(16)
+        .fontColor('#007AFF')
+        .backgroundColor(Color.Transparent)
+        .width('100%')
+        .height(48)
+        .onClick(() => {
+          this.showReminderPicker = false;
+        })
     }
     .width('100%')
     .backgroundColor(Color.White)
@@ -543,7 +575,7 @@ struct EventEdit {
         .width('100%')
 
       Row() {
-        Text(this.repeatOptions[this.repeatIndex])
+        Text(this.dataManager.getRepeatOptions()[this.repeatIndex].label)
           .fontSize(14)
           .fontColor('#333333')
           .layoutWeight(1)
@@ -561,6 +593,11 @@ struct EventEdit {
         this.showRepeatPicker = true
       })
     }
+
+    // 重复选择弹窗
+    if (this.showRepeatPicker) {
+      this.buildRepeatPicker()
+    }
   }
 
   // 重复选择器
@@ -573,9 +610,9 @@ struct EventEdit {
         .padding({ top: 20, bottom: 20 })
 
       Column() {
-        ForEach(this.repeatOptions, (option: string, index: number) => {
+        ForEach(this.dataManager.getRepeatOptions(), (option: RepeatOption, index: number) => {
           Row() {
-            Text(option)
+            Text(option.label)
               .fontSize(16)
               .fontColor('#333333')
               .layoutWeight(1)
@@ -595,6 +632,16 @@ struct EventEdit {
           })
         })
       }
+      // 取消按钮
+      Button('取消')
+        .fontSize(16)
+        .fontColor('#007AFF')
+        .backgroundColor(Color.Transparent)
+        .width('100%')
+        .height(48)
+        .onClick(() => {
+          this.showRepeatPicker = false;
+        })
     }
     .width('100%')
     .backgroundColor(Color.White)
@@ -640,6 +687,19 @@ struct EventEdit {
       return;
     }
 
+    // 获取提醒分钟数
+    const reminderOptions = this.dataManager.getReminderOptions();
+    const reminderMinutes = this.reminderIndex < reminderOptions.length
+      ? reminderOptions[this.reminderIndex].minutes
+      : -1;
+
+    // 获取重复规则字符串
+    const repeatOptions = this.dataManager.getRepeatOptions();
+    let repeatRuleString = '';
+    if (this.repeatIndex < repeatOptions.length) {
+      repeatRuleString = this.dataManager.getRepeatRuleByIndex(this.repeatIndex);
+    }
+
     const now = new Date().getTime()
     let uuidString: string = util.generateRandomUUID(true);
     const eventData: CalendarEvent = {
@@ -652,8 +712,8 @@ struct EventEdit {
       location: this.location,
       calendarId: this.calendarId,
       color: this.selectedColor,
-      reminder: this.reminderOptions[this.reminderIndex].minutes,
-      repeatRule: this.repeatOptions[this.repeatIndex],
+      reminder: reminderMinutes,
+      repeatRule: repeatRuleString, // DataManager会处理转换
       completed: this.completed,
       created: this.editEventId === '0' ? now : this.createdTime,
       updated: now
@@ -676,7 +736,7 @@ struct EventEdit {
 
         // 延迟返回，让用户看到成功提示
         setTimeout(() => {
-          this.pathStack.pushPathByName('Calendar', eventData, null)
+          this.pathStack.replacePathByName('Calendar', eventData, null)
         }, 2000);
       } else {
         console.error('保存失败:', result.error);
@@ -694,6 +754,7 @@ struct EventEdit {
     }
   }
 
+  //构建主界面
   build() {
     NavDestination(){
       Stack(){
@@ -743,7 +804,7 @@ struct EventEdit {
           Column()
             .width('100%')
             .height('100%')
-            .backgroundColor($r('sys.color.black'))
+            .backgroundColor('#000000')
             .opacity(0.3)
             .onClick(() => {
               this.closeAllPickers();

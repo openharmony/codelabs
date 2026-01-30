@@ -10,19 +10,31 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "LifeTrack"
+      "value": "label"
     },
     {
       "name": "place_call_permission_reason",
       "value": "用于拨打联系人电话"
     },
     {
-      "name": "activity_motion_permission_reason",
-      "value": "用于收集运动数据"
+      "name": "motion_permission_reason",
+      "value": "用于获取您的运动步数数据"
     },
     {
       "name": "keep_background_running_reason",
       "value": "允许应用在后台持续监听步数"
+    },
+    {
+      "name": "reminder_permission_reason",
+      "value": "用于设置日程提醒"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "用于发送通知提醒"
+    },
+    {
+      "name": "notification_agent_reason",
+      "value": "用于管理通知代理"
     }
   ]
 }

@@ -11,6 +11,7 @@
  * limitations under the License.
  */
 
+// 在Dashboard页面顶部添加导入
 import { ContactManager } from './ContactManager';
 import { DataManager } from './DataManager';
 import { StepManager } from './StepManager';
@@ -19,6 +20,7 @@ import { CalendarEvent } from '../model/EventModel';
 import { StepRecord } from '../model/StepModel';
 import common from '@ohos.app.ability.common';
 
+// 跳转页面入口函数
 @Builder
 export function DashboardBuilder() {
   Dashboard();
@@ -449,21 +451,21 @@ struct Dashboard {
               .backgroundColor('#1F62A8')
               .width('30%')
               .onClick(() => {
-                this.pathStack.pushPathByName("Contact", null, false)
+                this.pathStack.replacePathByName("Contact", null, false)
               })
             Blank().width('6%')
             Button('日历与日程')
               .backgroundColor('#34C759')
               .width('30%')
               .onClick(() => {
-                this.pathStack.pushPathByName("Calendar", null, false)
+                this.pathStack.replacePathByName("Calendar", null, false)
               })
             Blank().width('6%')
             Button('步数记录')
               .backgroundColor('#FF6B6B')
               .width('30%')
               .onClick(() => {
-                this.pathStack.pushPathByName("StepTracker", null, false)
+                this.pathStack.replacePathByName("StepTracker", null, false)
               })
           }
           .width('100%')

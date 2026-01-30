@@ -2,7 +2,7 @@
 # You can include the obfuscation configuration files in the current module's build-profile.json5.
 #
 # For more details, see
-#   relative developer docs
+#   relative docs
 
 # Obfuscation options:
 # -disable-obfuscation: disable all obfuscations

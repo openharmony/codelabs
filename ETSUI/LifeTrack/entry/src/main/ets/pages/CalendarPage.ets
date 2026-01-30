@@ -12,6 +12,7 @@
  */
 
 import { CalendarEvent } from '../model/EventModel'
+import { EventInstance} from '../model/EventTypes'
 import { DataManager } from './DataManager';
 import common from '@ohos.app.ability.common';
 
@@ -126,6 +127,7 @@ struct myCalendar {
   @Local currentDate: Date = new Date()
   @Local selectedDate: Date = new Date()
   @Local events: CalendarEvent[] = []
+  @Local eventInstances: EventInstance[] = [] // 新增：存储事件实例
 
   // 星期标题
   private weekDays: string[] = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
@@ -235,10 +237,53 @@ struct myCalendar {
   // 获取选中日期的事件
   getEventsForSelectedDate(): CalendarEvent[] {
     const selectedDateStr = this.selectedDate.toDateString()
-    return this.events.filter(event => {
+    const selectedTimestamp = this.selectedDate.getTime();
+
+    // 1. 获取直接在该日期开始的事件
+    const directEvents = this.events.filter(event => {
       const eventDate = CalendarUtils.timestampToDate(event.startTime);
       return eventDate.toDateString() === selectedDateStr;
-    }).sort((a, b) => a.startTime - b.startTime); // 按开始时间排序
+    });
+
+    // 2. 获取重复事件实例
+    const repeatedEvents: CalendarEvent[] = [];
+
+    for (const instance of this.eventInstances) {
+      const instanceDate = CalendarUtils.timestampToDate(instance.instanceTime);
+      if (instanceDate.toDateString() === selectedDateStr) {
+        // 找到对应的原始事件
+        const originalEvent = this.events.find(event => event.id === instance.originalId);
+        if (originalEvent) {
+          // 创建事件副本，使用实例的时间（手动复制所有属性）
+          const eventCopy: CalendarEvent = {
+            id: instance.id,
+            title: originalEvent.title,
+            description: originalEvent.description,
+            startTime: instance.instanceTime,
+            endTime: instance.instanceTime + (originalEvent.endTime - originalEvent.startTime),
+            allDay: originalEvent.allDay,
+            location: originalEvent.location,
+            calendarId: originalEvent.calendarId,
+            color: originalEvent.color,
+            reminder: originalEvent.reminder,
+            repeatRule: '', // 重复规则为空，因为这是具体实例
+            completed: instance.completed,
+            created: originalEvent.created,
+            updated: originalEvent.updated
+          };
+          repeatedEvents.push(eventCopy);
+        }
+      }
+    }
+
+    // 3. 合并结果，按开始时间排序
+    const allEvents = [...directEvents, ...repeatedEvents];
+    return allEvents.sort((a, b) => a.startTime - b.startTime);
+
+    // return this.events.filter(event => {
+    //   const eventDate = CalendarUtils.timestampToDate(event.startTime);
+    //   return eventDate.toDateString() === selectedDateStr;
+    // }).sort((a, b) => a.startTime - b.startTime); // 按开始时间排序
   }
 
   // 初始化示例数据
@@ -255,7 +300,16 @@ struct myCalendar {
       const allEvents = await this.dataManager.getAllEvents();
       this.events = allEvents
 
-      console.log(`从数据库加载了 ${this.events.length} 个事件`);
+      // 获取所有事件实例
+      this.eventInstances = [];
+      for (const event of allEvents) {
+        if (event.repeatRule && event.repeatRule.trim() !== '') {
+          const instances = await this.dataManager.getEventInstancesByOriginalId(event.id);
+          this.eventInstances.push(...instances);
+        }
+      }
+
+      console.log(`从数据库加载了 ${this.events.length} 个事件和 ${this.eventInstances.length} 个事件实例`);
     } catch (error) {
       console.error('加载事件数据失败:', error);
     }
@@ -291,22 +345,52 @@ struct myCalendar {
   // 检查日期是否有事件
   hasEvents(date: Date): boolean {
     const dateStr = date.toDateString()
-    return this.events.some(event => {
+
+    // 检查直接事件
+    const hasDirectEvents = this.events.some(event => {
       const eventDate = CalendarUtils.timestampToDate(event.startTime);
       return eventDate.toDateString() === dateStr;
+    });
+
+    if (hasDirectEvents) return true;
+
+    // 检查重复事件实例
+    return this.eventInstances.some(instance => {
+      const instanceDate = CalendarUtils.timestampToDate(instance.instanceTime);
+      return instanceDate.toDateString() === dateStr;
     });
   }
 
   // 获取事件指示点颜色
   getEventIndicators(date: Date): string[] {
     const dateStr = date.toDateString();
-    const dateEvents = this.events.filter(event => {
+    const indicators: string[] = [];
+
+    // 1. 收集直接事件的指示点
+    const directEvents = this.events.filter(event => {
       const eventDate = CalendarUtils.timestampToDate(event.startTime);
       return eventDate.toDateString() === dateStr;
     });
 
-    // 返回最多3个事件指示点，使用事件的实际颜色
-    return dateEvents.slice(0, 3).map(event => event.color);
+    indicators.push(...directEvents.slice(0, 3).map(event => event.color));
+
+    // 2. 如果直接事件不足3个，添加重复事件的指示点
+    if (indicators.length < 3) {
+      const repeatedEvents = this.eventInstances.filter(instance => {
+        const instanceDate = CalendarUtils.timestampToDate(instance.instanceTime);
+        return instanceDate.toDateString() === dateStr;
+      }).slice(0, 3 - indicators.length);
+
+      // 获取重复事件的颜色
+      for (const instance of repeatedEvents) {
+        const originalEvent = this.events.find(event => event.id === instance.originalId);
+        if (originalEvent && !indicators.includes(originalEvent.color)) {
+          indicators.push(originalEvent.color);
+        }
+      }
+    }
+
+    return indicators.slice(0, 3); // 最多返回3个
   }
 
   @Builder EventItemComponent(event: CalendarEvent) {
@@ -394,7 +478,7 @@ struct myCalendar {
       .justifyContent(FlexAlign.Center)
       .alignItems(HorizontalAlign.Start)
       .onClick(() => {
-        this.pathStack.pushPathByName('EventEdit', event, false);
+        this.pathStack.replacePathByName('EventEdit', event, false);
       })
 
       // 右侧操作按钮
@@ -409,7 +493,7 @@ struct myCalendar {
           .borderRadius(6)
           .margin({bottom: 10})
           .onClick(() => {
-            this.pathStack.pushPathByName('EventEdit', event, false);
+            this.pathStack.replacePathByName('EventEdit', event, false);
           })
 
         // 删除按钮
@@ -440,49 +524,81 @@ struct myCalendar {
   // 切换事件状态
   async toggleEventStatus(eventId: string) {
     try {
-      // 先找到要更新的事件
-      const eventToUpdate = this.events.find(event => event.id === eventId);
-      if (!eventToUpdate) {
-        console.warn('未找到要更新的事件:', eventId);
-        return;
-      }
+      // 判断是主事件还是实例
+      const isInstance = eventId.includes('_'); // 实例ID格式：originalId_timestamp_index
 
-      // 计算新的完成状态
-      const newCompleted = !eventToUpdate.completed;
+      if (isInstance) {
+        // 处理实例
+        const instance = this.eventInstances.find(inst => inst.id === eventId);
+        if (!instance) {
+          console.warn('未找到要更新的事件实例:', eventId);
+          return;
+        }
 
-      console.log(`正在更新事件 ${eventId} 的完成状态: ${newCompleted}`);
+        const newCompleted = !instance.completed;
 
-      // 调用DataManager更新数据库中的事件状态
-      const result = await this.dataManager.toggleEventCompletion(eventId, newCompleted);
+        // 更新实例完成状态
+        const success = await this.dataManager.updateEventInstanceCompletion(eventId, newCompleted);
 
-      if (result.success) {
-        console.log('事件状态更新成功');
-
-        // 更新本地事件列表
-        this.events = this.events.map(event => {
-          if (event.id === eventId) {
-            // 返回更新后的事件
-            return {
-              id: event.id,
-              title: event.title,
-              description: event.description,
-              startTime: event.startTime,
-              endTime: event.endTime,
-              allDay: event.allDay,
-              location: event.location,
-              calendarId: event.calendarId,
-              color: event.color,
-              reminder: event.reminder,
-              repeatRule: event.repeatRule,
-              completed: newCompleted,
-              created: event.created,
-              updated: Date.now() // 更新修改时间
-            };
-          }
-          return event;
-        });
+        if (success) {
+          // 更新本地实例列表（手动复制）
+          this.eventInstances = this.eventInstances.map(inst => {
+            if (inst.id === eventId) {
+              // 手动创建新对象
+              return {
+                id: inst.id,
+                originalId: inst.originalId,
+                title: inst.title,
+                description: inst.description,
+                instanceTime: inst.instanceTime,
+                completed: newCompleted
+              };
+            }
+            return inst;
+          });
+        } else {
+          console.error('更新事件实例状态失败');
+        }
       } else {
-        console.error('更新事件状态失败:', result.error);
+        // 处理主事件（原有逻辑）
+        const eventToUpdate = this.events.find(event => event.id === eventId);
+        if (!eventToUpdate) {
+          console.warn('未找到要更新的事件:', eventId);
+          return;
+        }
+
+        const newCompleted = !eventToUpdate.completed;
+
+        // 调用DataManager更新数据库中的事件状态
+        const result = await this.dataManager.toggleEventCompletion(eventId, newCompleted);
+
+        if (result.success) {
+          // 更新本地事件列表（手动复制）
+          this.events = this.events.map(event => {
+            if (event.id === eventId) {
+              // 手动创建新对象
+              return {
+                id: event.id,
+                title: event.title,
+                description: event.description,
+                startTime: event.startTime,
+                endTime: event.endTime,
+                allDay: event.allDay,
+                location: event.location,
+                calendarId: event.calendarId,
+                color: event.color,
+                reminder: event.reminder,
+                repeatRule: event.repeatRule,
+                completed: newCompleted,
+                created: event.created,
+                updated: Date.now() // 更新修改时间
+              };
+            }
+            return event;
+          });
+        } else {
+          console.error('更新事件状态失败:', result.error);
+        }
       }
     } catch (error) {
       console.error('切换事件状态时发生错误:', error);
@@ -492,18 +608,38 @@ struct myCalendar {
   // 删除事件
   async deleteEvent(eventId: string) {
     try {
-      console.log('正在删除事件:', eventId);
+      // 判断是主事件还是实例
+      const isInstance = eventId.includes('_'); // 实例ID格式：originalId_timestamp_index
 
-      // 调用DataManager删除数据库中的事件
-      const result = await this.dataManager.deleteEvent(eventId);
+      if (isInstance) {
+        // 删除实例
+        const success = await this.dataManager.deleteEventInstance(eventId);
 
-      if (result.success) {
-        console.log('事件删除成功');
-
-        // 从本地列表删除
-        this.events = this.events.filter(event => event.id !== eventId);
+        if (success) {
+          // 从本地列表删除实例
+          this.eventInstances = this.eventInstances.filter(inst => inst.id !== eventId);
+          console.log('事件实例删除成功');
+        } else {
+          console.error('删除事件实例失败');
+        }
       } else {
-        console.error('删除事件失败:', result.error);
+        // 删除主事件（原有逻辑）
+        console.log('正在删除事件:', eventId);
+
+        // 调用DataManager删除数据库中的事件
+        const result = await this.dataManager.deleteEvent(eventId);
+
+        if (result.success) {
+          console.log('事件删除成功');
+
+          // 从本地列表删除主事件
+          this.events = this.events.filter(event => event.id !== eventId);
+
+          // 同时删除相关的所有实例
+          this.eventInstances = this.eventInstances.filter(inst => inst.originalId !== eventId);
+        } else {
+          console.error('删除事件失败:', result.error);
+        }
       }
     } catch (error) {
       console.error('删除事件时发生错误:', error);
@@ -543,7 +679,7 @@ struct myCalendar {
     setTimeout(() => {
       this.eventListScroller.scrollEdge(Edge.Bottom);
       setTimeout(() => {
-        this.pathStack.pushPathByName('EventEdit', newEvent, false);
+        this.pathStack.replacePathByName('EventEdit', newEvent, false);
       }, 300); // 给滚动一点时间
     }, 100);
   }

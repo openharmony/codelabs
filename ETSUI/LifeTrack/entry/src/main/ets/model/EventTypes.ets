@@ -11,29 +11,32 @@
  * limitations under the License.
  */
 
-// 跳转页面入口函数
-@Builder
-export function StartBuilder() {
-  Start();
+// model/EventTypes.ts
+export interface ReminderOption {
+  label: string;
+  minutes: number;
 }
 
-@Component
-struct Start {
-  pathStack: NavPathStack = new NavPathStack();
-  aboutToAppear(): void {
-    setTimeout(() => {
-      this.pathStack.replacePathByName("Dashboard", null, false)
-    }, 1000)
-  }
+export interface RepeatOption {
+  label: string;
+  value: string;
+  type: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+}
 
-  build() {
-    NavDestination() {
+export interface RepeatRule {
+  type: 'none' | 'daily' | 'weekly' | 'monthly' | 'yearly';
+  interval: number;
+  endType: 'never' | 'count' | 'date';
+  endCount?: number;
+  endDate?: number;
+  weekdays?: number[];
+}
 
-    }
-    // .title('开始页')
-    .onReady((context: NavDestinationContext) => {
-      this.pathStack = context.pathStack;
-    })
-
-  }
+export interface EventInstance {
+  id: string;
+  originalId: string;
+  title: string;
+  description: string;
+  instanceTime: number;
+  completed: boolean;
 }
