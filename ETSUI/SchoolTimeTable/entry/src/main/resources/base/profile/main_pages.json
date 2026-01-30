@@ -1,0 +1,14 @@
+{
+  "src": [
+    "pages/SplashPage",
+    "pages/LoginPage",
+    "pages/RegisterPage",
+    "pages/Index",
+    "pages/SearchPage",
+    "pages/SettingsPage",
+    "pages/StatisticsPage",
+    "pages/ProfilePage",
+    "pages/EditProfilePage",
+    "pages/AboutPage"
+  ]
+}
