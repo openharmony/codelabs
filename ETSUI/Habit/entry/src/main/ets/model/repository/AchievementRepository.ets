@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import relationalStore from '@ohos.data.relationalStore';
 import { CommonConstants } from '../../common/constants/CommonConstants';
 import RdbHelper from '../database/RdbHelper';
@@ -9,11 +23,10 @@ export interface Achievement {
   description: string;
   unlockCondition: string; // 关键字段：用于逻辑判断，如 "total_10", "streak_7"
   isUnlocked: boolean;
-  unlockTime: number;      // 0 表示未解锁
+  unlockTime: number; // 0 表示未解锁
 }
 
 class AchievementRepository {
-
   // 查询所有成就，按 ID 排序
   async queryAll(): Promise<Achievement[]> {
     const store = RdbHelper.getRdbStore();
@@ -46,7 +59,9 @@ class AchievementRepository {
   // 根据条件标识查询（用于判断特定成就是否存在）
   async queryByCondition(condition: string): Promise<Achievement | null> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return null;
+    if (!store) {
+      return null;
+    }
 
     const predicates = new relationalStore.RdbPredicates(CommonConstants.ACHIEVEMENT_TABLE_NAME);
     predicates.equalTo('unlockCondition', condition);
@@ -73,7 +88,9 @@ class AchievementRepository {
   // 解锁指定成就，更新状态和时间戳
   async unlockAchievement(id: number): Promise<void> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return;
+    if (!store) {
+      return;
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       isUnlocked: 1,
