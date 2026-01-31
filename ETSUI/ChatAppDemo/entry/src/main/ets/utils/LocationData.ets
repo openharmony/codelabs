@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -454,7 +454,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
           code: "321300"
         }
       ]
-    },{
+    }, {
     name: "浙江省",
     cities: [
       {
@@ -502,7 +502,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "331100"
       }
     ]
-  },{
+  }, {
     name: "山东省",
     cities: [
       {
@@ -570,7 +570,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "371700"
       }
     ]
-  },{
+  }, {
     name: "河北省",
     cities: [
       {
@@ -618,7 +618,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "131100"
       }
     ]
-  },{
+  }, {
     name: "河南省",
     cities: [
       {
@@ -694,7 +694,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "419001"
       }
     ]
-  },{
+  }, {
     name: "山西省",
     cities: [
       {
@@ -742,7 +742,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "141100"
       }
     ]
-  },{
+  }, {
     name: "陕西省",
     cities: [
       {
@@ -786,7 +786,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "611000"
       }
     ]
-  },{
+  }, {
     name: "湖北省",
     cities: [
       {
@@ -858,7 +858,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "429021"
       }
     ]
-  },{
+  }, {
     name: "湖南省",
     cities: [
       {
@@ -918,7 +918,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "433100"
       }
     ]
-  },{
+  }, {
     name: "安徽省",
     cities: [
       {
@@ -986,7 +986,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "341800"
       }
     ]
-  },{
+  }, {
     name: "江西省",
     cities: [
       {
@@ -1034,7 +1034,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "361100"
       }
     ]
-  },{
+  }, {
     name: "四川省",
     cities: [
       {
@@ -1122,7 +1122,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "513400"
       }
     ]
-  },{
+  }, {
     name: "云南省",
     cities: [
       {
@@ -1190,7 +1190,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "533400"
       }
     ]
-  },{
+  }, {
     name: "辽宁省",
     cities: [
       {
@@ -1250,7 +1250,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "211400"
       }
     ]
-  },{
+  }, {
     name: "广西壮族自治区",
     cities: [
       {
@@ -1310,7 +1310,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "451400"
       }
     ]
-  },{
+  }, {
     name: "黑龙江省",
     cities: [
       {
@@ -1366,7 +1366,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "232700"
       }
     ]
-  },{
+  }, {
     name: "吉林省",
     cities: [
       {
@@ -1406,7 +1406,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "222400"
       }
     ]
-  },{
+  }, {
     name: "甘肃省",
     cities: [
       {
@@ -1466,7 +1466,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "623000"
       }
     ]
-  },{
+  }, {
     name: "内蒙古自治区",
     cities: [
       {
@@ -1518,7 +1518,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "152900"
       }
     ]
-  },{
+  }, {
     name: "新疆维吾尔自治区",
     cities: [
       {
@@ -1578,7 +1578,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "654300"
       }
     ]
-  },{
+  }, {
     name: "贵州省",
     cities: [
       {
@@ -1618,7 +1618,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "522700"
       }
     ]
-  },{
+  }, {
     name: "海南省",
     cities: [
       {
@@ -1698,7 +1698,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "469030"
       }
     ]
-  },{
+  }, {
     name: "福建省",
     cities: [
       {
@@ -1738,7 +1738,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "350900"
       }
     ]
-  },{
+  }, {
     name: "西藏自治区",
     cities: [
       {
@@ -1770,7 +1770,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "542500"
       }
     ]
-  },{
+  }, {
     name: "青海省",
     cities: [
       {
@@ -1806,7 +1806,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "632800"
       }
     ]
-  },{
+  }, {
     name: "宁夏回族自治区",
     cities: [
       {
@@ -1830,7 +1830,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "640500"
       }
     ]
-  },{
+  }, {
     name: "香港特别行政区",
     cities: [
       {
@@ -1906,7 +1906,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "811800"
       }
     ]
-  },{
+  }, {
     name: "澳门特别行政区",
     cities: [
       {
@@ -1938,7 +1938,7 @@ export const WORLD_DATA: Record<string, Province[]> = {
         code: "820700"
       }
     ]
-  },{
+  }, {
     name: "台湾省",
     cities: [
       {

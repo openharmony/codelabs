@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { router, Prompt, promptAction } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { dbManager } from '../utils/DatabaseManager';
 import { UserModel } from '../viewmodel/UserModel';
 
@@ -22,7 +22,6 @@ import { UserModel } from '../viewmodel/UserModel';
 struct Login {
   @State phoneNumber: string = '';
   @State password: string = '';
-
   // 使用 @StorageLink 绑定全局变量。
   // 一旦此变量被赋值，全应用所有关联页面都会感知到
   @StorageLink('currentUser') currentUser: UserModel | null = null;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,12 +26,10 @@ import { LocationPickerDialog } from '../components/LocationPickerDialog';
 struct EditProfile {
   // 从全局状态获取当前用户，修改这里会直接同步 App 展示
   @StorageLink('currentUser') currentUser: UserModel | null = null
-
   // 临时状态，用于页面显示，点击保存后再同步给 currentUser
   @State tempNickname: string = ''
   @State tempAvatar: string = ''
   @State tempLocation: string = ''
-
   // 城市选择弹窗控制器
   dialogController: CustomDialogController = new CustomDialogController({
     builder: LocationPickerDialog({
@@ -102,7 +100,8 @@ struct EditProfile {
       // --- 头像编辑区 ---
       Column() {
         Image(this.tempAvatar || $r('app.media.user_default'))
-          .width(100).height(100)
+          .width(100)
+          .height(100)
           .borderRadius(50)
           .margin({ top: 30, bottom: 10 })
           .objectFit(ImageFit.Cover)
@@ -119,6 +118,7 @@ struct EditProfile {
         ListItem() {
           this.InfoItem($r('app.string.label_nickname'), this.tempNickname, true)
         }
+
         // 地区选择
         ListItem() {
           // this.InfoItem($r('app.string.label_region'), this.tempLocation, false, () => {
@@ -149,7 +149,8 @@ struct EditProfile {
   }
 
   // 封装信息条目
-  @Builder InfoItem(label: ResourceStr, value: ResourceStr, isInput: boolean, onClick?: () => void) {
+  @Builder
+  InfoItem(label: ResourceStr, value: ResourceStr, isInput: boolean, onClick?: () => void) {
     Row() {
       Text(label).width(80).fontSize(16).fontColor('#333')
 
@@ -165,7 +166,11 @@ struct EditProfile {
           .layoutWeight(1)
           .fontColor('#666')
           .textAlign(TextAlign.End)
-          .onClick(() => { if(onClick) onClick() })
+          .onClick(() => {
+            if (onClick) {
+              onClick()
+            }
+          })
       }
 
       Image($r('app.media.arrow_right'))
@@ -176,7 +181,9 @@ struct EditProfile {
 
   // --- 保存逻辑 ---
   async handleSave() {
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      return;
+    }
 
     try {
       // 更新内存对象

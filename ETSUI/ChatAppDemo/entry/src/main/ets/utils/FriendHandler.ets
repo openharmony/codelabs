@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,11 +16,14 @@
 import { relationalStore } from '@kit.ArkData';
 import { FriendRequestModel } from '../viewmodel/FriendRequestModel';
 import { UserModel } from '../viewmodel/UserModel';
-import { dbManager } from '../utils/DatabaseManager'
+import { dbManager } from '../utils/DatabaseManager';
 
 export class FriendHandler {
   private store: relationalStore.RdbStore;
-  constructor(store: relationalStore.RdbStore) { this.store = store; }
+
+  constructor(store: relationalStore.RdbStore) {
+    this.store = store;
+  }
 
   // 发送好友申请
   async sendRequest(request: FriendRequestModel) {
@@ -87,7 +90,9 @@ export class FriendHandler {
 
   // 获取我的好友列表（关联 User 表查询头像和昵称）
   async getFriends(myPhone: string): Promise<UserModel[]> {
-    if (!this.store) return [];
+    if (!this.store) {
+      return [];
+    }
 
     // 从 Friend 表找到我所有的好友手机号
     let predicates = new relationalStore.RdbPredicates('Friend');
@@ -105,7 +110,9 @@ export class FriendHandler {
     }
 
     // 如果没有好友，直接返回空数组
-    if (friendPhones.length === 0) return [];
+    if (friendPhones.length === 0) {
+      return [];
+    }
 
     // 调用刚才在 UserHandler 里写好的批量查询方法
     // 注意：因为 dbManager 初始化时已经实例化了 user，我们可以直接跨模块调用
@@ -135,7 +142,9 @@ export class FriendHandler {
    * 检查两人是否已经是好友
    */
   async isFriend(myPhone: string, friendPhone: string): Promise<boolean> {
-    if (!this.store) return false;
+    if (!this.store) {
+      return false;
+    }
 
     let predicates = new relationalStore.RdbPredicates('Friend');
     predicates.equalTo('myPhone', myPhone);
@@ -152,7 +161,9 @@ export class FriendHandler {
   }
 
   async queryFriendsPhones(myPhone: string): Promise<string[]> {
-    if (!this.store) return [];
+    if (!this.store) {
+      return [];
+    }
 
     let predicates = new relationalStore.RdbPredicates('Friend');
     predicates.equalTo('myPhone', myPhone);
@@ -174,15 +185,21 @@ export class FriendHandler {
    * 删除好友关系（双向删除）
    */
   async deleteFriend(myPhone: string, friendPhone: string): Promise<void> {
-    if (!this.store) return;
+    if (!this.store) {
+      return;
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates('Friend');
       // 删除两条记录：我与他，他与我
       predicates.beginWrap()
-        .equalTo('myPhone', myPhone).and().equalTo('friendPhone', friendPhone)
+        .equalTo('myPhone', myPhone)
+        .and()
+        .equalTo('friendPhone', friendPhone)
         .or()
-        .equalTo('myPhone', friendPhone).and().equalTo('friendPhone', myPhone)
+        .equalTo('myPhone', friendPhone)
+        .and()
+        .equalTo('friendPhone', myPhone)
         .endWrap();
 
       await this.store.delete(predicates);

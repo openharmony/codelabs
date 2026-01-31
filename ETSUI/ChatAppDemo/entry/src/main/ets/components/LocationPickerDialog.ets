@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { WORLD_DATA, Province, City } from '../utils/LocationData'
+import { City, Province, WORLD_DATA } from '../utils/LocationData'
 
 // 顶部定义类型
 type ConfirmCallback = (province: string, city: string) => void
@@ -27,7 +27,6 @@ export struct LocationPickerDialog {
   }
   @State selectedProvinceIndex: number = 0
   @State selectedCityIndex: number = 0
-
   // 数据源
   private provinces: Province[] = WORLD_DATA["中国"]
   @State currentCities: City[] = WORLD_DATA["中国"][0].cities

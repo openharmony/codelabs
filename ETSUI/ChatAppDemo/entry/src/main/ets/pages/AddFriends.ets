@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,21 +13,23 @@
  * limitations under the License.
  */
 
-import { router, promptAction } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { dbManager } from '../utils/DatabaseManager';
 import { UserModel } from '../viewmodel/UserModel';
 
 @Entry
-@Component struct AddFriends {
+@Component
+struct AddFriends {
   @State searchText: string = '';
   // 搜索结果直接使用 UserModel 类型
   @State searchResult: UserModel | null = null;
-
   // 获取当前登录用户，作为“申请人”
   @StorageProp('currentUser') currentUser: UserModel | null = null;
 
   async handleSearch() {
-    if (this.searchText.trim() === '') return;
+    if (this.searchText.trim() === '') {
+      return;
+    }
 
     // 1. 调用 UserHandler 里的查询方法
     const user = await dbManager.user?.queryUserByPhone(this.searchText);
@@ -92,14 +94,16 @@ import { UserModel } from '../viewmodel/UserModel';
                 }
 
                 // 拦截：是否已经是好友
-                const alreadyFriend = await dbManager.friend?.isFriend(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
+                const alreadyFriend =
+                  await dbManager.friend?.isFriend(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
                 if (alreadyFriend) {
                   promptAction.showToast({ message: $r('app.string.toast_already_friend') });
                   return;
                 }
 
                 // 拦截：是否已经发送过申请且对方未处理
-                const isPending = await dbManager.friend?.checkRequestExists(this.currentUser.phoneNumber, this.searchResult!.phoneNumber);
+                const isPending = await dbManager.friend?.checkRequestExists(this.currentUser.phoneNumber,
+                  this.searchResult!.phoneNumber);
                 if (isPending) {
                   promptAction.showToast({ message: $r('app.string.toast_request_sent') });
                   return;
@@ -128,12 +132,14 @@ import { UserModel } from '../viewmodel/UserModel';
       } else if (this.searchText === '') {
         // 展示一些默认的入口
         this.buildMenuOption($r('app.media.qrcode'), $r('app.string.label_scan'), $r('app.string.label_scan_desc'))
-        this.buildMenuOption($r('app.media.contactpp'), $r('app.string.label_phone_contacts'), $r('app.string.label_phone_contacts_desc'))
+        this.buildMenuOption($r('app.media.contactpp'), $r('app.string.label_phone_contacts'),
+          $r('app.string.label_phone_contacts_desc'))
       }
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('#F1F3F5')  }
+    .backgroundColor('#F1F3F5')
+  }
 
   @Builder
   buildMenuOption(icon: Resource, title: ResourceStr, subTitle: ResourceStr) {

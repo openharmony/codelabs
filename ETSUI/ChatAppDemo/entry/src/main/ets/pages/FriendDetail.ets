@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { router, promptAction } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
 import { UserModel } from '../viewmodel/UserModel';
 import { dbManager } from '../utils/DatabaseManager';
@@ -34,7 +34,9 @@ struct FriendDetail {
 
   // 删除好友操作
   async handleDelete(): Promise<void> {
-    if (!this.currentUser || !this.friend || !dbManager.friend) return;
+    if (!this.currentUser || !this.friend || !dbManager.friend) {
+      return;
+    }
 
     await dbManager.friend.deleteFriend(this.currentUser.phoneNumber, this.friend.phoneNumber);
 
@@ -77,8 +79,11 @@ struct FriendDetail {
       Column() {
         // 发消息按钮
         Button($r('app.string.btn_send_msg'), { type: ButtonType.Normal })
-          .width('100%').height(50).backgroundColor(Color.White)
-          .fontColor('#576B95').fontWeight(600)
+          .width('100%')
+          .height(50)
+          .backgroundColor(Color.White)
+          .fontColor('#576B95')
+          .fontWeight(600)
           .onClick(() => {
             router.pushUrl({
               url: 'pages/Chat',
@@ -87,7 +92,9 @@ struct FriendDetail {
                   id: this.friend?.phoneNumber,
                   nickName: this.friend?.nickName,
                   avatar: this.friend?.avatarPath || $r('app.media.user_default'),
-                  content: '', time: '', isSelf: false
+                  content: '',
+                  time: '',
+                  isSelf: false
                 } as Message
               }
             })
@@ -97,8 +104,11 @@ struct FriendDetail {
 
         // 删除好友按钮
         Button($r('app.string.btn_delete_friend'), { type: ButtonType.Normal })
-          .width('100%').height(50).backgroundColor(Color.White)
-          .fontColor('#FA5151').fontWeight(600)
+          .width('100%')
+          .height(50)
+          .backgroundColor(Color.White)
+          .fontColor('#FA5151')
+          .fontWeight(600)
           .onClick(() => {
             this.handleDelete();
           })

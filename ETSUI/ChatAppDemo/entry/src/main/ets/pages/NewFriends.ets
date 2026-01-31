@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-import { router, promptAction } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { dbManager } from '../utils/DatabaseManager';
 import { FriendRequestModel } from '../viewmodel/FriendRequestModel';
 import { UserModel } from '../viewmodel/UserModel';
@@ -51,12 +51,12 @@ struct NewFriends {
         Blank()
         Text($r('app.string.title_add_friends'))
           .fontColor('#576B95')
-          .fontSize(16)          .onClick(() => router.pushUrl({ url: 'pages/AddFriends' }))
+          .fontSize(16).onClick(() => router.pushUrl({ url: 'pages/AddFriends' }))
       }
       .width('100%').padding(15).backgroundColor('#F1F3F5')
 
       // 搜索入口
-      Search({ placeholder: $r('app.string.hint_account_phone') })        .margin(10)
+      Search({ placeholder: $r('app.string.hint_account_phone') }).margin(10)
         .onClick(() => router.pushUrl({ url: 'pages/AddFriends' }))
 
       List() {
@@ -77,7 +77,11 @@ struct NewFriends {
               if (item.status === 0) {
                 // 待处理状态
                 Row() {
-                  Button($r('app.string.btn_accept')).height(30).fontSize(14).backgroundColor('#07C160').margin({ right: 5 })
+                  Button($r('app.string.btn_accept'))
+                    .height(30)
+                    .fontSize(14)
+                    .backgroundColor('#07C160')
+                    .margin({ right: 5 })
                     .onClick(async () => {
                       await this.handleAction(item, 1, index);
                     })
@@ -106,7 +110,9 @@ struct NewFriends {
   }
 
   async handleAction(item: FriendRequestModel, newStatus: number, index: number) {
-    if (!this.currentUser || !item.id) return;
+    if (!this.currentUser || !item.id) {
+      return;
+    }
 
     try {
       // 调用 FriendHandler 处理申请
@@ -123,7 +129,9 @@ struct NewFriends {
       // ArkTS 的数组索引更新有时不触发渲染，保险做法是整体重新赋值一次
       this.requests = [...this.requests];
 
-      promptAction.showToast({ message: newStatus === 1 ? $r('app.string.toast_approved') : $r('app.string.label_rejected') });
+      promptAction.showToast({
+        message: newStatus === 1 ? $r('app.string.toast_approved') : $r('app.string.label_rejected')
+      });
 
       if (newStatus === 1) { // 如果是接受好友
         // 发送更新通知

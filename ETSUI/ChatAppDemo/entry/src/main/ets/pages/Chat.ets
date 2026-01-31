@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,12 +13,11 @@
  * limitations under the License.
  */
 
-import { router } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
 import { UserModel } from '../viewmodel/UserModel';
 import Message from '../viewmodel/Message';
 import { dbManager } from '../utils/DatabaseManager';
-import { promptAction } from '@kit.ArkUI';
 
 @Entry
 @Component
@@ -50,7 +49,7 @@ struct Chat {
 
       console.info(`正在查询历史：我的手机号[${this.currentUser.phoneNumber}], 对方手机号[${this.targetPhone}]`);
 
-      if (this.isFriend &&dbManager.chat) {
+      if (this.isFriend && dbManager.chat) {
         // 2. 调用查询函数
         const history: Message[] = await dbManager.chat.queryHistoryByContact(
           this.targetPhone,
@@ -70,7 +69,9 @@ struct Chat {
 
   // 核心修改：增加 : Promise<void>
   async sendMessage(): Promise<void> {
-    if (this.inputText.trim().length === 0 || !this.currentUser || !dbManager.chat) return;
+    if (this.inputText.trim().length === 0 || !this.currentUser || !dbManager.chat) {
+      return;
+    }
     if (!this.isFriend) {
       promptAction.showToast({ message: $r('app.string.toast_not_friend_fail') });
       return;
@@ -144,7 +145,9 @@ struct Chat {
             .layoutWeight(1).height(40).backgroundColor(Color.White)
             .onChange((v: string) => this.inputText = v)
           Button('发送').margin({ left: 10 })
-            .onClick((): void => { this.sendMessage() })
+            .onClick((): void => {
+              this.sendMessage()
+            })
         } else {
           // 不是好友：显示提示文本或禁用状态
           Row() {
@@ -159,7 +162,8 @@ struct Chat {
     }.width('100%').height('100%')
   }
 
-  @Builder MessageBubble(msg: Message) {
+  @Builder
+  MessageBubble(msg: Message) {
     Row() {
       // 逻辑：如果 msg.isSelf 为 true，说明这条消息是当前登录账号发出的
       if (msg.isSelf) {
