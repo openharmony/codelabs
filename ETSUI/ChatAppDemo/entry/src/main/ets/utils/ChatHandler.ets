@@ -1,4 +1,18 @@
-// entry/src/main/ets/db/ChatHandler.ets
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { relationalStore } from '@kit.ArkData';
 import Message from '../viewmodel/Message';
 
@@ -25,9 +39,7 @@ export class ChatHandler {
   }
 
   // 显式声明返回类型 Promise<Message[]>
-  // entry/src/main/ets/db/ChatHandler.ets
-
-  // async queryChatList(myPhone: string): Promise<Message[]> {
+   // async queryChatList(myPhone: string): Promise<Message[]> {
   //   const list: Message[] = [];
   //   // 核心逻辑：先过滤 owner，然后通过子查询找到每个 targetPhone 对应的最大 ID（即最新消息）
   //   const SQL = `SELECT * FROM ChatHistory

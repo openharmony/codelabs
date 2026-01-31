@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { relationalStore } from '@kit.ArkData';
 import { FriendRequestModel } from '../viewmodel/FriendRequestModel';
 import { UserModel } from '../viewmodel/UserModel';
@@ -7,7 +22,7 @@ export class FriendHandler {
   private store: relationalStore.RdbStore;
   constructor(store: relationalStore.RdbStore) { this.store = store; }
 
-  // 1. 发送好友申请
+  // 发送好友申请
   async sendRequest(request: FriendRequestModel) {
     const valueBucket: relationalStore.ValuesBucket = {
       fromPhone: request.fromPhone,
@@ -24,7 +39,7 @@ export class FriendHandler {
     return;
   }
 
-  // 2. 获取发给我的所有申请
+  // 获取发给我的所有申请
   async getMyRequests(myPhone: string): Promise<FriendRequestModel[]> {
     let predicates = new relationalStore.RdbPredicates('FriendRequest');
     predicates.equalTo('toPhone', myPhone);
@@ -51,7 +66,7 @@ export class FriendHandler {
     return list;
   }
 
-  // 3. 处理申请 (接受/拒绝)
+  // 处理申请 (接受/拒绝)
   async handleRequest(requestId: number, status: number, fromPhone: string, myPhone: string) {
     // A. 更新申请状态
     let predicates = new relationalStore.RdbPredicates('FriendRequest');
@@ -74,7 +89,7 @@ export class FriendHandler {
   async getFriends(myPhone: string): Promise<UserModel[]> {
     if (!this.store) return [];
 
-    // 1. 先从 Friend 表找到我所有的好友手机号
+    // 从 Friend 表找到我所有的好友手机号
     let predicates = new relationalStore.RdbPredicates('Friend');
     predicates.equalTo('myPhone', myPhone);
 
@@ -89,10 +104,10 @@ export class FriendHandler {
       console.error('获取好友手机号失败');
     }
 
-    // 2. 如果没有好友，直接返回空数组
+    // 如果没有好友，直接返回空数组
     if (friendPhones.length === 0) return [];
 
-    // 3. 调用刚才在 UserHandler 里写好的批量查询方法
+    // 调用刚才在 UserHandler 里写好的批量查询方法
     // 注意：因为 dbManager 初始化时已经实例化了 user，我们可以直接跨模块调用
     const friendDetails = await dbManager.user!.queryUsersByPhones(friendPhones);
 

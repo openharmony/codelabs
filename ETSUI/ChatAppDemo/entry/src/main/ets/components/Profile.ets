@@ -1,17 +1,20 @@
-/**
- * 个人中心组件
- * 负责人：待分配
- * 状态：已实现
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 import router from '@ohos.router'
 import { UserModel } from '../viewmodel/UserModel'
-
-// 个人信息接口
-// interface UserInfo {
-//   avatar: Resource
-//   nickName: ResourceStr
-//   region: ResourceStr
-// }
 
 // 功能菜单项接口
 interface MenuItem {
@@ -27,13 +30,6 @@ export struct Profile {
   // @StorageProp 是单向绑定（只读），@StorageLink 是双向绑定
   @StorageProp('currentUser') user: UserModel | null = null;
 
-  // 模拟个人信息数据
-  // private userInfo: UserInfo = {
-  //   avatar: $r('app.media.user1'), // 使用现有资源
-  //   nickName: $r('app.string.label_default_user'),
-  //   region: $r('app.string.label_default_location')
-  // }
-
   // 功能菜单数据
   private menuItems: MenuItem[][] = [
     [
@@ -47,7 +43,7 @@ export struct Profile {
 
   // 退出登录函数
   private handleLogout(): void {
-    // 这里可以添加退出登录的逻辑，例如清除本地缓存等
+    // 这里可以添加退出登录的逻辑
     // 然后跳转到登录页面
     router.replaceUrl({
       url: 'pages/Login'
