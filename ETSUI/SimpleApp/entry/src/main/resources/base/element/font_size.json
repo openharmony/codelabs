@@ -1,0 +1,63 @@
+{
+  "integer" : [ {
+    "name" : "display_text_L",
+    "value" : 56,
+    "comment" : "Light"
+  }, {
+    "name" : "display_text_M",
+    "value" : 48,
+    "comment" : "Light"
+  }, {
+    "name" : "display_text_S",
+    "value" : 38,
+    "comment" : "Light"
+  }, {
+    "name" : "title_text_L",
+    "value" : 30,
+    "comment" : "Bold"
+  }, {
+    "name" : "title_text_M",
+    "value" : 24,
+    "comment" : "Bold"
+  }, {
+    "name" : "title_text_S",
+    "value" : 20,
+    "comment" : "Bold"
+  }, {
+    "name" : "subtitle_text_L",
+    "value" : 18,
+    "comment" : "Medium"
+  }, {
+    "name" : "subtitle_text_M",
+    "value" : 16,
+    "comment" : "Medium"
+  }, {
+    "name" : "subtitle_text_S",
+    "value" : 14,
+    "comment" : "Medium"
+  }, {
+    "name" : "body_text_L",
+    "value" : 16,
+    "comment" : "Regular"
+  }, {
+    "name" : "body_text_M",
+    "value" : 14,
+    "comment" : "Regular"
+  }, {
+    "name" : "body_text_S",
+    "value" : 12,
+    "comment" : "Regular"
+  }, {
+    "name" : "caption_text_L",
+    "value" : 12,
+    "comment" : "Medium"
+  }, {
+    "name" : "caption_text_M",
+    "value" : 10,
+    "comment" : "Medium"
+  }, {
+    "name" : "caption_text_S",
+    "value" : 8,
+    "comment" : "Medium"
+  } ]
+}

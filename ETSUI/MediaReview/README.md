@@ -11,14 +11,6 @@
 - 广场：发帖、点赞、评论
 - 收藏：聚合展示已收藏的图书/电影
 
-本应用的运行效果如下图所示：
-
-![](demo-gif/function_display_1.gif)
-
-![](demo-gif/function_display_2.gif)
-
-![](demo-gif/function_display_3.gif)
-
 # 搭建 OpenHarmony 环境
 
 ## 软件要求

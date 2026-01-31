@@ -1,0 +1,60 @@
+{
+  "string" : [ {
+    "name" : "module_desc",
+    "value" : "module description"
+  }, {
+    "name" : "EntryAbility_desc",
+    "value" : "description"
+  }, {
+    "name" : "EntryAbility_label",
+    "value" : "label"
+  }, {
+    "name" : "defaultForm_label",
+    "value" : "form_label"
+  }, {
+    "name" : "defaultForm_desc",
+    "value" : "form_description"
+  }, {
+    "name" : "EntryFormAbility_desc",
+    "value" : "form_description"
+  }, {
+    "name" : "EntryFormAbility_label",
+    "value" : "form_label"
+  }, {
+    "name" : "widget_desc",
+    "value" : "This is a service widget."
+  }, {
+    "name" : "widget_display_name",
+    "value" : "widget"
+  }, {
+    "name" : "widget1_desc",
+    "value" : "This is a service widget."
+  }, {
+    "name" : "widget1_display_name",
+    "value" : "widget1"
+  }, {
+    "name" : "camera_permission_reason",
+    "value" : "用于启动相机应用"
+  }, {
+    "name" : "gallery_permission_reason",
+    "value" : "用于启动图库应用"
+  }, {
+    "name" : "internet_permission_reason",
+    "value" : "用于浏览器搜索功能"
+  }, {
+    "name" : "start_abilities_permission_reason",
+    "value" : "用于启动其他系统应用"
+  }, {
+    "name" : "start_invisible_ability_permission_reason",
+    "value" : "用于启动系统后台应用"
+  }, {
+    "name" : "alarm_permission_reason",
+    "value" : "用于创建闹钟提醒"
+  }, {
+    "name" : "read_media_permission_reason",
+    "value" : "用于读取媒体文件以启动图库应用"
+  }, {
+    "name" : "clock_permission_reason",
+    "value" : "用于启动系统时钟应用"
+  } ]
+}

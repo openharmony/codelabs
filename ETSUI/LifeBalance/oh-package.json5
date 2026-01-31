@@ -1,0 +1,12 @@
+{
+  "modelVersion": "6.0.2",
+  "description": "Please describe the basic information.",
+  "dependencies": {
+    "cjcalendar": "^2.3.5"
+  },
+  "devDependencies": {
+    "@ohos/hypium": "1.0.24",
+    "@ohos/hamock": "1.0.0"
+  },
+  "dynamicDependencies": {}
+}
