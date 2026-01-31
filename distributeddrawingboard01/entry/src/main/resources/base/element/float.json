@@ -1,0 +1,116 @@
+{
+  "float": [
+    {
+      "name": "dialog_offset_dx",
+      "value": "0vp"
+    },
+    {
+      "name": "dialog_offset_dy",
+      "value": "-12vp"
+    },
+    {
+      "name": "ic_back_width",
+      "value": "24vp"
+    },
+    {
+      "name": "ic_back_height",
+      "value": "21vp"
+    },
+    {
+      "name": "ic_hop_width",
+      "value": "24vp"
+    },
+    {
+      "name": "ic_hop_height",
+      "value": "24vp"
+    },
+    {
+      "name": "button_font_size",
+      "value": "16fp"
+    },
+    {
+      "name": "dialog_title_font_size",
+      "value": "20fp"
+    },
+    {
+      "name": "dialog_title_padding_left",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_title_padding_top",
+      "value": "24vp"
+    },
+    {
+      "name": "dialog_title_height",
+      "value": "56vp"
+    },
+    {
+      "name": "device_icon_opacity",
+      "value": "0.9"
+    },
+    {
+      "name": "icon_uncheck_opacity",
+      "value": "0.5"
+    },
+    {
+      "name": "device_icon_width",
+      "value": "24vp"
+    },
+    {
+      "name": "device_name_font_size",
+      "value": "16fp"
+    },
+    {
+      "name": "device_name_margin_left",
+      "value": "16vp"
+    },
+    {
+      "name": "device_info_height",
+      "value": "56vp"
+    },
+    {
+      "name": "device_info_padding",
+      "value": "24vp"
+    },
+    {
+      "name": "device_info_divider_height",
+      "value": "1vp"
+    },
+    {
+      "name": "device_info_divider_opacity",
+      "value": "0.1"
+    },
+    {
+      "name": "device_info_divider_padding_left",
+      "value": "64vp"
+    },
+    {
+      "name": "device_info_divider_padding_right",
+      "value": "24vp"
+    },
+    {
+      "name": "button_line_height",
+      "value": "40vp"
+    },
+    {
+      "name": "button_line_divider_height",
+      "value": "22vp"
+    },
+    {
+      "name": "button_line_divider_width",
+      "value": "1vp"
+    },
+    {
+      "name": "button_line_radius",
+      "value": "20vp"
+    },
+    {
+      "name": "button_line_margin_top",
+      "value": "8vp"
+    },
+    {
+      "name": "button_line_padding",
+      "value": "10vp"
+    }
+  ]
+}
