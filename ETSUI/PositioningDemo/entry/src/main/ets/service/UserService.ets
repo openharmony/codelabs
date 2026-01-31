@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 import { UserInfo, UserSettings } from '../model/UserModel';
 import preferences from '@ohos.data.preferences';
 import { common } from '@kit.AbilityKit';

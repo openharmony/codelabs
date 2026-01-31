@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 import { LocationService } from '../service/LocationService';
 import { SportService } from '../service/SportService';
 import { ReminderService } from '../service/ReminderService';

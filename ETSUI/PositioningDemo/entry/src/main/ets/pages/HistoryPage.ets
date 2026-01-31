@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import { HistoryService } from '../service/HistoryService';
 import { SportData } from '../model/SportModel';
 import { common } from '@kit.AbilityKit';

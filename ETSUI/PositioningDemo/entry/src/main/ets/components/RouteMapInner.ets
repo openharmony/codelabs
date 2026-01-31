@@ -1,3 +1,8 @@
+// SPDX-License-Identifier: Apache-2.0
+/*
+ * Copyright (c) 2023 Your Company Name
+ * All rights reserved.
+ */
 import { LocationInfo, RouteData } from '../model/SportModel';
 import { MapComponent, mapCommon, map } from '@kit.MapKit';
 import { AsyncCallback } from '@kit.BasicServicesKit';
