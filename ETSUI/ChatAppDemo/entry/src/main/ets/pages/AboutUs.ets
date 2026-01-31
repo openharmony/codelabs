@@ -44,7 +44,7 @@ struct AboutUs {
       // 内容区域
       Column() {
         // APP图标
-        Image($r('app.media.user7'))
+        Image($r('app.media.icon'))
           .width(80)
           .height(80)
           .margin({ bottom: 16 })
