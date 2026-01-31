@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 xingxin. All rights reserved.
+ * 文件名: example.cpp
+ * 作者:邢欣
+ * 版本: 1.0
+ * 日期: 2025-11-03
+ */
 import UIAbility from '@ohos.app.ability.UIAbility';
 import AbilityDelegatorRegistry from '@ohos.app.ability.abilityDelegatorRegistry';
 import hilog from '@ohos.hilog';
