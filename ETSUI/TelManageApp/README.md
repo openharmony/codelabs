@@ -628,11 +628,11 @@ async saveContact() {
 
 ## 查找联系人
 ### 查找联系人界面设计
-搜索输入框位于主页顶栏下方，输入关键字（姓名或电话号码）后提交触发搜索；列表区域根据状态显示加载指示、空态或联系人列表。
+搜索输入框位于主页顶栏下方，输入关键字（姓名）后提交触发搜索；列表区域根据状态显示加载指示、空态或联系人列表。
 
 ```typescript
 // 搜索框（Index.ets）
-TextInput({ placeholder: '搜索联系人姓名或电话号码' })
+TextInput({ placeholder: '搜索联系人姓名' })
   .width('90%')
   .height(40)
   .margin(10)
@@ -672,7 +672,7 @@ if (this.isLoading) {
 ```
 
 ### 查找联系人逻辑
-搜索逻辑位于 `searchContacts()`：空关键字回退到全量列表；申请权限后优先按电话号码查询，无结果再全量拉取并按姓名包含过滤；最终更新列表数据。
+搜索逻辑位于 `searchContacts()`：空关键字回退到全量列表；申请权限后全量拉取并按姓名包含过滤；最终更新列表数据。
 
 ```typescript
 async searchContacts() {
