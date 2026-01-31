@@ -1,3 +1,4 @@
+// Copyright 2023 YourCompany. All rights reserved.
 import router from '@ohos.router';
 import { UserService } from '../service/UserService';
 import { StatisticsService } from '../service/StatisticsService';

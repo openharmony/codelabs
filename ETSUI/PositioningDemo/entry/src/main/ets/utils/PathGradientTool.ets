@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 import { LocationInfo } from '../model/SportModel';
 
 export class PathGradientTool {

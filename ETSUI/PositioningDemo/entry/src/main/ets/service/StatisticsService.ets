@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: MIT
+// Copyright 2023 Your Company. All rights reserved.
 import { SportData, SportType } from '../model/SportModel';
 import { UserStatistics, WeeklyStatistics, DailyRecord } from '../model/UserModel';
 import { HistoryService } from './HistoryService';
