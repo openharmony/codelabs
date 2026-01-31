@@ -1,3 +1,18 @@
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import router from '@ohos.router'
 
 @Entry
@@ -5,10 +20,12 @@ import router from '@ohos.router'
 struct Index {
 
   build() {
-    Column() {
+    // 使用 Stack 容器，组件会从后往前叠放
+    Stack({ alignContent: Alignment.Bottom }) {
       Image($r('app.media.launch'))
         .width('100%')
-        .height('80%')
+        .height('100%')
+        .objectFit(ImageFit.Cover) // 核心：确保图片覆盖全屏不留白
 
       Row() {
         Button($r('app.string.btn_login'))
@@ -34,11 +51,11 @@ struct Index {
       }.width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
       .padding({left: 20, right: 20})
+      .margin({ bottom: 60 })
     }
     .width('100%')
     .height('100%')
     .backgroundColor('#020204')
-    .justifyContent(FlexAlign.Center)
   }
 }
 

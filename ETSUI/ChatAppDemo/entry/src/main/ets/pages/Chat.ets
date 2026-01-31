@@ -1,7 +1,21 @@
-// entry/src/main/ets/pages/Chat.ets
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { router } from '@kit.ArkUI';
 import { emitter } from '@kit.BasicServicesKit';
-import { UserModel } from '../viewmodel/UserModel'; // 确保引入了 UserModel
+import { UserModel } from '../viewmodel/UserModel';
 import Message from '../viewmodel/Message';
 import { dbManager } from '../utils/DatabaseManager';
 import { promptAction } from '@kit.ArkUI';
@@ -19,8 +33,6 @@ struct Chat {
   @State isFriend: boolean = true; // 新增：记录好友状态
 
   // 显式声明返回类型为 Promise<void>
-  // entry/src/main/ets/pages/Chat.ets
-
   async aboutToAppear(): Promise<void> {
     const params = router.getParams() as Record<string, Object>;
     if (params && params.contact && this.currentUser) {
