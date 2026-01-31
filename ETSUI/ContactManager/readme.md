@@ -59,7 +59,6 @@
 
 ## 🧠 技术要点
 
-- HarmonyOS 系统联系人能力：`@ohos.contact`
 - 本地持久化存储：扩展联系人元数据与行为记录
 - 状态驱动 UI（ArkUI）：实现分组展示、Tab 筛选与动态刷新
 - 数据模型设计：`ContactActivity`、联系人扩展 Metadata
