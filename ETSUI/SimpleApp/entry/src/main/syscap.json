@@ -1,0 +1,20 @@
+{
+  "devices": {
+    "general": [
+      "default"
+    ]
+  },
+  "production": {
+    "removedSysCaps": [
+      "SystemCapability.HiviewDFX.HiDumper",
+      "SystemCapability.Security.DataTransitManager",
+      "SystemCapability.PowerManager.BatteryManager.Extension",
+      "SystemCapability.PowerManager.PowerManager.Extension",
+      "SystemCapability.Security.DeviceSecurityLevel",
+      "SystemCapability.UserIAM.UserAuth.PinAuth",
+      "SystemCapability.Security.DeviceAuth",
+      "SystemCapability.Telephony.CellularCall",
+      "SystemCapability.Window.SessionManager"
+    ]
+  }
+}
