@@ -13,13 +13,8 @@
 
 import { ContactDao } from '../dao/ContactDao';
 import { ContactDBConfig } from '../dao/ContactDBConfig';
-import common from '@ohos.app.ability.common'
-import {
-  ContactsItem,
-  InsertContactData,
-  OperationResult,
-  BatchContactData
-} from '../model/ContactModel';
+import common from '@ohos.app.ability.common';
+import { BatchContactData, ContactsItem, InsertContactData, OperationResult } from '../model/ContactModel';
 
 // 联系人管理器 - 业务逻辑层
 export class ContactManager {

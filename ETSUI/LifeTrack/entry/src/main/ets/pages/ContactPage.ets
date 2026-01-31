@@ -11,9 +11,9 @@
  * limitations under the License.
  */
 
-import { ContactsItem } from '../model/ContactModel'
+import { ContactsItem } from '../model/ContactModel';
 import { ContactManager } from './ContactManager';
-import common from '@ohos.app.ability.common'
+import common from '@ohos.app.ability.common';
 import call from '@ohos.telephony.call';
 import abilityAccessCtrl, { Permissions } from '@ohos.abilityAccessCtrl';
 import { PromptAction } from '@ohos.arkui.UIContext';
@@ -27,17 +27,15 @@ export function ContactBuilder() {
 @ComponentV2
 struct Contact {
   pathStack: NavPathStack = new NavPathStack();
-
   @Local contactsList: Array<ContactsItem> = []
   @Local searchText: string = ''
   @Local filteredContacts: Array<ContactsItem> = []
   @Local selectedContact: ContactsItem | null = null
   @Local selectedContactId: number = -1 // 添加选中状态的ID
-
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
   private contactManager: ContactManager = ContactManager.getInstance();
-  private prompt : PromptAction = this.getUIContext().getPromptAction()
+  private prompt: PromptAction = this.getUIContext().getPromptAction()
 
   async aboutToAppear() {
     // 初始化数据库并加载数据
@@ -156,33 +154,27 @@ struct Contact {
     Row({ space: 0 }) {
       // Call 按钮
       Column() {
-        Image($r('app.media.phone')) // 电话图标
-          .width(24)
-          .height(24)
-          .margin({ bottom: 4 })
         Text('拨号')
-          .fontSize(12)
+          .fontSize(24)
           .fontColor(this.selectedContact ? '#007AFF' : '#cccccc')  // 没有选中时变灰
+          .margin({ top: 14 })
       }
       .width('25%')
       .height(60)
       .onClick(() => {
         if (this.selectedContact) {
           this.makeCall()
-        }else {
+        } else {
           this.prompt.showToast({ message: '请先选择一个联系人' });
         }
       })
 
       // Add 按钮
       Column() {
-        Image($r('app.media.plus')) // 添加图标
-          .width(24)
-          .height(24)
-          .margin({ bottom: 4 })
         Text('添加')
-          .fontSize(12)
+          .fontSize(24)
           .fontColor('#007AFF')
+          .margin({ top: 14 })
       }
       .width('25%')
       .height(60)
@@ -192,40 +184,34 @@ struct Contact {
 
       // Edit 按钮
       Column() {
-        Image($r('app.media.pen')) // 编辑图标
-          .width(24)
-          .height(24)
-          .margin({ bottom: 4 })
         Text('编辑')
-          .fontSize(12)
+          .fontSize(24)
           .fontColor(this.selectedContact ? '#007AFF' : '#cccccc') // 没有选中时变灰
+          .margin({ top: 14 })
       }
       .width('25%')
       .height(60)
       .onClick(() => {
         if (this.selectedContact) {
           this.editContact()
-        }else {
+        } else {
           this.prompt.showToast({ message: '请先选择一个联系人' });
         }
       })
 
       // Delete 按钮
       Column() {
-        Image($r('app.media.bin')) // 删除图标
-          .width(24)
-          .height(24)
-          .margin({ bottom: 4 })
         Text('删除')
-          .fontSize(12)
+          .fontSize(24)
           .fontColor(this.selectedContact ? '#FF3B30' : '#ffcccc')  // 没有选中时变灰
+          .margin({ top: 14 })
       }
       .width('25%')
       .height(60)
       .onClick(() => {
         if (this.selectedContact) {
           this.deleteContact()
-        }else {
+        } else {
           this.prompt.showToast({ message: '请先选择一个联系人' });
         }
       })
@@ -238,7 +224,9 @@ struct Contact {
   // 显示字母索引的条件
   showInitial(contact: ContactsItem, list: Array<ContactsItem>): boolean {
     const index = list.findIndex(item => item.id === contact.id)
-    if (index === 0) return true
+    if (index === 0) {
+      return true
+    }
     const prevContact = list[index - 1]
     return prevContact.initial !== contact.initial
   }
@@ -383,7 +371,7 @@ struct Contact {
     NavDestination() {
       Column({ space: 0 }) {
         // 标题栏
-        Row({ space: 0 }){
+        Row({ space: 0 }) {
           // 返回按钮
           Button('返回')
             .fontSize(16)
@@ -400,20 +388,21 @@ struct Contact {
           Blank()
             .width(54)
         }
-        .padding({ left: 6, right: 6, top: 10, bottom: 10 })
+        .padding({
+          left: 6,
+          right: 6,
+          top: 10,
+          bottom: 10
+        })
         .width('100%')
         .backgroundColor(Color.White)
 
         // 搜索框
-        Row({ space: 10 }) {
-          Image($r('app.media.search')) // 搜索图标
-            .width(20)
-            .height(20)
-            .margin({ left: 16 })
-
-          TextInput({ placeholder: 'Search contacts' })
+        Row({}) {
+          TextInput({ placeholder: '搜索联系人' })
             .placeholderFont({ size: 16 })
-            .width('80%')
+            .width('90%')
+            .margin({ left: 16, right: 16 })
             .height(40)
             .onChange((value: string) => {
               this.searchText = value
@@ -436,7 +425,12 @@ struct Contact {
         }
         .width('100%')
         .layoutWeight(1)
-        .divider({ strokeWidth: 1, color: '#eeeeee', startMargin: 16, endMargin: 16 })
+        .divider({
+          strokeWidth: 1,
+          color: '#eeeeee',
+          startMargin: 16,
+          endMargin: 16
+        })
 
         // 底部操作栏
         this.ActionBar()

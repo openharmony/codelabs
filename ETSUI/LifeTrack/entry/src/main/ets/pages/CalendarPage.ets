@@ -11,8 +11,8 @@
  * limitations under the License.
  */
 
-import { CalendarEvent } from '../model/EventModel'
-import { EventInstance} from '../model/EventTypes'
+import { CalendarEvent } from '../model/EventModel';
+import { EventInstance } from '../model/EventTypes';
 import { DataManager } from './DataManager';
 import common from '@ohos.app.ability.common';
 
@@ -55,14 +55,20 @@ class CalendarUtils {
   // 时间字符串转分钟数（用于时间比较）
   static timeStringToMinutes(timeStr: string): number {
     const match = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);
-    if (!match) return 0;
+    if (!match) {
+      return 0;
+    }
 
     let hours = parseInt(match[1]);
     const minutes = parseInt(match[2]);
     const ampm = match[3].toUpperCase();
 
-    if (ampm === 'PM' && hours !== 12) hours += 12;
-    if (ampm === 'AM' && hours === 12) hours = 0;
+    if (ampm === 'PM' && hours !== 12) {
+      hours += 12;
+    }
+    if (ampm === 'AM' && hours === 12) {
+      hours = 0;
+    }
 
     return hours * 60 + minutes;
   }
@@ -78,7 +84,9 @@ class CalendarUtils {
 
   // 格式化持续时间（如："9:00 AM - 5:00 PM"）
   static formatDuration(startTime: number, endTime: number, allDay: boolean): string {
-    if (allDay) return "全天";
+    if (allDay) {
+      return "全天";
+    }
 
     const startStr = CalendarUtils.timestampToTimeString(startTime);
     const endStr = CalendarUtils.timestampToTimeString(endTime);
@@ -119,25 +127,20 @@ class CalendarUtils {
 @ComponentV2
 struct myCalendar {
   pathStack: NavPathStack = new NavPathStack();
-
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
   private dataManager: DataManager = DataManager.getInstance(this.context);
-
   @Local currentDate: Date = new Date()
   @Local selectedDate: Date = new Date()
   @Local events: CalendarEvent[] = []
   @Local eventInstances: EventInstance[] = [] // 新增：存储事件实例
-
   // 星期标题
   private weekDays: string[] = ['S', 'M', 'T', 'W', 'T', 'F', 'S']
-
   // 月份名称
   private monthNames: string[] = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ]
-
   // Scroller控制器
   private eventListScroller: Scroller = new Scroller()
 
@@ -352,7 +355,9 @@ struct myCalendar {
       return eventDate.toDateString() === dateStr;
     });
 
-    if (hasDirectEvents) return true;
+    if (hasDirectEvents) {
+      return true;
+    }
 
     // 检查重复事件实例
     return this.eventInstances.some(instance => {
@@ -393,17 +398,14 @@ struct myCalendar {
     return indicators.slice(0, 3); // 最多返回3个
   }
 
-  @Builder EventItemComponent(event: CalendarEvent) {
+  @Builder
+  EventItemComponent(event: CalendarEvent) {
     Row({ space: 16 }) {
       // 左侧：颜色标记和复选框
       Column({ space: 4 }) {
         // 复选框
-        Column(){
+        Column() {
           if (event.completed) {
-            Image($r('app.media.checkmark'))
-              .width(12)
-              .height(12)
-              .objectFit(ImageFit.Contain)
           }
         }
         .width(20)
@@ -433,14 +435,6 @@ struct myCalendar {
               type: event.completed ? TextDecorationType.LineThrough : TextDecorationType.None
             })
             .layoutWeight(1)
-
-          // 提醒标志
-          if (event.reminder > 0) {
-            Image($r('app.media.checkmark')) // 需要添加提醒图标资源
-              .width(14)
-              .height(14)
-              .objectFit(ImageFit.Contain)
-          }
         }
         .width('100%')
 
@@ -453,10 +447,6 @@ struct myCalendar {
         // 地点
         if (event.location) {
           Row({ space: 4 }) {
-            Image($r('app.media.checkmark')) // 需要添加地点图标资源
-              .width(12)
-              .height(12)
-              .objectFit(ImageFit.Contain)
             Text(event.location)
               .fontSize(12)
               .fontColor('#6B7280')
@@ -491,7 +481,7 @@ struct myCalendar {
           .fontColor('#3C82F6')
           .backgroundColor('#DBEAFE')
           .borderRadius(6)
-          .margin({bottom: 10})
+          .margin({ bottom: 10 })
           .onClick(() => {
             this.pathStack.replacePathByName('EventEdit', event, false);
           })
@@ -513,7 +503,12 @@ struct myCalendar {
       .alignItems(HorizontalAlign.End)
     }
     .width('100%')
-    .padding({ top: 16, bottom: 16, left: 12, right: 12 })
+    .padding({
+      top: 16,
+      bottom: 16,
+      left: 12,
+      right: 12
+    })
     .border({ width: { bottom: 1 }, color: '#F3F4F6' })
     .backgroundColor('#FFFFFF')
     .borderRadius(8)
@@ -714,7 +709,7 @@ struct myCalendar {
     NavDestination() {
       Column({ space: 0 }) {
         // 日历标题部分
-        Row({ space: 0 }){
+        Row({ space: 0 }) {
           // 返回按钮
           Button('返回')
             .fontSize(16)
@@ -732,7 +727,12 @@ struct myCalendar {
           Blank()
             .width(54)
         }
-        .padding({ left: 6, right: 6, top: 10, bottom: 10 })
+        .padding({
+          left: 6,
+          right: 6,
+          top: 10,
+          bottom: 10
+        })
         .width('100%')
         .backgroundColor(Color.White)
 
@@ -878,7 +878,7 @@ struct myCalendar {
           .margin({ top: 20, left: 24, right: 24 })
           .alignSelf(ItemAlign.Start)
 
-        Scroll(this.eventListScroller){
+        Scroll(this.eventListScroller) {
           // 事件列表
           Column() {
             if (this.getEventsForSelectedDate().length > 0) {
@@ -903,9 +903,9 @@ struct myCalendar {
         }
         .width('100%')
         // 计算事件列表区域的高度：总高度减去日历部分的高度
-        .layoutWeight(1)  // 使用layoutWeight占据剩余空间
+        .layoutWeight(1) // 使用layoutWeight占据剩余空间
         .scrollable(ScrollDirection.Vertical)
-        .scrollBar(BarState.Off)  // 可选：隐藏滚动条
+        .scrollBar(BarState.Off) // 可选：隐藏滚动条
         .margin({ top: 20 })
 
         // 添加事件按钮

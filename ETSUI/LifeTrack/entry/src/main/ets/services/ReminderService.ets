@@ -15,8 +15,7 @@
 import reminderManager from '@ohos.reminderAgentManager';
 import Notification from '@ohos.notification';
 import { notificationManager } from '@kit.NotificationKit';
-import wantAgent from '@ohos.wantAgent';
-import { ReminderOption, RepeatRule } from '../model/EventTypes';
+import { ReminderOption } from '../model/EventTypes';
 import { CalendarEvent } from '../model/EventModel';
 
 // ============ 类型定义 ============
@@ -192,7 +191,7 @@ export class ReminderService {
           hour: remindDate.getHours(),
           minute: remindDate.getMinutes(),
           second: remindDate.getSeconds()
-        }as LocalDateTime,
+        } as LocalDateTime,
         title: event.title,
         content: this.getReminderContent(event),
         notificationId: this.generateNotificationId(event.id),
@@ -283,8 +282,12 @@ export class ReminderService {
 
   // 计算提醒时间
   private calculateRemindTime(eventStartTime: number, reminderMinutes: number): number | null {
-    if (reminderMinutes < 0) return null;
-    if (reminderMinutes === 0) return eventStartTime;
+    if (reminderMinutes < 0) {
+      return null;
+    }
+    if (reminderMinutes === 0) {
+      return eventStartTime;
+    }
 
     const remindTime = eventStartTime - (reminderMinutes * 60 * 1000);
     return remindTime < Date.now() ? null : remindTime;

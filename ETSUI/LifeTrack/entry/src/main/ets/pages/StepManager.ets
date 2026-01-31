@@ -13,7 +13,7 @@
 
 // StepManager.ets - 步数记录管理器
 import { StepDao } from '../dao/StepDao';
-import { StepRecord, StepStats, StepResult, StepTrend, StepGoal } from '../model/StepModel';
+import { StepGoal, StepRecord, StepResult, StepStats, StepTrend } from '../model/StepModel';
 import common from '@ohos.app.ability.common';
 
 // 连续达标天数结果接口
@@ -251,7 +251,7 @@ export class StepManager {
 
     // 按日期排序（从最新到最旧）
     const sortedRecords = [...records].sort((a, b) =>
-      new Date(b.date).getTime() - new Date(a.date).getTime()
+    new Date(b.date).getTime() - new Date(a.date).getTime()
     );
 
     let currentStreak = 0;
@@ -264,7 +264,9 @@ export class StepManager {
 
       if (isGoalMet) {
         tempStreak++;
-        if (tempStreak > maxStreak) maxStreak = tempStreak;
+        if (tempStreak > maxStreak) {
+          maxStreak = tempStreak;
+        }
       } else {
         // 如果今天没达标，当前连续天数为0
         if (i === 0) { // 最新的一天
@@ -315,7 +317,7 @@ export class StepManager {
 
       // 按日期排序
       const sortedRecords = records.sort((a, b) =>
-        new Date(a.date).getTime() - new Date(b.date).getTime()
+      new Date(a.date).getTime() - new Date(b.date).getTime()
       );
 
       // 生成日期范围内每一天的数据，包括没有记录的日期

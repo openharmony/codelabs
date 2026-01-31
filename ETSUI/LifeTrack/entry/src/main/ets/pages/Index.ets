@@ -14,10 +14,10 @@
 @Entry
 @Component
 struct Index {
-  pathStack : NavPathStack = new NavPathStack();
+  pathStack: NavPathStack = new NavPathStack();
 
   build() {
-    Navigation(this.pathStack){
+    Navigation(this.pathStack) {
     }.onAppear(() => {
       this.pathStack.pushPathByName("Start", null, false);
     })

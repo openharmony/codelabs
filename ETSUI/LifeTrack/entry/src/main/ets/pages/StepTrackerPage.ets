@@ -26,7 +26,6 @@ export function StepTrackerBuilder() {
 @ComponentV2
 struct StepTracker {
   pathStack: NavPathStack = new NavPathStack();
-
   // 步数相关状态变量
   @Local todaySteps: number = 0;
   @Local todayCalories: number = 0;
@@ -36,16 +35,13 @@ struct StepTracker {
   @Local stepHistory: StepRecord[] = [];
   @Local stepTrends: StepTrend[] = [];
   @Local hasRecordedToday: boolean = false;
-
   // 输入相关状态
   @Local inputSteps: string = '0';
   @Local inputCalories: string = '0';
   @Local inputDistance: string = '0';
-  
   // 目标设置相关状态
   @Local showGoalSetting: boolean = false;
   @Local newGoal: string = '8000';
-  
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
   private stepManager: StepManager = StepManager.getInstance(this.context);
@@ -81,10 +77,10 @@ struct StepTracker {
   async loadData() {
     try {
       const today = this.getCurrentDate();
-      
+
       // 检查今天是否已有记录
       this.hasRecordedToday = await this.stepManager.hasTodayRecord();
-      
+
       // 获取今天的步数记录
       const result = await this.stepManager.getStepRecordByDate(today);
       if (result.success && result.data) {
@@ -100,10 +96,10 @@ struct StepTracker {
         this.todayDistance = this.calculateDistance(this.todaySteps);
         this.goalMet = this.todaySteps >= this.stepGoal;
       }
-      
+
       // 获取最近7天的趋势数据
       this.stepTrends = await this.stepManager.getStepTrends(7);
-      
+
       // 获取最近的步数记录
       const historyResult = await this.stepManager.getRecentStepRecords(10);
       if (historyResult.success && historyResult.data) {
@@ -124,7 +120,7 @@ struct StepTracker {
       const steps = parseInt(this.inputSteps) || 0;
       const calories = parseFloat(this.inputCalories) || 0;
       const distance = parseFloat(this.inputDistance) || 0;
-      
+
       if (steps < 0) {
         this.getUIContext().getPromptAction().showToast({
           message: '步数不能为负数',
@@ -132,7 +128,7 @@ struct StepTracker {
         });
         return;
       }
-      
+
       const today = this.getCurrentDate();
       const stepData: Partial<StepRecord> = {
         date: today,
@@ -142,18 +138,18 @@ struct StepTracker {
         calories: calories || this.calculateCalories(steps),
         distance: distance || this.calculateDistance(steps)
       };
-      
+
       const result = await this.stepManager.saveStepRecord(stepData);
-      
+
       if (result.success) {
         this.getUIContext().getPromptAction().showToast({
           message: '步数记录保存成功',
           duration: 2000
         });
-        
+
         // 重新加载数据
         this.loadData();
-        
+
         // 重置输入框
         this.inputSteps = '0';
         this.inputCalories = '';
@@ -211,7 +207,7 @@ struct StepTracker {
       console.error('加载目标步数异常:', error);
     }
   }
-  
+
   // 保存目标步数
   async saveStepGoal() {
     try {
@@ -223,16 +219,16 @@ struct StepTracker {
         });
         return;
       }
-      
+
       // 更新目标步数
       this.stepGoal = newGoalValue;
-      
+
       // 更新目标达成状态
       this.goalMet = this.todaySteps >= this.stepGoal;
-      
+
       // 关闭设置弹窗
       this.showGoalSetting = false;
-      
+
       // 保存到持久化存储
       preferences.getPreferences(this.context, 'settings').then((preferences) => {
         preferences.put('stepGoal', newGoalValue).then(() => {
@@ -243,7 +239,7 @@ struct StepTracker {
       }).catch((error: Error) => {
         console.error('获取偏好设置失败:', error);
       });
-      
+
       this.getUIContext().getPromptAction().showToast({
         message: `目标步数已更新为 ${newGoalValue}`,
         duration: 2000
@@ -261,18 +257,18 @@ struct StepTracker {
   formatDateDisplay(dateStr: string): string {
     const date = new Date(dateStr);
     const today = new Date();
-    
+
     if (date.toDateString() === today.toDateString()) {
       return '今天';
     }
-    
+
     const yesterday = new Date(today);
     yesterday.setDate(yesterday.getDate() - 1);
-    
+
     if (date.toDateString() === yesterday.toDateString()) {
       return '昨天';
     }
-    
+
     return `${date.getMonth() + 1}/${date.getDate()}`;
   }
 
@@ -292,7 +288,7 @@ struct StepTracker {
           .onChange((value: string) => {
             const numValue = parseInt(value) || 0;
             this.inputSteps = Math.max(0, numValue).toString();
-            
+
             // 自动计算卡路里和距离
             if (value.trim() !== '') {
               this.inputCalories = this.calculateCalories(numValue).toString();
@@ -388,10 +384,14 @@ struct StepTracker {
             .stroke('#E0E0E0')
             .strokeWidth(12)
             .fill(Color.Transparent)
-          
+
           // 进度圆弧
           if (this.stepGoal > 0) {
-            Progress({ value: Math.min(100, (this.todaySteps / this.stepGoal) * 100), total: 100, type: ProgressType.Ring })
+            Progress({
+              value: Math.min(100, (this.todaySteps / this.stepGoal) * 100),
+              total: 100,
+              type: ProgressType.Ring
+            })
               .width(140)
               .height(140)
               .color(this.goalMet ? '#34C759' : '#007AFF')
@@ -501,13 +501,13 @@ struct StepTracker {
             .fontColor('#999999')
             .layoutWeight(1)
             .align(Alignment.Top)
-          
+
           Text('')
             .fontSize(12)
             .fontColor('#999999')
             .layoutWeight(1)
             .align(Alignment.Center)
-          
+
           Text('低')
             .fontSize(12)
             .fontColor('#999999')
@@ -648,7 +648,7 @@ struct StepTracker {
                   .fontSize(16)
                   .fontWeight(FontWeight.Medium)
                   .fontColor('#333333')
-                
+
                 Text(`${record.calories} 卡路里 | ${record.distance}m`)
                   .fontSize(12)
                   .fontColor('#999999')
@@ -688,7 +688,7 @@ struct StepTracker {
 
   build() {
     NavDestination() {
-      Row({ space: 0 }){
+      Row({ space: 0 }) {
         // 返回按钮
         Button('返回')
           .fontSize(16)
@@ -705,7 +705,12 @@ struct StepTracker {
         Blank()
           .width(54)
       }
-      .padding({ left: 6, right: 6, top: 10, bottom: 10 })
+      .padding({
+        left: 6,
+        right: 6,
+        top: 10,
+        bottom: 10
+      })
       .width('100%')
       .backgroundColor(Color.White)
 
@@ -736,7 +741,7 @@ struct StepTracker {
                 .align(Alignment.Start)
                 .width('100%')
                 .margin({ bottom: 16 })
-              
+
               Column() {
                 Text('暂无历史记录')
                   .fontSize(16)
@@ -763,12 +768,18 @@ struct StepTracker {
           Blank()
             .height(20)
         }
-        .padding({ left: 16, right: 16, top: 0, bottom: 16 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 0,
+          bottom: 16
+        })
         .width('100%')
+
         // 移除固定高度，让内容自然撑开
       }
       .scrollBar(BarState.Auto)
-      
+
       // 目标设置弹窗
       this.buildGoalSettingDialog()
     }

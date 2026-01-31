@@ -12,7 +12,7 @@
  */
 
 // services/RepeatService.ts
-import { RepeatRule, EventInstance, RepeatOption } from '../model/EventTypes';
+import { EventInstance, RepeatOption, RepeatRule } from '../model/EventTypes';
 import { CalendarEvent } from '../model/EventModel';
 import common from '@ohos.app.ability.common';
 import { EventDao } from '../dao/EventDao';
@@ -20,9 +20,8 @@ import { ReminderService } from './ReminderService';
 
 export class RepeatService {
   private static instance: RepeatService;
-  private context: common.Context;  // 显式声明字段
+  private context: common.Context; // 显式声明字段
   private eventDao: EventDao;
-
   // 重复选项配置
   public readonly repeatOptions: RepeatOption[] = [
     { label: '一次性活动', value: 'none', type: 'none' },
@@ -41,7 +40,7 @@ export class RepeatService {
 
   // 构造函数：显式赋值
   constructor(context: common.Context) {
-    this.context = context;  // 显式赋值
+    this.context = context; // 显式赋值
     this.eventDao = new EventDao(context);
   }
 
@@ -217,7 +216,7 @@ export class RepeatService {
           calendarId: originalEvent.calendarId || 'default',
           color: originalEvent.color || '#2196F3',
           reminder: originalEvent.reminder,
-          repeatRule: '',  // 实例没有重复规则
+          repeatRule: '', // 实例没有重复规则
           completed: originalEvent.completed || false,
           created: originalEvent.created || Date.now(),
           updated: originalEvent.updated || Date.now()

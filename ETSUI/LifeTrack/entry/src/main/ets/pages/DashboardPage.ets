@@ -29,12 +29,10 @@ export function DashboardBuilder() {
 @ComponentV2
 struct Dashboard {
   pathStack: NavPathStack = new NavPathStack();
-
   // 联系人状态变量
   @Local contactCount: number = 0;
   @Local contactList: ContactsItem[] = [];
   @Local recentContacts: ContactsItem[] = [];
-
   // 日程管理相关状态变量
   @Local todayEvents: CalendarEvent[] = [];
   @Local upcomingEvent: CalendarEvent | null = null;
@@ -42,13 +40,11 @@ struct Dashboard {
   @Local completedEventsCount: number = 0;
   @Local pendingEventsCount: number = 0;
   @Local allEvents: CalendarEvent[] = [];
-
   // 步数统计相关状态变量
   @Local todaySteps: number = 0;
   @Local stepGoal: number = 8000;
   @Local goalMet: boolean = false;
   @Local weeklyAvgSteps: number = 0;
-
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
   // 添加ContactManager实例
@@ -133,7 +129,7 @@ struct Dashboard {
       // 获取今天的步数记录
       const today = this.getCurrentDate();
       const stepResult = await this.stepManager.getStepRecordByDate(today);
-      
+
       if (stepResult.success && stepResult.data) {
         const stepRecord = stepResult.data as StepRecord;
         this.todaySteps = stepRecord.steps;
@@ -143,11 +139,11 @@ struct Dashboard {
         this.todaySteps = 0;
         this.goalMet = false;
       }
-      
+
       // 获取最近7天的平均步数
       const stepStats = await this.stepManager.getStepStats(7);
       this.weeklyAvgSteps = stepStats.avgSteps;
-      
+
     } catch (error) {
       console.error('加载步数数据失败:', error);
     }
@@ -203,9 +199,9 @@ struct Dashboard {
 
   build() {
     NavDestination() {
-      Column(){
+      Column() {
         // Header
-        Row(){
+        Row() {
           Text('LifeTrack')
             .fontSize(30)
             .fontWeight(FontWeight.Bold)
@@ -215,27 +211,28 @@ struct Dashboard {
         .width('100%')
         .height(100)
         .backgroundColor('#1F62A8')
-        .margin({bottom: -30})
-        .padding({left: 20, right: 20, bottom: 40})
-        .expandSafeArea([SafeAreaType.SYSTEM],[SafeAreaEdge.TOP,SafeAreaEdge.BOTTOM])
+        .margin({ bottom: -30 })
+        .padding({ left: 20, right: 20, bottom: 40 })
+        .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
 
-        Column(){
+        Column() {
           // Dashboard
-          Column(){
-            Row(){
+          Column() {
+            Row() {
               Text('联系人们')
                 .width('100%')
                 .fontSize(20)
                 .fontWeight(FontWeight.Medium)
             }
+
             // 分隔线
             Divider()
               .strokeWidth(0.5)
               .color(Color.Gray)
               .margin({ left: 16, right: 16 })
               .margin({ top: 10, bottom: 10 })
-            Row(){
-              Column(){
+            Row() {
+              Column() {
                 Text(`可联系人数: ${this.contactCount}`)
                   .width('100%')
                   .fontSize(18)
@@ -269,7 +266,7 @@ struct Dashboard {
           .width('100%')
           .height(120)
           .backgroundColor('#FEFEFE')
-          .border({radius: 12})
+          .border({ radius: 12 })
           .padding(16)
           .shadow({
             radius: 6,
@@ -279,28 +276,29 @@ struct Dashboard {
           })
 
           // Upcoming Events
-          Column(){
-            Row(){
+          Column() {
+            Row() {
               Text('即将到来的活动')
                 .width('100%')
                 .fontSize(20)
                 .fontWeight(FontWeight.Medium)
             }
+
             // 分隔线
             Divider()
               .strokeWidth(0.5)
               .color(Color.Gray)
               .margin({ left: 16, right: 16 })
               .margin({ top: 10, bottom: 10 })
-            Row(){
-              Column(){
+            Row() {
+              Column() {
                 if (this.upcomingEvent) {
                   Text(`下一项: ${this.upcomingEvent.title}`)
                     .width('100%')
                     .fontSize(16)
                     .fontWeight(FontWeight.Normal)
                     .maxLines(1)
-                    .margin({bottom: 8})
+                    .margin({ bottom: 8 })
                   Text(this.formatEventTime(this.upcomingEvent))
                     .width('100%')
                     .fontSize(14)
@@ -312,7 +310,7 @@ struct Dashboard {
                     .fontSize(16)
                     .fontWeight(FontWeight.Normal)
                     .maxLines(1)
-                    .margin({bottom: 8})
+                    .margin({ bottom: 8 })
                   Text(this.formatEventTime(this.firstTodayEvent))
                     .width('100%')
                     .fontSize(14)
@@ -339,8 +337,8 @@ struct Dashboard {
           .width('100%')
           .height(120)
           .backgroundColor('#FEFEFE')
-          .border({radius: 12})
-          .margin({top: 20})
+          .border({ radius: 12 })
+          .margin({ top: 20 })
           .padding(16)
           .shadow({
             radius: 6,
@@ -350,28 +348,30 @@ struct Dashboard {
           })
 
           // Daily Status
-          Column(){
-            Row(){
+          Column() {
+            Row() {
               Text('日程状态')
                 .width('100%')
                 .fontSize(20)
                 .fontWeight(FontWeight.Medium)
             }
+
             // 分隔线
             Divider()
               .strokeWidth(0.5)
               .color(Color.Gray)
               .margin({ left: 16, right: 16 })
               .margin({ top: 10, bottom: 10 })
-            Row(){
-              Column(){
+            Row() {
+              Column() {
                 Text(`${this.completedEventsCount}项日程完成`)
                   .width('100%')
                   .fontSize(16)
                   .fontWeight(FontWeight.Normal)
               }
               .width('50%')
-              Column(){
+
+              Column() {
                 Text(`${this.pendingEventsCount}项待办日程`)
                   .width('100%')
                   .fontSize(16)
@@ -382,8 +382,8 @@ struct Dashboard {
           .width('100%')
           .height(120)
           .backgroundColor('#FEFEFE')
-          .border({radius: 12})
-          .margin({top: 20})
+          .border({ radius: 12 })
+          .margin({ top: 20 })
           .padding(16)
           .shadow({
             radius: 6,
@@ -393,33 +393,36 @@ struct Dashboard {
           })
 
           // 步数统计
-          Column(){
-            Row(){
+          Column() {
+            Row() {
               Text('步数统计')
                 .width('100%')
                 .fontSize(20)
                 .fontWeight(FontWeight.Medium)
             }
+
             // 分隔线
             Divider()
               .strokeWidth(0.5)
               .color(Color.Gray)
               .margin({ left: 16, right: 16 })
               .margin({ top: 10, bottom: 10 })
-            Row(){
-              Column(){
+            Row() {
+              Column() {
                 Text(`${this.todaySteps.toLocaleString()} 步`)
                   .width('100%')
                   .fontSize(16)
                   .fontWeight(FontWeight.Normal)
-                Text(this.goalMet ? '今日目标达成！' : `距目标还差 ${(this.stepGoal - this.todaySteps).toLocaleString()} 步`)
+                Text(this.goalMet ? '今日目标达成！' :
+                  `距目标还差 ${(this.stepGoal - this.todaySteps).toLocaleString()} 步`)
                   .width('100%')
                   .fontSize(12)
                   .fontColor(this.goalMet ? '#34C759' : '#FF9500')
-                  .margin({top: 4})
+                  .margin({ top: 4 })
               }
               .width('50%')
-              Column(){
+
+              Column() {
                 Text(`${this.weeklyAvgSteps.toLocaleString()} 步`)
                   .width('100%')
                   .fontSize(16)
@@ -428,15 +431,15 @@ struct Dashboard {
                   .width('100%')
                   .fontSize(12)
                   .fontColor('#666666')
-                  .margin({top: 4})
+                  .margin({ top: 4 })
               }
             }
           }
           .width('100%')
           .height(120)
           .backgroundColor('#FEFEFE')
-          .border({radius: 12})
-          .margin({top: 20})
+          .border({ radius: 12 })
+          .margin({ top: 20 })
           .padding(16)
           .shadow({
             radius: 6,
@@ -446,7 +449,7 @@ struct Dashboard {
           })
 
           // 2 buttons
-          Row(){
+          Row() {
             Button('联系人管理')
               .backgroundColor('#1F62A8')
               .width('30%')
@@ -470,7 +473,7 @@ struct Dashboard {
           }
           .width('100%')
           .height(50)
-          .margin({top: 15, bottom: 15})
+          .margin({ top: 15, bottom: 15 })
 
         }
         .width('100%')
@@ -478,7 +481,7 @@ struct Dashboard {
       }
       .width('100%')
       .height('100%')
-      .expandSafeArea([SafeAreaType.SYSTEM],[SafeAreaEdge.TOP,SafeAreaEdge.BOTTOM])
+      .expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP, SafeAreaEdge.BOTTOM])
       .backgroundColor('#E3E7EC')
     }
     .hideBackButton(true)

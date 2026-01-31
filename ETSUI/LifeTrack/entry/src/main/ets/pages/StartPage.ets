@@ -20,6 +20,7 @@ export function StartBuilder() {
 @Component
 struct Start {
   pathStack: NavPathStack = new NavPathStack();
+
   aboutToAppear(): void {
     setTimeout(() => {
       this.pathStack.replacePathByName("Dashboard", null, false)

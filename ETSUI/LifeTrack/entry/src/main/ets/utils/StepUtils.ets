@@ -51,31 +51,31 @@ export class StepUtils {
   async generateHistoricalSteps(days: number = 7): Promise<void> {
     try {
       const today = new Date();
-      
+
       for (let i = days - 1; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(today.getDate() - i);
-        
+
         const dateStr = this.formatDate(date);
-        
+
         // 检查是否已经有该日期的记录
         const existingRecord = await this.stepManager.getStepRecordByDate(dateStr);
         if (existingRecord.success && existingRecord.data) {
           continue; // 如果已有记录，跳过
         }
-        
+
         // 对于历史数据，我们暂时使用估算值（因为传感器只提供从设备启动以来的步数）
         // 在实际应用中，这里可以使用更复杂的算法或从云端同步历史数据
         const isWeekend = date.getDay() === 0 || date.getDay() === 6;
         const baseSteps = isWeekend ? 8000 : 6000; // 周末基础步数更高
-        
+
         // 使用随机数生成模拟历史数据（实际应用中应该使用真实的传感器历史数据）
         const steps = Math.floor(baseSteps * (0.7 + Math.random() * 0.6)); // 70%-130%之间的随机值
-        
+
         // 计算卡路里和距离
         const calories = this.calculateCalories(steps);
         const distance = this.calculateDistance(steps);
-        
+
         // 保存记录
         const stepData: Partial<StepRecord> = {
           date: dateStr,
@@ -83,7 +83,7 @@ export class StepUtils {
           calories: calories,
           distance: distance
         };
-        
+
         await this.stepManager.saveStepRecord(stepData);
       }
     } catch (error) {

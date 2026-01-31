@@ -16,7 +16,6 @@ import { StepRecord } from '../model/StepModel';
 import { sensor } from '@kit.SensorServiceKit';
 import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
 import common from '@ohos.app.ability.common';
-import { BusinessError } from '@kit.BasicServicesKit';
 
 // 步数计数器服务类，用于后台持续监听步数
 export class StepCounterService {
@@ -97,7 +96,7 @@ export class StepCounterService {
 
       const callback = (data: sensor.PedometerResponse) => {
         const totalSteps = data.steps;
-        
+
         // 首次初始化，设置初始步数
         if (this.initialStepCount === 0) {
           this.initialStepCount = totalSteps;
@@ -106,15 +105,15 @@ export class StepCounterService {
         } else {
           // 计算相对于初始值的步数
           const newStepCount = Math.max(0, totalSteps - this.initialStepCount);
-          
+
           // 如果步数发生变化，则更新
           if (newStepCount !== this.currentStepCount) {
             this.currentStepCount = newStepCount;
             console.info(`步数更新: ${this.currentStepCount}`);
-            
+
             // 通知所有监听器
             this.notifyStepChange(this.currentStepCount);
-            
+
             // 自动保存当前步数
             this.saveCurrentSteps();
           }
@@ -144,10 +143,10 @@ export class StepCounterService {
   private async saveCurrentSteps(): Promise<void> {
     try {
       const today = this.formatDate(new Date());
-      
+
       // 获取今天已有的步数记录
       const existingRecord = await this.stepManager.getStepRecordByDate(today);
-      
+
       if (existingRecord.success && existingRecord.data) {
         // 如果今天已有记录，更新它
         const existingData = existingRecord.data as StepRecord;
@@ -159,7 +158,7 @@ export class StepCounterService {
           distance: this.calculateDistance(this.currentStepCount),
           updated: Date.now()
         };
-        
+
         await this.stepManager.saveStepRecord(updatedRecord);
       } else {
         // 如果今天没有记录，创建新记录
@@ -169,7 +168,7 @@ export class StepCounterService {
           calories: this.calculateCalories(this.currentStepCount),
           distance: this.calculateDistance(this.currentStepCount)
         };
-        
+
         await this.stepManager.saveStepRecord(newRecord);
       }
     } catch (error) {
