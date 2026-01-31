@@ -41,8 +41,7 @@
 完成本项目开发需要先完成开发环境的搭建：
 
 1. **搭建开发环境**
-   - 参考 [工具准备](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-tools-overview-V5)，完成 DevEco Studio 的安装和开发环境配置
-   - 开发环境配置完成后，参考 [创建新项目](https://developer.huawei.com/consumer/cn/doc/harmonyos-guides-V5/ide-create-new-project-V5)（模板选择 "Empty Ability"）
+   - 完成 DevEco Studio 的安装和开发环境配置
 
 2. **获取项目代码**
    ```bash
@@ -279,19 +278,19 @@ export class AudioService {
 
 ```json
 {
-  "requestPermissions": [
-    {
-      "name": "ohos.permission.NOTIFICATION"
-    },
-    {
-      "name": "ohos.permission.MICROPHONE",
-      "reason": "$string:microphone_reason",
-      "usedScene": {
-        "abilities": ["EntryAbility"],
-        "when": "inuse"
+   "requestPermissions": [
+      {
+         "name": "ohos.permission.NOTIFICATION"
+      },
+      {
+         "name": "ohos.permission.MICROPHONE",
+         "reason": "$string:microphone_reason",
+         "usedScene": {
+            "abilities": ["EntryAbility"],
+            "when": "inuse"
+         }
       }
-    }
-  ]
+   ]
 }
 ```
 
