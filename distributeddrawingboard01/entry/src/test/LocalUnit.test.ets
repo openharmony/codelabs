@@ -1,3 +1,5 @@
+// Copyright 023 xingxin. All rights reserved.
+
 import { describe, beforeAll, beforeEach, afterEach, afterAll, it, expect } from '@ohos/hypium';
 
 export default function localUnitTest() {
