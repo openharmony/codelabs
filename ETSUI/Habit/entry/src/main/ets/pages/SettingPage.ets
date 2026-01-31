@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import HabitRepository from '../model/repository/HabitRepository';
@@ -28,10 +42,17 @@ struct SettingPage {
       List({ space: 10 }) {
 
         // --- 分组 1: 个人信息 ---
-        ListItem() { this.SettingItem("开发者", "李孙鹏") }
-        ListItem() { this.SettingItem("学号", "3220251393") }
-        ListItem() { this.SettingItem("版本号", "v1.0.0 Beta") }
+        ListItem() {
+          this.SettingItem("开发者", "李孙鹏")
+        }
 
+        ListItem() {
+          this.SettingItem("学号", "3220251393")
+        }
+
+        ListItem() {
+          this.SettingItem("版本号", "v1.0.0 Beta")
+        }
 
 
         // --- 分组 3: 数据管理 (危险区) ---
@@ -43,7 +64,10 @@ struct SettingPage {
             Text('>')
               .fontSize(16).fontColor('#CCC')
           }
-          .width('100%').padding(15).backgroundColor(Color.White).borderRadius(12)
+          .width('100%')
+          .padding(15)
+          .backgroundColor(Color.White)
+          .borderRadius(12)
           .onClick(() => {
             this.showResetDialog();
           })
@@ -58,7 +82,8 @@ struct SettingPage {
   }
 
   // 封装通用的列表项样式
-  @Builder SettingItem(title: string, value: string) {
+  @Builder
+  SettingItem(title: string, value: string) {
     Row() {
       Text(title).fontSize(16).fontColor('#333')
       Blank()
@@ -77,7 +102,8 @@ struct SettingPage {
       message: '确定要清空所有习惯和打卡记录吗？此操作无法撤销！',
       primaryButton: {
         value: '取消',
-        action: () => {}
+        action: () => {
+        }
       },
       secondaryButton: {
         value: '确认清空',

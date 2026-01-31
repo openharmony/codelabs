@@ -1,7 +1,21 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import router from '@ohos.router';
 import Habit from '../common/bean/Habit';
 import HabitRepository from '../model/repository/HabitRepository';
-import RecordRepository, { RecordDetail } from '../model/repository/RecordRepository'; // 🆕 引入 RecordDetail 接口
+import RecordRepository from '../model/repository/RecordRepository'; // 🆕 引入 RecordDetail 接口
 import AchievementRepository, { Achievement } from '../model/repository/AchievementRepository';
 import { CalendarView } from '../view/component/CalendarView';
 import { TimeAnalysisCard } from '../view/component/TimeAnalysisCard';
@@ -14,22 +28,17 @@ struct HabitDetailPage {
   @State habit: Habit | null = null;
   @State achievements: Achievement[] = [];
   @State recordDateStrings: string[] = [];
-
   // 存储详细的时间戳 (用于时段分析)
   @State recordTimestamps: number[] = [];
-
   // 统计数据
   @State currentStreak: number = 0;
   @State maxStreak: number = 0;
   @State totalCount: number = 0;
-
   @State selectedAchievementName: string = '';
-
   // 🆕 详情弹窗所需数据
   @State detailDate: string = '';
   @State detailMood: number = 1;
   @State detailNote: string = '';
-
   // 🆕 详情弹窗控制器
   detailDialogController: CustomDialogController = new CustomDialogController({
     builder: RecordDetailDialog({
@@ -59,7 +68,9 @@ struct HabitDetailPage {
    * 打卡后调用此方法，强制刷新所有组件的数据（包括时段分析卡片）
    */
   async loadData() {
-    if (!this.habit) return;
+    if (!this.habit) {
+      return;
+    }
     const habitId = this.habit.id;
 
     // A. 刷新统计数据
@@ -81,7 +92,9 @@ struct HabitDetailPage {
 
   // 🆕 打开详情弹窗的逻辑
   async openRecordDetail(dateStr: string) {
-    if (!this.habit) return;
+    if (!this.habit) {
+      return;
+    }
 
     // 查询那天的记录
     const detail = await RecordRepository.getRecordByDate(this.habit.id, dateStr);
@@ -102,42 +115,106 @@ struct HabitDetailPage {
     return list.map(item => {
       let isUnlockedNow = false;
       switch (item.unlockCondition) {
-        case 'total_3': if (this.totalCount >= 3) isUnlockedNow = true; break;
-        case 'total_7': if (this.totalCount >= 7) isUnlockedNow = true; break;
-        case 'total_15': if (this.totalCount >= 15) isUnlockedNow = true; break;
-        case 'total_30': if (this.totalCount >= 30) isUnlockedNow = true; break;
-        case 'total_50': if (this.totalCount >= 50) isUnlockedNow = true; break;
-        case 'total_100': if (this.totalCount >= 100) isUnlockedNow = true; break;
-        case 'total_365': if (this.totalCount >= 365) isUnlockedNow = true; break;
+        case 'total_3':
+          if (this.totalCount >= 3) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'total_7':
+          if (this.totalCount >= 7) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'total_15':
+          if (this.totalCount >= 15) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'total_30':
+          if (this.totalCount >= 30) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'total_50':
+          if (this.totalCount >= 50) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'total_100':
+          if (this.totalCount >= 100) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'total_365':
+          if (this.totalCount >= 365) {
+            isUnlockedNow = true;
+          }
+          break;
 
-        case 'streak_3': if (this.maxStreak >= 3) isUnlockedNow = true; break;
-        case 'streak_7': if (this.maxStreak >= 7) isUnlockedNow = true; break;
-        case 'streak_15': if (this.maxStreak >= 15) isUnlockedNow = true; break;
-        case 'streak_30': if (this.maxStreak >= 30) isUnlockedNow = true; break;
-        case 'streak_50': if (this.maxStreak >= 50) isUnlockedNow = true; break;
-        case 'streak_100': if (this.maxStreak >= 100) isUnlockedNow = true; break;
-        case 'streak_365': if (this.maxStreak >= 365) isUnlockedNow = true; break;
+        case 'streak_3':
+          if (this.maxStreak >= 3) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'streak_7':
+          if (this.maxStreak >= 7) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'streak_15':
+          if (this.maxStreak >= 15) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'streak_30':
+          if (this.maxStreak >= 30) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'streak_50':
+          if (this.maxStreak >= 50) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'streak_100':
+          if (this.maxStreak >= 100) {
+            isUnlockedNow = true;
+          }
+          break;
+        case 'streak_365':
+          if (this.maxStreak >= 365) {
+            isUnlockedNow = true;
+          }
+          break;
       }
       item.isUnlocked = isUnlockedNow;
       return item;
     });
   }
 
-  @Builder AchievementPopupBuilder(desc: string) {
+  @Builder
+  AchievementPopupBuilder(desc: string) {
     Text(desc)
       .fontSize(12)
       .fontColor(Color.White)
-      .padding({ left: 10, right: 10, top: 8, bottom: 8 })
+      .padding({
+        left: 10,
+        right: 10,
+        top: 8,
+        bottom: 8
+      })
       .backgroundColor('rgba(0,0,0,0.8)')
       .borderRadius(8)
   }
 
-  @Builder AchievementGrid(list: Achievement[]) {
+  @Builder
+  AchievementGrid(list: Achievement[]) {
     Flex({ wrap: FlexWrap.Wrap }) {
       ForEach(list, (item: Achievement) => {
         Column() {
           Image($r(`app.media.${item.icon}`))
-            .width(50).height(50)
+            .width(50)
+            .height(50)
             .grayscale(item.isUnlocked ? 0 : 1)
             .opacity(item.isUnlocked ? 1 : 0.4)
             .animation({ duration: 300 })
@@ -160,7 +237,9 @@ struct HabitDetailPage {
           placement: Placement.Top,
           mask: false,
           onStateChange: (e) => {
-            if (!e.isVisible) this.selectedAchievementName = '';
+            if (!e.isVisible) {
+              this.selectedAchievementName = '';
+            }
           }
         })
       })
@@ -185,7 +264,12 @@ struct HabitDetailPage {
           })
       }
       .width('100%')
-      .padding({ left: 20, right: 20, top: 12, bottom: 12 })
+      .padding({
+        left: 20,
+        right: 20,
+        top: 12,
+        bottom: 12
+      })
       .backgroundColor('#F1F3F5')
 
       Scroll() {
@@ -244,7 +328,8 @@ struct HabitDetailPage {
     .width('100%').height('100%').backgroundColor('#F1F3F5')
   }
 
-  @Builder AchievementSection() {
+  @Builder
+  AchievementSection() {
     Column() {
       Text('成就勋章').sectionTitleStyle() // 🆕 应用标题样式
 
@@ -273,7 +358,8 @@ struct HabitDetailPage {
 /**
  * 统计卡片中的数字样式
  */
-@Extend(Text) function statNumStyle() {
+@Extend(Text)
+function statNumStyle() {
   .fontSize(18)
   .fontWeight(FontWeight.Bold)
   .fontColor('#007DFF')
@@ -283,7 +369,8 @@ struct HabitDetailPage {
 /**
  * 统计卡片中的说明文字样式
  */
-@Extend(Text) function statLabelStyle() {
+@Extend(Text)
+function statLabelStyle() {
   .fontSize(12)
   .fontColor('#666')
   .margin({ top: 4 })
@@ -293,7 +380,8 @@ struct HabitDetailPage {
 /**
  * 板块主标题样式 (如"成就勋章")
  */
-@Extend(Text) function sectionTitleStyle() {
+@Extend(Text)
+function sectionTitleStyle() {
   .fontSize(16)
   .fontWeight(FontWeight.Bold)
   .width('100%')
@@ -304,7 +392,8 @@ struct HabitDetailPage {
 /**
  * 里程碑副标题样式 (如"累计里程碑")
  */
-@Extend(Text) function milestoneTitleStyle() {
+@Extend(Text)
+function milestoneTitleStyle() {
   .fontSize(14)
   .fontColor('#666')
   .fontWeight(FontWeight.Bold)
@@ -316,7 +405,8 @@ struct HabitDetailPage {
  * 通用白色卡片样式
  * 包含：白色背景、圆角、内边距
  */
-@Styles function cardStyle() {
+@Styles
+function cardStyle() {
   .width('100%')
   .padding(20)
   .backgroundColor(Color.White)

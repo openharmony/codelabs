@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import relationalStore from '@ohos.data.relationalStore';
 import { CommonConstants } from '../../common/constants/CommonConstants';
 
@@ -52,6 +66,7 @@ class RdbHelper {
     class InitCategory {
       name: string;
       color: string;
+
       constructor(name: string, color: string) {
         this.name = name;
         this.color = color;
@@ -92,24 +107,94 @@ class RdbHelper {
 
     const achievements: InitAchievement[] = [
       // --- 累计里程碑 ---
-      { name: '初出茅庐', icon: 'medal_total_3', description: '累计打卡达到 3 天，迈出第一步', unlockCondition: 'total_3' },
-      { name: '小试牛刀', icon: 'medal_total_7', description: '累计打卡达到 7 天，渐入佳境', unlockCondition: 'total_7' },
-      { name: '初具规模', icon: 'medal_total_15', description: '累计打卡达到 15 天，养成习惯', unlockCondition: 'total_15' },
-      { name: '凑满整月', icon: 'medal_total_30', description: '累计打卡达到 30 天，凑满整月', unlockCondition: 'total_30' },
-      { name: '坚持不懈', icon: 'medal_total_50', description: '累计打卡达到 50 天，意志坚定', unlockCondition: 'total_50' },
-      { name: '百日筑基', icon: 'medal_total_100', description: '累计打卡达到 100 天，坚如磐石', unlockCondition: 'total_100' },
-      { name: '登峰造极', icon: 'medal_total_365', description: '累计打卡达到 365 天，年度霸主', unlockCondition: 'total_365' },
+      {
+        name: '初出茅庐',
+        icon: 'medal_total_3',
+        description: '累计打卡达到 3 天，迈出第一步',
+        unlockCondition: 'total_3'
+      },
+      {
+        name: '小试牛刀',
+        icon: 'medal_total_7',
+        description: '累计打卡达到 7 天，渐入佳境',
+        unlockCondition: 'total_7'
+      },
+      {
+        name: '初具规模',
+        icon: 'medal_total_15',
+        description: '累计打卡达到 15 天，养成习惯',
+        unlockCondition: 'total_15'
+      },
+      {
+        name: '凑满整月',
+        icon: 'medal_total_30',
+        description: '累计打卡达到 30 天，凑满整月',
+        unlockCondition: 'total_30'
+      },
+      {
+        name: '坚持不懈',
+        icon: 'medal_total_50',
+        description: '累计打卡达到 50 天，意志坚定',
+        unlockCondition: 'total_50'
+      },
+      {
+        name: '百日筑基',
+        icon: 'medal_total_100',
+        description: '累计打卡达到 100 天，坚如磐石',
+        unlockCondition: 'total_100'
+      },
+      {
+        name: '登峰造极',
+        icon: 'medal_total_365',
+        description: '累计打卡达到 365 天，年度霸主',
+        unlockCondition: 'total_365'
+      },
 
       // --- 连胜里程碑 ---
-      { name: '习惯达人', icon: 'medal_streak_3', description: '连续打卡达到 3 天，保持势头', unlockCondition: 'streak_3' },
-      { name: '自律精英', icon: 'medal_streak_7', description: '连续打卡达到 7 天，势不可挡', unlockCondition: 'streak_7' },
-      { name: '不败传说', icon: 'medal_streak_15', description: '连续打卡达到 15 天，独孤求败', unlockCondition: 'streak_15' },
-      { name: '超越自我', icon: 'medal_streak_30', description: '连续打卡达到 30 天，你就是神！', unlockCondition: 'streak_30' },
+      {
+        name: '习惯达人',
+        icon: 'medal_streak_3',
+        description: '连续打卡达到 3 天，保持势头',
+        unlockCondition: 'streak_3'
+      },
+      {
+        name: '自律精英',
+        icon: 'medal_streak_7',
+        description: '连续打卡达到 7 天，势不可挡',
+        unlockCondition: 'streak_7'
+      },
+      {
+        name: '不败传说',
+        icon: 'medal_streak_15',
+        description: '连续打卡达到 15 天，独孤求败',
+        unlockCondition: 'streak_15'
+      },
+      {
+        name: '超越自我',
+        icon: 'medal_streak_30',
+        description: '连续打卡达到 30 天，你就是神！',
+        unlockCondition: 'streak_30'
+      },
 
       // 🆕 新增的3个连胜勋章
-      { name: '坚韧不拔', icon: 'medal_streak_50', description: '连续打卡达到 50 天，坚韧如钢', unlockCondition: 'streak_50' },
-      { name: '百炼成钢', icon: 'medal_streak_100', description: '连续打卡达到 100 天，炉火纯青', unlockCondition: 'streak_100' },
-      { name: '永恒传奇', icon: 'medal_streak_365', description: '连续打卡达到 365 天，创造传奇', unlockCondition: 'streak_365' }
+      {
+        name: '坚韧不拔',
+        icon: 'medal_streak_50',
+        description: '连续打卡达到 50 天，坚韧如钢',
+        unlockCondition: 'streak_50'
+      },
+      {
+        name: '百炼成钢',
+        icon: 'medal_streak_100',
+        description: '连续打卡达到 100 天，炉火纯青',
+        unlockCondition: 'streak_100'
+      },
+      {
+        name: '永恒传奇',
+        icon: 'medal_streak_365',
+        description: '连续打卡达到 365 天，创造传奇',
+        unlockCondition: 'streak_365'
+      }
     ];
 
     for (const a of achievements) {

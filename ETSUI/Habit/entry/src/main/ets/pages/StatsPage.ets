@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import { DateUtil } from '../common/utils/DateUtil';
@@ -36,7 +50,9 @@ struct StatsPage {
 
   // 计算连续天数 (逻辑保留，虽然界面不显示了)
   calculateStreak(dates: string[]): number {
-    if (dates.length === 0) return 0;
+    if (dates.length === 0) {
+      return 0;
+    }
     let uniqueDates = Array.from(new Set(dates)).sort().reverse();
     let now = new Date();
     let todayStr = DateUtil.formatDate(now.getTime());
@@ -164,6 +180,7 @@ struct StatsPage {
           Text('<').fontSize(26).fontWeight(FontWeight.Bold)
         }
         .width(40).height(40).backgroundColor('#FFF').onClick(() => router.back())
+
         Text("数据统计").fontSize(20).fontWeight(FontWeight.Bold).margin({ left: 15 })
       }
       .width('100%').padding(15)
@@ -189,18 +206,25 @@ struct StatsPage {
 
           // 按钮区
           Button('⚡ 生成模拟数据')
-            .width('100%').height(50).backgroundColor('#333')
+            .width('100%')
+            .height(50)
+            .backgroundColor('#333')
             .margin({ top: 30 })
             .onClick(() => this.generateMockData())
 
           Button('🗑️ 强制清空旧数据')
-            .width('100%').height(40).backgroundColor('#FF4444')
+            .width('100%')
+            .height(40)
+            .backgroundColor('#FF4444')
             .margin({ top: 15, bottom: 50 })
             .onClick(() => {
               AlertDialog.show({
                 title: '清空数据',
                 message: '确定要清空所有打卡记录吗？',
-                primaryButton: { value: '取消', action: () => {} },
+                primaryButton: {
+                  value: '取消', action: () => {
+                  }
+                },
                 secondaryButton: {
                   value: '确认清空',
                   fontColor: '#FF0000',

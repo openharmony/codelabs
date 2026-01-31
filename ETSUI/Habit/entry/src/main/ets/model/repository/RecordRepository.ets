@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import RdbHelper from '../database/RdbHelper';
 import { CommonConstants } from '../../common/constants/CommonConstants';
 import relationalStore from '@ohos.data.relationalStore';
@@ -23,7 +37,6 @@ export interface RecordDetail {
 }
 
 class RecordRepository {
-
   // =================================================================
   // 1. 基础增删改查
   // =================================================================
@@ -31,7 +44,9 @@ class RecordRepository {
   // 新增记录 (支持心情和心得)
   createRecord(habitId: number, mood: number = 1, note: string = ''): Promise<number> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB not initialized');
+    if (!store) {
+      return Promise.reject('DB not initialized');
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       habitId: habitId,
@@ -46,7 +61,9 @@ class RecordRepository {
   // 🟢 [修复] 插入模拟数据 (补全字段，防止数据库报错)
   insertMockData(habitId: number, timestamp: number): Promise<number> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB not initialized');
+    if (!store) {
+      return Promise.reject('DB not initialized');
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       habitId: habitId,
@@ -60,7 +77,9 @@ class RecordRepository {
   // 删除指定习惯的所有记录
   deleteByHabitId(habitId: number): Promise<number> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB Error');
+    if (!store) {
+      return Promise.reject('DB Error');
+    }
     let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
     predicates.equalTo('habitId', habitId);
     return store.delete(predicates);
@@ -69,9 +88,13 @@ class RecordRepository {
   // 清空所有数据
   cleanAll(): Promise<void> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB Error');
+    if (!store) {
+      return Promise.reject('DB Error');
+    }
     let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
-    return store.delete(predicates).then(() => { return; });
+    return store.delete(predicates).then(() => {
+      return;
+    });
   }
 
   // =================================================================
@@ -80,7 +103,9 @@ class RecordRepository {
 
   async isCheckedInToday(habitId: number): Promise<boolean> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return false;
+    if (!store) {
+      return false;
+    }
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     const todayStart = now.getTime();
@@ -95,7 +120,9 @@ class RecordRepository {
 
   async getTodayCompletedNums(): Promise<Map<number, number>> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return new Map();
+    if (!store) {
+      return new Map();
+    }
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     const todayStart = now.getTime();
@@ -117,7 +144,9 @@ class RecordRepository {
 
   async deleteLatestRecord(habitId: number): Promise<void> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return;
+    if (!store) {
+      return;
+    }
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     const todayStart = now.getTime();
@@ -134,7 +163,9 @@ class RecordRepository {
 
   async getTodayCompletedIds(): Promise<number[]> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
     const now = new Date();
     now.setHours(0, 0, 0, 0);
     const todayStart = now.getTime();
@@ -186,7 +217,9 @@ class RecordRepository {
 
   async getAllRecordIds(): Promise<number[]> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
     try {
       let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
       const resultSet = await store.query(predicates);
@@ -207,7 +240,9 @@ class RecordRepository {
 
   async getRecordTimestamps(habitId: number): Promise<number[]> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
     try {
       let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
       predicates.equalTo('habitId', habitId);
@@ -227,7 +262,9 @@ class RecordRepository {
 
   async getRecordByDate(habitId: number, dateStr: string): Promise<RecordDetail | null> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return null;
+    if (!store) {
+      return null;
+    }
     const start = new Date(dateStr + 'T00:00:00').getTime();
     const end = new Date(dateStr + 'T23:59:59').getTime();
     let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
@@ -252,7 +289,9 @@ class RecordRepository {
 
   async getRecordDateStrings(habitId: number): Promise<string[]> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return [];
+    if (!store) {
+      return [];
+    }
     try {
       let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
       predicates.equalTo('habitId', habitId);
@@ -272,7 +311,9 @@ class RecordRepository {
   async getStreakStats(habitId: number): Promise<StreakStats> {
     const store = RdbHelper.getRdbStore();
     let stats = new StreakStats();
-    if (!store) return stats;
+    if (!store) {
+      return stats;
+    }
     let predicates = new relationalStore.RdbPredicates(CommonConstants.RECORD_TABLE_NAME);
     predicates.equalTo('habitId', habitId);
     predicates.orderByDesc('createTime');
@@ -287,7 +328,9 @@ class RecordRepository {
     }
     resultSet.close();
     stats.totalCount = uniqueDates.length;
-    if (stats.totalCount === 0) return stats;
+    if (stats.totalCount === 0) {
+      return stats;
+    }
     const todayStr = DateUtil.formatDate(new Date().getTime());
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
@@ -320,7 +363,9 @@ class RecordRepository {
       }
     }
     maxStreak = Math.max(maxStreak, tempStreak);
-    if (stats.totalCount > 0 && maxStreak === 0) maxStreak = 1;
+    if (stats.totalCount > 0 && maxStreak === 0) {
+      maxStreak = 1;
+    }
     stats.currentStreak = currentStreak;
     stats.maxStreak = maxStreak;
     return stats;

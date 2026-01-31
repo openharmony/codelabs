@@ -1,4 +1,17 @@
-
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import RdbHelper from '../database/RdbHelper';
 import Habit from '../../common/bean/Habit';
 import { CommonConstants } from '../../common/constants/CommonConstants';
@@ -6,11 +19,12 @@ import relationalStore from '@ohos.data.relationalStore';
 import { ReminderHelper } from '../ReminderHelper';
 
 class HabitRepository {
-
   // 1. 检查 INSERT：存的时候带上 categoryId 了吗？
   insert(habit: Habit): Promise<number> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('数据库未初始化');
+    if (!store) {
+      return Promise.reject('数据库未初始化');
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       name: habit.name,
@@ -31,7 +45,9 @@ class HabitRepository {
 
   async deleteById(id: number): Promise<number> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB Error');
+    if (!store) {
+      return Promise.reject('DB Error');
+    }
 
     try {
       // 🛑 在删除数据库记录前，先查一下这个习惯有没有提醒
@@ -59,7 +75,9 @@ class HabitRepository {
   // 2. 检查 QUERY：取的时候读出来了吗？(最容易漏这里！)
   queryAll(): Promise<Array<Habit>> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('数据库未初始化');
+    if (!store) {
+      return Promise.reject('数据库未初始化');
+    }
 
     try {
       let predicates = new relationalStore.RdbPredicates(CommonConstants.HABIT_TABLE_NAME);
@@ -76,16 +94,24 @@ class HabitRepository {
           // 读取 categoryId
           try {
             let catIndex = resultSet.getColumnIndex('categoryId');
-            if (catIndex >= 0) habit.categoryId = resultSet.getLong(catIndex);
-          } catch (e) {}
+            if (catIndex >= 0) {
+              habit.categoryId = resultSet.getLong(catIndex);
+            }
+          } catch (e) {
+          }
 
           // 🆕 读取 reminderTime 和 reminderId
           try {
             let timeIndex = resultSet.getColumnIndex('reminderTime');
             let idIndex = resultSet.getColumnIndex('reminderId');
-            if (timeIndex >= 0) habit.reminderTime = resultSet.getString(timeIndex);
-            if (idIndex >= 0) habit.reminderId = resultSet.getLong(idIndex);
-          } catch (e) {}
+            if (timeIndex >= 0) {
+              habit.reminderTime = resultSet.getString(timeIndex);
+            }
+            if (idIndex >= 0) {
+              habit.reminderId = resultSet.getLong(idIndex);
+            }
+          } catch (e) {
+          }
 
           habits.push(habit);
         }
@@ -96,21 +122,27 @@ class HabitRepository {
       return Promise.reject(err);
     }
   }
+
   cleanAll(): Promise<void> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB Error');
+    if (!store) {
+      return Promise.reject('DB Error');
+    }
 
     let predicates = new relationalStore.RdbPredicates(CommonConstants.HABIT_TABLE_NAME);
     return store.delete(predicates).then(() => {
       return;
     });
   }
+
   /**
    * 🆕 根据 ID 更新习惯信息
    */
   update(habit: Habit): Promise<number> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB Error');
+    if (!store) {
+      return Promise.reject('DB Error');
+    }
 
     const valueBucket: relationalStore.ValuesBucket = {
       name: habit.name,
@@ -135,7 +167,9 @@ class HabitRepository {
    */
   queryById(id: number): Promise<Habit | null> {
     const store = RdbHelper.getRdbStore();
-    if (!store) return Promise.reject('DB not initialized');
+    if (!store) {
+      return Promise.reject('DB not initialized');
+    }
 
     try {
       let predicates = new relationalStore.RdbPredicates(CommonConstants.HABIT_TABLE_NAME);
@@ -153,13 +187,20 @@ class HabitRepository {
           // 补全所有字段
           try {
             let catIndex = resultSet.getColumnIndex('categoryId');
-            if (catIndex >= 0) habit.categoryId = resultSet.getLong(catIndex);
+            if (catIndex >= 0) {
+              habit.categoryId = resultSet.getLong(catIndex);
+            }
 
             let timeIndex = resultSet.getColumnIndex('reminderTime');
             let idIndex = resultSet.getColumnIndex('reminderId');
-            if (timeIndex >= 0) habit.reminderTime = resultSet.getString(timeIndex);
-            if (idIndex >= 0) habit.reminderId = resultSet.getLong(idIndex);
-          } catch (e) {}
+            if (timeIndex >= 0) {
+              habit.reminderTime = resultSet.getString(timeIndex);
+            }
+            if (idIndex >= 0) {
+              habit.reminderId = resultSet.getLong(idIndex);
+            }
+          } catch (e) {
+          }
 
           resultSet.close();
           return habit;
