@@ -1,21 +1,23 @@
-# Define project specific obfuscation rules here.
-# You can include the obfuscation configuration files in the current module's build-profile.json5.
+# Define project-specific obfuscation rules here.
+# The obfuscation configuration file can be referenced in the module's build configuration.
 #
-# For more details, see
-#   https://developer.huawei.com/consumer/cn/doc/harmonyos-guides/source-obfuscation
+# For more details about source code obfuscation and build-time optimization,
+# refer to the official documentation of your build toolchain or platform.
 
 # Obfuscation options:
-# -disable-obfuscation: disable all obfuscations
-# -enable-property-obfuscation: obfuscate the property names
-# -enable-toplevel-obfuscation: obfuscate the names in the global scope
-# -compact: remove unnecessary blank spaces and all line feeds
-# -remove-log: remove all console.* statements
-# -print-namecache: print the name cache that contains the mapping from the old names to new names
-# -apply-namecache: reuse the given cache file
+# -disable-obfuscation: Disable all obfuscation features
+# -enable-property-obfuscation: Obfuscate property names
+# -enable-toplevel-obfuscation: Obfuscate global scope identifiers
+# -enable-filename-obfuscation: Obfuscate output file names
+# -enable-export-obfuscation: Obfuscate exported symbols
+# -compact: Remove unnecessary whitespace and line breaks
+# -remove-log: Remove console.* logging statements
+# -print-namecache: Output name mapping cache for debugging
+# -apply-namecache: Reuse an existing name mapping cache
 
 # Keep options:
-# -keep-property-name: specifies property names that you want to keep
-# -keep-global-name: specifies names that you want to keep in the global scope
+# -keep-property-name: Preserve specified property names
+# -keep-global-name: Preserve specified global identifiers
 
 -enable-property-obfuscation
 -enable-toplevel-obfuscation
