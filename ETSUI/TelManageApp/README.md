@@ -50,10 +50,17 @@
 │  ├──entrybackupability
 │  │  └──EntryBackupAbility.ets          // 数据备份与恢复类
 │  ├──model
-│  │  └──ContactData.ets                 // 联系人数据管理类
+│  │  ├──ContactData.ets                 // 联系人数据管理类
+│  │  └──BusinessCardData.ts                 // 我的名片管理
+│  │  └──FavoriteManager.ts                 // 我的收藏管理
 │  ├──pages
 │  │  ├──EditContact.ets                 // 编辑联系人页面
 │  │  ├──AddContact.ets                 // 添加联系人
+│  │  ├──FavoriteManagement.ets                 // 收藏管理
+│  │  ├──FavoritesDisplay.ets                 // 收藏展示
+│  │  ├──ImportExport.ets                 // 导入导出
+│  │  ├──MyBusinessCard.ets                 // 我的名片
+│  │  ├──SelectFavorites.ets                 // 选择收藏
 │  │  └──Index.ets                      //主页面的UI设计
 │  └──viewmodel    
 │     ├──ContactItem.ets                 // 联系人信息类
