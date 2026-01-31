@@ -12,9 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 // dishDetail.ets
 import router from '@ohos.router'; // 修正后的导入路径
+import { Constants } from '../common/Constants';
 import { Dish } from './Index';
 
 interface RouterParams {
@@ -26,6 +26,7 @@ interface RouterParams {
 struct DishDetail {
   @StorageProp('favoriteList') favorites: Dish[] = [];
   @StorageProp('likeList') likes: Dish[] = [];
+  @StorageProp('historyList') histories: Dish[] = [];
 
   @State dishData: Dish = {
     id: '',
@@ -43,8 +44,23 @@ struct DishDetail {
       const target = this.favorites.find(item => item.id === params.id);
       if (target) {
         this.dishData = target;
+      } else {
+        const historyTarget = this.histories.find(item => item.id === params.id);
+        if (historyTarget) {
+          this.dishData = historyTarget;
+        }
       }
     }
+
+    if (this.dishData.id) {
+      this.addToHistory();
+    }
+  }
+
+  addToHistory(): void {
+    const history: Dish[] = AppStorage.get(Constants.HISTORY_LIST) || [];
+    const filtered = history.filter((item: Dish) => item.id !== this.dishData.id);
+    AppStorage.set(Constants.HISTORY_LIST, [this.dishData, ...filtered]);
   }
 
 

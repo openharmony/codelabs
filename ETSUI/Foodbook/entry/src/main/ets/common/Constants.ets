@@ -15,5 +15,6 @@
 
 export class Constants {
   static FAVORITE_LIST: string = 'favoriteList';
+  static HISTORY_LIST: string = 'historyList';
   static readonly LIKE_LIST = 'likeList';
 }

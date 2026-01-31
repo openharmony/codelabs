@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 // WebPage.ets
 import webview from '@ohos.web.webview';
 import router from '@ohos.router';

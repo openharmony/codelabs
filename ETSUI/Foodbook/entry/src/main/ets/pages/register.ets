@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 //register
 import { font, Prompt, router, AppStorageV2 } from '@kit.ArkUI';
 import { text } from '@kit.ArkGraphics2D';

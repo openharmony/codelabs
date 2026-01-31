@@ -1,6 +1,20 @@
 {
   "app": {
-    "signingConfigs": [],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/peixiaoming/.ohos/config/default_works_rV8Jh0OKUnD9C3FjlLNAnnf1lGdpjhzZk0ew-c8tqjc=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B9779D666108161C257A95B20D0094043BAB18C53D2C44FEEDAE315BB090D630E670CFE06D01FBF",
+          "profile": "/Users/peixiaoming/.ohos/config/default_works_rV8Jh0OKUnD9C3FjlLNAnnf1lGdpjhzZk0ew-c8tqjc=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/peixiaoming/.ohos/config/default_works_rV8Jh0OKUnD9C3FjlLNAnnf1lGdpjhzZk0ew-c8tqjc=.p12",
+          "storePassword": "0000001B3087325F7F3FE9BBB74B980E5933C3C7BBF063E2969834760AD580B6022C0870B88DC389C8499D"
+        }
+      }
+    ],
     "products": [
       {
         "name": "default",
@@ -12,7 +26,8 @@
             "caseSensitiveCheck": true,
             "useNormalizedOHMUrl": true
           }
-        }
+        },
+        "targetSdkVersion": ""
       }
     ],
     "buildModeSet": [

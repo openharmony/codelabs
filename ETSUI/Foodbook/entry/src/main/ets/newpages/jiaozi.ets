@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import { LengthMetrics, router } from '@kit.ArkUI';
 import { Constants } from '../common/Constants';
 
@@ -52,10 +51,18 @@ struct DishDetailPage {
       AppStorage.set(Constants.FAVORITE_LIST, newFavorites);
     }
   }
+  addToHistory(): void {
+    const history: Dish[] = AppStorage.get(Constants.HISTORY_LIST) || [];
+    const filtered = history.filter((item: Dish) => item.id !== this.dishData.id);
+    AppStorage.set(Constants.HISTORY_LIST, [this.dishData, ...filtered]);
+  }
+
+
 
   aboutToAppear(): void {
     const favorites: Dish[] = AppStorage.get(Constants.FAVORITE_LIST) || [];
     this.isCollected = favorites.some((item: Dish) => item.id === this.dishData.id);
+    this.addToHistory();
   }
 
   build() {

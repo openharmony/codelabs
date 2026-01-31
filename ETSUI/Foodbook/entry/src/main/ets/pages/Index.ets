@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 //Index.ets
 import { LengthMetrics, router } from '@kit.ArkUI';
 import sendableColorSpaceManager from '@ohos.graphics.sendableColorSpaceManager';
@@ -46,6 +45,7 @@ struct Index {
   myindic: DotIndicator = new DotIndicator();
   myswiscr: SwiperController = new SwiperController();
   @StorageProp('favoriteList') favorites: FavoriteList = [];
+  @StorageProp('historyList') histories: FavoriteList = [];
   @StorageProp('likeList') likes: Dish[] = []; // 点赞列表
 
   @Styles myfun() {
@@ -131,6 +131,75 @@ struct Index {
                     name: item.name,
                     description: item.description,
                     image: item.image.id, // 关键！传递资源ID
+                    ingredients: item.ingredients,
+                    seasonings: item.seasonings
+                  }
+                });
+              })
+            })
+          }
+          .padding(10)
+          .width('100%')
+        }
+      }
+    }
+  }
+
+  @Builder HistoryList() {
+    Column() {
+      if (this.histories.length === 0) {
+        Column() {
+          Text().width(170).height(170).backgroundImage($r('app.media.kong')).backgroundImageSize(ImageSize.FILL)
+          Text('暂无浏览历史').margin({top:10}).fontColor('#9a9a9a')
+        }
+      } else {
+        Scroll() {
+          Column() {
+            ForEach(this.histories, (item: Dish) => {
+              Row() {
+                Image(item.image)
+                  .height(120)
+                  .width(120)
+                  .margin({ left: 10 })
+                  .borderRadius(10)
+                  .objectFit(ImageFit.Cover)
+
+                Column() {
+                  Text(item.name)
+                    .fontSize(18)
+                    .fontWeight(FontWeight.Bold)
+                    .margin({ bottom: 5 })
+
+                  Text(item.description)
+                    .fontSize(14)
+                    .fontColor('#666666')
+                    .margin({ bottom: 8 })
+
+                  Text(`主要食材: ${item.ingredients}`)
+                    .fontSize(12)
+                    .fontColor('#888888')
+                    .margin({ bottom: 5 })
+
+                  Text(`调料: ${item.seasonings}`)
+                    .fontSize(12)
+                    .fontColor('#888888')
+                }
+                .margin({ left: 15 })
+                .layoutWeight(1)
+              }
+              .width('100%')
+              .height(140)
+              .backgroundColor(Color.White)
+              .borderRadius(10)
+              .margin({ top: 10 })
+              .onClick(() => {
+                router.pushUrl({
+                  url: 'pages/dishDetail',
+                  params: {
+                    id: item.id,
+                    name: item.name,
+                    description: item.description,
+                    image: item.image.id,
                     ingredients: item.ingredients,
                     seasonings: item.seasonings
                   }
@@ -1266,7 +1335,8 @@ struct Index {
             .margin({ top: '45%' })
           }
           .backgroundColor(Color.Orange)
-          .stlfull()
+          // .stlfull()
+          .width("100%").height(380)
           .backgroundImage($r('app.media.context2'))
           .backgroundImageSize(ImageSize.FILL)
 
@@ -1320,7 +1390,7 @@ struct Index {
               this.FavoriteList()
             }
             TabContent() {
-              // 浏览历史内容
+              this.HistoryList()
             }
           }
           .height('40%')
