@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -15,9 +15,9 @@
 
 
 import router from '@ohos.router';
-import { PostItem, CommentItem, initPostData } from '../viewmodel/PostModel';
+import { CommentItem, initPostData, PostItem } from '../viewmodel/PostModel';
 import { dbManager } from '../utils/DatabaseManager';
-import { UserModel } from '../viewmodel/UserModel'
+import { UserModel } from '../viewmodel/UserModel';
 import { promptAction } from '@kit.ArkUI';
 
 @Component
@@ -47,9 +47,12 @@ export struct Post {
     // 2. 调用 PostHandler 的过滤查询
     this.posts = await dbManager.postHandler.queryTimeline(myPhone, friendPhones);
   }
+
   // 点赞逻辑（同步数据库）
   async toggleLike(postId: number) {
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      return;
+    }
     const myPhone = this.currentUser.phoneNumber;
 
     if (dbManager.postHandler) {
@@ -69,7 +72,9 @@ export struct Post {
   // Post.ets 内部方法
   async submitComment() {
     // 1. 校验输入内容
-    if (this.tempComment.trim().length === 0) return;
+    if (this.tempComment.trim().length === 0) {
+      return;
+    }
 
     // 2. 校验登录状态（确保评论能关联到人）
     if (!this.currentUser) {
@@ -140,7 +145,9 @@ export struct Post {
           }
           .layoutWeight(1).edgeEffect(EdgeEffect.Spring)
         } else {
-          Column() { Text($r('app.string.label_empty_list')).fontColor('#999') }.layoutWeight(1).justifyContent(FlexAlign.Center)
+          Column() {
+            Text($r('app.string.label_empty_list')).fontColor('#999')
+          }.layoutWeight(1).justifyContent(FlexAlign.Center)
         }
       }
       .width('100%').height('100%').backgroundColor('#F5F5F5')
@@ -166,8 +173,10 @@ export struct Post {
 @Component
 struct PostItemComponent {
   @ObjectLink post: PostItem;
-  onLikeHandler: (id: number) => void = (id) => {};
-  onCommentHandler: (id: number) => void = (id) => {};
+  onLikeHandler: (id: number) => void = (id) => {
+  };
+  onCommentHandler: (id: number) => void = (id) => {
+  };
 
   build() {
     Column() {

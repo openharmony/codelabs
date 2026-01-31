@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import picker from '@ohos.file.picker'
-import router from '@ohos.router'
+import picker from '@ohos.file.picker';
+import router from '@ohos.router';
 import { dbManager } from '../utils/DatabaseManager';
-import { UserModel } from '../viewmodel/UserModel'
+import { UserModel } from '../viewmodel/UserModel';
 import { LocationPickerDialog } from '../components/LocationPickerDialog';
 import { promptAction } from '@kit.ArkUI';
 
@@ -30,7 +30,6 @@ struct Register {
   @State password: string = ''
   @State isAgree: boolean = false
   private photoPicker = new picker.PhotoViewPicker()
-
   // 定义弹窗控制器
   dialogController: CustomDialogController = new CustomDialogController({
     builder: LocationPickerDialog({
@@ -81,7 +80,12 @@ struct Register {
           })
 
         Column() {
-          MyTextInput({ label: $r('app.string.label_nickname'), placeholder: $r('app.string.hint_example_name'), text: $nickName, type: InputType.Normal })
+          MyTextInput({
+            label: $r('app.string.label_nickname'),
+            placeholder: $r('app.string.hint_example_name'),
+            text: $nickName,
+            type: InputType.Normal
+          })
           // MyTextInput({ label: $r('app.string.label_country_region'), placeholder: $r('app.string.label_mainland_china'), text: $country, type: InputType.Normal })
           Column() {
             Row() {
@@ -101,8 +105,19 @@ struct Register {
 
             Divider().margin({ bottom: 10 })
           }
-          MyTextInput({ label: $r('app.string.label_phone'), placeholder: $r('app.string.hint_fill_phone'), text: $phoneNumber, type: InputType.Number })
-          MyTextInput({ label: $r('app.string.label_pwd'), placeholder: $r('app.string.hint_fill_pwd'), text: $password, type: InputType.Password })
+
+          MyTextInput({
+            label: $r('app.string.label_phone'),
+            placeholder: $r('app.string.hint_fill_phone'),
+            text: $phoneNumber,
+            type: InputType.Number
+          })
+          MyTextInput({
+            label: $r('app.string.label_pwd'),
+            placeholder: $r('app.string.hint_fill_pwd'),
+            text: $password,
+            type: InputType.Password
+          })
 
         }.width('80%')
         .justifyContent(FlexAlign.SpaceBetween)
@@ -130,7 +145,7 @@ struct Register {
                 .fontSize(14)
                 .fontColor(Color.Grey)
               Span($r('app.string.label_license_agreement'))
-                .onClick(()=>{
+                .onClick(() => {
                   router.pushUrl({ url: 'pages/LicenseAgreement' });
                 })
                 .fontColor(Color.Blue)
@@ -177,7 +192,7 @@ struct Register {
                   message: $r('app.string.error_phone_empty')
                 });
                 return
-              }else if (this.phoneNumber.length !== 11 || !/^\d+$/.test(this.phoneNumber)) {
+              } else if (this.phoneNumber.length !== 11 || !/^\d+$/.test(this.phoneNumber)) {
                 // 长度不是11位，或者 包含非数字字符
                 //err += $r('app.string.error_phone_format');
                 promptAction.showToast({

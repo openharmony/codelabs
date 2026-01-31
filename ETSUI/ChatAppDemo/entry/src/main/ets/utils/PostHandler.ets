@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,7 +14,7 @@
  */
 
 import { relationalStore } from '@kit.ArkData';
-import { PostItem, CommentItem } from '../viewmodel/PostModel';
+import { CommentItem, PostItem } from '../viewmodel/PostModel';
 
 export class PostHandler {
   private store: relationalStore.RdbStore;
@@ -122,7 +122,8 @@ export class PostHandler {
 
     if (hasLiked) {
       await this.store.delete(predicates);
-      await this.store.executeSql(`UPDATE Post SET likeCount = CASE WHEN likeCount > 0 THEN likeCount - 1 ELSE 0 END WHERE id = ?`, [postId]);
+      await this.store.executeSql(`UPDATE Post SET likeCount = CASE WHEN likeCount > 0 THEN likeCount - 1 ELSE 0 END WHERE id = ?`,
+        [postId]);
     } else {
       await this.store.insert('LikeRecord', { postId: postId, userPhone: myPhone });
       await this.store.executeSql(`UPDATE Post SET likeCount = likeCount + 1 WHERE id = ?`, [postId]);

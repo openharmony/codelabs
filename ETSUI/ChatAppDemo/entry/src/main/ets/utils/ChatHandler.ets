@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -39,7 +39,7 @@ export class ChatHandler {
   }
 
   // 显式声明返回类型 Promise<Message[]>
-   // async queryChatList(myPhone: string): Promise<Message[]> {
+  // async queryChatList(myPhone: string): Promise<Message[]> {
   //   const list: Message[] = [];
   //   // 核心逻辑：先过滤 owner，然后通过子查询找到每个 targetPhone 对应的最大 ID（即最新消息）
   //   const SQL = `SELECT * FROM ChatHistory

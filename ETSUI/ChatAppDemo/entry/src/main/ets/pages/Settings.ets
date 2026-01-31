@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -68,7 +68,12 @@ struct Settings {
       .width('100%')
       .backgroundColor(Color.White)
       .margin({ top: 12 })
-      .divider({ strokeWidth: 0.5, color: '#f0f0f0', startMargin: 16, endMargin: 16 }) // 分割线
+      .divider({
+        strokeWidth: 0.5,
+        color: '#f0f0f0',
+        startMargin: 16,
+        endMargin: 16
+      }) // 分割线
     }
     .width('100%')
     .height('100%')
@@ -76,7 +81,8 @@ struct Settings {
   }
 
   // 封装设置项组件
-  @Builder SettingItem(title: ResourceStr, action: () => void) {
+  @Builder
+  SettingItem(title: ResourceStr, action: () => void) {
     Row() {
       Text(title)
         .fontSize(16)

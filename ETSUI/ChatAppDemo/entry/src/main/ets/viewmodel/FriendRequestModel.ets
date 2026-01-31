@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,8 +16,8 @@
 export interface FriendRequestModel {
   id?: number;
   fromPhone: string; // 申请人手机号
-  toPhone: string;   // 被申请人手机号
-  fromName: string;  // 申请人昵称
-  message: string;   // 验证消息
-  status: number;    // 0:待处理, 1:已通过, 2:已拒绝
+  toPhone: string; // 被申请人手机号
+  fromName: string; // 申请人昵称
+  message: string; // 验证消息
+  status: number; // 0:待处理, 1:已通过, 2:已拒绝
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,22 +18,23 @@ import { common } from '@kit.AbilityKit';
 import { UserHandler } from '../utils/UserHandler';
 import { FriendHandler } from '../utils/FriendHandler';
 import { ChatHandler } from '../utils/ChatHandler';
-import {PostHandler} from '../utils/PostHandler'
+import { PostHandler } from '../utils/PostHandler';
 
 export class DatabaseManager {
   private store: relationalStore.RdbStore | null = null;
   public user: UserHandler | null = null;
   public friend: FriendHandler | null = null;
   public chat: ChatHandler | null = null;
-  public postHandler : PostHandler|null = null
-
+  public postHandler: PostHandler | null = null
   private readonly STORE_CONFIG: relationalStore.StoreConfig = {
     name: 'ChatDatabase.db',
     securityLevel: relationalStore.SecurityLevel.S1
   };
 
   async initDB(context: common.Context) {
-    if (this.store && this.user && this.friend && this.chat) return;
+    if (this.store && this.user && this.friend && this.chat) {
+      return;
+    }
 
     // 修改建表语句：增加 owner 字段（用于隔离不同账号的记录）
     const SQL_CREATE_USER = `CREATE TABLE IF NOT EXISTS User (
@@ -110,7 +111,9 @@ export class DatabaseManager {
 
   // 这里的 mock 数据逻辑需要适配 owner 字段，根据当前用户填充
   private async prePopulateChatData() {
-    if (!this.chat) return;
+    if (!this.chat) {
+      return;
+    }
     // 此时不知道 owner 是谁，由业务层根据登录用户调用填充
   }
 }

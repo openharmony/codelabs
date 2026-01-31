@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,9 +18,9 @@ import { I18nManager } from '../common/I18nManager';
 
 // 定义语言选项的显式接口
 interface LanguageOption {
-  label: string;    // 显示的名称，如“简体中文”
-  value: string;    // 逻辑值，如“zh-Hans”
-  sub: string;      // 副标题，如“Chinese”
+  label: string; // 显示的名称，如“简体中文”
+  value: string; // 逻辑值，如“zh-Hans”
+  sub: string; // 副标题，如“Chinese”
 }
 
 @Entry
@@ -28,7 +28,6 @@ interface LanguageOption {
 struct LanguageSettings {
   // 核心：监听全局语言状态
   @StorageLink('currentLanguage') currentLang: string = 'zh-Hans';
-
   // 使用显式类型数组代替 Array<any>
   private langOptions: LanguageOption[] = [
     {

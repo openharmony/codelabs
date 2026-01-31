@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -21,10 +21,9 @@ import { UserModel } from '../viewmodel/UserModel'; // 确保引入你的用户�
 @Entry
 @Component
 struct ChangePassword {
-  // 1. 直接关联 AppStorage 中的用户信息
+  // 直接关联 AppStorage 中的用户信息
   // 如果 currentUser 改变，这里会自动同步
   @StorageLink('currentUser') currentUser: UserModel | null = null
-
   @State oldPassword: string = ''
   @State newPassword: string = ''
   @State confirmPassword: string = ''

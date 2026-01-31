@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,20 +26,16 @@ interface MenuItem {
 
 @Component
 export struct Profile {
-
   // @StorageProp 是单向绑定（只读），@StorageLink 是双向绑定
   @StorageProp('currentUser') user: UserModel | null = null;
-
   // 功能菜单数据
   private menuItems: MenuItem[][] = [
     [
       // { icon: $r('app.media.user7'), title: $r('app.string.label_about_us') },
-      { index:0, icon: $r('app.media.edit'), title: $r('app.string.btn_edit') },
-      { index:1, icon: $r('app.media.settings'), title: $r('app.string.label_settings') }
+      { index: 0, icon: $r('app.media.edit'), title: $r('app.string.btn_edit') },
+      { index: 1, icon: $r('app.media.settings'), title: $r('app.string.label_settings') }
     ]
   ]
-
-
 
   // 退出登录函数
   private handleLogout(): void {
@@ -54,7 +50,7 @@ export struct Profile {
     Column() {
       // 顶部个人信息区域
       Column() {
-        if(this.user){
+        if (this.user) {
           // 头像
           Image(this.user.avatarPath)
             .width(80)
@@ -103,7 +99,12 @@ export struct Profile {
                       .fontSize(10)
                       .fontColor('#FFFFFF')
                       .backgroundColor('#FF4D4F')
-                      .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+                      .padding({
+                        left: 6,
+                        right: 6,
+                        top: 2,
+                        bottom: 2
+                      })
                       .borderRadius(10)
                       .margin({ left: 4 })
                   }
@@ -119,8 +120,7 @@ export struct Profile {
                   router.pushUrl({
                     url: 'pages/EditProfile'
                   })
-                }
-                else if (item.index === 1) {
+                } else if (item.index === 1) {
                   router.pushUrl({
                     url: 'pages/Settings'
                   })

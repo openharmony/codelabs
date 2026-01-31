@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -48,7 +48,9 @@ export class UserHandler {
   }
 
   async queryUserByPhone(phoneNumber: string): Promise<UserModel | null> {
-    if (!this.store) return null;
+    if (!this.store) {
+      return null;
+    }
 
     // 1. 构造谓词（查询条件）
     let predicates = new relationalStore.RdbPredicates('User');
@@ -79,7 +81,9 @@ export class UserHandler {
 
   async queryAllUsers(): Promise<UserModel[]> {
     const users: UserModel[] = [];
-    if (!this.store) return users;
+    if (!this.store) {
+      return users;
+    }
 
     // 1. 构造谓词，不加任何条件代表查询全表
     let predicates = new relationalStore.RdbPredicates('User');
@@ -112,7 +116,9 @@ export class UserHandler {
    * @returns true 表示已存在，false 表示不存在
    */
   async isPhoneNumberExists(phoneNumber: string): Promise<boolean> {
-    if (!this.store) return false;
+    if (!this.store) {
+      return false;
+    }
 
     let predicates = new relationalStore.RdbPredicates('User');
     predicates.equalTo('phoneNumber', phoneNumber);
@@ -134,7 +140,9 @@ export class UserHandler {
    */
   async queryUsersByPhones(phoneNumbers: string[]): Promise<UserModel[]> {
     const users: UserModel[] = [];
-    if (!this.store || phoneNumbers.length === 0) return users;
+    if (!this.store || phoneNumbers.length === 0) {
+      return users;
+    }
 
     let predicates = new relationalStore.RdbPredicates('User');
     // 使用 in 语句：WHERE phoneNumber IN ('138...', '139...')

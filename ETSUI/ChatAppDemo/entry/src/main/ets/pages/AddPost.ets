@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -26,7 +26,6 @@ struct AddPost {
   @State content: string = '';
   @State selectImage: string = '';
   @StorageLink('globalPosts') posts: PostItem[] = [];
-
   // 登录时保存的手机号，用于关联发布者身份
   @StorageLink('currentUser') currentUser: UserModel | null = null;
 
@@ -35,8 +34,7 @@ struct AddPost {
    */
   // AddPost.ets 中的核心插入逻辑补充
   async publish() {
-    if (!this.currentUser)
-    {
+    if (!this.currentUser) {
       promptAction.showToast({ message: $r('app.string.toast_login_to_post') });
       return;
     }
@@ -55,7 +53,7 @@ struct AddPost {
       0,
       false,
       [],
-      this.selectImage || '' // 确保不是 undefined
+      this.selectImage || ''// 确保不是 undefined
     );
 
     if (dbManager.postHandler) {
@@ -75,6 +73,7 @@ struct AddPost {
       }
     }
   }
+
   /**
    * 选择图片
    */

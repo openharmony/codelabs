@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -18,7 +18,6 @@ import router from '@ohos.router'
 @Entry
 @Component
 struct Index {
-
   build() {
     // 使用 Stack 容器，组件会从后往前叠放
     Stack({ alignContent: Alignment.Bottom }) {
@@ -50,7 +49,7 @@ struct Index {
 
       }.width('100%')
       .justifyContent(FlexAlign.SpaceBetween)
-      .padding({left: 20, right: 20})
+      .padding({ left: 20, right: 20 })
       .margin({ bottom: 60 })
     }
     .width('100%')
@@ -59,7 +58,8 @@ struct Index {
   }
 }
 
-@Extend(Button) function commonBtn() {
+@Extend(Button)
+function commonBtn() {
   .type(ButtonType.Normal)
   .fontSize(18)
   .width(120)

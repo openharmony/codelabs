@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,6 +22,7 @@ import { Profile } from '../components/Profile'
 @Component
 struct Main {
   @State curIndex: number = 0
+
   onPageShow() {
     if (this.curIndex === 0) {
       // 触发 ChatList 重新加载数据
@@ -30,7 +31,8 @@ struct Main {
     }
   }
 
-  @Builder buildTabBar(title: Resource, normalImage: Resource, selectedImage: Resource, index: number) {
+  @Builder
+  buildTabBar(title: Resource, normalImage: Resource, selectedImage: Resource, index: number) {
     Column() {
       Image(this.curIndex == index ? selectedImage : normalImage)
         .width(28)
@@ -47,21 +49,30 @@ struct Main {
     Tabs() {
       TabContent() {
         ChatList()
-      }.tabBar(this.buildTabBar($r("app.string.tab_chat"), $r("app.media.main_0_normal"), $r("app.media.main_0_select"), 0))
+      }
+      .tabBar(this.buildTabBar($r("app.string.tab_chat"), $r("app.media.main_0_normal"), $r("app.media.main_0_select"),
+        0))
 
       TabContent() {
         Contact()
-      }.tabBar(this.buildTabBar($r("app.string.tab_contacts"), $r("app.media.main_1_normal"), $r("app.media.main_1_select"), 1))
+      }
+      .tabBar(this.buildTabBar($r("app.string.tab_contacts"), $r("app.media.main_1_normal"),
+        $r("app.media.main_1_select"), 1))
 
       TabContent() {
         Post()
-      }.tabBar(this.buildTabBar($r("app.string.tab_moments"), $r("app.media.main_2_normal"), $r("app.media.main_2_select"), 2))
+      }
+      .tabBar(this.buildTabBar($r("app.string.tab_moments"), $r("app.media.main_2_normal"),
+        $r("app.media.main_2_select"), 2))
 
       TabContent() {
         Profile()
-      }.tabBar(this.buildTabBar($r("app.string.label_me"), $r("app.media.main_3_normal"), $r("app.media.main_3_select"), 3))
+      }
+      .tabBar(this.buildTabBar($r("app.string.label_me"), $r("app.media.main_3_normal"), $r("app.media.main_3_select"),
+        3))
 
-    }.width('100%')
+    }
+    .width('100%')
     .height('100%')
     .barPosition(BarPosition.End)
     .backgroundColor($r('app.color.main_background'))

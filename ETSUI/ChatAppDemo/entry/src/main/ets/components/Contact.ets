@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -13,10 +13,10 @@
  * limitations under the License.
  */
 
-import { router, promptAction } from '@kit.ArkUI';
-import { ContactGroup } from './ContactGroup'
-import { NavTitle } from './NavTitle'
-import { ContactModel } from '../viewmodel/ContactModel'
+import { promptAction, router } from '@kit.ArkUI';
+import { ContactGroup } from './ContactGroup';
+import { NavTitle } from './NavTitle';
+import { ContactModel } from '../viewmodel/ContactModel';
 import { UserModel } from '../viewmodel/UserModel';
 import { dbManager } from '../utils/DatabaseManager';
 import { emitter } from '@kit.BasicServicesKit';
@@ -42,7 +42,9 @@ export struct Contact {
   }
 
   async loadContacts() {
-    if (!this.currentUser) return;
+    if (!this.currentUser) {
+      return;
+    }
     const result = await dbManager.friend?.getFriends(this.currentUser.phoneNumber);
     if (result) {
       this.processContacts(result);
@@ -67,7 +69,9 @@ export struct Contact {
         }
       }
 
-      if (!groups.has(firstChar)) groups.set(firstChar, []);
+      if (!groups.has(firstChar)) {
+        groups.set(firstChar, []);
+      }
       groups.get(firstChar)?.push({
         avatar: user.avatarPath || $r('app.media.user_default'),
         name: user.nickName,
@@ -77,8 +81,12 @@ export struct Contact {
 
     const sortedGroups: ContactGroup[] = Array.from(groups.keys())
       .sort((a, b) => {
-        if (a === '#') return 1;
-        if (b === '#') return -1;
+        if (a === '#') {
+          return 1;
+        }
+        if (b === '#') {
+          return -1;
+        }
         return a.localeCompare(b);
       })
       .map((key: string): ContactGroup => {
@@ -126,7 +134,9 @@ export struct Contact {
     .height(55)
     .backgroundColor(Color.White)
     .onClick(() => {
-      if (onClick) onClick();
+      if (onClick) {
+        onClick();
+      }
     })
   }
 
