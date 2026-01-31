@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { DateUtil } from '../../common/utils/DateUtil';
 
 @Component
@@ -7,7 +21,9 @@ export struct CalendarView {
   private days: number[] = [0, 1, 2, 3, 4, 5, 6]; // 一周7天
   // 👇👇👇 新增这一行 👇👇👇
   // 定义一个回调函数，接收点击的日期字符串
-  onDateClick: (date: string) => void = () => {};
+  onDateClick: (date: string) => void = () => {
+  };
+
   // 计算某个坐标点对应的日期
   getDateByCoordinate(weekIndex: number, dayIndex: number): string {
     let date = new Date();
@@ -43,7 +59,8 @@ export struct CalendarView {
                 } else {
                   // ✅ 关键修改：在这里添加 onClick 事件
                   Rect()
-                    .width(12).height(12)
+                    .width(12)
+                    .height(12)
                     .radius(2)
                     // 打卡了深绿色，没打卡浅灰色
                     .fill(this.isDateChecked(week, day) ? '#28C060' : '#EBEDF0')

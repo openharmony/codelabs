@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 /**
  * 打卡时段分析卡片 (TimeAnalysisCard)
  * ------------------------------------------------
@@ -9,13 +23,11 @@
 export struct TimeAnalysisCard {
   // 1. 核心数据源，加上 @Watch 监听变化
   @Prop @Watch('analyze') timeStamps: number[] = [];
-
   // 2. 统计状态
   @State morningCount: number = 0;
   @State afternoonCount: number = 0;
   @State nightCount: number = 0;
   @State totalCount: number = 0; // 新增：用于传给子组件计算百分比
-
   // 3. 标签状态
   @State userTag: string = '计算中...';
 
@@ -109,7 +121,12 @@ export struct TimeAnalysisCard {
             .fontSize(10)
             .fontColor(Color.White)
             .backgroundColor('#FF9F0A')
-            .padding({ left: 8, right: 8, top: 2, bottom: 2 })
+            .padding({
+              left: 8,
+              right: 8,
+              top: 2,
+              bottom: 2
+            })
             .borderRadius(10)
         }
       }
@@ -145,7 +162,12 @@ export struct TimeAnalysisCard {
     .padding(20)
     .backgroundColor(Color.White)
     .borderRadius(16)
-    .shadow({ radius: 5, color: '#05000000', offsetX: 2, offsetY: 2 })
+    .shadow({
+      radius: 5,
+      color: '#05000000',
+      offsetX: 2,
+      offsetY: 2
+    })
   }
 }
 
@@ -162,7 +184,9 @@ struct TimeBarItem {
 
   // 计算百分比的辅助方法
   getPercent(): number {
-    if (this.total === 0) return 0;
+    if (this.total === 0) {
+      return 0;
+    }
     return (this.count / this.total) * 100;
   }
 

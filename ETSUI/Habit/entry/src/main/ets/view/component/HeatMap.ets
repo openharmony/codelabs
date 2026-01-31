@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import { DateUtil } from '../../common/utils/DateUtil';
 
 // 1. 定义一个简单的类，包含日期和状态
@@ -14,7 +28,6 @@ class DayInfo {
 @Component
 export struct HeatMap {
   @Prop @Watch('onDatesChange') recordDates: string[];
-
   // 2. 修改这里：不再存纯字符串，而是存包含状态的对象
   @State weeks: Array<Array<DayInfo>> = [];
 
@@ -87,7 +100,8 @@ export struct HeatMap {
   }
 
   // 5. 修改 Builder 接收对象
-  @Builder DayCell(day: DayInfo) {
+  @Builder
+  DayCell(day: DayInfo) {
     Rect()
       .width(12)
       .height(12)

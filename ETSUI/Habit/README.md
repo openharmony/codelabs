@@ -1,11 +1,11 @@
 # Habit Tracker
 
-这是一个基于 HarmonyOS (ArkTS) 开发的习惯养成应用，采用极简卡片式设计，帮助用户建立良好的生活习惯。
+这是一个基于 OpenHarmony (ArkTS) 开发的习惯养成应用，采用极简卡片式设计，帮助用户建立良好的生活习惯。
 
 ## 核心功能
 
 1. Rdb 数据库
-   - 关系型数据库：使用 HarmonyOS 关系型数据库（Rdb）存储所有数据
+   - 关系型数据库：使用 OpenHarmony 关系型数据库（Rdb）存储所有数据
    - 数据持久化：习惯、分类、打卡记录等数据持久化存储，应用重启后数据不丢失
    - 高效查询：支持高效的增删改查操作，确保数据操作流畅
    - 数据管理：支持一键重置所有数据，方便重新开始
@@ -28,7 +28,7 @@
 
 ### 前置要求
 - 安装 DevEco Studio
-- 配置好 HarmonyOS 开发环境
+- 配置好 OpenHarmony 开发环境
 
 ### 修改 Bundle Name
 1. 打开 `entry/src/main/module.json5` 文件

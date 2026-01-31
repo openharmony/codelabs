@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 export class CommonConstants {
   /**
    * 数据库配置
@@ -6,10 +20,8 @@ export class CommonConstants {
   static readonly HABIT_TABLE_NAME = 'habit';
   static readonly RECORD_TABLE_NAME = 'record';
   static readonly CATEGORY_TABLE_NAME = 'category';
-
   // 🆕 同学C新增：成就表名
   static readonly ACHIEVEMENT_TABLE_NAME = 'achievement';
-
   /**
    * 建表 SQL 语句
    * 包含字段: id (主键), name (名称), color (颜色), targetCount (目标次数)
@@ -25,7 +37,6 @@ export class CommonConstants {
       reminderId INTEGER  -- 🆕 新增：系统提醒ID (用于取消)
     )
   `;
-
   static readonly CREATE_CATEGORY_TABLE_SQL = `
     CREATE TABLE IF NOT EXISTS category (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -33,12 +44,10 @@ export class CommonConstants {
       color TEXT
     )
   `;
-
   /**
    * 页面标题
    */
   static readonly HOME_TITLE = '我的习惯';
-
   /**
    * 🆕 修改后的打卡记录表
    * 新增 mood (心情指数 1-4) 和 note (心得文字)
@@ -52,7 +61,6 @@ export class CommonConstants {
       note TEXT
     )
   `;
-
   // 🆕 同学C新增：成就表建表语句
   // 字段说明:
   // icon: 勋章图标资源名

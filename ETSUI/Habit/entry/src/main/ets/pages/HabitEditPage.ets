@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import router from '@ohos.router';
 import promptAction from '@ohos.promptAction';
 import Habit from '../common/bean/Habit';
@@ -14,24 +28,22 @@ struct HabitEditPage {
   // === 编辑模式状态 ===
   @State editHabitId: number = -1; // 如果大于0，说明是编辑模式
   @State oldReminderId: number = -1; // 记录旧的闹钟ID，用于取消
-
   // === 表单状态 ===
   @State habitName: string = '';
   @State targetCount: string = '1';
   @State selectedColor: string = '#FF5733';
   @State isSubmitting: boolean = false;
-
   // 分类状态
   @State categories: Category[] = [];
   @State selectedCategoryId: number = 2;
-
   // 提醒状态
   @State isReminderOn: boolean = false;
   @State reminderTime: Date = new Date('2023-01-01T08:00:00');
-
   dialogController: CustomDialogController = new CustomDialogController({
     builder: CategoryDialog({
-      confirm: (text: string) => { this.addCategory(text); }
+      confirm: (text: string) => {
+        this.addCategory(text);
+      }
     }),
     alignment: DialogAlignment.Center,
     autoCancel: true
@@ -82,10 +94,12 @@ struct HabitEditPage {
   }
 
   addCategory(name: string) {
-    const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    const randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
     CategoryRepository.insert(name, randomColor).then((newId) => {
       this.refreshCategories();
-      setTimeout(() => { this.selectedCategoryId = newId; }, 100);
+      setTimeout(() => {
+        this.selectedCategoryId = newId;
+      }, 100);
     });
   }
 
@@ -97,7 +111,9 @@ struct HabitEditPage {
           Text('<').fontSize(26).fontWeight(FontWeight.Bold).fontColor('#333').margin({ bottom: 2 })
         }
         .width(40).height(40).backgroundColor('#F5F5F5')
-        .onClick(() => { router.back(); })
+        .onClick(() => {
+          router.back();
+        })
 
         // 动态标题：编辑还是新建？
         Text(this.editHabitId > 0 ? "编辑习惯" : "新建习惯")
@@ -119,36 +135,60 @@ struct HabitEditPage {
           .onClick(() => {
             // 这个空的点击事件是为了解决某些情况下的焦点问题 (Hack)
           })
+
           // 注意：InputGroup 需要在 build 下面定义，这里直接用 TextInput 也行，为了复用之前的 InputGroup Builder
           Column() {
             Text("每日目标次数").fontSize(14).fontColor('#666').width('100%').margin({ bottom: 8 })
             TextInput({ placeholder: "例如：1", text: this.targetCount }) // 绑定 text 实现回显
               .type(InputType.Number)
-              .height(50).backgroundColor(Color.White).borderRadius(12)
-              .padding({ left: 16, right: 16 }).border({ width: 1, color: '#E0E0E0' })
-              .onChange((val) => { this.targetCount = val; })
+              .height(50)
+              .backgroundColor(Color.White)
+              .borderRadius(12)
+              .padding({ left: 16, right: 16 })
+              .border({ width: 1, color: '#E0E0E0' })
+              .onChange((val) => {
+                this.targetCount = val;
+              })
           }
 
           // 分类选择器
           Column() {
-            Text("所属分类").fontSize(14).fontColor('#666').width('100%').margin({bottom:8})
+            Text("所属分类").fontSize(14).fontColor('#666').width('100%').margin({ bottom: 8 })
             Flex({ wrap: FlexWrap.Wrap }) {
               ForEach(this.categories, (item: Category) => {
                 Text(item.name)
                   .fontSize(14)
                   .fontColor(this.selectedCategoryId === item.id ? Color.White : '#666')
                   .backgroundColor(this.selectedCategoryId === item.id ? item.color : '#F0F0F0')
-                  .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+                  .padding({
+                    left: 16,
+                    right: 16,
+                    top: 8,
+                    bottom: 8
+                  })
                   .borderRadius(20)
                   .margin({ right: 10, bottom: 10 })
-                  .onClick(() => { this.selectedCategoryId = item.id; })
+                  .onClick(() => {
+                    this.selectedCategoryId = item.id;
+                  })
               }, (item: Category) => JSON.stringify(item))
 
-              Text('+').fontSize(16).fontColor('#007DFF').backgroundColor('#E6F2FF')
-                .padding({ left: 20, right: 20, top: 8, bottom: 8 })
-                .borderRadius(20).margin({ bottom: 10 })
+              Text('+')
+                .fontSize(16)
+                .fontColor('#007DFF')
+                .backgroundColor('#E6F2FF')
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 8,
+                  bottom: 8
+                })
+                .borderRadius(20)
+                .margin({ bottom: 10 })
                 .border({ width: 1, color: '#007DFF', style: BorderStyle.Dashed })
-                .onClick(() => { this.dialogController.open(); })
+                .onClick(() => {
+                  this.dialogController.open();
+                })
             }
           }
 
@@ -158,7 +198,9 @@ struct HabitEditPage {
               Text("每日提醒").fontSize(14).fontColor('#666')
               Blank()
               Toggle({ type: ToggleType.Switch, isOn: this.isReminderOn })
-                .onChange((isOn) => { this.isReminderOn = isOn; })
+                .onChange((isOn) => {
+                  this.isReminderOn = isOn;
+                })
             }
             .width('100%').margin({ bottom: this.isReminderOn ? 10 : 20 })
 
@@ -166,7 +208,9 @@ struct HabitEditPage {
               Row() {
                 Column() {
                   Text("提醒时间").fontSize(14).fontColor('#999').margin({ bottom: 8 })
-                  Text(`${this.reminderTime.getHours().toString().padStart(2, '0')}点${this.reminderTime.getMinutes().toString().padStart(2, '0')}分`)
+                  Text(`${this.reminderTime.getHours().toString().padStart(2, '0')}点${this.reminderTime.getMinutes()
+                    .toString()
+                    .padStart(2, '0')}分`)
                     .fontSize(32).fontColor('#007DFF').fontWeight(FontWeight.Bold)
                 }
                 .alignItems(HorizontalAlign.Start).layoutWeight(1)
@@ -177,6 +221,7 @@ struct HabitEditPage {
                     Text('分').fontSize(12).fontColor('#999').textAlign(TextAlign.Center).layoutWeight(1)
                   }
                   .width(140)
+
                   TimePicker({ selected: this.reminderTime })
                     .useMilitaryTime(true).height(100).width(140)
                     .onChange((date: TimePickerResult) => {
@@ -186,8 +231,12 @@ struct HabitEditPage {
                     })
                 }
               }
-              .width('100%').padding(20).backgroundColor(Color.White).borderRadius(16)
-              .margin({ bottom: 20 }).shadow({ radius: 4, color: '#1A000000', offsetY: 2 })
+              .width('100%')
+              .padding(20)
+              .backgroundColor(Color.White)
+              .borderRadius(16)
+              .margin({ bottom: 20 })
+              .shadow({ radius: 4, color: '#1A000000', offsetY: 2 })
               .alignItems(VerticalAlign.Center)
             }
           }
@@ -197,10 +246,16 @@ struct HabitEditPage {
 
           // 提交按钮
           Button(this.isSubmitting ? "正在保存..." : (this.editHabitId > 0 ? "保存修改" : "创建习惯"))
-            .width('100%').height(50).fontSize(18).fontWeight(FontWeight.Medium)
-            .backgroundColor(this.selectedColor).margin({ top: 30 })
+            .width('100%')
+            .height(50)
+            .fontSize(18)
+            .fontWeight(FontWeight.Medium)
+            .backgroundColor(this.selectedColor)
+            .margin({ top: 30 })
             .enabled(!this.isSubmitting)
-            .onClick(() => { this.submitForm(); })
+            .onClick(() => {
+              this.submitForm();
+            })
 
         }
         .padding(20).width('100%')
@@ -211,18 +266,27 @@ struct HabitEditPage {
   }
 
   // 这里的 InputGroup 用于习惯名称的复用
-  @Builder InputGroup(title: string, placeholder: string, onChange: (val: string) => void) {
+  @Builder
+  InputGroup(title: string, placeholder: string, onChange: (val: string) => void) {
     Column() {
       Text(title).fontSize(14).fontColor('#666666').width('100%').margin({ bottom: 8 })
       TextInput({ placeholder: placeholder, text: this.habitName }) // 绑定 text 回显
-        .height(50).fontSize(16).backgroundColor(Color.White).borderRadius(12)
-        .padding({ left: 16, right: 16 }).border({ width: 1, color: '#E0E0E0' })
-        .onChange((value: string) => { onChange(value); })
+        .height(50)
+        .fontSize(16)
+        .backgroundColor(Color.White)
+        .borderRadius(12)
+        .padding({ left: 16, right: 16 })
+        .border({ width: 1, color: '#E0E0E0' })
+        .onChange((value: string) => {
+          onChange(value);
+        })
     }
   }
 
   async submitForm() {
-    if (this.isSubmitting) return;
+    if (this.isSubmitting) {
+      return;
+    }
     if (this.habitName.trim().length === 0) {
       promptAction.showToast({ message: '请输入习惯名称' });
       return;

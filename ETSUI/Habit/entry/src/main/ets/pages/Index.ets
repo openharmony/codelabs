@@ -1,3 +1,17 @@
+/*
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 import router from '@ohos.router';
 import Habit from '../common/bean/Habit';
 import { CommonConstants } from '../common/constants/CommonConstants';
@@ -22,10 +36,8 @@ struct Index {
   @State categories: Category[] = []; // 分类列表
   @State currentCategoryId: number = 1; // 当前选中的分类ID，默认1(全部)
   @State allHabitsCache: Habit[] = []; // 本地缓存所有习惯
-
   // 🆕 记录当前正在操作的习惯 (为了传给弹窗)
   @State currentOperatingHabit: Habit | null = null;
-
   // 🆕 定义打卡弹窗控制器
   checkInDialogController: CustomDialogController = new CustomDialogController({
     builder: CheckInDialog({
@@ -150,7 +162,7 @@ struct Index {
   }
 
   // ↩️ 撤销打卡逻辑 (反悔功能)
-  backoutRecord(id: number){
+  backoutRecord(id: number) {
     RecordRepository.deleteLatestRecord(id).then(() => {
       this.refreshData();
     }).catch((err: Error) => {
@@ -170,7 +182,7 @@ struct Index {
           colors: [
             ['#FFFFFF', 0.0], // 顶部白
             ['#F0F4FF', 0.5], // 中间淡蓝
-            ['#E6F2FF', 1.0]  // 底部蓝
+            ['#E6F2FF', 1.0]// 底部蓝
           ]
         })
 
@@ -181,7 +193,8 @@ struct Index {
           Button({ type: ButtonType.Circle }) {
             Text('⚙️').fontSize(24)
           }
-          .width(48).height(48)
+          .width(48)
+          .height(48)
           .backgroundColor('#FFFFFF')
           .shadow({ radius: 8, color: '#1A000000', offsetY: 2 })
           .margin({ right: 12 })
@@ -209,7 +222,8 @@ struct Index {
           Button({ type: ButtonType.Circle }) {
             Text('📊').fontSize(22)
           }
-          .width(48).height(48)
+          .width(48)
+          .height(48)
           .backgroundColor('#FFFFFF')
           .shadow({ radius: 8, color: '#1A000000', offsetY: 2 })
           .onClick(() => {
@@ -217,7 +231,12 @@ struct Index {
           })
         }
         .width('100%')
-        .padding({ left: 24, right: 24, top: 20, bottom: 10 })
+        .padding({
+          left: 24,
+          right: 24,
+          top: 20,
+          bottom: 10
+        })
         .alignItems(VerticalAlign.Center)
 
         // === 2. 分类 Tab 栏 (胶囊样式) ===
@@ -229,7 +248,12 @@ struct Index {
                 .fontWeight(this.currentCategoryId === item.id ? FontWeight.Bold : FontWeight.Medium)
                 .fontColor(this.currentCategoryId === item.id ? Color.White : '#666')
                 .backgroundColor(this.currentCategoryId === item.id ? '#333333' : '#FFFFFF')
-                .padding({ left: 20, right: 20, top: 8, bottom: 8 })
+                .padding({
+                  left: 20,
+                  right: 20,
+                  top: 8,
+                  bottom: 8
+                })
                 .borderRadius(20)
                 .shadow({ radius: this.currentCategoryId === item.id ? 4 : 0, color: '#33000000', offsetY: 2 })
                 .onClick(() => {
@@ -241,7 +265,8 @@ struct Index {
           })
         }
         .listDirection(Axis.Horizontal)
-        .width('100%').height(60)
+        .width('100%')
+        .height(60)
         .padding({ left: 24, right: 24 })
         .scrollBar(BarState.Off)
 
@@ -319,7 +344,8 @@ struct Index {
           .fontWeight(FontWeight.Medium)
           .margin({ bottom: 2 })
       }
-      .width(64).height(64)
+      .width(64)
+      .height(64)
       .linearGradient({
         angle: 135,
         colors: [['#007DFF', 0.0], ['#005BBB', 1.0]]
