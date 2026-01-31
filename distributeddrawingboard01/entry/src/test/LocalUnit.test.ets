@@ -1,4 +1,5 @@
 // Copyright 023 xingxin. All rights reserved.
+// SPDX-License-Identifier: Apache-2.0
 
 import { describe, beforeAll, beforeEach, afterEach, afterAll, it, expect } from '@ohos/hypium';
 
