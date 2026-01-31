@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2025 YourCompany. All rights reserved.
+ * 文件名: example.cpp
+ * 作者:邢欣
+ * 版本: 1.0
+ * 日期: 2025-11-01
+ */
 import AbilityConstant from '@ohos.app.ability.AbilityConstant';
 import UIAbility from '@ohos.app.ability.UIAbility';
 import Want from '@ohos.app.ability.Want';
