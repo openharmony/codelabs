@@ -16,7 +16,13 @@ import relationalStore from '@ohos.data.relationalStore';
 import common from '@ohos.app.ability.common';
 import { CalendarEvent } from '../model/EventModel';
 import { EventInstance } from '../model/EventTypes';
-import { DATABASE_CONFIG, SQL_CREATE_EVENTS_TABLE, SQL_CREATE_INDEXES, SQL_CREATE_EVENT_INSTANCES_TABLE, SQL_CREATE_INSTANCE_INDEXES } from './DatabaseConfig';
+import {
+  DATABASE_CONFIG,
+  SQL_CREATE_EVENT_INSTANCES_TABLE,
+  SQL_CREATE_EVENTS_TABLE,
+  SQL_CREATE_INDEXES,
+  SQL_CREATE_INSTANCE_INDEXES
+} from './DatabaseConfig';
 import util from '@ohos.util';
 
 export class EventDao {

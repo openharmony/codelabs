@@ -13,7 +13,7 @@
 
 import { ContactsItem } from '../model/ContactModel';
 import { ContactManager } from './ContactManager';
-import common from '@ohos.app.ability.common'
+import common from '@ohos.app.ability.common';
 
 @Builder
 export function ContactEditBuilder() {
@@ -23,11 +23,9 @@ export function ContactEditBuilder() {
 @ComponentV2
 struct ContactEdit {
   pathStack: NavPathStack = new NavPathStack();
-
   @Local contactId: number = -1
   @Local name: string = '';
   @Local phone: string = '';
-
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
   private contactManager: ContactManager = ContactManager.getInstance();
@@ -124,7 +122,12 @@ struct ContactEdit {
               this.saveContact();
             })
         }
-        .padding({ left: 16, right: 16, top: 10, bottom: 10 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 10,
+          bottom: 10
+        })
         .width('100%')
         .backgroundColor(Color.White)
         .border({ width: { bottom: 1 }, color: '#eeeeee' })

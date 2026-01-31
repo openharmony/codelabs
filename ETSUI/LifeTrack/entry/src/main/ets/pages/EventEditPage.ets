@@ -13,16 +13,12 @@
 
 // EventEditPage.ets
 import { DataManager } from './DataManager';
-import { CalendarEvent } from '../model/EventModel'
+import { CalendarEvent } from '../model/EventModel';
 import { ReminderOption, RepeatOption } from '../model/EventTypes';
-import common from '@ohos.app.ability.common'
+import common from '@ohos.app.ability.common';
 import util from '@ohos.util';
 import router from '@ohos.router';
 
-// interface ReminderOption {
-//   label: string,
-//   minutes: number
-// }
 
 @Builder
 export function EventEditBuilder() {
@@ -33,7 +29,6 @@ export function EventEditBuilder() {
 struct EventEdit {
   //导航栈
   pathStack: NavPathStack = new NavPathStack();
-
   // 状态变量
   @Local title: string = ''
   @Local description: string = ''
@@ -45,16 +40,14 @@ struct EventEdit {
   @Local selectedColor: string = '#FF3B30' // 默认红色
   @Local completed: boolean = false
   @Local showTimePicker: boolean = false
-  @Local editEventId: string = '0'  // 0表示新增，大于0表示编辑现有事件
+  @Local editEventId: string = '0' // 0表示新增，大于0表示编辑现有事件
   @Local createdTime: number = 0;
-
   // 提醒设置
   @Local reminderIndex: number = 0
   @Local showReminderPicker: boolean = false
   // 重复设置
   @Local repeatIndex: number = 0
   @Local showRepeatPicker: boolean = false
-
   @Local para: CalendarEvent = {
     id: '0',
     title: '',
@@ -71,7 +64,6 @@ struct EventEdit {
     created: 0,
     updated: 0
   }
-
   // context获取
   private context: common.UIAbilityContext =
     this.getUIContext().getHostContext() as common.UIAbilityContext;
@@ -188,7 +180,12 @@ struct EventEdit {
           this.saveEvent()
         })
     }
-    .padding({ left: 16, right: 16, top: 10, bottom: 10 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 10,
+      bottom: 10
+    })
     .width('100%')
     .backgroundColor(Color.White)
   }
@@ -203,7 +200,7 @@ struct EventEdit {
         .align(Alignment.Start)
         .width('100%')
 
-      TextInput({ text:this.title, placeholder: '添加标题' })
+      TextInput({ text: this.title, placeholder: '添加标题' })
         .onChange((value: string) => {
           this.title = value
         })
@@ -225,7 +222,7 @@ struct EventEdit {
         .align(Alignment.Start)
         .width('100%')
 
-      TextInput({ text:this.description, placeholder: '添加描述' })
+      TextInput({ text: this.description, placeholder: '添加描述' })
         .onChange((value: string) => {
           this.description = value
         })
@@ -259,9 +256,10 @@ struct EventEdit {
         }
         .layoutWeight(1)
 
-        Image($r('app.media.minus'))
+        Text("——")
           .width(16)
           .height(16)
+          .fontColor(Color.Black)
           .margin({ left: 8, right: 8 })
 
         Column({ space: 4 }) {
@@ -279,7 +277,7 @@ struct EventEdit {
       .backgroundColor(Color.White)
       .borderRadius(8)
       .onClick(() => {
-        this.closeAllPickers();  // 先关闭其他弹窗
+        this.closeAllPickers(); // 先关闭其他弹窗
         this.showTimePicker = true
       })
     }
@@ -318,7 +316,12 @@ struct EventEdit {
             this.showTimePicker = false
           })
       }
-      .padding({ left: 16, right: 16, top: 10, bottom: 10 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 10,
+        bottom: 10
+      })
       .width('100%')
 
       // 时间选择器
@@ -330,7 +333,7 @@ struct EventEdit {
           TimePicker({
             selected: this.startTime
           })
-            .onChange((time: TimePickerResult)  => {
+            .onChange((time: TimePickerResult) => {
               // const newStartTime = new Date()
               // newStartTime.setHours(time.hour)
               // newStartTime.setMinutes(time.minute)
@@ -376,7 +379,12 @@ struct EventEdit {
     .width('100%')
     .backgroundColor(Color.White)
     .borderRadius(16)
-    .shadow({ radius: 20, color: '#1A000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 20,
+      color: '#1A000000',
+      offsetX: 0,
+      offsetY: 2
+    })
     .position({ x: 0, y: '20%' })
     .zIndex(999)
   }
@@ -420,7 +428,7 @@ struct EventEdit {
         .align(Alignment.Start)
         .width('100%')
 
-      TextInput({ text:this.location, placeholder: '添加地点' })
+      TextInput({ text: this.location, placeholder: '添加地点' })
         .onChange((value: string) => {
           this.location = value
         })
@@ -530,13 +538,18 @@ struct EventEdit {
               .layoutWeight(1)
 
             if (index === this.reminderIndex) {
-              Image($r('app.media.checkmark'))
+              Text("√")
                 .width(20)
                 .height(20)
-                .fillColor('#007AFF')
+                .fontColor('#007AFF')
             }
           }
-          .padding({ left: 20, right: 20, top: 14, bottom: 14 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 14,
+            bottom: 14
+          })
           .width('100%')
           .onClick(() => {
             this.reminderIndex = index
@@ -559,7 +572,12 @@ struct EventEdit {
     .width('100%')
     .backgroundColor(Color.White)
     .borderRadius(16)
-    .shadow({ radius: 20, color: '#1A000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 20,
+      color: '#1A000000',
+      offsetX: 0,
+      offsetY: 2
+    })
     .position({ x: '0%', y: '40%' })
     .zIndex(999)
   }
@@ -618,13 +636,18 @@ struct EventEdit {
               .layoutWeight(1)
 
             if (index === this.repeatIndex) {
-              Image($r('app.media.checkmark'))
+              Text("√")
                 .width(20)
                 .height(20)
-                .fillColor('#007AFF')
+                .fontColor('#007AFF')
             }
           }
-          .padding({ left: 20, right: 20, top: 14, bottom: 14 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 14,
+            bottom: 14
+          })
           .width('100%')
           .onClick(() => {
             this.repeatIndex = index
@@ -632,6 +655,7 @@ struct EventEdit {
           })
         })
       }
+
       // 取消按钮
       Button('取消')
         .fontSize(16)
@@ -646,8 +670,13 @@ struct EventEdit {
     .width('100%')
     .backgroundColor(Color.White)
     .borderRadius(16)
-    .shadow({ radius: 20, color: '#1A000000', offsetX: 0, offsetY: 2 })
-    .position({ x: '0%', y: '70%' })
+    .shadow({
+      radius: 20,
+      color: '#1A000000',
+      offsetX: 0,
+      offsetY: 2
+    })
+    .position({ x: '0%', y: '50%' })
     .zIndex(999)
   }
 
@@ -707,7 +736,7 @@ struct EventEdit {
       title: this.title,
       description: this.description,
       startTime: this.startTime.getTime(), // 转换为时间戳
-      endTime: this.endTime.getTime(),     // 转换为时间戳
+      endTime: this.endTime.getTime(), // 转换为时间戳
       allDay: this.allDay,
       location: this.location,
       calendarId: this.calendarId,
@@ -731,33 +760,33 @@ struct EventEdit {
         console.log('事件保存成功，ID:', result.id);
         this.getUIContext().getPromptAction().showToast({
           message: '保存成功',
-          duration: 2000
+          duration: 1000
         });
 
         // 延迟返回，让用户看到成功提示
         setTimeout(() => {
           this.pathStack.replacePathByName('Calendar', eventData, null)
-        }, 2000);
+        }, 1000);
       } else {
         console.error('保存失败:', result.error);
         this.getUIContext().getPromptAction().showToast({
           message: `保存失败: ${result.error}`,
-          duration: 3000
+          duration: 1000
         });
       }
     } catch (error) {
       console.error('保存事件时发生错误:', error);
       this.getUIContext().getPromptAction().showToast({
         message: `保存失败: ${error.message || '未知错误'}`,
-        duration: 3000
+        duration: 1000
       });
     }
   }
 
   //构建主界面
   build() {
-    NavDestination(){
-      Stack(){
+    NavDestination() {
+      Stack() {
         Column() {
           // 顶部标题栏
           this.buildHeader()
@@ -833,9 +862,9 @@ struct EventEdit {
     .onReady((context: NavDestinationContext) => {
       this.pathStack = context.pathStack;
       this.para = context.pathInfo.param as CalendarEvent
-      console.log("收到的信息是:"+`${this.para}`);
-      const id:string = this.para.id
-      if (id!='0') {
+      console.log("收到的信息是:" + `${this.para}`);
+      const id: string = this.para.id
+      if (id != '0') {
         this.editEventId = id;
         this.loadEventData(id);
       } else {

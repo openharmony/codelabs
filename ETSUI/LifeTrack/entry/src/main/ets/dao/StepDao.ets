@@ -42,7 +42,7 @@ export class StepDao {
       for (const sql of SQL_CREATE_INDEXES) {
         await this.rdbStore.executeSql(sql);
       }
-      
+
       // 为步数记录表创建索引
       for (const sql of SQL_CREATE_STEP_INDEXES) {
         await this.rdbStore.executeSql(sql);
@@ -138,11 +138,11 @@ export class StepDao {
           // 如果存在当天的记录，则更新它而不是插入
           const existingId = dateResultSet.getString(dateResultSet.getColumnIndex('id'));
           dateResultSet.close();
-          
+
           // 更新现有日期记录
           const updatePredicates = new relationalStore.RdbPredicates('step_records');
           updatePredicates.equalTo('date', step.date);
-          
+
           valueBucket['id'] = existingId; // 使用现有ID
           const updatedRows = await rdbStore.update(valueBucket, updatePredicates);
           result = existingId;

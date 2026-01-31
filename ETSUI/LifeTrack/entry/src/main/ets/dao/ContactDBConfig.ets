@@ -12,35 +12,31 @@
  */
 
 import relationalStore from '@ohos.data.relationalStore';
-import common from '@ohos.app.ability.common'
+import common from '@ohos.app.ability.common';
 
 // 数据库配置类
 export class ContactDBConfig {
   // 数据库名称和配置
   private static readonly DB_NAME: string = 'Contacts.db';
   private static readonly DB_VERSION: number = 1;
-
   // 数据库配置
   private static readonly STORE_CONFIG: relationalStore.StoreConfig = {
     name: ContactDBConfig.DB_NAME,
     securityLevel: relationalStore.SecurityLevel.S1
   };
-
   // 创建表的SQL语句
   private static readonly CREATE_TABLE_SQL: string =
     'CREATE TABLE IF NOT EXISTS contacts (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, phone TEXT NOT NULL, initial TEXT NOT NULL)';
-
   // 创建索引的SQL语句
   private static readonly CREATE_INDEX_SQL: string =
     'CREATE INDEX IF NOT EXISTS idx_name ON contacts(name); CREATE INDEX IF NOT EXISTS idx_initial ON contacts(initial); CREATE INDEX IF NOT EXISTS idx_phone ON contacts(phone);';
-
   // 数据库实例
   private rdbStore: relationalStore.RdbStore | null = null;
-
   // 单例模式
   private static instance: ContactDBConfig | null = null;
 
-  private constructor() {}
+  private constructor() {
+  }
 
   public static getInstance(): ContactDBConfig {
     if (!ContactDBConfig.instance) {

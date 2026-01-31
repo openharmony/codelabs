@@ -17,7 +17,7 @@ import { CalendarEvent } from '../model/EventModel';
 import { ReminderService } from '../services/ReminderService';
 import { RepeatService } from '../services/RepeatService';
 import common from '@ohos.app.ability.common';
-import { RepeatRule, EventInstance} from '../model/EventTypes';
+import { EventInstance } from '../model/EventTypes';
 
 interface SaveResult {
   success: boolean;
@@ -331,7 +331,7 @@ export class DataManager {
     }
   }
 
-   //更新事件实例提醒
+  //更新事件实例提醒
   async updateEventInstanceReminders(event: CalendarEvent): Promise<boolean> {
     try {
       if (!event.id || event.reminder < 0) {
