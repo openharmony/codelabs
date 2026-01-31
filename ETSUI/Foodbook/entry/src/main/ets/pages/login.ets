@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 //login.ets
 import { font, Prompt, router, AppStorageV2 } from '@kit.ArkUI';
 import prompt from '@system.prompt';
@@ -195,7 +194,7 @@ struct login {
                 .maxLength(15)
 
               Row() {
-                Toggle({ type: ToggleType.Checkbox })
+                Toggle({ type: ToggleType.Checkbox, isOn:this.agreeProtocol})
                   .selectedColor('#007DFF')
                   .accessibilityChecked(this.agreeProtocol)
                   .onChange((isOn: boolean) =>
