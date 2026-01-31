@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "宠物日常记录簿应用"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "记录宠物的点滴生活"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "宠物记录簿"
+    },
+    {
+      "name": "reason_background",
+      "value": "我们需要后台运行权限以确保定时提醒准时发送"
+    },
+    {
+      "name": "reason_notification",
+      "value": "我们需要通知权限来提醒您喂食、打疫苗等事项"
+    }
+  ]
+}
