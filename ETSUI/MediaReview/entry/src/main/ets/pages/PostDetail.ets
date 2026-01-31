@@ -27,7 +27,6 @@ struct PostDetail {
   @State inputContent: string = ''
   @State userName: string = ''
   @State userAvatarKey: string = 'user'
-
   // 页面回到前台时刷新用户信息
   onPageShow() {
     this.loadUser()
@@ -141,6 +140,10 @@ struct PostDetail {
     return $r('app.media.user')
   }
 
+  private postValue(): DbPost {
+    return this.post as DbPost
+  }
+
   build() {
     Column() {
       Row() {
@@ -166,16 +169,16 @@ struct PostDetail {
           ListItem() {
             Column({ space: 12 }) {
               Row({ space: 10 }) {
-                Image(this.avatarRes(this.post.avatarKey))
+                Image(this.avatarRes(this.postValue().avatarKey))
                   .width(40)
                   .height(40)
                   .borderRadius(20)
                 
                 Column({ space: 4 }) {
-                  Text(this.post.userName)
+                  Text(this.postValue().userName)
                     .fontSize(15)
                     .fontWeight(FontWeight.Bold)
-                  Text(this.post.createdAt)
+                  Text(this.postValue().createdAt)
                     .fontSize(12)
                     .fontColor('#BBB')
                 }
@@ -183,14 +186,14 @@ struct PostDetail {
               .width('100%')
               .alignItems(VerticalAlign.Center)
 
-              Text(this.post.content)
+              Text(this.postValue().content)
                 .fontSize(16)
                 .lineHeight(24)
                 .width('100%')
 
-              if (this.post.tags) {
+              if (this.postValue().tags) {
                 Row({ space: 8 }) {
-                  ForEach(this.post.tags.split(','), (tag: string) => {
+                  ForEach(this.postValue().tags.split(','), (tag: string) => {
                     if (tag.trim().length > 0) {
                       Text(tag.trim())
                         .fontSize(12)
@@ -207,7 +210,7 @@ struct PostDetail {
               Text(`全部评论`)
                 .fontSize(14)
                 .fontWeight(FontWeight.Bold)
-              Text(`(${this.post.commentCount})`)
+              Text(`(${this.postValue().commentCount})`)
                   .fontSize(14)
                   .fontColor('#7A6F66')
               }
