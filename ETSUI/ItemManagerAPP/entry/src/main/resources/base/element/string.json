@@ -11,6 +11,10 @@
     {
       "name": "EntryAbility_label",
       "value": "轻物志"
+    },
+    {
+      "name": "read_media_reason",
+      "value": "读取并显示物品图片"
     }
   ]
 }
