@@ -26,19 +26,18 @@ class UserInfoRdb {
   private rdbStore: relationalStore.RdbStore | null = null;
   private tableName: string = 'USER_INFO_TABLE'; // 用户信息表
   private isMock: boolean = false; // 预览器兼容模式
-  private mockData: UserInfo = { // 预览器模拟数据（单用户）
+  private mockData: UserInfo = {
+    // 预览器模拟数据（单用户）
     avatar: '👤',
     nickname: '轻物志用户',
     joinDate: '2026年1月'
   };
-
   // 彻底删除 id 字段
   private sqlCreate: string = `CREATE TABLE IF NOT EXISTS USER_INFO_TABLE (
     avatar TEXT DEFAULT '👤',
     nickname TEXT DEFAULT '轻物志用户',
     joinDate TEXT NOT NULL
   )`;
-
   private static instance: UserInfoRdb;
   // 新增：保存上下文，避免重复传递
   private context: common.UIAbilityContext | null = null;
@@ -51,7 +50,8 @@ class UserInfoRdb {
     return UserInfoRdb.instance;
   }
 
-  private constructor() {}
+  private constructor() {
+  }
 
   // 核心修复：初始化数据库（保存上下文，确保只初始化一次）
   async getRdbStore(context: common.UIAbilityContext): Promise<relationalStore.RdbStore | null> {

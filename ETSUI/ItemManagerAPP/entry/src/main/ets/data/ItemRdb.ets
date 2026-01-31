@@ -27,7 +27,6 @@ class ItemRdb {
   private tableName: string = 'ITEM_TABLE';
   private isMock: boolean = false; // 预览器兼容模式
   private mockData: Item[] = []; // 预览器模拟数据
-
   // 建表语句（严格对齐Item接口字段）
   private sqlCreate: string = `CREATE TABLE IF NOT EXISTS ITEM_TABLE (
     id INTEGER PRIMARY KEY,
@@ -45,7 +44,6 @@ class ItemRdb {
     maintenanceDate TEXT,
     imagePath TEXT
   )`;
-
   private static instance: ItemRdb;
 
   // 单例模式（全局唯一数据库实例）
@@ -56,7 +54,8 @@ class ItemRdb {
     return ItemRdb.instance;
   }
 
-  private constructor() {}
+  private constructor() {
+  }
 
   // 初始化数据库
   async getRdbStore(context: common.UIAbilityContext): Promise<relationalStore.RdbStore | null> {
@@ -108,7 +107,7 @@ class ItemRdb {
             console.info('物品数据表创建成功');
             this.rdbStore = store;
             resolve(store);
-          }).catch((sqlErr:Error) => {
+          }).catch((sqlErr: Error) => {
             console.error(`创建数据表失败: ${sqlErr.message}`);
             this.isMock = true;
             resolve(store);

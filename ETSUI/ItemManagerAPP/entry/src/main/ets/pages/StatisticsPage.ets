@@ -36,25 +36,21 @@ class ThemeConfig {
   static readonly DANGER = "#FF3B30";
   static readonly SUCCESS = "#34C759";
   static readonly WARNING = "#FF9500";
-
   static readonly RAINBOW_COLORS: string[] = [
     "#FF3B30", "#FF9500", "#FFCC00", "#34C759", "#30B0C7",
     "#007AFF", "#5856D6", "#AF52DE", "#FF2D55", "#A2845E",
     "#4A6CF7", "#3A5CCC", "#2AC759", "#1A1A1A", "#666666"
   ];
-
   static readonly STATUS_COLORS: Record<string, string> = {
     "在用": "#34C759", // Green
     "闲置": "#FF9500", // Orange
     "已丢弃": "#8E8E93"  // Gray
   };
-
   // 图表专用渐变色
   static readonly CHART_GRADIENT = [
     "rgba(74, 108, 247, 0.5)",
     "rgba(74, 108, 247, 0.0)"
   ];
-
   // 雷达图颜色
   static readonly RADAR_FILL = "rgba(74, 108, 247, 0.3)";
   static readonly RADAR_STROKE = "#4A6CF7";
@@ -109,13 +105,19 @@ class ChartUtils {
   }
 
   static formatCurrency(val: number): string {
-    if (val >= 10000) return (val / 10000).toFixed(1) + "w";
-    if (val >= 1000) return (val / 1000).toFixed(1) + "k";
+    if (val >= 10000) {
+      return (val / 10000).toFixed(1) + "w";
+    }
+    if (val >= 1000) {
+      return (val / 1000).toFixed(1) + "k";
+    }
     return val.toFixed(0);
   }
 
   static getMonthKey(dateStr: string): string {
-    if (!dateStr) return "Unknown";
+    if (!dateStr) {
+      return "Unknown";
+    }
     try {
       const d = new Date(dateStr);
       return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}`;
@@ -296,9 +298,12 @@ struct BaseCard {
   @Prop title: string = "";
   @Prop subTitle: string = "";
   @Prop showArrow: boolean = false;
-  onHeaderClick: () => void = () => {};
+  onHeaderClick: () => void = () => {
+  };
 
-  @Builder emptyBuilder() {}
+  @Builder
+  emptyBuilder() {
+  }
 
   build() {
     Column() {
@@ -349,7 +354,6 @@ struct BaseCard {
 struct AssetHeader {
   @Prop totalValue: number = 0;
   @Prop totalCount: number = 0;
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private particles: BubbleParticle[] = [];
@@ -364,11 +368,15 @@ struct AssetHeader {
   }
 
   aboutToDisappear() {
-    if (this.timerId !== -1) clearInterval(this.timerId);
+    if (this.timerId !== -1) {
+      clearInterval(this.timerId);
+    }
   }
 
   startAnimation() {
-    if (this.timerId !== -1) clearInterval(this.timerId);
+    if (this.timerId !== -1) {
+      clearInterval(this.timerId);
+    }
     this.timerId = setInterval(() => {
       this.drawParticles();
     }, 20);
@@ -447,7 +455,12 @@ struct AssetHeader {
         }
         .alignItems(HorizontalAlign.End)
       }
-      .padding({ left: 24, right: 24, top: 30, bottom: 30 })
+      .padding({
+        left: 24,
+        right: 24,
+        top: 30,
+        bottom: 30
+      })
     }
     .width("100%")
     .height(160)
@@ -466,14 +479,12 @@ struct AssetHeader {
 @Component
 struct RadarChart {
   @Prop indicators: RadarIndicator[];
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private chartSize: number = 0;
   private centerX: number = 0;
   private centerY: number = 0;
   private radius: number = 0;
-
   @State animProgress: number = 0;
 
   build() {
@@ -505,7 +516,9 @@ struct RadarChart {
       let p = Math.min(1, (now - start) / 1000);
       let easeP = 1 - Math.pow(1 - p, 3);
       this.draw(easeP);
-      if (p < 1) setTimeout(frame, 16);
+      if (p < 1) {
+        setTimeout(frame, 16);
+      }
     };
     frame();
   }
@@ -515,7 +528,9 @@ struct RadarChart {
     ctx.clearRect(0, 0, this.chartSize, 300);
 
     const count = this.indicators.length;
-    if (count < 3) return;
+    if (count < 3) {
+      return;
+    }
 
     const angleSlice = 360 / count;
 
@@ -529,8 +544,11 @@ struct RadarChart {
       ctx.beginPath();
       for (let j = 0; j < count; j++) {
         const pt = ChartUtils.polarToCartesian(this.centerX, this.centerY, levelRadius, j * angleSlice);
-        if (j === 0) ctx.moveTo(pt.x, pt.y);
-        else ctx.lineTo(pt.x, pt.y);
+        if (j === 0) {
+          ctx.moveTo(pt.x, pt.y);
+        } else {
+          ctx.lineTo(pt.x, pt.y);
+        }
       }
       ctx.closePath();
       if (i === 5) {
@@ -558,8 +576,11 @@ struct RadarChart {
       const valRadius = this.radius * Math.min(1.1, Math.max(0, ratio)); // 限制在范围内
       const pt = ChartUtils.polarToCartesian(this.centerX, this.centerY, valRadius, j * angleSlice);
       dataPoints.push(pt);
-      if (j === 0) ctx.moveTo(pt.x, pt.y);
-      else ctx.lineTo(pt.x, pt.y);
+      if (j === 0) {
+        ctx.moveTo(pt.x, pt.y);
+      } else {
+        ctx.lineTo(pt.x, pt.y);
+      }
     }
     ctx.closePath();
     ctx.fillStyle = ThemeConfig.RADAR_FILL;
@@ -597,7 +618,6 @@ struct RadarChart {
 @Component
 struct PriceHistogram {
   @Prop bins: HistogramBin[];
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private w: number = 0;
@@ -646,7 +666,9 @@ struct PriceHistogram {
     const ctx = this.context;
     ctx.clearRect(0, 0, this.w, this.h);
 
-    if (this.bins.length === 0) return;
+    if (this.bins.length === 0) {
+      return;
+    }
 
     const padding = 30;
     const chartH = this.h - padding * 2;
@@ -663,18 +685,18 @@ struct PriceHistogram {
     ctx.font = "24px sans-serif";
     ctx.textAlign = "right";
     ctx.fillStyle = ThemeConfig.TEXT_LIGHT;
-    for(let i=0; i<=4; i++) {
-      const y = padding + chartH - (chartH * (i/4));
+    for (let i = 0; i <= 4; i++) {
+      const y = padding + chartH - (chartH * (i / 4));
       ctx.beginPath();
       ctx.moveTo(padding, y);
       ctx.lineTo(this.w - padding, y);
       ctx.stroke();
-      ctx.fillText(Math.round(maxCount * (i/4)).toString(), padding - 5, y + 3);
+      ctx.fillText(Math.round(maxCount * (i / 4)).toString(), padding - 5, y + 3);
     }
 
     // 绘制柱子
     this.bins.forEach((bin, i) => {
-      const x = padding + (i * (chartW / this.bins.length)) + gap/2;
+      const x = padding + (i * (chartW / this.bins.length)) + gap / 2;
       const barH = (bin.count / maxCount) * chartH;
       const y = padding + chartH - barH;
 
@@ -692,7 +714,7 @@ struct PriceHistogram {
       if (this.bins.length > 8 && i % 2 !== 0) {
         // skip
       } else {
-        ctx.fillText(bin.rangeLabel.split('-')[0], x + barWidth/2, this.h - 10);
+        ctx.fillText(bin.rangeLabel.split('-')[0], x + barWidth / 2, this.h - 10);
       }
 
       // 选中时显示数值Tooltip
@@ -700,9 +722,9 @@ struct PriceHistogram {
         const text = `${bin.count}件`;
         const tw = ctx.measureText(text).width + 10;
         ctx.fillStyle = ThemeConfig.TEXT_MAIN;
-        ctx.fillRect(x + barWidth/2 - tw/2, y - 25, tw, 20);
+        ctx.fillRect(x + barWidth / 2 - tw / 2, y - 25, tw, 20);
         ctx.fillStyle = Color.White;
-        ctx.fillText(text, x + barWidth/2, y - 11);
+        ctx.fillText(text, x + barWidth / 2, y - 11);
       }
     });
   }
@@ -716,7 +738,6 @@ struct PriceHistogram {
 @Component
 struct StackedBarChart {
   @Prop data: StackedBarData[];
-
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private w: number = 0;
@@ -747,7 +768,8 @@ struct StackedBarChart {
     }
   }
 
-  @Builder LegendItem(label: string, color: string) {
+  @Builder
+  LegendItem(label: string, color: string) {
     Row() {
       Circle({ width: 8, height: 8 }).fill(color).margin({ right: 4 })
       Text(label).fontSize(12).fontColor(ThemeConfig.TEXT_SECONDARY)
@@ -759,10 +781,12 @@ struct StackedBarChart {
     const ctx = this.context;
     ctx.clearRect(0, 0, this.w, this.h);
 
-    if (this.data.length === 0) return;
+    if (this.data.length === 0) {
+      return;
+    }
 
     // 排序取前6个主要分类
-    const displayData = this.data.sort((a,b) => b.total - a.total).slice(0, 6);
+    const displayData = this.data.sort((a, b) => b.total - a.total).slice(0, 6);
 
     const paddingLeft = 40;
     const paddingBottom = 30;
@@ -783,7 +807,7 @@ struct StackedBarChart {
       ctx.textBaseline = "middle";
       ctx.fillStyle = ThemeConfig.TEXT_SECONDARY;
       ctx.font = "32px sans-serif";
-      ctx.fillText(d.category, paddingLeft - 5, y + barHeight/2);
+      ctx.fillText(d.category, paddingLeft - 5, y + barHeight / 2);
 
       // 计算各部分宽度
       const wUsed = (d.usedCount / maxTotal) * chartW;
@@ -814,7 +838,7 @@ struct StackedBarChart {
       // 绘制总数标签
       ctx.textAlign = "left";
       ctx.fillStyle = ThemeConfig.TEXT_LIGHT;
-      ctx.fillText(d.total.toString(), currentX + 5, y + barHeight/2);
+      ctx.fillText(d.total.toString(), currentX + 5, y + barHeight / 2);
     });
   }
 }
@@ -829,7 +853,8 @@ struct StackedBarChart {
 struct CategoryLegendItem {
   @Prop stat: CategoryStat;
   @Prop isSelected: boolean = false;
-  onClickItem: () => void = () => {};
+  onClickItem: () => void = () => {
+  };
 
   build() {
     Row() {
@@ -866,7 +891,8 @@ struct CategoryLegendItem {
 struct InteractiveWordCloud {
   @Prop stats: PositionStat[];
   @Prop selectedLocation: string;
-  onLocationSelect: (loc: string) => void = () => {};
+  onLocationSelect: (loc: string) => void = () => {
+  };
 
   build() {
     Flex({ wrap: FlexWrap.Wrap, justifyContent: FlexAlign.Start, alignContent: FlexAlign.Start }) {
@@ -876,7 +902,12 @@ struct InteractiveWordCloud {
           .fontWeight(stat.name === this.selectedLocation ? FontWeight.Bold : stat.fontWeight)
           .fontColor(stat.name === this.selectedLocation ? Color.White : stat.color)
           .backgroundColor(stat.name === this.selectedLocation ? stat.color : "#F5F7FA")
-          .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+          .padding({
+            left: 12,
+            right: 12,
+            top: 6,
+            bottom: 6
+          })
           .borderRadius(20)
           .margin({ right: 8, bottom: 8 })
           .animation({ duration: 300, curve: curves.springMotion() })
@@ -895,7 +926,12 @@ struct InteractiveWordCloud {
             .fontSize(12)
             .fontColor(ThemeConfig.TEXT_LIGHT)
         }
-        .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 6,
+          bottom: 6
+        })
         .backgroundColor("transparent")
         .border({ width: 1, color: "#E0E0E0", radius: 20 })
         .margin({ bottom: 8 })
@@ -911,10 +947,14 @@ struct ComplexItemCard {
   @Prop item: Item;
 
   private formatDate(dateStr?: string): string {
-    if (!dateStr) return "未知日期";
+    if (!dateStr) {
+      return "未知日期";
+    }
     try {
       const d = new Date(dateStr);
-      return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+      return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate()
+        .toString()
+        .padStart(2, '0')}`;
     } catch (e) {
       return dateStr;
     }
@@ -952,7 +992,12 @@ struct ComplexItemCard {
             .fontSize(10)
             .fontColor(Color.White)
             .backgroundColor("#B0B0B0")
-            .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+            .padding({
+              left: 6,
+              right: 6,
+              top: 2,
+              bottom: 2
+            })
             .borderRadius(4)
             .margin({ right: 8 })
 
@@ -987,9 +1032,15 @@ struct IdleAnalysisCard {
 
   private getWasteLevel(): string {
     const ratio = this.totalValue > 0 ? this.idleValue / this.totalValue : 0;
-    if (ratio < 0.1) return "极简大师";
-    if (ratio < 0.3) return "理性消费";
-    if (ratio < 0.5) return "有点浪费";
+    if (ratio < 0.1) {
+      return "极简大师";
+    }
+    if (ratio < 0.3) {
+      return "理性消费";
+    }
+    if (ratio < 0.5) {
+      return "有点浪费";
+    }
     return "囤积达人";
   }
 
@@ -1011,7 +1062,12 @@ struct IdleAnalysisCard {
               .fontSize(12)
               .fontColor(ThemeConfig.TEXT_SECONDARY)
               .backgroundColor("#FFF0F0")
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
               .borderRadius(4)
           }
           .alignItems(HorizontalAlign.Start)
@@ -1049,7 +1105,8 @@ struct IdleAnalysisCard {
         .margin({ bottom: 20 })
 
         Row() {
-          Text(this.idleValue > 1000 ? "💡 建议处理高价闲置物品，可回血约 ¥" + (this.idleValue * 0.6).toFixed(0) : "✨ 保持得很好，继续保持高利用率！")
+          Text(this.idleValue > 1000 ? "💡 建议处理高价闲置物品，可回血约 ¥" + (this.idleValue * 0.6).toFixed(0) :
+            "✨ 保持得很好，继续保持高利用率！")
             .fontSize(12)
             .fontColor(ThemeConfig.PRIMARY)
             .layoutWeight(1)
@@ -1067,8 +1124,8 @@ struct IdleAnalysisCard {
 struct TrendChart {
   @Prop trendData: TrendPoint[];
   @Prop selectedMonth: string;
-  onMonthSelect: (monthKey: string) => void = () => {};
-
+  onMonthSelect: (monthKey: string) => void = () => {
+  };
   private settings: RenderingContextSettings = new RenderingContextSettings(true);
   private context: CanvasRenderingContext2D = new CanvasRenderingContext2D(this.settings);
   private chartWidth: number = 0;
@@ -1077,7 +1134,6 @@ struct TrendChart {
   private paddingBottom: number = 30;
   private paddingTop: number = 20;
   private paddingRight: number = 20;
-
   @State animProgress: number = 0;
   @State touchedPointIndex: number = -1;
 
@@ -1106,7 +1162,10 @@ struct TrendChart {
 
   startEnterAnimation() {
     this.animProgress = 0;
-    animateTo({ duration: 1000, curve: Curve.FastOutSlowIn, onFinish: () => {} }, () => {
+    animateTo({
+      duration: 1000, curve: Curve.FastOutSlowIn, onFinish: () => {
+      }
+    }, () => {
       this.animProgress = 1;
     })
 
@@ -1124,7 +1183,9 @@ struct TrendChart {
   }
 
   drawChart(progress: number) {
-    if (this.trendData.length === 0) return;
+    if (this.trendData.length === 0) {
+      return;
+    }
 
     const ctx = this.context;
     const w = this.chartWidth;
@@ -1137,7 +1198,9 @@ struct TrendChart {
     ctx.clearRect(0, 0, w, h);
 
     let maxVal = Math.max(...this.trendData.map(d => d.value));
-    if (maxVal === 0) maxVal = 100;
+    if (maxVal === 0) {
+      maxVal = 100;
+    }
     maxVal = maxVal * 1.2;
 
     const drawingW = w - pL - pR;
@@ -1211,7 +1274,8 @@ struct TrendChart {
       ctx.strokeStyle = ThemeConfig.PRIMARY;
       ctx.stroke();
 
-      if (index === this.touchedPointIndex || (this.selectedMonth === point.fullDate && this.touchedPointIndex === -1)) {
+      if (index === this.touchedPointIndex ||
+        (this.selectedMonth === point.fullDate && this.touchedPointIndex === -1)) {
         this.drawTooltip(ctx, point);
       }
     });
@@ -1226,8 +1290,12 @@ struct TrendChart {
     let tx = point.x - tw / 2;
     let ty = point.y - 35;
 
-    if (tx < 0) tx = 0;
-    if (tx + tw > this.chartWidth) tx = this.chartWidth - tw;
+    if (tx < 0) {
+      tx = 0;
+    }
+    if (tx + tw > this.chartWidth) {
+      tx = this.chartWidth - tw;
+    }
 
     ctx.fillStyle = ThemeConfig.PRIMARY_DARK;
     ctx.beginPath();
@@ -1284,27 +1352,21 @@ struct TrendChart {
 @Component
 export struct StatisticsPage {
   @Prop itemList: Item[] = [];
-
   // ================= 状态管理 =================
   @State animatedValues: number[] = [];
-
   // 筛选状态
   @State currentStatusFilter: number = 0; // 0:全部, 1:在用, 2:闲置, 3:已丢弃
   @State currentLocationFilter: string = "";
   @State currentCategoryFilter: string = "";
   @State currentMonthFilter: string = "";
-
   @State sortField: 'price' | 'time' = 'time';
   @State isAscending: boolean = false;
   @State isListReady: boolean = false;
-
   private readonly FILTER_TABS: string[] = ["全部", "在用", "闲置", "已丢弃"];
   private scroller: Scroller = new Scroller();
-
   // 缓存数据
   private cachedCategoryStats: CategoryStat[] = [];
   private cachedTrendData: TrendPoint[] = [];
-
   // 新增缓存数据
   private cachedRadarData: RadarIndicator[] = [];
   private cachedHistogramBins: HistogramBin[] = [];
@@ -1351,7 +1413,9 @@ export struct StatisticsPage {
    * 维度：均价、最大价、闲置率、数量、新品率
    */
   private calculateRadarData(): RadarIndicator[] {
-    if (this.itemList.length === 0) return [];
+    if (this.itemList.length === 0) {
+      return [];
+    }
 
     // 1. 均价 (Standard: 500)
     const avgPrice = this.getTotalPrice() / this.itemList.length;
@@ -1372,8 +1436,11 @@ export struct StatisticsPage {
     // 5. 新品率 (今年购买的占比)
     const currentYear = new Date().getFullYear();
     const newItems = this.itemList.filter(i => {
-      try { return new Date(i.buyDate).getFullYear() === currentYear }
-      catch { return false }
+      try {
+        return new Date(i.buyDate).getFullYear() === currentYear
+      } catch {
+        return false
+      }
     }).length;
     const newRate = newItems / this.itemList.length;
     const newScore = newRate * 100;
@@ -1391,7 +1458,9 @@ export struct StatisticsPage {
    * 4. 直方图分箱计算 (修复：使用 new 关键字实例化)
    */
   private calculateHistogramBins(): HistogramBin[] {
-    if (this.itemList.length === 0) return [];
+    if (this.itemList.length === 0) {
+      return [];
+    }
 
     // 定义区间：0-100, 100-300, 300-1000, 1000-3000, 3000+
     const ranges = [0, 100, 300, 1000, 3000, 999999];
@@ -1429,9 +1498,14 @@ export struct StatisticsPage {
       const cat = item.category || "其他";
       const data = map.get(cat);
       if (data) {
-        if (item.useStatus === "在用") data.usedCount++;
-        else if (item.useStatus === "闲置") data.idleCount++;
-        else data.wasteCount++;
+        if (item.useStatus === "在用") {
+          data.usedCount++;
+        } else if (item.useStatus ===
+          "闲置") {
+          data.idleCount++;
+        } else {
+          data.wasteCount++;
+        }
         data.total++;
       }
     });
@@ -1444,7 +1518,9 @@ export struct StatisticsPage {
    */
   private calculateCategoryStats(): CategoryStat[] {
     const total = this.itemList.length;
-    if (total === 0) return [];
+    if (total === 0) {
+      return [];
+    }
 
     const statsMap = new Map<string, CategoryStat>();
     DEFAULT_CATEGORY_OPTIONS.forEach(cat => {
@@ -1511,7 +1587,9 @@ export struct StatisticsPage {
    */
   private getStatusStats(): StatusStat[] {
     const total = this.itemList.length;
-    if (total === 0) return [];
+    if (total === 0) {
+      return [];
+    }
     const statuses: ItemUseStatus[] = ["在用", "闲置", "已丢弃"];
     return statuses.map(status => {
       const items = this.itemList.filter(item => item.useStatus === status);
@@ -1526,7 +1604,9 @@ export struct StatisticsPage {
   }
 
   private getPositionStats(): PositionStat[] {
-    if (this.itemList.length === 0) return [];
+    if (this.itemList.length === 0) {
+      return [];
+    }
     const countMap = new Map<string, number>();
     let maxCount = 0;
 
@@ -1534,7 +1614,9 @@ export struct StatisticsPage {
       const loc = item.location && item.location.trim() !== "" ? item.location : "未归位";
       const current = (countMap.get(loc) || 0) + 1;
       countMap.set(loc, current);
-      if (current > maxCount) maxCount = current;
+      if (current > maxCount) {
+        maxCount = current;
+      }
     });
 
     let result: PositionStat[] = [];
@@ -1560,9 +1642,16 @@ export struct StatisticsPage {
    */
   private getFilteredAndSortedItems(): Item[] {
     let result = this.itemList;
-    if (this.currentStatusFilter === 1) result = result.filter(i => i.useStatus === '在用');
-    else if (this.currentStatusFilter === 2) result = result.filter(i => i.useStatus === '闲置');
-    else if (this.currentStatusFilter === 3) result = result.filter(i => i.useStatus === '已丢弃');
+    if (this.currentStatusFilter === 1) {
+      result =
+        result.filter(i => i.useStatus === '在用');
+    } else if (this.currentStatusFilter === 2) {
+      result =
+        result.filter(i => i.useStatus === '闲置');
+    } else if (this.currentStatusFilter === 3) {
+      result =
+        result.filter(i => i.useStatus === '已丢弃');
+    }
 
     if (this.currentLocationFilter) {
       result = result.filter(i => {
@@ -1586,8 +1675,12 @@ export struct StatisticsPage {
       } else {
         valA = a.buyDate ? new Date(a.buyDate).getTime() : 0;
         valB = b.buyDate ? new Date(b.buyDate).getTime() : 0;
-        if (isNaN(valA)) valA = 0;
-        if (isNaN(valB)) valB = 0;
+        if (isNaN(valA)) {
+          valA = 0;
+        }
+        if (isNaN(valB)) {
+          valB = 0;
+        }
       }
       return this.isAscending ? valA - valB : valB - valA;
     });
@@ -1628,9 +1721,15 @@ export struct StatisticsPage {
 
   private getFilterStatusText(): string {
     let parts: string[] = [];
-    if (this.currentCategoryFilter) parts.push(`分类:${this.currentCategoryFilter}`);
-    if (this.currentMonthFilter) parts.push(`月份:${this.currentMonthFilter}`);
-    if (this.currentLocationFilter) parts.push(`位置:${this.currentLocationFilter}`);
+    if (this.currentCategoryFilter) {
+      parts.push(`分类:${this.currentCategoryFilter}`);
+    }
+    if (this.currentMonthFilter) {
+      parts.push(`月份:${this.currentMonthFilter}`);
+    }
+    if (this.currentLocationFilter) {
+      parts.push(`位置:${this.currentLocationFilter}`);
+    }
     return parts.length > 0 ? `正在筛选: ${parts.join(" + ")}` : "";
   }
 
@@ -1644,7 +1743,12 @@ export struct StatisticsPage {
             totalValue: this.getTotalPrice(),
             totalCount: this.itemList.length
           })
-            .padding({ left: 16, right: 16, top: 16, bottom: 8 })
+            .padding({
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: 8
+            })
         }
 
         if (this.itemList.length === 0) {
@@ -1719,7 +1823,9 @@ export struct StatisticsPage {
               title: "物品分类",
               subTitle: this.currentCategoryFilter ? `已选中: ${this.currentCategoryFilter}` : "点击右侧列表可筛选",
               showArrow: !!this.currentCategoryFilter,
-              onHeaderClick: () => { this.currentCategoryFilter = "" }
+              onHeaderClick: () => {
+                this.currentCategoryFilter = ""
+              }
             }) {
               Row() {
                 Stack() {
@@ -1791,7 +1897,12 @@ export struct StatisticsPage {
                       .fontSize(10)
                       .fontColor(ThemeConfig.PRIMARY)
                   }
-                  .padding({ top: 4, bottom: 4, left: 8, right: 8 })
+                  .padding({
+                    top: 4,
+                    bottom: 4,
+                    left: 8,
+                    right: 8
+                  })
                   .backgroundColor("#Eef2ff")
                   .borderRadius(12)
                   .onClick(() => this.resetFilters())
@@ -1809,7 +1920,12 @@ export struct StatisticsPage {
                       .fontWeight(this.currentStatusFilter === index ? FontWeight.Medium : FontWeight.Normal)
                       .fontColor(this.currentStatusFilter === index ? Color.White : ThemeConfig.TEXT_SECONDARY)
                       .backgroundColor(this.currentStatusFilter === index ? ThemeConfig.PRIMARY : "#E0E4E8")
-                      .padding({ top: 8, bottom: 8, left: 16, right: 16 })
+                      .padding({
+                        top: 8,
+                        bottom: 8,
+                        left: 16,
+                        right: 16
+                      })
                       .borderRadius(20)
                       .margin({ right: 10 })
                       .onClick(() => {
@@ -1850,7 +1966,9 @@ export struct StatisticsPage {
                   .backgroundColor(this.sortField === 'price' ? "#Eef2ff" : "Transparent")
                   .borderRadius(8)
                   .onClick(() => {
-                    animateTo({ duration: 250 }, () => { this.toggleSort('price') })
+                    animateTo({ duration: 250 }, () => {
+                      this.toggleSort('price')
+                    })
                   })
 
                   Row() {
@@ -1869,7 +1987,9 @@ export struct StatisticsPage {
                   .backgroundColor(this.sortField === 'time' ? "#Eef2ff" : "Transparent")
                   .borderRadius(8)
                   .onClick(() => {
-                    animateTo({ duration: 250 }, () => { this.toggleSort('time') })
+                    animateTo({ duration: 250 }, () => {
+                      this.toggleSort('time')
+                    })
                   })
                 }
               }
@@ -1909,7 +2029,9 @@ export struct StatisticsPage {
     .onVisibleAreaChange([0.0, 1.0], (isVisible: boolean, ratio: number) => {
       if (isVisible && ratio > 0) {
         this.refreshCharts();
-        setTimeout(() => { this.isListReady = true; }, 100);
+        setTimeout(() => {
+          this.isListReady = true;
+        }, 100);
       }
     })
   }

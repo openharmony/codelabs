@@ -18,6 +18,7 @@ import { UserInfo, AppInfo } from '../model/types';
 import { itemStore } from '../store';
 import userInfoRdb from '../data/UserRdb';
 import common from '@ohos.app.ability.common';
+
 @Component
 export struct MinePage {
   // 页面状态
@@ -32,19 +33,16 @@ export struct MinePage {
   @State itemCount: number = 0;
   @State isLoading: boolean = true;
   @State isUserInfoLoading: boolean = true; // 新增：用户信息加载状态
-
   // 预设头像库（表情）
   private avatarLibrary: string[] = [
     '👤', '👨‍💻', '👩‍💻', '🧑‍💻', '🐱', '🐶', '🦁', '🐰', '🦊', '🐻'
   ];
-
   // 用户信息（初始化为空，从数据库加载，无 id 字段）
   @State userInfo: UserInfo = {
     avatar: '',
     nickname: '',
     joinDate: ''
   };
-
   // 应用信息
   private appInfo: AppInfo = {
     name: '轻物志',
@@ -60,7 +58,7 @@ export struct MinePage {
     // 并行加载物品数量和用户信息（无 id 相关逻辑）
     await Promise.all([
       this.initItemCount(),
-      this.loadUserInfo() // 加载用户信息时无需处理 id
+      this.loadUserInfo()// 加载用户信息时无需处理 id
     ]);
   }
 
@@ -455,7 +453,12 @@ export struct MinePage {
         .layoutWeight(1)
         .alignItems(HorizontalAlign.Start)
       }
-      .padding({ left: 20, right: 20, top: 24, bottom: 24 })
+      .padding({
+        left: 20,
+        right: 20,
+        top: 24,
+        bottom: 24
+      })
     }
     .width('100%')
     .backgroundColor(Color.White)
@@ -1310,13 +1313,27 @@ export struct MinePage {
       .layoutWeight(1)
 
       // 弹窗和遮罩层
-      if (this.showConfirmDialog) this.buildConfirmDialog()
-      if (this.showNoDataDialog) this.buildNoDataDialog()
-      if (this.showSuccessDialog) this.buildSuccessDialog()
-      if (this.showEditDialog) this.buildEditDialog()
-      if (this.showHelpDialog) this.buildHelpDialog()
-      if (this.showAvatarSelectDialog) this.buildAvatarSelectDialog()
-      if (this.isClearing) this.buildLoadingOverlay()
+      if (this.showConfirmDialog) {
+        this.buildConfirmDialog()
+      }
+      if (this.showNoDataDialog) {
+        this.buildNoDataDialog()
+      }
+      if (this.showSuccessDialog) {
+        this.buildSuccessDialog()
+      }
+      if (this.showEditDialog) {
+        this.buildEditDialog()
+      }
+      if (this.showHelpDialog) {
+        this.buildHelpDialog()
+      }
+      if (this.showAvatarSelectDialog) {
+        this.buildAvatarSelectDialog()
+      }
+      if (this.isClearing) {
+        this.buildLoadingOverlay()
+      }
     }
     .width('100%')
     .height('100%')

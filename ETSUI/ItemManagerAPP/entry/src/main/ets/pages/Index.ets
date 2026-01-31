@@ -31,7 +31,9 @@ struct FormCard {
   @Prop title: string = "";
   @BuilderParam content: () => void = this.emptyBuilder;
 
-  @Builder emptyBuilder() {}
+  @Builder
+  emptyBuilder() {
+  }
 
   build() {
     Column() {
@@ -62,14 +64,12 @@ struct LightItemNote {
   @State itemList: Item[] = [];
   @State searchText: string = "";
   @State editingItemId: number = -1;
-
   // 图片预览状态 - 关键修改
   @State showImagePreview: boolean = false;
   @State previewImagePath: string = "";
   @State imageScale: number = 1; // 新增：图片缩放比例
   @State imageOffsetX: number = 0; // 新增：图片X轴偏移
   @State imageOffsetY: number = 0; // 新增：图片Y轴偏移
-
   // 表单状态
   @State itemName: string = "";
   @State itemCategory: string = "";
@@ -82,7 +82,6 @@ struct LightItemNote {
   @State nameError: string = "";
   @State priceError: string = "";
   @State itemImagePath: string = "";
-
   private itemCategories: string[] = DEFAULT_CATEGORY_OPTIONS;
   private itemUseStatusOptions: ItemUseStatus[] = ["在用", "闲置", "已丢弃"];
   private context = getContext(this) as common.UIAbilityContext;
@@ -179,23 +178,43 @@ struct LightItemNote {
     return options;
   }
 
+  private isImageFile(fileUri: string): boolean {
+    if (!fileUri || fileUri.trim() === "") {
+      return false;
+    }
+    const fileExt = fileUri.split('.').pop()?.toLowerCase() || "";
+    const supportImageExts = ["jpg", "jpeg", "png", "gif", "bmp"];
+    return supportImageExts.includes(fileExt);
+  }
+
   private async selectItemImage(): Promise<void> {
     try {
-      const photoPicker = new picker.PhotoViewPicker();
-      const selectOptions = new picker.PhotoSelectOptions();
-      selectOptions.maxSelectNumber = 1;
-      selectOptions.MIMEType = picker.PhotoViewMIMETypes.IMAGE_TYPE;
+      // 1. 创建 DocumentViewPicker 实例
+      const documentPicker = new picker.DocumentViewPicker();
 
-      const result = await photoPicker.select(selectOptions);
+      // 2. 配置选择参数（仅保留低版本支持的基础属性）
+      const selectOptions = new picker.DocumentSelectOptions();
+      selectOptions.maxSelectNumber = 1; // 单选，低版本支持
 
-      if (result.photoUris && result.photoUris.length > 0) {
-        const imageUri = result.photoUris[0];
-        this.itemImagePath = imageUri;
-        promptAction.showToast({ message: '图片选择成功', duration: 1500 });
+      // 3. 唤起选择器，获取返回结果（低版本返回 string[] 数组）
+      const result: string[] = await documentPicker.select(selectOptions);
+
+      // 4. 处理返回结果（直接操作 string[] 数组，无需访问 result.documents）
+      // 判断数组是否非空、有有效元素
+      if (result && result.length > 0) {
+        const selectedFileUri = result[0]; // 直接取数组第一个元素（单选，对应选中的文件URI）
+
+        // 5. 手动校验是否为有效图片
+        if (this.isImageFile(selectedFileUri)) {
+          this.itemImagePath = selectedFileUri;
+          promptAction.showToast({ message: '图片选择成功', duration: 1500 });
+        }
       }
     } catch (err) {
-      console.error("选择图片失败:", err);
-      promptAction.showToast({ message: '图片选择失败，请重试', duration: 2000 });
+      console.error("文件选择失败:", err);
+      if ((err as Error).message.indexOf("cancel") === -1) {
+        promptAction.showToast({ message: '文件选择失败，请重试', duration: 2000 });
+      }
     }
   }
 
@@ -328,7 +347,8 @@ struct LightItemNote {
       message: '确定要删除该物品记录吗？',
       primaryButton: {
         value: '取消',
-        action: () => {}
+        action: () => {
+        }
       },
       secondaryButton: {
         value: '删除',
@@ -355,13 +375,13 @@ struct LightItemNote {
     console.info('接收到数据清空事件，刷新列表');
     this.refreshItemList();
   };
-
   private itemCountChangedCallback = (count: number): void => {
     console.info(`物品数量变化: ${count}个，刷新列表`);
     this.refreshItemList();
   };
 
-  @Builder itemEnd(item: Item) {
+  @Builder
+  itemEnd(item: Item) {
     Row() {
       Button("编辑")
         .type(ButtonType.Normal)
@@ -408,14 +428,19 @@ struct LightItemNote {
 
   private getStatusColor(status: ItemUseStatus): string {
     switch (status) {
-      case '在用': return "#34C759";
-      case '闲置': return "#FF9500";
-      case '已丢弃': return "#8E8E93";
-      default: return "#333333";
+      case '在用':
+        return "#34C759";
+      case '闲置':
+        return "#FF9500";
+      case '已丢弃':
+        return "#8E8E93";
+      default:
+        return "#333333";
     }
   }
 
-  @Builder TabBuilder(title: string, index: number, icon: string) {
+  @Builder
+  TabBuilder(title: string, index: number, icon: string) {
     Column() {
       Text(icon)
         .fontSize(22)
@@ -450,10 +475,14 @@ struct LightItemNote {
 
   private getStatusBgColor(status: ItemUseStatus): string {
     switch (status) {
-      case '在用': return "#E6F4EA";
-      case '闲置': return "#FFF0E0";
-      case '已丢弃': return "#F2F2F7";
-      default: return "#F5F5F5";
+      case '在用':
+        return "#E6F4EA";
+      case '闲置':
+        return "#FFF0E0";
+      case '已丢弃':
+        return "#F2F2F7";
+      default:
+        return "#F5F5F5";
     }
   }
 
@@ -702,7 +731,12 @@ struct LightItemNote {
                 })
             }
             .width("100%")
-            .padding({ left: 16, right: 16, top: 12, bottom: 8 })
+            .padding({
+              left: 16,
+              right: 16,
+              top: 12,
+              bottom: 8
+            })
 
             if (this.getFilteredItems().length === 0) {
               Column() {
@@ -723,11 +757,11 @@ struct LightItemNote {
                   ListItem() {
                     Row() {
                       Column() {
-                          Stack() {
-                            Text(item.category.substring(0, 1))
-                              .fontSize(18)
-                              .fontWeight(FontWeight.Bold)
-                              .fontColor(Color.White)
+                        Stack() {
+                          Text(item.category.substring(0, 1))
+                            .fontSize(18)
+                            .fontWeight(FontWeight.Bold)
+                            .fontColor(Color.White)
 
                         }
                       }
@@ -753,7 +787,12 @@ struct LightItemNote {
                             .fontSize(10)
                             .fontColor(this.getStatusColor(item.useStatus))
                             .backgroundColor(this.getStatusBgColor(item.useStatus))
-                            .padding({ left: 4, right: 4, top: 2, bottom: 2 })
+                            .padding({
+                              left: 4,
+                              right: 4,
+                              top: 2,
+                              bottom: 2
+                            })
                             .borderRadius(4)
                             .flexShrink(0)
                         }
@@ -820,7 +859,6 @@ struct LightItemNote {
         }
         .tabBar(this.TabBuilder("我的", 3, "👤"))
       }
-
       .barWidth("100%")
       .barHeight(60)
       .backgroundColor(Color.White)
