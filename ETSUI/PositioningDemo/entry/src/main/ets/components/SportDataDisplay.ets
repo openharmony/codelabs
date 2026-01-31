@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 import { SportData, SportType } from '../model/SportModel';
 
 @Component

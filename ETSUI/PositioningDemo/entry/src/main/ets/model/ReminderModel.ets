@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 // 提醒类型枚举
 export enum ReminderType {
   SPORT_START = 'sport_start',      // 运动开始提醒

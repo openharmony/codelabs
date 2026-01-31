@@ -1,3 +1,4 @@
+// Copyright 2023 YourCompany. All rights reserved.
 import { SportType, SportData, RoutePoint, LocationInfo, DataPoint } from '../model/SportModel';
 import { ReminderService } from './ReminderService';
 

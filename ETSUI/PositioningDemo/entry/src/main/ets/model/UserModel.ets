@@ -1,3 +1,14 @@
+/*
+ * Copyright (c) 2023 公司名称
+ * All rights reserved.
+ *
+ * 文件名称：example.cpp
+ 作者：作者名称
+ * 创建日期：2023-01-01
+ * 版本：1.0.0
+ *
+ * 描述：示文件的描述
+ */
 // 用户信息数据模型（纯本地存储）
 export class UserInfo {
   nickname: string = '运动爱好者';

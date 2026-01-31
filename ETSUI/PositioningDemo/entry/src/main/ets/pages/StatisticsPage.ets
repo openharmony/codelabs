@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 Your Company Name
+ * All rights reserved.
+ */
 import router from '@ohos.router';
 import { StatisticsService } from '../service/StatisticsService';
 import { HistoryService } from '../service/HistoryService';
