@@ -1,3 +1,10 @@
+/*
+ * Copyright (C) 2023 Your Company Name
+ * All rights reserved.
+ * This source code is licensed under the BSD found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { ReminderType, ReminderConfig, ReminderData, ReminderSettings, ReminderState, SportGoal } from '../model/ReminderModel';
 import { SportData } from '../model/SportModel';
 import promptAction from '@ohos.promptAction';

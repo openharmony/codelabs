@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2023 YourCompany. All rights reserved.
+ * This file is part of YourProject.
+ * Unauthorized of this file, via any medium is strictly prohibited.
+ * Proprietary and confidential.
+ */
 import { DataPoint } from '../model/SportModel';
 
 // 分析结果接口定义

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: Apache-2.0
 import router from '@ohos.router';
 import { PlanService } from '../service/PlanService';
 import { HistoryService } from '../service/HistoryService';

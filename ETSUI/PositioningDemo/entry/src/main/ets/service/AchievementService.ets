@@ -1,3 +1,8 @@
+/*
+ * Copyright © 2023 YourCompany. All rights reserved.
+ * Author: YourName
+ * Date: 202-10-01
+ */
 import { Achievement, AchievementType, AchievementConfig } from '../model/AchievementModel';
 import { HistoryService } from './HistoryService';
 import { StatisticsService } from './StatisticsService';
