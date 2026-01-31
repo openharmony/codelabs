@@ -201,7 +201,7 @@ struct Index {
       .backgroundColor('#f0f0f0')
 
       // 搜索框
-      TextInput({ placeholder: '搜索联系人姓名或电话号码' })
+      TextInput({ placeholder: '搜索联系人姓名' })
         .width('90%')
         .height(40)
         .margin(10)
