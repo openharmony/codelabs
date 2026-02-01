@@ -7,6 +7,7 @@ import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.Ab
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { PreferenceManager } from '../manager/PreferenceManager';
+import { EventHubManager } from '../services/EventHubManager';
 import { MonitorCoreService } from '../services/MonitorCoreService';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { runAllTests } from '../test/TestRunner'
@@ -69,6 +70,9 @@ export default class EntryAbility extends UIAbility {
           JSON.stringify(err)
         );
       });
+    EventHubManager.getInstance()
+      .init(this.context)
+      .then(() => EventHubManager.subscribeAll());
   }
 
   /**
