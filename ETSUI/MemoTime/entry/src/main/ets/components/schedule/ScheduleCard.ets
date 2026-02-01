@@ -24,9 +24,12 @@ import { Schedule } from '../../model/Schedule'
 export struct ScheduleCard {
   @Prop scheduleData: Schedule = new Schedule()
   @Prop showDate: boolean = false
-  onCardClick: (schedule: Schedule) => void = () => {}
-  onEditClick: (schedule: Schedule) => void = () => {}
-  onDeleteClick: (schedule: Schedule) => void = () => {}
+  onCardClick: (schedule: Schedule) => void = () => {
+  }
+  onEditClick: (schedule: Schedule) => void = () => {
+  }
+  onDeleteClick: (schedule: Schedule) => void = () => {
+  }
 
   build() {
     Row() {
@@ -144,7 +147,12 @@ export struct ScheduleCard {
         .margin({ top: 8 })
       }
       .layoutWeight(1)
-      .padding({ left: 12, right: 12, top: 12, bottom: 12 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 12,
+        bottom: 12
+      })
     }
     .width('100%')
     .backgroundColor('#FFFFFF')

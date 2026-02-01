@@ -17,14 +17,7 @@
 /**
  * 月视图组件
  */
-import { CalendarViewType } from '../../common/constants/Constants'
-import {
-  getMonthViewDates,
-  getWeekDayName,
-  isToday,
-  isSameDay,
-  formatDate
-} from '../../common/utils/DateUtils'
+import { formatDate, getMonthViewDates, getWeekDayName, isSameDay, isToday } from '../../common/utils/DateUtils'
 import { Schedule } from '../../model/Schedule'
 
 @Component
@@ -34,9 +27,10 @@ export struct MonthView {
   @Prop @Watch('onDataChange') selectedDate: Date = new Date()
   @Prop @Watch('onDataChange') schedules: Schedule[] = []
   @Prop startFromMonday: boolean = false
-  onDateSelect: (date: Date) => void = () => {}
-  onScheduleClick: (schedule: Schedule) => void = () => {}
-
+  onDateSelect: (date: Date) => void = () => {
+  }
+  onScheduleClick: (schedule: Schedule) => void = () => {
+  }
   @State dates: Date[] = []
   @State weekHeaders: string[] = []
   @State refreshKey: number = 0

@@ -22,8 +22,8 @@ export struct FloatingButton {
   @Prop iconRes: Resource = $r('sys.media.ohos_ic_public_add')
   @Prop bgColor: string = '#4ECDC4'
   @Prop btnSize: number = 56
-  onBtnClick: () => void = () => {}
-
+  onBtnClick: () => void = () => {
+  }
   @State isPressed: boolean = false
 
   build() {

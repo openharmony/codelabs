@@ -24,11 +24,11 @@ import { relationalStore } from '@kit.ArkData';
 
 export default function reminderModelTest() {
   describe('ReminderModelTest', () => {
-    
+
     describe('构造函数测试', () => {
       it('创建默认 Reminder 实例', 0, () => {
         const reminder = new Reminder();
-        
+
         expect(reminder.id).assertContain('reminder-');
         expect(reminder.scheduleId).assertEqual('');
         expect(reminder.timing).assertEqual(ReminderTiming.ON_TIME);
@@ -52,9 +52,9 @@ export default function reminderModelTest() {
           customSound: 'alarm.mp3',
           vibrationEnabled: false
         };
-        
+
         const reminder = new Reminder(init);
-        
+
         expect(reminder.id).assertEqual('reminder-test-001');
         expect(reminder.scheduleId).assertEqual('schedule-001');
         expect(reminder.timing).assertEqual(ReminderTiming.MINUTES_15);
@@ -70,13 +70,13 @@ export default function reminderModelTest() {
           scheduleId: 'schedule-partial',
           timing: ReminderTiming.HOURS_1
         };
-        
+
         const reminder = new Reminder(init);
-        
+
         expect(reminder.id).assertContain('reminder-');
         expect(reminder.scheduleId).assertEqual('schedule-partial');
         expect(reminder.timing).assertEqual(ReminderTiming.HOURS_1);
-        expect(reminder.type).assertEqual(ReminderType.NOTIFICATION);  // 默认值
+        expect(reminder.type).assertEqual(ReminderType.NOTIFICATION); // 默认值
       });
     });
 
@@ -85,10 +85,10 @@ export default function reminderModelTest() {
         const reminder = new Reminder({
           timing: ReminderTiming.ON_TIME
         });
-        const scheduleStartTime = 1705305600000;  // 示例时间戳
-        
+        const scheduleStartTime = 1705305600000; // 示例时间戳
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         expect(reminder.triggerTime).assertEqual(scheduleStartTime);
       });
 
@@ -97,9 +97,9 @@ export default function reminderModelTest() {
           timing: ReminderTiming.MINUTES_5
         });
         const scheduleStartTime = 1705305600000;
-        
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         expect(reminder.triggerTime).assertEqual(scheduleStartTime - 5 * 60 * 1000);
       });
 
@@ -108,9 +108,9 @@ export default function reminderModelTest() {
           timing: ReminderTiming.MINUTES_15
         });
         const scheduleStartTime = 1705305600000;
-        
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         expect(reminder.triggerTime).assertEqual(scheduleStartTime - 15 * 60 * 1000);
       });
 
@@ -119,9 +119,9 @@ export default function reminderModelTest() {
           timing: ReminderTiming.MINUTES_30
         });
         const scheduleStartTime = 1705305600000;
-        
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         expect(reminder.triggerTime).assertEqual(scheduleStartTime - 30 * 60 * 1000);
       });
 
@@ -130,9 +130,9 @@ export default function reminderModelTest() {
           timing: ReminderTiming.HOURS_1
         });
         const scheduleStartTime = 1705305600000;
-        
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         expect(reminder.triggerTime).assertEqual(scheduleStartTime - 60 * 60 * 1000);
       });
 
@@ -141,9 +141,9 @@ export default function reminderModelTest() {
           timing: ReminderTiming.DAYS_1
         });
         const scheduleStartTime = 1705305600000;
-        
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         // DAYS_1 = 1440 分钟 = 24小时
         expect(reminder.triggerTime).assertEqual(scheduleStartTime - 1440 * 60 * 1000);
       });
@@ -153,9 +153,9 @@ export default function reminderModelTest() {
           timing: ReminderTiming.WEEKS_1
         });
         const scheduleStartTime = 1705305600000;
-        
+
         reminder.calculateTriggerTime(scheduleStartTime);
-        
+
         // WEEKS_1 = 10080 分钟 = 7天
         expect(reminder.triggerTime).assertEqual(scheduleStartTime - 10080 * 60 * 1000);
       });
@@ -226,17 +226,17 @@ export default function reminderModelTest() {
           customSound: 'custom.mp3',
           vibrationEnabled: false
         });
-        
+
         const dbObj = reminder.toDbObject();
-        
+
         expect(dbObj['id']).assertEqual('db-reminder-001');
         expect(dbObj['scheduleId']).assertEqual('schedule-db');
         expect(dbObj['timing']).assertEqual(ReminderTiming.HOURS_2);
         expect(dbObj['type']).assertEqual(ReminderType.EMAIL);
         expect(dbObj['triggerTime']).assertEqual(triggerTime);
-        expect(dbObj['isTriggered']).assertEqual(1);  // boolean 转为 1
+        expect(dbObj['isTriggered']).assertEqual(1); // boolean 转为 1
         expect(dbObj['customSound']).assertEqual('custom.mp3');
-        expect(dbObj['vibrationEnabled']).assertEqual(0);  // boolean 转为 0
+        expect(dbObj['vibrationEnabled']).assertEqual(0); // boolean 转为 0
       });
     });
 
@@ -254,9 +254,9 @@ export default function reminderModelTest() {
           vibrationEnabled: 1,
           createdAt: now - 3600000
         };
-        
+
         const reminder = Reminder.fromDbObject(dbObj);
-        
+
         expect(reminder.id).assertEqual('from-db-reminder');
         expect(reminder.scheduleId).assertEqual('schedule-from-db');
         expect(reminder.timing).assertEqual(ReminderTiming.DAYS_2);

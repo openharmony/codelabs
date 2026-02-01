@@ -29,10 +29,11 @@ export struct RecordingPanel {
   @State recordingState: RecordingState = RecordingState.IDLE
   @State recordingDuration: number = 0
   @State showPanel: boolean = false
-
   // 回调
-  onRecordingComplete: (recording: Recording) => void = () => {}
-  onCancel: () => void = () => {}
+  onRecordingComplete: (recording: Recording) => void = () => {
+  }
+  onCancel: () => void = () => {
+  }
 
   /**
    * 格式化时长显示
@@ -129,7 +130,12 @@ export struct RecordingPanel {
         .fontColor('#4ECDC4')
         .margin({ left: 8 })
     }
-    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 12,
+      bottom: 12
+    })
     .backgroundColor('#E8F8F5')
     .borderRadius(24)
     .onClick(() => this.startRecording())

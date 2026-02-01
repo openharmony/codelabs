@@ -5,9 +5,8 @@
     "description": "$string:module_desc",
     "mainElement": "EntryAbility",
     "deviceTypes": [
-      "phone",
-      "tablet",
-      "2in1"
+      "default",
+      "tablet"
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
@@ -17,7 +16,9 @@
         "name": "ohos.permission.NOTIFICATION_CONTROLLER",
         "reason": "$string:notification_permission_reason",
         "usedScene": {
-          "abilities": ["EntryAbility"],
+          "abilities": [
+            "EntryAbility"
+          ],
           "when": "always"
         }
       },
@@ -25,7 +26,9 @@
         "name": "ohos.permission.PUBLISH_AGENT_REMINDER",
         "reason": "$string:reminder_permission_reason",
         "usedScene": {
-          "abilities": ["EntryAbility"],
+          "abilities": [
+            "EntryAbility"
+          ],
           "when": "always"
         }
       },
@@ -33,7 +36,9 @@
         "name": "ohos.permission.MICROPHONE",
         "reason": "$string:microphone_permission_reason",
         "usedScene": {
-          "abilities": ["EntryAbility"],
+          "abilities": [
+            "EntryAbility"
+          ],
           "when": "inuse"
         }
       }

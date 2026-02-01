@@ -19,7 +19,7 @@
  */
 import { Schedule } from '../../model/Schedule'
 import { ScheduleCard } from './ScheduleCard'
-import { formatDateChinese, isSameDay } from '../../common/utils/DateUtils'
+import { formatDateChinese } from '../../common/utils/DateUtils'
 
 /**
  * 分组日程数据
@@ -35,10 +35,12 @@ export struct ScheduleList {
   @Prop @Watch('onSchedulesChange') schedules: Schedule[] = []
   @Prop groupByDate: boolean = true
   @Prop emptyText: string = '暂无日程'
-  onScheduleClick: (schedule: Schedule) => void = () => {}
-  onScheduleEdit: (schedule: Schedule) => void = () => {}
-  onScheduleDelete: (schedule: Schedule) => void = () => {}
-
+  onScheduleClick: (schedule: Schedule) => void = () => {
+  }
+  onScheduleEdit: (schedule: Schedule) => void = () => {
+  }
+  onScheduleDelete: (schedule: Schedule) => void = () => {
+  }
   @State groupedSchedules: ScheduleGroup[] = []
   @State refreshKey: number = 0
 
@@ -125,7 +127,12 @@ export struct ScheduleList {
       Blank()
     }
     .width('100%')
-    .padding({ left: 4, right: 4, top: 12, bottom: 8 })
+    .padding({
+      left: 4,
+      right: 4,
+      top: 12,
+      bottom: 8
+    })
   }
 
   @Builder
@@ -160,7 +167,12 @@ export struct ScheduleList {
             this.ScheduleGroupView(group)
           }, (group: ScheduleGroup) => `${group.dateStr}-${this.refreshKey}`)
         }
-        .padding({ left: 16, right: 16, top: 8, bottom: 16 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 8,
+          bottom: 16
+        })
       }
       .scrollable(ScrollDirection.Vertical)
       .edgeEffect(EdgeEffect.Spring)

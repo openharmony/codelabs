@@ -61,19 +61,45 @@ export class Schedule {
 
   constructor(init?: ScheduleInit) {
     if (init) {
-      if (init.id !== undefined) this.id = init.id
-      if (init.title !== undefined) this.title = init.title
-      if (init.description !== undefined) this.description = init.description
-      if (init.startTime !== undefined) this.startTime = init.startTime
-      if (init.endTime !== undefined) this.endTime = init.endTime
-      if (init.isAllDay !== undefined) this.isAllDay = init.isAllDay
-      if (init.location !== undefined) this.location = init.location
-      if (init.tagIds !== undefined) this.tagIds = init.tagIds
-      if (init.color !== undefined) this.color = init.color
-      if (init.repeatRule !== undefined) this.repeatRule = init.repeatRule
-      if (init.reminderIds !== undefined) this.reminderIds = init.reminderIds
-      if (init.recordingIds !== undefined) this.recordingIds = init.recordingIds
-      if (init.externalAppLink !== undefined) this.externalAppLink = init.externalAppLink
+      if (init.id !== undefined) {
+        this.id = init.id
+      }
+      if (init.title !== undefined) {
+        this.title = init.title
+      }
+      if (init.description !== undefined) {
+        this.description = init.description
+      }
+      if (init.startTime !== undefined) {
+        this.startTime = init.startTime
+      }
+      if (init.endTime !== undefined) {
+        this.endTime = init.endTime
+      }
+      if (init.isAllDay !== undefined) {
+        this.isAllDay = init.isAllDay
+      }
+      if (init.location !== undefined) {
+        this.location = init.location
+      }
+      if (init.tagIds !== undefined) {
+        this.tagIds = init.tagIds
+      }
+      if (init.color !== undefined) {
+        this.color = init.color
+      }
+      if (init.repeatRule !== undefined) {
+        this.repeatRule = init.repeatRule
+      }
+      if (init.reminderIds !== undefined) {
+        this.reminderIds = init.reminderIds
+      }
+      if (init.recordingIds !== undefined) {
+        this.recordingIds = init.recordingIds
+      }
+      if (init.externalAppLink !== undefined) {
+        this.externalAppLink = init.externalAppLink
+      }
     }
     if (!this.id) {
       this.id = generateScheduleUUID()
@@ -142,7 +168,7 @@ export class Schedule {
     schedule.endTime = obj['endTime'] as number
     schedule.isAllDay = (obj['isAllDay'] as number) === 1
     schedule.location = (obj['location'] as string) || ''
-    
+
     const tagIdsStr = obj['tagIds'] as string
     if (tagIdsStr) {
       try {
@@ -151,10 +177,10 @@ export class Schedule {
         schedule.tagIds = []
       }
     }
-    
+
     schedule.color = (obj['color'] as string) || '#4ECDC4'
     schedule.repeatRule = (obj['repeatRule'] as string) || ''
-    
+
     const reminderIdsStr = obj['reminderIds'] as string
     if (reminderIdsStr) {
       try {
@@ -163,7 +189,7 @@ export class Schedule {
         schedule.reminderIds = []
       }
     }
-    
+
     const recordingIdsStr = obj['recordingIds'] as string
     if (recordingIdsStr) {
       try {
@@ -172,12 +198,12 @@ export class Schedule {
         schedule.recordingIds = []
       }
     }
-    
+
     schedule.externalAppLink = (obj['externalAppLink'] as string) || ''
     schedule.createdAt = obj['createdAt'] as number
     schedule.updatedAt = obj['updatedAt'] as number
     schedule.isDeleted = (obj['isDeleted'] as number) === 1
-    
+
     return schedule
   }
 }

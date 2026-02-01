@@ -39,25 +39,41 @@ export interface ReminderInit {
  */
 export class Reminder {
   id: string = ''
-  scheduleId: string = ''           // 关联的日程ID
-  timing: ReminderTiming = ReminderTiming.ON_TIME  // 提醒时机
-  type: ReminderType = ReminderType.NOTIFICATION   // 提醒方式
-  triggerTime: number = 0           // 计算后的触发时间戳
-  isTriggered: boolean = false      // 是否已触发
-  customSound: string = ''          // 自定义提示音
-  vibrationEnabled: boolean = true  // 是否启用震动
+  scheduleId: string = '' // 关联的日程ID
+  timing: ReminderTiming = ReminderTiming.ON_TIME // 提醒时机
+  type: ReminderType = ReminderType.NOTIFICATION // 提醒方式
+  triggerTime: number = 0 // 计算后的触发时间戳
+  isTriggered: boolean = false // 是否已触发
+  customSound: string = '' // 自定义提示音
+  vibrationEnabled: boolean = true // 是否启用震动
   createdAt: number = 0
 
   constructor(init?: ReminderInit) {
     if (init) {
-      if (init.id !== undefined) this.id = init.id
-      if (init.scheduleId !== undefined) this.scheduleId = init.scheduleId
-      if (init.timing !== undefined) this.timing = init.timing
-      if (init.type !== undefined) this.type = init.type
-      if (init.triggerTime !== undefined) this.triggerTime = init.triggerTime
-      if (init.isTriggered !== undefined) this.isTriggered = init.isTriggered
-      if (init.customSound !== undefined) this.customSound = init.customSound
-      if (init.vibrationEnabled !== undefined) this.vibrationEnabled = init.vibrationEnabled
+      if (init.id !== undefined) {
+        this.id = init.id
+      }
+      if (init.scheduleId !== undefined) {
+        this.scheduleId = init.scheduleId
+      }
+      if (init.timing !== undefined) {
+        this.timing = init.timing
+      }
+      if (init.type !== undefined) {
+        this.type = init.type
+      }
+      if (init.triggerTime !== undefined) {
+        this.triggerTime = init.triggerTime
+      }
+      if (init.isTriggered !== undefined) {
+        this.isTriggered = init.isTriggered
+      }
+      if (init.customSound !== undefined) {
+        this.customSound = init.customSound
+      }
+      if (init.vibrationEnabled !== undefined) {
+        this.vibrationEnabled = init.vibrationEnabled
+      }
     }
     if (!this.id) {
       this.id = generateReminderUUID()

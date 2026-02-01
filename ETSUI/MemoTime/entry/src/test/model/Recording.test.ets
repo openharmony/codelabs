@@ -23,11 +23,11 @@ import { relationalStore } from '@kit.ArkData';
 
 export default function recordingModelTest() {
   describe('RecordingModelTest', () => {
-    
+
     describe('构造函数测试', () => {
       it('创建默认 Recording 实例', 0, () => {
         const recording = new Recording();
-        
+
         expect(recording.id).assertContain('recording-');
         expect(recording.scheduleId).assertEqual('');
         expect(recording.filePath).assertEqual('');
@@ -50,9 +50,9 @@ export default function recordingModelTest() {
           format: 'mp3',
           transcription: '这是测试语音转文本内容'
         };
-        
+
         const recording = new Recording(init);
-        
+
         expect(recording.id).assertEqual('recording-test-001');
         expect(recording.scheduleId).assertEqual('schedule-001');
         expect(recording.filePath).assertEqual('/data/recordings/test.aac');
@@ -68,13 +68,13 @@ export default function recordingModelTest() {
           scheduleId: 'schedule-partial',
           fileName: 'memo.aac'
         };
-        
+
         const recording = new Recording(init);
-        
+
         expect(recording.id).assertContain('recording-');
         expect(recording.scheduleId).assertEqual('schedule-partial');
         expect(recording.fileName).assertEqual('memo.aac');
-        expect(recording.format).assertEqual('aac');  // 默认值
+        expect(recording.format).assertEqual('aac'); // 默认值
       });
     });
 
@@ -174,9 +174,9 @@ export default function recordingModelTest() {
           format: 'aac',
           transcription: '会议记录内容'
         });
-        
+
         const dbObj = recording.toDbObject();
-        
+
         expect(dbObj['id']).assertEqual('db-recording-001');
         expect(dbObj['scheduleId']).assertEqual('schedule-db');
         expect(dbObj['filePath']).assertEqual('/storage/audio/memo.aac');
@@ -203,9 +203,9 @@ export default function recordingModelTest() {
           transcription: '从数据库恢复的语音内容',
           createdAt: now
         };
-        
+
         const recording = Recording.fromDbObject(dbObj);
-        
+
         expect(recording.id).assertEqual('from-db-recording');
         expect(recording.scheduleId).assertEqual('schedule-from-db');
         expect(recording.filePath).assertEqual('/cache/recordings/voice.mp3');
@@ -220,12 +220,12 @@ export default function recordingModelTest() {
 
     describe('边界条件测试', () => {
       it('非常大的文件大小', 0, () => {
-        const recording = new Recording({ fileSize: 1073741824 });  // 1GB
+        const recording = new Recording({ fileSize: 1073741824 }); // 1GB
         expect(recording.getFileSizeText()).assertEqual('1024.0 MB');
       });
 
       it('非常长的录音时长', 0, () => {
-        const recording = new Recording({ duration: 7200 });  // 2小时
+        const recording = new Recording({ duration: 7200 }); // 2小时
         expect(recording.getDurationText()).assertEqual('120:00');
       });
     });

@@ -31,9 +31,9 @@ export struct RecordingList {
   @State playbackState: PlaybackState = PlaybackState.IDLE
   @State currentProgress: number = 0
   @State currentDuration: number = 0
-
   // 回调
-  onDelete: (recording: Recording) => void = () => {}
+  onDelete: (recording: Recording) => void = () => {
+  }
 
   /**
    * 格式化时长显示 (mm:ss)

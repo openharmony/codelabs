@@ -54,13 +54,12 @@ export function formatDateTime(date: Date): string {
 }
 
 
-
 /**
  * 获取月份名称
  */
 export function getMonthName(month: number): string {
-  const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月', 
-                      '七月', '八月', '九月', '十月', '十一月', '十二月']
+  const monthNames = ['一月', '二月', '三月', '四月', '五月', '六月',
+    '七月', '八月', '九月', '十月', '十一月', '十二月']
   return monthNames[month]
 }
 
@@ -69,8 +68,8 @@ export function getMonthName(month: number): string {
  */
 export function isSameDay(date1: Date, date2: Date): boolean {
   return date1.getFullYear() === date2.getFullYear() &&
-         date1.getMonth() === date2.getMonth() &&
-         date1.getDate() === date2.getDate()
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
 }
 
 /**
@@ -155,7 +154,7 @@ export function getRelativeTimeString(date: Date): string {
   const now = new Date()
   const diff = date.getTime() - now.getTime()
   const diffDays = Math.floor(diff / (1000 * 60 * 60 * 24))
-  
+
   if (diffDays === 0) {
     return '今天'
   } else if (diffDays === 1) {
@@ -186,30 +185,30 @@ export function getMonthViewDates(year: number, month: number, startFromMonday: 
   const dates: Date[] = []
   const firstDay = new Date(year, month, 1)
   const lastDay = new Date(year, month + 1, 0)
-  
+
   // 计算第一天是星期几
   let firstDayOfWeek = firstDay.getDay()
   if (startFromMonday) {
     firstDayOfWeek = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1
   }
-  
+
   // 添加上个月的日期
   for (let i = firstDayOfWeek - 1; i >= 0; i--) {
     const date = new Date(year, month, -i)
     dates.push(date)
   }
-  
+
   // 添加当月的日期
   for (let i = 1; i <= lastDay.getDate(); i++) {
     dates.push(new Date(year, month, i))
   }
-  
+
   // 添加下个月的日期，填充到6行
   const remainingDays = 42 - dates.length
   for (let i = 1; i <= remainingDays; i++) {
     dates.push(new Date(year, month + 1, i))
   }
-  
+
   return dates
 }
 
@@ -219,20 +218,20 @@ export function getMonthViewDates(year: number, month: number, startFromMonday: 
 export function getWeekDates(date: Date, startFromMonday: boolean): Date[] {
   const dates: Date[] = []
   const currentDay = date.getDay()
-  
+
   let diff: number
   if (startFromMonday) {
     diff = currentDay === 0 ? -6 : 1 - currentDay
   } else {
     diff = -currentDay
   }
-  
+
   for (let i = 0; i < 7; i++) {
     const newDate = new Date(date)
     newDate.setDate(date.getDate() + diff + i)
     dates.push(newDate)
   }
-  
+
   return dates
 }
 
