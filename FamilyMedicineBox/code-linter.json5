@@ -12,6 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+{
+  "ignore": [ // 补充根字段定义，修复结构不完整错误
     "**/build/**/*",
     "**/.preview/**/*"
   ],
