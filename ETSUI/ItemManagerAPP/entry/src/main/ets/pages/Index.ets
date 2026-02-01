@@ -15,11 +15,13 @@
 import { promptAction } from '@kit.ArkUI';
 import common from '@ohos.app.ability.common';
 import picker from '@ohos.file.picker';
-import { Item, ItemUseStatus, DEFAULT_CATEGORY_OPTIONS } from '../model/Item';
+import { DEFAULT_CATEGORY_OPTIONS, Item, ItemUseStatus } from '../model/Item';
 import ItemRdb from '../data/ItemRdb';
 import { StatisticsPage } from './StatisticsPage';
 import { MinePage } from './MinePage';
 import { itemStore } from '../store';
+import fs from '@ohos.file.fs';
+import image from '@ohos.multimedia.image';
 
 interface SelectOption {
   value: string;
@@ -82,6 +84,7 @@ struct LightItemNote {
   @State nameError: string = "";
   @State priceError: string = "";
   @State itemImagePath: string = "";
+  @State previewImagePixelMap: PixelMap | null = null;
   private itemCategories: string[] = DEFAULT_CATEGORY_OPTIONS;
   private itemUseStatusOptions: ItemUseStatus[] = ["在用", "闲置", "已丢弃"];
   private context = getContext(this) as common.UIAbilityContext;
@@ -112,6 +115,39 @@ struct LightItemNote {
 
   private formatDate(date: Date): string {
     return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
+  }
+
+  private async loadPreviewImageToPixelMap(filePath: string): Promise<void> {
+    if (!filePath) {
+      this.previewImagePixelMap = null;
+      return;
+    }
+
+    try {
+      // 1. 打开文件（只读模式，适配 Dayu200 文件权限）
+      const file = fs.openSync(filePath, fs.OpenMode.READ_ONLY);
+      // 2. 获取文件大小，创建对应 ArrayBuffer
+      const fileStat = fs.statSync(filePath);
+      const arrayBuffer = new ArrayBuffer(fileStat.size);
+      // 3. 读取文件内容到 ArrayBuffer
+      const readResult = fs.readSync(file.fd, arrayBuffer);
+      if (readResult <= 0) {
+        throw new Error("预览图片文件内容为空");
+      }
+      // 4. 转换为 ImageSource（图片数据源）
+      const imageSource = image.createImageSource(arrayBuffer);
+      // 5. 配置 PixelMap 解码参数（适配预览弹窗大小，保持图片清晰度）
+      const pixMap = await imageSource.createPixelMap();
+      this.previewImagePixelMap = pixMap;
+
+      // 7. 关闭文件描述符，释放 Dayu200 资源（必须执行）
+      fs.closeSync(file);
+    } catch (err) {
+      console.error("预览图片读取转换失败:", err);
+      this.previewImagePixelMap = null;
+      this.showImagePreview = false; // 转换失败关闭弹窗
+      promptAction.showToast({ message: '预览图片解析失败', duration: 2000 });
+    }
   }
 
   private async refreshItemList(): Promise<void> {
@@ -207,7 +243,9 @@ struct LightItemNote {
         // 5. 手动校验是否为有效图片
         if (this.isImageFile(selectedFileUri)) {
           this.itemImagePath = selectedFileUri;
+          this.loadPreviewImageToPixelMap(selectedFileUri);
           promptAction.showToast({ message: '图片选择成功', duration: 1500 });
+
         }
       }
     } catch (err) {
@@ -227,6 +265,7 @@ struct LightItemNote {
   private previewImage(item: Item): void {
     if (item.imagePath) {
       this.previewImagePath = item.imagePath;
+      this.loadPreviewImageToPixelMap(this.previewImagePath)
       this.showImagePreview = true;
       this.imageScale = 1; // 重置缩放
       this.imageOffsetX = 0; // 重置偏移
@@ -899,7 +938,8 @@ struct LightItemNote {
             });
 
           // 图片预览
-          Image(this.previewImagePath)
+
+          Image(this.previewImagePixelMap)
             .width('90%')
             .height('70%')
             .objectFit(ImageFit.Contain)
@@ -907,23 +947,6 @@ struct LightItemNote {
             .scale({ x: this.imageScale, y: this.imageScale })
             .translate({ x: this.imageOffsetX, y: this.imageOffsetY })
             .zIndex(2)
-            .gesture(
-              PinchGesture()
-                .onActionUpdate((event: GestureEvent) => {
-                  if (event.scale) {
-                    this.imageScale = Math.max(0.5, Math.min(3, this.imageScale * event.scale));
-                  }
-                })
-            )
-            .gesture(
-              PanGesture()
-                .onActionUpdate((event: GestureEvent) => {
-                  if (event.offsetX && event.offsetY) {
-                    this.imageOffsetX += event.offsetX;
-                    this.imageOffsetY += event.offsetY;
-                  }
-                })
-            );
         }
         .width('100%')
         .height('100%')
