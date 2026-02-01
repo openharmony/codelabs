@@ -1,11 +1,10 @@
 ﻿/*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSEt-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,55 +13,101 @@
  * limitations under the License.
  */
 
-  async aboutToAppear() {
-    const params = router.getParams() as Record<string, Object>;
-    if (params && params['category']) {
-      this.categoryName = params['category'] as string;
-      this.loadData();
-    }
-  }
+import router from '@ohos.router';
+import { MedicineItem, MockData } from '../model/MockData';
 
-  async loadData() {
-    // 1. 鑾峰彇鎵€鏈?    let all = await RdbStore.queryAll(1);
-    // 2. 鏍规嵁鍒嗙被鍚嶇О杩囨护 (瀛楁鏄?company)
-    this.filteredList = all.filter(item => item.company === this.categoryName);
+@Entry
+@Component
+struct CategoryListPage {
+  @State categoryName: string = '';
+  @State medicineList: MedicineItem[] = [];
+
+  aboutToAppear() {
+    const params = router.getParams() as Record<string, string>;
+    if (params && params['category']) {
+      this.categoryName = params['category'];
+      this.medicineList = MockData.getMedicinesByCategory(this.categoryName);
+    }
   }
 
   build() {
-    Navigation() {
-      Column() {
-        List() {
-          if (this.filteredList.length === 0) {
-            ListItem() {
-              Column() {
-                Text('馃摝').fontSize(50)
-                Text(`娌℃湁鎵惧埌 "${this.categoryName}" 绫荤殑鑽搧`).fontColor(Color.Gray).margin({top:10})
-              }.width('100%').height(300).justifyContent(FlexAlign.Center)
-            }
-          } else {
-            ForEach(this.filteredList, (item: Contact) => {
-              ListItem() {
-                ContactListItem({ contact: item })
-              }
-              .margin({ left: '4%', right: '4%' })
-              .onClick(() => {
-                router.pushUrl({
-                  url: 'pages/ContactDetailPage',
-                  params: { contactId: item.id }
-                });
-              })
-            }, (item: Contact) => JSON.stringify(item))
-          }
-        }
-        .width('100%').layoutWeight(1)
+    Column() {
+      // 导航栏
+      Row() {
+        Button('<')
+          .onClick(() => router.back())
+          .backgroundColor(Color.Transparent)
+          .fontColor(Color.Black)
+          .fontSize(24)
+
+        Text(this.categoryName)
+          .fontSize(20)
+          .fontWeight(FontWeight.Bold)
+          .margin({ left: 10 })
       }
-      .width('100%').height('100%').backgroundColor('#F7F8FA')
+      .width('100%')
+      .padding(16)
+
+      // 列表
+      List({ space: 10 }) {
+        if (this.medicineList.length === 0) {
+          ListItem() {
+            Column() {
+              Text('暂无该分类药品').fontSize(16).fontColor('#999')
+            }
+            .width('100%')
+            .margin({ top: 50 })
+          }
+        } else {
+          ForEach(this.medicineList, (item: MedicineItem) => {
+            ListItem() {
+              Row() {
+                // 修复点：使用 Stack 替代 overlay
+                Stack({ alignContent: Alignment.Center }) {
+                  Circle({ width: 44, height: 44 }).fill('#F0F4FF')
+                  Text(item.id.toString())
+                    .fontColor('#4A90E2')
+                    .fontWeight(FontWeight.Bold)
+                }
+                .margin({ right: 12 })
+
+                Column() {
+                  Row() {
+                    Text(item.name).fontSize(16).fontWeight(FontWeight.Medium)
+                    Text(item.category)
+                      .fontSize(10)
+                      .fontColor(Color.White)
+                      .backgroundColor('#FFB74D') // Orange tag
+                      .borderRadius(4)
+                      .padding({
+                        left: 6,
+                        right: 6,
+                        top: 2,
+                        bottom: 2
+                      })
+                      .margin({ left: 8 })
+                  }
+
+                  Text('有效期至: ' + item.expiryDate)
+                    .fontSize(13)
+                    .fontColor('#888888')
+                    .margin({ top: 4 })
+                }
+                .alignItems(HorizontalAlign.Start)
+              }
+              .width('100%')
+              .padding(16)
+              .backgroundColor(Color.White)
+              .borderRadius(12)
+            }
+          })
+        }
+      }
+      .width('100%')
+      .layoutWeight(1)
+      .padding(16)
+      .backgroundColor('#F5F6FA')
     }
-    .title(this.categoryName).titleMode(NavigationTitleMode.Mini)
+    .height('100%')
   }
 }
-
-
-
-
-

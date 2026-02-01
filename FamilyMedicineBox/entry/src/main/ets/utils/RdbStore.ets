@@ -1,11 +1,10 @@
 ﻿/*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSEt-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,11 +13,23 @@
  * limitations under the License.
  */
 
-securityLevel: relationalStore.SecurityLevel.S1
-};
+import relationalStore from '@ohos.data.relationalStore'
+import common from '@ohos.app.ability.common'
+import { Contact } from '../model/Contact'
 
- * 鏁版嵁搴撳缓琛ㄨ鍙? * 鍖呭惈瀛楁锛氫富閿甶d, 鑽悕, 鏈夋晥鏈? 鍒嗙被, 鐢ㄦ硶, 浣嶇疆, 鍥剧墖, 鐢ㄦ埛ID
-const SQL_CREATE_TABLE = `CREATE TABLE IF NOT EXISTS CONTACT_TABLE_V2 (
+/**
+ * 数据库配置
+ */
+const STORE_CONFIG: relationalStore.StoreConfig = {
+  name: 'MedicineBox.db',
+  securityLevel: relationalStore.SecurityLevel.S1
+}
+
+/**
+ * 建表 SQL
+ */
+const SQL_CREATE_TABLE = `
+CREATE TABLE IF NOT EXISTS CONTACT_TABLE_V2 (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   phone TEXT,
@@ -27,207 +38,241 @@ const SQL_CREATE_TABLE = `CREATE TABLE IF NOT EXISTS CONTACT_TABLE_V2 (
   email TEXT,
   image TEXT,
   userId INTEGER
-)`;
+)`
 
- * RDB 鏁版嵁搴撶鐞嗗伐鍏风被
- * 灏佽浜嗗鍒犳敼鏌?(CRUD) 鎿嶄綔
- * 瀹炵幇浜嗗崟渚嬫ā寮? */
+/**
+ * RdbStore 数据访问层（增强版）
+ */
 export class RdbStore {
-  private rdbStore: relationalStore.RdbStore | null = null;
-  private tableName: string = 'CONTACT_TABLE_V2';
+  private rdbStore: relationalStore.RdbStore | null = null
+  private readonly tableName: string = 'CONTACT_TABLE_V2'
 
-  
-  getRdbStore(context: common.Context): Promise<relationalStore.RdbStore> {
+  /* ==================== 初始化 ==================== */
+
+  async getRdbStore(context: common.Context): Promise<relationalStore.RdbStore> {
+    if (this.rdbStore !== null) {
+      return this.rdbStore
+    }
+
     return new Promise((resolve, reject) => {
-      // 濡傛灉宸插垵濮嬪寲锛岀洿鎺ヨ繑鍥?      if (this.rdbStore) {
-        console.info('[RdbStore] Store already initialized.');
-        resolve(this.rdbStore);
-        return;
-      }
-
-      console.info('[RdbStore] Start getting RdbStore...');
-      // 璋冪敤绯荤粺 API 鑾峰彇鏁版嵁搴?      relationalStore.getRdbStore(context, STORE_CONFIG, (err, store) => {
+      relationalStore.getRdbStore(context, STORE_CONFIG, (err, store) => {
         if (err) {
-          console.error(`[RdbStore] Failed to get RdbStore. Code:${err.code}, Message:${err.message}`);
-          reject(err);
-        } else {
-          console.info('[RdbStore] Get RdbStore successfully.');
-          this.rdbStore = store;
-
-          // 鎵ц寤鸿〃 SQL
-          try {
-            this.rdbStore.executeSql(SQL_CREATE_TABLE);
-          } catch (e) {
-            console.error('[RdbStore] Execute SQL error: ' + JSON.stringify(e));
-          }
-
-          // 妫€鏌ユ槸鍚︿负绌哄簱锛屽鏋滄槸鍒欐彃鍏ユ紨绀烘暟鎹?          this.queryAll(1).then(list => {
-            if (list.length === 0) {
-              console.info('[RdbStore] No data found, initializing default data...');
-              this.initDefaultData();
-            }
-          })
-          resolve(store);
+          reject(err)
+          return
         }
-      });
-    });
+
+        this.rdbStore = store
+        try {
+          this.rdbStore.executeSql(SQL_CREATE_TABLE)
+        } catch (e) {
+          console.error('[RdbStore] executeSql failed')
+        }
+
+        resolve(store)
+      })
+    })
   }
 
-  
-  private initDefaultData() {
-    let c1 = new Contact('999鎰熷啋鐏?, '2025-12-01');
-    c1.company = '鎰熷啋鍙戠儳';
-    c1.position = '涓€鏃ヤ笁娆?;
-    c1.email = '鑽涓€灞?;
-    c1.userId = 1;
-    this.insert(c1);
+  /* ==================== 基础 CRUD（原样保留） ==================== */
 
-    let c2 = new Contact('甯冩礇鑺紦閲婅兌鍥?, '2026-05-20');
-    c2.company = '姝㈢棝閫€鐑?;
-    c2.position = '鍙戠儳38.5搴︿互涓?;
-    c2.email = '鑽浜屽眰';
-    c2.userId = 1;
-    this.insert(c2);
-
-    let c3 = new Contact('闃胯帿瑗挎灄', '2024-11-15');
-    c3.company = '娑堢値鎶楃敓绱?;
-    c3.position = '楗悗鏈嶇敤';
-    c3.email = '鎶藉眽';
-    c3.userId = 1;
-    this.insert(c3);
-  }
-
-  
   async insert(contact: Contact): Promise<number> {
     if (!this.rdbStore) {
-      console.error('[RdbStore] Error: RdbStore is NOT initialized.');
-      return -1;
+      return -1
     }
 
-    // 鏋勫缓閿€煎
-    const valueBucket: relationalStore.ValuesBucket = {
+    const values: relationalStore.ValuesBucket = {
       name: contact.name,
       phone: contact.phone,
-      company: contact.company,
-      position: contact.position,
-      email: contact.email,
-      image: contact.image,
-      userId: contact.userId
-    };
+      company: contact.company ?? '',
+      position: contact.position ?? '',
+      email: contact.email ?? '',
+      image: contact.image ?? '',
+      userId: contact.userId ?? 0
+    }
 
-    console.info(`[RdbStore] Inserting: ${contact.name}`);
-    return this.rdbStore.insert(this.tableName, valueBucket);
+    return this.rdbStore.insert(this.tableName, values)
   }
 
-  
-  update(contact: Contact): Promise<number> {
-    if (!this.rdbStore) return Promise.resolve(-1);
+  async update(contact: Contact): Promise<number> {
+    if (!this.rdbStore || contact.id === undefined) {
+      return -1
+    }
 
-    const valueBucket: relationalStore.ValuesBucket = {
+    const values: relationalStore.ValuesBucket = {
       name: contact.name,
       phone: contact.phone,
-      company: contact.company,
-      position: contact.position,
-      email: contact.email,
-      image: contact.image
-    };
-    // 鏍规嵁 ID 鏇存柊
-    let predicates = new relationalStore.RdbPredicates(this.tableName);
-    predicates.equalTo('id', contact.id);
-    return this.rdbStore.update(valueBucket, predicates);
+      company: contact.company ?? '',
+      position: contact.position ?? '',
+      email: contact.email ?? '',
+      image: contact.image ?? ''
+    }
+
+    const predicates = new relationalStore.RdbPredicates(this.tableName)
+    predicates.equalTo('id', contact.id)
+
+    return this.rdbStore.update(values, predicates)
   }
 
-  
-  delete(id: number): Promise<number> {
-    if (!this.rdbStore) return Promise.resolve(-1);
-
-    let predicates = new relationalStore.RdbPredicates(this.tableName);
-    predicates.equalTo('id', id);
-    return this.rdbStore.delete(predicates);
-  }
-
-  
-  queryAll(userId: number): Promise<Array<Contact>> {
+  async delete(id: number): Promise<number> {
     if (!this.rdbStore) {
-      return Promise.resolve([]);
+      return -1
     }
 
-    let predicates = new relationalStore.RdbPredicates(this.tableName);
-    predicates.equalTo('userId', userId);
+    const predicates = new relationalStore.RdbPredicates(this.tableName)
+    predicates.equalTo('id', id)
 
-    return new Promise((resolve, reject) => {
-      this.rdbStore!.query(predicates, ['id', 'name', 'phone', 'company', 'position', 'email', 'image', 'userId'], (err, resultSet) => {
-        if (err) {
-          console.error(`[RdbStore] Query failed: ${err.message}`);
-          reject(err);
-        } else {
-          let count = resultSet.rowCount;
-          let result: Array<Contact> = [];
-          if (count > 0) {
-            resultSet.goToFirstRow();
-            do {
-              let contact = new Contact(
-                resultSet.getString(resultSet.getColumnIndex('name')),
-                resultSet.getString(resultSet.getColumnIndex('phone'))
-              );
-              contact.id = resultSet.getLong(resultSet.getColumnIndex('id'));
-              contact.company = resultSet.getString(resultSet.getColumnIndex('company'));
-              contact.position = resultSet.getString(resultSet.getColumnIndex('position'));
-              contact.email = resultSet.getString(resultSet.getColumnIndex('email'));
-              contact.image = resultSet.getString(resultSet.getColumnIndex('image'));
-              contact.userId = resultSet.getLong(resultSet.getColumnIndex('userId'));
-              result.push(contact);
-            } while (resultSet.goToNextRow());
-          }
-          resultSet.close();
-          resolve(result);
-        }
-      });
-    });
+    return this.rdbStore.delete(predicates)
   }
 
-  
-  search(keyword: string, userId: number): Promise<Array<Contact>> {
-    if (!this.rdbStore) return Promise.resolve([]);
+  async queryAll(userId: number): Promise<Contact[]> {
+    if (!this.rdbStore) {
+      return []
+    }
 
-    let predicates = new relationalStore.RdbPredicates(this.tableName);
-    // SQL: WHERE userId = ? AND name LIKE %keyword%
-    predicates.equalTo('userId', userId).and().contains('name', keyword);
+    const predicates = new relationalStore.RdbPredicates(this.tableName)
+    predicates.equalTo('userId', userId)
+
+    return this.queryByPredicates(predicates)
+  }
+
+  async search(keyword: string, userId: number): Promise<Contact[]> {
+    if (!this.rdbStore) {
+      return []
+    }
+
+    const predicates = new relationalStore.RdbPredicates(this.tableName)
+    predicates.equalTo('userId', userId).and().contains('name', keyword)
+
+    return this.queryByPredicates(predicates)
+  }
+
+  /* ==================== 🔥 新增：分类查询 ==================== */
+
+  async queryByCategory(category: string, userId: number): Promise<Contact[]> {
+    if (!this.rdbStore) {
+      return []
+    }
+
+    const predicates = new relationalStore.RdbPredicates(this.tableName)
+    predicates
+      .equalTo('userId', userId)
+      .and()
+      .equalTo('company', category)
+
+    return this.queryByPredicates(predicates)
+  }
+
+  /* ==================== 🔥 新增：过期判断工具 ==================== */
+
+  async queryExpired(userId: number): Promise<Contact[]> {
+    const all = await this.queryAll(userId)
+    return all.filter(item => this.isExpired(item.phone))
+  }
+
+  async queryNearExpired(userId: number, days: number = 30): Promise<Contact[]> {
+    const all = await this.queryAll(userId)
+    return all.filter(item => this.isNearExpired(item.phone, days))
+  }
+
+  async countAll(userId: number): Promise<number> {
+    const all = await this.queryAll(userId)
+    return all.length
+  }
+
+  /* ==================== 🔥 新增：临期 / 过期查询 ==================== */
+
+  async countNearAndExpired(userId: number): Promise<number> {
+    const all = await this.queryAll(userId)
+    return all.filter(
+      item =>
+      this.isExpired(item.phone) ||
+      this.isNearExpired(item.phone, 30)
+    ).length
+  }
+
+  private parseDate(dateStr: string): Date | null {
+    const parts = dateStr.split('-')
+    if (parts.length !== 3) {
+      return null
+    }
+
+    const year = Number(parts[0])
+    const month = Number(parts[1]) - 1
+    const day = Number(parts[2])
+
+    return new Date(year, month, day)
+  }
+
+  /* ==================== 🔥 新增：首页统计 ==================== */
+
+  private isExpired(phone: string): boolean {
+    const date = this.parseDate(phone)
+    if (!date) {
+      return false
+    }
+    return date.getTime() < Date.now()
+  }
+
+  private isNearExpired(phone: string, days: number): boolean {
+    const date = this.parseDate(phone)
+    if (!date) {
+      return false
+    }
+
+    const diff = date.getTime() - Date.now()
+    const diffDays = diff / (1000 * 60 * 60 * 24)
+    return diffDays >= 0 && diffDays <= days
+  }
+
+  /* ==================== 内部通用查询 ==================== */
+
+  private async queryByPredicates(
+    predicates: relationalStore.RdbPredicates
+  ): Promise<Contact[]> {
+    if (!this.rdbStore) {
+      return []
+    }
 
     return new Promise((resolve, reject) => {
-      this.rdbStore!.query(predicates, ['id', 'name', 'phone', 'company', 'position', 'email', 'image', 'userId'], (err, resultSet) => {
-        if (err) {
-          reject(err);
-        } else {
-          let count = resultSet.rowCount;
-          let result: Array<Contact> = [];
-          if (count > 0) {
-            resultSet.goToFirstRow();
+      this.rdbStore!.query(
+        predicates,
+        ['id', 'name', 'phone', 'company', 'position', 'email', 'image', 'userId'],
+        (err, resultSet) => {
+          if (err) {
+            reject(err)
+            return
+          }
+
+          const result: Contact[] = []
+
+          if (resultSet.rowCount > 0) {
+            resultSet.goToFirstRow()
             do {
-              let contact = new Contact(
+              const contact = new Contact(
                 resultSet.getString(resultSet.getColumnIndex('name')),
                 resultSet.getString(resultSet.getColumnIndex('phone'))
-              );
-              contact.id = resultSet.getLong(resultSet.getColumnIndex('id'));
-              contact.company = resultSet.getString(resultSet.getColumnIndex('company'));
-              contact.position = resultSet.getString(resultSet.getColumnIndex('position'));
-              contact.email = resultSet.getString(resultSet.getColumnIndex('email'));
-              contact.image = resultSet.getString(resultSet.getColumnIndex('image'));
-              contact.userId = resultSet.getLong(resultSet.getColumnIndex('userId'));
-              result.push(contact);
-            } while (resultSet.goToNextRow());
+              )
+
+              contact.id = resultSet.getLong(resultSet.getColumnIndex('id'))
+              contact.company = resultSet.getString(resultSet.getColumnIndex('company'))
+              contact.position = resultSet.getString(resultSet.getColumnIndex('position'))
+              contact.email = resultSet.getString(resultSet.getColumnIndex('email'))
+              contact.image = resultSet.getString(resultSet.getColumnIndex('image'))
+              contact.userId = resultSet.getLong(resultSet.getColumnIndex('userId'))
+
+              result.push(contact)
+            } while (resultSet.goToNextRow())
           }
-          resultSet.close();
-          resolve(result);
+
+          resultSet.close()
+          resolve(result)
         }
-      });
-    });
+      )
+    })
   }
 }
 
-export default new RdbStore();
-
-
-
-
-
+/**
+ * 单例导出（所有页面统一使用）
+ */
+export default new RdbStore()
