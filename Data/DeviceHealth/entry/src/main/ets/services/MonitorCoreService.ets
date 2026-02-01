@@ -13,6 +13,15 @@ import type { IBatteryProvider } from '../providers/BatteryProvider';
 import type { INetworkProvider } from '../providers/NetworkProvider';
 import type { IStorageProvider } from '../providers/StorageProvider';
 import type { IScreenProvider } from '../providers/ScreenProvider';
+import { EventHubManager } from './EventHubManager';
+
+export interface BatteryPayload {
+  soc: number;
+}
+
+export interface StoragePayload {
+  freePercentage: number;
+}
 
 export class MonitorOptions {
   enableBattery?: boolean;
@@ -212,6 +221,24 @@ export class MonitorCoreService {
       e.message,
       payloadStr
     );
+
+    const eventHub = MonitorCoreService.ctx?.eventHub;
+    if (eventHub) {
+      if (e.type === 'BATTERY' && e.level === 'WARN') {
+        const payload = e.payload as BatteryPayload;
+        const soc = payload?.soc;
+        if (soc !== undefined) {
+          eventHub.emit(EventHubManager.EVENT_LOW_BATTERY, soc);
+        }
+      }
+      if (e.type === 'STORAGE' && e.level === 'WARN') {
+        const payload = e.payload as StoragePayload;
+        const freePercentage = payload?.freePercentage;
+        if (freePercentage !== undefined) {
+          eventHub.emit(EventHubManager.EVENT_LOW_STORAGE, freePercentage);
+        }
+      }
+    }
 
     const lg = MonitorCoreService.logger;
     if (lg === null) return;
