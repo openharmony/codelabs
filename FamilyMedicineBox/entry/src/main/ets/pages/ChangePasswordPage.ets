@@ -13,12 +13,10 @@
  * limitations under the License.
  */
 
-iimport
-router
-from
-'@ohos.router';
-iimport promptAction from '@ohos.promptAction';
+import router from '@ohos.router';
+import promptAction from '@ohos.promptAction';
 import { MockData } from '../model/MockData';
+
 @Entry
 @Component
 struct ChangePasswordPage {
