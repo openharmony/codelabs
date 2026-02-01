@@ -72,9 +72,11 @@ export struct PasswordEntry {
     Column({ space: 25 }) {
       // 顶部标题栏
       Row({ space: 25 }) {
-        Image($r('app.media.ic_welcome'))
-          .width(24)
-          .height(24)
+        Text('👋')
+          .fontSize(24)
+        // Image($r('app.media.ic_welcome'))
+        //   .width(24)
+        //   .height(24)
 
         Column({ space: 5 }) {
           Text(`欢迎回来，${this.currentUser}`)
@@ -112,7 +114,7 @@ export struct PasswordEntry {
             '使用6位数字密码登录',
             PassType.NUMBER,
             '#4CAF50',
-            $r('app.media.ic_number') // 数字锁图标
+            '🔢'// 数字锁图标
           )
 
           // 图形密码认证卡片
@@ -121,17 +123,17 @@ export struct PasswordEntry {
             '连接至少4个点的图案',
             PassType.GRAPH,
             '#2196F3',
-            $r('app.media.ic_pattern') // 图案锁图标
+            '💠'// 图案锁图标
           )
 
           // 指纹认证卡片
-          this.buildAuthCard(
-            '指纹识别',
-            '使用已录入的指纹',
-            PassType.FINGERPRINT,
-            '#FF9800',
-            $r('app.media.ic_up') // 指纹图标
-          )
+          // this.buildAuthCard(
+          //   '指纹识别',
+          //   '使用已录入的指纹',
+          //   PassType.FINGERPRINT,
+          //   '#FF9800',
+          //   $r('app.media.ic_up') // 指纹图标
+          // )
 
 
           // 底部说明
@@ -160,15 +162,14 @@ export struct PasswordEntry {
     description: string,
     type: PassType,
     color: ResourceColor,
-    icon: Resource  // 明确为 string 类型
+    icon: string  // 明确为 string 类型
   ) {
     Column() {
       Row({ space: 15 }) {
         // 左侧图标容器
         Column() {
-          Image(icon)
-            .width(24)
-            .height(24)
+          Text(icon)
+            .fontSize(24)
         }
         .width(60)
         .height(60)
@@ -218,16 +219,16 @@ export struct PasswordEntry {
     .padding({ left: 12, right: 12 })
     .margin({ top: 8, bottom: 8 })
   }
-  getIconRes(type: PassType): Resource {
+  getIconRes(type: PassType): string {
     switch (type) {
       case PassType.NUMBER:
-        return $r('app.media.ic_number')
+        return '🔢'
       case PassType.GRAPH:
-        return $r('app.media.ic_pattern')
+        return '💠'
       case PassType.FINGERPRINT:
-        return $r('app.media.ic_fingerprint')
+        return '👆'
       default:
-        return $r('app.media.ic_number')
+        return '🔢'
     }
   }
 }

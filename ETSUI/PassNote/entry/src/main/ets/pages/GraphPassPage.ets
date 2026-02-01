@@ -119,46 +119,30 @@ export struct GraphPassPage {
   // 处理触摸开始
   handleTouchStart(event: TouchEvent) {
     if (this.isVerifying) return;
-
-    const touch = event.touches[0];
-    // 使用触摸位置相对于容器的坐标
-    const touchPosition: TouchPosition = {
-      x: touch.displayX || touch.x || 0,
-      y: touch.displayY || touch.y || 0
-    };
-    this.checkTouchPoint(touchPosition);
+    const t = event.touches[0];
     this.isDrawing = true;
+    this.checkTouchPoint({ x: t.x, y: t.y });
   }
 
   // 处理触摸移动
   handleTouchMove(event: TouchEvent) {
     if (!this.isDrawing || this.isVerifying) return;
-
-    const touch = event.touches[0];
-    // 使用触摸位置相对于容器的坐标
-    const touchPosition: TouchPosition = {
-      x: touch.displayX || touch.x || 0,
-      y: touch.displayY || touch.y || 0
-    };
-    this.checkTouchPoint(touchPosition);
+    const t = event.touches[0];
+    this.checkTouchPoint({ x: t.x, y: t.y });
   }
 
   // 处理触摸结束
   handleTouchEnd() {
     if (!this.isDrawing) return;
-
     this.isDrawing = false;
 
-    // 至少需要连接4个点
     if (this.selectedPoints.length >= 4) {
       this.verifyPattern();
     } else {
-      if (this.selectedPoints.length > 0) {
-        promptAction.showToast({
-          message: '请连接至少4个点',
-          duration: 1500
-        });
-      }
+      this.promptAction.showToast({
+        message: '请连接至少4个点',
+        duration: 1500
+      });
       this.resetPattern();
     }
   }
@@ -191,6 +175,7 @@ export struct GraphPassPage {
     }
 
     this.points = [...this.points];
+    this.drawLines(); // 手动触发 Canvas 更新
   }
 
   // 标记两个点之间的中间点（用于实现类似Android的九宫格逻辑）
@@ -398,6 +383,10 @@ export struct GraphPassPage {
     this.selectedPoints = [];
     this.currentPath = [];
     this.points = [...this.points];
+
+    // ⭐ 关键：清 Canvas
+    const ctx = this.context;
+    ctx.clearRect(0, 0, this.gridSize, this.gridSize);
   }
 
   // 返回上一页
@@ -541,6 +530,7 @@ export struct GraphPassPage {
         Column()
           .width(this.gridSize)
           .height(this.gridSize)
+          .backgroundColor('#00000001') // ★ 真机必需
           .onTouch((event: TouchEvent) => {
             if (event.type === TouchType.Down) {
               this.handleTouchStart(event);

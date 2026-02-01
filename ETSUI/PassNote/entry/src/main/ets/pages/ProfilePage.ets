@@ -34,7 +34,7 @@ interface UserInfo {
 interface AuthMethodConfig {
   type: PassType;
   name: string;
-  icon: Resource;
+  icon: string;
   color: string;
   enabled: boolean;
   lastUsed: string;
@@ -63,7 +63,7 @@ struct ProfilePage {
   @State currentMethod: AuthMethodConfig = {
     type: PassType.NUMBER,
     name: '',
-    icon: $r('app.media.avatar_default'),
+    icon: '🔢',
     color: '',
     enabled: true,
     lastUsed: ''
@@ -80,7 +80,7 @@ struct ProfilePage {
     {
       type: PassType.NUMBER,
       name: '数字密码',
-      icon: $r('app.media.ic_number'),
+      icon: '🔢',
       color: '#4CAF50',
       enabled: true,
       lastUsed: '今天 14:30'
@@ -88,19 +88,19 @@ struct ProfilePage {
     {
       type: PassType.GRAPH,
       name: '图形密码',
-      icon: $r('app.media.ic_pattern'),
+      icon: '💠',
       color: '#2196F3',
       enabled: true,
       lastUsed: '昨天 09:15'
     },
-    {
-      type: PassType.FINGERPRINT,
-      name: '指纹识别',
-      icon: $r('app.media.ic_up'),
-      color: '#FF9800',
-      enabled: true,
-      lastUsed: this.getNowDateTime()
-    }
+    // {
+    //   type: PassType.FINGERPRINT,
+    //   name: '指纹识别',
+    //   icon: $r('app.media.ic_up'),
+    //   color: '#FF9800',
+    //   enabled: true,
+    //   lastUsed: this.getNowDateTime()
+    // }
   ];
 
   // 便签相关状态
@@ -506,9 +506,8 @@ struct ProfilePage {
   @Builder buildAuthMethodCard(method: AuthMethodConfig) {
     Row() {
       Column() {
-        Image(method.icon)
-          .width(30)
-          .height(30)
+        Text(method.icon)
+          .fontSize(30)
       }
       .width(50)
       .height(50)
@@ -810,62 +809,117 @@ struct ProfilePage {
   }
 
   build() {
-    // 根布局改为 Stack，以便弹窗可以覆盖在最上层
+    // 根布局 Stack 用于层叠弹窗
     Stack() {
-      // 主页面内容
-      Column() {
-        this.buildUserHeader()
+      // 1. 主滚动区域 (直接放在 Stack 下，去掉了多余的外层 Column)
+      Scroll() {
+        Column() {
+          // 1.1 用户头部 (自带 padding)
+          this.buildUserHeader()
 
-        // 添加 Scroll，防止内容过多导致无法滚动
-        Scroll() {
+          // 1.2 认证方式管理
+          // 这里保留一个 Column 仅用于聚合标题和列表，并设置统一的内边距
           Column() {
-            // 原有的认证方式列表
-            Column() {
-              Text('认证方式管理')
-                .fontSize(18)
-                .fontWeight(FontWeight.Bold)
-                .width('100%')
-                .margin({ top: 0, bottom: 10 })
+            Text('认证方式管理')
+              .fontSize(18)
+              .fontWeight(FontWeight.Bold)
+              .width('100%')
+              .margin({ bottom: 10 })
 
-              ForEach(this.authMethods,
-                (m: AuthMethodConfig) => {
-                  this.buildAuthMethodCard(m)
-                },
-                (m: AuthMethodConfig) => m.type.toString())
-            }
-            .padding(20)
-
-            this.buildFeatureCard()
-            // 在认证列表下方添加便签卡片
-            // 注意：因为上面已经有 padding，这里通过 margin 调整间距
-            Column() {
-              this.buildNotesCard()
-            }
-            .padding({ left: 20, right: 20 })
-
-            // 退出登录按钮
-            Button('退出登录')
-              .width('80%')
-              .height(50)
-              .backgroundColor('#FF3B30')
-              .fontColor(Color.White)
-              .margin({ top: 20, bottom: 30 }) // 底部多留点白
-              .onClick(() => {
-                router.pushUrl({ url: 'pages/Index' })
-              })
+            ForEach(this.authMethods, (m: AuthMethodConfig) => {
+              this.buildAuthMethodCard(m)
+            }, (m: AuthMethodConfig) => m.type.toString())
           }
+          .padding({ left: 20, right: 20, bottom: 10 }) // 只设置必要的边距
+
+          // 1.3 常用功能 (自带 padding)
+          this.buildFeatureCard()
+
+          // 1.4 便签卡片 (自带 padding，直接调用，无需再包 Column)
+          this.buildNotesCard()
+
+          // 1.5 退出按钮
+          Button('退出登录')
+            .width('80%')
+            .height(50)
+            .backgroundColor('#FF3B30')
+            .fontColor(Color.White)
+            .margin({ top: 10, bottom: 50 }) // 底部留白
+            .onClick(() => {
+              router.pushUrl({ url: 'pages/Index' })
+            })
         }
-        .layoutWeight(1) // 让 Scroll 占据剩余空间
-        .scrollBar(BarState.Off)
       }
       .width('100%')
       .height('100%')
-      .backgroundColor('#F8F9FA')
+      .scrollBar(BarState.Off) // 隐藏滚动条
+      .align(Alignment.Top)    // 内容顶端对齐
 
-      // 将编辑弹窗放在 Stack 的最上层
+      // 2. 弹窗层 (放在最上层)
       this.buildNoteEditDialog()
     }
+    .width('100%')
+    .height('100%')
+    .backgroundColor('#F8F9FA') // 背景色设置在根容器
   }
+
+  // build() {
+  //   // 根布局改为 Stack，以便弹窗可以覆盖在最上层
+  //   Stack() {
+  //     // 主页面内容
+  //     Column() {
+  //       this.buildUserHeader()
+  //
+  //       // 添加 Scroll，防止内容过多导致无法滚动
+  //       Scroll() {
+  //         Column() {
+  //           // 原有的认证方式列表
+  //           Column() {
+  //             Text('认证方式管理')
+  //               .fontSize(18)
+  //               .fontWeight(FontWeight.Bold)
+  //               .width('100%')
+  //               .margin({ top: 0, bottom: 10 })
+  //
+  //             ForEach(this.authMethods,
+  //               (m: AuthMethodConfig) => {
+  //                 this.buildAuthMethodCard(m)
+  //               },
+  //               (m: AuthMethodConfig) => m.type.toString())
+  //           }
+  //           .padding(20)
+  //
+  //           this.buildFeatureCard()
+  //           // 在认证列表下方添加便签卡片
+  //           // 注意：因为上面已经有 padding，这里通过 margin 调整间距
+  //           Column() {
+  //             this.buildNotesCard()
+  //           }
+  //           .padding({ left: 20, right: 20 })
+  //
+  //           // 退出登录按钮
+  //           Button('退出登录')
+  //             .width('80%')
+  //             .height(50)
+  //             .backgroundColor('#FF3B30')
+  //             .fontColor(Color.White)
+  //             .margin({ top: 20, bottom: 30 }) // 底部多留点白
+  //             .onClick(() => {
+  //               router.pushUrl({ url: 'pages/Index' })
+  //             })
+  //         }
+  //       }
+  //       .layoutWeight(1) // 让 Scroll 占据剩余空间
+  //       .scrollBar(BarState.Off)
+  //     }
+  //     .width('100%')
+  //     .height('100%')
+  //     .backgroundColor('#F8F9FA')
+  //
+  //     // 将编辑弹窗放在 Stack 的最上层
+  //     this.buildNoteEditDialog()
+  //   }
+  // }
 }
 
 @CustomDialog
@@ -874,7 +928,7 @@ struct ChangePasswordDialog {
   authMethod: AuthMethodConfig = {
     type: PassType.NUMBER,
     name: '',
-    icon:$r('app.media.avatar_default') ,
+    icon:'🔢' ,
     color: '',
     enabled: true,
     lastUsed: ''
@@ -951,7 +1005,7 @@ struct ResetPasswordDialog {
   authMethod: AuthMethodConfig = {
     type: PassType.NUMBER,
     name: '',
-    icon:$r('app.media.avatar_default') ,
+    icon:'🔢',
     color: '',
     enabled: true,
     lastUsed: ''
