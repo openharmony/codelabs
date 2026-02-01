@@ -103,46 +103,62 @@ export class MonitorCoreService {
     const enableStorage: boolean = opt.enableStorage ?? true;
     const enableScreen: boolean = opt.enableScreen ?? true;
 
-    if (enableBattery && MonitorCoreService.battery === null) {
-      const low: number = opt.batteryLowPercent ?? 20;
-      MonitorCoreService.battery = new BatteryMonitor(low, opt.batteryProvider);
-      hilog.info(
-        MonitorCoreService.LOG_DOMAIN,
-        MonitorCoreService.LOG_TAG,
-        '%{public}s%{public}d',
-        'BatteryMonitor start(), lowPercent=',
-        low
-      );
+    if (enableBattery) {
+      if (MonitorCoreService.battery === null) {
+        const low: number = opt.batteryLowPercent ?? 20;
+        MonitorCoreService.battery = new BatteryMonitor(low, opt.batteryProvider);
+        hilog.info(
+          MonitorCoreService.LOG_DOMAIN,
+          MonitorCoreService.LOG_TAG,
+          '%{public}s%{public}d',
+          'BatteryMonitor start(), lowPercent=',
+          low
+        );
+      }
       await MonitorCoreService.battery.start((e: EventLog): void => MonitorCoreService.safeLog(e));
+    } else if (MonitorCoreService.battery !== null) {
+      await MonitorCoreService.battery.stop();
     }
 
-    if (enableNetwork && MonitorCoreService.network === null) {
-      MonitorCoreService.network = new NetworkMonitor(opt.networkProvider);
-      hilog.info(MonitorCoreService.LOG_DOMAIN, MonitorCoreService.LOG_TAG, '%{public}s', 'NetworkMonitor start()');
+    if (enableNetwork) {
+      if (MonitorCoreService.network === null) {
+        MonitorCoreService.network = new NetworkMonitor(opt.networkProvider);
+        hilog.info(MonitorCoreService.LOG_DOMAIN, MonitorCoreService.LOG_TAG, '%{public}s', 'NetworkMonitor start()');
+      }
       await MonitorCoreService.network.start((e: EventLog): void => MonitorCoreService.safeLog(e));
+    } else if (MonitorCoreService.network !== null) {
+      await MonitorCoreService.network.stop();
     }
 
-    if (enableStorage && MonitorCoreService.storage === null) {
-      const lowBytes: number = opt.storageLowBytes ?? 4*1024 * 1024 * 1024;
-      const intervalMs: number = opt.storagePollIntervalMs ?? 5_000;
+    if (enableStorage) {
+      if (MonitorCoreService.storage === null) {
+        const lowBytes: number = opt.storageLowBytes ?? 4*1024 * 1024 * 1024;
+        const intervalMs: number = opt.storagePollIntervalMs ?? 5_000;
 
-      MonitorCoreService.storage = new StorageMonitor(lowBytes, intervalMs, opt.storageProvider);
-      hilog.info(
-        MonitorCoreService.LOG_DOMAIN,
-        MonitorCoreService.LOG_TAG,
-        '%{public}s%{public}d%{public}s%{public}d',
-        'StorageMonitor start(), lowBytes=',
-        lowBytes,
-        ', intervalMs=',
-        intervalMs
-      );
+        MonitorCoreService.storage = new StorageMonitor(lowBytes, intervalMs, opt.storageProvider);
+        hilog.info(
+          MonitorCoreService.LOG_DOMAIN,
+          MonitorCoreService.LOG_TAG,
+          '%{public}s%{public}d%{public}s%{public}d',
+          'StorageMonitor start(), lowBytes=',
+          lowBytes,
+          ', intervalMs=',
+          intervalMs
+        );
+      }
       await MonitorCoreService.storage.start((e: EventLog): void => MonitorCoreService.safeLog(e));
+    } else if (MonitorCoreService.storage !== null) {
+      await MonitorCoreService.storage.stop();
     }
 
-    if (enableScreen && MonitorCoreService.screen === null) {
-      MonitorCoreService.screen = new ScreenMonitor(opt.screenProvider);
-      hilog.info(MonitorCoreService.LOG_DOMAIN, MonitorCoreService.LOG_TAG, '%{public}s', 'ScreenMonitor start()');
+    if (enableScreen) {
+      if (MonitorCoreService.screen === null) {
+        MonitorCoreService.screen = new ScreenMonitor(opt.screenProvider);
+        hilog.info(MonitorCoreService.LOG_DOMAIN, MonitorCoreService.LOG_TAG, '%{public}s', 'ScreenMonitor start()');
+      }
       await MonitorCoreService.screen.start((e: EventLog): void => MonitorCoreService.safeLog(e));
+    } else if (MonitorCoreService.screen !== null) {
+      await MonitorCoreService.screen.stop();
     }
   }
 
