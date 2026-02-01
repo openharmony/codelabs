@@ -1,11 +1,10 @@
 ﻿/*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSEt-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,18 +13,30 @@
  * limitations under the License.
  */
 
+import router from '@ohos.router';
+import RdbStore from '../utils/RdbStore';
+import { Contact } from '../model/Contact';
+import ContactListItem from './ContactListItem';
+import UserPreferences from '../utils/UserPreferences';
+
+@Entry
+@Component
+struct ContactListPage {
+  @State contacts: Array<Contact> = [];
+
   onPageShow() {
     this.refresh();
   }
 
   async refresh() {
-    // 绠€鍗曞鐞嗭紝鐩存帴鏌ユ墍鏈?    this.contacts = await RdbStore.queryAll(1);
+    let userId = await UserPreferences.getUserId();
+    this.contacts = await RdbStore.queryAll(userId);
   }
 
   build() {
     Column() {
-      // 绠€鍗曠殑鏍囬
-      Text('鑽搧鍒楄〃')
+      // 简单的标题
+      Text('药品列表')
         .fontSize(20)
         .fontWeight(FontWeight.Bold)
         .margin(20)
@@ -44,14 +55,10 @@
         }, (item: Contact) => JSON.stringify(item))
       }
       .width('100%')
-      .height('100%')
+      .layoutWeight(1)
     }
     .width('100%')
     .height('100%')
+    .backgroundColor('#F7F8FA')
   }
 }
-
-
-
-
-

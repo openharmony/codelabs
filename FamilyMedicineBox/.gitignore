@@ -1,12 +1,25 @@
+# 依赖目录
 /node_modules
-/oh_modules
-/local.properties
-/.idea
-**/build
+
+# 编辑器配置
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# 构建产物
+build/
+dist/
+oh_modules/
+*.hap
+*.apk
+
+# 日志与临时文件
+*.log
+*.tmp
+.DS_Store
+
+
 /.hvigor
-.cxx
-/.clangd
-/.clang-format
-/.clang-tidy
-**/.test
-/.appanalyzer
+/.cxx
+/local.properties

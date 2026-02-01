@@ -1,11 +1,10 @@
 ﻿/*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSEt-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,91 +13,85 @@
  * limitations under the License.
  */
 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+import router from '@ohos.router';
+import promptAction from '@ohos.promptAction';
+import { MockData } from '../model/MockData';
 
-  async aboutToAppear(): Promise<void> {
-    try {
-      let context = getContext(this) as common.UIAbilityContext;
-      await UserPreferences.init(context);
-    } catch(e) {}
-  }
-
-  async login(): Promise<void> {
-    let realAccount = await UserPreferences.getAccount();
-    let realPassword = await UserPreferences.getPassword();
-
-    if (this.account === realAccount && this.password === realPassword) {
-      await UserPreferences.putUserId(1);
-      try { promptAction.showToast({ message: '鐧诲綍鎴愬姛' }); } catch (e) {}
-      // 鐧诲綍鎴愬姛璺宠浆棣栭〉
-      router.replaceUrl({ url: 'pages/Index' });
-    } else {
-      try { promptAction.showToast({ message: '璐﹀彿鎴栧瘑鐮侀敊璇? }); } catch (e) {}
-    }
-  }
+@Entry
+@Component
+struct LoginPage {
+  @State username: string = '';
+  @State password: string = '';
 
   build() {
     Column() {
-      // 椤堕儴鑳屾櫙
-      Stack({ alignContent: Alignment.Bottom }) {
-        Column().width('100%').height('100%')
-          .backgroundColor('#4A90E2')
-          .borderRadius({ bottomLeft: 40, bottomRight: 40 })
+      Image($r('app.media.startIcon'))
+        .width(80).height(80)
+        .margin({ top: 80, bottom: 20 })
 
-        Column() {
-          Stack({ alignContent: Alignment.Center }) {
-            Circle({ width: 80, height: 80 }).fill(Color.White)
-            Text('鉁?).fontSize(50).fontWeight(FontWeight.Bold).fontColor('#4A90E2')
-          }.margin({ bottom: 15 })
+      Text('家庭小药箱')
+        .fontSize(24)
+        .fontWeight(FontWeight.Bold)
+        .fontColor('#333')
+        .margin({ bottom: 50 })
 
-          Text('瀹跺涵灏忚嵂绠卞姪鎵?).fontSize(28).fontWeight(FontWeight.Bold).fontColor(Color.White)
-          Text('Family Medicine Box').fontSize(16).fontColor('#E3F2FD').margin({ top: 5 })
-        }.margin({ bottom: 50 })
-      }.width('100%').height('35%')
+      // 提示信息 (满足需求4)
+      Text('测试账号: admin   密码: ' + MockData.currentUser.password)
+        .fontSize(12)
+        .fontColor('#999')
+        .backgroundColor('#F0F0F0')
+        .padding(8)
+        .borderRadius(4)
+        .margin({ bottom: 20 })
 
-      // 杈撳叆妗?      Column() {
-        TextInput({ placeholder: '璇疯緭鍏ヨ处鍙? })
-          .height(50).backgroundColor('#F5F5F5').borderRadius(25)
-          .padding({ left: 20 }).margin({ bottom: 15 })
-          .onChange((value: string) => this.account = value)
+      TextInput({ placeholder: '请输入账号' })
+        .width('80%')
+        .height(50)
+        .backgroundColor('#F5F6FA')
+        .borderRadius(25)
+        .margin({ bottom: 16 })
+        .onChange((val) => this.username = val)
 
-        TextInput({ placeholder: '璇疯緭鍏ュ瘑鐮? })
-          .type(InputType.Password)
-          .height(50).backgroundColor('#F5F5F5').borderRadius(25)
-          .padding({ left: 20 }).margin({ bottom: 30 })
-          .onChange((value: string) => this.password = value)
+      TextInput({ placeholder: '请输入密码' })
+        .type(InputType.Password)
+        .width('80%')
+        .height(50)
+        .backgroundColor('#F5F6FA')
+        .borderRadius(25)
+        .margin({ bottom: 40 })
+        .onChange((val) => this.password = val)
 
-        Button('瀹夊叏鐧诲綍')
-          .width('100%').height(50).backgroundColor('#4A90E2').borderRadius(25).fontSize(18)
-          .onClick(() => this.login())
+      Button('登录')
+        .width('80%')
+        .height(50)
+        .backgroundColor('#4A90E2')
+        .borderRadius(25)
+        .onClick(() => {
+          if (this.username === MockData.currentUser.username &&
+            this.password === MockData.currentUser.password) {
+            try {
+              promptAction.showToast({ message: '登录成功' });
+            } catch (e) {
+            }
+            router.replaceUrl({ url: 'pages/Index' });
+          } else {
+            try {
+              promptAction.showToast({ message: '账号或密码错误' });
+            } catch (e) {
+            }
+          }
+        })
 
-        // 搴曢儴鏂囧瓧閾炬帴
-        Row() {
-          // 銆愯繖閲屾槸娉ㄥ唽鎸夐挳锛屽繀椤荤‘淇?router.pushUrl 鐨勮矾寰勫湪 main_pages.json 閲屻€?          Text('娉ㄥ唽鏂拌处鍙?)
-            .fontSize(14).fontColor('#4A90E2')
-            .onClick(() => {
-              router.pushUrl({ url: 'pages/RegisterPage' });
-            })
-
-          Text(' | ').fontColor('#999999')
-
-          Text('蹇樿瀵嗙爜')
-            .fontSize(14).fontColor('#999999')
-            .onClick(() => {
-              AlertDialog.show({
-                title: '鎻愮ず',
-                message: '璇疯仈绯荤鐞嗗憳閲嶇疆瀵嗙爜銆俓n鍒濆瀵嗙爜涓猴細123456',
-                confirm: { value: '鐭ラ亾浜?, action: () => {} }
-              })
-            })
-        }.margin({ top: 20 })
-      }.width('90%').margin({ top: 40 })
+      Text('注册账号')
+        .fontSize(14)
+        .fontColor('#4A90E2')
+        .margin({ top: 20 })
+        .onClick(() => {
+          // 跳转注册页逻辑
+          router.pushUrl({ url: 'pages/RegisterPage' });
+        })
     }
-    .width('100%').height('100%').backgroundColor(Color.White)
+    .width('100%').height('100%')
+    .backgroundColor(Color.White)
   }
 }
-
-
-
-
-

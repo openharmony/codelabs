@@ -1,11 +1,10 @@
 ﻿/*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSEt-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,77 +13,95 @@
  * limitations under the License.
  */
 
-  async submit() {
-    // 1. 鑾峰彇褰撳墠瀛樺偍鐨勭湡瀹炲瘑鐮?    let currentRealPass = await UserPreferences.getPassword();
-    let currentAccount = await UserPreferences.getAccount();
+import router from '@ohos.router';
+import promptAction from '@ohos.promptAction';
+import { MockData } from '../model/MockData';
 
-    // 2. 鏍￠獙鏃у瘑鐮?    if (this.oldPass !== currentRealPass) {
-      try { promptAction.showToast({ message: '鏃у瘑鐮侀敊璇? }); } catch(e){}
-      return;
-    }
-
-    // 3. 鏍￠獙鏂板瘑鐮?    if (this.newPass === '') {
-      try { promptAction.showToast({ message: '鏂板瘑鐮佷笉鑳戒负绌? }); } catch(e){}
-      return;
-    }
-    if (this.newPass !== this.confirmPass) {
-      try { promptAction.showToast({ message: '涓ゆ鏂板瘑鐮佽緭鍏ヤ笉涓€鑷? }); } catch(e){}
-      return;
-    }
-
-    // 4. 銆愭牳蹇冧慨澶嶃€戜繚瀛樻柊瀵嗙爜鍒伴閫夐」
-    await UserPreferences.saveAccount(currentAccount, this.newPass);
-
-    try { promptAction.showToast({ message: '瀵嗙爜淇敼鎴愬姛锛岃閲嶆柊鐧诲綍' }); } catch(e){}
-
-    // 5. 閫€鍑虹櫥褰曡烦杞?    router.replaceUrl({ url: 'pages/LoginPage' });
-  }
+@Entry
+@Component
+struct ChangePasswordPage {
+  @State oldPass: string = '';
+  @State newPass: string = '';
+  @State confirmPass: string = '';
 
   build() {
-    Navigation() {
-      Column() {
-        List() {
-          ListItem() {
-            Column() {
-              Text('鏃у瘑鐮?).fontSize(14).fontColor('#666666').width('100%').margin({ bottom: 5 })
-              TextInput({ placeholder: '璇疯緭鍏ユ棫瀵嗙爜' }).type(InputType.Password)
-                .height(45).width('100%').backgroundColor(Color.White).borderRadius(8)
-                .onChange((val) => this.oldPass = val)
-            }.padding(10)
-          }
-
-          ListItem() {
-            Column() {
-              Text('鏂板瘑鐮?).fontSize(14).fontColor('#666666').width('100%').margin({ bottom: 5 })
-              TextInput({ placeholder: '璇疯緭鍏ユ柊瀵嗙爜' }).type(InputType.Password)
-                .height(45).width('100%').backgroundColor(Color.White).borderRadius(8)
-                .onChange((val) => this.newPass = val)
-            }.padding(10)
-          }
-
-          ListItem() {
-            Column() {
-              Text('纭鏂板瘑鐮?).fontSize(14).fontColor('#666666').width('100%').margin({ bottom: 5 })
-              TextInput({ placeholder: '璇峰啀娆¤緭鍏ユ柊瀵嗙爜' }).type(InputType.Password)
-                .height(45).width('100%').backgroundColor(Color.White).borderRadius(8)
-                .onChange((val) => this.confirmPass = val)
-            }.padding(10)
-          }
-        }
-        .width('95%').margin({ top: 20 })
-
-        Button('纭淇敼')
-          .width('90%').height(50).margin({ top: 40 })
-          .backgroundColor('#4A90E2').borderRadius(25)
-          .onClick(() => this.submit())
+    Column() {
+      // 标题
+      Row() {
+        Button('<').onClick(() => router.back()).backgroundColor(Color.Transparent).fontColor(Color.Black).fontSize(24)
+        Text('修改密码').fontSize(20).fontWeight(FontWeight.Bold).margin({ left: 10 })
       }
-      .width('100%').height('100%').backgroundColor('#F7F8FA')
+      .width('100%').padding(16).margin({ bottom: 20 })
+
+      // 表单
+      Column() {
+        Text('旧密码').fontSize(14).fontColor('#666').width('100%').margin({ bottom: 8 })
+        TextInput({ placeholder: '请输入旧密码' })
+          .type(InputType.Password)
+          .height(50)
+          .backgroundColor('#F5F6FA')
+          .borderRadius(8)
+          .margin({ bottom: 20 })
+          .onChange((val) => this.oldPass = val)
+
+        Text('新密码').fontSize(14).fontColor('#666').width('100%').margin({ bottom: 8 })
+        TextInput({ placeholder: '请输入新密码' })
+          .type(InputType.Password)
+          .height(50)
+          .backgroundColor('#F5F6FA')
+          .borderRadius(8)
+          .margin({ bottom: 20 })
+          .onChange((val) => this.newPass = val)
+
+        Text('确认新密码').fontSize(14).fontColor('#666').width('100%').margin({ bottom: 8 })
+        TextInput({ placeholder: '请再次输入新密码' })
+          .type(InputType.Password)
+          .height(50)
+          .backgroundColor('#F5F6FA')
+          .borderRadius(8)
+          .margin({ bottom: 40 })
+          .onChange((val) => this.confirmPass = val)
+
+        Button('确认修改')
+          .width('100%').height(50)
+          .backgroundColor('#4A90E2')
+          .onClick(() => {
+            // 验证旧密码
+            if (this.oldPass !== MockData.currentUser.password) {
+              try {
+                promptAction.showToast({ message: '旧密码错误' });
+              } catch (e) {
+              }
+              return;
+            }
+            // 验证新密码
+            if (this.newPass.length < 6) {
+              try {
+                promptAction.showToast({ message: '新密码不能少于6位' });
+              } catch (e) {
+              }
+              return;
+            }
+            if (this.newPass !== this.confirmPass) {
+              try {
+                promptAction.showToast({ message: '两次密码输入不一致' });
+              } catch (e) {
+              }
+              return;
+            }
+
+            // 修改密码
+            MockData.currentUser.password = this.newPass;
+            try {
+              promptAction.showToast({ message: '密码修改成功' });
+            } catch (e) {
+            }
+            router.back();
+          })
+      }
+      .width('90%')
     }
-    .title('淇敼瀵嗙爜').titleMode(NavigationTitleMode.Mini)
+    .height('100%')
+    .backgroundColor(Color.White)
   }
 }
-
-
-
-
-

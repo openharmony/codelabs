@@ -10,6 +10,7 @@
     "pages/ExpiryWarningPage",
     "pages/AllMedicinesPage",
     "pages/CategoryListPage",
+    "pages/MedicineDetailPage",
     "pages/RegisterPage"
   ]
 }

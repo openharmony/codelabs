@@ -1,11 +1,10 @@
 ﻿/*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSEt-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,74 +13,63 @@
  * limitations under the License.
  */
 
-  // 閫€鍑虹櫥褰曢€昏緫
-  async logout() {
-    // 1. 娓呴櫎鐢ㄦ埛鐧诲綍鎬?(璁句负0)
-    await UserPreferences.putUserId(0);
+import router from '@ohos.router';
 
-    try { promptAction.showToast({ message: '宸插畨鍏ㄩ€€鍑? }); } catch(e){}
-
-    // 2. 娓呯┖璺敱鏍堝苟璺宠浆鍥炵櫥褰曢〉 (杩欐牱鎸夎繑鍥為敭鍥炰笉鏉?
-    router.clear();
-    router.replaceUrl({ url: 'pages/LoginPage' });
-  }
-
+@Entry
+@Component
+struct ProfilePage {
   build() {
-    Navigation() {
-      Column() {
-        // 1. 椤堕儴鏍囬
-        Text('鎴戠殑鐢ㄨ嵂鎻愰啋鍗?)
-          .fontSize(20).fontWeight(FontWeight.Bold).margin({ top: 20, bottom: 20 })
-
-        // 2. Canvas 缁樺浘 (淇濈暀浣犵殑鍔犲垎椤?
-        Canvas(this.context)
-          .width('90%').height(220).backgroundColor('#FFFFFF')
-          .borderRadius(12).shadow({ radius: 10, color: 'rgba(0,0,0,0.1)' })
-          .onReady(() => {
-            this.context.fillStyle = '#E3F2FD';
-            this.context.fillRect(0, 0, 350, 220);
-            this.context.fillStyle = '#1565C0';
-            this.context.font = 'bold 24px sans-serif';
-            this.context.fillText('瀹跺涵鐢ㄨ嵂灏忚创澹?, 20, 40);
-            this.context.beginPath();
-            this.context.moveTo(20, 55);
-            this.context.lineTo(330, 55);
-            this.context.strokeStyle = '#1565C0';
-            this.context.stroke();
-            this.context.fillStyle = '#333333';
-            this.context.font = '20px sans-serif';
-            this.context.fillText('娓╅Θ鎻愮ず锛?, 20, 90);
-            this.context.font = '16px sans-serif';
-            this.context.fillText('1. 璇峰畾鏈熸竻鐞嗚繃鏈熻嵂鍝?, 20, 130);
-            this.context.fillText('2. 鏈嶈嵂鍓嶈鐪嬫竻鐢ㄦ硶鐢ㄩ噺', 20, 160);
-            this.context.fillText('3. 鑽搧璇峰瓨鏀惧湪鍎跨鎷夸笉鍒扮殑鍦版柟', 20, 190);
-          })
-
-        // 3. 閫€鍑虹櫥褰曟寜閽?(鏂板鍔熻兘)
-        Button('閫€鍑虹櫥褰?)
-          .width('90%').height(50).margin({ top: 50 })
-          .backgroundColor('#FF3B30') // 绾㈣壊
-          .borderRadius(25)
-          .onClick(() => {
-            // 寮瑰嚭纭妗?            AlertDialog.show({
-              title: '鎻愮ず',
-              message: '纭畾瑕侀€€鍑虹櫥褰曞悧锛?,
-              primaryButton: { value: '鍙栨秷', action: () => {} },
-              secondaryButton: {
-                value: '閫€鍑?,
-                fontColor: '#FF3B30',
-                action: () => { this.logout(); }
-              }
-            })
-          })
+    Column() {
+      // 标题
+      Row() {
+        Button('<')
+          .onClick(() => router.back())
+          .backgroundColor(Color.Transparent)
+          .fontColor(Color.Black)
+          .fontSize(24)
+        Text('发现').fontSize(20).fontWeight(FontWeight.Bold).margin({ left: 10 })
       }
-      .width('100%').height('100%').backgroundColor('#F7F8FA')
+      .width('100%').padding(16)
+
+      Text('我的用药提醒卡')
+        .fontSize(22)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 20, bottom: 20 })
+
+      // 卡片区域 (用蓝色背景模拟截图中的卡片)
+      Column() {
+        Row() {
+          Text('家庭用药小贴士')
+            .fontColor('#4A90E2')
+            .fontWeight(FontWeight.Bold)
+        }
+        .width('100%')
+        .padding({ bottom: 10 })
+        .border({ width: { bottom: 1 }, color: '#4A90E2' })
+
+        Text('温馨提示：\n\n1. 请定期清理过期药品\n\n2. 服药前请看清用法用量\n\n3. 药品请放在儿童拿不到的地方')
+          .fontSize(14)
+          .fontColor('#333')
+          .margin({ top: 20 })
+      }
+      .width('90%')
+      .height(300)
+      .backgroundColor('#EBF5FF')
+      .borderRadius(12)
+      .padding(20)
+      .margin({ bottom: 50 })
+
+      // 退出按钮
+      Button('退出登录')
+        .width('80%')
+        .height(50)
+        .backgroundColor('#FF5252') // 红色
+        .onClick(() => {
+          router.replaceUrl({ url: 'pages/LoginPage' }); // 假设有登录页
+        })
     }
-    .title('鍙戠幇').titleMode(NavigationTitleMode.Mini)
+    .width('100%')
+    .height('100%')
+    .backgroundColor(Color.White)
   }
 }
-
-
-
-
-
