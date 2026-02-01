@@ -9,7 +9,7 @@ import DialogUtils from '../components/Notification/DialogUtils';
 
 export class EventHubManager {
   private static instance: EventHubManager;
-  private context: common.UIAbilityContext | null = null;
+  private static ctx: common.Context | null = null;
 
   // 定义统一的事件名常量
   public static readonly EVENT_LOW_BATTERY = 'EVENT_LOW_BATTERY';
@@ -25,15 +25,15 @@ export class EventHubManager {
   }
 
   // 初始化，在主页面的 aboutToAppear 调用
-  public init(context: common.Context): void {
-    this.context = context as common.UIAbilityContext;
+  public async init(context: common.Context): Promise<void> {
+    EventHubManager.ctx = context;
   }
 
   // 开启全局监听：电量不足信号
-  public subscribeBatteryWarning(): void {
-    if (!this.context) return;
+  static async subscribeBatteryWarning(): Promise<void> {
+    if (!EventHubManager.ctx) return;
 
-    this.context.eventHub.on(EventHubManager.EVENT_LOW_BATTERY, (soc: number) => {
+    EventHubManager.ctx.eventHub.on(EventHubManager.EVENT_LOW_BATTERY, (soc: number) => {
       // 接收到信号后，直接调用之前封装好的弹窗
       if (soc < 20){
         DialogUtils.showNotice(
@@ -47,16 +47,16 @@ export class EventHubManager {
 
   // 发送电量不足信号
   public emitBatteryWarning(soc: number): void {
-    if (this.context) {
-      this.context.eventHub.emit(EventHubManager.EVENT_LOW_BATTERY, soc);
+    if (EventHubManager.ctx) {
+      EventHubManager.ctx.eventHub.emit(EventHubManager.EVENT_LOW_BATTERY, soc);
     }
   }
 
   // 开启全局监听：存储空间不足信号
-  public subscribeStorageWarning(): void {
-    if (!this.context) return;
+  static async subscribeStorageWarning(): Promise<void> {
+    if (!EventHubManager.ctx) return;
 
-    this.context.eventHub.on(EventHubManager.EVENT_LOW_STORAGE, (freePercentage: number) => {
+    EventHubManager.ctx.eventHub.on(EventHubManager.EVENT_LOW_STORAGE, (freePercentage: number) => {
       // 接收到信号后，显示存储空间不足警告
 
       if (freePercentage < 20) {
@@ -73,22 +73,22 @@ export class EventHubManager {
   }
   // 发送存储空间警告信号（简化版）
   public emitStorageWarning(freePercentage: number): void {
-    if (this.context) {
-      this.context.eventHub.emit(EventHubManager.EVENT_LOW_STORAGE, freePercentage);
+    if (EventHubManager.ctx) {
+      EventHubManager.ctx.eventHub.emit(EventHubManager.EVENT_LOW_STORAGE, freePercentage);
     }
   }
 
 
   // 开启所有监听
-  public subscribeAll(): void {
-    this.subscribeBatteryWarning();
-    this.subscribeStorageWarning();
+  static async subscribeAll(): Promise<void> {
+    EventHubManager.subscribeBatteryWarning();
+    EventHubManager.subscribeStorageWarning();
   }
   // 取消监听，防止内存泄漏
   public unSubscribeAll(): void {
-    if (this.context) {
-      this.context.eventHub.off(EventHubManager.EVENT_LOW_BATTERY);
-      this.context.eventHub.off(EventHubManager.EVENT_LOW_STORAGE);
+    if (EventHubManager.ctx) {
+      EventHubManager.ctx.eventHub.off(EventHubManager.EVENT_LOW_BATTERY);
+      EventHubManager.ctx.eventHub.off(EventHubManager.EVENT_LOW_STORAGE);
     }
   }
 }
