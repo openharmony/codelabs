@@ -1,13 +1,14 @@
 /*
- * Copyright (c) 2023 公司名称
- * All rights reserved.
- *
- * 文件名称：example.cpp
- 作者：作者名称
- * 创建日期：2023-01-01
- * 版本：1.0.0
- *
- * 描述：示文件的描述
+ * Copyright (c) 2026 Huawei Device Co., Ltd.
+ * Licensed under the Apache License, Version 2.0 (the");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-20
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 // 用户信息数据模型（纯本地存储）
 export class UserInfo {
