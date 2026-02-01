@@ -14,7 +14,7 @@ import type { INetworkProvider } from '../providers/NetworkProvider';
 import type { IStorageProvider } from '../providers/StorageProvider';
 import type { IScreenProvider } from '../providers/ScreenProvider';
 
-export interface MonitorOptions {
+export class MonitorOptions {
   enableBattery?: boolean;
   enableNetwork?: boolean;
   enableStorage?: boolean;
@@ -34,7 +34,7 @@ export interface MonitorOptions {
   eventStore?: IEventStore;
 }
 
-class DefaultMonitorOptions implements MonitorOptions {
+class DefaultMonitorOptions extends MonitorOptions {
   enableBattery: boolean = true;
   enableNetwork: boolean = true;
   enableStorage: boolean = true;
