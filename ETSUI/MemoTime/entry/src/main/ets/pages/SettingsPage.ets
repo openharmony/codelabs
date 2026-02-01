@@ -17,11 +17,9 @@
 /**
  * 设置页面
  */
-import { router } from '@kit.ArkUI'
-import { AppConstants } from '../common/constants/Constants'
+import { promptAction, router } from '@kit.ArkUI'
 import { Logger } from '../common/utils/Logger'
 import { notificationService } from '../service/NotificationService'
-import { promptAction } from '@kit.ArkUI'
 
 const TAG = 'SettingsPage'
 
@@ -129,7 +127,12 @@ struct SettingsPage {
       }
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 14, bottom: 14 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 14,
+      bottom: 14
+    })
     .backgroundColor('#FFFFFF')
   }
 
@@ -181,7 +184,12 @@ struct SettingsPage {
           }
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 14, bottom: 14 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 14,
+          bottom: 14
+        })
         .onClick(() => {
           if (!this.isTestingNotification) {
             this.testNotification()
@@ -239,7 +247,12 @@ struct SettingsPage {
             .fontColor('#999999')
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 14, bottom: 14 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 14,
+          bottom: 14
+        })
 
         Divider()
           .color('#E0E0E0')
@@ -257,7 +270,12 @@ struct SettingsPage {
             .fontColor('#999999')
         }
         .width('100%')
-        .padding({ left: 16, right: 16, top: 14, bottom: 14 })
+        .padding({
+          left: 16,
+          right: 16,
+          top: 14,
+          bottom: 14
+        })
       }
       .backgroundColor('#FFFFFF')
       .borderRadius(12)

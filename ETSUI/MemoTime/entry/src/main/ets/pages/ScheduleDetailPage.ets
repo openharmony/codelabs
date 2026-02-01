@@ -22,7 +22,6 @@ import { common, Want } from '@kit.AbilityKit'
 import { AppConstants } from '../common/constants/Constants'
 import { formatDateChinese, formatTime, getWeekDayName } from '../common/utils/DateUtils'
 import { Logger } from '../common/utils/Logger'
-import { Schedule } from '../model/Schedule'
 import { Reminder } from '../model/Reminder'
 import { Recording } from '../model/Recording'
 import { Tag } from '../model/Tag'
@@ -345,7 +344,12 @@ struct ScheduleDetailPage {
                   .fontColor('#666666')
                   .margin({ left: 6 })
               }
-              .padding({ left: 10, right: 10, top: 6, bottom: 6 })
+              .padding({
+                left: 10,
+                right: 10,
+                top: 6,
+                bottom: 6
+              })
               .backgroundColor('#F5F5F5')
               .borderRadius(16)
             }, (tagId: string) => tagId)
@@ -415,7 +419,8 @@ struct ScheduleDetailPage {
 
           RecordingList({
             recordings: this.recordings,
-            onDelete: () => {}  // 详情页不允许删除，需到编辑页操作
+            onDelete: () => {
+            }  // 详情页不允许删除，需到编辑页操作
           })
         }
         .width('100%')
@@ -536,7 +541,12 @@ struct ScheduleDetailPage {
               this.HeaderSection()
               this.InfoSection()
             }
-            .padding({ left: 16, right: 16, top: 16, bottom: 32 })
+            .padding({
+              left: 16,
+              right: 16,
+              top: 16,
+              bottom: 32
+            })
           }
           .layoutWeight(1)
           .scrollable(ScrollDirection.Vertical)

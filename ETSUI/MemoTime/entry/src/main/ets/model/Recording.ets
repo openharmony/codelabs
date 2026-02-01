@@ -38,25 +38,41 @@ export interface RecordingInit {
  */
 export class Recording {
   id: string = ''
-  scheduleId: string = ''     // 关联的日程ID
-  filePath: string = ''       // 文件路径
-  fileName: string = ''       // 文件名
-  duration: number = 0        // 时长（秒）
-  fileSize: number = 0        // 文件大小（字节）
-  format: string = 'aac'      // 格式 (mp3/aac)
-  transcription: string = ''  // 语音转文本结果
+  scheduleId: string = '' // 关联的日程ID
+  filePath: string = '' // 文件路径
+  fileName: string = '' // 文件名
+  duration: number = 0 // 时长（秒）
+  fileSize: number = 0 // 文件大小（字节）
+  format: string = 'aac' // 格式 (mp3/aac)
+  transcription: string = '' // 语音转文本结果
   createdAt: number = 0
 
   constructor(init?: RecordingInit) {
     if (init) {
-      if (init.id !== undefined) this.id = init.id
-      if (init.scheduleId !== undefined) this.scheduleId = init.scheduleId
-      if (init.filePath !== undefined) this.filePath = init.filePath
-      if (init.fileName !== undefined) this.fileName = init.fileName
-      if (init.duration !== undefined) this.duration = init.duration
-      if (init.fileSize !== undefined) this.fileSize = init.fileSize
-      if (init.format !== undefined) this.format = init.format
-      if (init.transcription !== undefined) this.transcription = init.transcription
+      if (init.id !== undefined) {
+        this.id = init.id
+      }
+      if (init.scheduleId !== undefined) {
+        this.scheduleId = init.scheduleId
+      }
+      if (init.filePath !== undefined) {
+        this.filePath = init.filePath
+      }
+      if (init.fileName !== undefined) {
+        this.fileName = init.fileName
+      }
+      if (init.duration !== undefined) {
+        this.duration = init.duration
+      }
+      if (init.fileSize !== undefined) {
+        this.fileSize = init.fileSize
+      }
+      if (init.format !== undefined) {
+        this.format = init.format
+      }
+      if (init.transcription !== undefined) {
+        this.transcription = init.transcription
+      }
     }
     if (!this.id) {
       this.id = generateRecordingUUID()

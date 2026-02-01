@@ -17,14 +17,7 @@
 /**
  * 周视图组件
  */
-import {
-  getWeekDates,
-  getWeekDayName,
-  isToday,
-  isSameDay,
-  formatDate,
-  formatTime
-} from '../../common/utils/DateUtils'
+import { formatDate, getWeekDates, getWeekDayName, isSameDay, isToday } from '../../common/utils/DateUtils'
 import { Schedule } from '../../model/Schedule'
 
 @Component
@@ -33,13 +26,14 @@ export struct WeekView {
   @Prop @Watch('onSelectedDateChange') selectedDate: Date = new Date()
   @Prop schedules: Schedule[] = []
   @Prop startFromMonday: boolean = false
-  onDateSelect: (date: Date) => void = () => {}
-  onScheduleClick: (schedule: Schedule) => void = () => {}
-  onTimeSlotClick: (date: Date, hour: number) => void = () => {}
-
+  onDateSelect: (date: Date) => void = () => {
+  }
+  onScheduleClick: (schedule: Schedule) => void = () => {
+  }
+  onTimeSlotClick: (date: Date, hour: number) => void = () => {
+  }
   @State weekDates: Date[] = []
   @State hours: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-
   private scrollerForTimeline: Scroller = new Scroller()
 
   aboutToAppear(): void {

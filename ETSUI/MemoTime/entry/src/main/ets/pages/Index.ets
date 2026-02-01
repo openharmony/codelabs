@@ -17,12 +17,12 @@
 /**
  * MemoTime 主页面 - 日历视图入口
  */
-import { CalendarViewType, AppConstants, ReminderTiming } from '../common/constants/Constants'
-import { formatDate, formatDateChinese, addMonths, addYears, getMonthName } from '../common/utils/DateUtils'
+import { AppConstants, CalendarViewType, ReminderTiming } from '../common/constants/Constants'
+import { addMonths, formatDateChinese } from '../common/utils/DateUtils'
 import { Logger } from '../common/utils/Logger'
 import { Schedule, ScheduleInit } from '../model/Schedule'
 import { Reminder, ReminderInit } from '../model/Reminder'
-import { DataService, dataService } from '../service/DataService'
+import { dataService } from '../service/DataService'
 import { notificationService } from '../service/NotificationService'
 import { MonthView } from '../components/calendar/MonthView'
 import { WeekView } from '../components/calendar/WeekView'
@@ -64,11 +64,9 @@ struct Index {
   @State schedules: Schedule[] = []
   @State selectedDateSchedules: Schedule[] = []
   @State isLoading: boolean = false
-
   // 响应式布局相关
   @State windowWidth: number = 360
   @State isLargeScreen: boolean = false
-
   // 视图类型列表
   private viewTypes: ViewTypeItem[] = [
     { type: CalendarViewType.DAY, label: '日' },
@@ -76,7 +74,6 @@ struct Index {
     { type: CalendarViewType.MONTH, label: '月' },
     { type: CalendarViewType.YEAR, label: '年' }
   ]
-
   private context = getContext(this)
 
   aboutToAppear(): void {
@@ -200,7 +197,7 @@ struct Index {
 
     for (const schedule of sampleSchedules) {
       await dataService.insertSchedule(schedule)
-      
+
       // 为每个日程创建提醒（提前15分钟）
       const reminderInit: ReminderInit = {
         scheduleId: schedule.id,
@@ -392,7 +389,12 @@ struct Index {
         .fontSize(14)
         .fontColor('#4ECDC4')
         .fontWeight(FontWeight.Medium)
-        .padding({ left: 12, right: 12, top: 6, bottom: 6 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 6,
+          bottom: 6
+        })
         .backgroundColor('#E8F8F5')
         .borderRadius(16)
         .onClick(() => this.goToToday())
@@ -421,7 +423,12 @@ struct Index {
           .fontSize(14)
           .fontColor(this.currentViewType === item.type ? '#FFFFFF' : '#666666')
           .fontWeight(FontWeight.Medium)
-          .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 8,
+            bottom: 8
+          })
           .backgroundColor(this.currentViewType === item.type ? '#4ECDC4' : '#F5F5F5')
           .borderRadius(20)
           .onClick(() => {
@@ -430,7 +437,12 @@ struct Index {
       }, (item: ViewTypeItem) => item.type)
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 8,
+      bottom: 8
+    })
     .justifyContent(FlexAlign.Center)
     .backgroundColor('#FFFFFF')
   }
@@ -464,7 +476,12 @@ struct Index {
               .fontColor('#999999')
           }
           .width('100%')
-          .padding({ left: 16, right: 16, top: 16, bottom: 8 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: 8
+          })
 
           ScheduleList({
             schedules: this.selectedDateSchedules,

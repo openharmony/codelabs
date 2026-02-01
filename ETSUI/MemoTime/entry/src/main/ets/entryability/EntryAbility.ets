@@ -50,7 +50,8 @@ export default class EntryAbility extends UIAbility {
   private handleWantParams(want: Want): void {
     if (want.parameters && want.parameters['scheduleId']) {
       this.scheduleIdFromNotification = want.parameters['scheduleId'] as string;
-      hilog.info(DOMAIN, 'testTag', 'Received scheduleId from notification: %{public}s', this.scheduleIdFromNotification);
+      hilog.info(DOMAIN, 'testTag', 'Received scheduleId from notification: %{public}s',
+        this.scheduleIdFromNotification);
     }
   }
 
@@ -113,7 +114,7 @@ export default class EntryAbility extends UIAbility {
         return;
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content: %{public}s', targetPage);
-      
+
       // 如果有参数，使用 router 跳转以传递参数
       if (params) {
         setTimeout(() => {

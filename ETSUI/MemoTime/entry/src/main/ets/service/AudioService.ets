@@ -70,7 +70,6 @@ export class AudioService {
   private context: Context | null = null
   private avRecorder: media.AVRecorder | null = null
   private avPlayer: media.AVPlayer | null = null
-
   // 录音状态
   private recordingState: RecordingState = RecordingState.IDLE
   private recordingStartTime: number = 0
@@ -78,14 +77,14 @@ export class AudioService {
   private currentRecordingPath: string = ''
   private durationTimer: number = -1
   private recordingCallback: RecordingCallback | null = null
-
   // 播放状态
   private playbackState: PlaybackState = PlaybackState.IDLE
   private currentPlayingId: string = ''
   private playbackCallback: PlaybackCallback | null = null
   private progressTimer: number = -1
 
-  private constructor() {}
+  private constructor() {
+  }
 
   static getInstance(): AudioService {
     if (!AudioService.instance) {
@@ -146,7 +145,7 @@ export class AudioService {
 
     try {
       const atManager = abilityAccessCtrl.createAtManager()
-      
+
       // 检查当前权限状态
       const grantStatus = await atManager.checkAccessToken(
         (this.context as common.UIAbilityContext).applicationInfo.accessTokenId,

@@ -23,11 +23,11 @@ import { relationalStore } from '@kit.ArkData';
 
 export default function scheduleModelTest() {
   describe('ScheduleModelTest', () => {
-    
+
     describe('构造函数测试', () => {
       it('创建默认 Schedule 实例', 0, () => {
         const schedule = new Schedule();
-        
+
         expect(schedule.id).assertContain('schedule-');
         expect(schedule.title).assertEqual('');
         expect(schedule.description).assertEqual('');
@@ -63,9 +63,9 @@ export default function scheduleModelTest() {
           recordingIds: ['recording-001'],
           externalAppLink: 'https://example.com'
         };
-        
+
         const schedule = new Schedule(init);
-        
+
         expect(schedule.id).assertEqual('test-schedule-001');
         expect(schedule.title).assertEqual('测试日程');
         expect(schedule.description).assertEqual('这是一个测试日程');
@@ -87,9 +87,9 @@ export default function scheduleModelTest() {
           title: '部分初始化日程',
           isAllDay: true
         };
-        
+
         const schedule = new Schedule(init);
-        
+
         expect(schedule.id).assertContain('schedule-');
         expect(schedule.title).assertEqual('部分初始化日程');
         expect(schedule.isAllDay).assertTrue();
@@ -104,7 +104,7 @@ export default function scheduleModelTest() {
           startTime: now,
           endTime: now + 3600000 // 1小时 = 3600000毫秒
         });
-        
+
         expect(schedule.getDuration()).assertEqual(60);
       });
 
@@ -114,7 +114,7 @@ export default function scheduleModelTest() {
           startTime: now,
           endTime: now + 1800000 // 30分钟
         });
-        
+
         expect(schedule.getDuration()).assertEqual(30);
       });
 
@@ -124,7 +124,7 @@ export default function scheduleModelTest() {
           startTime: now,
           endTime: now
         });
-        
+
         expect(schedule.getDuration()).assertEqual(0);
       });
 
@@ -134,7 +134,7 @@ export default function scheduleModelTest() {
           startTime: now,
           endTime: now + (2 * 60 + 15) * 60000 // 135分钟
         });
-        
+
         expect(schedule.getDuration()).assertEqual(135);
       });
     });
@@ -144,12 +144,12 @@ export default function scheduleModelTest() {
         // 创建一个在 2024-01-15 10:00-12:00 的日程
         const startTime = new Date(2024, 0, 15, 10, 0, 0).getTime();
         const endTime = new Date(2024, 0, 15, 12, 0, 0).getTime();
-        
+
         const schedule = new Schedule({
           startTime: startTime,
           endTime: endTime
         });
-        
+
         const checkDate = new Date(2024, 0, 15);
         expect(schedule.isOnDate(checkDate)).assertTrue();
       });
@@ -157,12 +157,12 @@ export default function scheduleModelTest() {
       it('日程不在指定日期内', 0, () => {
         const startTime = new Date(2024, 0, 15, 10, 0, 0).getTime();
         const endTime = new Date(2024, 0, 15, 12, 0, 0).getTime();
-        
+
         const schedule = new Schedule({
           startTime: startTime,
           endTime: endTime
         });
-        
+
         const checkDate = new Date(2024, 0, 16);
         expect(schedule.isOnDate(checkDate)).assertFalse();
       });
@@ -171,12 +171,12 @@ export default function scheduleModelTest() {
         // 创建一个跨天日程：1月15日 22:00 到 1月16日 02:00
         const startTime = new Date(2024, 0, 15, 22, 0, 0).getTime();
         const endTime = new Date(2024, 0, 16, 2, 0, 0).getTime();
-        
+
         const schedule = new Schedule({
           startTime: startTime,
           endTime: endTime
         });
-        
+
         const checkDate = new Date(2024, 0, 15);
         expect(schedule.isOnDate(checkDate)).assertTrue();
       });
@@ -184,12 +184,12 @@ export default function scheduleModelTest() {
       it('跨天日程第二天', 0, () => {
         const startTime = new Date(2024, 0, 15, 22, 0, 0).getTime();
         const endTime = new Date(2024, 0, 16, 2, 0, 0).getTime();
-        
+
         const schedule = new Schedule({
           startTime: startTime,
           endTime: endTime
         });
-        
+
         const checkDate = new Date(2024, 0, 16);
         expect(schedule.isOnDate(checkDate)).assertTrue();
       });
@@ -213,17 +213,17 @@ export default function scheduleModelTest() {
           recordingIds: ['rec-1'],
           externalAppLink: 'https://test.com'
         });
-        
+
         const dbObj = schedule.toDbObject();
-        
+
         expect(dbObj['id']).assertEqual('db-test-001');
         expect(dbObj['title']).assertEqual('数据库测试');
         expect(dbObj['description']).assertEqual('测试描述');
         expect(dbObj['startTime']).assertEqual(now);
         expect(dbObj['endTime']).assertEqual(now + 3600000);
-        expect(dbObj['isAllDay']).assertEqual(1);  // boolean 转为 1/0
+        expect(dbObj['isAllDay']).assertEqual(1); // boolean 转为 1/0
         expect(dbObj['location']).assertEqual('办公室');
-        expect(dbObj['tagIds']).assertEqual('["tag-1","tag-2"]');  // JSON 字符串
+        expect(dbObj['tagIds']).assertEqual('["tag-1","tag-2"]'); // JSON 字符串
         expect(dbObj['color']).assertEqual('#FF0000');
         expect(dbObj['repeatRule']).assertEqual('weekly');
         expect(dbObj['reminderIds']).assertEqual('["rem-1"]');
@@ -254,9 +254,9 @@ export default function scheduleModelTest() {
           updatedAt: now,
           isDeleted: 0
         };
-        
+
         const schedule = Schedule.fromDbObject(dbObj);
-        
+
         expect(schedule.id).assertEqual('from-db-001');
         expect(schedule.title).assertEqual('从数据库恢复');
         expect(schedule.description).assertEqual('数据库描述');
@@ -286,21 +286,21 @@ export default function scheduleModelTest() {
           endTime: now,
           isAllDay: 1,
           location: '',
-          tagIds: '',  // 空字符串
+          tagIds: '', // 空字符串
           color: '',
           repeatRule: '',
-          reminderIds: 'invalid-json',  // 无效 JSON
+          reminderIds: 'invalid-json', // 无效 JSON
           recordingIds: '',
           externalAppLink: '',
           createdAt: now,
           updatedAt: now,
           isDeleted: 1
         };
-        
+
         const schedule = Schedule.fromDbObject(dbObj);
-        
+
         expect(schedule.tagIds.length).assertEqual(0);
-        expect(schedule.reminderIds.length).assertEqual(0);  // 解析失败返回空数组
+        expect(schedule.reminderIds.length).assertEqual(0); // 解析失败返回空数组
         expect(schedule.isAllDay).assertTrue();
         expect(schedule.isDeleted).assertTrue();
       });

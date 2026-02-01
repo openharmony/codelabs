@@ -23,11 +23,11 @@ import { relationalStore } from '@kit.ArkData';
 
 export default function tagModelTest() {
   describe('TagModelTest', () => {
-    
+
     describe('构造函数测试', () => {
       it('创建默认 Tag 实例', 0, () => {
         const tag = new Tag();
-        
+
         expect(tag.id).assertContain('tag-');
         expect(tag.name).assertEqual('');
         expect(tag.color).assertEqual('#4ECDC4');
@@ -44,9 +44,9 @@ export default function tagModelTest() {
           icon: 'work_icon',
           scheduleCount: 5
         };
-        
+
         const tag = new Tag(init);
-        
+
         expect(tag.id).assertEqual('custom-tag-001');
         expect(tag.name).assertEqual('工作');
         expect(tag.color).assertEqual('#FF6B6B');
@@ -59,10 +59,10 @@ export default function tagModelTest() {
           name: '会议',
           color: '#45B7D1'
         };
-        
+
         const tag = new Tag(init);
-        
-        expect(tag.id).assertContain('tag-');  // 自动生成
+
+        expect(tag.id).assertContain('tag-'); // 自动生成
         expect(tag.name).assertEqual('会议');
         expect(tag.color).assertEqual('#45B7D1');
         expect(tag.icon).assertEqual('');
@@ -71,9 +71,9 @@ export default function tagModelTest() {
 
       it('空初始化参数创建实例', 0, () => {
         const init: TagInit = {};
-        
+
         const tag = new Tag(init);
-        
+
         expect(tag.id).assertContain('tag-');
         expect(tag.name).assertEqual('');
         expect(tag.color).assertEqual('#4ECDC4');
@@ -89,9 +89,9 @@ export default function tagModelTest() {
           icon: 'study_icon',
           scheduleCount: 10
         });
-        
+
         const dbObj = tag.toDbObject();
-        
+
         expect(dbObj['id']).assertEqual('db-tag-001');
         expect(dbObj['name']).assertEqual('学习');
         expect(dbObj['color']).assertEqual('#96CEB4');
@@ -112,9 +112,9 @@ export default function tagModelTest() {
           scheduleCount: 8,
           createdAt: now
         };
-        
+
         const tag = Tag.fromDbObject(dbObj);
-        
+
         expect(tag.id).assertEqual('from-db-tag');
         expect(tag.name).assertEqual('运动');
         expect(tag.color).assertEqual('#FFEAA7');

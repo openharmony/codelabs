@@ -18,9 +18,7 @@
  * 日视图组件
  */
 import {
-  formatTime,
-  formatDateChinese,
-  getWeekDayName
+  formatTime, formatDateChinese, getWeekDayName
 } from '../../common/utils/DateUtils'
 import { Schedule } from '../../model/Schedule'
 
@@ -28,11 +26,11 @@ import { Schedule } from '../../model/Schedule'
 export struct DayView {
   @Prop currentDate: Date = new Date()
   @Prop schedules: Schedule[] = []
-  onScheduleClick: (schedule: Schedule) => void = () => {}
-  onTimeSlotClick: (date: Date, hour: number) => void = () => {}
-
+  onScheduleClick: (schedule: Schedule) => void = () => {
+  }
+  onTimeSlotClick: (date: Date, hour: number) => void = () => {
+  }
   @State hours: number[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
-
   private scrollerForTimeline: Scroller = new Scroller()
 
   aboutToAppear(): void {

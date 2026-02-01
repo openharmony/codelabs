@@ -35,7 +35,8 @@ export class NotificationService {
   private isEnabled: boolean = false
   private pollingIntervalId: number = -1
 
-  private constructor() {}
+  private constructor() {
+  }
 
   static getInstance(): NotificationService {
     if (!NotificationService.instance) {
@@ -52,13 +53,13 @@ export class NotificationService {
       // 检查通知权限
       const isNotificationEnabled = await notificationManager.isNotificationEnabled()
       this.isEnabled = isNotificationEnabled
-      
+
       if (!isNotificationEnabled) {
         // 请求通知权限
         await notificationManager.requestEnableNotification()
         this.isEnabled = await notificationManager.isNotificationEnabled()
       }
-      
+
       Logger.info(TAG, `Notification service initialized, enabled: ${this.isEnabled}`)
     } catch (error) {
       Logger.error(TAG, `Failed to initialize notification service: ${JSON.stringify(error)}`)
@@ -73,22 +74,22 @@ export class NotificationService {
     if (this.pollingIntervalId !== -1) {
       return // 已经在轮询中
     }
-    
+
     // 计算到下一个整分钟的毫秒数
     const now = new Date()
     const msToNextMinute = (60 - now.getSeconds()) * 1000 - now.getMilliseconds()
-    
+
     // 先等待到整分钟，然后开始每分钟轮询
     setTimeout(() => {
       // 立即执行一次
       this.checkAndSendPendingReminders()
-      
+
       // 然后每60秒执行一次
       this.pollingIntervalId = setInterval(() => {
         this.checkAndSendPendingReminders()
       }, 60 * 1000)
     }, msToNextMinute)
-    
+
     Logger.info(TAG, `Reminder polling will start in ${msToNextMinute}ms (at next minute)`)
   }
 
@@ -147,10 +148,10 @@ export class NotificationService {
       }
 
       await notificationManager.publish(notificationRequest)
-      
+
       // 标记提醒为已触发
       await dataService.updateReminderTriggered(reminder.id)
-      
+
       Logger.info(TAG, `Notification sent for schedule: ${schedule.id}`)
     } catch (error) {
       Logger.error(TAG, `Failed to send notification: ${JSON.stringify(error)}`)
@@ -223,10 +224,10 @@ export class NotificationService {
   async checkAndSendPendingReminders(): Promise<void> {
     try {
       const now = Date.now()
-      
+
       // 获取所有未触发的提醒
       const pendingReminders = await dataService.getPendingReminders()
-      
+
       for (const reminder of pendingReminders) {
         // 检查是否应该触发（触发时间已到或在1分钟内）
         if (reminder.triggerTime <= now + 60 * 1000 && reminder.triggerTime >= now - 5 * 60 * 1000) {

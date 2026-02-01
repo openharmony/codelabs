@@ -27,7 +27,7 @@ import recordingModelTest from './model/Recording.test';
 export default function testsuite() {
   // 基础测试
   localUnitTest();
-  
+
   // 模型单元测试
   scheduleModelTest();
   tagModelTest();

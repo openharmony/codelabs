@@ -18,10 +18,7 @@
  * 年视图组件
  */
 import {
-  getDaysInMonth,
-  getFirstDayOfMonth,
-  getMonthName,
-  isToday
+  getDaysInMonth, getFirstDayOfMonth, getMonthName, isToday
 } from '../../common/utils/DateUtils'
 import { Schedule } from '../../model/Schedule'
 
@@ -40,8 +37,8 @@ interface MonthMini {
 export struct YearView {
   @Prop year: number = new Date().getFullYear()
   @Prop schedules: Schedule[] = []
-  onMonthClick: (year: number, month: number) => void = () => {}
-
+  onMonthClick: (year: number, month: number) => void = () => {
+  }
   @State months: MonthMini[] = []
 
   aboutToAppear(): void {

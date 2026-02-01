@@ -43,11 +43,21 @@ export class Tag {
 
   constructor(init?: TagInit) {
     if (init) {
-      if (init.id !== undefined) this.id = init.id
-      if (init.name !== undefined) this.name = init.name
-      if (init.color !== undefined) this.color = init.color
-      if (init.icon !== undefined) this.icon = init.icon
-      if (init.scheduleCount !== undefined) this.scheduleCount = init.scheduleCount
+      if (init.id !== undefined) {
+        this.id = init.id
+      }
+      if (init.name !== undefined) {
+        this.name = init.name
+      }
+      if (init.color !== undefined) {
+        this.color = init.color
+      }
+      if (init.icon !== undefined) {
+        this.icon = init.icon
+      }
+      if (init.scheduleCount !== undefined) {
+        this.scheduleCount = init.scheduleCount
+      }
     }
     if (!this.id) {
       this.id = generateTagUUID()

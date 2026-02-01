@@ -18,13 +18,13 @@
  * 日程编辑页面
  */
 import { router } from '@kit.ArkUI'
-import { AppConstants, ReminderTiming, RepeatType, TAG_COLORS } from '../common/constants/Constants'
-import { formatDate, formatTime, formatDateChinese } from '../common/utils/DateUtils'
+import { ReminderTiming, TAG_COLORS } from '../common/constants/Constants'
+import { formatDateChinese, formatTime } from '../common/utils/DateUtils'
 import { Logger } from '../common/utils/Logger'
 import { Schedule, ScheduleInit } from '../model/Schedule'
 import { Reminder, ReminderInit } from '../model/Reminder'
 import { Recording } from '../model/Recording'
-import { Tag, DEFAULT_TAGS } from '../model/Tag'
+import { DEFAULT_TAGS, Tag } from '../model/Tag'
 import { dataService } from '../service/DataService'
 import { audioService } from '../service/AudioService'
 import { RecordingPanel } from '../components/recording/RecordingPanel'
@@ -58,19 +58,16 @@ struct ScheduleEditPage {
   @State showStartTimePicker: boolean = false
   @State showEndTimePicker: boolean = false
   @State isSaving: boolean = false
-
   // 录音相关状态
   @State recordings: Recording[] = []
-  @State newRecordings: Recording[] = []  // 新添加的录音（尚未保存）
-  @State deletedRecordingIds: string[] = []  // 待删除的录音ID
-
+  @State newRecordings: Recording[] = [] // 新添加的录音（尚未保存）
+  @State deletedRecordingIds: string[] = [] // 待删除的录音ID
   // 时间选择器临时值
   @State tempHour: number = 0
   @State tempMinute: number = 0
   @State tempYear: number = 0
   @State tempMonth: number = 0
   @State tempDay: number = 0
-
   private scrollerForPage: Scroller = new Scroller()
 
   aboutToAppear(): void {
@@ -172,7 +169,7 @@ struct ScheduleEditPage {
 
       if (this.isEditMode) {
         await dataService.updateSchedule(schedule)
-        
+
         // 编辑模式下更新提醒：先删除旧提醒，再创建新提醒
         await dataService.deleteRemindersByScheduleId(schedule.id)
         for (const timing of this.selectedReminders) {
@@ -258,15 +255,24 @@ struct ScheduleEditPage {
    */
   getReminderText(timing: ReminderTiming): string {
     switch (timing) {
-      case ReminderTiming.ON_TIME: return '准时'
-      case ReminderTiming.MINUTES_5: return '5分钟前'
-      case ReminderTiming.MINUTES_10: return '10分钟前'
-      case ReminderTiming.MINUTES_15: return '15分钟前'
-      case ReminderTiming.MINUTES_30: return '30分钟前'
-      case ReminderTiming.HOURS_1: return '1小时前'
-      case ReminderTiming.HOURS_2: return '2小时前'
-      case ReminderTiming.DAYS_1: return '1天前'
-      default: return ''
+      case ReminderTiming.ON_TIME:
+        return '准时'
+      case ReminderTiming.MINUTES_5:
+        return '5分钟前'
+      case ReminderTiming.MINUTES_10:
+        return '10分钟前'
+      case ReminderTiming.MINUTES_15:
+        return '15分钟前'
+      case ReminderTiming.MINUTES_30:
+        return '30分钟前'
+      case ReminderTiming.HOURS_1:
+        return '1小时前'
+      case ReminderTiming.HOURS_2:
+        return '2小时前'
+      case ReminderTiming.DAYS_1:
+        return '1天前'
+      default:
+        return ''
     }
   }
 
@@ -458,7 +464,12 @@ struct ScheduleEditPage {
         Text(formatDateChinese(new Date(this.scheduleStartTime)))
           .fontSize(15)
           .fontColor('#4ECDC4')
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .padding({
+            left: 8,
+            right: 8,
+            top: 4,
+            bottom: 4
+          })
           .backgroundColor('#E8F8F5')
           .borderRadius(4)
           .onClick(() => this.openStartDatePicker())
@@ -467,7 +478,12 @@ struct ScheduleEditPage {
           Text(formatTime(new Date(this.scheduleStartTime)))
             .fontSize(15)
             .fontColor('#4ECDC4')
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .padding({
+              left: 8,
+              right: 8,
+              top: 4,
+              bottom: 4
+            })
             .backgroundColor('#E8F8F5')
             .borderRadius(4)
             .margin({ left: 8 })
@@ -490,7 +506,12 @@ struct ScheduleEditPage {
         Text(formatDateChinese(new Date(this.scheduleEndTime)))
           .fontSize(15)
           .fontColor('#4ECDC4')
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .padding({
+            left: 8,
+            right: 8,
+            top: 4,
+            bottom: 4
+          })
           .backgroundColor('#E8F8F5')
           .borderRadius(4)
           .onClick(() => this.openEndDatePicker())
@@ -499,7 +520,12 @@ struct ScheduleEditPage {
           Text(formatTime(new Date(this.scheduleEndTime)))
             .fontSize(15)
             .fontColor('#4ECDC4')
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+            .padding({
+              left: 8,
+              right: 8,
+              top: 4,
+              bottom: 4
+            })
             .backgroundColor('#E8F8F5')
             .borderRadius(4)
             .margin({ left: 8 })
@@ -562,7 +588,12 @@ struct ScheduleEditPage {
               .fontColor(this.selectedTags.includes(tag.id) ? '#FFFFFF' : '#666666')
               .margin({ left: 6 })
           }
-          .padding({ left: 12, right: 12, top: 8, bottom: 8 })
+          .padding({
+            left: 12,
+            right: 12,
+            top: 8,
+            bottom: 8
+          })
           .backgroundColor(this.selectedTags.includes(tag.id) ? tag.color : '#F5F5F5')
           .borderRadius(20)
           .margin({ right: 8, bottom: 8 })
@@ -600,7 +631,12 @@ struct ScheduleEditPage {
           Text(this.getReminderText(timing))
             .fontSize(14)
             .fontColor(this.selectedReminders.includes(timing) ? '#FFFFFF' : '#666666')
-            .padding({ left: 12, right: 12, top: 8, bottom: 8 })
+            .padding({
+              left: 12,
+              right: 12,
+              top: 8,
+              bottom: 8
+            })
             .backgroundColor(this.selectedReminders.includes(timing) ? '#4ECDC4' : '#F5F5F5')
             .borderRadius(20)
             .margin({ right: 8, bottom: 8 })
@@ -630,7 +666,12 @@ struct ScheduleEditPage {
         .fontSize(14)
         .backgroundColor('#F5F5F5')
         .borderRadius(8)
-        .padding({ left: 12, right: 12, top: 12, bottom: 12 })
+        .padding({
+          left: 12,
+          right: 12,
+          top: 12,
+          bottom: 12
+        })
         .onChange((value: string) => {
           this.scheduleExternalAppLink = value
         })
@@ -847,7 +888,12 @@ struct ScheduleEditPage {
             // 关联应用功能暂时禁用，待真机测试
             // this.ExternalLinkSection()
           }
-          .padding({ left: 16, right: 16, top: 16, bottom: 32 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 16,
+            bottom: 32
+          })
         }
         .layoutWeight(1)
         .scrollable(ScrollDirection.Vertical)

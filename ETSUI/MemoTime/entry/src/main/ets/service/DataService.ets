@@ -36,7 +36,8 @@ export class DataService {
   private rdbStore: relationalStore.RdbStore | null = null
   private context: Context | null = null
 
-  private constructor() {}
+  private constructor() {
+  }
 
   static getInstance(): DataService {
     if (!DataService.instance) {
@@ -70,7 +71,9 @@ export class DataService {
    * 创建数据表
    */
   private async createTables(): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     // 日程表
     const createScheduleTable = `
@@ -151,7 +154,9 @@ export class DataService {
    * 初始化默认标签
    */
   private async initializeDefaultTags(): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_TAG)
@@ -176,7 +181,9 @@ export class DataService {
    * 插入日程
    */
   async insertSchedule(schedule: Schedule): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const valuesBucket = schedule.toDbObject()
@@ -191,7 +198,9 @@ export class DataService {
    * 更新日程
    */
   async updateSchedule(schedule: Schedule): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     schedule.updatedAt = Date.now()
     try {
@@ -209,7 +218,9 @@ export class DataService {
    * 删除日程（软删除）
    */
   async deleteSchedule(id: string): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_SCHEDULE)
@@ -229,7 +240,9 @@ export class DataService {
    * 获取所有日程
    */
   async getAllSchedules(): Promise<Schedule[]> {
-    if (!this.rdbStore) return []
+    if (!this.rdbStore) {
+      return []
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_SCHEDULE)
@@ -262,7 +275,9 @@ export class DataService {
    * 根据日期范围获取日程
    */
   async getSchedulesByDateRange(startTime: number, endTime: number): Promise<Schedule[]> {
-    if (!this.rdbStore) return []
+    if (!this.rdbStore) {
+      return []
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_SCHEDULE)
@@ -297,7 +312,9 @@ export class DataService {
    * 根据ID获取日程
    */
   async getScheduleById(id: string): Promise<Schedule | null> {
-    if (!this.rdbStore) return null
+    if (!this.rdbStore) {
+      return null
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_SCHEDULE)
@@ -330,7 +347,9 @@ export class DataService {
    * 插入标签
    */
   async insertTag(tag: Tag): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const valuesBucket = tag.toDbObject()
@@ -344,7 +363,9 @@ export class DataService {
    * 获取所有标签
    */
   async getAllTags(): Promise<Tag[]> {
-    if (!this.rdbStore) return []
+    if (!this.rdbStore) {
+      return []
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_TAG)
@@ -378,7 +399,9 @@ export class DataService {
    * 插入提醒
    */
   async insertReminder(reminder: Reminder): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const valuesBucket = reminder.toDbObject()
@@ -392,7 +415,9 @@ export class DataService {
    * 获取日程的所有提醒
    */
   async getRemindersByScheduleId(scheduleId: string): Promise<Reminder[]> {
-    if (!this.rdbStore) return []
+    if (!this.rdbStore) {
+      return []
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_REMINDER)
@@ -424,7 +449,9 @@ export class DataService {
    * 删除日程的所有提醒
    */
   async deleteRemindersByScheduleId(scheduleId: string): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_REMINDER)
@@ -440,7 +467,9 @@ export class DataService {
    * 更新提醒触发状态
    */
   async updateReminderTriggered(reminderId: string): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_REMINDER)
@@ -458,7 +487,9 @@ export class DataService {
    * 获取所有未触发的提醒
    */
   async getPendingReminders(): Promise<Reminder[]> {
-    if (!this.rdbStore) return []
+    if (!this.rdbStore) {
+      return []
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_REMINDER)
@@ -493,7 +524,9 @@ export class DataService {
    * 插入录音
    */
   async insertRecording(recording: Recording): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const valuesBucket = recording.toDbObject()
@@ -507,7 +540,9 @@ export class DataService {
    * 获取日程的所有录音
    */
   async getRecordingsByScheduleId(scheduleId: string): Promise<Recording[]> {
-    if (!this.rdbStore) return []
+    if (!this.rdbStore) {
+      return []
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_RECORDING)
@@ -539,7 +574,9 @@ export class DataService {
    * 删除录音
    */
   async deleteRecording(id: string): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_RECORDING)
@@ -555,7 +592,9 @@ export class DataService {
    * 更新录音（如更新转录文本）
    */
   async updateRecording(recording: Recording): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_RECORDING)
@@ -572,7 +611,9 @@ export class DataService {
    * 删除日程的所有录音
    */
   async deleteRecordingsByScheduleId(scheduleId: string): Promise<void> {
-    if (!this.rdbStore) return
+    if (!this.rdbStore) {
+      return
+    }
 
     try {
       const predicates = new relationalStore.RdbPredicates(AppConstants.TABLE_RECORDING)
