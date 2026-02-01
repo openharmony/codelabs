@@ -17,7 +17,7 @@
 // pages/Index.ets
 import router from '@ohos.router'
 interface AuthMethod {
-  icon: Resource
+  icon: string
   title: string
   desc: string
 }
@@ -30,17 +30,17 @@ struct Index {
 
   private authMethods: AuthMethod[] = [
     {
-      icon: $r('app.media.ic_fingerprint'),
+      icon: '👆',
       title: '指纹识别',
       desc: '使用系统生物识别能力，快速完成身份验证'
     },
     {
-      icon: $r('app.media.ic_number'),
+      icon: '🔢',
       title: '数字密码',
       desc: '支持自定义数字 PIN 码进行安全访问'
     },
     {
-      icon: $r('app.media.ic_pattern'),
+      icon: '💠',
       title: '图形密码',
       desc: '通过绘制图形完成身份校验'
     }
@@ -70,10 +70,12 @@ struct Index {
 
           /* ================= 顶部欢迎区（Flex） ================= */
           Flex({ direction: FlexDirection.Column, alignItems: ItemAlign.Center }) {
-            Image($r('app.media.ic_shield'))
-              .width(64)
-              .height(64)
-              .margin({ bottom: 16 })
+            Text('🛡️')
+              .fontSize(64)
+            // Image($r('app.media.ic_shield'))
+            //   .width(64)
+            //   .height(64)
+            //   .margin({ bottom: 16 })
 
             Text(this.message)
               .fontSize(26)
@@ -101,16 +103,18 @@ struct Index {
             Row() {
 
               Column() {
-                Image($r('app.media.ic_number'))
-                  .width(32)
-                  .height(32)
+                Text('🔢')
+                  .fontSize(32)
+                // Image($r('app.media.ic_number'))
+                //   .width(32)
+                //   .height(32)
                   .margin({ bottom: 8 })
 
                 Text('密码保护')
                   .fontSize(15)
                   .fontWeight(FontWeight.Medium)
 
-                Text('数字 & 图形密码')
+                Text('数字密码')
                   .fontSize(12)
                   .fontColor('#666')
               }
@@ -124,16 +128,18 @@ struct Index {
 
 
               Column() {
-                Image($r('app.media.ic_up'))
-                  .width(32)
-                  .height(32)
+                Text('💠')
+                  .fontSize(32)
+                // Image($r('app.media.ic_up'))
+                //   .width(32)
+                //   .height(32)
                   .margin({ bottom: 8 })
 
-                Text('生物识别')
+                Text('密码保护')
                   .fontSize(15)
                   .fontWeight(FontWeight.Medium)
 
-                Text('指纹解锁')
+                Text('图形密码')
                   .fontSize(12)
                   .fontColor('#666')
               }
@@ -169,7 +175,7 @@ struct Index {
             .fontSize(12)
             .fontColor('#999')
 
-          Text('支持数字 / 图形密码 / 指纹密码')
+          Text('支持数字 / 图形密码 ')
             .fontSize(12)
             .fontColor('#999')
             .margin({ top: 4 })

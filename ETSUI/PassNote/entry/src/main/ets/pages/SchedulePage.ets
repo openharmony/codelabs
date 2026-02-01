@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 // src/main/ets/pages/SchedulePage.ets
+
 import router from '@ohos.router';
 import common from '@ohos.app.ability.common';
 import promptAction from '@ohos.promptAction';
@@ -327,12 +328,16 @@ struct SchedulePage {
         .width('100%')
         .height('100%')
         .justifyContent(FlexAlign.Center)
+        // 给内部容器增加背景色
+        .backgroundColor('#01FFFFFF')
       }
     }
     .width('100%')
     .height('100%')
     // 格子边框
     .border({ width: 0.5, color: '#F0F0F0' })
+    // 给最外层 Stack 增加背景色
+    .backgroundColor('#01FFFFFF')
     .onClick(() => {
       this.openEditDialog(dayIndex, periodIndex);
     })
@@ -513,6 +518,8 @@ struct SchedulePage {
           }
           // 定义列宽比例：时间栏占 12%，其余 7 天均分剩余 88%
           .columnsTemplate('12fr 12.5fr 12.5fr 12.5fr 12.5fr 12.5fr 12.5fr 12.5fr')
+          // 设置触摸测试控制，确保子组件优先响应
+          .hitTestBehavior(HitTestMode.Default)
           .rowsGap(0)
           .columnsGap(0)
           .layoutWeight(1) // 占满剩余高度
