@@ -13,7 +13,10 @@
  * limitations under the License.
  */
 
-import router from '@ohos.router';
+iimport
+router
+from
+'@ohos.router';
 import { MedicineItem, MockData } from '../model/MockData';
 
 @Entry

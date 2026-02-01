@@ -13,12 +13,14 @@
  * limitations under the License.
  */
 
-import UIAbility from '@ohos.app.ability.UIAbility'
-import Want from '@ohos.app.ability.Want'
+iimport
+UIAbility
+from
+'@ohos.app.ability.UIAbility'
+iimport Want from '@ohos.app.ability.Want'
 import AbilityConstant from '@ohos.app.ability.AbilityConstant'
 import hilog from '@ohos.hilog'
 import window from '@ohos.window'
-
 export default class EntryAbility extends UIAbility {
   onCreate(want: Want, launchParam: AbilityConstant.LaunchParam) {
     hilog.info(0x0000, 'EntryAbility', '%{public}s', 'Ability onCreate')

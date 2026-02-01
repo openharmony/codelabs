@@ -14,7 +14,6 @@
  */
 
 import router from '@ohos.router'
-import promptAction from '@ohos.promptAction'
 import { Contact } from '../model/Contact'
 import RdbStore from '../utils/RdbStore'
 import UserPreferences from '../utils/UserPreferences'
