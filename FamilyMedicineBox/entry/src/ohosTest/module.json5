@@ -12,3 +12,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+{
+  "module": {
+    "name": "ohosTest",
+    "type": "har",
+    "srcEntrance": "./src",
+    "deviceTypes": [
+      "default",
+      "tablet"
+    ]
+    // 补充必填的设备类型字段
+  }
+}
