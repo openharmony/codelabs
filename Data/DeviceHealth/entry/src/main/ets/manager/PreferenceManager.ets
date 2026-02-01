@@ -6,6 +6,7 @@
 import preferences from '@ohos.data.preferences';
 import { DEFAULT_SETTINGS, SettingsKeys } from '../model/UserSettings';
 import common from '@ohos.app.ability.common';
+import { MonitorCoreService, MonitorOptions } from '../services/MonitorCoreService';
 
 /**
  * 配置值类型
@@ -32,6 +33,7 @@ export class PreferenceManager {
       this.dataPreferences = await preferences.getPreferences(context, this.PREFERENCE_NAME);
       console.info('[PreferenceManager] 初始化成功');
       await this.loadSettings();
+      await this.updateMonitor();
     } catch (error) {
       console.error('[PreferenceManager] 初始化失败:', JSON.stringify(error));
     }
@@ -120,6 +122,7 @@ export class PreferenceManager {
         AppStorage.set<string>(key, value);
       }
 
+      await this.updateMonitor();
       console.info(`[PreferenceManager] 保存成功: ${key} = ${value}`);
     } catch (error) {
       console.error('[PreferenceManager] 保存失败:', JSON.stringify(error));
@@ -153,9 +156,35 @@ export class PreferenceManager {
         this.saveValue(SettingsKeys.NOTIFICATIONS, DEFAULT_SETTINGS.enableNotifications)
       ]);
 
+      await this.updateMonitor();
       console.info('[PreferenceManager] 已重置为默认设置');
     } catch (error) {
       console.error('[PreferenceManager] 重置失败:', JSON.stringify(error));
+    }
+  }
+
+  public async updateMonitor(): Promise<void> {
+    try{
+      if (!this.dataPreferences) {
+        return;
+      }
+      const batteryThreshold = AppStorage.get<number>(SettingsKeys.BATTERY_THRESHOLD);
+      const storageThreshold = AppStorage.get<number>(SettingsKeys.STORAGE_THRESHOLD) ?? 3.5;
+      const isNetworkMonitorOn = AppStorage.get<boolean>(SettingsKeys.NETWORK_MONITOR);
+
+      const monitorOptions: MonitorOptions = new MonitorOptions();
+
+      monitorOptions.enableBattery = true;
+      monitorOptions.enableNetwork = isNetworkMonitorOn;
+      monitorOptions.enableStorage = true;
+      monitorOptions.enableScreen = true;
+
+      monitorOptions.batteryLowPercent = batteryThreshold;
+      monitorOptions.storageLowBytes = storageThreshold * 1024 * 1024 * 1024;
+
+      await MonitorCoreService.startAll(monitorOptions);
+    } catch (error) {
+      console.error('[PreferenceManager] 配置更新失败！');
     }
   }
 }
