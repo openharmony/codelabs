@@ -52,7 +52,7 @@
 │  ├──model
 │  │  ├──ContactData.ets                 // 联系人数据管理类
 │  │  ├──BusinessCardData.ts                 // 个人名片管理
-│  │  └──FavoriteManager.ts                 // 我的收藏管理
+│  │  └──FavoriteManager.ts                 // 个人收藏管理
 │  ├──pages
 │  │  ├──EditContact.ets                 // 编辑联系人页面
 │  │  ├──AddContact.ets                 // 添加联系人
