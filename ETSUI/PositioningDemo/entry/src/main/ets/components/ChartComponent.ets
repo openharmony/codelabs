@@ -29,7 +29,6 @@ export struct ChartComponent {
   @Prop xLabel: string;
   @Prop yLabel: string;
   @Prop color: string;
-
   // 分析结果属性
   private analysisResults: AnalysisResults = {
     speedStability: '',
@@ -47,7 +46,7 @@ export struct ChartComponent {
     if (this.data.length > 0) {
       console.log(`${this.title} 前5个数据点:`);
       for (let i = 0; i < Math.min(5, this.data.length); i++) {
-        console.log(`  数据点${i+1} - 时间戳: ${this.data[i].timestamp} 值: ${this.data[i].value}`);
+        console.log(`  数据点${i + 1} - 时间戳: ${this.data[i].timestamp} 值: ${this.data[i].value}`);
       }
     }
 
@@ -165,8 +164,10 @@ export struct ChartComponent {
 
     results.generalStats.push(`运动持续时间为${duration}秒`);
     results.generalStats.push(`共采集了${this.data.length}个数据点`);
-    results.generalStats.push(`平均${this.yLabel.includes('速度') ? '速度' : '卡路里'}为${meanValue.toFixed(2)}${this.yLabel.includes('速度') ? ' m/s' : ' 卡'}`);
-    results.generalStats.push(`${this.yLabel.includes('速度') ? '速度' : '卡路里'}范围：${minValue.toFixed(2)} - ${maxValue.toFixed(2)}${this.yLabel.includes('速度') ? ' m/s' : ' 卡'}`);
+    results.generalStats.push(`平均${this.yLabel.includes('速度') ? '速度' :
+      '卡路里'}为${meanValue.toFixed(2)}${this.yLabel.includes('速度') ? ' m/s' : ' 卡'}`);
+    results.generalStats.push(`${this.yLabel.includes('速度') ? '速度' :
+      '卡路里'}范围：${minValue.toFixed(2)} - ${maxValue.toFixed(2)}${this.yLabel.includes('速度') ? ' m/s' : ' 卡'}`);
 
     return results;
   }
@@ -179,14 +180,14 @@ export struct ChartComponent {
         Text(analysisResults.speedStability)
           .fontSize(14)
           .margin({ bottom: 8 })
-        
+
         ForEach(analysisResults.speedStats, (stat: string) => {
           Text(stat)
             .fontSize(14)
             .margin({ bottom: 8 })
         })
       }
-      
+
       // 卡路里里程碑分析（如果是卡路里数据）
       if (this.title.includes('卡路里')) {
         if (analysisResults.milestoneTimes.length > 0) {
@@ -200,20 +201,20 @@ export struct ChartComponent {
             .fontSize(14)
             .margin({ bottom: 8 })
         }
-        
+
         if (analysisResults.finalCalorie) {
           Text(analysisResults.finalCalorie)
             .fontSize(14)
             .margin({ bottom: 8 })
         }
-        
+
         if (analysisResults.riceBowlEquivalent) {
           Text(analysisResults.riceBowlEquivalent)
             .fontSize(14)
             .margin({ bottom: 8 })
         }
       }
-      
+
       // 通用数据统计
       ForEach(analysisResults.generalStats, (stat: string) => {
         Text(stat)

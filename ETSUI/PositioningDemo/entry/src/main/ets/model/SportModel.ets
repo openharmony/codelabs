@@ -39,7 +39,8 @@ export class LocationInfo {
   netDistance: number = 0;
   netDuration: number = 0;
 
-  constructor(latitude: number, longitude: number, altitude: number, accuracy: number, speed: number, timestamp: number, totalDistance: number = 0, netDistance: number = 0, netDuration: number = 0) {
+  constructor(latitude: number, longitude: number, altitude: number, accuracy: number, speed: number, timestamp: number,
+    totalDistance: number = 0, netDistance: number = 0, netDuration: number = 0) {
     this.latitude = latitude;
     this.longitude = longitude;
     this.altitude = altitude;
@@ -71,12 +72,13 @@ export class SportData {
   averageSpeed: number = 0;
   currentSpeed: number = 0;
   startTime: number = 0;
-  speedData: DataPoint[] = [];      // 速度时间序列数据
-  caloriesData: DataPoint[] = [];    // 卡路里时间序列数据
+  speedData: DataPoint[] = []; // 速度时间序列数据
+  caloriesData: DataPoint[] = []; // 卡路里时间序列数据
   endTime: number = 0;
   route: RoutePoint[] = [];
 
-  constructor(type: SportType, distance: number, duration: number, calories: number, averageSpeed: number, currentSpeed: number, startTime: number, endTime: number, route: RoutePoint[]) {
+  constructor(type: SportType, distance: number, duration: number, calories: number, averageSpeed: number,
+    currentSpeed: number, startTime: number, endTime: number, route: RoutePoint[]) {
     this.type = type;
     this.distance = distance;
     this.duration = duration;

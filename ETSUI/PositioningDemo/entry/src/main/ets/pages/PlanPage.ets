@@ -26,7 +26,6 @@ struct PlanPage {
   @State completedPlans: number = 0;
   @State averageCompletionRate: number = 0;
   @State isLoaded: boolean = false;
-
   private historyService: HistoryService = new HistoryService();
   private planService: PlanService = new PlanService(this.historyService);
 
@@ -54,8 +53,12 @@ struct PlanPage {
 
     // 按状态和创建时间排序：进行中的在前，然后按创建时间倒序
     this.plans.sort((a, b) => {
-      if (a.status === PlanStatus.ACTIVE && b.status !== PlanStatus.ACTIVE) return -1;
-      if (a.status !== PlanStatus.ACTIVE && b.status === PlanStatus.ACTIVE) return 1;
+      if (a.status === PlanStatus.ACTIVE && b.status !== PlanStatus.ACTIVE) {
+        return -1;
+      }
+      if (a.status !== PlanStatus.ACTIVE && b.status === PlanStatus.ACTIVE) {
+        return 1;
+      }
       return b.createdTime - a.createdTime;
     });
   }
@@ -63,9 +66,9 @@ struct PlanPage {
   build() {
     Column() {
       this.TopNavBar()
-      
+
       this.StatisticsHeader()
-      
+
       if (this.plans.length === 0) {
         Column() {
           Text('📋')
@@ -127,7 +130,12 @@ struct PlanPage {
         })
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 16,
+      bottom: 16
+    })
     .backgroundColor('#FFFFFF')
   }
 
@@ -191,7 +199,12 @@ struct PlanPage {
       .padding({ top: 20, bottom: 20 })
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 16,
+      bottom: 16
+    })
     .backgroundColor('#FFFFFF')
     .margin({ bottom: 12 })
   }
@@ -206,7 +219,7 @@ struct PlanPage {
             .fontWeight(FontWeight.Bold)
             .fontColor('#333333')
             .margin({ bottom: 6 })
-          
+
           Text(plan.description || plan.goal)
             .fontSize(14)
             .fontColor('#666666')
@@ -218,10 +231,15 @@ struct PlanPage {
             Text(this.getStatusText(plan.status))
               .fontSize(12)
               .fontColor(this.getStatusColor(plan.status))
-              .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
               .backgroundColor(this.getStatusBgColor(plan.status))
               .borderRadius(12)
-            
+
             Text(`${plan.completedDays}/${plan.totalDays} 天`)
               .fontSize(12)
               .fontColor('#999999')
@@ -237,10 +255,10 @@ struct PlanPage {
               total: 100,
               type: ProgressType.Linear
             })
-            .width('100%')
-            .height(6)
-            .color('#4ECDC4')
-            .backgroundColor('#E0E0E0')
+              .width('100%')
+              .height(6)
+              .color('#4ECDC4')
+              .backgroundColor('#E0E0E0')
           }
           .width('100%')
           .height(6)
@@ -254,7 +272,12 @@ struct PlanPage {
     .padding(16)
     .backgroundColor('#FFFFFF')
     .borderRadius(12)
-    .shadow({ radius: 8, color: '#1A000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#1A000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   getStatusText(status: PlanStatus): string {

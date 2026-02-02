@@ -19,7 +19,8 @@ export class UserInfo {
   height: number = 0; // 身高（cm）
   weight: number = 0; // 体重（kg）
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 用户设置数据模型
@@ -30,7 +31,6 @@ export class UserSettings {
   vibration: boolean = false;
   keepScreenOn: boolean = true;
   saveTrajectory: boolean = true;
-
   // 提醒设置
   enableDistanceReminder: boolean = true;
   distanceInterval: number = 1000; // 米
@@ -41,7 +41,8 @@ export class UserSettings {
   distanceUnit: string = 'km'; // km 或 mile
   speedUnit: string = 'kmh'; // kmh 或 mph
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 用户运动统计数据
@@ -54,7 +55,6 @@ export class UserStatistics {
   maxSpeed: number = 0;
   longestDistance: number = 0;
   longestDuration: number = 0;
-
   // 按类型统计
   runningCount: number = 0;
   walkingCount: number = 0;
@@ -63,7 +63,8 @@ export class UserStatistics {
   walkingDistance: number = 0;
   cyclingDistance: number = 0;
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 周统计数据
@@ -77,7 +78,8 @@ export class WeeklyStatistics {
   totalCalories: number = 0;
   dailyRecords: DailyRecord[] = [];
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 月统计数据
@@ -91,7 +93,8 @@ export class MonthlyStatistics {
   totalCalories: number = 0;
   weeklyData: WeeklyData[] = [];
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 每日记录
@@ -103,7 +106,8 @@ export class DailyRecord {
   duration: number = 0;
   calories: number = 0;
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 每周数据
@@ -114,7 +118,8 @@ export class WeeklyData {
   duration: number = 0;
   calories: number = 0;
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 运动类型统计
@@ -130,21 +135,32 @@ export class SportTypeStatistics {
   averageSpeed: number = 0;
   percentage: number = 0;
 
-  constructor() {}
+  constructor() {
+  }
 }
 
 // 计算BMI
 export function calculateBMI(height: number, weight: number): number {
-  if (height <= 0 || weight <= 0) return 0;
+  if (height <= 0 || weight <= 0) {
+    return 0;
+  }
   const heightInMeters = height / 100;
   return weight / (heightInMeters * heightInMeters);
 }
 
 // 获取BMI评价
 export function getBMICategory(bmi: number): string {
-  if (bmi === 0) return '未设置';
-  if (bmi < 18.5) return '偏瘦';
-  if (bmi < 24) return '正常';
-  if (bmi < 28) return '偏胖';
+  if (bmi === 0) {
+    return '未设置';
+  }
+  if (bmi < 18.5) {
+    return '偏瘦';
+  }
+  if (bmi < 24) {
+    return '正常';
+  }
+  if (bmi < 28) {
+    return '偏胖';
+  }
   return '肥胖';
 }

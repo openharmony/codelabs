@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ReminderType, ReminderConfig, SportGoal } from '../model/ReminderModel';
+import { ReminderConfig, ReminderType, SportGoal } from '../model/ReminderModel';
 import { ReminderService } from '../service/ReminderService';
 import promptAction from '@ohos.promptAction';
 
@@ -57,7 +57,12 @@ export struct ReminderSettingComponent {
       .padding(16)
       .backgroundColor('#FFFFFF')
       .borderRadius(12)
-      .shadow({ radius: 4, color: '#1A000000', offsetX: 0, offsetY: 2 })
+      .shadow({
+        radius: 4,
+        color: '#1A000000',
+        offsetX: 0,
+        offsetY: 2
+      })
 
       // 展开内容
       if (this.isExpanded) {
@@ -107,7 +112,12 @@ export struct ReminderSettingComponent {
             .fontColor('#FFFFFF')
             .backgroundColor('#4ECDC4')
             .borderRadius(8)
-            .padding({ left: 32, right: 32, top: 10, bottom: 10 })
+            .padding({
+              left: 32,
+              right: 32,
+              top: 10,
+              bottom: 10
+            })
             .margin({ top: 20, bottom: 10 })
             .onClick(() => {
               this.saveSettings();
@@ -118,7 +128,12 @@ export struct ReminderSettingComponent {
         .backgroundColor('#FFFFFF')
         .borderRadius(12)
         .margin({ top: 8 })
-        .shadow({ radius: 4, color: '#1A000000', offsetX: 0, offsetY: 2 })
+        .shadow({
+          radius: 4,
+          color: '#1A000000',
+          offsetX: 0,
+          offsetY: 2
+        })
       }
 
       // 目标设置对话框
@@ -176,13 +191,15 @@ export struct ReminderSettingComponent {
         .margin({ bottom: 8 })
 
         // 间隔设置
-        if (params.showInterval && (this.reminderService.getSettings().getReminderConfig(params.type)?.enabled || false)) {
+        if (params.showInterval &&
+          (this.reminderService.getSettings().getReminderConfig(params.type)?.enabled || false)) {
           Row() {
             Text('提醒间隔:')
               .fontSize(12)
               .fontColor('#666666')
               .margin({ right: 8 })
-            Text(`${Math.floor((this.reminderService.getSettings().getReminderConfig(params.type)?.interval || 1800) / 60)} 分钟`)
+            Text(`${Math.floor((this.reminderService.getSettings().getReminderConfig(params.type)?.interval || 1800) /
+              60)} 分钟`)
               .fontSize(12)
               .fontColor('#333333')
               .margin({ right: 12 })
@@ -191,7 +208,12 @@ export struct ReminderSettingComponent {
               .fontColor('#4ECDC4')
               .backgroundColor('#FFFFFF')
               .borderRadius(4)
-              .padding({ left: 8, right: 8, top: 2, bottom: 2 })
+              .padding({
+                left: 8,
+                right: 8,
+                top: 2,
+                bottom: 2
+              })
               .border({ width: 1, color: '#4ECDC4' })
               .onClick(() => {
                 const config = this.reminderService.getSettings().getReminderConfig(params.type);
@@ -233,7 +255,12 @@ export struct ReminderSettingComponent {
           .fontColor('#4ECDC4')
           .backgroundColor('#FFFFFF')
           .borderRadius(4)
-          .padding({ left: 12, right: 12, top: 4, bottom: 4 })
+          .padding({
+            left: 12,
+            right: 12,
+            top: 4,
+            bottom: 4
+          })
           .border({ width: 1, color: '#4ECDC4' })
           .onClick(() => {
             const currentGoal = this.reminderService.getSettings().getGoal();
@@ -248,7 +275,8 @@ export struct ReminderSettingComponent {
       .width('100%')
 
       // 当前目标显示
-      if (this.reminderService.getSettings().getGoal().distance || this.reminderService.getSettings().getGoal().duration || this.reminderService.getSettings().getGoal().calories) {
+      if (this.reminderService.getSettings().getGoal().distance ||
+      this.reminderService.getSettings().getGoal().duration || this.reminderService.getSettings().getGoal().calories) {
         Row() {
           Text('当前目标:')
             .fontSize(12)
@@ -286,10 +314,10 @@ export struct ReminderSettingComponent {
     // 预设间隔选项
     const intervals = [5, 10, 15, 20, 30, 45, 60];
     const currentMinutes = Math.floor((config.interval || 1800) / 60);
-    
+
     // 构建按钮数组
     const buttons: DialogButton[] = [];
-    
+
     // 添加间隔选项按钮
     for (const minutes of intervals) {
       const button: DialogButton = {
@@ -298,14 +326,14 @@ export struct ReminderSettingComponent {
       };
       buttons.push(button);
     }
-    
+
     // 添加取消按钮
     const cancelButton: DialogButton = {
       text: '取消',
       color: '#999999'
     };
     buttons.unshift(cancelButton);
-    
+
     promptAction.showDialog({
       title: '设置提醒间隔',
       message: '请选择提醒间隔',
@@ -357,15 +385,15 @@ export struct ReminderSettingComponent {
             text: this.tempGoal.distance?.toString() || '',
             placeholder: '请输入距离'
           })
-          .width(120)
-          .height(40)
-          .fontSize(14)
-          .padding({ left: 8, right: 8 })
-          .backgroundColor('#F5F5F5')
-          .borderRadius(4)
-          .onChange((value: string) => {
-            this.tempGoal.distance = value ? parseFloat(value) : undefined;
-          })
+            .width(120)
+            .height(40)
+            .fontSize(14)
+            .padding({ left: 8, right: 8 })
+            .backgroundColor('#F5F5F5')
+            .borderRadius(4)
+            .onChange((value: string) => {
+              this.tempGoal.distance = value ? parseFloat(value) : undefined;
+            })
           Text('米')
             .fontSize(14)
             .fontColor('#666666')
@@ -383,15 +411,15 @@ export struct ReminderSettingComponent {
             text: this.tempGoal.duration?.toString() || '',
             placeholder: '请输入时长'
           })
-          .width(120)
-          .height(40)
-          .fontSize(14)
-          .padding({ left: 8, right: 8 })
-          .backgroundColor('#F5F5F5')
-          .borderRadius(4)
-          .onChange((value: string) => {
-            this.tempGoal.duration = value ? parseFloat(value) : undefined;
-          })
+            .width(120)
+            .height(40)
+            .fontSize(14)
+            .padding({ left: 8, right: 8 })
+            .backgroundColor('#F5F5F5')
+            .borderRadius(4)
+            .onChange((value: string) => {
+              this.tempGoal.duration = value ? parseFloat(value) : undefined;
+            })
           Text('分钟')
             .fontSize(14)
             .fontColor('#666666')
@@ -409,15 +437,15 @@ export struct ReminderSettingComponent {
             text: this.tempGoal.calories?.toString() || '',
             placeholder: '请输入卡路里'
           })
-          .width(120)
-          .height(40)
-          .fontSize(14)
-          .padding({ left: 8, right: 8 })
-          .backgroundColor('#F5F5F5')
-          .borderRadius(4)
-          .onChange((value: string) => {
-            this.tempGoal.calories = value ? parseFloat(value) : undefined;
-          })
+            .width(120)
+            .height(40)
+            .fontSize(14)
+            .padding({ left: 8, right: 8 })
+            .backgroundColor('#F5F5F5')
+            .borderRadius(4)
+            .onChange((value: string) => {
+              this.tempGoal.calories = value ? parseFloat(value) : undefined;
+            })
           Text('卡路里')
             .fontSize(14)
             .fontColor('#666666')
@@ -432,7 +460,12 @@ export struct ReminderSettingComponent {
             .fontColor('#999999')
             .backgroundColor('#FFFFFF')
             .borderRadius(8)
-            .padding({ left: 24, right: 24, top: 8, bottom: 8 })
+            .padding({
+              left: 24,
+              right: 24,
+              top: 8,
+              bottom: 8
+            })
             .border({ width: 1, color: '#E0E0E0' })
             .onClick(() => {
               this.showGoalDialog = false;
@@ -442,7 +475,12 @@ export struct ReminderSettingComponent {
             .fontColor('#FFFFFF')
             .backgroundColor('#4ECDC4')
             .borderRadius(8)
-            .padding({ left: 24, right: 24, top: 8, bottom: 8 })
+            .padding({
+              left: 24,
+              right: 24,
+              top: 8,
+              bottom: 8
+            })
             .margin({ left: 12 })
             .onClick(() => {
               this.saveGoal();
@@ -466,7 +504,7 @@ export struct ReminderSettingComponent {
     console.log('tempGoal - 距离:', this.tempGoal.distance, '米');
     console.log('tempGoal - 时长:', this.tempGoal.duration, '分钟');
     console.log('tempGoal - 卡路里:', this.tempGoal.calories);
-    
+
     const goal: SportGoal = {};
     if (this.tempGoal.distance !== undefined) {
       goal.distance = parseFloat(this.tempGoal.distance.toString());
@@ -480,18 +518,18 @@ export struct ReminderSettingComponent {
       goal.calories = parseFloat(this.tempGoal.calories.toString());
       console.log('保存卡路里目标:', goal.calories);
     }
-    
+
     console.log('准备保存的目标 - 距离:', goal.distance, '米');
     console.log('准备保存的目标 - 时长:', goal.duration, '分钟');
     console.log('准备保存的目标 - 卡路里:', goal.calories);
     this.reminderService.setSportGoal(goal);
-    
+
     // 保存后立即获取目标，验证是否保存成功
     const savedGoal = this.reminderService.getSettings().getGoal();
     console.log('保存后的目标 - 距离:', savedGoal.distance, '米');
     console.log('保存后的目标 - 时长:', savedGoal.duration, '分钟');
     console.log('保存后的目标 - 卡路里:', savedGoal.calories);
-    
+
     promptAction.showToast({ message: '目标已保存' });
   }
 }

@@ -46,7 +46,7 @@ export class AchievementService {
   async getAllAchievements(): Promise<Achievement[]> {
     const allAchievements = AchievementConfig.getAllAchievements();
     const unlockedMap = await this.getUnlockedAchievementsMap();
-    
+
     // 计算每个成就的进度和状态，并检查是否需要解锁
     for (const achievement of allAchievements) {
       const unlockedInfo = unlockedMap.get(achievement.id);
@@ -58,13 +58,13 @@ export class AchievementService {
       } else {
         // 计算当前进度
         await this.calculateProgress(achievement);
-        
+
         // 检查是否达到解锁条件，如果达到则自动解锁
         if (achievement.progress >= 100 && !achievement.isUnlocked) {
           achievement.isUnlocked = true;
           achievement.unlockedTime = Date.now();
           achievement.currentValue = achievement.targetValue;
-          
+
           // 保存解锁状态
           await this.unlockAchievement(achievement.id, achievement.unlockedTime);
           console.log(`成就自动解锁: ${achievement.name}`);
@@ -100,11 +100,11 @@ export class AchievementService {
         achievement.isUnlocked = true;
         achievement.unlockedTime = Date.now();
         achievement.currentValue = achievement.targetValue;
-        
+
         // 保存解锁状态
         await this.unlockAchievement(achievement.id, achievement.unlockedTime);
         newlyUnlocked.push(achievement);
-        
+
         console.log(`成就解锁: ${achievement.name}`);
       }
     }
@@ -170,7 +170,9 @@ export class AchievementService {
 
   // 计算连续运动天数
   private async calculateConsecutiveDays(records: SportData[]): Promise<number> {
-    if (records.length === 0) return 0;
+    if (records.length === 0) {
+      return 0;
+    }
 
     // 按日期分组，获取所有有运动的日期
     const dateSet = new Set<string>();
@@ -193,16 +195,18 @@ export class AchievementService {
       })
       .sort((a, b) => b.getTime() - a.getTime()); // 从新到旧排序
 
-    if (dates.length === 0) return 0;
+    if (dates.length === 0) {
+      return 0;
+    }
 
     // 从最新日期开始向前计算连续天数
     let consecutiveDays = 0;
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    
+
     // 从今天或最近的日期开始
     let expectedDate = new Date(today);
-    
+
     // 如果今天没有运动，从最近的运动日期开始
     if (dates[0].getTime() !== today.getTime()) {
       expectedDate = new Date(dates[0]);
@@ -232,8 +236,9 @@ export class AchievementService {
 
     try {
       const unlockedJson = await this.preferences.get(this.KEY_UNLOCKED_ACHIEVEMENTS, '{}');
-      const unlockedDataObj: Record<string, UnlockedAchievementInfo> = JSON.parse(unlockedJson as string) as Record<string, UnlockedAchievementInfo>;
-      
+      const unlockedDataObj: Record<string, UnlockedAchievementInfo> =
+        JSON.parse(unlockedJson as string) as Record<string, UnlockedAchievementInfo>;
+
       const keys = Object.keys(unlockedDataObj);
       for (let i = 0; i < keys.length; i++) {
         const id = keys[i];
@@ -258,8 +263,9 @@ export class AchievementService {
 
     try {
       const unlockedJson = await this.preferences.get(this.KEY_UNLOCKED_ACHIEVEMENTS, '{}');
-      const unlockedDataObj: Record<string, UnlockedAchievementInfo> = JSON.parse(unlockedJson as string) as Record<string, UnlockedAchievementInfo>;
-      
+      const unlockedDataObj: Record<string, UnlockedAchievementInfo> =
+        JSON.parse(unlockedJson as string) as Record<string, UnlockedAchievementInfo>;
+
       // 创建新对象并添加新成就
       const updatedData: Record<string, UnlockedAchievementInfo> = {};
       const keys = Object.keys(unlockedDataObj);
@@ -268,7 +274,7 @@ export class AchievementService {
         updatedData[key] = unlockedDataObj[key];
       }
       updatedData[id] = { unlockedTime };
-      
+
       await this.preferences.put(this.KEY_UNLOCKED_ACHIEVEMENTS, JSON.stringify(updatedData));
       await this.preferences.flush();
       console.log(`成就已解锁并保存: ${id}`);

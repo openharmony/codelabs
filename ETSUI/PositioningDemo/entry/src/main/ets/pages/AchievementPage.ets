@@ -24,7 +24,6 @@ struct AchievementPage {
   @State unlockedCount: number = 0;
   @State totalCount: number = 0;
   @State isLoaded: boolean = false;
-
   private historyService: HistoryService = new HistoryService();
   private statisticsService: StatisticsService = new StatisticsService(this.historyService);
   private achievementService: AchievementService = new AchievementService(this.historyService, this.statisticsService);
@@ -49,11 +48,15 @@ struct AchievementPage {
     // 因为getAllAchievements已经自动检查并解锁了符合条件的成就
     this.unlockedCount = this.achievements.filter(a => a.isUnlocked).length;
     this.totalCount = this.achievementService.getTotalCount();
-    
+
     // 按解锁状态排序：已解锁在前，未解锁在后
     this.achievements.sort((a, b) => {
-      if (a.isUnlocked && !b.isUnlocked) return -1;
-      if (!a.isUnlocked && b.isUnlocked) return 1;
+      if (a.isUnlocked && !b.isUnlocked) {
+        return -1;
+      }
+      if (!a.isUnlocked && b.isUnlocked) {
+        return 1;
+      }
       return 0;
     });
   }
@@ -61,9 +64,9 @@ struct AchievementPage {
   build() {
     Column() {
       this.TopNavBar()
-      
+
       this.ProgressHeader()
-      
+
       if (this.achievements.length === 0) {
         Column() {
           Text('暂无成就')
@@ -109,7 +112,12 @@ struct AchievementPage {
         })
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 16,
+      bottom: 16
+    })
     .backgroundColor('#FFFFFF')
   }
 
@@ -166,17 +174,22 @@ struct AchievementPage {
           total: this.totalCount,
           type: ProgressType.Linear
         })
-        .width('100%')
-        .height(8)
-        .color('#4ECDC4')
-        .backgroundColor('#E0E0E0')
+          .width('100%')
+          .height(8)
+          .color('#4ECDC4')
+          .backgroundColor('#E0E0E0')
       }
       .width('100%')
       .height(8)
       .margin({ top: 12, bottom: 8 })
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 16,
+      bottom: 16
+    })
     .backgroundColor('#FFFFFF')
     .margin({ bottom: 12 })
   }
@@ -201,7 +214,7 @@ struct AchievementPage {
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
               .fontColor(achievement.isUnlocked ? '#333333' : '#999999')
-            
+
             if (achievement.isUnlocked) {
               Text('✓')
                 .fontSize(16)
@@ -240,10 +253,10 @@ struct AchievementPage {
                   total: 100,
                   type: ProgressType.Linear
                 })
-                .width('100%')
-                .height(4)
-                .color('#4ECDC4')
-                .backgroundColor('#E0E0E0')
+                  .width('100%')
+                  .height(4)
+                  .color('#4ECDC4')
+                  .backgroundColor('#E0E0E0')
               }
               .width('100%')
               .height(4)
@@ -273,7 +286,12 @@ struct AchievementPage {
     .padding(16)
     .backgroundColor('#FFFFFF')
     .borderRadius(12)
-    .shadow({ radius: 8, color: '#1A000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#1A000000',
+      offsetX: 0,
+      offsetY: 2
+    })
     .opacity(achievement.isUnlocked ? 1 : 0.8)
   }
 

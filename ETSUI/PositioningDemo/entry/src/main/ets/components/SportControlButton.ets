@@ -14,10 +14,14 @@
 export struct SportControlButton {
   @Prop isRunning: boolean;
   @Prop isPaused: boolean;
-  onStart: () => void = () => {};
-  onPause: () => void = () => {};
-  onResume: () => void = () => {};
-  onStop: () => void = () => {};
+  onStart: () => void = () => {
+  };
+  onPause: () => void = () => {
+  };
+  onResume: () => void = () => {
+  };
+  onStop: () => void = () => {
+  };
 
   build() {
     Row() {
