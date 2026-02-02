@@ -1,8 +1,0 @@
-{
-  "src": [
-    "pages/IndexPage",
-    "pages/DetailPage",
-    "pages/ListPage",
-    "pages/DetailListPage"
-  ]
-}

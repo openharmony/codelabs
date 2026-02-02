@@ -1,564 +1,0 @@
-Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚ+import relationalStore from '@ohos.data.relationalStore';
-import { PhotoModel } from '../model/PhotoModel';
-import Constants from '../common/constants/Constants';
-class PhotoService {
-    constructor() {
-        // æ•°æ®åº“æ“ä½œå®ä¾‹
-        this.rdbStore = null;
-    }
-    /**
-     * åˆå§‹åŒ–æ•°æ®åº“
-     * @param context åº”ç”¨ä¸Šä¸‹æ–‡
-     */
-    initDB(context) {
-        const config = {
-            name: Constants.RDB_NAME,
-            securityLevel: relationalStore.SecurityLevel.S1
-        };
-        return new Promise((resolve, reject) => {
-            relationalStore.getRdbStore(context, config, (err, store) => {
-                if (err) {
-                    console.error(`[PhotoService] è·å–æ•°æ®åº“å¤±è´¥: ${err.code}, ${err.message}`);
-                    reject(err);
-                    return;
-                }
-                this.rdbStore = store;
-                // å¦‚æœè¡¨ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºè¡¨
-                if (this.rdbStore) {
-                    this.rdbStore.executeSql(Constants.CREATE_TABLE_SQL);
-                    console.info('[PhotoService] æ•°æ®åº“åˆå§‹åŒ–æˆåŠŸï¼Œè¡¨å·²å°±ç»ª');
-                }
-                resolve();
-            });
-        });
-    }
-    /**
-     * æ’å…¥ä¸€å¼ å›¾ç‰‡æ•°æ®
-     * @param photo å›¾ç‰‡å¯¹è±¡ (idå¯ä¼ 0ï¼Œå› ä¸ºæ˜¯è‡ªå¢çš„)
-     * @returns Promise<number> è¿”å›æ’å…¥è¡Œçš„ rowId
-     */
-    insert(photo) {
-        if (!this.rdbStore) {
-            console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-            return Promise.reject('DB not initialized');
-        }
-        const valueBucket = {};
-        valueBucket[Constants.COL_NAME] = photo.name;
-        valueBucket[Constants.COL_PATH] = photo.path;
-        valueBucket[Constants.COL_CATEGORY] = photo.category;
-        valueBucket[Constants.COL_CREATE_TIME] = photo.createTime;
-        valueBucket[Constants.COL_TAGS] = photo.tags;
-        return this.rdbStore.insert(Constants.PHOTO_TABLE_NAME, valueBucket);
-    }
-    /**
-     * æŸ¥è¯¢æ‰€æœ‰å›¾ç‰‡
-     * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-     */
-    queryAll() {
-        if (!this.rdbStore) {
-            return Promise.reject('DB not initialized');
-        }
-        // æ„å»ºæŸ¥è¯¢æ¡ä»¶ (è¿™é‡ŒæŸ¥è¯¢æ‰€æœ‰)
-        let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-        // æŒ‰åˆ›å»ºæ—¶é—´å€’åºæ’åˆ— (æœ€æ–°çš„åœ¨æœ€å‰)
-        predicates.orderByDesc(Constants.COL_CREATE_TIME);
-        return this.rdbStore.query(predicates).then((resultSet) => {
-            let count = resultSet.rowCount;
-            console.info(`[PhotoService] æŸ¥è¯¢åˆ° ${count} æ¡è®°å½•`);
-            let result = [];
-            if (count === 0) {
-                resultSet.close();
-                return result;
-            }
-            resultSet.goToFirstRow();
-            do {
-                // ä»ç»“æœé›†ä¸­æå–æ•°æ®
-                const id = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_ID));
-                const name = resultSet.getString(resultSet.getColumnIndex(Constants.COL_NAME));
-                const path = resultSet.getString(resultSet.getColumnIndex(Constants.COL_PATH));
-                const category = resultSet.getString(resultSet.getColumnIndex(Constants.COL_CATEGORY));
-                const createTime = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_CREATE_TIME));
-                const tags = resultSet.getString(resultSet.getColumnIndex(Constants.COL_TAGS));
-                result.push(new PhotoModel(id, name, path, category, createTime, tags));
-            } while (resultSet.goToNextRow());
-            resultSet.close();
-            return result;
-        });
-    }
-    // ==========================================
-    // æ–°å¢ï¼šæœç´¢å’Œåˆ†ç±»åŠŸèƒ½
-    // ==========================================
-    /**
-     * æ ¹æ®åˆ†ç±»æŸ¥è¯¢å›¾ç‰‡
-     * @param category åˆ†ç±»åç§°
-     * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-     */
-    queryByCategory(category) {
-        if (!this.rdbStore) {
-            console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-            return Promise.reject('DB not initialized');
-        }
-        let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-        predicates.equalTo(Constants.COL_CATEGORY, category);
-        predicates.orderByDesc(Constants.COL_CREATE_TIME);
-        return this.rdbStore.query(predicates).then((resultSet) => {
-            return this.parseResultSet(resultSet);
-        });
-    }
-    /**
-     * æœç´¢å›¾ç‰‡ï¼ˆæ”¯æŒåç§°ã€åˆ†ç±»å’Œæ ‡ç­¾æœç´¢ï¼‰
-     * @param keyword æœç´¢å…³é”®è¯
-     * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-     */
-    searchPhotos(keyword) {
-        if (!this.rdbStore) {
-            console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-            return Promise.reject('DB not initialized');
-        }
-        if (!keyword || keyword.trim() === '') {
-            return this.queryAll();
-        }
-        let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-        // ==========================================
-        // ğŸ”§ ä¿®å¤ï¼šæœç´¢åç§°ã€åˆ†ç±»æˆ–æ ‡ç­¾åŒ…å«å…³é”®è¯çš„å›¾ç‰‡
-        // ==========================================
-        predicates.like(Constants.COL_NAME, `%${keyword}%`)
-            .or()
-            .like(Constants.COL_CATEGORY, `%${keyword}%`) // ğŸ†• æ·»åŠ åˆ†ç±»æœç´¢
-            .or()
-            .like(Constants.COL_TAGS, `%${keyword}%`);
-        predicates.orderByDesc(Constants.COL_CREATE_TIME);
-        return this.rdbStore.query(predicates).then((resultSet) => {
-            return this.parseResultSet(resultSet);
-        });
-    }
-    /**
-     * ç»„åˆæœç´¢ï¼šæŒ‰åˆ†ç±»å’Œå…³é”®è¯æœç´¢
-     * @param category åˆ†ç±»ï¼ˆä¼  'å…¨éƒ¨' è¡¨ç¤ºä¸é™åˆ†ç±»ï¼‰
-     * @param keyword æœç´¢å…³é”®è¯
-     * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-     */
-    searchPhotosByCategoryAndKeyword(category, keyword) {
-        if (!this.rdbStore) {
-            console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-            return Promise.reject('DB not initialized');
-        }
-        console.info(`[PhotoService] ğŸ” ç»„åˆæœç´¢ - åˆ†ç±»: "${category}", å…³é”®è¯: "${keyword}"`);
-        let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-        // ==========================================
-        // ğŸ”§ ä¿®å¤ï¼šåˆ†ç±»å’Œå…³é”®è¯æœç´¢é€»è¾‘
-        // ==========================================
-        // æƒ…å†µ1ï¼šåªé€‰æ‹©åˆ†ç±»ï¼Œæ— å…³é”®è¯ â†’ æŒ‰åˆ†ç±»æŸ¥è¯¢
-        if ((category && category !== 'å…¨éƒ¨') && (!keyword || keyword.trim() === '')) {
-            predicates.equalTo(Constants.COL_CATEGORY, category);
-            console.info(`[PhotoService] ğŸ“‚ æŒ‰åˆ†ç±»æŸ¥è¯¢: ${category}`);
-        }
-        // æƒ…å†µ2ï¼šé€‰æ‹©"å…¨éƒ¨"ï¼Œæœ‰å…³é”®è¯ â†’ å…¨å±€æœç´¢
-        else if ((category === 'å…¨éƒ¨' || !category) && keyword && keyword.trim() !== '') {
-            predicates.beginWrap()
-                .like(Constants.COL_NAME, `%${keyword}%`)
-                .or()
-                .like(Constants.COL_CATEGORY, `%${keyword}%`) // ğŸ†• æ·»åŠ åˆ†ç±»æœç´¢
-                .or()
-                .like(Constants.COL_TAGS, `%${keyword}%`)
-                .endWrap();
-            console.info(`[PhotoService] ğŸ” å…¨å±€æœç´¢: ${keyword}`);
-        }
-        // æƒ…å†µ3ï¼šæ—¢æœ‰åˆ†ç±»åˆæœ‰å…³é”®è¯ â†’ å…ˆç­›é€‰åˆ†ç±»ï¼Œå†æœç´¢
-        else if ((category && category !== 'å…¨éƒ¨') && (keyword && keyword.trim() !== '')) {
-            predicates.equalTo(Constants.COL_CATEGORY, category)
-                .and()
-                .beginWrap()
-                .like(Constants.COL_NAME, `%${keyword}%`)
-                .or()
-                .like(Constants.COL_TAGS, `%${keyword}%`)
-                .endWrap();
-            console.info(`[PhotoService] ğŸ”ğŸ“‚ åˆ†ç±»+æœç´¢: ${category} + ${keyword}`);
-        }
-        // æƒ…å†µ4ï¼šéƒ½ä¸ºç©º â†’ æŸ¥è¯¢å…¨éƒ¨
-        else {
-            console.info(`[PhotoService] ğŸ“‹ æŸ¥è¯¢å…¨éƒ¨`);
-        }
-        predicates.orderByDesc(Constants.COL_CREATE_TIME);
-        return this.rdbStore.query(predicates).then((resultSet) => {
-            const result = this.parseResultSet(resultSet);
-            console.info(`[PhotoService] âœ… æŸ¥è¯¢ç»“æœ: ${result.length} æ¡`);
-            return result;
-        });
-    }
-    /**
-     * è·å–æ‰€æœ‰åˆ†ç±»åˆ—è¡¨ï¼ˆå»é‡ï¼‰
-     * @returns Promise<string[]> åˆ†ç±»åˆ—è¡¨
-     */
-    getCategories() {
-        if (!this.rdbStore) {
-            console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-            return Promise.reject('DB not initialized');
-        }
-        let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-        return this.rdbStore.query(predicates, [Constants.COL_CATEGORY]).then((resultSet) => {
-            let categories = [];
-            let count = resultSet.rowCount;
-            if (count === 0) {
-                resultSet.close();
-                return categories;
-            }
-            resultSet.goToFirstRow();
-            do {
-                const category = resultSet.getString(resultSet.getColumnIndex(Constants.COL_CATEGORY));
-                if (category && category.trim() !== '' && !categories.includes(category)) {
-                    categories.push(category);
-                }
-            } while (resultSet.goToNextRow());
-            resultSet.close();
-            return categories;
-        });
-    }
-    /**
-     * è§£ææŸ¥è¯¢ç»“æœé›†ï¼ˆæå–å…¬å…±é€»è¾‘ï¼‰
-     * @param resultSet æŸ¥è¯¢ç»“æœé›†
-     * @returns PhotoModel[] å›¾ç‰‡åˆ—è¡¨
-     */
-    parseResultSet(resultSet) {
-        let count = resultSet.rowCount;
-        console.info(`[PhotoService] æŸ¥è¯¢åˆ° ${count} æ¡è®°å½•`);
-        let result = [];
-        if (count === 0) {
-            resultSet.close();
-            return result;
-        }
-        resultSet.goToFirstRow();
-        do {
-            const id = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_ID));
-            const name = resultSet.getString(resultSet.getColumnIndex(Constants.COL_NAME));
-            const path = resultSet.getString(resultSet.getColumnIndex(Constants.COL_PATH));
-            const category = resultSet.getString(resultSet.getColumnIndex(Constants.COL_CATEGORY));
-            const createTime = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_CREATE_TIME));
-            const tags = resultSet.getString(resultSet.getColumnIndex(Constants.COL_TAGS));
-            result.push(new PhotoModel(id, name, path, category, createTime, tags));
-        } while (resultSet.goToNextRow());
-        resultSet.close();
-        return result;
-    }
-}
-// å¯¼å‡ºå•ä¾‹å¯¹è±¡ï¼Œæ–¹ä¾¿å¤–éƒ¨ç›´æ¥è°ƒç”¨
-export default new PhotoService();
-//# sourceMappingURL=PhotoService.js.mapÂ“Ùw hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.data.relationalStore.d.tsÙR/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/model/PhotoModel.etsÙ\/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/common/constants/Constants.etsÙV/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/service/PhotoService.etsÔrBœªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo¯hostModulesInfo°belongModulePath§checker¬shouldEmitJs¥entryÃÂÙ0/Users/lichen18/Documents/Openharmony/kyhm/entryÙ*/Users/lichen18/Documents/Openharmony/kyhm¥entry¥1.0.0Ô  ’ÔrC’²hostDependencyName®hostModuleName·../service/PhotoService¥entryC·../service/PhotoService¥entryÙ0/Users/lichen18/Documents/Openharmony/kyhm/entryÔrDÜ ®¬getNodeCount²getIdentifierCount®getSymbolCount¬getTypeCountµgetInstantiationCountµgetRelationCacheSizes±isUndefinedSymbol±isArgumentsSymbol¯isUnknownSymbol¯getMergedSymbol®getDiagnostics´getGlobalDiagnostics´getRecursionIdentity¶getUnmatchedProperties¹getTypeOfSymbolAtLocation¯getTypeOfSymbolÙ(getSymbolsOfParameterPropertyDeclaration·getDeclaredTypeOfSymbol³getPropertiesOfType±getPropertyOfTypeÙ"getPrivateIdentifierPropertyOfType·getTypeOfPropertyOfType²getIndexInfoOfType³getIndexInfosOfTypeºgetIndexInfosOfIndexSymbol³getSignaturesOfType²getIndexTypeOfType¬getIndexType¬getBaseTypes¸getBaseTypeOfLiteralType®getWidenedType³getTypeFromTypeNode°getParameterTypeÙ$getParameterIdentifierNameAtPosition¸getPromisedTypeOfPromise®getAwaitedType¸getReturnTypeOfSignature®isNullableType¯getNullableType²getNonNullableType²getNonOptionalType°getTypeArguments®typeToTypeNodeÙ$indexInfoToIndexSignatureDeclaration¿signatureToSignatureDeclaration²symbolToEntityName²symbolToExpression¬symbolToNodeÙ!symbolToTypeParameterDeclarations¼symbolToParameterDeclarationºtypeParameterToDeclaration±getSymbolsInScope³getSymbolAtLocation·getIndexInfosAtLocationÙ!getShorthandAssignmentValueSymbolÙ#getExportSpecifierLocalTargetSymbol·getExportSymbolOfSymbol±getTypeAtLocationºgetTypeAtLocationForLinterÙ tryGetTypeAtLocationWithoutCheckºgetTypeOfAssignmentPatternÙ*getPropertySymbolOfDestructuringAssignment±signatureToString¬typeToString®symbolToStringµtypePredicateToString®writeSignature©writeType«writeSymbol²writeTypePredicate¼getAugmentedPropertiesOfType®getRootSymbols²getSymbolOfExpando±getContextualTypeÙ(getContextualTypeForObjectLiteralElementÙ#getContextualTypeForArgumentAtIndexÙ getContextualTypeForJsxAttribute²isContextSensitiveÙ!getTypeOfPropertyOfContextualTypeµgetFullyQualifiedNameÙ#tryGetResolvedSignatureWithoutCheck´getResolvedSignatureÙ/getResolvedSignatureForStringLiteralCompletionsÙ$getResolvedSignatureForSignatureHelpµgetExpandedParameters¹hasEffectiveRestParameterºcontainsArgumentsReference°getConstantValueµisValidPropertyAccessÙ#isValidPropertyAccessForCompletions»getSignatureFromDeclarationºisImplementationOfOverload¹getImmediateAliasedSymbol°getAliasedSymbol¯getEmitResolver²getExportsOfModule¿getExportsAndPropertiesOfModuleÙ forEachExportAndPropertyOfModule¯getSymbolWalker±getAmbientModules¹getJsxIntrinsicTagNamesAt³isOptionalParameter»tryGetMemberInModuleExportsÙ(tryGetMemberInModuleExportsAndProperties´tryFindAmbientModuleÙ(tryFindAmbientModuleWithoutAugmentations¯getApparentType¬getUnionType²isTypeAssignableTo³createAnonymousType¯createSignature¬createSymbol¯createIndexInfoªgetAnyType­getStringType­getNumberType±createPromiseType¯createArrayType¹getElementTypeOfArrayType®getBooleanType¬getFalseType«getTrueType«getVoidType°getUndefinedType«getNullType¯getESSymbolType¬getNeverType¯getOptionalType®getPromiseType²getPromiseLikeType´getAsyncIterableType²isSymbolAccessible«isArrayType«isTupleType¯isArrayLikeTypeÙ#isTypeInvalidDueToUnionDiscriminantºgetExactOptionalProperties¿getAllPossiblePropertiesOfTypesÙ(getSuggestedSymbolForNonexistentPropertyÙ#getSuggestionForNonexistentPropertyÙ,getSuggestedSymbolForNonexistentJSXAttributeÙ&getSuggestedSymbolForNonexistentSymbolÙ!getSuggestionForNonexistentSymbolÙ&getSuggestedSymbolForNonexistentModuleÙ!getSuggestionForNonexistentExportÙ+getSuggestedSymbolForNonexistentClassMember·getBaseConstraintOfType»getDefaultFromTypeParameter«resolveName¯getJsxNamespaceµgetJsxFragmentFactory¸getAccessibleSymbolChain»getTypePredicateOfSignature¹resolveExternalModuleName»resolveExternalModuleSymbol°tryGetThisTypeAt¹getTypeArgumentConstraint¸getSuggestionDiagnostics¸runWithCancellationTokenÙ3getLocalTypeParametersOfClassOrInterfaceOrTypeAlias´isDeclarationVisible´isPropertyAccessible»getTypeOnlyAliasDeclaration¿getMemberOverrideModifierStatusÙ!isTypeParameterPossiblyReferenced²getConstEnumRelate´clearConstEnumRelateµdeleteConstEnumRelateÙ$getTypeArgumentsForResolvedSignatureµgetCheckedSourceFilesÙ"collectHaveTsNoCheckFilesForLinter·clearQualifiedNameCache®isStaticRecord²isStaticSourceFileÔ  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  ÃÃÚ'dimport relationalStore from '@ohos.data.relationalStore';
-import { PhotoModel } from '../model/PhotoModel';
-import Constants from '../common/constants/Constants';
-import common from '@ohos.app.ability.common';
-
-class PhotoService {
-  // æ•°æ®åº“æ“ä½œå®ä¾‹
-  private rdbStore: relationalStore.RdbStore | null = null;
-
-  /**
-   * åˆå§‹åŒ–æ•°æ®åº“
-   * @param context åº”ç”¨ä¸Šä¸‹æ–‡
-   */
-  initDB(context: common.UIAbilityContext): Promise<void> {
-    const config: relationalStore.StoreConfig = {
-      name: Constants.RDB_NAME,
-      securityLevel: relationalStore.SecurityLevel.S1
-    };
-
-    return new Promise((resolve, reject) => {
-      relationalStore.getRdbStore(context, config, (err, store) => {
-        if (err) {
-          console.error(`[PhotoService] è·å–æ•°æ®åº“å¤±è´¥: ${err.code}, ${err.message}`);
-          reject(err);
-          return;
-        }
-
-        this.rdbStore = store;
-        // å¦‚æœè¡¨ä¸å­˜åœ¨ï¼Œåˆ™åˆ›å»ºè¡¨
-        if (this.rdbStore) {
-          this.rdbStore.executeSql(Constants.CREATE_TABLE_SQL);
-          console.info('[PhotoService] æ•°æ®åº“åˆå§‹åŒ–æˆåŠŸï¼Œè¡¨å·²å°±ç»ª');
-        }
-        resolve();
-      });
-    });
-  }
-
-  /**
-   * æ’å…¥ä¸€å¼ å›¾ç‰‡æ•°æ®
-   * @param photo å›¾ç‰‡å¯¹è±¡ (idå¯ä¼ 0ï¼Œå› ä¸ºæ˜¯è‡ªå¢çš„)
-   * @returns Promise<number> è¿”å›æ’å…¥è¡Œçš„ rowId
-   */
-  insert(photo: PhotoModel): Promise<number> {
-    if (!this.rdbStore) {
-      console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-      return Promise.reject('DB not initialized');
-    }
-
-    const valueBucket: relationalStore.ValuesBucket = {};
-
-    valueBucket[Constants.COL_NAME] = photo.name;
-    valueBucket[Constants.COL_PATH] = photo.path;
-    valueBucket[Constants.COL_CATEGORY] = photo.category;
-    valueBucket[Constants.COL_CREATE_TIME] = photo.createTime;
-    valueBucket[Constants.COL_TAGS] = photo.tags;
-
-    return this.rdbStore.insert(Constants.PHOTO_TABLE_NAME, valueBucket);
-  }
-
-  /**
-   * æŸ¥è¯¢æ‰€æœ‰å›¾ç‰‡
-   * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-   */
-  queryAll(): Promise<PhotoModel[]> {
-    if (!this.rdbStore) {
-      return Promise.reject('DB not initialized');
-    }
-
-    // æ„å»ºæŸ¥è¯¢æ¡ä»¶ (è¿™é‡ŒæŸ¥è¯¢æ‰€æœ‰)
-    let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-    // æŒ‰åˆ›å»ºæ—¶é—´å€’åºæ’åˆ— (æœ€æ–°çš„åœ¨æœ€å‰)
-    predicates.orderByDesc(Constants.COL_CREATE_TIME);
-
-    return this.rdbStore.query(predicates).then((resultSet) => {
-      let count = resultSet.rowCount;
-      console.info(`[PhotoService] æŸ¥è¯¢åˆ° ${count} æ¡è®°å½•`);
-
-      let result: PhotoModel[] = [];
-      if (count === 0) {
-        resultSet.close();
-        return result;
-      }
-
-      resultSet.goToFirstRow();
-      do {
-        // ä»ç»“æœé›†ä¸­æå–æ•°æ®
-        const id = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_ID));
-        const name = resultSet.getString(resultSet.getColumnIndex(Constants.COL_NAME));
-        const path = resultSet.getString(resultSet.getColumnIndex(Constants.COL_PATH));
-        const category = resultSet.getString(resultSet.getColumnIndex(Constants.COL_CATEGORY));
-        const createTime = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_CREATE_TIME));
-        const tags = resultSet.getString(resultSet.getColumnIndex(Constants.COL_TAGS));
-
-        result.push(new PhotoModel(id, name, path, category, createTime, tags));
-      } while (resultSet.goToNextRow());
-
-      resultSet.close();
-      return result;
-    });
-  }
-
-  // ==========================================
-  // æ–°å¢ï¼šæœç´¢å’Œåˆ†ç±»åŠŸèƒ½
-  // ==========================================
-
-  /**
-   * æ ¹æ®åˆ†ç±»æŸ¥è¯¢å›¾ç‰‡
-   * @param category åˆ†ç±»åç§°
-   * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-   */
-  queryByCategory(category: string): Promise<PhotoModel[]> {
-    if (!this.rdbStore) {
-      console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-      return Promise.reject('DB not initialized');
-    }
-
-    let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-    predicates.equalTo(Constants.COL_CATEGORY, category);
-    predicates.orderByDesc(Constants.COL_CREATE_TIME);
-
-    return this.rdbStore.query(predicates).then((resultSet) => {
-      return this.parseResultSet(resultSet);
-    });
-  }
-
-  /**
-   * æœç´¢å›¾ç‰‡ï¼ˆæ”¯æŒåç§°ã€åˆ†ç±»å’Œæ ‡ç­¾æœç´¢ï¼‰
-   * @param keyword æœç´¢å…³é”®è¯
-   * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-   */
-  searchPhotos(keyword: string): Promise<PhotoModel[]> {
-    if (!this.rdbStore) {
-      console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-      return Promise.reject('DB not initialized');
-    }
-
-    if (!keyword || keyword.trim() === '') {
-      return this.queryAll();
-    }
-
-    let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-
-    // ==========================================
-    // ğŸ”§ ä¿®å¤ï¼šæœç´¢åç§°ã€åˆ†ç±»æˆ–æ ‡ç­¾åŒ…å«å…³é”®è¯çš„å›¾ç‰‡
-    // ==========================================
-    predicates.like(Constants.COL_NAME, `%${keyword}%`)
-      .or()
-      .like(Constants.COL_CATEGORY, `%${keyword}%`) // ğŸ†• æ·»åŠ åˆ†ç±»æœç´¢
-      .or()
-      .like(Constants.COL_TAGS, `%${keyword}%`);
-
-    predicates.orderByDesc(Constants.COL_CREATE_TIME);
-
-    return this.rdbStore.query(predicates).then((resultSet) => {
-      return this.parseResultSet(resultSet);
-    });
-  }
-
-  /**
-   * ç»„åˆæœç´¢ï¼šæŒ‰åˆ†ç±»å’Œå…³é”®è¯æœç´¢
-   * @param category åˆ†ç±»ï¼ˆä¼  'å…¨éƒ¨' è¡¨ç¤ºä¸é™åˆ†ç±»ï¼‰
-   * @param keyword æœç´¢å…³é”®è¯
-   * @returns Promise<PhotoModel[]> å›¾ç‰‡åˆ—è¡¨
-   */
-  searchPhotosByCategoryAndKeyword(category: string, keyword: string): Promise<PhotoModel[]> {
-    if (!this.rdbStore) {
-      console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-      return Promise.reject('DB not initialized');
-    }
-
-    console.info(`[PhotoService] ğŸ” ç»„åˆæœç´¢ - åˆ†ç±»: "${category}", å…³é”®è¯: "${keyword}"`);
-
-    let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-
-    // ==========================================
-    // ğŸ”§ ä¿®å¤ï¼šåˆ†ç±»å’Œå…³é”®è¯æœç´¢é€»è¾‘
-    // ==========================================
-
-    // æƒ…å†µ1ï¼šåªé€‰æ‹©åˆ†ç±»ï¼Œæ— å…³é”®è¯ â†’ æŒ‰åˆ†ç±»æŸ¥è¯¢
-    if ((category && category !== 'å…¨éƒ¨') && (!keyword || keyword.trim() === '')) {
-      predicates.equalTo(Constants.COL_CATEGORY, category);
-      console.info(`[PhotoService] ğŸ“‚ æŒ‰åˆ†ç±»æŸ¥è¯¢: ${category}`);
-    }
-    // æƒ…å†µ2ï¼šé€‰æ‹©"å…¨éƒ¨"ï¼Œæœ‰å…³é”®è¯ â†’ å…¨å±€æœç´¢
-    else if ((category === 'å…¨éƒ¨' || !category) && keyword && keyword.trim() !== '') {
-      predicates.beginWrap()
-        .like(Constants.COL_NAME, `%${keyword}%`)
-        .or()
-        .like(Constants.COL_CATEGORY, `%${keyword}%`) // ğŸ†• æ·»åŠ åˆ†ç±»æœç´¢
-        .or()
-        .like(Constants.COL_TAGS, `%${keyword}%`)
-        .endWrap();
-      console.info(`[PhotoService] ğŸ” å…¨å±€æœç´¢: ${keyword}`);
-    }
-    // æƒ…å†µ3ï¼šæ—¢æœ‰åˆ†ç±»åˆæœ‰å…³é”®è¯ â†’ å…ˆç­›é€‰åˆ†ç±»ï¼Œå†æœç´¢
-    else if ((category && category !== 'å…¨éƒ¨') && (keyword && keyword.trim() !== '')) {
-      predicates.equalTo(Constants.COL_CATEGORY, category)
-        .and()
-        .beginWrap()
-        .like(Constants.COL_NAME, `%${keyword}%`)
-        .or()
-        .like(Constants.COL_TAGS, `%${keyword}%`)
-        .endWrap();
-      console.info(`[PhotoService] ğŸ”ğŸ“‚ åˆ†ç±»+æœç´¢: ${category} + ${keyword}`);
-    }
-    // æƒ…å†µ4ï¼šéƒ½ä¸ºç©º â†’ æŸ¥è¯¢å…¨éƒ¨
-    else {
-      console.info(`[PhotoService] ğŸ“‹ æŸ¥è¯¢å…¨éƒ¨`);
-    }
-
-    predicates.orderByDesc(Constants.COL_CREATE_TIME);
-
-    return this.rdbStore.query(predicates).then((resultSet) => {
-      const result = this.parseResultSet(resultSet);
-      console.info(`[PhotoService] âœ… æŸ¥è¯¢ç»“æœ: ${result.length} æ¡`);
-      return result;
-    });
-  }
-
-  /**
-   * è·å–æ‰€æœ‰åˆ†ç±»åˆ—è¡¨ï¼ˆå»é‡ï¼‰
-   * @returns Promise<string[]> åˆ†ç±»åˆ—è¡¨
-   */
-  getCategories(): Promise<string[]> {
-    if (!this.rdbStore) {
-      console.error('[PhotoService] æ•°æ®åº“æœªåˆå§‹åŒ–');
-      return Promise.reject('DB not initialized');
-    }
-
-    let predicates = new relationalStore.RdbPredicates(Constants.PHOTO_TABLE_NAME);
-
-    return this.rdbStore.query(predicates, [Constants.COL_CATEGORY]).then((resultSet) => {
-      let categories: string[] = [];
-      let count = resultSet.rowCount;
-
-      if (count === 0) {
-        resultSet.close();
-        return categories;
-      }
-
-      resultSet.goToFirstRow();
-      do {
-        const category = resultSet.getString(resultSet.getColumnIndex(Constants.COL_CATEGORY));
-        if (category && category.trim() !== '' && !categories.includes(category)) {
-          categories.push(category);
-        }
-      } while (resultSet.goToNextRow());
-
-      resultSet.close();
-      return categories;
-    });
-  }
-
-  /**
-   * è§£ææŸ¥è¯¢ç»“æœé›†ï¼ˆæå–å…¬å…±é€»è¾‘ï¼‰
-   * @param resultSet æŸ¥è¯¢ç»“æœé›†
-   * @returns PhotoModel[] å›¾ç‰‡åˆ—è¡¨
-   */
-  private parseResultSet(resultSet: relationalStore.ResultSet): PhotoModel[] {
-    let count = resultSet.rowCount;
-    console.info(`[PhotoService] æŸ¥è¯¢åˆ° ${count} æ¡è®°å½•`);
-
-    let result: PhotoModel[] = [];
-    if (count === 0) {
-      resultSet.close();
-      return result;
-    }
-
-    resultSet.goToFirstRow();
-    do {
-      const id = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_ID));
-      const name = resultSet.getString(resultSet.getColumnIndex(Constants.COL_NAME));
-      const path = resultSet.getString(resultSet.getColumnIndex(Constants.COL_PATH));
-      const category = resultSet.getString(resultSet.getColumnIndex(Constants.COL_CATEGORY));
-      const createTime = resultSet.getDouble(resultSet.getColumnIndex(Constants.COL_CREATE_TIME));
-      const tags = resultSet.getString(resultSet.getColumnIndex(Constants.COL_TAGS));
-
-      result.push(new PhotoModel(id, name, path, category, createTime, tags));
-    } while (resultSet.goToNextRow());
-
-    resultSet.close();
-    return result;
-  }
-}
-// å¯¼å‡ºå•ä¾‹å¯¹è±¡ï¼Œæ–¹ä¾¿å¤–éƒ¨ç›´æ¥è°ƒç”¨
-export default new PhotoService();ÀÔrE“º@ohos.data.relationalStore½../common/constants/Constants³../model/PhotoModelÔrF—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙw hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.data.relationalStore.d.tsÔrG‘¯hostModulesInfo‘Cº@ohos.data.relationalStore¥entryÃªoh-resolveÂFAÂÙ\/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/common/constants/Constants.etsAÃªoh-resolveÂFAÂÙR/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/model/PhotoModel.etsAÃªoh-resolveÂ“ÔrH–§version¤fileªsourceRoot§sources¥names¨mappings¯PhotoService.js ‘°PhotoService.etsÜ õ–”    ”  ”  ”  ”8  8”9  9˜”   ” ”	 	” ” ” ”0 0”1 1–”   ” ” ” ”5 5”6 6“”   ” ” ‘”  ’” ” •” 
-” ” 6” :” ;’” Í ” Í‘” 	‘” ”” ”
- ” 	” )”” ” 
-” ” 0–” ” 
-” ” ” ”$ ˜” ” ” ”* $”+ %”8 2”9 3”; 5’”	 ”
- ›” ” ” ” ” ” ”# ”% !”+ '”- )”/ +Ÿ” ” ” ”' !”( "”/ )”1 +”7 1”9 3”: 4”= 7”? 9”ÌD >”ÌF Ì@”ÌH ÌB”” ” ” ” Ü ” 
-” ” ”! ”" ”= 3”Ì@ 6”ÌA 7”ÌE ;”ÌJ Ì@”ÌM ÌC”ÌN ÌD”ÌU ÌK”ÌW ÌM”ÌX ÌN”ÌY ÌO–” 
-” ” ” ” ”  ’” 
-” ‘” 	—” ” ” ” ”  ”% ”& ’” ” –” ” ” ” ”! ”# œ” 
-” ” ”! ”" ”, "”- #”6 ,”7 -”ÌG =”ÌH >”ÌI ?˜” 
-” ” ”  ”! ”? 5”Ì@ 6”ÌA 7‘”  	”” !” !” !” !”” "” "” "” "	”” #”	 #”
- #” #’” $” $‘” &‘” *”” +”
- +” +	” +—” ,” ,” ,	” ,” ,” ,” ,˜” -” -” -” -” -”2 -,”3 --”4 -.™” .” .” .” .”! .”" .”6 .0”7 .1”8 .2‘”	 /–” 1” 1
-” 1” 16” 18” 19œ” 3” 3” 3” 3” 3”& 3"”' 3#”* 3&”/ 3+”0 3,”4 30”5 31œ” 4” 4” 4” 4” 4”& 4"”' 4#”* 4&”/ 4+”0 4,”4 40”5 41œ” 5” 5” 5” 5” 5”* 5&”+ 5'”. 5*”3 5/”4 50”< 58”= 59œ” 6” 6” 6” 6” 6”- 6)”. 6*”1 6-”6 62”7 63”ÌA 6=”ÌB 6>œ” 7” 7” 7” 7” 7”& 7"”' 7#”* 7&”/ 7+”0 7,”4 70”5 71Ÿ” 9” 9” 9” 9” 9” 9”# 9”$ 9 ”- 9)”. 9*”> 9:”Ì@ 9<”ÌK 9ÌG”ÌL 9ÌH”ÌM 9ÌI’” :” :‘” <‘” ?’” Ì@” Ì@
-—” ÌA” ÌA” ÌA	” ÌA” ÌA” ÌA” ÌA™” ÌB” ÌB” ÌB” ÌB”! ÌB”" ÌB”6 ÌB0”7 ÌB1”8 ÌB2‘”	 ÌC’” ÌE” ÌE” ÌF” ÌF” ÌF” ÌF” ÌF”, ÌF(”- ÌF)”: ÌF6”; ÌF7”ÌD ÌFÌ@”ÌE ÌFÌA”ÌU ÌFÌQ”ÌV ÌFÌR”ÌW ÌFÌS’” ÌG” ÌGš” ÌH” ÌH” ÌH” ÌH” ÌH”( ÌH$”) ÌH%”8 ÌH4”9 ÌH5”: ÌH6Ü ” ÌJ” ÌJ” ÌJ” ÌJ” ÌJ” ÌJ”" ÌJ”# ÌJ”- ÌJ)”. ÌJ*”/ ÌJ+”3 ÌJ/”4 ÌJ0”5 ÌJ1”> ÌJ:”Ì@ ÌJ<”ÌB ÌJ>˜” ÌK” ÌK
-” ÌK” ÌK”! ÌK”" ÌK”* ÌK$”+ ÌK%š” ÌL” ÌL” ÌL” ÌL” ÌL”/ ÌL)”4 ÌL.”: ÌL4”; ÌL5”< ÌL6–” ÌN” ÌN
-” ÌN” ÌN!” ÌN#” ÌN$–” ÌO” ÌO
-” ÌO” ÌO” ÌO” ÌO–” ÌP” ÌP” ÌP” ÌP”! ÌP”" ÌP”” ÌQ” ÌQ” ÌQ” ÌQ‘” ÌR–” ÌT” ÌT” ÌT”" ÌT”$ ÌT”% ÌT’” ÌU” ÌU	’” ÌV” ÌVÜ ” ÌW” ÌW” ÌW” ÌW”$ ÌW”% ÌW”. ÌW&”/ ÌW'”8 ÌW0”9 ÌW1”ÌG ÌW?”ÌH ÌWÌ@”ÌQ ÌWÌI”ÌR ÌWÌJ”ÌX ÌWÌP”ÌY ÌWÌQ”ÌZ ÌWÌR”Ì[ ÌWÌSÜ ” ÌX” ÌX” ÌX” ÌX”& ÌX”' ÌX”0 ÌX(”1 ÌX)”: ÌX2”; ÌX3”ÌI ÌXÌA”ÌJ ÌXÌB”ÌS ÌXÌK”ÌT ÌXÌL”Ì\ ÌXÌT”Ì] ÌXÌU”Ì^ ÌXÌV”Ì_ ÌXÌWÜ ” ÌY” ÌY” ÌY” ÌY”& ÌY”' ÌY”0 ÌY(”1 ÌY)”: ÌY2”; ÌY3”ÌI ÌYÌA”ÌJ ÌYÌB”ÌS ÌYÌK”ÌT ÌYÌL”Ì\ ÌYÌT”Ì] ÌYÌU”Ì^ ÌYÌV”Ì_ ÌYÌWÜ ” ÌZ” ÌZ” ÌZ”! ÌZ”* ÌZ"”+ ÌZ#”4 ÌZ,”5 ÌZ-”> ÌZ6”? ÌZ7”ÌM ÌZÌE”ÌN ÌZÌF”ÌW ÌZÌO”ÌX ÌZÌP”Ìd ÌZÌ\”Ìe ÌZÌ]”Ìf ÌZÌ^”Ìg ÌZÌ_Ü ” Ì[” Ì[”  Ì[”# Ì[”, Ì[$”- Ì[%”6 Ì[.”7 Ì[/”Ì@ Ì[8”ÌA Ì[9”ÌO Ì[ÌG”ÌP Ì[ÌH”ÌY Ì[ÌQ”ÌZ Ì[ÌR”Ìi Ì[Ìa”Ìj Ì[Ìb”Ìk Ì[Ìc”Ìl Ì[ÌdÜ ” Ì\” Ì\” Ì\” Ì\”& Ì\”' Ì\”0 Ì\(”1 Ì\)”: Ì\2”; Ì\3”ÌI Ì\ÌA”ÌJ Ì\ÌB”ÌS Ì\ÌK”ÌT Ì\ÌL”Ì\ Ì\ÌT”Ì] Ì\ÌU”Ì^ Ì\ÌV”Ì_ Ì\ÌWÜ ” Ì^” Ì^” Ì^” Ì^” Ì^”  Ì^”* Ì^"”+ Ì^#”- Ì^%”/ Ì^'”3 Ì^+”5 Ì^-”9 Ì^1”; Ì^3”ÌC Ì^;”ÌE Ì^=”ÌO Ì^ÌG”ÌQ Ì^ÌI”ÌU Ì^ÌM”ÌV Ì^ÌN”ÌW Ì^ÌO”ÌX Ì^ÌP—” Ì_” Ì_” Ì_” Ì_”* Ì_$”, Ì_&”. Ì_(–” Ìa” Ìa” Ìa” Ìa” Ìa” Ìa”” Ìb” Ìb” Ìb” Ìb”” Ìc”	 Ìc”
- Ìc” Ìc’” Ìd” Ìd’” Ìf”1 Ìf/’” Ìg” Ìg’” Ìh”1 Ìh/‘” Ìj‘” Ìn”” Ìo” Ìo” Ìo” Ìo"—” Ìp” Ìp” Ìp	” Ìp” Ìp” Ìp” Ìp˜” Ìq” Ìq” Ìq” Ìq” Ìq”2 Ìq,”3 Ìq-”4 Ìq.™” Ìr” Ìr” Ìr” Ìr”! Ìr”" Ìr”6 Ìr0”7 Ìr1”8 Ìr2‘”	 Ìs” Ìu” Ìu” Ìu” Ìu” Ìu”, Ìu(”- Ìu)”: Ìu6”; Ìu7”ÌD ÌuÌ@”ÌE ÌuÌA”ÌU ÌuÌQ”ÌV ÌuÌR”ÌW ÌuÌSœ” Ìv” Ìv” Ìv” Ìv” Ìv”$ Ìv ”% Ìv!”1 Ìv-”3 Ìv/”; Ìv7”< Ìv8”= Ìv9š” Ìw” Ìw” Ìw” Ìw” Ìw”( Ìw$”) Ìw%”8 Ìw4”9 Ìw5”: Ìw6Ü ” Ìy” Ìy” Ìy” Ìy” Ìy” Ìy”" Ìy”# Ìy”- Ìy)”. Ìy*”/ Ìy+”3 Ìy/”4 Ìy0”5 Ìy1”> Ìy:”Ì@ Ìy<”ÌB Ìy>™” Ìz” Ìz” Ìz” Ìz”& Ìz ”' Ìz!”0 Ìz*”1 Ìz+”2 Ìz,”” Ì{”	 Ì{”
- Ì{” Ì{’” Ì|” Ì|‘” Ì~‘” Ì‚”” Ìƒ” Ìƒ” Ìƒ” Ìƒ—” Ì„” Ì„” Ì„	” Ì„” Ì„” Ì„” Ì„˜” Ì…” Ì…” Ì…” Ì…” Ì…”2 Ì…,”3 Ì…-”4 Ì….™” Ì†” Ì†” Ì†” Ì†”! Ì†”" Ì†”6 Ì†0”7 Ì†1”8 Ì†2‘”	 Ì‡œ” Ì‰” Ì‰” Ì‰	” Ì‰” Ì‰” Ì‰”  Ì‰”$ Ì‰ ”& Ì‰"”+ Ì‰'”- Ì‰)”/ Ì‰+—” ÌŠ” ÌŠ” ÌŠ” ÌŠ”  ÌŠ”" ÌŠ”# ÌŠ‘”	 Ì‹” Ì” Ì” Ì” Ì” Ì”, Ì(”- Ì)”: Ì6”; Ì7”ÌD ÌÌ@”ÌE ÌÌA”ÌU ÌÌQ”ÌV ÌÌR”ÌW ÌÌS’” Ì”5 Ì1’” Ì”# Ì’” Ì‘”5 Ì‘1” Ì’” Ì’” Ì’” Ì’” Ì’”! Ì’”" Ì’”* Ì’&”, Ì’(”0 Ì’,”7 Ì’3”: Ì’6”; Ì’7“” Ì“” Ì“	” Ì“” Ì”” Ì”” Ì”” Ì”” Ì””( Ì”"”* Ì”$”. Ì”(”5 Ì”/”8 Ì”2”9 Ì”3”: Ì”4”ÌF Ì”Ì@“” Ì•” Ì•	” Ì•œ” Ì–” Ì–” Ì–” Ì–” Ì–”$ Ì–”& Ì– ”* Ì–$”1 Ì–+”4 Ì–.”5 Ì–/”6 Ì–0š” Ì˜” Ì˜” Ì˜” Ì˜” Ì˜”( Ì˜$”) Ì˜%”8 Ì˜4”9 Ì˜5”: Ì˜6Ü ” Ìš” Ìš” Ìš” Ìš” Ìš” Ìš”" Ìš”# Ìš”- Ìš)”. Ìš*”/ Ìš+”3 Ìš/”4 Ìš0”5 Ìš1”> Ìš:”Ì@ Ìš<”ÌB Ìš>™” Ì›” Ì›” Ì›” Ì›”& Ì› ”' Ì›!”0 Ì›*”1 Ì›+”2 Ì›,”” Ìœ”	 Ìœ”
- Ìœ” Ìœ’” Ì” Ì‘” ÌŸ‘” Ì¤–” Ì¥”$ Ì¥"”% Ì¥#”- Ì¥3”/ Ì¥5”6 Ì¥ÌD—” Ì¦” Ì¦” Ì¦	” Ì¦” Ì¦” Ì¦” Ì¦˜” Ì§” Ì§” Ì§” Ì§” Ì§”2 Ì§,”3 Ì§-”4 Ì§.™” Ì¨” Ì¨” Ì¨” Ì¨”! Ì¨”" Ì¨”6 Ì¨0”7 Ì¨1”8 Ì¨2‘”	 Ì©œ” Ì«” Ì«” Ì«” Ì«” Ì«”6 Ì«2”> Ì«:”ÌJ Ì«ÌF”ÌQ Ì«ÌM”ÌT Ì«ÌP”ÌU Ì«ÌQ”ÌV Ì«ÌR” Ì­” Ì­” Ì­” Ì­” Ì­”, Ì­(”- Ì­)”: Ì­6”; Ì­7”ÌD Ì­Ì@”ÌE Ì­ÌA”ÌU Ì­ÌQ”ÌV Ì­ÌR”ÌW Ì­ÌS’” Ì¯”5 Ì¯1’” Ì°” Ì°’” Ì±”5 Ì±1’” Ì³”! Ì³Ü ” Ì´” Ì´” Ì´	” Ì´” Ì´”! Ì´”& Ì´"”* Ì´&”+ Ì´'”/ Ì´+”0 Ì´,”1 Ì´-”8 Ì´4”< Ì´8”ÌC Ì´?”ÌD Ì´Ì@”ÌH Ì´ÌD”ÌJ Ì´ÌF”ÌO Ì´ÌK”ÌQ Ì´ÌM”ÌR Ì´ÌN”ÌT Ì´ÌPœ” Ìµ” Ìµ” Ìµ” Ìµ” Ìµ”( Ìµ"”) Ìµ#”5 Ìµ/”7 Ìµ1”? Ìµ9”Ì@ Ìµ:”ÌA Ìµ;š” Ì¶” Ì¶” Ì¶” Ì¶” Ì¶”5 Ì¶/”= Ì¶7”? Ì¶9”Ì@ Ì¶:”ÌA Ì¶;‘”	 Ì·’” Ì¸”! Ì¸Ü ” Ì¹	” Ì¹” Ì¹” Ì¹” Ì¹”# Ì¹”' Ì¹#”( Ì¹$”0 Ì¹,”1 Ì¹-”5 Ì¹1”< Ì¹8”Ì@ Ì¹<”ÌG Ì¹ÌC”ÌH Ì¹ÌD”ÌL Ì¹ÌH”ÌN Ì¹ÌJ”ÌS Ì¹ÌO”ÌU Ì¹ÌQ”ÌW Ì¹ÌS•” Ìº” Ìº” Ìº”  Ìº”" Ìº›” Ì»	” Ì»” Ì»” Ì»”  Ì»”( Ì» ”* Ì»"”. Ì»&”5 Ì»-”8 Ì»0”9 Ì»1“” Ì¼	” Ì¼” Ì¼” Ì½	” Ì½” Ì½” Ì½”  Ì½”, Ì½$”. Ì½&”2 Ì½*”9 Ì½1”< Ì½4”= Ì½5”> Ì½6”ÌJ Ì½ÌB“” Ì¾	” Ì¾” Ì¾›” Ì¿	” Ì¿” Ì¿” Ì¿”  Ì¿”( Ì¿ ”* Ì¿"”. Ì¿&”5 Ì¿-”8 Ì¿0”9 Ì¿1”” ÌÀ	” ÌÀ” ÌÀ” ÌÀš” ÌÁ” ÌÁ” ÌÁ” ÌÁ” ÌÁ”4 ÌÁ.”; ÌÁ5”= ÌÁ7”> ÌÁ8”? ÌÁ9‘”	 ÌÂ’” ÌÃ”$ ÌÃ Ü ” ÌÄ	” ÌÄ” ÌÄ” ÌÄ” ÌÄ”& ÌÄ"”+ ÌÄ'”/ ÌÄ+”0 ÌÄ,”4 ÌÄ0”5 ÌÄ1”< ÌÄ8”Ì@ ÌÄ<”ÌG ÌÄÌC”ÌH ÌÄÌD”ÌL ÌÄÌH”ÌN ÌÄÌJ”ÌS ÌÄÌO”ÌU ÌÄÌQ”ÌV ÌÄÌR”ÌX ÌÄÌT›” ÌÅ” ÌÅ” ÌÅ” ÌÅ” ÌÅ”( ÌÅ"”) ÌÅ#”5 ÌÅ/”7 ÌÅ1”? ÌÅ9”Ì@ ÌÅ:“” ÌÆ	” ÌÆ” ÌÆ“” ÌÇ	” ÌÇ” ÌÇ›” ÌÈ	” ÌÈ” ÌÈ” ÌÈ”  ÌÈ”( ÌÈ ”* ÌÈ"”. ÌÈ&”5 ÌÈ-”8 ÌÈ0”9 ÌÈ1“” ÌÉ	” ÌÉ” ÌÉ›” ÌÊ	” ÌÊ” ÌÊ” ÌÊ”  ÌÊ”( ÌÊ ”* ÌÊ"”. ÌÊ&”5 ÌÊ-”8 ÌÊ0”9 ÌÊ1”” ÌË	” ÌË” ÌË” ÌËœ” ÌÌ” ÌÌ” ÌÌ” ÌÌ” ÌÌ”7 ÌÌ1”? ÌÌ9”ÌE ÌÌ?”ÌL ÌÌÌF”ÌN ÌÌÌH”ÌO ÌÌÌI”ÌP ÌÌÌJ‘”	 ÌÍ’” ÌÎ” ÌÎ‘” ÌÏ	˜” ÌĞ” ÌĞ” ÌĞ” ÌĞ” ÌĞ”1 ÌĞ+”2 ÌĞ,”3 ÌĞ-‘”	 ÌÑš” ÌÓ” ÌÓ” ÌÓ” ÌÓ” ÌÓ”( ÌÓ$”) ÌÓ%”8 ÌÓ4”9 ÌÓ5”: ÌÓ6Ü ” ÌÕ” ÌÕ” ÌÕ” ÌÕ” ÌÕ” ÌÕ”" ÌÕ”# ÌÕ”- ÌÕ)”. ÌÕ*”/ ÌÕ+”3 ÌÕ/”4 ÌÕ0”5 ÌÕ1”> ÌÕ:”Ì@ ÌÕ<”ÌB ÌÕ>›” ÌÖ” ÌÖ” ÌÖ” ÌÖ” ÌÖ”  ÌÖ”. ÌÖ(”/ ÌÖ)”8 ÌÖ2”9 ÌÖ3”: ÌÖ4œ” Ì×” Ì×” Ì×” Ì×” Ì×”3 Ì×-”9 Ì×3”: Ì×4”Ì@ Ì×:”ÌD Ì×>”ÌE Ì×?”ÌF Ì×Ì@”” ÌØ” ÌØ” ÌØ” ÌØ”” ÌÙ”	 ÌÙ”
- ÌÙ” ÌÙ’” ÌÚ” ÌÚ‘” ÌÜ‘” Ìß’” Ìà” Ìà—” Ìá” Ìá” Ìá	” Ìá” Ìá” Ìá” Ìá˜” Ìâ” Ìâ” Ìâ” Ìâ” Ìâ”2 Ìâ,”3 Ìâ-”4 Ìâ.™” Ìã” Ìã” Ìã” Ìã”! Ìã”" Ìã”6 Ìã0”7 Ìã1”8 Ìã2‘”	 Ìä” Ìæ” Ìæ” Ìæ” Ìæ” Ìæ”, Ìæ(”- Ìæ)”: Ìæ6”; Ìæ7”ÌD ÌæÌ@”ÌE ÌæÌA”ÌU ÌæÌQ”ÌV ÌæÌR”ÌW ÌæÌSÜ ” Ìè” Ìè” Ìè” Ìè” Ìè” Ìè”" Ìè”# Ìè”- Ìè)”/ Ìè+”0 Ìè,”9 Ìè5”: Ìè6”ÌF ÌèÌB”ÌG ÌèÌC”ÌH ÌèÌD”ÌI ÌèÌE”ÌM ÌèÌI”ÌN ÌèÌJ”ÌO ÌèÌK”ÌX ÌèÌT”ÌZ ÌèÌV”Ì\ ÌèÌX–” Ìé” Ìé
-” Ìé” Ìé!” Ìé#”  Ìé$˜” Ìê” Ìê
-” Ìê” Ìê”! Ìê”" Ìê”* Ìê$”+ Ìê%–” Ìì” Ìì
-” Ìì” Ìì” Ìì” Ìì–” Ìí” Ìí” Ìí” Ìí”! Ìí”" Ìí”” Ìî” Ìî”! Ìî”" Ìî‘” Ìï–” Ìñ” Ìñ” Ìñ”" Ìñ”$ Ìñ”% Ìñ’” Ìò” Ìò	Ü ” Ìó” Ìó” Ìó”! Ìó”* Ìó"”+ Ìó#”4 Ìó,”5 Ìó-”> Ìó6”? Ìó7”ÌM ÌóÌE”ÌN ÌóÌF”ÌW ÌóÌO”ÌX ÌóÌP”Ìd ÌóÌ\”Ìe ÌóÌ]”Ìf ÌóÌ^”Ìg ÌóÌ_Ü ” Ìô” Ìô” Ìô”  Ìô”( Ìô ”) Ìô!”- Ìô%”/ Ìô'”4 Ìô,”6 Ìô.”: Ìô2”; Ìô3”ÌE Ìô=”ÌF Ìô>”ÌN ÌôÌF”ÌO ÌôÌG”ÌW ÌôÌO”ÌX ÌôÌP”ÌZ ÌôÌR˜” Ìõ
-” Ìõ” Ìõ”# Ìõ”$ Ìõ”, Ìõ"”- Ìõ#”. Ìõ$‘” Ìö	—” Ì÷” Ì÷” Ì÷” Ì÷”* Ì÷$”, Ì÷&”. Ì÷(–” Ìù” Ìù” Ìù” Ìù” Ìù” Ìù”” Ìú” Ìú” Ìú” Ìú”” Ìû”	 Ìû”
- Ìû” Ìû’” Ìü” Ìü‘” Ìş‘” Í”” Í
-” Í” Í” Í=˜” Í” Í” Í” Í” Í” Í”& Í"”' Í#š” Í” Í” Í” Í” Í”+ Í'”0 Í,”6 Í2”7 Í3”8 Í4–” Í” Í” Í” Í” Í!” Í"–” Í” Í” Í” Í” Í” Í–” Í	” Í	” Í	” Í	” Í	” Í	”” Í
-” Í
-” Í
-” Í
-‘”	 Í–” Í” Í” Í” Í”  Í”! Í’” Í” ÍÜ ” Í” Í” Í” Í”  Í”! Í”* Í$”+ Í%”4 Í.”5 Í/”ÌC Í=”ÌD Í>”ÌM ÍÌG”ÌN ÍÌH”ÌT ÍÌN”ÌU ÍÌO”ÌV ÍÌP”ÌW ÍÌQÜ ” Í” Í” Í” Í”" Í”# Í”, Í&”- Í'”6 Í0”7 Í1”ÌE Í?”ÌF ÍÌ@”ÌO ÍÌI”ÌP ÍÌJ”ÌX ÍÌR”ÌY ÍÌS”ÌZ ÍÌT”Ì[ ÍÌUÜ ” Í” Í” Í” Í”" Í”# Í”, Í&”- Í'”6 Í0”7 Í1”ÌE Í?”ÌF ÍÌ@”ÌO ÍÌI”ÌP ÍÌJ”ÌX ÍÌR”ÌY ÍÌS”ÌZ ÍÌT”Ì[ ÍÌUÜ ” Í” Í” Í” Í”& Í ”' Í!”0 Í*”1 Í+”: Í4”; Í5”ÌI ÍÌC”ÌJ ÍÌD”ÌS ÍÌM”ÌT ÍÌN”Ì` ÍÌZ”Ìa ÍÌ[”Ìb ÍÌ\”Ìc ÍÌ]Ü ” Í” Í” Í” Í”( Í"”) Í#”2 Í,”3 Í-”< Í6”= Í7”ÌK ÍÌE”ÌL ÍÌF”ÌU ÍÌO”ÌV ÍÌP”Ìe ÍÌ_”Ìf ÍÌ`”Ìg ÍÌa”Ìh ÍÌbÜ ” Í” Í” Í” Í”" Í”# Í”, Í&”- Í'”6 Í0”7 Í1”ÌE Í?”ÌF ÍÌ@”ÌO ÍÌI”ÌP ÍÌJ”ÌX ÍÌR”ÌY ÍÌS”ÌZ ÍÌT”Ì[ ÍÌUÜ ” Í” Í” Í” Í” Í” Í”& Í ”' Í!”) Í#”+ Í%”/ Í)”1 Í+”5 Í/”7 Í1”? Í9”ÌA Í;”ÌK ÍÌE”ÌM ÍÌG”ÌQ ÍÌK”ÌR ÍÌL”ÌS ÍÌM”ÌT ÍÌN—”	 Í” Í” Í” Í”& Í"”( Í$”* Í&–” Í” Í” Í” Í” Í” Í”” Í” Í” Í” Í’” Í” Í‘” Í’”  Í ” Í–”  Í ” Í” Í” Í”! Í!”" Í"ÔrI–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ ö‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
- ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ÔrJ’§missing¦pluginÃ¦genAbcÂÔ  ÔrK”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache“ÔrL•¤type¥start£endªspecifiers¦source±ImportDeclaration 9‘ÔrM”¤type¥start£end¥local¶ImportDefaultSpecifierÔrN”¤type¥start£end¤nameªIdentifier¯relationalStoreÔrO•¤type¥start£end¥value£raw§Literal8º@ohos.data.relationalStore¼'@ohos.data.relationalStore'L±ImportDeclaration;Ìl‘ÔrP•¤type¥start£end¨imported¥local¯ImportSpecifierÌDÌNNªIdentifierÌDÌNªPhotoModelNªIdentifierÌDÌNªPhotoModelO§LiteralÌVÌk³../model/PhotoModelµ'../model/PhotoModel'L±ImportDeclarationÌnÌ¤‘M¶ImportDefaultSpecifierÌuÌ~NªIdentifierÌuÌ~©ConstantsO§LiteralÌ„Ì£½../common/constants/Constants¿'../common/constants/Constants'
