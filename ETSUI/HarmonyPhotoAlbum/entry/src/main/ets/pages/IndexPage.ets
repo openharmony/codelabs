@@ -101,7 +101,7 @@ struct IndexPage {
   @State currentIndex: number = 0;
   @State tempSelectedPath: string = '';
   @State dbPhotoList: Array<PhotoModel> = [];
-
+  @StorageLink('selectedIndex') selectedIndex: number = 0;
   // ==========================================
   // 🆕 Tab导航相关状态
   // ==========================================
@@ -137,12 +137,13 @@ struct IndexPage {
     autoCancel: false,
     customStyle: true
   });
-
   pickerDialogController: CustomDialogController = new CustomDialogController({
     builder: ImagePicker({
       onImageSelected: (path: string) => {
         this.tempSelectedPath = path;
-        setTimeout(() => { this.infoDialogController.open(); }, 100);
+        setTimeout(() => {
+          this.infoDialogController.open();
+        }, 100);
       }
     }),
     alignment: DialogAlignment.Bottom,
@@ -159,7 +160,10 @@ struct IndexPage {
       AlertDialog.show({
         title: '保存成功',
         message: '图片已安全存入数据库!',
-        confirm: { value: '棒', action: () => {} }
+        confirm: {
+          value: '棒', action: () => {
+          }
+        }
       });
     }).catch((err: Error) => {
       console.error('[IndexPage] 保存失败: ' + JSON.stringify(err));
@@ -193,7 +197,8 @@ struct IndexPage {
             .width(Constants.FULL_PERCENT).aspectRatio(Constants.BANNER_ASPECT_RATIO)
           }, (item: Resource, index?: number) => JSON.stringify(item) + index)
         }
-        .autoPlay(true).loop(true)
+        .autoPlay(true)
+        .loop(true)
         .margin($r('app.float.grid_padding'))
         .borderRadius($r('app.float.img_border_radius'))
         .clip(true)
@@ -221,33 +226,13 @@ struct IndexPage {
           .justifyContent(FlexAlign.Center)
         } else {
           Grid() {
-            ForEach(this.dbPhotoList, (item: PhotoModel) => {
+            ForEach(this.dbPhotoList, (photo: PhotoModel, index: number) => {
               GridItem() {
-                Column() {
-                  LazyImage({
-                    src: 'file://' + item.path,
-                    widthValue: '100%',
-                    heightValue: 100,
-                    objectFit: ImageFit.Cover,
-                    cornerRadius: 8,
-                    placeholder: Constants.PLACEHOLDER_IMAGE,
-                    errorHolder: Constants.ERROR_IMAGE
-                  })
-
-                  Text(item.name)
-                    .fontSize(14)
-                    .maxLines(1)
-                    .textOverflow({ overflow: TextOverflow.Ellipsis })
-                    .margin({ top: 5 })
-                }
-                .padding(5)
-                .backgroundColor('#F5F5F5')
-                .borderRadius(8)
+                this.PhotoItem(photo, index);
               }
-              .onClick(() => {
-                console.info(`点击了图片: ${item.name}`);
-              })
-            }, (item: PhotoModel) => item.id.toString())
+              .width(Constants.FULL_PERCENT)
+              .aspectRatio(1)
+            }, (photo: PhotoModel) => photo.id.toString())
           }
           .columnsTemplate(Constants.INDEX_COLUMNS_TEMPLATE)
           .columnsGap($r('app.float.grid_padding'))
@@ -279,6 +264,54 @@ struct IndexPage {
     }
     .width(Constants.FULL_PERCENT)
     .height(Constants.FULL_PERCENT)
+  }
+
+  @Builder
+  PhotoItem(photo: PhotoModel, index: number) {
+    Stack({ alignContent: Alignment.BottomStart }) {
+      Image('file://' + photo.path)
+        .width('100%')
+        .height('100%')
+        .objectFit(ImageFit.Cover)
+        .alt($r('app.media.app_icon'))
+
+      Column() {
+        Text(photo.name)
+          .fontSize(12)
+          .fontColor(Color.White)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .width('100%')
+          .textAlign(TextAlign.Start)
+
+        if (photo.category) {
+          Text(photo.category)
+            .fontSize(10)
+            .fontColor(Color.White)
+            .padding({
+              left: 6,
+              right: 6,
+              top: 2,
+              bottom: 2
+            })
+            .backgroundColor('rgba(0, 0, 0, 0.5)')
+            .borderRadius(4)
+            .margin({ top: 4 })
+        }
+      }
+      .width('100%')
+      .padding(8)
+      .linearGradient({
+        direction: GradientDirection.Bottom,
+        colors: [[0x00000000, 0.0], [0xAA000000, 1.0]]
+      })
+      .alignItems(HorizontalAlign.Start)
+    }
+    .width('100%')
+    .height('100%')
+    .onClick(() => {
+      this.navigateToDetail(index);
+    })
   }
 
   // ==========================================
@@ -363,4 +396,19 @@ struct IndexPage {
     .justifyContent(FlexAlign.Center)
   }
 
+  private navigateToDetail(index: number) {
+    this.selectedIndex = index;
+    const photoPaths = this.dbPhotoList.map(photo => 'file://' + photo.path); // 🔧 添加 file:// 前缀
+
+    console.info(`[ListPage] 跳转到详情页，索引: ${index}`);
+
+    router.pushUrl({
+      url: Constants.URL_DETAIL_LIST_PAGE,
+      params: {
+        photoArr: photoPaths,
+      }
+    }).catch((err: Error) => {
+      console.error(`${Constants.TAG_LIST_PAGE}${err.message}`);
+    });
+  }
 }

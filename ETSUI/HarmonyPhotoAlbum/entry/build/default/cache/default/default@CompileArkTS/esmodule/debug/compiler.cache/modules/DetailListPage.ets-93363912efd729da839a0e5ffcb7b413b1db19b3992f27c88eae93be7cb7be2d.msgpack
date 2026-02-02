@@ -1,0 +1,547 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚF÷if (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import display from '@ohos.display';
+import router from '@ohos.router';
+import Constants from '../common/constants/Constants';
+import { LazyImage } from '../components/LazyImage';
+var scrollTypeEnum;
+(function (scrollTypeEnum) {
+    scrollTypeEnum["STOP"] = "onScrollStop";
+    scrollTypeEnum["SCROLL"] = "onScroll";
+})(scrollTypeEnum || (scrollTypeEnum = {}));
+;
+class DetailListPage extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.smallScroller = new Scroller();
+        this.bigScroller = new Scroller();
+        this.__deviceWidth = new ObservedPropertySimplePU(Constants.DEFAULT_WIDTH, this, "deviceWidth");
+        this.__smallImgWidth = new ObservedPropertySimplePU((this.deviceWidth - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) /
+            Constants.SHOW_COUNT, this, "smallImgWidth");
+        this.__imageWidth = new ObservedPropertySimplePU(this.deviceWidth + this.smallImgWidth, this, "imageWidth");
+        this.photoArr = router.getParams()[`${Constants.PARAM_PHOTO_ARR_KEY}`];
+        this.smallPhotoArr = new Array().concat(Constants.CACHE_IMG_LIST, router.getParams()[`${Constants.PARAM_PHOTO_ARR_KEY}`], Constants.CACHE_IMG_LIST);
+        this.__selectedIndex = this.createStorageLink('selectedIndex', 0, "selectedIndex");
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.smallScroller !== undefined) {
+            this.smallScroller = params.smallScroller;
+        }
+        if (params.bigScroller !== undefined) {
+            this.bigScroller = params.bigScroller;
+        }
+        if (params.deviceWidth !== undefined) {
+            this.deviceWidth = params.deviceWidth;
+        }
+        if (params.smallImgWidth !== undefined) {
+            this.smallImgWidth = params.smallImgWidth;
+        }
+        if (params.imageWidth !== undefined) {
+            this.imageWidth = params.imageWidth;
+        }
+        if (params.photoArr !== undefined) {
+            this.photoArr = params.photoArr;
+        }
+        if (params.smallPhotoArr !== undefined) {
+            this.smallPhotoArr = params.smallPhotoArr;
+        }
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__deviceWidth.purgeDependencyOnElmtId(rmElmtId);
+        this.__smallImgWidth.purgeDependencyOnElmtId(rmElmtId);
+        this.__imageWidth.purgeDependencyOnElmtId(rmElmtId);
+        this.__selectedIndex.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__deviceWidth.aboutToBeDeleted();
+        this.__smallImgWidth.aboutToBeDeleted();
+        this.__imageWidth.aboutToBeDeleted();
+        this.__selectedIndex.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get deviceWidth() {
+        return this.__deviceWidth.get();
+    }
+    set deviceWidth(newValue) {
+        this.__deviceWidth.set(newValue);
+    }
+    get smallImgWidth() {
+        return this.__smallImgWidth.get();
+    }
+    set smallImgWidth(newValue) {
+        this.__smallImgWidth.set(newValue);
+    }
+    get imageWidth() {
+        return this.__imageWidth.get();
+    }
+    set imageWidth(newValue) {
+        this.__imageWidth.set(newValue);
+    }
+    get selectedIndex() {
+        return this.__selectedIndex.get();
+    }
+    set selectedIndex(newValue) {
+        this.__selectedIndex.set(newValue);
+    }
+    SmallImgItemBuilder(img, index, parent = null) {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            if (index && index > (Constants.CACHE_IMG_SIZE - 1) && index < (this.smallPhotoArr.length - Constants.CACHE_IMG_SIZE)) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        __Common__.create();
+                        __Common__.onClick(() => this.smallImgClickAction(index));
+                    }, __Common__);
+                    {
+                        this.observeComponentCreation2((elmtId, isInitialRender) => {
+                            if (isInitialRender) {
+                                let componentCall = new LazyImage(this, {
+                                    src: img,
+                                    widthValue: '100%',
+                                    heightValue: '100%',
+                                    objectFit: ImageFit.Cover,
+                                    placeholder: Constants.PLACEHOLDER_IMAGE,
+                                    errorHolder: Constants.ERROR_IMAGE,
+                                    cornerRadius: { "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
+                                }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/DetailListPage.ets", line: 43, col: 7 });
+                                ViewPU.create(componentCall);
+                                let paramsLambda = () => {
+                                    return {
+                                        src: img,
+                                        widthValue: '100%',
+                                        heightValue: '100%',
+                                        objectFit: ImageFit.Cover,
+                                        placeholder: Constants.PLACEHOLDER_IMAGE,
+                                        errorHolder: Constants.ERROR_IMAGE,
+                                        cornerRadius: { "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
+                                    };
+                                };
+                                componentCall.paramsGenerator_ = paramsLambda;
+                            }
+                            else {
+                                this.updateStateVarsOfChildByElmtId(elmtId, {});
+                            }
+                        }, { name: "LazyImage" });
+                    }
+                    __Common__.pop();
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+    }
+    aboutToAppear() {
+        let displayClass = display.getDefaultDisplaySync();
+        let width = displayClass?.width / displayClass.densityPixels ?? Constants.DEFAULT_WIDTH;
+        this.deviceWidth = width;
+        this.smallImgWidth = (width - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) / Constants.SHOW_COUNT;
+        this.imageWidth = this.deviceWidth + this.smallImgWidth;
+    }
+    onPageShow() {
+        this.smallScroller.scrollToIndex(this.selectedIndex);
+        this.bigScroller.scrollToIndex(this.selectedIndex);
+    }
+    goDetailPage() {
+        router.pushUrl({
+            url: Constants.URL_DETAIL_PAGE,
+            params: { photoArr: this.photoArr }
+        });
+    }
+    smallImgClickAction(index) {
+        this.selectedIndex = index - Constants.CACHE_IMG_SIZE;
+        this.smallScroller.scrollToIndex(this.selectedIndex);
+        this.bigScroller.scrollToIndex(this.selectedIndex);
+    }
+    smallScrollAction(type) {
+        this.selectedIndex = Math.round((this.smallScroller.currentOffset().xOffset +
+            this.smallImgWidth / Constants.DOUBLE_NUMBER) / (this.smallImgWidth + Constants.LIST_ITEM_SPACE));
+        if (type === scrollTypeEnum.SCROLL) {
+            this.bigScroller.scrollTo({ xOffset: this.selectedIndex * this.imageWidth, yOffset: 0 });
+        }
+        else {
+            this.smallScroller.scrollTo({ xOffset: this.selectedIndex * this.smallImgWidth, yOffset: 0 });
+        }
+    }
+    bigScrollAction(type) {
+        let smallWidth = this.smallImgWidth + Constants.LIST_ITEM_SPACE;
+        this.selectedIndex = Math.round((this.bigScroller.currentOffset().xOffset +
+            smallWidth / Constants.DOUBLE_NUMBER) / this.imageWidth);
+        if (type === scrollTypeEnum.SCROLL) {
+            this.smallScroller.scrollTo({ xOffset: this.selectedIndex * smallWidth, yOffset: 0 });
+        }
+        else {
+            this.bigScroller.scrollTo({ xOffset: this.selectedIndex * this.imageWidth, yOffset: 0 });
+        }
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Navigation.create(new NavPathStack(), { moduleName: "entry", pagePath: "entry/src/main/ets/pages/DetailListPage", isUserCreateStack: false });
+            Navigation.title(Constants.PAGE_TITLE);
+            Navigation.hideBackButton(false);
+            Navigation.titleMode(NavigationTitleMode.Mini);
+        }, Navigation);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Stack.create({ alignContent: Alignment.Bottom });
+            Stack.width(this.imageWidth);
+            Stack.height(Constants.FULL_PERCENT);
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            List.create({ scroller: this.bigScroller, initialIndex: this.selectedIndex });
+            List.onScroll((scrollOffset, scrollState) => {
+                if (scrollState === ScrollState.Fling) {
+                    this.bigScrollAction(scrollTypeEnum.SCROLL);
+                }
+            });
+            List.onScrollStop(() => this.bigScrollAction(scrollTypeEnum.STOP));
+            List.width(Constants.FULL_PERCENT);
+            List.height(Constants.FULL_PERCENT);
+            List.padding({ bottom: this.smallImgWidth * Constants.DOUBLE_NUMBER });
+            List.listDirection(Axis.Horizontal);
+        }, List);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            ForEach.create();
+            const forEachItemGenFunction = _item => {
+                const img = _item;
+                {
+                    const itemCreation = (elmtId, isInitialRender) => {
+                        ViewStackProcessor.StartGetAccessRecordingFor(elmtId);
+                        ListItem.create(deepRenderFunction, true);
+                        if (!isInitialRender) {
+                            ListItem.pop();
+                        }
+                        ViewStackProcessor.StopGetAccessRecording();
+                    };
+                    const itemCreation2 = (elmtId, isInitialRender) => {
+                        ListItem.create(deepRenderFunction, true);
+                        ListItem.padding({
+                            left: this.smallImgWidth / Constants.DOUBLE_NUMBER,
+                            right: this.smallImgWidth / Constants.DOUBLE_NUMBER
+                        });
+                        ListItem.width(this.imageWidth);
+                    };
+                    const deepRenderFunction = (elmtId, isInitialRender) => {
+                        itemCreation(elmtId, isInitialRender);
+                        this.observeComponentCreation2((elmtId, isInitialRender) => {
+                            __Common__.create();
+                            Gesture.create(GesturePriority.Low);
+                            PinchGesture.create({ fingers: Constants.DOUBLE_NUMBER });
+                            PinchGesture.onActionStart(() => this.goDetailPage());
+                            PinchGesture.pop();
+                            Gesture.pop();
+                            __Common__.onClick(() => this.goDetailPage());
+                        }, __Common__);
+                        {
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                if (isInitialRender) {
+                                    let componentCall = new LazyImage(this, {
+                                        src: img,
+                                        widthValue: Constants.FULL_PERCENT,
+                                        heightValue: Constants.FULL_PERCENT,
+                                        objectFit: ImageFit.Contain,
+                                        placeholder: Constants.PLACEHOLDER_IMAGE,
+                                        errorHolder: Constants.ERROR_IMAGE
+                                    }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/DetailListPage.ets", line: 109, col: 15 });
+                                    ViewPU.create(componentCall);
+                                    let paramsLambda = () => {
+                                        return {
+                                            src: img,
+                                            widthValue: Constants.FULL_PERCENT,
+                                            heightValue: Constants.FULL_PERCENT,
+                                            objectFit: ImageFit.Contain,
+                                            placeholder: Constants.PLACEHOLDER_IMAGE,
+                                            errorHolder: Constants.ERROR_IMAGE
+                                        };
+                                    };
+                                    componentCall.paramsGenerator_ = paramsLambda;
+                                }
+                                else {
+                                    this.updateStateVarsOfChildByElmtId(elmtId, {});
+                                }
+                            }, { name: "LazyImage" });
+                        }
+                        __Common__.pop();
+                        ListItem.pop();
+                    };
+                    this.observeComponentCreation2(itemCreation2, ListItem);
+                    ListItem.pop();
+                }
+            };
+            this.forEachUpdateFunction(elmtId, this.photoArr, forEachItemGenFunction, (item) => JSON.stringify(item), false, false);
+        }, ForEach);
+        ForEach.pop();
+        List.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            List.create({
+                scroller: this.smallScroller,
+                space: Constants.LIST_ITEM_SPACE,
+                initialIndex: this.selectedIndex
+            });
+            List.listDirection(Axis.Horizontal);
+            List.onScroll((scrollOffset, scrollState) => {
+                if (scrollState === ScrollState.Fling) {
+                    this.smallScrollAction(scrollTypeEnum.SCROLL);
+                }
+            });
+            List.onScrollStop(() => this.smallScrollAction(scrollTypeEnum.STOP));
+            List.margin({ top: { "id": 16777226, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }, bottom: { "id": 16777226, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" } });
+            List.height(this.smallImgWidth);
+            List.width(Constants.FULL_PERCENT);
+        }, List);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            ForEach.create();
+            const forEachItemGenFunction = (_item, index) => {
+                const img = _item;
+                {
+                    const itemCreation = (elmtId, isInitialRender) => {
+                        ViewStackProcessor.StartGetAccessRecordingFor(elmtId);
+                        ListItem.create(deepRenderFunction, true);
+                        if (!isInitialRender) {
+                            ListItem.pop();
+                        }
+                        ViewStackProcessor.StopGetAccessRecording();
+                    };
+                    const itemCreation2 = (elmtId, isInitialRender) => {
+                        ListItem.create(deepRenderFunction, true);
+                        ListItem.width(this.smallImgWidth);
+                        ListItem.aspectRatio(1);
+                    };
+                    const deepRenderFunction = (elmtId, isInitialRender) => {
+                        itemCreation(elmtId, isInitialRender);
+                        this.SmallImgItemBuilder.bind(this)(img, index);
+                        ListItem.pop();
+                    };
+                    this.observeComponentCreation2(itemCreation2, ListItem);
+                    ListItem.pop();
+                }
+            };
+            this.forEachUpdateFunction(elmtId, this.smallPhotoArr, forEachItemGenFunction, (item) => JSON.stringify(item), true, false);
+        }, ForEach);
+        ForEach.pop();
+        List.pop();
+        Stack.pop();
+        Navigation.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+    static getEntryName() {
+        return "DetailListPage";
+    }
+}
+registerNamedRoute(() => new DetailListPage(undefined, {}), "", { bundleName: "com.example.electronicalbum", moduleName: "entry", pagePath: "pages/DetailListPage", pageFullPath: "entry/src/main/ets/pages/DetailListPage", integratedHsp: "false", moduleType: "followWithHap" });
+//# sourceMappingURL=DetailListPage.js.mapÂ”Ùq hvigor_ignore__Applications_WebApp_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.display.d.tsÙp hvigor_ignore__Applications_WebApp_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.router.d.tsÙq/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/constants/Constants.etsÙk/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/LazyImage.etsÙk/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.etsÔrB›ªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo°belongModulePath§checker¬shouldEmitJs¥entryÃÂÙE/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entryÙ?/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum¥entry¥1.0.0Ô  ÙE/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entryÔrCÜ ®¬getNodeCount²getIdentifierCount®getSymbolCount¬getTypeCountµgetInstantiationCountµgetRelationCacheSizes±isUndefinedSymbol±isArgumentsSymbol¯isUnknownSymbol¯getMergedSymbol®getDiagnostics´getGlobalDiagnostics´getRecursionIdentity¶getUnmatchedProperties¹getTypeOfSymbolAtLocation¯getTypeOfSymbolÙ(getSymbolsOfParameterPropertyDeclaration·getDeclaredTypeOfSymbol³getPropertiesOfType±getPropertyOfTypeÙ"getPrivateIdentifierPropertyOfType·getTypeOfPropertyOfType²getIndexInfoOfType³getIndexInfosOfTypeºgetIndexInfosOfIndexSymbol³getSignaturesOfType²getIndexTypeOfType¬getIndexType¬getBaseTypes¸getBaseTypeOfLiteralType®getWidenedType³getTypeFromTypeNode°getParameterTypeÙ$getParameterIdentifierNameAtPosition¸getPromisedTypeOfPromise®getAwaitedType¸getReturnTypeOfSignature®isNullableType¯getNullableType²getNonNullableType²getNonOptionalType°getTypeArguments®typeToTypeNodeÙ$indexInfoToIndexSignatureDeclaration¿signatureToSignatureDeclaration²symbolToEntityName²symbolToExpression¬symbolToNodeÙ!symbolToTypeParameterDeclarations¼symbolToParameterDeclarationºtypeParameterToDeclaration±getSymbolsInScope³getSymbolAtLocation·getIndexInfosAtLocationÙ!getShorthandAssignmentValueSymbolÙ#getExportSpecifierLocalTargetSymbol·getExportSymbolOfSymbol±getTypeAtLocationºgetTypeAtLocationForLinterÙ tryGetTypeAtLocationWithoutCheckºgetTypeOfAssignmentPatternÙ*getPropertySymbolOfDestructuringAssignment±signatureToString¬typeToString®symbolToStringµtypePredicateToString®writeSignature©writeType«writeSymbol²writeTypePredicate¼getAugmentedPropertiesOfType®getRootSymbols²getSymbolOfExpando±getContextualTypeÙ(getContextualTypeForObjectLiteralElementÙ#getContextualTypeForArgumentAtIndexÙ getContextualTypeForJsxAttribute²isContextSensitiveÙ!getTypeOfPropertyOfContextualTypeµgetFullyQualifiedNameÙ#tryGetResolvedSignatureWithoutCheck´getResolvedSignatureÙ/getResolvedSignatureForStringLiteralCompletionsÙ$getResolvedSignatureForSignatureHelpµgetExpandedParameters¹hasEffectiveRestParameterºcontainsArgumentsReference°getConstantValueµisValidPropertyAccessÙ#isValidPropertyAccessForCompletions»getSignatureFromDeclarationºisImplementationOfOverload¹getImmediateAliasedSymbol°getAliasedSymbol¯getEmitResolver²getExportsOfModule¿getExportsAndPropertiesOfModuleÙ forEachExportAndPropertyOfModule¯getSymbolWalker±getAmbientModules¹getJsxIntrinsicTagNamesAt³isOptionalParameter»tryGetMemberInModuleExportsÙ(tryGetMemberInModuleExportsAndProperties´tryFindAmbientModuleÙ(tryFindAmbientModuleWithoutAugmentations¯getApparentType¬getUnionType²isTypeAssignableTo³createAnonymousType¯createSignature¬createSymbol¯createIndexInfoªgetAnyType­getStringType­getNumberType±createPromiseType¯createArrayType¹getElementTypeOfArrayType®getBooleanType¬getFalseType«getTrueType«getVoidType°getUndefinedType«getNullType¯getESSymbolType¬getNeverType¯getOptionalType®getPromiseType²getPromiseLikeType´getAsyncIterableType²isSymbolAccessible«isArrayType«isTupleType¯isArrayLikeTypeÙ#isTypeInvalidDueToUnionDiscriminantºgetExactOptionalProperties¿getAllPossiblePropertiesOfTypesÙ(getSuggestedSymbolForNonexistentPropertyÙ#getSuggestionForNonexistentPropertyÙ,getSuggestedSymbolForNonexistentJSXAttributeÙ&getSuggestedSymbolForNonexistentSymbolÙ!getSuggestionForNonexistentSymbolÙ&getSuggestedSymbolForNonexistentModuleÙ!getSuggestionForNonexistentExportÙ+getSuggestedSymbolForNonexistentClassMember·getBaseConstraintOfType»getDefaultFromTypeParameter«resolveName¯getJsxNamespaceµgetJsxFragmentFactory¸getAccessibleSymbolChain»getTypePredicateOfSignature¹resolveExternalModuleName»resolveExternalModuleSymbol°tryGetThisTypeAt¹getTypeArgumentConstraint¸getSuggestionDiagnostics¸runWithCancellationTokenÙ3getLocalTypeParametersOfClassOrInterfaceOrTypeAlias´isDeclarationVisible´isPropertyAccessible»getTypeOnlyAliasDeclaration¿getMemberOverrideModifierStatusÙ!isTypeParameterPossiblyReferenced²getConstEnumRelate´clearConstEnumRelateµdeleteConstEnumRelateÙ$getTypeArgumentsForResolvedSignatureµgetCheckedSourceFilesÙ"collectHaveTsNoCheckFilesForLinter·clearQualifiedNameCache®isStaticRecord²isStaticSourceFileÔ  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  ÃÃÚ|/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import display from '@ohos.display';
+import router from '@ohos.router';
+import Constants from '../common/constants/Constants';
+import { LazyImage } from '../components/LazyImage';
+
+enum scrollTypeEnum {
+  STOP = 'onScrollStop',
+  SCROLL = 'onScroll'
+};
+
+@Entry
+@Component
+struct DetailListPage {
+  private smallScroller: Scroller = new Scroller();
+  private bigScroller: Scroller = new Scroller();
+  @State deviceWidth: number = Constants.DEFAULT_WIDTH;
+  @State smallImgWidth: number = (this.deviceWidth - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) /
+  Constants.SHOW_COUNT;
+  @State imageWidth: number = this.deviceWidth + this.smallImgWidth;
+  private photoArr: Array<ResourceStr> = (router.getParams() as Record<string, Array<ResourceStr>>)[`${Constants.PARAM_PHOTO_ARR_KEY}`];
+  private smallPhotoArr: Array<ResourceStr> = new Array<ResourceStr>().concat(Constants.CACHE_IMG_LIST,
+    (router.getParams() as Record<string, Array<ResourceStr>>)[`${Constants.PARAM_PHOTO_ARR_KEY}`],
+    Constants.CACHE_IMG_LIST)
+  @StorageLink('selectedIndex') selectedIndex: number = 0;
+  @Builder
+  SmallImgItemBuilder(img: Resource, index?: number) {
+    if (index && index > (Constants.CACHE_IMG_SIZE - 1) && index < (this.smallPhotoArr.length - Constants.CACHE_IMG_SIZE)) {
+      LazyImage({
+        src: img,
+        widthValue: '100%',
+        heightValue: '100%',
+        objectFit: ImageFit.Cover,
+        placeholder: Constants.PLACEHOLDER_IMAGE,
+        errorHolder: Constants.ERROR_IMAGE,
+        cornerRadius: $r('app.float.img_border_radius')
+      })
+        .onClick(() => this.smallImgClickAction(index))
+    }
+  }
+
+  aboutToAppear() {
+    let displayClass: display.Display = display.getDefaultDisplaySync();
+    let width = displayClass?.width / displayClass.densityPixels ?? Constants.DEFAULT_WIDTH;
+    this.deviceWidth = width;
+    this.smallImgWidth = (width - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) / Constants.SHOW_COUNT;
+    this.imageWidth = this.deviceWidth + this.smallImgWidth;
+  }
+
+  onPageShow() {
+    this.smallScroller.scrollToIndex(this.selectedIndex);
+    this.bigScroller.scrollToIndex(this.selectedIndex);
+  }
+
+  goDetailPage(): void {
+    router.pushUrl({
+      url: Constants.URL_DETAIL_PAGE,
+      params: { photoArr: this.photoArr }
+    });
+  }
+
+  smallImgClickAction(index: number): void {
+    this.selectedIndex = index - Constants.CACHE_IMG_SIZE;
+    this.smallScroller.scrollToIndex(this.selectedIndex);
+    this.bigScroller.scrollToIndex(this.selectedIndex);
+  }
+
+  smallScrollAction(type: scrollTypeEnum): void {
+    this.selectedIndex = Math.round(((this.smallScroller.currentOffset().xOffset as number) +
+      this.smallImgWidth / Constants.DOUBLE_NUMBER) / (this.smallImgWidth + Constants.LIST_ITEM_SPACE));
+    if (type === scrollTypeEnum.SCROLL) {
+      this.bigScroller.scrollTo({ xOffset: this.selectedIndex * this.imageWidth, yOffset: 0 });
+    } else {
+      this.smallScroller.scrollTo({ xOffset: this.selectedIndex * this.smallImgWidth, yOffset: 0 });
+    }
+  }
+
+  bigScrollAction(type: scrollTypeEnum): void {
+    let smallWidth = this.smallImgWidth + Constants.LIST_ITEM_SPACE;
+    this.selectedIndex = Math.round(((this.bigScroller.currentOffset().xOffset as number) +
+      smallWidth / Constants.DOUBLE_NUMBER) / this.imageWidth);
+    if (type === scrollTypeEnum.SCROLL) {
+      this.smallScroller.scrollTo({ xOffset: this.selectedIndex * smallWidth, yOffset: 0 });
+    } else {
+      this.bigScroller.scrollTo({ xOffset: this.selectedIndex * this.imageWidth, yOffset: 0 });
+    }
+  }
+
+  build() {
+    Navigation() {
+      Stack({ alignContent: Alignment.Bottom }) {
+        List({ scroller: this.bigScroller, initialIndex: this.selectedIndex }) {
+          ForEach(this.photoArr, (img: Resource) => {
+            ListItem() {
+              LazyImage({
+                src: img,
+                widthValue: Constants.FULL_PERCENT,
+                heightValue: Constants.FULL_PERCENT,
+                objectFit: ImageFit.Contain,
+                placeholder: Constants.PLACEHOLDER_IMAGE,
+                errorHolder: Constants.ERROR_IMAGE
+              })
+                .gesture(PinchGesture({ fingers: Constants.DOUBLE_NUMBER })
+                  .onActionStart(() => this.goDetailPage()))
+                .onClick(() => this.goDetailPage())
+            }
+            .padding({
+              left: this.smallImgWidth / Constants.DOUBLE_NUMBER,
+              right: this.smallImgWidth / Constants.DOUBLE_NUMBER
+            })
+            .width(this.imageWidth)
+          }, (item: Resource) => JSON.stringify(item))
+        }
+        .onScroll((scrollOffset, scrollState) => {
+          if (scrollState === ScrollState.Fling) {
+            this.bigScrollAction(scrollTypeEnum.SCROLL);
+          }
+        })
+        .onScrollStop(() => this.bigScrollAction(scrollTypeEnum.STOP))
+        .width(Constants.FULL_PERCENT)
+        .height(Constants.FULL_PERCENT)
+        .padding({ bottom: this.smallImgWidth * Constants.DOUBLE_NUMBER })
+        .listDirection(Axis.Horizontal)
+
+        List({
+          scroller: this.smallScroller,
+          space: Constants.LIST_ITEM_SPACE,
+          initialIndex: this.selectedIndex
+        }) {
+          ForEach(this.smallPhotoArr, (img: Resource, index?: number) => {
+            ListItem() {
+              this.SmallImgItemBuilder(img, index)
+            }
+            .width(this.smallImgWidth)
+            .aspectRatio(1)
+          }, (item: Resource) => JSON.stringify(item))
+        }
+        .listDirection(Axis.Horizontal)
+        .onScroll((scrollOffset, scrollState) => {
+          if (scrollState === ScrollState.Fling) {
+            this.smallScrollAction(scrollTypeEnum.SCROLL);
+          }
+        })
+        .onScrollStop(() => this.smallScrollAction(scrollTypeEnum.STOP))
+        .margin({ top: $r('app.float.detail_list_margin'), bottom: $r('app.float.detail_list_margin') })
+        .height(this.smallImgWidth)
+        .width(Constants.FULL_PERCENT)
+      }
+      .width(this.imageWidth)
+      .height(Constants.FULL_PERCENT)
+    }
+    .title(Constants.PAGE_TITLE)
+    .hideBackButton(false)
+    .titleMode(NavigationTitleMode.Mini)
+  }
+}
+ÀÔrD”­@ohos.display¬@ohos.router·../components/LazyImage½../common/constants/ConstantsÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙq hvigor_ignore__Applications_WebApp_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.display.d.tsÔrF‘¯hostModulesInfo’ÔrG’²hostDependencyName®hostModuleName­@ohos.display¥entryG­@ohos.display¥entryÃªoh-resolveÂEAÃÙp hvigor_ignore__Applications_WebApp_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.router.d.tsAÃªoh-resolveÂEAÂÙk/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/LazyImage.etsAÃªoh-resolveÂEAÂÙq/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/constants/Constants.etsAÃªoh-resolveÂ“ÔrH–§version¤fileªsourceRoot§sources¥names¨mappings±DetailListPage.js ‘²DetailListPage.etsÜ]‘”    ‘” –”   ” ” ” ”# #”$ $–”   ” ” ” ”! !”" "–”   ” ” ” ”5 5”6 6˜”   ” ”	 	” ” ” ”3 3”4 4“”   ” ” “”   ” ” “” ”+ ”, “” ”) ”* —”   ” ” ” ” ”$ ”, ’”  ” ’” ” ‘”  ”” $”! (”) 0”+ 2”” "” &”' .”) 0””: ”ÌC (”ÌD )”ÌQ 6Ü ”< !”= "”ÌA &”ÌB '”ÌM 2”ÌP 5”ÌY >”ÌZ ?”Ìi ÌN”Ìl ÌQ”Ìm ÌR”Ìv Ì[”Ìw Ì\”Ì Ìf”Ì„ Ìi”Ì… Ìj”Ì† Ìk”Ì‡ Ìl””  ”  ”  ”   ˜”9 !”= !"”> !#”ÌI !.”ÌL !1”ÌP !5”ÌQ !6”Ì^ !ÌCœ” "*” "0” "1”( ":”* "Ìc”+ "Ìd”. "Ìg”7 "Ìp”8 "Ìq”ÌK "Ì„”ÌM "Ì†”ÌN "Ì‡Ü ” #.”! #2”& #7”( #ÌF”) #ÌG”/ #ÌM”0 #ÌN”9 #ÌW”: #ÌX”ÌH #Ìf”ÌJ $”ÌP $”ÌQ $”ÌZ $”Ì\ $>”Ì] $?”Ì` $ÌB”Ìi $ÌK”Ìj $ÌL”Ì} $Ì_”Ì $Ìa”Ì€ $Ìb”Ì‚ %”Ì‹ %”ÌŒ %”Ìš %”Ì› %””6 &”ÌE &”ÌG &8”ÌH &9‘” ’” 	” ’” 	” ’” 	” ’” 	” ’” !	” !’” !	” !’” & ” &-’” & ” &-–” (” (” (” (#” (%”" (3Ü ” )” )” )” )” )”! )”" )”+ )#”, )$”: )2”= )5”> )6”? )7”ÌC );”ÌH )Ì@”ÌK )ÌC”ÌL )ÌD”ÌP )ÌH”ÌQ )ÌI”Ì^ )ÌV”Ì_ )ÌW”Ìe )Ì]”Ìh )Ì`”Ìq )Ìi”Ìr )Ìj”Ì€ )Ìx”Ì )Ìy”Ìƒ )Ì{œ”# 3	”* 3”+ 3”. 3”0 3”1 3”5 3”6 3”ÌI 3/”ÌJ 30”ÌO 35”ÌP 36“”8 *”ÌA *”ÌH *””$ +”' +”) +”, +””$ ,”. ,”0 ,”6 ,””$ -”/ -”1 -”7 -–”$ .”- .”/ .”7 .”8 .”= .!–”$ /”/ /”1 /”: /”; /”ÌL /0–”$ 0”/ 0”1 0”: 0”; 0”ÌF 0*“”$ 1”0 1”Ì£ 17‘”! 2””( +”+ +”- +”0 +””( ,”2 ,”4 ,”: ,””( -”3 -”5 -”; -–”( .”1 .”3 .”; .”< .”ÌA .!–”( /”3 /”5 /”> /”? /”ÌP /0–”( 0”3 0”5 0”> 0”? 0”ÌJ 0*’”( 1”4 1‘” 4‘” 4‘” 5’” 7” 7™” 8” 8” 8” 8(”" 8/”# 80”8 8ÌE”: 8ÌG”; 8ÌHÜ ” 9” 9” 9” 9”  9”" 9”' 9#”* 9&”6 92”7 93”ÌD 9Ì@”ÌH 9ÌD”ÌQ 9ÌM”ÌR 9ÌN”Ì_ 9Ì[”Ì` 9Ì\—” :” :” :	” :” :”  :”! :Ü ” ;” ;” ;	” ;” ;” ;”# ;”& ;"”/ ;+”0 ;,”? ;;”ÌB ;>”ÌC ;?”ÌL ;ÌH”ÌM ;ÌI”ÌW ;ÌS”ÌZ ;ÌV”Ì[ ;ÌW”Ì\ ;ÌX”Ì] ;ÌY”Ì` ;Ì\”Ìi ;Ìe”Ìj ;Ìf”Ìt ;Ìp”Ìu ;Ìq” <” <” <	” <” <” <” <”* <&”- <)”1 <-”2 <.”? <;”Ì@ <<’” =” =’” ?” ?œ” Ì@” Ì@” Ì@	” Ì@” Ì@”( Ì@$”) Ì@%”- Ì@)”. Ì@*”; Ì@7”< Ì@8”= Ì@9œ” ÌA” ÌA” ÌA	” ÌA” ÌA”& ÌA"”' ÌA#”+ ÌA'”, ÌA(”9 ÌA5”: ÌA6”; ÌA7’” ÌB” ÌB’” ÌD” ÌD•” ÌE” ÌE
+” ÌE” ÌE” ÌE–” ÌF” ÌF	” ÌF” ÌF” ÌF”* ÌF$š” ÌG” ÌG” ÌG” ÌG” ÌG”  ÌG”$ ÌG”% ÌG”- ÌG'”/ ÌG)“”	 ÌH”
+ ÌH” ÌH’” ÌI” ÌI”” ÌK” ÌK” ÌK” ÌK#›” ÌL” ÌL” ÌL	” ÌL” ÌL”" ÌL”% ÌL!”. ÌL*”/ ÌL+”= ÌL9”> ÌL:œ” ÌM” ÌM” ÌM	” ÌM” ÌM”( ÌM$”) ÌM%”- ÌM)”. ÌM*”; ÌM7”< ÌM8”= ÌM9œ” ÌN” ÌN” ÌN	” ÌN” ÌN”& ÌN"”' ÌN#”+ ÌN'”, ÌN(”9 ÌN5”: ÌN6”; ÌN7’” ÌO” ÌO”” ÌQ” ÌQ” ÌQ” ÌQ(Ü ” ÌR” ÌR” ÌR	” ÌR” ÌR”! ÌR”" ÌR”' ÌR#”( ÌR$”) ÌR&”- ÌR*”. ÌR+”; ÌR8”< ÌR9”ÌI ÌRÌF”ÌK ÌRÌH”ÌL ÌRÌI”ÌS ÌRÌ[Ü ” ÌS” ÌS
+” ÌS” ÌS”! ÌS”* ÌS$”+ ÌS%”8 ÌS2”9 ÌS3”< ÌS6”= ÌS7”ÌA ÌS;”ÌB ÌS<”ÌO ÌSÌI”ÌR ÌSÌL”Ì[ ÌSÌU”Ì\ ÌSÌV”Ìk ÌSÌe”Ìl ÌSÌf”Ìm ÌSÌg”Ìn ÌSÌh˜” ÌT” ÌT” ÌT” ÌT”# ÌT”$ ÌT ”* ÌT&”, ÌT(Ü ” ÌU” ÌU
+” ÌU” ÌU” ÌU”% ÌU”& ÌU ”( ÌU"”/ ÌU)”1 ÌU+”5 ÌU/”6 ÌU0”ÌC ÌU=”ÌF ÌUÌ@”ÌJ ÌUÌD”ÌK ÌUÌE”ÌU ÌUÌO”ÌW ÌUÌQ”Ì^ ÌUÌX”Ì` ÌUÌZ”Ìa ÌUÌ[”Ìc ÌUÌ]”Ìd ÌUÌ^”Ìe ÌUÌ_‘”	 ÌV‘” ÌVÜ ” ÌW” ÌW
+” ÌW” ÌW” ÌW”' ÌW!”( ÌW"”* ÌW$”1 ÌW+”3 ÌW-”7 ÌW1”8 ÌW2”ÌE ÌW?”ÌH ÌWÌB”ÌL ÌWÌF”ÌM ÌWÌG”ÌZ ÌWÌT”Ì\ ÌWÌV”Ìc ÌWÌ]”Ìe ÌWÌ_”Ìf ÌWÌ`”Ìh ÌWÌb”Ìi ÌWÌc”Ìj ÌWÌd‘”	 ÌX’” ÌY” ÌY”” Ì[” Ì[” Ì[” Ì[&œ” Ì\” Ì\” Ì\” Ì\” Ì\” Ì\”+ Ì\'”. Ì\*”7 Ì\3”8 Ì\4”ÌG Ì\ÌC”ÌH Ì\ÌDÜ ” Ì]” Ì]” Ì]	” Ì]” Ì]”! Ì]”" Ì]”' Ì]#”( Ì]$”) Ì]&”- Ì]*”. Ì]+”9 Ì]6”: Ì]7”ÌG Ì]ÌD”ÌI Ì]ÌF”ÌJ Ì]ÌG”ÌQ Ì]ÌY” Ì^” Ì^” Ì^”" Ì^”# Ì^”0 Ì^*”1 Ì^+”4 Ì^.”8 Ì^2”9 Ì^3”ÌC Ì^=”ÌD Ì^>”ÌE Ì^?˜” Ì_” Ì_” Ì_” Ì_”# Ì_”$ Ì_ ”* Ì_&”, Ì_(Ü ” Ì`” Ì`
+” Ì`” Ì`” Ì`”' Ì`!”( Ì`"”* Ì`$”1 Ì`+”3 Ì`-”7 Ì`1”8 Ì`2”ÌE Ì`?”ÌH Ì`ÌB”ÌR Ì`ÌL”ÌT Ì`ÌN”Ì[ Ì`ÌU”Ì] Ì`ÌW”Ì^ Ì`ÌX”Ì` Ì`ÌZ”Ìa Ì`Ì[”Ìb Ì`Ì\‘”	 Ìa‘” ÌaÜ ” Ìb” Ìb
+” Ìb” Ìb” Ìb”% Ìb”& Ìb ”( Ìb"”/ Ìb)”1 Ìb+”5 Ìb/”6 Ìb0”ÌC Ìb=”ÌF ÌbÌ@”ÌJ ÌbÌD”ÌK ÌbÌE”ÌU ÌbÌO”ÌW ÌbÌQ”Ì^ ÌbÌX”Ì` ÌbÌZ”Ìa ÌbÌ[”Ìc ÌbÌ]”Ìd ÌbÌ^”Ìe ÌbÌ_‘”	 Ìc’” Ìd” Ìd‘” Ìf’” Ìg” Ìg˜” Ìg” Ìg” Ì¥” Ì¥
+” Ì¥”& Ì¥”' Ì¥”1 Ì¥–” Ìg” Ìg” Ì¦”% Ì¦”& Ì¦”+ Ì¦˜” Ìg” Ìg” Ì§”  Ì§”! Ì§”4 Ì§"”5 Ì§#”9 Ì§'š” Ìh” Ìh” Ìh” Ìh”' Ìh”) Ìh”2 Ìh%”3 Ìh&”9 Ìh,”; Ìh.˜” Ìh” Ìh” Ì¢” Ì¢” Ì¢” Ì¢” Ì¢”' Ì¢˜” Ìh” Ìh” Ì£” Ì£” Ì£”" Ì£”# Ì£”/ Ì£$Ü ” Ìi” Ìi” Ìi” Ìi”" Ìi”$ Ìi”( Ìi”) Ìi”4 Ìi)”6 Ìi+”ÌB Ìi7”ÌD Ìi9”ÌH Ìi=”ÌI Ìi>”ÌV ÌiÌK”ÌX ÌiÌM›” Ìi” Ìi” Ì	” Ì” Ì” Ì”' Ì”) Ì!”4 Ì,”6 Ì.”8 Ì0˜” Ì€
+” Ì€” Ì€”$ Ì€”/ Ì€)”0 Ì€*”5 Ì€/”7 Ì€1š” Ì” Ì” Ì”( Ì ”) Ì!”7 Ì/”8 Ì0”> Ì6”? Ì7”Ì@ Ì8‘” Ì‚’” Ìƒ” Ìƒ	Ü ” Ìi” Ìi” Ì„	” Ì„” Ì„”! Ì„”# Ì„”$ Ì„”( Ì„ ”) Ì„!”8 Ì„0”9 Ì„1”ÌG Ì„?”ÌH Ì„Ì@”ÌL Ì„ÌD”ÌM Ì„ÌE˜” Ìi” Ìi” Ì…	” Ì…” Ì…”  Ì…”! Ì…”- Ì…%˜” Ìi” Ìi” Ì†	” Ì†” Ì†”! Ì†”" Ì†”. Ì†&Ü ” Ìi” Ìi” Ì‡	” Ì‡” Ì‡” Ì‡”! Ì‡”# Ì‡”' Ì‡”( Ì‡ ”5 Ì‡-”8 Ì‡0”ÌA Ì‡9”ÌB Ì‡:”ÌO Ì‡ÌG”ÌQ Ì‡ÌI˜” Ìi” Ìi” Ìˆ	” Ìˆ” Ìˆ”# Ìˆ”$ Ìˆ”. Ìˆ&’” Ìj
+” Ìj’” Ìk”$ Ìk•” Ìk”  Ìk”! Ìx”( Ìx”) Ìxš” Ìy”  Ìy”" Ìy”& Ìy”' Ìy”4 Ìy&”7 Ìy)”Ì@ Ìy2”ÌA Ìy3”ÌN ÌyÌ@š” Ìz”! Ìz”# Ìz”' Ìz”( Ìz”5 Ìz'”8 Ìz*”ÌA Ìz3”ÌB Ìz4”ÌO ÌzÌA‘” Ì{˜” Ìk”  Ìk”! Ì|”& Ì|”' Ì|”+ Ì|”, Ì|”6 Ì|"š” Ìt”( Ìt%”0 Ìt&”2 Ìt(”9 Ìt/”; Ìt1”ÌD Ìt:”ÌE Ìt;”ÌR ÌtÌH”ÌT ÌtÌJœ” Ìt”( Ìt%”) Ìu”6 Ìu ”7 Ìu!”: Ìu$”< Ìu&”= Ìu'”ÌA Ìu+”ÌB Ìu,”ÌN Ìu8”ÌP Ìu:’” Ìt”( Ìt%š”' Ìv”. Ìv”/ Ìv”2 Ìv”4 Ìv”5 Ìv”9 Ìv#”: Ìv$”ÌF Ìv0”ÌH Ìv2“”< Ìl”ÌE Ìl”ÌL Ìl””( Ìm”+ Ìm”- Ìm”0 Ìm–”( Ìn”2 Ìn”4 Ìn”= Ìn%”> Ìn&”ÌJ Ìn2–”( Ìo”3 Ìo”5 Ìo”> Ìo&”? Ìo'”ÌK Ìo3–”( Ìp”1 Ìp”3 Ìp”; Ìp#”< Ìp$”ÌC Ìp+–”( Ìq”3 Ìq”5 Ìq”> Ìq&”? Ìq'”ÌP Ìq8–”( Ìr”3 Ìr”5 Ìr”> Ìr&”? Ìr'”ÌJ Ìr2‘”% Ìs””, Ìm”/ Ìm”1 Ìm”4 Ìm–”, Ìn”6 Ìn”8 Ìn”ÌA Ìn%”ÌB Ìn&”ÌN Ìn2–”, Ìo”7 Ìo”9 Ìo”ÌB Ìo&”ÌC Ìo'”ÌO Ìo3–”, Ìp”5 Ìp”7 Ìp”? Ìp#”Ì@ Ìp$”ÌG Ìp+–”, Ìq”7 Ìq”9 Ìq”ÌB Ìq&”ÌC Ìq'”ÌT Ìq8–”, Ìr”7 Ìr”9 Ìr”ÌB Ìr&”ÌC Ìr'”ÌN Ìr2’” Ìk”  Ìk’” Ìk” ÌkÜ ”/ Ìj”3 Ìj”4 Ìj”< Ìj”ÌV Ì}”ÌW Ì}”Ì[ Ì}”Ì] Ì}”Ì_ Ì} ”Ì` Ì}!”Ìd Ì}%”Ìe Ì}&”Ìn Ì}/”Ìo Ì}0”Ìs Ì}4”Ìt Ì}5’” Ìj
+” Ìj’” Ìi” Ìi“” ÌŠ” ÌŠ” ÌŠ–” Ì‹
+” Ì‹” Ì‹” Ì‹” Ì‹”, Ì‹&–” ÌŒ
+” ÌŒ” ÌŒ”  ÌŒ”! ÌŒ”0 ÌŒ*–” Ì
+” Ì” Ì”" Ì”# Ì”0 Ì*‘” Ì	˜” ÌŠ” ÌŠ” Ì—	” Ì—” Ì—”# Ì—”$ Ì—”. Ì—&›” ÌŠ” ÌŠ” Ì˜	” Ì˜” Ì˜” Ì˜”' Ì˜”) Ì˜!”4 Ì˜,”6 Ì˜.”8 Ì˜0˜” Ì™
+” Ì™” Ì™”$ Ì™”/ Ì™)”0 Ì™*”5 Ì™/”7 Ì™1š” Ìš” Ìš” Ìš”* Ìš"”+ Ìš#”9 Ìš1”: Ìš2”Ì@ Ìš8”ÌA Ìš9”ÌB Ìš:‘” Ì›’” Ìœ” Ìœ	Ü ” ÌŠ” ÌŠ” Ì	” Ì” Ì”! Ì”# Ì”$ Ì”( Ì ”) Ì!”: Ì2”; Ì3”ÌI ÌÌA”ÌJ ÌÌB”ÌN ÌÌF”ÌO ÌÌGœ” ÌŠ” ÌŠ” Ì	” Ì” Ì” Ì” Ì”Ì Ì9”Ì’ Ì;”Ì˜ ÌÌA”Í ÌÌe”Í ÌÌg˜” ÌŠ” ÌŠ” ÌŸ	” ÌŸ” ÌŸ” ÌŸ” ÌŸ”* ÌŸ"˜” ÌŠ” ÌŠ” Ì 	” Ì ” Ì ”  Ì ”! Ì ”- Ì %’” Ì
+” Ì’”3 Ì6”8 ÌÌD’” Ì”$ Ì˜” Ì”  Ì”! Ì“”& Ì“”' Ì“”+ Ì“”, Ì“”9 Ì“%–” Ì”  Ì”! Ì””, Ì””- Ì””. Ì”™” Ì‘” Ì‘” Ì‘”0 Ì‘&”< Ì‘'”? Ì‘*”ÌA Ì‘,”ÌF Ì‘1”ÌG Ì‘2’” Ì”  Ì’” Ì” ÌÜ ”/ Ì”3 Ì”4 Ì”ÌA Ì$”Ì[ Ì•”Ì\ Ì•”Ì` Ì•”Ìb Ì•”Ìd Ì• ”Ìe Ì•!”Ìi Ì•%”Ìj Ì•&”Ìs Ì•/”Ìt Ì•0”Ìx Ì•4”Ìy Ì•5’” Ì
+” Ì’” ÌŠ” ÌŠ’” Ìh” Ìh’” Ìg” Ìg‘” Ì¨ÔrI–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜf‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ÔrJ’§missing¦pluginÃ¦genAbcÂÔ  ÔrK”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache”ÔrL•¤type¥start£endªspecifiers¦source±ImportDeclarationÍéÍ‘ÔrM”¤type¥start£end¥local¶ImportDefaultSpecifierÍğÍ÷ÔrN”¤type¥start£end¤nameªIdentifierÍğÍ÷§displayÔrO•¤type¥start£end¥value£raw§LiteralÍıÍ­@ohos.display¯'@ohos.display'L±ImportDeclarationÍÍ1‘M¶ImportDefaultSpecifierÍÍNªIdentifierÍÍ¦routerO§LiteralÍ"Í0¬@ohos.router®'@ohos.router'L±ImportDeclarationÍ3Íi‘M¶ImportDefaultSpecifierÍ:ÍCNªIdentifierÍ:ÍC©ConstantsO§LiteralÍIÍh½../common/constants/Constants¿'../common/constants/Constants'L±ImportDeclarationÍkÍŸ‘ÔrP•¤type¥start£end¨imported¥local¯ImportSpecifierÍtÍ}NªIdentifierÍtÍ}©LazyImageNªIdentifierÍtÍ}©LazyImageO§LiteralÍ…Í·../components/LazyImage¹'../components/LazyImage'

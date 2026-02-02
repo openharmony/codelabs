@@ -1,0 +1,83 @@
+{
+  "HVIGOR_OHOS_PLUGIN": {
+    "MODULES": [
+      {
+        "MODULE_NAME": "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf",
+        "API_TYPE": "stageMode",
+        "INCREMENTAL_TASKS": {
+          "COMPILE_ARKTS": false
+        }
+      }
+    ],
+    "NATIVE_COMPILER": "Default",
+    "BUILD_MODE": "debug",
+    "USE_NORMALIZED_OHMURL": true
+  },
+  "HVIGOR": {
+    "IS_INCREMENTAL": true,
+    "IS_DAEMON": true,
+    "IS_PARALLEL": true,
+    "IS_HVIGORFILE_TYPE_CHECK": false,
+    "TASK_TIME": {
+      "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf": {
+        "PreBuild": 76851666,
+        "CreateModuleInfo": 394875,
+        "GenerateMetadata": 1250459,
+        "ConfigureCmake": 253750,
+        "MergeProfile": 1440583,
+        "CreateBuildProfile": 1010625,
+        "PreCheckSyscap": 249125,
+        "GeneratePkgContextInfo": 4426250,
+        "ProcessIntegratedHsp": 271250,
+        "BuildNativeWithCmake": 187750,
+        "MakePackInfo": 1184416,
+        "SyscapTransform": 463542,
+        "ProcessProfile": 58575208,
+        "ProcessRouterMap": 1075584,
+        "ProcessShareConfig": 583833,
+        "ProcessStartupConfig": 605250,
+        "BuildNativeWithNinja": 341959,
+        "ProcessResource": 1819292,
+        "GenerateLoaderJson": 3557291,
+        "ProcessLibs": 2661959,
+        "CompileResource": 293793500,
+        "DoNativeStrip": 1370584,
+        "BuildJS": 4033583,
+        "CacheNativeLibs": 462917084,
+        "CompileArkTS": 6231910875,
+        "GeneratePkgModuleJson": 4262417,
+        "ProcessCompiledResources": 824750,
+        "PackageHap": 86210875,
+        "PackingCheck": 11336666,
+        "SignHap": 3405458,
+        "CollectDebugSymbol": 1255542,
+        "assembleHap": 859334
+      }
+    },
+    "APIS": [
+      "getHvigorConfig",
+      "getRootNodeDescriptor",
+      "getChildNode",
+      "getNodeByName",
+      "getAllNodes",
+      "getRootNode",
+      "getNodeName",
+      "getStartParams",
+      "buildFinished",
+      "getNodePath",
+      "subNodes",
+      "getExtraOption",
+      "getExtParam",
+      "getExtParams",
+      "getProperty",
+      "getProperties",
+      "getProductName",
+      "nodesEvaluated",
+      "getParameter",
+      "getCommandEntryTask"
+    ],
+    "CONFIG_PROPERTIES": {},
+    "BUILD_ID": "202602021615403210",
+    "TOTAL_TIME": 7879858250
+  }
+}
