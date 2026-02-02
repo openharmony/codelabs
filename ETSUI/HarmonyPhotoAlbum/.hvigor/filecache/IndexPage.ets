@@ -184,10 +184,13 @@ struct IndexPage {
     const count: number = Math.min(Constants.SHOW_COUNT, this.dbPhotoList.length);
     return this.dbPhotoList.slice(0, count);
   }
+
   @Builder
   FeaturedCarousel() {
+    const photos = this.getCarouselPhotos();
+
     // 无数据时显示占位图
-    if (this.getCarouselPhotos().length === 0) {
+    if (photos.length === 0) {
       Column() {
         Image(Constants.PLACEHOLDER_IMAGE)
           .width(Constants.FULL_PERCENT)
@@ -202,9 +205,11 @@ struct IndexPage {
           .margin({ top: 12 })
       }
       .padding($r('app.float.grid_padding'))
-    } else {
+      return;
+    }
+
     Swiper(this.swiperController) {
-      ForEach(this.getCarouselPhotos(), (photo: PhotoModel, index: number) => {
+      ForEach(photos, (photo: PhotoModel, index: number) => {
         Stack({ alignContent: Alignment.BottomStart }) {
           LazyImage({
             src: 'file://' + photo.path,
@@ -223,6 +228,7 @@ struct IndexPage {
               .fontColor(Color.White)
               .maxLines(1)
               .textOverflow({ overflow: TextOverflow.Ellipsis })
+
             if (photo.category) {
               Text(photo.category)
                 .fontSize(12)
@@ -258,13 +264,12 @@ struct IndexPage {
         })
       }, (photo: PhotoModel) => photo.id.toString())
     }
-    .autoPlay(this.getCarouselPhotos().length > 1)
-    .loop(this.getCarouselPhotos().length > 1)
+    .autoPlay(photos.length > 1)
+    .loop(photos.length > 1)
     .duration(Constants.BANNER_ANIMATE_DURATION)
     .margin($r('app.float.grid_padding'))
     .borderRadius($r('app.float.img_border_radius'))
     .clip(true)
-    }
   }
 
   // ==========================================
