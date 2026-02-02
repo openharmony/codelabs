@@ -1,0 +1,105 @@
+{
+  "color" : [ {
+    "name" : "start_window_background",
+    "value" : "#FFFFFF"
+  }, {
+    "name" : "app_icon_color",
+    "value" : "#BDBDBD"
+  }, {
+    "name" : "app_icon_pressed_color",
+    "value" : "#9E9E9E"
+  }, {
+    "name" : "font_primary",
+    "value" : "#e5000000"
+  }, {
+    "name" : "font_secondary",
+    "value" : "#99000000"
+  }, {
+    "name" : "font_tertiary",
+    "value" : "#66000000"
+  }, {
+    "name" : "font_fourth",
+    "value" : "#33000000"
+  }, {
+    "name" : "font_emphasize",
+    "value" : "#ff0a59f7"
+  }, {
+    "name" : "font_on_primary",
+    "value" : "#ffffffff"
+  }, {
+    "name" : "font_on_secondary",
+    "value" : "#99ffffff"
+  }, {
+    "name" : "font_on_tertiary",
+    "value" : "#66ffffff"
+  }, {
+    "name" : "icon_primary",
+    "value" : "#e5000000"
+  }, {
+    "name" : "icon_emphasize",
+    "value" : "#ff0a59f7"
+  }, {
+    "name" : "icon_sub_emphasize",
+    "value" : "#660a59f7"
+  }, {
+    "name" : "background_primary",
+    "value" : "#ffffffff"
+  }, {
+    "name" : "background_secondary",
+    "value" : "#fff1f3f5"
+  }, {
+    "name" : "background_emphasize",
+    "value" : "#ff0a59f7"
+  }, {
+    "name" : "comp_background_primary",
+    "value" : "#ffffffff"
+  }, {
+    "name" : "comp_background_primary_trans",
+    "value" : "#ffffffff"
+  }, {
+    "name" : "comp_background_gray",
+    "value" : "#fff1f3f5"
+  }, {
+    "name" : "comp_background_secondary",
+    "value" : "#19000000"
+  }, {
+    "name" : "comp_background_emphasize",
+    "value" : "#ff0a59f7"
+  }, {
+    "name" : "comp_background_neutral",
+    "value" : "#ff000000"
+  }, {
+    "name" : "comp_emphasize_secondary",
+    "value" : "#330a59f7"
+  }, {
+    "name" : "comp_divider",
+    "value" : "#33000000"
+  }, {
+    "name" : "comp_common_contrary",
+    "value" : "#ffffffff"
+  }, {
+    "name" : "interactive_active",
+    "value" : "#ff0a59f7"
+  }, {
+    "name" : "page_bg_color",
+    "value" : "#F5F5F5"
+  }, {
+    "name" : "module_icon_color",
+    "value" : "#9E9E9E"
+  }, {
+    "name" : "module_item_bg_color",
+    "value" : "#F2F2F2"
+  }, {
+    "name" : "content_main_title_font_color",
+    "value" : "#616161"
+  }, {
+    "name" : "content_sub_title_font_color",
+    "value" : "#757575"
+  }, {
+    "name" : "content_font_color",
+    "value" : "#000000"
+  }, {
+    "name" : "comp_background_gray_dark",
+    "value" : "#ffe5e5ea"
+  } ]
+}
