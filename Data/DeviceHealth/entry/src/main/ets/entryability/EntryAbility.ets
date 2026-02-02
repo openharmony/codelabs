@@ -8,6 +8,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { PreferenceManager } from '../manager/PreferenceManager';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { runAllTests } from '../test/TestRunner'
 
 const DOMAIN: number = 0x0000;
 
@@ -32,6 +33,10 @@ export default class EntryAbility extends UIAbility {
 
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
 
+    console.info('[EntryAbility] onCreate')
+
+    // ===== 临时测试入口 =====
+    runAllTests()
     /**
      * 【关键步骤】初始化 PreferenceManager
      * 作用：
