@@ -51,7 +51,7 @@
 │  │  └──EntryBackupAbility.ets          // 数据备份与恢复类
 │  ├──model
 │  │  ├──ContactData.ets                 // 联系人数据管理类
-│  │  └──BusinessCardData.ts                 // 我的名片管理
+│  │  ├──BusinessCardData.ts                 // 个人名片管理
 │  │  └──FavoriteManager.ts                 // 我的收藏管理
 │  ├──pages
 │  │  ├──EditContact.ets                 // 编辑联系人页面
