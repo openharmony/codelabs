@@ -13,17 +13,25 @@
  * limitations under the License.
  */
 {
-  "modelVersion": "6.0.2",
+  "modelVersion": "6.0.1",
   "dependencies": {
-    "@ohos/hvigor-ohos-plugin": "^6.22.3"
   },
   "execution": {
-    "analyze": "normal",
-    "daemon": true,
-    "incremental": true,
-    "parallel": true
+    // "analyze": "normal",          /* Define the analyze mode */
+    // "daemon": true,               /* Enable daemon mode */
+    // "incremental": true,          /* Enable incremental build */
+    // "parallel": true,             /* Enable parallel execution */
+    // "typeCheck": false,           /* Enable type checking */
+    // "optimizationStrategy": "memory" /* Define the optimization strategy */
   },
   "logging": {
-    "level": "info"
+    // "level": "info"               /* Define the logging level */
+  },
+  "debugging": {
+    // "stacktrace": false           /* Disable stack trace */
+  },
+  "nodeOptions": {
+    // "maxOldSpaceSize": 8192       /* Enable node options */
+    // "exposeGC": true              /* Enable to expose GC */
   }
 }
