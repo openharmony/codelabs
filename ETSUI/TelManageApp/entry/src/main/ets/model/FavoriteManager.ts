@@ -130,7 +130,9 @@ export class FavoriteManager {
 
   // 添加单个收藏联系人
   async addFavoriteContact(contactId: string): Promise<void> {
-    if (!contactId) return;
+    if (!contactId) {
+      return;
+    }
 
     const favoriteIds = await this.getFavoriteContactIds();
     if (!favoriteIds.includes(contactId)) {
@@ -141,7 +143,9 @@ export class FavoriteManager {
 
   // 移除收藏联系人
   async removeFavoriteContact(contactId: string): Promise<void> {
-    if (!contactId) return;
+    if (!contactId) {
+      return;
+    }
 
     let favoriteIds = await this.getFavoriteContactIds();
     favoriteIds = favoriteIds.filter(id => id !== contactId);
@@ -150,7 +154,9 @@ export class FavoriteManager {
 
   // 检查是否已收藏
   async isContactFavorite(contactId: string): Promise<boolean> {
-    if (!contactId) return false;
+    if (!contactId) {
+      return false;
+    }
 
     const favoriteIds = await this.getFavoriteContactIds();
     return favoriteIds.includes(contactId);
@@ -167,7 +173,9 @@ export class FavoriteManager {
 
   // 批量设置收藏状态
   async setFavoriteStatus(contactIds: string[], isFavorite: boolean): Promise<void> {
-    if (!contactIds || contactIds.length === 0) return;
+    if (!contactIds || contactIds.length === 0) {
+      return;
+    }
 
     let favoriteIds = await this.getFavoriteContactIds();
 

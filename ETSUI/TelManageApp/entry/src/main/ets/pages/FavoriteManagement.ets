@@ -24,7 +24,6 @@ struct FavoriteManagement {
   @Provide('context') context: Context = getContext(this);
   private contactData: ContactData = new ContactData(this.context);
   private favoriteManager: FavoriteManager = new FavoriteManager(this.context);
-
   @State favoriteContacts: contact.Contact[] = [];
   @State isLoading: boolean = true;
 
@@ -65,7 +64,9 @@ struct FavoriteManagement {
 
   // 移除收藏
   async removeFavorite(contactId: string) {
-    if (!contactId) return;
+    if (!contactId) {
+      return;
+    }
 
     try {
       await this.favoriteManager.removeFavoriteContact(contactId);
@@ -78,7 +79,9 @@ struct FavoriteManagement {
 
   // 显示移除确认对话框
   showRemoveConfirmDialog(contactItem: contact.Contact) {
-    if (!contactItem.key) return;
+    if (!contactItem.key) {
+      return;
+    }
 
     const contactName = contactItem.name?.fullName || '未知联系人';
 
@@ -256,7 +259,12 @@ struct FavoriteManagement {
     .padding(15)
     .backgroundColor(Color.White)
     .borderRadius(10)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
     .margin({ left: '5%', right: '5%' })
   }
 }

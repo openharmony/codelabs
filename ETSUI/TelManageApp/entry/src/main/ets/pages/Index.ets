@@ -109,7 +109,9 @@ struct Index {
   // 添加二次确认弹窗方法
   showDeleteConfirmDialog(contactItem: contact.Contact) {
     // 二次确认对话框：避免误删，含遮障层点击关闭与取消/删除两按钮
-    if (!contactItem.key) return;
+    if (!contactItem.key) {
+      return;
+    }
 
     const contactName = contactItem.name?.fullName || '未知联系人';
 
@@ -371,6 +373,11 @@ struct Index {
     .padding(15)
     .backgroundColor(Color.White)
     .borderRadius(10)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
   }
 }

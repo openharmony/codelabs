@@ -24,7 +24,6 @@ struct FavoritesDisplay {
   @Provide('context') context: Context = getContext(this);
   private contactData: ContactData = new ContactData(this.context);
   private favoriteManager: FavoriteManager = new FavoriteManager(this.context);
-
   @State favoriteContacts: contact.Contact[] = [];
   @State isLoading: boolean = true;
   @State searchText: string = '';
@@ -239,7 +238,12 @@ struct FavoritesDisplay {
     .padding(15)
     .backgroundColor(Color.White)
     .borderRadius(10)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
     .margin({ left: '5%', right: '5%' })
   }
 }
