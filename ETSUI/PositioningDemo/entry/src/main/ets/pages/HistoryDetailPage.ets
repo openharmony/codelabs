@@ -14,6 +14,7 @@ import { SportData, RouteData, LocationInfo, DataPoint } from '../model/SportMod
 import router from '@ohos.router';
 import { RouteMapInner } from '../components/RouteMapInner';
 import { ChartComponent } from '../components/ChartComponent';
+
 // 移除可能不存在的导入，使用默认值
 
 @Entry
@@ -26,7 +27,7 @@ struct HistoryDetailPage {
     // 获取从HistoryPage传递过来的运动记录数据
     const params = router.getParams();
     console.log('获取到路由参数:', params);
-    
+
     // 安全地获取record参数
     let recordJson = '';
     if (params) {
@@ -34,11 +35,13 @@ struct HistoryDetailPage {
       interface RecordParams {
         record?: string;
       }
+
       const parsedParams = params as RecordParams;
       if (parsedParams.record) {
         recordJson = parsedParams.record;
         this.sportRecord = JSON.parse(recordJson) as SportData;
-        console.log('获取到运动记录 - 类型:', this.sportRecord.type, '距离:', this.sportRecord.distance, '米', '时间:', this.sportRecord.duration, '毫秒', '卡路里:', this.sportRecord.calories, 'kcal');
+        console.log('获取到运动记录 - 类型:', this.sportRecord.type, '距离:', this.sportRecord.distance, '米', '时间:',
+          this.sportRecord.duration, '毫秒', '卡路里:', this.sportRecord.calories, 'kcal');
         console.log('速度数据点数量:', this.sportRecord.speedData ? this.sportRecord.speedData.length : 0);
         console.log('卡路里数据点数量:', this.sportRecord.caloriesData ? this.sportRecord.caloriesData.length : 0);
         if (this.sportRecord.speedData && this.sportRecord.speedData.length > 0) {
@@ -53,7 +56,7 @@ struct HistoryDetailPage {
             console.log(`  数据点${index + 1} - 时间戳:`, point.timestamp, '卡路里:', point.value, 'kcal');
           });
         }
-        
+
         // 初始化routeData，用于显示轨迹
         if (this.sportRecord && this.sportRecord.route) {
           this.routeData = new RouteData();
@@ -69,11 +72,11 @@ struct HistoryDetailPage {
               routePoint.timestamp,
               0, // totalDistance
               0, // netDistance
-              0  // netDuration
+              0// netDuration
             );
             this.routeData.addRoutePoint(locationInfo);
           });
-          
+
           // 设置当前位置为最后一个轨迹点
           if (this.routeData.routePoints.length > 0) {
             const lastPoint = this.routeData.routePoints[this.routeData.routePoints.length - 1];
@@ -103,7 +106,12 @@ struct HistoryDetailPage {
           })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 16
+      })
 
       // 添加滚动组件
       Scroll() {
@@ -136,7 +144,12 @@ struct HistoryDetailPage {
             .padding(16)
             .backgroundColor('#FFFFFF')
             .borderRadius(16)
-            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
+            .shadow({
+              radius: 6,
+              color: '#1A000000',
+              offsetX: 0,
+              offsetY: 2
+            })
             .margin({ bottom: 12 })
 
             // 运动轨迹地图
@@ -155,7 +168,12 @@ struct HistoryDetailPage {
             .padding(16)
             .backgroundColor('#FFFFFF')
             .borderRadius(16)
-            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
+            .shadow({
+              radius: 6,
+              color: '#1A000000',
+              offsetX: 0,
+              offsetY: 2
+            })
             .margin({ bottom: 12 })
 
             // 速度变化图表
@@ -167,8 +185,8 @@ struct HistoryDetailPage {
                 yLabel: '速度 (m/s)',
                 color: '#4ECDC4'
               })
-              .width('100%')
-              .margin({ bottom: 12 })
+                .width('100%')
+                .margin({ bottom: 12 })
             }
 
             // 卡路里增长图表
@@ -180,8 +198,8 @@ struct HistoryDetailPage {
                 yLabel: '卡路里',
                 color: '#FF6B6B'
               })
-              .width('100%')
-              .margin({ bottom: 12 })
+                .width('100%')
+                .margin({ bottom: 12 })
             }
 
             // 运动数据详情
@@ -224,7 +242,12 @@ struct HistoryDetailPage {
             .padding(16)
             .backgroundColor('#FFFFFF')
             .borderRadius(16)
-            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
+            .shadow({
+              radius: 6,
+              color: '#1A000000',
+              offsetX: 0,
+              offsetY: 2
+            })
             .margin({ bottom: 24 })
           } else {
             // 加载失败提示
@@ -261,6 +284,7 @@ struct HistoryDetailPage {
         .fontSize(12)
         .fontColor('#999999')
     }
+
     // 移除alignItems，使用默认对齐方式
   }
 

@@ -27,10 +27,8 @@ struct StatisticsPage {
   @State totalDuration: number = 0;
   @State totalCalories: number = 0;
   @State dailyRecords: DailyRecord[] = [];
-
   @State recentTrend: DailyRecord[] = [];
   @State topDistanceRecords: SportData[] = [];
-
   private historyService: HistoryService = new HistoryService();
   private statisticsService: StatisticsService = new StatisticsService(this.historyService);
 
@@ -242,7 +240,12 @@ struct StatisticsPage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -282,7 +285,12 @@ struct StatisticsPage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -382,7 +390,12 @@ struct StatisticsPage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -415,7 +428,12 @@ struct StatisticsPage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -458,14 +476,22 @@ struct StatisticsPage {
 
   calculateDailyProgress(distance: number): number {
     const maxDistance = Math.max(...this.dailyRecords.map(d => d.distance));
-    if (maxDistance === 0) return 0;
+    if (maxDistance === 0) {
+      return 0;
+    }
     return Math.round((distance / maxDistance) * 100);
   }
 
   getRankColor(rank: number): string {
-    if (rank === 1) return '#FFD700';
-    if (rank === 2) return '#C0C0C0';
-    if (rank === 3) return '#CD7F32';
+    if (rank === 1) {
+      return '#FFD700';
+    }
+    if (rank === 2) {
+      return '#C0C0C0';
+    }
+    if (rank === 3) {
+      return '#CD7F32';
+    }
     return '#95A5A6';
   }
 

@@ -15,7 +15,8 @@ import { SportType } from '../model/SportModel';
 @Component
 export struct SportTypeSelector {
   @Prop selectedType: SportType;
-  onSelect: (type: SportType) => void = () => {};
+  onSelect: (type: SportType) => void = () => {
+  };
 
   build() {
     Row() {
@@ -37,7 +38,12 @@ export struct SportTypeSelector {
         .fontSize(14)
         .fontColor(this.selectedType === type ? '#4ECDC4' : '#999999')
     }
-    .padding({ top: 16, bottom: 16, left: 24, right: 24 })
+    .padding({
+      top: 16,
+      bottom: 16,
+      left: 24,
+      right: 24
+    })
     .backgroundColor(this.selectedType === type ? '#4ECDC420' : '#FFFFFF')
     .borderRadius(12)
     .border(this.selectedType === type ? { width: 2, color: '#4ECDC4' } : { width: 1, color: '#E0E0E0' })

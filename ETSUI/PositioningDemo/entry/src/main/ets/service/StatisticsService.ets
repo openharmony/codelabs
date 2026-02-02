@@ -178,7 +178,9 @@ export class StatisticsService {
   // 计算运动频率（每周平均运动几次）
   async calculateWeeklyFrequency(): Promise<number> {
     const records = await this.historyService.getSportRecords();
-    if (records.length === 0) return 0;
+    if (records.length === 0) {
+      return 0;
+    }
 
     const sortedRecords = records.sort((a, b) => a.startTime - b.startTime);
     const firstTime = sortedRecords[0].startTime;

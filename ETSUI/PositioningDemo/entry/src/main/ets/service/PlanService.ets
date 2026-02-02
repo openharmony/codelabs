@@ -106,7 +106,7 @@ export class PlanService {
     try {
       const plansJson = await this.preferences.get(this.KEY_PLANS, '[]');
       const plansData: PlanData[] = JSON.parse(plansJson as string) as PlanData[];
-      
+
       const plans: Plan[] = [];
       for (let i = 0; i < plansData.length; i++) {
         const planData = plansData[i];
@@ -326,7 +326,7 @@ export class PlanService {
     const plans = await this.getAllPlans();
     const activePlans = plans.filter(p => p.status === PlanStatus.ACTIVE);
     const completedPlans = plans.filter(p => p.status === PlanStatus.COMPLETED);
-    
+
     const totalCompletionRate = plans.reduce((sum, p) => sum + p.completionRate, 0);
     const averageCompletionRate = plans.length > 0 ? Math.round(totalCompletionRate / plans.length) : 0;
 
@@ -404,14 +404,14 @@ export class PlanService {
         return task;
       })
     );
-    
+
     plan.id = data.id || plan.id;
     plan.status = data.status || PlanStatus.ACTIVE;
     plan.createdTime = data.createdTime || plan.createdTime;
     plan.completedDays = data.completedDays || 0;
     plan.totalDays = data.totalDays || plan.totalDays;
     plan.completionRate = data.completionRate || 0;
-    
+
     return plan;
   }
 }

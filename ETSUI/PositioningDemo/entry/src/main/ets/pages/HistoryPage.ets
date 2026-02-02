@@ -50,7 +50,12 @@ struct HistoryPage {
           })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, top: 16, bottom: 16 })
+      .padding({
+        left: 16,
+        right: 16,
+        top: 16,
+        bottom: 16
+      })
 
       if (this.sportRecords.length === 0) {
         Column() {
@@ -124,7 +129,12 @@ struct HistoryPage {
     .padding(16)
     .backgroundColor('#FFFFFF')
     .borderRadius(12)
-    .shadow({ radius: 8, color: '#1A000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#1A000000',
+      offsetX: 0,
+      offsetY: 2
+    })
     .onClick(() => {
       console.log('点击了运动记录:', record);
       router.pushUrl({
