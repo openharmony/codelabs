@@ -59,7 +59,7 @@
 │  │  ├──FavoriteManagement.ets                 // 收藏管理
 │  │  ├──FavoritesDisplay.ets                 // 收藏展示
 │  │  ├──ImportExport.ets                 // 导入导出
-│  │  ├──MyBusinessCard.ets                 // 我的名片
+│  │  ├──MyBusinessCard.ets                 // 个人名片
 │  │  ├──SelectFavorites.ets                 // 选择收藏
 │  │  └──Index.ets                      //主页面的UI设计
 │  └──viewmodel    
