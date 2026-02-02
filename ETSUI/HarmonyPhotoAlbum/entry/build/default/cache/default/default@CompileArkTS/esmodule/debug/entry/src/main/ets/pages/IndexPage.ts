@@ -221,7 +221,7 @@ class IndexPage extends ViewPU {
                     onSave: (data: PhotoData) => {
                         this.handleSaveData(data);
                     }
-                }, undefined, -1, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 131, col: 14 });
+                }, undefined, -1, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 129, col: 14 });
                 jsDialog.setController(this.infoDialogController);
                 ViewPU.create(jsDialog);
                 let paramsLambda = () => {
@@ -246,7 +246,7 @@ class IndexPage extends ViewPU {
                             this.infoDialogController.open();
                         }, 100);
                     }
-                }, undefined, -1, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 141, col: 14 });
+                }, undefined, -1, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 140, col: 14 });
                 jsDialog.setController(this.pickerDialogController);
                 ViewPU.create(jsDialog);
                 let paramsLambda = () => {
@@ -337,9 +337,7 @@ class IndexPage extends ViewPU {
     set selectedIndex(newValue: number) {
         this.__selectedIndex.set(newValue);
     }
-    // ==========================================
-    // 🆕 Tab导航相关状态
-    // ==========================================
+    // Tab导航相关状态
     private __currentTabIndex: ObservedPropertySimplePU<number>;
     get currentTabIndex() {
         return this.__currentTabIndex.get();
@@ -376,8 +374,7 @@ class IndexPage extends ViewPU {
                 title: '保存成功',
                 message: '图片已安全存入数据库!',
                 confirm: {
-                    value: '棒', action: () => {
-                    }
+                    value: '棒', action: () => { }
                 }
             });
         }).catch((err: Error) => {
@@ -386,7 +383,178 @@ class IndexPage extends ViewPU {
         });
     }
     // ==========================================
-    // 🆕 首页内容构建器
+    // 顶部滚动照片组件（基于 PhotoModel，与下方网格对齐）
+    // ==========================================
+    /**
+     * 获取用于轮播展示的照片列表
+     * 这里直接取 dbPhotoList 前 N 张，这样索引与网格完全一致
+     */
+    private getCarouselPhotos(): PhotoModel[] {
+        if (!this.dbPhotoList || this.dbPhotoList.length === 0) {
+            return [];
+        }
+        const count: number = Math.min(Constants.SHOW_COUNT, this.dbPhotoList.length);
+        return this.dbPhotoList.slice(0, count);
+    }
+    FeaturedCarousel(parent = null) {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            // 无数据时显示占位图
+            if (this.getCarouselPhotos().length === 0) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Column.create();
+                        Column.padding({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
+                    }, Column);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Image.create(Constants.PLACEHOLDER_IMAGE);
+                        Image.width(Constants.FULL_PERCENT);
+                        Image.aspectRatio(Constants.BANNER_ASPECT_RATIO);
+                        Image.objectFit(ImageFit.Cover);
+                        Image.borderRadius({ "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
+                        Image.backgroundColor('#F0F0F0');
+                    }, Image);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create('暂无精选照片，去添加一张吧～');
+                        Text.fontSize(14);
+                        Text.fontColor('#999999');
+                        Text.margin({ top: 12 });
+                    }, Text);
+                    Text.pop();
+                    Column.pop();
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Swiper.create(this.swiperController);
+                        Swiper.autoPlay(this.getCarouselPhotos().length > 1);
+                        Swiper.loop(this.getCarouselPhotos().length > 1);
+                        Swiper.duration(Constants.BANNER_ANIMATE_DURATION);
+                        Swiper.margin({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
+                        Swiper.borderRadius({ "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
+                        Swiper.clip(true);
+                    }, Swiper);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        ForEach.create();
+                        const forEachItemGenFunction = (_item, index: number) => {
+                            const photo = _item;
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                Stack.create({ alignContent: Alignment.BottomStart });
+                                Stack.width(Constants.FULL_PERCENT);
+                                Stack.aspectRatio(Constants.BANNER_ASPECT_RATIO);
+                                Stack.clip(true);
+                                Stack.onClick(() => {
+                                    // 由于 photos 是 dbPhotoList 的头部切片，index 与 dbPhotoList 中一致
+                                    this.navigateToDetail(index);
+                                });
+                            }, Stack);
+                            {
+                                this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                    if (isInitialRender) {
+                                        let componentCall = new LazyImage(this, {
+                                            src: 'file://' + photo.path,
+                                            widthValue: Constants.FULL_PERCENT,
+                                            heightValue: Constants.FULL_PERCENT,
+                                            objectFit: ImageFit.Cover,
+                                            placeholder: Constants.PLACEHOLDER_IMAGE,
+                                            errorHolder: Constants.ERROR_IMAGE,
+                                            cornerRadius: { "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
+                                        }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 209, col: 11 });
+                                        ViewPU.create(componentCall);
+                                        let paramsLambda = () => {
+                                            return {
+                                                src: 'file://' + photo.path,
+                                                widthValue: Constants.FULL_PERCENT,
+                                                heightValue: Constants.FULL_PERCENT,
+                                                objectFit: ImageFit.Cover,
+                                                placeholder: Constants.PLACEHOLDER_IMAGE,
+                                                errorHolder: Constants.ERROR_IMAGE,
+                                                cornerRadius: { "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
+                                            };
+                                        };
+                                        componentCall.paramsGenerator_ = paramsLambda;
+                                    }
+                                    else {
+                                        this.updateStateVarsOfChildByElmtId(elmtId, {});
+                                    }
+                                }, { name: "LazyImage" });
+                            }
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                Column.create();
+                                Column.padding(20);
+                                Column.width(Constants.FULL_PERCENT);
+                                Column.linearGradient({
+                                    direction: GradientDirection.Bottom,
+                                    colors: [[0x00000000, 0.0], [0xAA000000, 1.0]]
+                                });
+                            }, Column);
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                Text.create(photo.name || '未命名图片');
+                                Text.fontSize(20);
+                                Text.fontWeight(FontWeight.Medium);
+                                Text.fontColor(Color.White);
+                                Text.maxLines(1);
+                                Text.textOverflow({ overflow: TextOverflow.Ellipsis });
+                            }, Text);
+                            Text.pop();
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                If.create();
+                                if (photo.category) {
+                                    this.ifElseBranchUpdateFunction(0, () => {
+                                        this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                            Text.create(photo.category);
+                                            Text.fontSize(12);
+                                            Text.fontColor(Color.White);
+                                            Text.padding({ left: 12, right: 12, top: 4, bottom: 4 });
+                                            Text.backgroundColor('rgba(0,0,0,0.4)');
+                                            Text.borderRadius(999);
+                                            Text.margin({ top: 12 });
+                                        }, Text);
+                                        Text.pop();
+                                    });
+                                }
+                                else {
+                                    this.ifElseBranchUpdateFunction(1, () => {
+                                    });
+                                }
+                            }, If);
+                            If.pop();
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                If.create();
+                                if (photo.tags) {
+                                    this.ifElseBranchUpdateFunction(0, () => {
+                                        this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                            Text.create(photo.tags);
+                                            Text.fontSize(10);
+                                            Text.fontColor('#EEEEEE');
+                                            Text.margin({ top: 6 });
+                                            Text.maxLines(1);
+                                            Text.textOverflow({ overflow: TextOverflow.Ellipsis });
+                                        }, Text);
+                                        Text.pop();
+                                    });
+                                }
+                                else {
+                                    this.ifElseBranchUpdateFunction(1, () => {
+                                    });
+                                }
+                            }, If);
+                            If.pop();
+                            Column.pop();
+                            Stack.pop();
+                        };
+                        this.forEachUpdateFunction(elmtId, this.getCarouselPhotos(), forEachItemGenFunction, (photo: PhotoModel) => photo.id.toString(), true, false);
+                    }, ForEach);
+                    ForEach.pop();
+                    Swiper.pop();
+                });
+            }
+        }, If);
+        If.pop();
+    }
+    // ==========================================
+    // 首页内容构建器
     // ==========================================
     HomeContent(parent = null) {
         this.observeComponentCreation2((elmtId, isInitialRender) => {
@@ -417,41 +585,8 @@ class IndexPage extends ViewPU {
         Text.pop();
         // 1. 标题栏
         Row.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            // 2. 轮播图
-            Swiper.create(this.swiperController);
-            // 2. 轮播图
-            Swiper.autoPlay(true);
-            // 2. 轮播图
-            Swiper.loop(true);
-            // 2. 轮播图
-            Swiper.margin({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            // 2. 轮播图
-            Swiper.borderRadius({ "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            // 2. 轮播图
-            Swiper.clip(true);
-        }, Swiper);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            ForEach.create();
-            const forEachItemGenFunction = _item => {
-                const item = _item;
-                this.observeComponentCreation2((elmtId, isInitialRender) => {
-                    Row.create();
-                    Row.width(Constants.FULL_PERCENT);
-                    Row.aspectRatio(Constants.BANNER_ASPECT_RATIO);
-                }, Row);
-                this.observeComponentCreation2((elmtId, isInitialRender) => {
-                    Image.create(item);
-                    Image.width(Constants.FULL_PERCENT);
-                    Image.height(Constants.FULL_PERCENT);
-                }, Image);
-                Row.pop();
-            };
-            this.forEachUpdateFunction(elmtId, Constants.BANNER_IMG_LIST, forEachItemGenFunction, (item: Resource, index?: number) => JSON.stringify(item) + index, false, true);
-        }, ForEach);
-        ForEach.pop();
-        // 2. 轮播图
-        Swiper.pop();
+        // 2. 顶部滚动照片
+        this.FeaturedCarousel.bind(this)();
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             If.create();
             // 3. 图片网格
@@ -575,7 +710,7 @@ class IndexPage extends ViewPU {
                         placeholder: Constants.PLACEHOLDER_IMAGE,
                         errorHolder: Constants.ERROR_IMAGE,
                         cornerRadius: 8
-                    }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 272, col: 7 });
+                    }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 356, col: 7 });
                     ViewPU.create(componentCall);
                     let paramsLambda = () => {
                         return {
@@ -640,17 +775,13 @@ class IndexPage extends ViewPU {
         Column.pop();
         Stack.pop();
     }
-    // ==========================================
-    // 🆕 页面显示时的生命周期（从ListPage返回时触发）
-    // ==========================================
+    // 页面显示时（从ListPage返回触发）
     onPageShow() {
         console.info('[IndexPage] 页面显示，刷新数据');
-        this.currentTabIndex = 0; // 确保回到首页Tab
-        this.refreshData(); // 刷新图片列表
+        this.currentTabIndex = 0;
+        this.refreshData();
     }
-    // ==========================================
-    // 🆕 主构建函数 - 使用Tabs组件
-    // ==========================================
+    // 主构建函数 - 使用Tabs组件
     initialRender() {
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Tabs.create({ index: this.currentTabIndex });
@@ -660,15 +791,11 @@ class IndexPage extends ViewPU {
             Tabs.onChange((index: number) => {
                 console.info(`[IndexPage] 切换到 Tab ${index}`);
                 this.currentTabIndex = index;
-                // ==========================================
-                // 🎯 关键:点击"搜索"Tab时跳转到ListPage
-                // ==========================================
                 if (index === 1) {
                     router.pushUrl({
                         url: 'pages/ListPage'
                     }).then(() => {
                         console.info('[IndexPage] 成功跳转到搜索页');
-                        // 跳转后立即切回首页Tab,避免UI错乱
                         this.currentTabIndex = 0;
                     }).catch((err: Error) => {
                         console.error(`[IndexPage] 跳转失败: ${err.message}`);
@@ -709,9 +836,7 @@ class IndexPage extends ViewPU {
         TabContent.pop();
         Tabs.pop();
     }
-    // ==========================================
-    // 🆕 Tab图标构建器
-    // ==========================================
+    // Tab图标构建器
     TabBuilder(index: number, title: string, icon: string, parent = null) {
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Column.create();
@@ -736,15 +861,15 @@ class IndexPage extends ViewPU {
     }
     private navigateToDetail(index: number) {
         this.selectedIndex = index;
-        const photoPaths = this.dbPhotoList.map(photo => 'file://' + photo.path); // 🔧 添加 file:// 前缀
-        console.info(`[ListPage] 跳转到详情页，索引: ${index}`);
+        const photoPaths = this.dbPhotoList.map(photo => 'file://' + photo.path);
+        console.info(`[IndexPage] 跳转到详情页，索引: ${index}`);
         router.pushUrl({
             url: Constants.URL_DETAIL_LIST_PAGE,
             params: {
                 photoArr: photoPaths,
             }
         }).catch((err: Error) => {
-            console.error(`${Constants.TAG_LIST_PAGE}${err.message}`);
+            console.error(`${Constants.TAG_INDEX_PAGE}${err.message}`);
         });
     }
     rerender() {
