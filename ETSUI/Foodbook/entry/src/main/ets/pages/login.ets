@@ -13,9 +13,8 @@
  * limitations under the License.
  */
 //login.ets
-import { font, Prompt, router, AppStorageV2 } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 import prompt from '@system.prompt';
-import { text } from '@kit.ArkGraphics2D';
 
 interface user_account {
   username: string;

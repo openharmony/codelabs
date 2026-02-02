@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { LengthMetrics, router } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 import { Constants } from '../common/Constants';
 
 // 定义菜品数据类型
