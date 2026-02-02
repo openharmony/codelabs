@@ -24,7 +24,6 @@ struct SelectFavorites {
   @Provide('context') context: Context = getContext(this);
   private contactData: ContactData = new ContactData(this.context);
   private favoriteManager: FavoriteManager = new FavoriteManager(this.context);
-
   @State allContacts: contact.Contact[] = [];
   @State selectedContactIds: string[] = [];
   @State isLoading: boolean = true;
@@ -60,7 +59,9 @@ struct SelectFavorites {
 
   // 切换选择状态
   toggleContactSelection(contactId: string) {
-    if (!contactId) return;
+    if (!contactId) {
+      return;
+    }
 
     const index = this.selectedContactIds.indexOf(contactId);
     if (index === -1) {
@@ -264,7 +265,12 @@ struct SelectFavorites {
               .padding(15)
               .backgroundColor(Color.White)
               .borderRadius(10)
-              .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+              .shadow({
+                radius: 2,
+                color: '#10000000',
+                offsetX: 0,
+                offsetY: 1
+              })
               .margin({ left: '5%', right: '5%' })
               .onClick(() => {
                 this.toggleContactSelection(item.key || '');
@@ -282,7 +288,12 @@ struct SelectFavorites {
           .fontSize(16)
           .fontColor(Color.White)
           .backgroundColor('rgba(0, 0, 0, 0.7)')
-          .padding({ left: 20, right: 20, top: 10, bottom: 10 })
+          .padding({
+            left: 20,
+            right: 20,
+            top: 10,
+            bottom: 10
+          })
           .borderRadius(8)
           .position({ x: '50%', y: '80%' })
           .translate({ x: '-50%', y: '-50%' })

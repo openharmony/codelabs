@@ -118,7 +118,12 @@ struct AddContact {
         .opacity(this.name && this.phone ? 1 : 0.6)
       }
       .width('100%')
-      .padding({ left: 12, right: 12, top: 20, bottom: 20 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 20,
+        bottom: 20
+      })
       // .backgroundColor('#F0F0F0')
       .borderRadius(4)
 
@@ -236,7 +241,12 @@ struct AddContact {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(10)
-          .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+          .shadow({
+            radius: 2,
+            color: '#10000000',
+            offsetX: 0,
+            offsetY: 1
+          })
           .margin({ left: 20, right: 20 })
         }
       }
