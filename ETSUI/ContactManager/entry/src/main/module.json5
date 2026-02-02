@@ -7,24 +7,6 @@
     "deviceTypes": [
       "default"
     ],
-    "requestPermissions": [
-      {
-        "name": "ohos.permission.READ_CONTACTS",
-        "reason": "$string:module_desc", // 这里建议在 string.json 定义具体理由
-        "usedScene": {
-          "abilities": ["EntryAbility"],
-          "when": "always"
-        }
-      },
-      {
-        "name": "ohos.permission.WRITE_CONTACTS",
-        "reason": "$string:module_desc",
-        "usedScene": {
-          "abilities": ["EntryAbility"],
-          "when": "always"
-        }
-      }
-    ],
     "deliveryWithInstall": true,
     "installationFree": false,
     "pages": "$profile:main_pages",

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import router from '@ohos.router';
+
 import promptAction from '@ohos.promptAction';
-import { Routes } from '../constants/Routes';
 import { DeletedContact } from '../model/DeletedContact';
 import { RecycleBinService } from '../service/RecycleBinService';
 import { TimeUtils } from '../utils/TimeUtils';

@@ -13,234 +13,122 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import contact from '@ohos.contact'
-import common from '@ohos.app.ability.common'
-import { BusinessError } from '@ohos.base'
 import { Contact as LocalContact } from '../model/Contact'
+import { StorageService } from './StorageService'
 
+/**
+ * 联系人服务 - 基于本地存储实现
+ * 不依赖系统联系人API，完全使用本地数据库
+ */
 export class ContactService {
-  private static getAbilityContext(): common.UIAbilityContext {
-    // @ts-ignore
-    return getContext() as common.UIAbilityContext
+  private static readonly CONTACT_PREFIX = 'contact_';
+  private static readonly ALL_CONTACTS_KEY = 'all_contact_keys';
+  private static storageService = StorageService.getInstance();
+
+  /**
+   * 初始化服务
+   */
+  static async init(): Promise<void> {
+    await this.storageService.init();
+  }
+
+  /**
+   * 生成唯一ID
+   */
+  private static generateId(): string {
+    return 'contact_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  }
+
+  /**
+   * 生成存储键
+   */
+  private static getStorageKey(key: string): string {
+    return `${this.CONTACT_PREFIX}${key}`;
   }
 
   /**
    * 【增】添加联系人
    */
   static async addContact(c: LocalContact): Promise<string> {
-    const context = ContactService.getAbilityContext()
-
-    const systemData: contact.Contact = {
-      name: {
-        fullName: c.name || ''
-      },
-      phoneNumbers: [{
-        phoneNumber: c.phone || ''
-      }]
-    }
-
-    // 可选字段
-    if (c.email && c.email.trim()) {
-      systemData.emails = [{
-        email: c.email.trim()
-      }]
-    }
-
-    if (c.remark && c.remark.trim()) {
-      systemData.note = {
-        noteContent: c.remark.trim()
-      }
-    }
-
     try {
-      await contact.addContact(context, systemData)
-      console.info('[ContactService] 添加联系人成功')
+      // 生成唯一的key
+      const newKey = this.generateId();
+      
+      // 设置联系人的key和id
+      c.key = newKey;
+      c.id = newKey;
 
-      // 添加成功后，可以重新查询获取 key
-      const allContacts = await contact.queryContacts(context)
-      // 假设通过姓名和电话找到刚添加的联系人
-      const newContact = allContacts.find((item: contact.Contact): boolean =>
-      item.name?.fullName === c.name &&
-        item.phoneNumbers?.[0]?.phoneNumber === c.phone
-      )
+      // 保存到本地存储
+      const storageKey = this.getStorageKey(newKey);
+      await this.storageService.put(storageKey, this.contactToJSON(c));
 
-      return newContact?.key || ''
+      // 更新联系人列表
+      await this.addToContactList(newKey);
+
+      console.info('[ContactService] 添加联系人成功:', newKey);
+      return newKey;
 
     } catch (err) {
-      const error = err as BusinessError
-      console.error(`[ContactService] 添加联系人失败:`, error)
-      throw error
+      console.error(`[ContactService] 添加联系人失败:`, err);
+      throw err;
     }
   }
 
   /**
-   * 【查】查询联系人
+   * 【查】查询所有联系人
    */
   static async getAllContacts(): Promise<LocalContact[]> {
-    const context = ContactService.getAbilityContext()
-    const systemContacts = await contact.queryContacts(context)
+    try {
+      const keys = await this.getAllContactKeys();
+      const contacts: LocalContact[] = [];
 
-    if (!systemContacts || systemContacts.length === 0) {
-      return []
+      for (const key of keys) {
+        try {
+          const storageKey = this.getStorageKey(key);
+          const jsonData = await this.storageService.getString(storageKey, '');
+          
+          if (jsonData) {
+            const contact = this.jsonToContact(jsonData);
+            contacts.push(contact);
+          }
+        } catch (err) {
+          console.error(`[ContactService] 读取联系人失败: ${key}`, err);
+        }
+      }
+
+      console.info(`[ContactService] 查询到 ${contacts.length} 个联系人`);
+      return contacts;
+
+    } catch (err) {
+      console.error('[ContactService] 查询联系人失败:', err);
+      return [];
     }
-
-    return systemContacts.map((item: contact.Contact): LocalContact => {
-      console.info('[ContactService] 原始数据:', {
-        系统key: item.key,
-        key类型: typeof item.key, // 应该是string
-        系统id: item.id,
-        id类型: typeof item.id     // 应该是number
-      })
-
-      const c = new LocalContact(
-        item.name?.fullName || '未知',
-        item.phoneNumbers?.[0]?.phoneNumber || ''
-      )
-
-      // 关键修改：正确映射系统字段
-      c.key = item.key || ''      // key是string，系统返回的应该是string
-      c.id = item.id ? item.id.toString() : '' // 将number类型的id转为string用于UI
-      // 补充：邮箱
-      c.email = item.emails?.[0]?.email || ''
-      // 补充：备注
-      c.remark = item.note?.noteContent || ''
-      // 验证类型
-      console.info('[ContactService] 处理后的联系人:', {
-        key: c.key,
-        key类型: typeof c.key,
-        id: c.id,
-        id类型: typeof c.id
-      })
-      return c
-    })
   }
 
   /**
    * 【改】更新联系人
    */
   static async updateContact(c: LocalContact): Promise<void> {
-
-    const abilityContext = ContactService.getAbilityContext()
-
-    // 关键：string → number
-    const contactIdNum = Number(c.id)
-    if (!contactIdNum || Number.isNaN(contactIdNum)) {
-      console.error('[updateContact] 非法的联系人 id:', c.id)
-      const err: BusinessError = {
-        code: 401,
-        message: '联系人 id 无效',
-        name: 'BusinessError'
-      }
-      throw err
-    }
-    // 3. 构建系统期望的数据结构
-    // 特别注意：只需要包含要更新的字段和key
-    const systemData: contact.Contact = {
-      id: contactIdNum,
-      key: c.key,  // string类型
-
-      // 更新姓名（必须字段）
-      name: {
-        fullName: c.name || ''
-      },
-
-      // 更新电话（必须字段）
-      phoneNumbers: [{
-        phoneNumber: c.phone || ''
-      }],
-
-      // 可选字段
-      emails: c.email && c.email.trim() ? [{
-        email: c.email.trim()
-      }] : undefined,
-
-      note: c.remark && c.remark.trim() ? {
-        noteContent: c.remark.trim()
-      } : undefined
-    }
-
-    // 4. 验证数据
-    console.info('[ContactService] 最终传给系统的数据:', {
-      key: systemData.key,
-      数据类型: typeof systemData.key,
-      完整结构: JSON.stringify(systemData, null, 2)
-    })
-
     try {
-      // 5. 调用API
-      await contact.updateContact(abilityContext, systemData)
-      console.info('[Service] 更新成功')
-
-    } catch (err) {
-      const busiErr = err as BusinessError
-      console.error(`[Service] 更新失败! 错误码: ${busiErr.code}, 原因: ${busiErr.message}`)
-
-      // 如果是401错误，执行详细诊断
-      if (busiErr.code === 401) {
-        await this.diagnose401Error(c.key, abilityContext)
+      if (!c.key || c.key.trim() === '') {
+        throw new Error('联系人key不能为空');
       }
 
-      throw busiErr
-    }
-  }
-
-  /**
-   * 诊断401错误，针对前期后端系统问题出错使用的判断方法
-   */
-  static async diagnose401Error(key: string, context: common.Context): Promise<void> {
-    console.error('=== 401错误详细诊断 ===')
-    console.error('1. 尝试查找key为:', key)
-    try {
-      // 获取所有联系人
-      const allContacts = await contact.queryContacts(context)
-      console.error('2. 系统中共有联系人:', allContacts.length)
-      // 查找匹配的联系人
-      const foundContacts = allContacts.filter((contact: contact.Contact): boolean => contact.key === key)
-      console.error('3. 找到匹配的联系人数量:', foundContacts.length)
-      if (foundContacts.length > 0) {
-        console.error('4. 找到的联系人详情:', foundContacts.map((c: contact.Contact): Record<string, unknown> => ({
-          key: c.key,
-          id: c.id,
-          name: c.name?.fullName
-        })))
-        // 检查是否有重复key
-        const duplicateKeys = allContacts.filter((c: contact.Contact): boolean => c.key === key)
-        if (duplicateKeys.length > 1) {
-          console.error('5. 警告：发现重复的key！')
-        }
-      } else {
-        console.error('4. 未找到匹配的联系人')
-        console.error('5. 系统所有key列表:', allContacts.map((c: contact.Contact): Record<string, unknown> => ({
-          key: c.key,
-          key类型: typeof c.key,
-          name: c.name?.fullName
-        })))
+      // 检查联系人是否存在
+      const exists = await this.isContactExist(c.key);
+      if (!exists) {
+        throw new Error('联系人不存在');
       }
-    } catch (err) {
-      console.error('诊断过程中出错:', err)
-    }
-  }
 
-  /**
-   * 验证联系人是否存在
-   */
-  static async isContactExist(key: string): Promise<boolean> {
-    try {
-      const context = ContactService.getAbilityContext()
-      const contacts = await contact.queryContacts(context)
-      // 精确匹配key（string类型）
-      const found = contacts.find((item: contact.Contact): boolean => item.key === key)
-      console.info('[isContactExist] 验证结果:', {
-        查询的key: key,
-        系统联系人数量: contacts.length,
-        是否找到: !!found,
-        如果找到的key: found?.key,
-        如果找到的id: found?.id
-      })
-      return !!found
+      // 更新到本地存储
+      const storageKey = this.getStorageKey(c.key);
+      await this.storageService.put(storageKey, this.contactToJSON(c));
+
+      console.info('[ContactService] 更新联系人成功:', c.key);
+
     } catch (err) {
-      console.error('[isContactExist] 验证失败:', err)
-      return false
+      console.error(`[ContactService] 更新联系人失败:`, err);
+      throw err;
     }
   }
 
@@ -249,80 +137,115 @@ export class ContactService {
    */
   static async deleteContact(key: string): Promise<void> {
     if (!key || key.trim() === '') {
-      console.error('[ContactService] 删除失败: key为空')
-      return
+      console.error('[ContactService] 删除失败: key为空');
+      return;
     }
 
-    const context = ContactService.getAbilityContext()
-
     try {
-      await contact.deleteContact(context, key)
-      console.info(`[ContactService] 删除联系人成功, key: ${key}`)
+      // 从存储中删除
+      const storageKey = this.getStorageKey(key);
+      await this.storageService.delete(storageKey);
+
+      // 从联系人列表中移除
+      await this.removeFromContactList(key);
+
+      console.info(`[ContactService] 删除联系人成功, key: ${key}`);
     } catch (err) {
-      const error = err as BusinessError
-      console.error(`[ContactService] 删除联系人失败:`, error)
-      throw error
+      console.error(`[ContactService] 删除联系人失败:`, err);
+      throw err;
     }
   }
 
   /**
-   * 测试联系人系统API
+   * 验证联系人是否存在
    */
-  static async testContactSystem(): Promise<void> {
-    console.info('=== 开始测试联系人系统 ===')
+  static async isContactExist(key: string): Promise<boolean> {
     try {
-      const context = this.getAbilityContext()
-      const contacts = await contact.queryContacts(context)
-
-      console.info('[testContactSystem] 系统联系人数量:', contacts.length)
-
-      if (contacts.length === 0) {
-        console.warn('[testContactSystem] 系统中没有联系人，无法测试')
-        return
-      }
-      // 显示第一个联系人的信息
-      const firstContact = contacts[0]
-      console.info('[testContactSystem] 第一个联系人详情:', {
-        key: firstContact.key,
-        key类型: typeof firstContact.key,
-        id: firstContact.id,
-        id类型: typeof firstContact.id,
-        姓名: firstContact.name?.fullName,
-        电话: firstContact.phoneNumbers?.[0]?.phoneNumber
-      })
-      // 测试更新功能
-      const testData: contact.Contact = {
-        key: firstContact.key,
-        name: {
-          fullName: '测试更新_' + Date.now()  // 使用时间戳确保每次不同
-        },
-        phoneNumbers: [{
-          phoneNumber: '13800138000'  // 测试电话号码
-        }]
-      }
-      console.info('[testContactSystem] 测试更新数据:', JSON.stringify(testData, null, 2))
-      // 执行更新
-      await contact.updateContact(context, testData)
-      console.info('[testContactSystem] ✅ 测试更新成功')
-
-      // 再次查询验证更新结果
-      const updatedContacts = await contact.queryContacts(context)
-      const updatedContact = updatedContacts.find((c: contact.Contact): boolean => c.key === firstContact.key)
-
-      console.info('[testContactSystem] 更新后验证:', {
-        更新前姓名: firstContact.name?.fullName,
-        更新后姓名: updatedContact?.name?.fullName,
-        是否一致: firstContact.name?.fullName !== updatedContact?.name?.fullName
-      })
-
+      const storageKey = this.getStorageKey(key);
+      return await this.storageService.has(storageKey);
     } catch (err) {
-      const error = err as BusinessError
-      console.error('[testContactSystem] ❌ 测试失败:', {
-        错误码: error.code,
-        错误信息: error.message,
-        完整错误: error
-      })
+      console.error('[ContactService] 验证联系人失败:', err);
+      return false;
     }
-    console.info('=== 联系人系统测试结束 ===')
+  }
+
+  /**
+   * 根据key获取单个联系人
+   */
+  static async getContactByKey(key: string): Promise<LocalContact | null> {
+    try {
+      const storageKey = this.getStorageKey(key);
+      const jsonData = await this.storageService.getString(storageKey, '');
+      
+      if (jsonData) {
+        return this.jsonToContact(jsonData);
+      }
+      return null;
+    } catch (err) {
+      console.error('[ContactService] 获取联系人失败:', err);
+      return null;
+    }
+  }
+
+  // ========== 内部工具方法 ==========
+
+  /**
+   * 联系人对象转JSON
+   */
+  private static contactToJSON(c: LocalContact): string {
+    return JSON.stringify({
+      id: c.id,
+      key: c.key,
+      name: c.name,
+      phone: c.phone,
+      email: c.email || '',
+      remark: c.remark || ''
+    });
+  }
+
+  /**
+   * JSON转联系人对象
+   */
+  private static jsonToContact(json: string): LocalContact {
+    const data = JSON.parse(json);
+    const contact = new LocalContact(data.name || '', data.phone || '');
+    contact.id = data.id || '';
+    contact.key = data.key || '';
+    contact.email = data.email || '';
+    contact.remark = data.remark || '';
+    return contact;
+  }
+
+  /**
+   * 添加到联系人列表
+   */
+  private static async addToContactList(key: string): Promise<void> {
+    const keys = await this.getAllContactKeys();
+    if (!keys.includes(key)) {
+      keys.push(key);
+      await this.storageService.put(this.ALL_CONTACTS_KEY, JSON.stringify(keys));
+    }
+  }
+
+  /**
+   * 从联系人列表中移除
+   */
+  private static async removeFromContactList(key: string): Promise<void> {
+    const keys = await this.getAllContactKeys();
+    const newKeys = keys.filter(k => k !== key);
+    await this.storageService.put(this.ALL_CONTACTS_KEY, JSON.stringify(newKeys));
+  }
+
+  /**
+   * 获取所有联系人键
+   */
+  private static async getAllContactKeys(): Promise<string[]> {
+    const jsonStr = await this.storageService.getString(this.ALL_CONTACTS_KEY, '[]');
+    try {
+      return JSON.parse(jsonStr) as string[];
+    } catch (err) {
+      console.error('[ContactService] 解析联系人键列表失败', err);
+      return [];
+    }
   }
 }
