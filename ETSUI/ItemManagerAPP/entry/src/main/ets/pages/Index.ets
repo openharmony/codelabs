@@ -262,14 +262,17 @@ struct LightItemNote {
   }
 
   // 图片预览 - 关键修改
-  private previewImage(item: Item): void {
+  private async previewImage(item: Item): Promise<void> {
     if (item.imagePath) {
       this.previewImagePath = item.imagePath;
-      this.loadPreviewImageToPixelMap(this.previewImagePath)
       this.showImagePreview = true;
       this.imageScale = 1; // 重置缩放
       this.imageOffsetX = 0; // 重置偏移
       this.imageOffsetY = 0;
+      promptAction.showToast({
+        message: `打开图片位置为${this.previewImagePath}`, // 关键修改：` + ${this.previewImagePath}
+        duration: 1500
+      });
     } else {
       promptAction.showToast({ message: '该物品暂无图片', duration: 1500 });
     }
@@ -939,7 +942,7 @@ struct LightItemNote {
 
           // 图片预览
 
-          Image(this.previewImagePixelMap)
+          Image(this.previewImagePath)
             .width('90%')
             .height('70%')
             .objectFit(ImageFit.Contain)
