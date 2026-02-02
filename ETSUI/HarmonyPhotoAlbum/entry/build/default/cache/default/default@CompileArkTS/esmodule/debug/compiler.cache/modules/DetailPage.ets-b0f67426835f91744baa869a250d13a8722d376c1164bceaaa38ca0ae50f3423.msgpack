@@ -1,0 +1,653 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚKûif (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+import display from '@ohos.display';
+import router from '@ohos.router';
+import Constants from '../common/constants/Constants';
+import { LazyImage } from '../components/LazyImage';
+class DetailPage extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.scroller = new Scroller();
+        this.photoArr = router.getParams()[`${Constants.PARAM_PHOTO_ARR_KEY}`];
+        this.preOffsetX = 0;
+        this.preOffsetY = 0;
+        this.currentScale = 1;
+        this.__deviceWidth = new ObservedPropertySimplePU(Constants.DEFAULT_WIDTH, this, "deviceWidth");
+        this.__smallImgWidth = new ObservedPropertySimplePU((Constants.DEFAULT_WIDTH - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) /
+            Constants.SHOW_COUNT, this, "smallImgWidth");
+        this.__imageWidth = new ObservedPropertySimplePU(this.deviceWidth + this.smallImgWidth, this, "imageWidth");
+        this.__selectedIndex = this.createStorageLink('selectedIndex', 0, "selectedIndex");
+        this.__isScaling = new ObservedPropertySimplePU(true, this, "isScaling");
+        this.__imgScale = new ObservedPropertySimplePU(1, this, "imgScale");
+        this.__imgOffSetX = new ObservedPropertySimplePU(0, this, "imgOffSetX");
+        this.__imgOffSetY = new ObservedPropertySimplePU(0, this, "imgOffSetY");
+        this.__bgOpacity = new ObservedPropertySimplePU(0, this, "bgOpacity");
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.scroller !== undefined) {
+            this.scroller = params.scroller;
+        }
+        if (params.photoArr !== undefined) {
+            this.photoArr = params.photoArr;
+        }
+        if (params.preOffsetX !== undefined) {
+            this.preOffsetX = params.preOffsetX;
+        }
+        if (params.preOffsetY !== undefined) {
+            this.preOffsetY = params.preOffsetY;
+        }
+        if (params.currentScale !== undefined) {
+            this.currentScale = params.currentScale;
+        }
+        if (params.deviceWidth !== undefined) {
+            this.deviceWidth = params.deviceWidth;
+        }
+        if (params.smallImgWidth !== undefined) {
+            this.smallImgWidth = params.smallImgWidth;
+        }
+        if (params.imageWidth !== undefined) {
+            this.imageWidth = params.imageWidth;
+        }
+        if (params.isScaling !== undefined) {
+            this.isScaling = params.isScaling;
+        }
+        if (params.imgScale !== undefined) {
+            this.imgScale = params.imgScale;
+        }
+        if (params.imgOffSetX !== undefined) {
+            this.imgOffSetX = params.imgOffSetX;
+        }
+        if (params.imgOffSetY !== undefined) {
+            this.imgOffSetY = params.imgOffSetY;
+        }
+        if (params.bgOpacity !== undefined) {
+            this.bgOpacity = params.bgOpacity;
+        }
+    }
+    updateStateVars(params) {
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__deviceWidth.purgeDependencyOnElmtId(rmElmtId);
+        this.__smallImgWidth.purgeDependencyOnElmtId(rmElmtId);
+        this.__imageWidth.purgeDependencyOnElmtId(rmElmtId);
+        this.__selectedIndex.purgeDependencyOnElmtId(rmElmtId);
+        this.__isScaling.purgeDependencyOnElmtId(rmElmtId);
+        this.__imgScale.purgeDependencyOnElmtId(rmElmtId);
+        this.__imgOffSetX.purgeDependencyOnElmtId(rmElmtId);
+        this.__imgOffSetY.purgeDependencyOnElmtId(rmElmtId);
+        this.__bgOpacity.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__deviceWidth.aboutToBeDeleted();
+        this.__smallImgWidth.aboutToBeDeleted();
+        this.__imageWidth.aboutToBeDeleted();
+        this.__selectedIndex.aboutToBeDeleted();
+        this.__isScaling.aboutToBeDeleted();
+        this.__imgScale.aboutToBeDeleted();
+        this.__imgOffSetX.aboutToBeDeleted();
+        this.__imgOffSetY.aboutToBeDeleted();
+        this.__bgOpacity.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get deviceWidth() {
+        return this.__deviceWidth.get();
+    }
+    set deviceWidth(newValue) {
+        this.__deviceWidth.set(newValue);
+    }
+    get smallImgWidth() {
+        return this.__smallImgWidth.get();
+    }
+    set smallImgWidth(newValue) {
+        this.__smallImgWidth.set(newValue);
+    }
+    get imageWidth() {
+        return this.__imageWidth.get();
+    }
+    set imageWidth(newValue) {
+        this.__imageWidth.set(newValue);
+    }
+    get selectedIndex() {
+        return this.__selectedIndex.get();
+    }
+    set selectedIndex(newValue) {
+        this.__selectedIndex.set(newValue);
+    }
+    get isScaling() {
+        return this.__isScaling.get();
+    }
+    set isScaling(newValue) {
+        this.__isScaling.set(newValue);
+    }
+    get imgScale() {
+        return this.__imgScale.get();
+    }
+    set imgScale(newValue) {
+        this.__imgScale.set(newValue);
+    }
+    get imgOffSetX() {
+        return this.__imgOffSetX.get();
+    }
+    set imgOffSetX(newValue) {
+        this.__imgOffSetX.set(newValue);
+    }
+    get imgOffSetY() {
+        return this.__imgOffSetY.get();
+    }
+    set imgOffSetY(newValue) {
+        this.__imgOffSetY.set(newValue);
+    }
+    get bgOpacity() {
+        return this.__bgOpacity.get();
+    }
+    set bgOpacity(newValue) {
+        this.__bgOpacity.set(newValue);
+    }
+    aboutToAppear() {
+        let displayClass = display.getDefaultDisplaySync();
+        let width = displayClass?.width / displayClass.densityPixels ?? Constants.DEFAULT_WIDTH;
+        this.deviceWidth = width;
+        this.smallImgWidth = (width - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) / Constants.SHOW_COUNT;
+        this.imageWidth = this.deviceWidth + this.smallImgWidth;
+    }
+    resetImg() {
+        this.imgScale = Constants.MIN_ZOOM_SCALE;
+        this.currentScale = Constants.MIN_ZOOM_SCALE;
+        this.preOffsetX = 0;
+        this.preOffsetY = 0;
+    }
+    handlePanEnd() {
+        const threshold = this.imageWidth * Constants.SWIPE_THRESHOLD_RATIO;
+        if (Math.abs(this.imgOffSetX) > threshold) {
+            if (this.imgOffSetX > 0 && this.selectedIndex > 0) {
+                this.selectedIndex -= 1;
+            }
+            else if (this.imgOffSetX < 0 && this.selectedIndex < (this.photoArr.length - 1)) {
+                this.selectedIndex += 1;
+            }
+            this.isScaling = false;
+            this.resetImg();
+            this.scroller.scrollTo({ xOffset: this.selectedIndex * this.imageWidth, yOffset: 0 });
+        }
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Stack.create();
+            Stack.offset({ x: -(this.smallImgWidth / Constants.DOUBLE_NUMBER) });
+            Stack.width(this.imageWidth);
+            Stack.height(Constants.FULL_PERCENT);
+            Stack.backgroundColor({ "id": 16777224, "type": 10001, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
+        }, Stack);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            List.create({ scroller: this.scroller, initialIndex: this.selectedIndex });
+            List.onScrollStop(() => {
+                let currentIndex = Math.round((this.scroller.currentOffset().xOffset +
+                    (this.imageWidth / Constants.DOUBLE_NUMBER)) / this.imageWidth);
+                this.selectedIndex = currentIndex;
+                this.scroller.scrollTo({ xOffset: currentIndex * this.imageWidth, yOffset: 0 });
+            });
+            List.width(Constants.FULL_PERCENT);
+            List.height(Constants.FULL_PERCENT);
+            List.listDirection(Axis.Horizontal);
+            List.visibility(this.isScaling ? Visibility.Hidden : Visibility.Visible);
+        }, List);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            ForEach.create();
+            const forEachItemGenFunction = _item => {
+                const img = _item;
+                {
+                    const itemCreation = (elmtId, isInitialRender) => {
+                        ViewStackProcessor.StartGetAccessRecordingFor(elmtId);
+                        ListItem.create(deepRenderFunction, true);
+                        if (!isInitialRender) {
+                            ListItem.pop();
+                        }
+                        ViewStackProcessor.StopGetAccessRecording();
+                    };
+                    const itemCreation2 = (elmtId, isInitialRender) => {
+                        ListItem.create(deepRenderFunction, true);
+                        Gesture.create(GesturePriority.Low);
+                        GestureGroup.create(GestureMode.Exclusive);
+                        PinchGesture.create({ fingers: Constants.DOUBLE_NUMBER });
+                        PinchGesture.onActionStart(() => {
+                            this.resetImg();
+                            this.isScaling = true;
+                            this.imgOffSetX = 0;
+                            this.imgOffSetY = 0;
+                        });
+                        PinchGesture.onActionUpdate((event) => {
+                            if (event) {
+                                this.imgScale = this.currentScale * event.scale;
+                                // é™åˆ¶ç¼©æ”¾èŒƒå›´
+                                if (this.imgScale < Constants.MIN_ZOOM_SCALE) {
+                                    this.imgScale = Constants.MIN_ZOOM_SCALE;
+                                }
+                                else if (this.imgScale > Constants.MAX_ZOOM_SCALE) {
+                                    this.imgScale = Constants.MAX_ZOOM_SCALE;
+                                }
+                            }
+                        });
+                        PinchGesture.onActionEnd(() => {
+                            if (this.imgScale < Constants.MIN_ZOOM_SCALE) {
+                                this.resetImg();
+                                this.imgOffSetX = 0;
+                                this.imgOffSetY = 0;
+                            }
+                            else if (this.imgScale > Constants.MAX_ZOOM_SCALE) {
+                                this.imgScale = Constants.MAX_ZOOM_SCALE;
+                                this.currentScale = this.imgScale;
+                            }
+                            else {
+                                this.currentScale = this.imgScale;
+                            }
+                        });
+                        PinchGesture.pop();
+                        PanGesture.create();
+                        PanGesture.onActionStart(() => {
+                            this.resetImg();
+                            this.isScaling = true;
+                        });
+                        PanGesture.onActionUpdate((event) => {
+                            if (event) {
+                                this.imgOffSetX = this.preOffsetX + event.offsetX;
+                                this.imgOffSetY = this.preOffsetY + event.offsetY;
+                            }
+                        });
+                        PanGesture.pop();
+                        GestureGroup.pop();
+                        Gesture.pop();
+                        ListItem.padding({
+                            left: this.smallImgWidth / Constants.DOUBLE_NUMBER,
+                            right: this.smallImgWidth / Constants.DOUBLE_NUMBER
+                        });
+                        ListItem.width(this.imageWidth);
+                    };
+                    const deepRenderFunction = (elmtId, isInitialRender) => {
+                        itemCreation(elmtId, isInitialRender);
+                        {
+                            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                                if (isInitialRender) {
+                                    let componentCall = new LazyImage(this, {
+                                        src: img,
+                                        widthValue: this.imageWidth,
+                                        heightValue: Constants.FULL_PERCENT,
+                                        objectFit: ImageFit.Contain,
+                                        placeholder: Constants.PLACEHOLDER_IMAGE,
+                                        errorHolder: Constants.ERROR_IMAGE
+                                    }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/DetailPage.ets", line: 73, col: 13 });
+                                    ViewPU.create(componentCall);
+                                    let paramsLambda = () => {
+                                        return {
+                                            src: img,
+                                            widthValue: this.imageWidth,
+                                            heightValue: Constants.FULL_PERCENT,
+                                            objectFit: ImageFit.Contain,
+                                            placeholder: Constants.PLACEHOLDER_IMAGE,
+                                            errorHolder: Constants.ERROR_IMAGE
+                                        };
+                                    };
+                                    componentCall.paramsGenerator_ = paramsLambda;
+                                }
+                                else {
+                                    this.updateStateVarsOfChildByElmtId(elmtId, {});
+                                }
+                            }, { name: "LazyImage" });
+                        }
+                        ListItem.pop();
+                    };
+                    this.observeComponentCreation2(itemCreation2, ListItem);
+                    ListItem.pop();
+                }
+            };
+            this.forEachUpdateFunction(elmtId, this.photoArr, forEachItemGenFunction, (item) => JSON.stringify(item), false, false);
+        }, ForEach);
+        ForEach.pop();
+        List.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Row.create();
+            Gesture.create(GesturePriority.Low);
+            GestureGroup.create(GestureMode.Exclusive);
+            PinchGesture.create({ fingers: Constants.DOUBLE_NUMBER });
+            PinchGesture.onActionUpdate((event) => {
+                if (event) {
+                    this.imgScale = this.currentScale * event.scale;
+                }
+            });
+            PinchGesture.onActionEnd(() => {
+                if (this.imgScale < 1) {
+                    this.resetImg();
+                    this.imgOffSetX = 0;
+                    this.imgOffSetY = 0;
+                }
+                else {
+                    this.currentScale = this.imgScale;
+                }
+            });
+            PinchGesture.pop();
+            PanGesture.create();
+            PanGesture.onActionStart(() => {
+                this.preOffsetX = this.imgOffSetX;
+                this.preOffsetY = this.imgOffSetY;
+            });
+            PanGesture.onActionUpdate((event) => {
+                if (event) {
+                    this.imgOffSetX = this.preOffsetX + event.offsetX;
+                    this.imgOffSetY = this.preOffsetY + event.offsetY;
+                }
+            });
+            PanGesture.onActionEnd(() => this.handlePanEnd());
+            PanGesture.pop();
+            GestureGroup.pop();
+            Gesture.pop();
+            Row.padding({
+                left: this.smallImgWidth / Constants.DOUBLE_NUMBER,
+                right: this.smallImgWidth / Constants.DOUBLE_NUMBER
+            });
+            Row.width(this.imageWidth);
+            Row.height(Constants.FULL_PERCENT);
+            Row.visibility(this.isScaling ? Visibility.Visible : Visibility.Hidden);
+        }, Row);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            __Common__.create();
+            __Common__.position({ x: this.imgOffSetX, y: this.imgOffSetY });
+            __Common__.scale({ x: this.imgScale, y: this.imgScale });
+            __Common__.onClick(() => router.back());
+        }, __Common__);
+        {
+            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                if (isInitialRender) {
+                    let componentCall = new LazyImage(this, {
+                        src: this.photoArr[this.selectedIndex],
+                        widthValue: this.imageWidth,
+                        heightValue: Constants.FULL_PERCENT,
+                        objectFit: ImageFit.Contain,
+                        placeholder: Constants.PLACEHOLDER_IMAGE,
+                        errorHolder: Constants.ERROR_IMAGE
+                    }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/DetailPage.ets", line: 143, col: 9 });
+                    ViewPU.create(componentCall);
+                    let paramsLambda = () => {
+                        return {
+                            src: this.photoArr[this.selectedIndex],
+                            widthValue: this.imageWidth,
+                            heightValue: Constants.FULL_PERCENT,
+                            objectFit: ImageFit.Contain,
+                            placeholder: Constants.PLACEHOLDER_IMAGE,
+                            errorHolder: Constants.ERROR_IMAGE
+                        };
+                    };
+                    componentCall.paramsGenerator_ = paramsLambda;
+                }
+                else {
+                    this.updateStateVarsOfChildByElmtId(elmtId, {});
+                }
+            }, { name: "LazyImage" });
+        }
+        __Common__.pop();
+        Row.pop();
+        Stack.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+    static getEntryName() {
+        return "DetailPage";
+    }
+}
+registerNamedRoute(() => new DetailPage(undefined, {}), "", { bundleName: "com.example.electronicalbum", moduleName: "entry", pagePath: "pages/DetailPage", pageFullPath: "entry/src/main/ets/pages/DetailPage", integratedHsp: "false", moduleType: "followWithHap" });
+//# sourceMappingURL=DetailPage.js.mapÂ”Ùj hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.display.d.tsÙi hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.router.d.tsÙx/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/constants/Constants.etsÙr/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/LazyImage.etsÙn/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailPage.etsÔrB›ªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo°belongModulePath§checker¬shouldEmitJs¥entryÃÂÙL/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entryÙF/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum¥entry¥1.0.0Ô  ÙL/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entryÔrCÜ ®¬getNodeCount²getIdentifierCount®getSymbolCount¬getTypeCountµgetInstantiationCountµgetRelationCacheSizes±isUndefinedSymbol±isArgumentsSymbol¯isUnknownSymbol¯getMergedSymbol®getDiagnostics´getGlobalDiagnostics´getRecursionIdentity¶getUnmatchedProperties¹getTypeOfSymbolAtLocation¯getTypeOfSymbolÙ(getSymbolsOfParameterPropertyDeclaration·getDeclaredTypeOfSymbol³getPropertiesOfType±getPropertyOfTypeÙ"getPrivateIdentifierPropertyOfType·getTypeOfPropertyOfType²getIndexInfoOfType³getIndexInfosOfTypeºgetIndexInfosOfIndexSymbol³getSignaturesOfType²getIndexTypeOfType¬getIndexType¬getBaseTypes¸getBaseTypeOfLiteralType®getWidenedType³getTypeFromTypeNode°getParameterTypeÙ$getParameterIdentifierNameAtPosition¸getPromisedTypeOfPromise®getAwaitedType¸getReturnTypeOfSignature®isNullableType¯getNullableType²getNonNullableType²getNonOptionalType°getTypeArguments®typeToTypeNodeÙ$indexInfoToIndexSignatureDeclaration¿signatureToSignatureDeclaration²symbolToEntityName²symbolToExpression¬symbolToNodeÙ!symbolToTypeParameterDeclarations¼symbolToParameterDeclarationºtypeParameterToDeclaration±getSymbolsInScope³getSymbolAtLocation·getIndexInfosAtLocationÙ!getShorthandAssignmentValueSymbolÙ#getExportSpecifierLocalTargetSymbol·getExportSymbolOfSymbol±getTypeAtLocationºgetTypeAtLocationForLinterÙ tryGetTypeAtLocationWithoutCheckºgetTypeOfAssignmentPatternÙ*getPropertySymbolOfDestructuringAssignment±signatureToString¬typeToString®symbolToStringµtypePredicateToString®writeSignature©writeType«writeSymbol²writeTypePredicate¼getAugmentedPropertiesOfType®getRootSymbols²getSymbolOfExpando±getContextualTypeÙ(getContextualTypeForObjectLiteralElementÙ#getContextualTypeForArgumentAtIndexÙ getContextualTypeForJsxAttribute²isContextSensitiveÙ!getTypeOfPropertyOfContextualTypeµgetFullyQualifiedNameÙ#tryGetResolvedSignatureWithoutCheck´getResolvedSignatureÙ/getResolvedSignatureForStringLiteralCompletionsÙ$getResolvedSignatureForSignatureHelpµgetExpandedParameters¹hasEffectiveRestParameterºcontainsArgumentsReference°getConstantValueµisValidPropertyAccessÙ#isValidPropertyAccessForCompletions»getSignatureFromDeclarationºisImplementationOfOverload¹getImmediateAliasedSymbol°getAliasedSymbol¯getEmitResolver²getExportsOfModule¿getExportsAndPropertiesOfModuleÙ forEachExportAndPropertyOfModule¯getSymbolWalker±getAmbientModules¹getJsxIntrinsicTagNamesAt³isOptionalParameter»tryGetMemberInModuleExportsÙ(tryGetMemberInModuleExportsAndProperties´tryFindAmbientModuleÙ(tryFindAmbientModuleWithoutAugmentations¯getApparentType¬getUnionType²isTypeAssignableTo³createAnonymousType¯createSignature¬createSymbol¯createIndexInfoªgetAnyType­getStringType­getNumberType±createPromiseType¯createArrayType¹getElementTypeOfArrayType®getBooleanType¬getFalseType«getTrueType«getVoidType°getUndefinedType«getNullType¯getESSymbolType¬getNeverType¯getOptionalType®getPromiseType²getPromiseLikeType´getAsyncIterableType²isSymbolAccessible«isArrayType«isTupleType¯isArrayLikeTypeÙ#isTypeInvalidDueToUnionDiscriminantºgetExactOptionalProperties¿getAllPossiblePropertiesOfTypesÙ(getSuggestedSymbolForNonexistentPropertyÙ#getSuggestionForNonexistentPropertyÙ,getSuggestedSymbolForNonexistentJSXAttributeÙ&getSuggestedSymbolForNonexistentSymbolÙ!getSuggestionForNonexistentSymbolÙ&getSuggestedSymbolForNonexistentModuleÙ!getSuggestionForNonexistentExportÙ+getSuggestedSymbolForNonexistentClassMember·getBaseConstraintOfType»getDefaultFromTypeParameter«resolveName¯getJsxNamespaceµgetJsxFragmentFactory¸getAccessibleSymbolChain»getTypePredicateOfSignature¹resolveExternalModuleName»resolveExternalModuleSymbol°tryGetThisTypeAt¹getTypeArgumentConstraint¸getSuggestionDiagnostics¸runWithCancellationTokenÙ3getLocalTypeParametersOfClassOrInterfaceOrTypeAlias´isDeclarationVisible´isPropertyAccessible»getTypeOnlyAliasDeclaration¿getMemberOverrideModifierStatusÙ!isTypeParameterPossiblyReferenced²getConstEnumRelate´clearConstEnumRelateµdeleteConstEnumRelateÙ$getTypeArgumentsForResolvedSignatureµgetCheckedSourceFilesÙ"collectHaveTsNoCheckFilesForLinter·clearQualifiedNameCache®isStaticRecord²isStaticSourceFileÔ  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  ÃÃÚè/*
+ * Copyright (c) 2023 Huawei Device Co., Ltd.
+ * Licensed under the Apache License,Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+import display from '@ohos.display';
+import router from '@ohos.router';
+import Constants from '../common/constants/Constants';
+import { LazyImage } from '../components/LazyImage';
+
+@Entry
+@Component
+struct DetailPage {
+  scroller: Scroller = new Scroller();
+  photoArr: Array<Resource> = (router.getParams() as Record<string, Array<Resource>>)[`${Constants.PARAM_PHOTO_ARR_KEY}`];
+  preOffsetX: number = 0;
+  preOffsetY: number = 0;
+  currentScale: number = 1;
+  @State deviceWidth: number = Constants.DEFAULT_WIDTH;
+  @State smallImgWidth: number = (Constants.DEFAULT_WIDTH - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) /
+  Constants.SHOW_COUNT;
+  @State imageWidth: number = this.deviceWidth + this.smallImgWidth;
+  @StorageLink('selectedIndex') selectedIndex: number = 0;
+  @State isScaling: boolean = true;
+  @State imgScale: number = 1;
+  @State imgOffSetX: number = 0;
+  @State imgOffSetY: number = 0;
+  @State bgOpacity: number = 0;
+  aboutToAppear() {
+    let displayClass: display.Display = display.getDefaultDisplaySync();
+    let width = displayClass?.width / displayClass.densityPixels ?? Constants.DEFAULT_WIDTH;
+    this.deviceWidth = width;
+    this.smallImgWidth = (width - Constants.LIST_ITEM_SPACE * (Constants.SHOW_COUNT - 1)) / Constants.SHOW_COUNT;
+    this.imageWidth = this.deviceWidth + this.smallImgWidth;
+  }
+
+  resetImg(): void {
+    this.imgScale = Constants.MIN_ZOOM_SCALE;
+    this.currentScale = Constants.MIN_ZOOM_SCALE;
+    this.preOffsetX = 0;
+    this.preOffsetY = 0;
+  }
+
+  handlePanEnd(): void {
+    const threshold = this.imageWidth * Constants.SWIPE_THRESHOLD_RATIO;
+    if (Math.abs(this.imgOffSetX) > threshold) {
+      if (this.imgOffSetX > 0 && this.selectedIndex > 0) {
+        this.selectedIndex -= 1;
+      } else if (this.imgOffSetX < 0 && this.selectedIndex < (this.photoArr.length - 1)) {
+        this.selectedIndex += 1;
+      }
+      this.isScaling = false;
+      this.resetImg();
+      this.scroller.scrollTo({ xOffset: this.selectedIndex * this.imageWidth, yOffset: 0 });
+    }
+  }
+
+  build() {
+    Stack() {
+      List({ scroller: this.scroller, initialIndex: this.selectedIndex }) {
+        ForEach(this.photoArr, (img: Resource) => {
+          ListItem() {
+            LazyImage({
+              src: img,
+              widthValue: this.imageWidth,
+              heightValue: Constants.FULL_PERCENT,
+              objectFit: ImageFit.Contain,
+              placeholder: Constants.PLACEHOLDER_IMAGE,
+              errorHolder: Constants.ERROR_IMAGE
+            })
+          }
+          .gesture(GestureGroup(GestureMode.Exclusive,
+            PinchGesture({ fingers: Constants.DOUBLE_NUMBER })
+              .onActionStart(() => {
+                this.resetImg();
+                this.isScaling = true;
+                this.imgOffSetX = 0;
+                this.imgOffSetY = 0;
+              })
+              .onActionUpdate((event?: GestureEvent) => {
+                if (event) {
+                  this.imgScale = this.currentScale * event.scale;
+                  // é™åˆ¶ç¼©æ”¾èŒƒå›´
+                  if (this.imgScale < Constants.MIN_ZOOM_SCALE) {
+                    this.imgScale = Constants.MIN_ZOOM_SCALE;
+                  } else if (this.imgScale > Constants.MAX_ZOOM_SCALE) {
+                    this.imgScale = Constants.MAX_ZOOM_SCALE;
+                  }
+                }
+              })
+              .onActionEnd(() => {
+                if (this.imgScale < Constants.MIN_ZOOM_SCALE) {
+                  this.resetImg();
+                  this.imgOffSetX = 0;
+                  this.imgOffSetY = 0;
+                } else if (this.imgScale > Constants.MAX_ZOOM_SCALE) {
+                  this.imgScale = Constants.MAX_ZOOM_SCALE;
+                  this.currentScale = this.imgScale;
+                } else {
+                  this.currentScale = this.imgScale;
+                }
+              }), PanGesture()
+              .onActionStart(() => {
+                this.resetImg();
+                this.isScaling = true;
+              })
+              .onActionUpdate((event?: GestureEvent) => {
+                if (event) {
+                  this.imgOffSetX = this.preOffsetX + event.offsetX;
+                  this.imgOffSetY = this.preOffsetY + event.offsetY;
+                }
+              })
+          ))
+          .padding({
+            left: this.smallImgWidth / Constants.DOUBLE_NUMBER,
+            right: this.smallImgWidth / Constants.DOUBLE_NUMBER
+          })
+          .width(this.imageWidth)
+        }, (item: Resource) => JSON.stringify(item))
+      }
+      .onScrollStop(() => {
+        let currentIndex = Math.round(((this.scroller.currentOffset().xOffset as number) +
+          (this.imageWidth / Constants.DOUBLE_NUMBER)) / this.imageWidth);
+        this.selectedIndex = currentIndex;
+        this.scroller.scrollTo({ xOffset: currentIndex * this.imageWidth, yOffset: 0 });
+      })
+      .width(Constants.FULL_PERCENT)
+      .height(Constants.FULL_PERCENT)
+      .listDirection(Axis.Horizontal)
+      .visibility(this.isScaling ? Visibility.Hidden : Visibility.Visible)
+
+      Row() {
+        LazyImage({
+          src: this.photoArr[this.selectedIndex],
+          widthValue: this.imageWidth,
+          heightValue: Constants.FULL_PERCENT,
+          objectFit: ImageFit.Contain,
+          placeholder: Constants.PLACEHOLDER_IMAGE,
+          errorHolder: Constants.ERROR_IMAGE
+        })
+          .position({ x: this.imgOffSetX, y: this.imgOffSetY })
+          .scale({ x: this.imgScale, y: this.imgScale })
+          .onClick(() => router.back())
+      }
+      .gesture(GestureGroup(GestureMode.Exclusive,
+        PinchGesture({ fingers: Constants.DOUBLE_NUMBER })
+          .onActionUpdate((event?: GestureEvent) => {
+            if (event) {
+              this.imgScale = this.currentScale * event.scale;
+            }
+          })
+          .onActionEnd(() => {
+            if (this.imgScale < 1) {
+              this.resetImg();
+              this.imgOffSetX = 0;
+              this.imgOffSetY = 0;
+            } else {
+              this.currentScale = this.imgScale;
+            }
+          }),
+        PanGesture()
+          .onActionStart(() => {
+            this.preOffsetX = this.imgOffSetX;
+            this.preOffsetY = this.imgOffSetY;
+          })
+          .onActionUpdate((event?: GestureEvent) => {
+            if (event) {
+              this.imgOffSetX = this.preOffsetX + event.offsetX;
+              this.imgOffSetY = this.preOffsetY + event.offsetY;
+            }
+          })
+          .onActionEnd(() => this.handlePanEnd())
+      ))
+      .padding({
+        left: this.smallImgWidth / Constants.DOUBLE_NUMBER,
+        right: this.smallImgWidth / Constants.DOUBLE_NUMBER
+      })
+      .width(this.imageWidth)
+      .height(Constants.FULL_PERCENT)
+      .visibility(this.isScaling ? Visibility.Visible : Visibility.Hidden)
+    }
+    .offset({ x: -(this.smallImgWidth / Constants.DOUBLE_NUMBER) })
+    .width(this.imageWidth)
+    .height(Constants.FULL_PERCENT)
+    .backgroundColor($r('app.color.detail_background'))
+  }
+}
+ÀÔrD”­@ohos.display¬@ohos.router½../common/constants/Constants·../components/LazyImageÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙj hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.display.d.tsÔrF‘¯hostModulesInfo’ÔrG’²hostDependencyName®hostModuleName­@ohos.display¥entryG­@ohos.display¥entryÃªoh-resolveÂEAÃÙi hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.router.d.tsAÃªoh-resolveÂEAÂÙx/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/constants/Constants.etsAÃªoh-resolveÂEAÂÙr/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/LazyImage.etsAÃªoh-resolveÂ“ÔrH–§version¤fileªsourceRoot§sources¥names¨mappings­DetailPage.js ‘®DetailPage.etsÜ™‘”    ‘” –”   ” ” ” ”# #”$ $–”   ” ” ” ”! !”" "–”   ” ” ” ”5 5”6 6˜”   ” ”	 	” ” ” ”3 3”4 4’” ” ‘”  ”” ” ”$ #”& %œ” ” %” &”( /”* ÌU”+ ÌV”. ÌY”7 Ìb”8 Ìc”ÌK Ìv”ÌM Ìx”ÌN Ìy’” ” ’” ” ’” ” ””: ”ÌC (”ÌD )”ÌQ 6Ü ”< !”= "”ÌF +”ÌG ,”ÌT 9”ÌW <”Ì` ÌE”Ìa ÌF”Ìp ÌU”Ìs ÌX”Ìt ÌY”Ì} Ìb”Ì~ Ìc”Ìˆ Ìm”Ì‹ Ìp”ÌŒ Ìq”Ì Ìr”Ì Ìs”” ” ” ”  ˜”9 ”= "”> #”ÌI .”ÌL 1”ÌP 5”ÌQ 6”Ì^ ÌC””6  ”ÌE  ”ÌG  8”ÌH  9’”8 !”< !"’”7 "”8 "’”9 #”: #’”9 $”: $’”8 %”9 %‘” 4’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’”   ”  -’”   ”  -’” !	” !’” !	” !’” "	” "’” "	” "’” #	” #’” #	” #’” $	” $’” $	” $’” %	” %’” %	” %’” &” &™” '” '” '” '(”" '/”# '0”8 'ÌE”: 'ÌG”; 'ÌHÜ ” (” (” (” (”  (”" (”' (#”* (&”6 (2”7 (3”ÌD (Ì@”ÌH (ÌD”ÌQ (ÌM”ÌR (ÌN”Ì_ (Ì[”Ì` (Ì\—” )” )” )	” )” )”  )”! )Ü ” *” *” *	” *” *” *”# *”& *"”/ *+”0 *,”? *;”ÌB *>”ÌC *?”ÌL *ÌH”ÌM *ÌI”ÌW *ÌS”ÌZ *ÌV”Ì[ *ÌW”Ì\ *ÌX”Ì] *ÌY”Ì` *Ì\”Ìi *Ìe”Ìj *Ìf”Ìt *Ìp”Ìu *Ìq” +” +” +	” +” +” +” +”* +&”- +)”1 +-”2 +.”? +;”Ì@ +<’” ,” ,’” .” .
+™” /” /” /	” /” /”! /”" /”0 /,”1 /-™” 0” 0” 0	” 0” 0”% 0!”& 0"”4 00”5 01—” 1” 1” 1	” 1” 1” 1” 1—” 2” 2” 2	” 2” 2” 2” 2’” 3” 3’” 5” 5œ” 6” 6
+” 6” 6” 6” 6”) 6%”, 6(”5 61”6 62”ÌK 6ÌG”ÌL 6ÌH” 7” 7” 7” 7” 7” 7” 7” 7”$ 7 ”% 7!”( 7$”1 7-”3 7/” 8” 8
+” 8” 8” 8”" 8”# 8”' 8!”+ 8%”, 8&”9 83”< 86”= 87”? 89—” 9” 9” 9”" 9”& 9”' 9”( 9 ‘” :Ü ” :” :” :” :”$ : ”' :#”( :$”, :(”0 :,”1 :-”> ::”ÌA :=”ÌB :>”ÌF :ÌB”ÌG :ÌC”ÌO :ÌK”ÌP :ÌL”ÌV :ÌR”ÌY :ÌU”ÌZ :ÌV”Ì[ :ÌW”Ì] :ÌY—” ;” ;” ;”" ;”& ;”' ;”( ; ‘” <—” =” =
+” =” =” =”" =”# =–” >” >
+” >” >” >” >Ü ” ?” ?
+” ?” ?” ?”" ?”# ?”% ?”, ?&”. ?(”2 ?,”3 ?-”Ì@ ?:”ÌC ?=”ÌG ?ÌA”ÌH ?ÌB”ÌR ?ÌL”ÌT ?ÌN”Ì[ ?ÌU”Ì] ?ÌW”Ì^ ?ÌX”Ì` ?ÌZ”Ìa ?Ì[”Ìb ?Ì\‘”	 Ì@’” ÌA” ÌA‘” ÌC’” ÌD” ÌD	Ü ” ÌD” ÌD	” Ì¿” Ì¿” Ì¿” Ì¿” Ì¿” Ì¿” Ì¿”  Ì¿”$ Ì¿”% Ì¿”2 Ì¿%”5 Ì¿(”> Ì¿1”? Ì¿2”ÌL Ì¿?”ÌM Ì¿Ì@”ÌO Ì¿ÌB˜” ÌD” ÌD	” ÌÀ” ÌÀ
+” ÌÀ” ÌÀ” ÌÀ”' ÌÀ˜” ÌD” ÌD	” ÌÁ” ÌÁ” ÌÁ”" ÌÁ”# ÌÁ”/ ÌÁ"”” ÌD” ÌD	” ÌÂ”! ÌÂÜ ” ÌE” ÌE
+” ÌE” ÌE”" ÌE”$ ÌE”( ÌE”) ÌE”1 ÌE$”3 ÌE&”? ÌE2”ÌA ÌE4”ÌE ÌE8”ÌF ÌE9”ÌS ÌEÌF”ÌU ÌEÌH—” ÌE” ÌE
+” Ì‚” Ì‚” Ì‚”! Ì‚”# Ì‚Ü ” Ìƒ” Ìƒ”  Ìƒ”# Ìƒ”' Ìƒ”( Ìƒ ”- Ìƒ%”. Ìƒ&”/ Ìƒ(”3 Ìƒ,”4 Ìƒ-”< Ìƒ5”= Ìƒ6”ÌJ ÌƒÌC”ÌL ÌƒÌE”ÌM ÌƒÌF”ÌT ÌƒÌXÜ ” Ì„
+” Ì„” Ì„” Ì„”$ Ì„”' Ì„”0 Ì„&”1 Ì„'”> Ì„4”? Ì„5”Ì@ Ì„6”ÌC Ì„9”ÌG Ì„=”ÌH Ì„>”ÌR Ì„ÌH”ÌS Ì„ÌI”ÌT Ì„ÌJ—” Ì…” Ì…” Ì…”" Ì…”% Ì…”1 Ì…)”2 Ì…*Ü ” Ì†” Ì†” Ì†” Ì†” Ì†”& Ì†”' Ì†”) Ì†!”0 Ì†(”2 Ì†*”> Ì†6”ÌA Ì†9”ÌE Ì†=”ÌF Ì†>”ÌP Ì†ÌH”ÌR Ì†ÌJ”ÌY Ì†ÌQ”Ì[ Ì†ÌS”Ì\ Ì†ÌT”Ì^ Ì†ÌV”Ì_ Ì†ÌW”Ì` Ì†ÌX’” Ì‡” Ì‡˜” ÌE” ÌE
+” Ìˆ” Ìˆ” Ìˆ”  Ìˆ”! Ìˆ”- Ìˆ#˜” ÌE” ÌE
+” Ì‰” Ì‰” Ì‰”! Ì‰”" Ì‰”. Ì‰$˜” ÌE” ÌE
+” ÌŠ” ÌŠ” ÌŠ”# ÌŠ”$ ÌŠ”. ÌŠ$Ü ” ÌE” ÌE
+” Ì‹” Ì‹” Ì‹”  Ì‹”! Ì‹”* Ì‹ ”+ Ì‹!”, Ì‹"”- Ì‹#”7 Ì‹-”8 Ì‹.”> Ì‹4”? Ì‹5”Ì@ Ì‹6”ÌA Ì‹7”ÌK Ì‹ÌA”ÌL Ì‹ÌB”ÌS Ì‹ÌI’” ÌF” ÌF’” ÌG
+”$ ÌG–” ÌQ”$ ÌQ”, ÌQ ”7 ÌQ+”8 ÌQ,”ÌA ÌQ5š” ÌR”$ ÌR”, ÌR”. ÌR”5 ÌR"”7 ÌR$”Ì@ ÌR-”ÌA ÌR.”ÌN ÌR;”ÌP ÌR=—” ÌR”$ ÌR”% ÌS”2 ÌS”3 ÌS”6 ÌS ”8 ÌS"–” ÌT”  ÌT”! ÌT”) ÌT”+ ÌT”, ÌT —” ÌU”  ÌU”! ÌU”* ÌU”- ÌU!”1 ÌU%”2 ÌU&—” ÌV”  ÌV”! ÌV”+ ÌV”. ÌV"”/ ÌV#”0 ÌV$—” ÌW”  ÌW”! ÌW”+ ÌW”. ÌW"”/ ÌW#”0 ÌW$’” ÌX” ÌX™” ÌR”$ ÌR”% ÌY”3 ÌY”4 ÌY”5 ÌY”: ÌY3”< ÌY5”> ÌY7”” ÌZ”  ÌZ”% ÌZ”' ÌZ”  Ì[”$ Ì[”% Ì[”- Ì[”0 Ì["”4 Ì[&”5 Ì['”ÌA Ì[3”ÌD Ì[6”ÌI Ì[;”ÌJ Ì[<”ÌO Ì[ÌA”ÌP Ì[ÌB’”  Ì\”) Ì\š”  Ì]”$ Ì]”( Ì]”) Ì]”1 Ì]#”4 Ì]&”= Ì]/”> Ì]0”ÌL Ì]>”ÌN Ì]Ì@™”$ Ì^”( Ì^”) Ì^”1 Ì^!”4 Ì^$”= Ì^-”> Ì^.”ÌL Ì^<”ÌM Ì^=‘”! Ì_š”% Ì_”) Ì_”- Ì_!”. Ì_"”6 Ì_*”9 Ì_-”ÌB Ì_6”ÌC Ì_7”ÌQ Ì_ÌE”ÌS Ì_ÌG™”$ Ì`”( Ì`”) Ì`”1 Ì`!”4 Ì`$”= Ì`-”> Ì`.”ÌL Ì`<”ÌM Ì`=‘”! Ìa‘” Ìb’” Ìc” Ìc—” ÌR”$ ÌR”% Ìd”0 Ìd”1 Ìd”4 Ìd”6 Ìd š” Ìe”  Ìe”$ Ìe”% Ìe”- Ìe!”0 Ìe$”9 Ìe-”: Ìe.”ÌH Ìe<”ÌJ Ìe>–”  Ìf”$ Ìf”% Ìf”- Ìf”/ Ìf!”0 Ìf"—”  Ìg”$ Ìg”% Ìg”/ Ìg!”2 Ìg$”3 Ìg%”4 Ìg&—”  Ìh”$ Ìh”% Ìh”/ Ìh!”2 Ìh$”3 Ìh%”4 Ìh&‘” Ìiš”! Ìi”% Ìi”) Ìi”* Ìi ”2 Ìi(”5 Ìi+”> Ìi4”? Ìi5”ÌM ÌiÌC”ÌO ÌiÌE™”  Ìj”$ Ìj”% Ìj”- Ìj”0 Ìj"”9 Ìj+”: Ìj,”ÌH Ìj:”ÌI Ìj;™”  Ìk”$ Ìk”% Ìk”1 Ìk#”4 Ìk&”8 Ìk*”9 Ìk+”ÌA Ìk3”ÌB Ìk4‘” Ìl‘”! Ìl™”  Ìm”$ Ìm”% Ìm”1 Ìm#”4 Ìm&”8 Ìm*”9 Ìm+”ÌA Ìm3”ÌB Ìm4‘” Ìn’” Ìo” Ìo’” ÌR”$ ÌR’” Ìo”" Ìo—” Ìo”" Ìo”# Ìp”0 Ìp”1 Ìp”4 Ìp ”6 Ìp"–” Ìq”  Ìq”! Ìq”) Ìq”+ Ìq”, Ìq —” Ìr”  Ìr”! Ìr”* Ìr”- Ìr!”1 Ìr%”2 Ìr&’” Ìs” Ìs™” Ìo”" Ìo”# Ìt”1 Ìt”2 Ìt”3 Ìt”8 Ìt3”: Ìt5”< Ìt7”” Ìu”  Ìu”% Ìu”' Ìu”  Ìv”$ Ìv”% Ìv”/ Ìv!”2 Ìv$”6 Ìv(”7 Ìv)”ÌA Ìv3”ÌD Ìv6”ÌI Ìv;”ÌJ Ìv<”ÌQ ÌvÌC”ÌR ÌvÌD”  Ìw”$ Ìw”% Ìw”/ Ìw!”2 Ìw$”6 Ìw(”7 Ìw)”ÌA Ìw3”ÌD Ìw6”ÌI Ìw;”ÌJ Ìw<”ÌQ ÌwÌC”ÌR ÌwÌD‘” Ìx’” Ìy” Ìy’” Ìo”" Ìo’” ÌQ”$ ÌQ•” ÌG
+”  ÌG”! Ì{”( Ì{”) Ì{š” Ì|”  Ì|”" Ì|”& Ì|”' Ì|”4 Ì|$”7 Ì|'”Ì@ Ì|0”ÌA Ì|1”ÌN Ì|>š” Ì}”! Ì}”# Ì}”' Ì}”( Ì}”5 Ì}%”8 Ì}(”ÌA Ì}1”ÌB Ì}2”ÌO Ì}?‘” Ì~˜” ÌG
+”  ÌG”! Ì”& Ì”' Ì”+ Ì”, Ì”6 Ì “”< ÌH”ÌE ÌH”ÌL ÌH””( ÌI”+ ÌI”- ÌI”0 ÌI–”( ÌJ”2 ÌJ”4 ÌJ”8 ÌJ”9 ÌJ”ÌC ÌJ)–”( ÌK”3 ÌK”5 ÌK”> ÌK$”? ÌK%”ÌK ÌK1–”( ÌL”1 ÌL”3 ÌL”; ÌL!”< ÌL"”ÌC ÌL)–”( ÌM”3 ÌM”5 ÌM”> ÌM$”? ÌM%”ÌP ÌM6–”( ÌN”3 ÌN”5 ÌN”> ÌN$”? ÌN%”ÌJ ÌN0‘”% ÌO””, ÌI”/ ÌI”1 ÌI”4 ÌI–”, ÌJ”6 ÌJ”8 ÌJ”< ÌJ”= ÌJ”ÌG ÌJ)–”, ÌK”7 ÌK”9 ÌK”ÌB ÌK$”ÌC ÌK%”ÌO ÌK1–”, ÌL”5 ÌL”7 ÌL”? ÌL!”Ì@ ÌL"”ÌG ÌL)–”, ÌM”7 ÌM”9 ÌM”ÌB ÌM$”ÌC ÌM%”ÌT ÌM6–”, ÌN”7 ÌN”9 ÌN”ÌB ÌN$”ÌC ÌN%”ÌN ÌN0’” ÌG
+”  ÌG’” ÌG
+” ÌGÜ ”/ ÌF”3 ÌF”4 ÌF”< ÌF”ÌV Ì€”ÌW Ì€”Ì[ Ì€”Ì] Ì€”Ì_ Ì€”Ì` Ì€”Ìd Ì€#”Ìe Ì€$”Ìn Ì€-”Ìo Ì€.”Ìs Ì€2”Ìt Ì€3’” ÌF” ÌF’” ÌE” ÌE
+’” Ì” Ì	–” Ìš” Ìš”  Ìš”+ Ìš'”, Ìš(”5 Ìš1š” Ì›” Ì›”  Ì›”" Ì›”) Ì›”+ Ì› ”4 Ì›)”5 Ì›*”ÌB Ì›7”ÌD Ì›9™” Ì›” Ì›” Ìœ”' Ìœ”( Ìœ”) Ìœ”. Ìœ/”0 Ìœ1”2 Ìœ3”” Ì” Ì” Ì” Ì” Ì” Ì” Ì”! Ì”$ Ì”( Ì"”) Ì#”5 Ì/”8 Ì2”= Ì7”> Ì8”ÌC Ì=”ÌD Ì>‘” ÌŸ’” Ì 
+” Ì —” Ì›” Ì›” Ì¡”$ Ì¡”% Ì¡”( Ì¡”* Ì¡˜” Ì¢” Ì¢” Ì¢” Ì¢”! Ì¢”$ Ì¢ ”% Ì¢!”' Ì¢#–” Ì£” Ì£” Ì£”! Ì£”# Ì£”$ Ì£—” Ì¤” Ì¤” Ì¤”# Ì¤”& Ì¤ ”' Ì¤!”( Ì¤"—” Ì¥” Ì¥” Ì¥”# Ì¥”& Ì¥ ”' Ì¥!”( Ì¥"‘” Ì¦‘” Ì¦™” Ì§” Ì§” Ì§”% Ì§”( Ì§"”, Ì§&”- Ì§'”5 Ì§/”6 Ì§0‘” Ì¨’” Ì©
+” Ì©’” Ì›” Ì›’” Ìª” Ìª—” Ìª” Ìª” Ì«”$ Ì«”% Ì«”( Ì«”* Ì«™” Ì¬” Ì¬” Ì¬” Ì¬”" Ì¬”& Ì¬"”' Ì¬#”1 Ì¬-”2 Ì¬.™” Ì­” Ì­” Ì­” Ì­”" Ì­”& Ì­"”' Ì­#”1 Ì­-”2 Ì­.’” Ì®
+” Ì®™” Ìª” Ìª” Ì¯”% Ì¯”& Ì¯”' Ì¯”, Ì¯/”. Ì¯1”0 Ì¯3”” Ì°” Ì°” Ì°” Ì°” Ì±” Ì±” Ì±”# Ì±”& Ì± ”* Ì±$”+ Ì±%”5 Ì±/”8 Ì±2”= Ì±7”> Ì±8”ÌE Ì±?”ÌF Ì±Ì@” Ì²” Ì²” Ì²”# Ì²”& Ì² ”* Ì²$”+ Ì²%”5 Ì²/”8 Ì²2”= Ì²7”> Ì²8”ÌE Ì²?”ÌF Ì²Ì@‘” Ì³’” Ì´
+” Ì´œ” Ìª” Ìª” Ìµ”" Ìµ”# Ìµ”& Ìµ”( Ìµ”) Ìµ”- Ìµ!”. Ìµ"”: Ìµ.”< Ìµ0’” Ìª” Ìª’” Ìš” Ìš•” Ì” Ì	” Ì·” Ì·” Ì·š” Ì¸” Ì¸” Ì¸” Ì¸” Ì¸”( Ì¸ ”+ Ì¸#”4 Ì¸,”5 Ì¸-”ÌB Ì¸:š” Ì¹” Ì¹” Ì¹” Ì¹” Ì¹”) Ì¹!”, Ì¹$”5 Ì¹-”6 Ì¹.”ÌC Ì¹;‘” Ìº˜” Ì” Ì	” Ì»” Ì»” Ì»” Ì»” Ì»”% Ì»˜” Ì” Ì	” Ì¼” Ì¼” Ì¼”  Ì¼”! Ì¼”- Ì¼$Ü ” Ì” Ì	” Ì½” Ì½” Ì½” Ì½”  Ì½”) Ì½ ”* Ì½!”+ Ì½"”, Ì½#”6 Ì½-”7 Ì½.”> Ì½5”? Ì½6”Ì@ Ì½7”ÌA Ì½8”ÌK Ì½ÌB”ÌL Ì½ÌC”ÌR Ì½ÌIÜ ” Ì–” Ì–”  Ì–”" Ì–”# Ì–”% Ì–”) Ì–”* Ì–”4 Ì–(”6 Ì–*”7 Ì–+”9 Ì–-”= Ì–1”> Ì–2”ÌH Ì–<”ÌJ Ì–>Ü ” Ì—” Ì—” Ì—” Ì—”  Ì—”" Ì—”& Ì—”' Ì—”/ Ì—#”1 Ì—%”2 Ì—&”4 Ì—(”8 Ì—,”9 Ì—-”ÌA Ì—5”ÌC Ì—7š” Ì˜” Ì˜” Ì˜”" Ì˜”$ Ì˜”% Ì˜”+ Ì˜”, Ì˜ ”0 Ì˜$”2 Ì˜&“”, Ì”5 Ì”< Ì›” Ì
+” Ì” Ì”! Ì”" Ì”* Ì”+ Ì”/ Ì!”0 Ì"”= Ì/”> Ì0–” Ì
+”" Ì”$ Ì”( Ì”) Ì”3 Ì%–” Ì‘
+”# Ì‘”% Ì‘”. Ì‘ ”/ Ì‘!”; Ì‘-–” Ì’
+”! Ì’”# Ì’”+ Ì’”, Ì’”3 Ì’%–” Ì“
+”# Ì“”% Ì“”. Ì“ ”/ Ì“!”Ì@ Ì“2–” Ì”
+”# Ì””% Ì””. Ì” ”/ Ì”!”: Ì”,‘” Ì•	›” Ì
+” Ì”! Ì”% Ì”& Ì”. Ì”/ Ì”3 Ì!”4 Ì"”ÌA Ì/”ÌB Ì0–” Ì
+”& Ì”( Ì”, Ì”- Ì”7 Ì%–” Ì‘
+”' Ì‘”) Ì‘”2 Ì‘ ”3 Ì‘!”? Ì‘-–” Ì’
+”% Ì’”' Ì’”/ Ì’”0 Ì’”7 Ì’%–” Ì“
+”' Ì“”) Ì“”2 Ì“ ”3 Ì“!”ÌD Ì“2–” Ì”
+”' Ì””) Ì””2 Ì” ”3 Ì”!”> Ì”,’” Ì” Ì	’” ÌD” ÌD	‘” ÌÃÔrI–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ¢‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
+ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Í ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ÔrJ’§missing¦pluginÃ¦genAbcÂÔ  ÔrK”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache”ÔrL•¤type¥start£endªspecifiers¦source±ImportDeclarationÍéÍ‘ÔrM”¤type¥start£end¥local¶ImportDefaultSpecifierÍğÍ÷ÔrN”¤type¥start£end¤nameªIdentifierÍğÍ÷§displayÔrO•¤type¥start£end¥value£raw§LiteralÍıÍ­@ohos.display¯'@ohos.display'L±ImportDeclarationÍÍ1‘M¶ImportDefaultSpecifierÍÍNªIdentifierÍÍ¦routerO§LiteralÍ"Í0¬@ohos.router®'@ohos.router'L±ImportDeclarationÍ3Íi‘M¶ImportDefaultSpecifierÍ:ÍCNªIdentifierÍ:ÍC©ConstantsO§LiteralÍIÍh½../common/constants/Constants¿'../common/constants/Constants'L±ImportDeclarationÍkÍŸ‘ÔrP•¤type¥start£end¨imported¥local¯ImportSpecifierÍtÍ}NªIdentifierÍtÍ}©LazyImageNªIdentifierÍtÍ}©LazyImageO§LiteralÍ…Í·../components/LazyImage¹'../components/LazyImage'
