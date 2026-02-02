@@ -1,1072 +1,0 @@
-Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚtcif (!("finalizeConstruction" in ViewPU.prototype)) {
-    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
-}
-import router from '@ohos.router';
-import Constants from '../common/constants/Constants';
-import { ImagePicker } from '../components/ImagePicker';
-import { PhotoModel } from '../model/PhotoModel';
-import PhotoService from '../service/PhotoService';
-import { LazyImage } from '../components/LazyImage';
-import Logger from '../common/utils/Logger';
-class PhotoInfoDialog extends ViewPU {
-    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
-        super(parent, __localStorage, elmtId, extraInfo);
-        if (typeof paramsLambda === "function") {
-            this.paramsGenerator_ = paramsLambda;
-        }
-        this.controller = undefined;
-        this.imagePath = '';
-        this.__category = new ObservedPropertySimplePU('ç”Ÿæ´»', this, "category");
-        this.__tags = new ObservedPropertySimplePU('', this, "tags");
-        this.__fileName = new ObservedPropertySimplePU('', this, "fileName");
-        this.onSave = (data) => { };
-        this.setInitiallyProvidedValue(params);
-        this.finalizeConstruction();
-    }
-    setInitiallyProvidedValue(params) {
-        if (params.controller !== undefined) {
-            this.controller = params.controller;
-        }
-        if (params.imagePath !== undefined) {
-            this.imagePath = params.imagePath;
-        }
-        if (params.category !== undefined) {
-            this.category = params.category;
-        }
-        if (params.tags !== undefined) {
-            this.tags = params.tags;
-        }
-        if (params.fileName !== undefined) {
-            this.fileName = params.fileName;
-        }
-        if (params.onSave !== undefined) {
-            this.onSave = params.onSave;
-        }
-    }
-    updateStateVars(params) {
-    }
-    purgeVariableDependenciesOnElmtId(rmElmtId) {
-        this.__category.purgeDependencyOnElmtId(rmElmtId);
-        this.__tags.purgeDependencyOnElmtId(rmElmtId);
-        this.__fileName.purgeDependencyOnElmtId(rmElmtId);
-    }
-    aboutToBeDeleted() {
-        this.__category.aboutToBeDeleted();
-        this.__tags.aboutToBeDeleted();
-        this.__fileName.aboutToBeDeleted();
-        SubscriberManager.Get().delete(this.id__());
-        this.aboutToBeDeletedInternal();
-    }
-    setController(ctr) {
-        this.controller = ctr;
-    }
-    get category() {
-        return this.__category.get();
-    }
-    set category(newValue) {
-        this.__category.set(newValue);
-    }
-    get tags() {
-        return this.__tags.get();
-    }
-    set tags(newValue) {
-        this.__tags.set(newValue);
-    }
-    get fileName() {
-        return this.__fileName.get();
-    }
-    set fileName(newValue) {
-        this.__fileName.set(newValue);
-    }
-    aboutToAppear() {
-        this.fileName = 'IMG_' + new Date().getTime();
-    }
-    initialRender() {
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Column.create({ space: 15 });
-            Column.padding(20);
-            Column.backgroundColor(Color.White);
-            Column.borderRadius(16);
-            Column.width('90%');
-        }, Column);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create('å®Œå–„å›¾ç‰‡ä¿¡æ¯');
-            Text.fontSize(20);
-            Text.fontWeight(FontWeight.Bold);
-        }, Text);
-        Text.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Image.create('file://' + this.imagePath);
-            Image.height(150);
-            Image.width('100%');
-            Image.objectFit(ImageFit.Contain);
-            Image.borderRadius(8);
-            Image.backgroundColor('#f0f0f0');
-        }, Image);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            TextInput.create({ placeholder: 'å›¾ç‰‡åç§°', text: this.fileName });
-            TextInput.onChange((value) => { this.fileName = value; });
-        }, TextInput);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Row.create();
-            Row.width('100%');
-        }, Row);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create('åˆ†ç±»:');
-            Text.fontSize(16);
-        }, Text);
-        Text.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            TextInput.create({ placeholder: 'ä¾‹å¦‚: é£æ™¯', text: this.category });
-            TextInput.layoutWeight(1);
-            TextInput.onChange((value) => { this.category = value; });
-        }, TextInput);
-        Row.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Row.create();
-            Row.width('100%');
-        }, Row);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create('æ ‡ç­¾:');
-            Text.fontSize(16);
-        }, Text);
-        Text.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            TextInput.create({ placeholder: 'ä¾‹å¦‚: #æ—…è¡Œ', text: this.tags });
-            TextInput.layoutWeight(1);
-            TextInput.onChange((value) => { this.tags = value; });
-        }, TextInput);
-        Row.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Row.create({ space: 20 });
-        }, Row);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Button.createWithLabel('å–æ¶ˆ');
-            Button.backgroundColor('#E5E5E5');
-            Button.fontColor('#000');
-            Button.onClick(() => { this.controller.close(); });
-        }, Button);
-        Button.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Button.createWithLabel('ä¿å­˜');
-            Button.onClick(() => {
-                const finalData = {
-                    filePath: this.imagePath,
-                    fileName: this.fileName,
-                    category: this.category,
-                    tags: this.tags,
-                    createTime: new Date().getTime()
-                };
-                this.onSave(finalData);
-                this.controller.close();
-            });
-        }, Button);
-        Button.pop();
-        Row.pop();
-        Column.pop();
-    }
-    rerender() {
-        this.updateDirtyElements();
-    }
-}
-class IndexPage extends ViewPU {
-    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
-        super(parent, __localStorage, elmtId, extraInfo);
-        if (typeof paramsLambda === "function") {
-            this.paramsGenerator_ = paramsLambda;
-        }
-        this.swiperController = new SwiperController();
-        this.__currentIndex = new ObservedPropertySimplePU(0, this, "currentIndex");
-        this.__tempSelectedPath = new ObservedPropertySimplePU('', this, "tempSelectedPath");
-        this.__dbPhotoList = new ObservedPropertyObjectPU([], this, "dbPhotoList");
-        this.__currentTabIndex = new ObservedPropertySimplePU(0, this, "currentTabIndex");
-        this.infoDialogController = new CustomDialogController({
-            builder: () => {
-                let jsDialog = new PhotoInfoDialog(this, {
-                    imagePath: this.tempSelectedPath,
-                    onSave: (data) => {
-                        this.handleSaveData(data);
-                    }
-                }, undefined, -1, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 115, col: 14 });
-                jsDialog.setController(this.infoDialogController);
-                ViewPU.create(jsDialog);
-                let paramsLambda = () => {
-                    return {
-                        imagePath: this.tempSelectedPath,
-                        onSave: (data) => {
-                            this.handleSaveData(data);
-                        }
-                    };
-                };
-                jsDialog.paramsGenerator_ = paramsLambda;
-            },
-            autoCancel: false,
-            customStyle: true
-        }, this);
-        this.pickerDialogController = new CustomDialogController({
-            builder: () => {
-                let jsDialog = new ImagePicker(this, {
-                    onImageSelected: (path) => {
-                        this.tempSelectedPath = path;
-                        setTimeout(() => { this.infoDialogController.open(); }, 100);
-                    }
-                }, undefined, -1, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 126, col: 14 });
-                jsDialog.setController(this.pickerDialogController);
-                ViewPU.create(jsDialog);
-                let paramsLambda = () => {
-                    return {
-                        onImageSelected: (path) => {
-                            this.tempSelectedPath = path;
-                            setTimeout(() => { this.infoDialogController.open(); }, 100);
-                        }
-                    };
-                };
-                jsDialog.paramsGenerator_ = paramsLambda;
-            },
-            alignment: DialogAlignment.Bottom,
-            customStyle: true
-        }, this);
-        this.setInitiallyProvidedValue(params);
-        this.finalizeConstruction();
-    }
-    setInitiallyProvidedValue(params) {
-        if (params.swiperController !== undefined) {
-            this.swiperController = params.swiperController;
-        }
-        if (params.currentIndex !== undefined) {
-            this.currentIndex = params.currentIndex;
-        }
-        if (params.tempSelectedPath !== undefined) {
-            this.tempSelectedPath = params.tempSelectedPath;
-        }
-        if (params.dbPhotoList !== undefined) {
-            this.dbPhotoList = params.dbPhotoList;
-        }
-        if (params.currentTabIndex !== undefined) {
-            this.currentTabIndex = params.currentTabIndex;
-        }
-        if (params.infoDialogController !== undefined) {
-            this.infoDialogController = params.infoDialogController;
-        }
-        if (params.pickerDialogController !== undefined) {
-            this.pickerDialogController = params.pickerDialogController;
-        }
-    }
-    updateStateVars(params) {
-    }
-    purgeVariableDependenciesOnElmtId(rmElmtId) {
-        this.__currentIndex.purgeDependencyOnElmtId(rmElmtId);
-        this.__tempSelectedPath.purgeDependencyOnElmtId(rmElmtId);
-        this.__dbPhotoList.purgeDependencyOnElmtId(rmElmtId);
-        this.__currentTabIndex.purgeDependencyOnElmtId(rmElmtId);
-    }
-    aboutToBeDeleted() {
-        this.__currentIndex.aboutToBeDeleted();
-        this.__tempSelectedPath.aboutToBeDeleted();
-        this.__dbPhotoList.aboutToBeDeleted();
-        this.__currentTabIndex.aboutToBeDeleted();
-        SubscriberManager.Get().delete(this.id__());
-        this.aboutToBeDeletedInternal();
-    }
-    get currentIndex() {
-        return this.__currentIndex.get();
-    }
-    set currentIndex(newValue) {
-        this.__currentIndex.set(newValue);
-    }
-    get tempSelectedPath() {
-        return this.__tempSelectedPath.get();
-    }
-    set tempSelectedPath(newValue) {
-        this.__tempSelectedPath.set(newValue);
-    }
-    get dbPhotoList() {
-        return this.__dbPhotoList.get();
-    }
-    set dbPhotoList(newValue) {
-        this.__dbPhotoList.set(newValue);
-    }
-    get currentTabIndex() {
-        return this.__currentTabIndex.get();
-    }
-    set currentTabIndex(newValue) {
-        this.__currentTabIndex.set(newValue);
-    }
-    aboutToAppear() {
-        console.info('[IndexPage] é¡µé¢åŠ è½½,æ­£åœ¨åˆå§‹åŒ–æ•°æ®åº“...');
-        PhotoService.initDB(getContext(this))
-            .then(() => {
-            console.info('[IndexPage] æ•°æ®åº“åˆå§‹åŒ–å®Œæˆ,å¼€å§‹åŠ è½½æ•°æ®');
-            this.refreshData();
-        })
-            .catch((err) => {
-            console.error('[IndexPage] æ•°æ®åº“å¯åŠ¨å¤±è´¥: ' + JSON.stringify(err));
-            Logger.showError('ç›¸å†Œåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·ç¨åé‡è¯•');
-        });
-    }
-    refreshData() {
-        PhotoService.queryAll().then((photos) => {
-            this.dbPhotoList = photos;
-            console.info(`[IndexPage] åˆ—è¡¨å·²åˆ·æ–°,å½“å‰å…±æœ‰ ${this.dbPhotoList.length} å¼ ç…§ç‰‡`);
-        });
-    }
-    handleSaveData(data) {
-        const newPhoto = new PhotoModel(0, data.fileName, data.filePath, data.category, data.createTime, data.tags);
-        PhotoService.insert(newPhoto).then((rowId) => {
-            console.info(`[IndexPage] ä¿å­˜æˆåŠŸ,æ–°è®°å½• ID: ${rowId}`);
-            this.refreshData();
-            AlertDialog.show({
-                title: 'ä¿å­˜æˆåŠŸ',
-                message: 'å›¾ç‰‡å·²å®‰å…¨å­˜å…¥æ•°æ®åº“!',
-                confirm: { value: 'æ£’', action: () => { } }
-            });
-        }).catch((err) => {
-            console.error('[IndexPage] ä¿å­˜å¤±è´¥: ' + JSON.stringify(err));
-            Logger.showError('ä¿å­˜å¤±è´¥ï¼Œæ•°æ®åº“å†™å…¥é”™è¯¯');
-        });
-    }
-    // ==========================================
-    // ğŸ†• é¦–é¡µå†…å®¹æ„å»ºå™¨
-    // ==========================================
-    HomeContent(parent = null) {
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Stack.create({ alignContent: Alignment.BottomEnd });
-            Stack.width(Constants.FULL_PERCENT);
-            Stack.height(Constants.FULL_PERCENT);
-        }, Stack);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Column.create();
-            Column.width(Constants.FULL_PERCENT);
-            Column.height(Constants.FULL_PERCENT);
-        }, Column);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            // 1. æ ‡é¢˜æ 
-            Row.create();
-            // 1. æ ‡é¢˜æ 
-            Row.height({ "id": 16777229, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            // 1. æ ‡é¢˜æ 
-            Row.width(Constants.FULL_PERCENT);
-            // 1. æ ‡é¢˜æ 
-            Row.padding({ left: { "id": 16777231, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" } });
-        }, Row);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create({ "id": 16777219, "type": 10003, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            Text.fontSize({ "id": 16777230, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            Text.fontWeight(Constants.TITLE_FONT_WEIGHT);
-        }, Text);
-        Text.pop();
-        // 1. æ ‡é¢˜æ 
-        Row.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            // 2. è½®æ’­å›¾
-            Swiper.create(this.swiperController);
-            // 2. è½®æ’­å›¾
-            Swiper.autoPlay(true);
-            // 2. è½®æ’­å›¾
-            Swiper.loop(true);
-            // 2. è½®æ’­å›¾
-            Swiper.margin({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            // 2. è½®æ’­å›¾
-            Swiper.borderRadius({ "id": 16777228, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-            // 2. è½®æ’­å›¾
-            Swiper.clip(true);
-        }, Swiper);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            ForEach.create();
-            const forEachItemGenFunction = _item => {
-                const item = _item;
-                this.observeComponentCreation2((elmtId, isInitialRender) => {
-                    Row.create();
-                    Row.width(Constants.FULL_PERCENT);
-                    Row.aspectRatio(Constants.BANNER_ASPECT_RATIO);
-                }, Row);
-                this.observeComponentCreation2((elmtId, isInitialRender) => {
-                    Image.create(item);
-                    Image.width(Constants.FULL_PERCENT);
-                    Image.height(Constants.FULL_PERCENT);
-                }, Image);
-                Row.pop();
-            };
-            this.forEachUpdateFunction(elmtId, Constants.BANNER_IMG_LIST, forEachItemGenFunction, (item, index) => JSON.stringify(item) + index, false, true);
-        }, ForEach);
-        ForEach.pop();
-        // 2. è½®æ’­å›¾
-        Swiper.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            If.create();
-            // 3. å›¾ç‰‡ç½‘æ ¼
-            if (this.dbPhotoList.length === 0) {
-                this.ifElseBranchUpdateFunction(0, () => {
-                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                        Column.create();
-                        Column.layoutWeight(1);
-                        Column.width('100%');
-                        Column.justifyContent(FlexAlign.Center);
-                    }, Column);
-                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                        Text.create('ğŸ“·');
-                        Text.fontSize(60);
-                        Text.opacity(0.3);
-                        Text.margin({ top: 50 });
-                    }, Text);
-                    Text.pop();
-                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                        Text.create('ç›¸å†Œç©ºç©ºå¦‚ä¹Ÿ');
-                        Text.fontSize(16);
-                        Text.fontColor(Color.Gray);
-                        Text.margin({ top: 20 });
-                    }, Text);
-                    Text.pop();
-                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                        Text.create('ç‚¹å‡»å³ä¸‹è§’ + å·æ·»åŠ ç…§ç‰‡');
-                        Text.fontSize(14);
-                        Text.fontColor('#CCCCCC');
-                        Text.margin({ top: 10 });
-                    }, Text);
-                    Text.pop();
-                    Column.pop();
-                });
-            }
-            else {
-                this.ifElseBranchUpdateFunction(1, () => {
-                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                        Grid.create();
-                        Grid.columnsTemplate(Constants.INDEX_COLUMNS_TEMPLATE);
-                        Grid.columnsGap({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-                        Grid.rowsGap({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-                        Grid.padding({ "id": 16777227, "type": 10002, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-                        Grid.width(Constants.FULL_PERCENT);
-                        Grid.layoutWeight(1);
-                    }, Grid);
-                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                        ForEach.create();
-                        const forEachItemGenFunction = _item => {
-                            const item = _item;
-                            {
-                                const itemCreation2 = (elmtId, isInitialRender) => {
-                                    GridItem.create(() => { }, false);
-                                    GridItem.onClick(() => {
-                                        console.info(`ç‚¹å‡»äº†å›¾ç‰‡: ${item.name}`);
-                                    });
-                                };
-                                const observedDeepRender = () => {
-                                    this.observeComponentCreation2(itemCreation2, GridItem);
-                                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                                        Column.create();
-                                        Column.padding(5);
-                                        Column.backgroundColor('#F5F5F5');
-                                        Column.borderRadius(8);
-                                    }, Column);
-                                    {
-                                        this.observeComponentCreation2((elmtId, isInitialRender) => {
-                                            if (isInitialRender) {
-                                                let componentCall = new LazyImage(this, {
-                                                    src: 'file://' + item.path,
-                                                    widthValue: '100%',
-                                                    heightValue: 100,
-                                                    objectFit: ImageFit.Cover,
-                                                    cornerRadius: 8,
-                                                    placeholder: Constants.PLACEHOLDER_IMAGE,
-                                                    errorHolder: Constants.ERROR_IMAGE
-                                                }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 211, col: 19 });
-                                                ViewPU.create(componentCall);
-                                                let paramsLambda = () => {
-                                                    return {
-                                                        src: 'file://' + item.path,
-                                                        widthValue: '100%',
-                                                        heightValue: 100,
-                                                        objectFit: ImageFit.Cover,
-                                                        cornerRadius: 8,
-                                                        placeholder: Constants.PLACEHOLDER_IMAGE,
-                                                        errorHolder: Constants.ERROR_IMAGE
-                                                    };
-                                                };
-                                                componentCall.paramsGenerator_ = paramsLambda;
-                                            }
-                                            else {
-                                                this.updateStateVarsOfChildByElmtId(elmtId, {});
-                                            }
-                                        }, { name: "LazyImage" });
-                                    }
-                                    this.observeComponentCreation2((elmtId, isInitialRender) => {
-                                        Text.create(item.name);
-                                        Text.fontSize(14);
-                                        Text.maxLines(1);
-                                        Text.textOverflow({ overflow: TextOverflow.Ellipsis });
-                                        Text.margin({ top: 5 });
-                                    }, Text);
-                                    Text.pop();
-                                    Column.pop();
-                                    GridItem.pop();
-                                };
-                                observedDeepRender();
-                            }
-                        };
-                        this.forEachUpdateFunction(elmtId, this.dbPhotoList, forEachItemGenFunction, (item) => item.id.toString(), false, false);
-                    }, ForEach);
-                    ForEach.pop();
-                    Grid.pop();
-                });
-            }
-        }, If);
-        If.pop();
-        Column.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.createWithChild({ type: ButtonType.Circle, stateEffect: true });
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.width(60);
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.height(60);
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.margin({ right: 20, bottom: 30 });
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.backgroundColor('#007DFF');
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.shadow({ radius: 10, color: '#888888', offsetY: 5 });
-            // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-            Button.onClick(() => {
-                this.pickerDialogController.open();
-            });
-        }, Button);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create('+');
-            Text.fontSize(40);
-            Text.fontColor(Color.White);
-            Text.fontWeight(300);
-            Text.margin({ bottom: 4 });
-        }, Text);
-        Text.pop();
-        // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-        Button.pop();
-        Stack.pop();
-    }
-    // ==========================================
-    // ğŸ†• é¡µé¢æ˜¾ç¤ºæ—¶çš„ç”Ÿå‘½å‘¨æœŸï¼ˆä»ListPageè¿”å›æ—¶è§¦å‘ï¼‰
-    // ==========================================
-    onPageShow() {
-        console.info('[IndexPage] é¡µé¢æ˜¾ç¤ºï¼Œåˆ·æ–°æ•°æ®');
-        this.currentTabIndex = 0; // ç¡®ä¿å›åˆ°é¦–é¡µTab
-        this.refreshData(); // åˆ·æ–°å›¾ç‰‡åˆ—è¡¨
-    }
-    // ==========================================
-    // ğŸ†• ä¸»æ„å»ºå‡½æ•° - ä½¿ç”¨Tabsç»„ä»¶
-    // ==========================================
-    initialRender() {
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Tabs.create({ index: this.currentTabIndex });
-            Tabs.barPosition(BarPosition.End);
-            Tabs.scrollable(false);
-            Tabs.animationDuration(300);
-            Tabs.onChange((index) => {
-                console.info(`[IndexPage] åˆ‡æ¢åˆ° Tab ${index}`);
-                this.currentTabIndex = index;
-                // ==========================================
-                // ğŸ¯ å…³é”®:ç‚¹å‡»"æœç´¢"Tabæ—¶è·³è½¬åˆ°ListPage
-                // ==========================================
-                if (index === 1) {
-                    router.pushUrl({
-                        url: 'pages/ListPage'
-                    }).then(() => {
-                        console.info('[IndexPage] æˆåŠŸè·³è½¬åˆ°æœç´¢é¡µ');
-                        // è·³è½¬åç«‹å³åˆ‡å›é¦–é¡µTab,é¿å…UIé”™ä¹±
-                        this.currentTabIndex = 0;
-                    }).catch((err) => {
-                        console.error(`[IndexPage] è·³è½¬å¤±è´¥: ${err.message}`);
-                        this.currentTabIndex = 0;
-                    });
-                }
-            });
-        }, Tabs);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            TabContent.create(() => {
-                this.HomeContent.bind(this)();
-            });
-            TabContent.tabBar({ builder: () => {
-                    this.TabBuilder.call(this, 0, 'é¦–é¡µ', 'ğŸ ');
-                } });
-        }, TabContent);
-        TabContent.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            TabContent.create(() => {
-                this.observeComponentCreation2((elmtId, isInitialRender) => {
-                    Column.create();
-                    Column.width('100%');
-                    Column.height('100%');
-                    Column.justifyContent(FlexAlign.Center);
-                }, Column);
-                this.observeComponentCreation2((elmtId, isInitialRender) => {
-                    Text.create('æ­£åœ¨è·³è½¬åˆ°æœç´¢é¡µ...');
-                    Text.fontSize(16);
-                    Text.fontColor('#999999');
-                }, Text);
-                Text.pop();
-                Column.pop();
-            });
-            TabContent.tabBar({ builder: () => {
-                    this.TabBuilder.call(this, 1, 'æœç´¢', 'ğŸ”');
-                } });
-        }, TabContent);
-        TabContent.pop();
-        Tabs.pop();
-    }
-    // ==========================================
-    // ğŸ†• Tabå›¾æ ‡æ„å»ºå™¨
-    // ==========================================
-    TabBuilder(index, title, icon, parent = null) {
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Column.create();
-            Column.width('100%');
-            Column.height(50);
-            Column.justifyContent(FlexAlign.Center);
-        }, Column);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create(icon);
-            Text.fontSize(24);
-            Text.fontColor(this.currentTabIndex === index ? '#007DFF' : '#666666');
-        }, Text);
-        Text.pop();
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Text.create(title);
-            Text.fontSize(12);
-            Text.fontColor(this.currentTabIndex === index ? '#007DFF' : '#666666');
-            Text.margin({ top: 4 });
-        }, Text);
-        Text.pop();
-        Column.pop();
-    }
-    rerender() {
-        this.updateDirtyElements();
-    }
-    static getEntryName() {
-        return "IndexPage";
-    }
-}
-registerNamedRoute(() => new IndexPage(undefined, {}), "", { bundleName: "com.example.electronicalbum", moduleName: "entry", pagePath: "pages/IndexPage", pageFullPath: "entry/src/main/ets/pages/IndexPage", integratedHsp: "false", moduleType: "followWithHap" });
-//# sourceMappingURL=IndexPage.js.mapÂ—Ùi hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.router.d.tsÙ\/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/common/constants/Constants.etsÙX/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/components/ImagePicker.etsÙR/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/model/PhotoModel.etsÙV/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/service/PhotoService.etsÙV/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/components/LazyImage.etsÙU/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/common/utils/Logger.etsÙQ/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/pages/IndexPage.etsÔrB›ªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo°belongModulePath§checker¬shouldEmitJs¥entryÃÂÙ0/Users/lichen18/Documents/Openharmony/kyhm/entryÙ*/Users/lichen18/Documents/Openharmony/kyhm¥entry¥1.0.0Ô  Ù0/Users/lichen18/Documents/Openharmony/kyhm/entryÔrCÜ ®¬getNodeCount²getIdentifierCount®getSymbolCount¬getTypeCountµgetInstantiationCountµgetRelationCacheSizes±isUndefinedSymbol±isArgumentsSymbol¯isUnknownSymbol¯getMergedSymbol®getDiagnostics´getGlobalDiagnostics´getRecursionIdentity¶getUnmatchedProperties¹getTypeOfSymbolAtLocation¯getTypeOfSymbolÙ(getSymbolsOfParameterPropertyDeclaration·getDeclaredTypeOfSymbol³getPropertiesOfType±getPropertyOfTypeÙ"getPrivateIdentifierPropertyOfType·getTypeOfPropertyOfType²getIndexInfoOfType³getIndexInfosOfTypeºgetIndexInfosOfIndexSymbol³getSignaturesOfType²getIndexTypeOfType¬getIndexType¬getBaseTypes¸getBaseTypeOfLiteralType®getWidenedType³getTypeFromTypeNode°getParameterTypeÙ$getParameterIdentifierNameAtPosition¸getPromisedTypeOfPromise®getAwaitedType¸getReturnTypeOfSignature®isNullableType¯getNullableType²getNonNullableType²getNonOptionalType°getTypeArguments®typeToTypeNodeÙ$indexInfoToIndexSignatureDeclaration¿signatureToSignatureDeclaration²symbolToEntityName²symbolToExpression¬symbolToNodeÙ!symbolToTypeParameterDeclarations¼symbolToParameterDeclarationºtypeParameterToDeclaration±getSymbolsInScope³getSymbolAtLocation·getIndexInfosAtLocationÙ!getShorthandAssignmentValueSymbolÙ#getExportSpecifierLocalTargetSymbol·getExportSymbolOfSymbol±getTypeAtLocationºgetTypeAtLocationForLinterÙ tryGetTypeAtLocationWithoutCheckºgetTypeOfAssignmentPatternÙ*getPropertySymbolOfDestructuringAssignment±signatureToString¬typeToString®symbolToStringµtypePredicateToString®writeSignature©writeType«writeSymbol²writeTypePredicate¼getAugmentedPropertiesOfType®getRootSymbols²getSymbolOfExpando±getContextualTypeÙ(getContextualTypeForObjectLiteralElementÙ#getContextualTypeForArgumentAtIndexÙ getContextualTypeForJsxAttribute²isContextSensitiveÙ!getTypeOfPropertyOfContextualTypeµgetFullyQualifiedNameÙ#tryGetResolvedSignatureWithoutCheck´getResolvedSignatureÙ/getResolvedSignatureForStringLiteralCompletionsÙ$getResolvedSignatureForSignatureHelpµgetExpandedParameters¹hasEffectiveRestParameterºcontainsArgumentsReference°getConstantValueµisValidPropertyAccessÙ#isValidPropertyAccessForCompletions»getSignatureFromDeclarationºisImplementationOfOverload¹getImmediateAliasedSymbol°getAliasedSymbol¯getEmitResolver²getExportsOfModule¿getExportsAndPropertiesOfModuleÙ forEachExportAndPropertyOfModule¯getSymbolWalker±getAmbientModules¹getJsxIntrinsicTagNamesAt³isOptionalParameter»tryGetMemberInModuleExportsÙ(tryGetMemberInModuleExportsAndProperties´tryFindAmbientModuleÙ(tryFindAmbientModuleWithoutAugmentations¯getApparentType¬getUnionType²isTypeAssignableTo³createAnonymousType¯createSignature¬createSymbol¯createIndexInfoªgetAnyType­getStringType­getNumberType±createPromiseType¯createArrayType¹getElementTypeOfArrayType®getBooleanType¬getFalseType«getTrueType«getVoidType°getUndefinedType«getNullType¯getESSymbolType¬getNeverType¯getOptionalType®getPromiseType²getPromiseLikeType´getAsyncIterableType²isSymbolAccessible«isArrayType«isTupleType¯isArrayLikeTypeÙ#isTypeInvalidDueToUnionDiscriminantºgetExactOptionalProperties¿getAllPossiblePropertiesOfTypesÙ(getSuggestedSymbolForNonexistentPropertyÙ#getSuggestionForNonexistentPropertyÙ,getSuggestedSymbolForNonexistentJSXAttributeÙ&getSuggestedSymbolForNonexistentSymbolÙ!getSuggestionForNonexistentSymbolÙ&getSuggestedSymbolForNonexistentModuleÙ!getSuggestionForNonexistentExportÙ+getSuggestedSymbolForNonexistentClassMember·getBaseConstraintOfType»getDefaultFromTypeParameter«resolveName¯getJsxNamespaceµgetJsxFragmentFactory¸getAccessibleSymbolChain»getTypePredicateOfSignature¹resolveExternalModuleName»resolveExternalModuleSymbol°tryGetThisTypeAt¹getTypeArgumentConstraint¸getSuggestionDiagnostics¸runWithCancellationTokenÙ3getLocalTypeParametersOfClassOrInterfaceOrTypeAlias´isDeclarationVisible´isPropertyAccessible»getTypeOnlyAliasDeclaration¿getMemberOverrideModifierStatusÙ!isTypeParameterPossiblyReferenced²getConstEnumRelate´clearConstEnumRelateµdeleteConstEnumRelateÙ$getTypeArgumentsForResolvedSignatureµgetCheckedSourceFilesÙ"collectHaveTsNoCheckFilesForLinter·clearQualifiedNameCache®isStaticRecord²isStaticSourceFileÔ  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  ÃÃÚ,import router from '@ohos.router';
-import common from '@ohos.app.ability.common';
-import Constants from '../common/constants/Constants';
-import { ImagePicker } from '../components/ImagePicker';
-import { PhotoModel } from '../model/PhotoModel';
-import PhotoService from '../service/PhotoService';
-import { LazyImage } from '../components/LazyImage';
-import Logger from '../common/utils/Logger';
-
-// å®šä¹‰æ•°æ®æ¥å£
-interface PhotoData {
-  filePath: string;
-  fileName: string;
-  category: string;
-  tags: string;
-  createTime: number;
-}
-
-// ==========================================
-// å­ç»„ä»¶:ä¿¡æ¯å½•å…¥å¼¹çª—
-// ==========================================
-@CustomDialog
-struct PhotoInfoDialog {
-  controller: CustomDialogController;
-  imagePath: string = '';
-  @State category: string = 'ç”Ÿæ´»';
-  @State tags: string = '';
-  @State fileName: string = '';
-  onSave: (data: PhotoData) => void = (data: PhotoData) => {};
-
-  aboutToAppear() {
-    this.fileName = 'IMG_' + new Date().getTime();
-  }
-
-  build() {
-    Column({ space: 15 }) {
-      Text('å®Œå–„å›¾ç‰‡ä¿¡æ¯').fontSize(20).fontWeight(FontWeight.Bold)
-
-      Image('file://' + this.imagePath)
-        .height(150).width('100%').objectFit(ImageFit.Contain)
-        .borderRadius(8).backgroundColor('#f0f0f0')
-
-      TextInput({ placeholder: 'å›¾ç‰‡åç§°', text: this.fileName })
-        .onChange((value) => { this.fileName = value; })
-
-      Row() {
-        Text('åˆ†ç±»:').fontSize(16)
-        TextInput({ placeholder: 'ä¾‹å¦‚: é£æ™¯', text: this.category })
-          .layoutWeight(1).onChange((value) => { this.category = value; })
-      }.width('100%')
-
-      Row() {
-        Text('æ ‡ç­¾:').fontSize(16)
-        TextInput({ placeholder: 'ä¾‹å¦‚: #æ—…è¡Œ', text: this.tags })
-          .layoutWeight(1).onChange((value) => { this.tags = value; })
-      }.width('100%')
-
-      Row({ space: 20 }) {
-        Button('å–æ¶ˆ').backgroundColor('#E5E5E5').fontColor('#000')
-          .onClick(() => { this.controller.close(); })
-        Button('ä¿å­˜').onClick(() => {
-          const finalData: PhotoData = {
-            filePath: this.imagePath,
-            fileName: this.fileName,
-            category: this.category,
-            tags: this.tags,
-            createTime: new Date().getTime()
-          };
-          this.onSave(finalData);
-          this.controller.close();
-        })
-      }
-    }
-    .padding(20).backgroundColor(Color.White).borderRadius(16).width('90%')
-  }
-}
-
-// ==========================================
-// ä¸»é¡µé¢:IndexPage (å¸¦åº•éƒ¨Tabå¯¼èˆª)
-// ==========================================
-@Entry
-@Component
-struct IndexPage {
-  swiperController: SwiperController = new SwiperController();
-  @State currentIndex: number = 0;
-  @State tempSelectedPath: string = '';
-  @State dbPhotoList: Array<PhotoModel> = [];
-
-  // ==========================================
-  // ğŸ†• Tabå¯¼èˆªç›¸å…³çŠ¶æ€
-  // ==========================================
-  @State currentTabIndex: number = 0;
-
-  aboutToAppear() {
-    console.info('[IndexPage] é¡µé¢åŠ è½½,æ­£åœ¨åˆå§‹åŒ–æ•°æ®åº“...');
-    PhotoService.initDB(getContext(this) as common.UIAbilityContext)
-      .then(() => {
-        console.info('[IndexPage] æ•°æ®åº“åˆå§‹åŒ–å®Œæˆ,å¼€å§‹åŠ è½½æ•°æ®');
-        this.refreshData();
-      })
-      .catch((err: Error) => {
-        console.error('[IndexPage] æ•°æ®åº“å¯åŠ¨å¤±è´¥: ' + JSON.stringify(err));
-        Logger.showError('ç›¸å†Œåˆå§‹åŒ–å¤±è´¥ï¼Œè¯·ç¨åé‡è¯•');
-      });
-  }
-
-  refreshData() {
-    PhotoService.queryAll().then((photos) => {
-      this.dbPhotoList = photos;
-      console.info(`[IndexPage] åˆ—è¡¨å·²åˆ·æ–°,å½“å‰å…±æœ‰ ${this.dbPhotoList.length} å¼ ç…§ç‰‡`);
-    });
-  }
-
-  infoDialogController: CustomDialogController = new CustomDialogController({
-    builder: PhotoInfoDialog({
-      imagePath: this.tempSelectedPath,
-      onSave: (data: PhotoData) => {
-        this.handleSaveData(data);
-      }
-    }),
-    autoCancel: false,
-    customStyle: true
-  });
-
-  pickerDialogController: CustomDialogController = new CustomDialogController({
-    builder: ImagePicker({
-      onImageSelected: (path: string) => {
-        this.tempSelectedPath = path;
-        setTimeout(() => { this.infoDialogController.open(); }, 100);
-      }
-    }),
-    alignment: DialogAlignment.Bottom,
-    customStyle: true
-  });
-
-  handleSaveData(data: PhotoData) {
-    const newPhoto = new PhotoModel(0, data.fileName, data.filePath, data.category, data.createTime, data.tags);
-
-    PhotoService.insert(newPhoto).then((rowId) => {
-      console.info(`[IndexPage] ä¿å­˜æˆåŠŸ,æ–°è®°å½• ID: ${rowId}`);
-      this.refreshData();
-
-      AlertDialog.show({
-        title: 'ä¿å­˜æˆåŠŸ',
-        message: 'å›¾ç‰‡å·²å®‰å…¨å­˜å…¥æ•°æ®åº“!',
-        confirm: { value: 'æ£’', action: () => {} }
-      });
-    }).catch((err: Error) => {
-      console.error('[IndexPage] ä¿å­˜å¤±è´¥: ' + JSON.stringify(err));
-      Logger.showError('ä¿å­˜å¤±è´¥ï¼Œæ•°æ®åº“å†™å…¥é”™è¯¯');
-    });
-  }
-
-  // ==========================================
-  // ğŸ†• é¦–é¡µå†…å®¹æ„å»ºå™¨
-  // ==========================================
-  @Builder
-  HomeContent() {
-    Stack({ alignContent: Alignment.BottomEnd }) {
-      Column() {
-        // 1. æ ‡é¢˜æ 
-        Row() {
-          Text($r('app.string.EntryAbility_label'))
-            .fontSize($r('app.float.title_font_size'))
-            .fontWeight(Constants.TITLE_FONT_WEIGHT)
-        }
-        .height($r('app.float.navi_bar_height'))
-        .width(Constants.FULL_PERCENT)
-        .padding({ left: $r('app.float.title_padding') })
-
-        // 2. è½®æ’­å›¾
-        Swiper(this.swiperController) {
-          ForEach(Constants.BANNER_IMG_LIST, (item: Resource) => {
-            Row() {
-              Image(item).width(Constants.FULL_PERCENT).height(Constants.FULL_PERCENT)
-            }
-            .width(Constants.FULL_PERCENT).aspectRatio(Constants.BANNER_ASPECT_RATIO)
-          }, (item: Resource, index?: number) => JSON.stringify(item) + index)
-        }
-        .autoPlay(true).loop(true)
-        .margin($r('app.float.grid_padding'))
-        .borderRadius($r('app.float.img_border_radius'))
-        .clip(true)
-
-        // 3. å›¾ç‰‡ç½‘æ ¼
-        if (this.dbPhotoList.length === 0) {
-          Column() {
-            Text('ğŸ“·')
-              .fontSize(60)
-              .opacity(0.3)
-              .margin({ top: 50 })
-
-            Text('ç›¸å†Œç©ºç©ºå¦‚ä¹Ÿ')
-              .fontSize(16)
-              .fontColor(Color.Gray)
-              .margin({ top: 20 })
-
-            Text('ç‚¹å‡»å³ä¸‹è§’ + å·æ·»åŠ ç…§ç‰‡')
-              .fontSize(14)
-              .fontColor('#CCCCCC')
-              .margin({ top: 10 })
-          }
-          .layoutWeight(1)
-          .width('100%')
-          .justifyContent(FlexAlign.Center)
-        } else {
-          Grid() {
-            ForEach(this.dbPhotoList, (item: PhotoModel) => {
-              GridItem() {
-                Column() {
-                  LazyImage({
-                    src: 'file://' + item.path,
-                    widthValue: '100%',
-                    heightValue: 100,
-                    objectFit: ImageFit.Cover,
-                    cornerRadius: 8,
-                    placeholder: Constants.PLACEHOLDER_IMAGE,
-                    errorHolder: Constants.ERROR_IMAGE
-                  })
-
-                  Text(item.name)
-                    .fontSize(14)
-                    .maxLines(1)
-                    .textOverflow({ overflow: TextOverflow.Ellipsis })
-                    .margin({ top: 5 })
-                }
-                .padding(5)
-                .backgroundColor('#F5F5F5')
-                .borderRadius(8)
-              }
-              .onClick(() => {
-                console.info(`ç‚¹å‡»äº†å›¾ç‰‡: ${item.name}`);
-              })
-            }, (item: PhotoModel) => item.id.toString())
-          }
-          .columnsTemplate(Constants.INDEX_COLUMNS_TEMPLATE)
-          .columnsGap($r('app.float.grid_padding'))
-          .rowsGap($r('app.float.grid_padding'))
-          .padding($r('app.float.grid_padding'))
-          .width(Constants.FULL_PERCENT)
-          .layoutWeight(1)
-        }
-      }
-      .width(Constants.FULL_PERCENT)
-      .height(Constants.FULL_PERCENT)
-
-      // 4. æ‚¬æµ®æ·»åŠ æŒ‰é’®
-      Button({ type: ButtonType.Circle, stateEffect: true }) {
-        Text('+')
-          .fontSize(40)
-          .fontColor(Color.White)
-          .fontWeight(300)
-          .margin({ bottom: 4 })
-      }
-      .width(60)
-      .height(60)
-      .margin({ right: 20, bottom: 30 })
-      .backgroundColor('#007DFF')
-      .shadow({ radius: 10, color: '#888888', offsetY: 5 })
-      .onClick(() => {
-        this.pickerDialogController.open();
-      })
-    }
-    .width(Constants.FULL_PERCENT)
-    .height(Constants.FULL_PERCENT)
-  }
-
-  // ==========================================
-  // ğŸ†• é¡µé¢æ˜¾ç¤ºæ—¶çš„ç”Ÿå‘½å‘¨æœŸï¼ˆä»ListPageè¿”å›æ—¶è§¦å‘ï¼‰
-  // ==========================================
-  onPageShow() {
-    console.info('[IndexPage] é¡µé¢æ˜¾ç¤ºï¼Œåˆ·æ–°æ•°æ®');
-    this.currentTabIndex = 0; // ç¡®ä¿å›åˆ°é¦–é¡µTab
-    this.refreshData(); // åˆ·æ–°å›¾ç‰‡åˆ—è¡¨
-  }
-
-  // ==========================================
-  // ğŸ†• ä¸»æ„å»ºå‡½æ•° - ä½¿ç”¨Tabsç»„ä»¶
-  // ==========================================
-  build() {
-    Tabs({ index: this.currentTabIndex }) {
-      // ==========================================
-      // Tab 1: é¦–é¡µ
-      // ==========================================
-      TabContent() {
-        this.HomeContent()
-      }
-      .tabBar(this.TabBuilder(0, 'é¦–é¡µ', 'ğŸ '))
-
-      // ==========================================
-      // Tab 2: æœç´¢é¡µ
-      // ==========================================
-      TabContent() {
-        Column() {
-          Text('æ­£åœ¨è·³è½¬åˆ°æœç´¢é¡µ...')
-            .fontSize(16)
-            .fontColor('#999999')
-        }
-        .width('100%')
-        .height('100%')
-        .justifyContent(FlexAlign.Center)
-      }
-      .tabBar(this.TabBuilder(1, 'æœç´¢', 'ğŸ”'))
-    }
-    .barPosition(BarPosition.End) // åº•éƒ¨å¯¼èˆª
-    .scrollable(false) // ç¦æ­¢æ»‘åŠ¨åˆ‡æ¢
-    .animationDuration(300) // åˆ‡æ¢åŠ¨ç”»æ—¶é•¿
-    .onChange((index: number) => {
-      console.info(`[IndexPage] åˆ‡æ¢åˆ° Tab ${index}`);
-      this.currentTabIndex = index;
-
-      // ==========================================
-      // ğŸ¯ å…³é”®:ç‚¹å‡»"æœç´¢"Tabæ—¶è·³è½¬åˆ°ListPage
-      // ==========================================
-      if (index === 1) {
-        router.pushUrl({
-          url: 'pages/ListPage'
-        }).then(() => {
-          console.info('[IndexPage] æˆåŠŸè·³è½¬åˆ°æœç´¢é¡µ');
-          // è·³è½¬åç«‹å³åˆ‡å›é¦–é¡µTab,é¿å…UIé”™ä¹±
-          this.currentTabIndex = 0;
-        }).catch((err: Error) => {
-          console.error(`[IndexPage] è·³è½¬å¤±è´¥: ${err.message}`);
-          this.currentTabIndex = 0;
-        });
-      }
-    })
-  }
-
-  // ==========================================
-  // ğŸ†• Tabå›¾æ ‡æ„å»ºå™¨
-  // ==========================================
-  @Builder
-  TabBuilder(index: number, title: string, icon: string) {
-    Column() {
-      Text(icon)
-        .fontSize(24)
-        .fontColor(this.currentTabIndex === index ? '#007DFF' : '#666666')
-
-      Text(title)
-        .fontSize(12)
-        .fontColor(this.currentTabIndex === index ? '#007DFF' : '#666666')
-        .margin({ top: 4 })
-    }
-    .width('100%')
-    .height(50)
-    .justifyContent(FlexAlign.Center)
-  }
-
-}
-ÀÔrD—¬@ohos.router½../common/constants/Constants¹../components/ImagePicker³../model/PhotoModel·../service/PhotoService·../components/LazyImage¶../common/utils/LoggerÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÃÙi hvigor_ignore__Applications_DevEco-Studio.app_Contents_sdk_default_openharmony_ets_api_@ohos.router.d.tsÔrF‘¯hostModulesInfo”ÔrG’²hostDependencyName®hostModuleName¬@ohos.router¥entryG¬@ohos.router¥entryG¬@ohos.router¥entryG¬@ohos.router¥entryÃªoh-resolveÂEAÂÙ\/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/common/constants/Constants.etsAÃªoh-resolveÂEAÂÙX/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/components/ImagePicker.etsAÃªoh-resolveÂEAÂÙR/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/model/PhotoModel.etsAÃªoh-resolveÂEAÂÙV/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/service/PhotoService.etsAÃªoh-resolveÂEAÂÙV/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/components/LazyImage.etsAÃªoh-resolveÂEAÂÙU/Users/lichen18/Documents/Openharmony/kyhm/entry/src/main/ets/common/utils/Logger.etsAÃªoh-resolveÂ“ÔrH–§version¤fileªsourceRoot§sources¥names¨mappings¬IndexPage.js ‘­IndexPage.etsÜ}–”    ”  ”  ”  ”!  !”"  "–”   ” ” ” ”5 5”6 6˜”   ” ”	 	” ” ” ”7 7”8 8˜”   ” ”	 	” ” ” ”0 0”1 1–”   ” ” ” ”2 2”3 3˜”   ” ”	 	” ” ” ”3 3”4 4–”   ” ” ” ”+ +”, ,’” ” ‘”  ’” ” ’”7 ”;  ’”3 ”5 ’”7 ”9 —” &” '” 6” 8” :”" <”# =‘” ’” ” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” 	” ’” ” ” ” ” 	” ” ” ”! ”% !”) %”+ '”, (”3 /”5 1”6 2’”  ”  ‘” "˜” #” #
-” #” #”! #”# #”% #”' #–” #” #
-” ÌI” ÌI” ÌI” ÌI˜” #” #
-” ÌI”" ÌI ”# ÌI!”( ÌI&”) ÌI'”. ÌI,–” #” #
-” ÌI.” ÌI:”  ÌI;”" ÌI=–” #” #
-” ÌI?” ÌIÌD” ÌIÌE” ÌIÌJ”” $” $
-” $”  $–” $” $
-” $” $” $” $ ˜” $” $
-” $"” $,” $-”& $7”' $8”+ $<’” $” $
-˜” &” &” &”" &”% &”) &”* &”3 &&–” &” &” '	” '” '” '–” &” &” '” '” '” '!˜” &” &” '#” ',” '-”$ '5”% '6”, '=–” &” &” (	” (” (”  (–” &” &” (”! ((”" ()”+ (2” *” *” *” *”* *”, *”2 *%”4 *'”8 *+”: *-”> *1”? *2”ÌG *:”ÌI *<Ü ” *” *” +	” +” +”  +”% +”' +”) +”, +”0 +#”1 +$”9 +,”< +/”ÌA +4”ÌB +5”ÌC +6”ÌD +7’” -” -	–” -” -	” 1” 1” 1” 1”” .” .” .” .–” .” .” .” .” .” .’” .” .” /” /” /” /”* /”, /!”4 /)”6 /+”: //”< /1”Ì@ /5”ÌA /6”ÌI />”ÌK /Ì@–” /” /” 0”" 0”# 0”$ 0Ü ” /” /” 0” 0#” 0$”  0%”% 0*”' 0,”) 0.”, 01”0 05”1 06”9 0>”< 0ÌA”ÌA 0ÌF”ÌB 0ÌG”ÌC 0ÌH”ÌD 0ÌI’” -” -	’” 3” 3	–” 3” 3	” 7” 7” 7” 7”” 4” 4” 4” 4–” 4” 4” 4” 4” 4” 4’” 4” 4” 5” 5” 5” 5”* 5”, 5!”5 5*”7 5,”; 50”= 52”ÌA 56”ÌB 57”ÌF 5;”ÌH 5=–” 5” 5” 6”" 6”# 6”$ 6Ü ” 5” 5” 6” 6#” 6$”  6%”% 6*”' 6,”) 6.”, 61”0 65”1 66”5 6:”8 6=”= 6ÌB”> 6ÌC”? 6ÌD”Ì@ 6ÌE’” 3” 3	˜” 9” 9	” 9
-” 9” 9”  9”" 9”$ 9”” :” :”# :”' :–” :” :” :”" :$”# :%”, :.–” :” :” :0” :9” ::”# :Ì@Ü ” :” :” ;” ;” ;” ;”  ;”# ;”' ;”( ; ”2 ;*”3 ;+”8 ;0”: ;2”; ;3”< ;4”= ;5’” :” :”” <” <”# <”' <—” <” <” <” <” <” < ”  <"”” =
-” =” =”" ='–” >” >” >”" >”# >”, >$–” ?” ?” ?”" ?”# ?”+ ?#–” Ì@” Ì@” Ì@”" Ì@”# Ì@”+ Ì@#–” ÌA” ÌA” ÌA” ÌA” ÌA”# ÌA™” ÌB” ÌB”  ÌB”$ ÌB”( ÌB ”* ÌB"”+ ÌB#”2 ÌB*”4 ÌB,’” ÌC” ÌC˜” ÌD
-” ÌD” ÌD” ÌD” ÌD”% ÌD”& ÌD ”' ÌD!˜” ÌE
-” ÌE” ÌE” ÌE”  ÌE”% ÌE”' ÌE!”( ÌE"’” ÌF” ÌF	’” <” <’” 9” 9	’” #” #
-‘” ÌJ’” ÌR” ÌR‘” ÌP ””  ÌS'”$ ÌS+”4 ÌS;”6 ÌS=’”; ÌT ”< ÌT!’”? ÌU$”ÌA ÌU&’”: ÌV*”< ÌV,’”> Ì[#”? Ì[$’”( Ìq5”> ÌqÌK’” Ìr” Ìr“”# Ìr”2 Ìr”9 Ìr–” Ìs” Ìs” Ìs”# Ìs”$ Ìs”4 Ìs&—” Ìt” Ìt” Ìt” Ìt”! Ìt”# Ìt ”% Ìt"˜” Ìu” Ìu” Ìu”+ Ìu”, Ìu”0 Ìu ”1 Ìu!”2 Ìu"’” Ìv” Ìv‘” Ìw’”, Ìq”Ì@ Ìq–” Ìs”! Ìs”# Ìs”' Ìs”( Ìs”8 Ìs&—” Ìt” Ìt”  Ìt”! Ìt”% Ìt”' Ìt ”) Ìt"˜” Ìu”  Ìu”! Ìu”/ Ìu”0 Ìu”4 Ìu ”5 Ìu!”6 Ìu"’” Ìv” Ìv‘” Ìw”” Ìx” Ìx” Ìx” Ìx”” Ìy” Ìy” Ìy” Ìy’”* Ì|7”Ì@ Ì|ÌM’” Ì}” Ì}“”# Ì}”. Ì}”5 Ì}—” Ì~”# Ì~”% Ì~”& Ì~”* Ì~$”, Ì~&”. Ì~(—” Ì” Ì” Ì”- Ì”0 Ì ”4 Ì$”5 Ì%Ü ” Ì€”" Ì€”# Ì€”& Ì€”( Ì€”+ Ì€”/ Ì€”0 Ì€ ”ÌD Ì€4”ÌE Ì€5”ÌI Ì€9”ÌK Ì€;”ÌL Ì€<”ÌM Ì€=”ÌN Ì€>”ÌP Ì€Ì@”ÌS Ì€ÌC”ÌT Ì€ÌD”ÌU Ì€ÌE’” Ì” Ì‘” Ì‚’”, Ì|”ÌB Ì|—” Ì~”' Ì~”) Ì~”* Ì~”. Ì~$”0 Ì~&”2 Ì~(—” Ì”  Ì”! Ì”1 Ì”4 Ì ”8 Ì$”9 Ì%Ü ” Ì€”& Ì€”' Ì€”* Ì€”, Ì€”/ Ì€”3 Ì€”4 Ì€ ”ÌH Ì€4”ÌI Ì€5”ÌM Ì€9”ÌO Ì€;”ÌP Ì€<”ÌQ Ì€=”ÌR Ì€>”ÌT Ì€Ì@”ÌW Ì€ÌC”ÌX Ì€ÌD”ÌY Ì€ÌE’” Ì” Ì‘” Ì‚–” Ìƒ” Ìƒ” Ìƒ”& Ìƒ”' Ìƒ”- Ìƒ%”” Ì„” Ì„” Ì„” Ì„‘” ÌK’” ÌT	” ÌT’” ÌT	” ÌT’” ÌU	” ÌU’” ÌU	” ÌU’” ÌV	” ÌV’” ÌV	” ÌV’” Ì[	” Ì[’” Ì[	” Ì[’” Ì]” Ì]˜” Ì^” Ì^” Ì^” Ì^” Ì^”3 Ì^/”4 Ì^0”5 Ì^1š” Ì_” Ì_” Ì_” Ì_” Ì_”& Ì_"”' Ì_#”+ Ì_'”, Ì_ÌC”- Ì_ÌD•” Ì`” Ì`” Ì`” Ì`” Ì`˜” Ìa” Ìa” Ìa” Ìa” Ìa”6 Ìa2”7 Ìa3”8 Ìa4–” Ìb” Ìb” Ìb” Ìb” Ìb” Ìb“” Ìc”	 Ìc”
- Ìc—” Ìd” Ìd” Ìd” Ìd” Ìd” Ìd” ÌdŸ” Ìe” Ìe” Ìe” Ìe” Ìe”1 Ìe-”4 Ìe0”8 Ìe4”9 Ìe5”ÌB Ìe>”ÌC Ìe?”ÌF ÌeÌB”ÌG ÌeÌC”ÌH ÌeÌD”ÌI ÌeÌE˜” Ìf” Ìf” Ìf” Ìf” Ìf”, Ìf(”- Ìf)”. Ìf*”” Ìg”	 Ìg”
- Ìg” Ìg	’” Ìh” Ìh’” Ìj” Ìjœ” Ìk” Ìk” Ìk” Ìk” Ìk”  Ìk”$ Ìk ”% Ìk!”& Ìk"”, Ìk(”. Ìk*”0 Ìk,—” Ìl” Ìl
-” Ìl” Ìl” Ìl”% Ìl”& Ìl ” Ìm” Ìm” Ìm” Ìm” Ìm”3 Ìm-”7 Ìm1”8 Ìm2”ÌC Ìm=”ÌD Ìm>”ÌJ ÌmÌD”ÌP ÌmÌJ”ÌQ ÌmÌK”ÌR ÌmÌL”” Ìn”	 Ìn”
- Ìn” Ìn’” Ìo” Ìo”” Ì‡” Ì‡” Ì‡” Ì‡ Ü ” Ìˆ” Ìˆ
-” Ìˆ” Ìˆ” Ìˆ”' Ìˆ#”( Ìˆ$”) Ìˆ%”+ Ìˆ'”/ Ìˆ+”0 Ìˆ,”8 Ìˆ4”: Ìˆ6”> Ìˆ:”? Ìˆ;”ÌG ÌˆÌC”ÌI ÌˆÌE”ÌM ÌˆÌI”ÌN ÌˆÌJ”ÌV ÌˆÌR”ÌX ÌˆÌT”Ì\ ÌˆÌX”Ì] ÌˆÌY”Ìg ÌˆÌc”Ìi ÌˆÌe”Ìm ÌˆÌi”Ìn ÌˆÌj”Ìr ÌˆÌn”Ìs ÌˆÌo”Ìt ÌˆÌp” ÌŠ” ÌŠ” ÌŠ” ÌŠ” ÌŠ”$ ÌŠ ”% ÌŠ!”& ÌŠ"”* ÌŠ&”+ ÌŠ'”, ÌŠ(”1 ÌŠ-”3 ÌŠ/”5 ÌŠ1š” Ì‹” Ì‹” Ì‹” Ì‹” Ì‹”5 Ì‹/”: Ì‹4”< Ì‹6”= Ì‹7”> Ì‹8–” ÌŒ” ÌŒ
-” ÌŒ” ÌŒ” ÌŒ” ÌŒ•” Ì” Ì” Ì” Ì” Ì”” Ì” Ì” Ì” Ì”” Ì” Ì” Ì”& ÌŸ” Ì‘” Ì‘” Ì‘” Ì‘”  Ì‘”" Ì‘”% Ì‘”' Ì‘”- Ì‘%”/ Ì‘'”2 Ì‘*”4 Ì‘,”7 Ì‘.”8 Ì‘/”: Ì‘1“” Ì’” Ì’” Ì’	š” Ì“”	 Ì“”
- Ì“” Ì“” Ì“” Ì“” Ì“” Ì“” Ì“” Ì“Ÿ” Ì”” Ì”” Ì”” Ì”” Ì””. Ì”(”1 Ì”+”5 Ì”/”6 Ì”0”? Ì”9”Ì@ Ì”:”ÌC Ì”=”ÌD Ì”>”ÌE Ì”?”ÌF Ì”Ì@˜” Ì•” Ì•” Ì•” Ì•” Ì•”+ Ì•%”, Ì•&”- Ì•'”” Ì–”	 Ì–”
- Ì–” Ì–’” Ì—” Ì—’” Ì™”1 Ì™/’” Ìš” Ìš’” Ì›”1 Ì›/’” Ì” Ìš” Ì” Ì	” Ì
-” Ì”' Ì”) Ì”2 Ì#”3 Ì$”< Ì-”> Ì/˜” Ì” Ì	” Í” Í
-” Í”! Í”" Í”. Í!˜” Ì” Ì	” Í” Í” Í”" Í”# Í”/ Í"’” ÌŸ” ÌŸ˜” ÌŸ” ÌŸ” Ìó” Ìó” Ìó”" Ìó”# Ìó”/ Ìó#˜” ÌŸ” ÌŸ” Ìô” Ìô” Ìô”# Ìô”$ Ìô”0 Ìô$’” Ì ” Ì ’” Ì¡” Ì¡’” Ì ” Ì ”” Ì¡” Ì¡” Ì¦	” Ì¦’” Ì ” Ì ˜” Ì¡” Ì¡” Ì§	” Ì§” Ì§” Ì§”  Ì§”, Ì§%’” Ì ” Ì ™” Ì¡” Ì¡” Ì¨	” Ì¨” Ì¨” Ì¨” Ì¨”Ì‘ Ì¨6”Ì“ Ì¨8’” Ì¢
-” Ì¢”” Ì¢
-” Ì¢” Ì£” Ì£˜” Ì¢
-” Ì¢” Ì¤” Ì¤” Ì¤”% Ì¤!”& Ì¤"”7 Ì¤3’” Ì¢
-” Ì¢’” Ì ” Ì ’” Ì¡” Ì¡’” Ìª” Ìª–” Ì«” Ì«” Ì«” Ì«” Ì«”/ Ì«$’” Ìª” Ìª–” Ì«” Ì«” Ì³	” Ì³” Ì³”  Ì³’” Ìª” Ìª–” Ì«” Ì«” Ì³” Ì³” Ì³” Ì³!’” Ìª” Ìª”” Ì«” Ì«” Ì´	” Ì´’” Ìª” Ìª”” Ì«” Ì«” Ìµ	” Ìµ’” Ìª” Ìª–” Ì«” Ì«” Ì¶	” Ì¶” Ì¶” Ì¶’” Ì¬
-” Ì¬’” Ì­” Ì­˜” Ì­” Ì­” Ì°” Ì°” Ì°”' Ì°”( Ì°”4 Ì°)˜” Ì­” Ì­” Ì°+”# Ì°6”$ Ì°7”- Ì°Ì@”. Ì°ÌA”ÌA Ì°ÌT”” Ì®” Ì®”! Ì®”% Ì®˜” Ì®” Ì®” Ì®” Ì®”  Ì® ”) Ì®)”* Ì®*”6 Ì®6˜” Ì®” Ì®” Ì®8”  Ì®>”! Ì®?”* Ì®ÌH”+ Ì®ÌI”7 Ì®ÌU’” Ì­” Ì­Ü ”/ Ì¬”8 Ì¬”9 Ì¬”ÌH Ì¬+”Ìb Ì±”Ìc Ì±”Ìg Ì±”Ìi Ì±”Ìn Ì±,”Ìp Ì±.”Ìr Ì±0”Ìs Ì±1”Ìw Ì±5”Ìx Ì±6”Ì Ì±?”Ì‚ Ì±Ì@”Ì† Ì±ÌD”Ì‡ Ì±ÌE”ÌŠ Ì±ÌH”Ì Ì±ÌM’” Ì¬
-” Ì¬’” Ìª” Ìª’” Ì«” Ì«’” Ì¸” Ì¸š” Ì¹” Ì¹” Ì¹” Ì¹”  Ì¹”! Ì¹”' Ì¹#”, Ì¹(”- Ì¹)”/ Ì¹+’” Ìº
-” Ìº–” Ìº
-” Ìº” ÌÊ”+ ÌÊ”, ÌÊ”- ÌÊ–” Ìº
-” Ìº” ÌË”$ ÌË”% ÌË”+ ÌË˜” Ìº
-” Ìº” ÌÌ”- ÌÌ”. ÌÌ”7 ÌÌ#”8 ÌÌ$”> ÌÌ*”” Ì»” Ì»”$ Ì»”( Ì»–” Ì»” Ì»” Ì¼”% Ì¼”& Ì¼”( Ì¼–” Ì»” Ì»” Ì½”$ Ì½”% Ì½”( Ì½š” Ì»” Ì»” Ì¾”# Ì¾”$ Ì¾”& Ì¾”) Ì¾”+ Ì¾”- Ì¾”/ Ì¾!’” Ì»” Ì»”” ÌÀ” ÌÀ”$ ÌÀ”, ÌÀ–” ÌÀ” ÌÀ” ÌÁ”% ÌÁ”& ÌÁ”( ÌÁ˜” ÌÀ” ÌÀ” ÌÂ”& ÌÂ”' ÌÂ”, ÌÂ”- ÌÂ”1 ÌÂ#š” ÌÀ” ÌÀ” ÌÃ”# ÌÃ”$ ÌÃ”& ÌÃ”) ÌÃ”+ ÌÃ”- ÌÃ”/ ÌÃ!’” ÌÀ” ÌÀ”” ÌÅ” ÌÅ”$ ÌÅ”3 ÌÅ –” ÌÅ” ÌÅ” ÌÆ”% ÌÆ”& ÌÆ”( ÌÆ–” ÌÅ” ÌÅ” ÌÇ”& ÌÇ”' ÌÇ”0 ÌÇ"š” ÌÅ” ÌÅ” ÌÈ”# ÌÈ”$ ÌÈ”& ÌÈ”) ÌÈ”+ ÌÈ”- ÌÈ”/ ÌÈ!’” ÌÅ” ÌÅ’” Ìº
-” Ìº‘” ÌÍ	‘” ÌÍ’” ÌÎ
-” ÌÎ˜” ÌÎ
-” ÌÎ” Ìë”, Ìë”- Ìë”6 Ìë$”7 Ìë%”ÌM Ìë;”” ÌÎ
-” ÌÎ” Ìì”' Ìì”” ÌÎ
-” ÌÎ” Ìí”$ Ìí”” ÌÎ
-” ÌÎ” Ìî”$ Ìî˜” ÌÎ
-” ÌÎ” Ìï”" Ìï”# Ìï”, Ìï”- Ìï”9 Ìï'–” ÌÎ
-” ÌÎ” Ìğ”) Ìğ”* Ìğ”+ Ìğ’” ÌÏ” ÌÏ—”$ ÌĞ”, ÌĞ”- Ìæ”4 Ìæ”5 Ìæ”8 Ìæ”: Ìæœ”( Ìç”/ Ìç”0 Ìç”4 Ìç”5 Ìç”? Ìç'”ÌC Ìç+”ÌD Ìç,”ÌH Ìç0”ÌJ Ìç2”ÌK Ìç3”ÌL Ìç4’”$ Ìè”% Ìè’”( ÌÑ”. ÌÑ–”( ÌÑ”. ÌÑ”/ Ìâ”6 Ìâ”7 Ìâ”8 Ìâ–”( ÌÑ”. ÌÑ”/ Ìã”> Ìã ”? Ìã!”ÌH Ìã*–”( ÌÑ”. ÌÑ”/ Ìä”; Ìä”< Ìä”= Ìä“”ÌH ÌÒ”ÌQ ÌÒ”ÌX ÌÒ˜”4 ÌÓ”7 ÌÓ”9 ÌÓ”ÌB ÌÓ"”ÌE ÌÓ%”ÌI ÌÓ)”ÌJ ÌÓ*”ÌN ÌÓ.””4 ÌÔ”> ÌÔ”Ì@ ÌÔ ”ÌF ÌÔ&””4 ÌÕ”? ÌÕ”ÌA ÌÕ!”ÌD ÌÕ$–”4 ÌÖ”= ÌÖ”? ÌÖ”ÌG ÌÖ'”ÌH ÌÖ(”ÌM ÌÖ-””4 Ì×”Ì@ Ì× ”ÌB Ì×"”ÌC Ì×#–”4 ÌØ”? ÌØ”ÌA ÌØ!”ÌJ ÌØ*”ÌK ÌØ+”Ì\ ÌØ<–”4 ÌÙ”? ÌÙ”ÌA ÌÙ!”ÌJ ÌÙ*”ÌK ÌÙ+”ÌV ÌÙ6‘”1 ÌÚ˜”8 ÌÓ”; ÌÓ”= ÌÓ”ÌF ÌÓ"”ÌI ÌÓ%”ÌM ÌÓ)”ÌN ÌÓ*”ÌR ÌÓ.””8 ÌÔ”ÌB ÌÔ”ÌD ÌÔ ”ÌJ ÌÔ&””8 ÌÕ”ÌC ÌÕ”ÌE ÌÕ!”ÌH ÌÕ$–”8 ÌÖ”ÌA ÌÖ”ÌC ÌÖ”ÌK ÌÖ'”ÌL ÌÖ(”ÌQ ÌÖ-””8 Ì×”ÌD Ì× ”ÌF Ì×"”ÌG Ì×#–”8 ÌØ”ÌC ÌØ”ÌE ÌØ!”ÌN ÌØ*”ÌO ÌØ+”Ì` ÌØ<–”8 ÌÙ”ÌC ÌÙ”ÌE ÌÙ!”ÌN ÌÙ*”ÌO ÌÙ+”ÌZ ÌÙ6–”( ÌÜ”, ÌÜ”4 ÌÜ”8 ÌÜ”9 ÌÜ”= ÌÜ –”( ÌÜ”, ÌÜ”- Ìİ”5 Ìİ”6 Ìİ”8 Ìİ –”( ÌÜ”, ÌÜ”- ÌŞ”5 ÌŞ”6 ÌŞ”7 ÌŞœ”( ÌÜ”, ÌÜ”- Ìß”9 Ìß!”: Ìß"”< Ìß$”ÌD Ìß,”ÌF Ìß.”ÌR Ìß:”ÌS Ìß;”Ì[ ÌßÌC”Ì] ÌßÌEš”( ÌÜ”, ÌÜ”- Ìà”3 Ìà”4 Ìà”6 Ìà”9 Ìà!”; Ìà#”< Ìà$”> Ìà&’”$ ÌÜ”( ÌÜ’”$ ÌÑ”* ÌÑ’”$ ÌĞ”, ÌĞÜ ”; ÌÏ”? ÌÏ”Ì@ ÌÏ”ÌK ÌÏ$”Ìe Ìé”Ìf Ìé”Ìj Ìé ”Ìl Ìé"”Ìn Ìé$”Ìo Ìé%”Ìs Ìé)”Ìt Ìé*”Ìv Ìé,”Ìw Ìé-”Ì Ìé5”Ì Ìé7’” ÌÏ” ÌÏ’” ÌÎ
-” ÌÎ‘” Ìñ	’” ÌŸ” ÌŸ’” Ìö” Ìö” Ì÷” Ì÷”# Ì÷”% Ì÷”) Ì÷”+ Ì÷”5 Ì÷”6 Ì÷ ”< Ì÷&”> Ì÷(”ÌI Ì÷3”ÌK Ì÷5”ÌO Ì÷9”ÌQ Ì÷;’” Ìö” Ìö–” Ì÷” Ì÷” Ìş” Ìş” Ìş” Ìş’” Ìö” Ìö–” Ì÷” Ì÷” Ìÿ” Ìÿ” Ìÿ” Ìÿ’” Ìö” Ìö” Ì÷” Ì÷” Í ” Í ” Í ” Í ”! Í ”# Í ”% Í ”' Í ”- Í !”/ Í #”1 Í %”3 Í '’” Ìö” Ìö–” Ì÷” Ì÷” Í”" Í”# Í”, Í ’” Ìö” ÌöÜ ” Ì÷” Ì÷” Í” Í” Í” Í”" Í”$ Í”& Í”( Í”- Í!”/ Í#”8 Í,”: Í.”ÌA Í5”ÌC Í7”ÌD Í8”ÌF Í:’” Ìö” Ìö—” Ì÷” Ì÷” Í” Í” Í” Í”  Í˜” Í” Í” Í”+ Í#”, Í$”0 Í(”2 Í*”3 Í+’” Í” Í”” Ìø” Ìø” Ìø” Ìø–” Ìø” Ìø” Ìù” Ìù” Ìù” Ìù˜” Ìø” Ìø” Ìú” Ìú” Ìú”  Ìú”! Ìú”& Ìú –” Ìø” Ìø” Ìû” Ìû” Ìû” Ìûš” Ìø” Ìø” Ìü” Ìü” Ìü” Ìü”  Ìü”" Ìü”# Ìü”% Ìü’” Ìø” Ìø’” Ìö” Ìö’” Ì÷” Ì÷’” Ì” Ì	‘” Í	’” Í”1 Í/’” Í”$ Í"’” Í”1 Í/’” Í” Í˜” Í” Í” Í” Í” Í”, Í(”- Í)”. Í*™” Í” Í” Í	” Í” Í”  Í”! Í”" Í”. Í*˜” Í” Í” Í	” Í” Í” Í” Í”% Í!’” Í” Í’” Í”1 Í/’” Í” Í’” Í”1 Í/‘” Íš” Í” Í” Í	” Í” Í”! Í”% Í”& Í”5 Í&”7 Í(˜” Í” Í” Í0” Í0” Í0”( Í0”) Í0”, Í0 –” Í” Í” Í1” Í1” Í1”! Í1–” Í” Í” Í2”" Í2”# Í2”& Í2™” Í” Í” Í3” Í3” Í3” Í3”  Í3”" Í3”$ Í3 š” Í4” Í4” Í4” Í4” Í4”4 Í4*”9 Í4/”; Í41”< Í42”= Í43—” Í5” Í5
-” Í5”$ Í5”' Í5”, Í5"”- Í5#’” Í7”= Í73’” Í8”. Í8$’” Í9”= Í93–” Í:” Í:
-” Í:” Í:” Í:”! Í:•” Í;” Í;” Í;”" Í;”# Í;”” Í<
-” Í<” Í<”- Í<—” Í=	” Í=
-” Í=” Í=” Í=” Í=”! Í=˜” Í>
-” Í>”  Í>”$ Í>”% Í>”; Í>-”< Í>.”= Í>/’” Í?
-”. Í? —” Í@
-” Í@” Í@”, Í@”/ Í@!”0 Í@"”1 Í@#š” ÍA” ÍA	” ÍA
-” ÍA” ÍA” ÍA” ÍA”! ÍA”# ÍA”% ÍA œ” ÍB
-” ÍB”  ÍB”% ÍB”& ÍB”; ÍB-”> ÍB0”? ÍB1”ÌF ÍB8”ÌH ÍB:”ÌI ÍB;”ÌJ ÍB<—” ÍC
-” ÍC” ÍC”, ÍC”/ ÍC!”0 ÍC"”1 ÍC#”” ÍD” ÍD	” ÍD
-” ÍD‘” ÍE’” ÍF” ÍF•” Í” Í” Í”  Í”- Í’” Í” Íš” Í” Í” Í”# Í”/ Í”0 Í”2 Í!”6 Í%”8 Í'”< Í+’” Í%” Í%–” Í%” Í%” Í*	”  Í*”! Í*”' Í*–” Í%” Í%” Í+	”! Í+”" Í+”( Í+˜” Í%” Í%” Í,	”) Í,”* Í,”3 Í,!”4 Í,"”: Í,(”” Í&
-” Í&”  Í&”- Í&–” Í&
-” Í&” Í'”! Í'”" Í'”$ Í'–” Í&
-” Í&” Í(”" Í(”# Í(”, Í( ’” Í&
-” Í&’” Í%” Í%’” Í.” Í.š” Í.” Í.” Í.”# Í.”/ Í.”0 Í.”2 Í.!”6 Í.%”8 Í.'”< Í.+’” Í” Í‘” ÍG’” ÍI”1 ÍI/’” ÍJ” ÍJ’” ÍK”1 ÍK/˜” ÍM” ÍM” ÍM” ÍM” ÍM” ÍM)” ÍM+”! ÍM7’” ÍN” ÍN
-–” ÍN” ÍN
-” ÍX” ÍX
-” ÍX” ÍX–” ÍN” ÍN
-” ÍY” ÍY” ÍY” ÍY˜” ÍN” ÍN
-” ÍZ”! ÍZ”" ÍZ”+ ÍZ”, ÍZ”2 ÍZ$”” ÍO” ÍO
-” ÍO” ÍO–” ÍO” ÍO
-” ÍP	” ÍP” ÍP” ÍPÜ ” ÍO” ÍO
-” ÍQ	” ÍQ” ÍQ” ÍQ”  ÍQ”/ ÍQ'”4 ÍQ,”9 ÍQ1”: ÍQ2”; ÍQ3”< ÍQ4”ÌE ÍQ=”ÌF ÍQ>”ÌG ÍQ?”ÌH ÍQÌ@”ÌQ ÍQÌI’” ÍO” ÍO
-”” ÍS” ÍS
-” ÍS” ÍS–” ÍS” ÍS
-” ÍT	” ÍT” ÍT” ÍTÜ ” ÍS” ÍS
-” ÍU	” ÍU” ÍU” ÍU”  ÍU”/ ÍU'”4 ÍU,”9 ÍU1”: ÍU2”; ÍU3”< ÍU4”ÌE ÍU=”ÌF ÍU>”ÌG ÍU?”ÌH ÍUÌ@”ÌQ ÍUÌIš” ÍS” ÍS
-” ÍV	” ÍV” ÍV” ÍV” ÍV” ÍV”  ÍV”" ÍV’” ÍS” ÍS
-’” ÍN” ÍN
-‘” Í[ÔrI–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ†‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
- ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ‘”  Ìü ‘”  Ìı ‘”  Ìş ‘”  Ìÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
- ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ‘”  Í† ‘”  Í‡ ‘”  Íˆ ‘”  Í‰ ‘”  ÍŠ ‘”  Í‹ ‘”  ÍŒ ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í‘ ‘”  Í’ ‘”  Í“ ‘”  Í” ‘”  Í• ‘”  Í– ‘”  Í— ‘”  Í˜ ‘”  Í™ ‘”  Íš ‘”  Í› ‘”  Íœ ‘”  Í ‘”  Í ‘”  ÍŸ ‘”  Í  ‘”  Í¡ ‘”  Í¢ ‘”  Í£ ‘”  Í¤ ‘”  Í¥ ‘”  Í¦ ‘”  Í§ ‘”  Í¨ ‘”  Í© ‘”  Íª ‘”  Í« ‘”  Í¬ ‘”  Í­ ‘”  Í® ‘”  Í¯ ‘”  Í° ‘”  Í± ‘”  Í² ‘”  Í³ ‘”  Í´ ‘”  Íµ ‘”  Í¶ ‘”  Í· ‘”  Í¸ ‘”  Í¹ ‘”  Íº ‘”  Í» ‘”  Í¼ ‘”  Í½ ‘”  Í¾ ‘”  Í¿ ‘”  ÍÀ ‘”  ÍÁ ‘”  ÍÂ ‘”  ÍÃ ‘”  ÍÄ ‘”  ÍÅ ‘”  ÍÆ ‘”  ÍÇ ‘”  ÍÈ ‘”  ÍÉ ‘”  ÍÊ ‘”  ÍË ‘”  ÍÌ ‘”  ÍÍ ‘”  ÍÎ ‘”  ÍÏ ‘”  ÍĞ ‘”  ÍÑ ‘”  ÍÒ ‘”  ÍÓ ‘”  ÍÔ ‘”  ÍÕ ‘”  ÍÖ ‘”  Í× ‘”  ÍØ ‘”  ÍÙ ‘”  ÍÚ ‘”  ÍÛ ‘”  ÍÜ ‘”  Íİ ‘”  ÍŞ ‘”  Íß ‘”  Íà ‘”  Íá ‘”  Íâ ‘”  Íã ‘”  Íä ‘”  Íå ‘”  Íæ ‘”  Íç ‘”  Íè ‘”  Íé ‘”  Íê ‘”  Íë ‘”  Íì ‘”  Íí ‘”  Íî ‘”  Íï ‘”  Íğ ‘”  Íñ ‘”  Íò ‘”  Íó ‘”  Íô ‘”  Íõ ‘”  Íö ‘”  Í÷ ‘”  Íø ‘”  Íù ‘”  Íú ‘”  Íû ‘”  Íü ‘”  Íı ‘”  Íş ‘”  Íÿ ‘”  Í  ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í	 ‘”  Í
- ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í ‘”  Í  ‘”  Í! ‘”  Í" ‘”  Í# ‘”  Í$ ‘”  Í% ‘”  Í& ‘”  Í' ‘”  Í( ‘”  Í) ‘”  Í* ‘”  Í+ ‘”  Í, ‘”  Í- ‘”  Í. ‘”  Í/ ‘”  Í0 ‘”  Í1 ‘”  Í2 ‘”  Í3 ‘”  Í4 ‘”  Í5 ‘”  Í6 ‘”  Í7 ‘”  Í8 ‘”  Í9 ‘”  Í: ‘”  Í; ‘”  Í< ‘”  Í= ‘”  Í> ‘”  Í? ‘”  Í@ ‘”  ÍA ‘”  ÍB ‘”  ÍC ‘”  ÍD ‘”  ÍE ‘”  ÍF ‘”  ÍG ‘”  ÍH ‘”  ÍI ‘”  ÍJ ‘”  ÍK ‘”  ÍL ‘”  ÍM ‘”  ÍN ‘”  ÍO ‘”  ÍP ‘”  ÍQ ‘”  ÍR ‘”  ÍS ‘”  ÍT ‘”  ÍU ‘”  ÍV ‘”  ÍW ‘”  ÍX ‘”  ÍY ‘”  ÍZ ‘”  Í[ ‘”  Í\ ‘”  Í] ‘”  Í^ ‘”  Í_ ‘”  Í` ‘”  Ía ‘”  Íb ‘”  Íc ‘”  Íd ‘”  Íe ‘”  Íf ‘”  Íg ‘”  Íh ‘”  Íi ‘”  Íj ‘”  Ík ‘”  Íl ‘”  Ím ‘”  Ín ‘”  Ío ‘”  Íp ‘”  Íq ‘”  Ír ‘”  Ís ‘”  Ít ‘”  Íu ‘”  Ív ‘”  Íw ‘”  Íx ‘”  Íy ‘”  Íz ‘”  Í{ ‘”  Í| ‘”  Í} ‘”  Í~ ‘”  Í ‘”  Í€ ‘”  Í ‘”  Í‚ ‘”  Íƒ ‘”  Í„ ‘”  Í… ÔrJ’§missing¦pluginÃ¦genAbcÂÔ  ÔrK”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache—ÔrL•¤type¥start£endªspecifiers¦source±ImportDeclarationÌ€Ì¢‘ÔrM”¤type¥start£end¥local¶ImportDefaultSpecifierÌ‡ÌÔrN”¤type¥start£end¤nameªIdentifierÌ‡Ì¦routerÔrO•¤type¥start£end¥value£raw§LiteralÌ“Ì¡¬@ohos.router®'@ohos.router'L±ImportDeclarationÌ¤ÌÚ‘M¶ImportDefaultSpecifierÌ«Ì´NªIdentifierÌ«Ì´©ConstantsO§LiteralÌºÌÙ½../common/constants/Constants¿'../common/constants/Constants'L±ImportDeclarationÌÜÍ‘ÔrP•¤type¥start£end¨imported¥local¯ImportSpecifierÌåÌğNªIdentifierÌåÌğ«ImagePickerNªIdentifierÌåÌğ«ImagePickerO§LiteralÌøÍ¹../components/ImagePicker»'../components/ImagePicker'L±ImportDeclarationÍÍG‘P¯ImportSpecifierÍÍ)NªIdentifierÍÍ)ªPhotoModelNªIdentifierÍÍ)ªPhotoModelO§LiteralÍ1ÍF³../model/PhotoModelµ'../model/PhotoModel'L±ImportDeclarationÍIÍ|‘M¶ImportDefaultSpecifierÍPÍ\NªIdentifierÍPÍ\¬PhotoServiceO§LiteralÍbÍ{·../service/PhotoService¹'../service/PhotoService'L±ImportDeclarationÍ~Í²‘P¯ImportSpecifierÍ‡ÍNªIdentifierÍ‡Í©LazyImageNªIdentifierÍ‡Í©LazyImageO§LiteralÍ˜Í±·../components/LazyImage¹'../components/LazyImage'L±ImportDeclarationÍ´Íà‘M¶ImportDefaultSpecifierÍ»ÍÁNªIdentifierÍ»ÍÁ¦LoggerO§LiteralÍÇÍß¶../common/utils/Logger¸'../common/utils/Logger'
