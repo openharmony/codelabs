@@ -25,6 +25,7 @@ import Constants from "@normalized:N&&&entry/src/main/ets/common/constants/Const
 import { ImagePicker } from "@normalized:N&&&entry/src/main/ets/components/ImagePicker&";
 import { PhotoModel } from "@normalized:N&&&entry/src/main/ets/model/PhotoModel&";
 import PhotoService from "@normalized:N&&&entry/src/main/ets/service/PhotoService&";
+import { LazyImage } from "@normalized:N&&&entry/src/main/ets/components/LazyImage&";
 import Logger from "@normalized:N&&&entry/src/main/ets/common/utils/Logger&";
 // 定义数据接口
 interface PhotoData {
@@ -563,13 +564,37 @@ class IndexPage extends ViewPU {
                 this.navigateToDetail(index);
             });
         }, Stack);
-        this.observeComponentCreation2((elmtId, isInitialRender) => {
-            Image.create('file://' + photo.path);
-            Image.width('100%');
-            Image.height('100%');
-            Image.objectFit(ImageFit.Cover);
-            Image.alt({ "id": 16777217, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" });
-        }, Image);
+        {
+            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                if (isInitialRender) {
+                    let componentCall = new LazyImage(this, {
+                        src: 'file://' + photo.path,
+                        widthValue: '100%',
+                        heightValue: '100%',
+                        objectFit: ImageFit.Cover,
+                        placeholder: Constants.PLACEHOLDER_IMAGE,
+                        errorHolder: Constants.ERROR_IMAGE,
+                        cornerRadius: 8
+                    }, undefined, elmtId, () => { }, { page: "entry/src/main/ets/pages/IndexPage.ets", line: 272, col: 7 });
+                    ViewPU.create(componentCall);
+                    let paramsLambda = () => {
+                        return {
+                            src: 'file://' + photo.path,
+                            widthValue: '100%',
+                            heightValue: '100%',
+                            objectFit: ImageFit.Cover,
+                            placeholder: Constants.PLACEHOLDER_IMAGE,
+                            errorHolder: Constants.ERROR_IMAGE,
+                            cornerRadius: 8
+                        };
+                    };
+                    componentCall.paramsGenerator_ = paramsLambda;
+                }
+                else {
+                    this.updateStateVarsOfChildByElmtId(elmtId, {});
+                }
+            }, { name: "LazyImage" });
+        }
         this.observeComponentCreation2((elmtId, isInitialRender) => {
             Column.create();
             Column.width('100%');
@@ -598,12 +623,7 @@ class IndexPage extends ViewPU {
                         Text.create(photo.category);
                         Text.fontSize(10);
                         Text.fontColor(Color.White);
-                        Text.padding({
-                            left: 6,
-                            right: 6,
-                            top: 2,
-                            bottom: 2
-                        });
+                        Text.padding({ left: 6, right: 6, top: 2, bottom: 2 });
                         Text.backgroundColor('rgba(0, 0, 0, 0.5)');
                         Text.borderRadius(4);
                         Text.margin({ top: 4 });

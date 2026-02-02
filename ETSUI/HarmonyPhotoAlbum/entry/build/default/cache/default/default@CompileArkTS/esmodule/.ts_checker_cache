@@ -1577,7 +1577,7 @@
       ]
     },
     "/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/IndexPage.ets": {
-      "mtimeMs": 1770020094567.599,
+      "mtimeMs": 1770022282355.4,
       "children": [
         "/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/ets/api/@ohos.router.d.ts",
         "/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/ets/api/@ohos.app.ability.common.d.ts",

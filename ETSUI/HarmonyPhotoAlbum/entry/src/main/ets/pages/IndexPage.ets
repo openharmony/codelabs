@@ -269,11 +269,15 @@ struct IndexPage {
   @Builder
   PhotoItem(photo: PhotoModel, index: number) {
     Stack({ alignContent: Alignment.BottomStart }) {
-      Image('file://' + photo.path)
-        .width('100%')
-        .height('100%')
-        .objectFit(ImageFit.Cover)
-        .alt($r('app.media.app_icon'))
+      LazyImage({
+        src: 'file://' + photo.path,
+        widthValue: '100%',
+        heightValue: '100%',
+        objectFit: ImageFit.Cover,
+        placeholder: Constants.PLACEHOLDER_IMAGE,
+        errorHolder: Constants.ERROR_IMAGE,
+        cornerRadius: 8
+      })
 
       Column() {
         Text(photo.name)
@@ -288,12 +292,7 @@ struct IndexPage {
           Text(photo.category)
             .fontSize(10)
             .fontColor(Color.White)
-            .padding({
-              left: 6,
-              right: 6,
-              top: 2,
-              bottom: 2
-            })
+            .padding({ left: 6, right: 6, top: 2, bottom: 2 })
             .backgroundColor('rgba(0, 0, 0, 0.5)')
             .borderRadius(4)
             .margin({ top: 4 })
