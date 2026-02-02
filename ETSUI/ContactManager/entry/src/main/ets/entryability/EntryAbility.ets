@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { AbilityConstant, ConfigurationConstant, UIAbility, Want, abilityAccessCtrl } from '@kit.AbilityKit'
+import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit'
 import { hilog } from '@kit.PerformanceAnalysisKit'
 import { window } from '@kit.ArkUI'
 import {BusinessError} from '@ohos.base'
@@ -30,33 +30,15 @@ export default class EntryAbility extends UIAbility {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate')
   }
 
-  // 封装权限申请方法
-  private async requestContactPermissions(): Promise<void> {
-    const atManager = abilityAccessCtrl.createAtManager()
-    try {
-      // 申请读写联系人权限
-      const data = await atManager.requestPermissionsFromUser(this.context, [
-        'ohos.permission.READ_CONTACTS',
-        'ohos.permission.WRITE_CONTACTS'
-      ])
-      hilog.info(DOMAIN, 'testTag', 'Permission request finished: %{public}s', JSON.stringify(data))
-    } catch (err) {
-      hilog.error(DOMAIN, 'testTag', 'Permission request failed: %{public}s', JSON.stringify(err))
-    }
-  }
-
   onWindowStageCreate(windowStage: window.WindowStage): void {
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onWindowStageCreate')
 
-    // 在进入页面前，先尝试申请权限
-    this.requestContactPermissions().then((): void => {
-      windowStage.loadContent('pages/Index', (err: BusinessError<void>): void => {
-        if (err.code) {
-          hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err))
-          return
-        }
-        hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.')
-      })
+    windowStage.loadContent('pages/Index', (err: BusinessError<void>): void => {
+      if (err.code) {
+        hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err))
+        return
+      }
+      hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.')
     })
   }
 

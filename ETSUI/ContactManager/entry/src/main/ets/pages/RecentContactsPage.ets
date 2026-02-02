@@ -29,18 +29,36 @@ interface ActivityGroup {
 
 @Entry
 struct RecentContactsPage {
-  @State isLoading: boolean = true;
+  @State isLoading: boolean = false;
   @State activityGroups: ActivityGroup[] = [];
 
-  // ⭐ 默认选中“最近查看”
+  // ⭐ 默认选中"最近查看"
   @State selectedTab: 'viewed' | 'edited' | 'created' = 'viewed';
+  private loadSeq: number = 0;
+  private isFirstLoad: boolean = true;
 
   async aboutToAppear(): Promise<void> {
+    // 初始化服务（只在第一次）
+    if (this.isFirstLoad) {
+      this.isLoading = true;
+      try {
+        await ContactService.init();
+        await MetadataService.init();
+        console.info('[RecentContactsPage] 服务初始化成功');
+      } catch (err) {
+        console.error('[RecentContactsPage] 服务初始化失败:', err);
+      }
+      this.isFirstLoad = false;
+    }
+    
     await this.loadData();
   }
 
   onPageShow(): void {
-    this.loadData();
+    // 只在不是第一次加载时刷新
+    if (!this.isFirstLoad) {
+      this.loadData();
+    }
   }
 
   private getNavTitle(): string {
@@ -52,30 +70,69 @@ struct RecentContactsPage {
   }
 
   async loadData(): Promise<void> {
+    const seq = ++this.loadSeq;
+    const tab = this.selectedTab;
+    
+    console.info('[RecentContactsPage] ===== loadData START =====');
+    console.info('[RecentContactsPage] seq:', seq, 'tab:', tab);
+    
     this.isLoading = true;
+    
     try {
       const allContacts = await ContactService.getAllContacts();
+      
+      // 检查是否被取消
+      if (seq !== this.loadSeq) {
+        console.warn('[RecentContactsPage] 请求已过期 (seq)', seq, '当前:', this.loadSeq);
+        return;
+      }
+      
+      console.info('[RecentContactsPage] 获取到联系人数量:', allContacts.length);
+      
       const contactMap: Map<string, Contact> = new Map();
       allContacts.forEach(c => c.key && contactMap.set(c.key, c));
 
       let activities: ContactActivity[] = [];
-      switch (this.selectedTab) {
+      switch (tab) {
         case 'viewed':
           activities = await MetadataService.getRecentViewedContacts(contactMap);
+          console.info('[RecentContactsPage] 最近查看数量:', activities.length);
           break;
         case 'edited':
           activities = await MetadataService.getRecentEditedContacts(contactMap);
+          console.info('[RecentContactsPage] 最近编辑数量:', activities.length);
           break;
         case 'created':
           activities = await MetadataService.getRecentCreatedContacts(contactMap);
+          console.info('[RecentContactsPage] 最近添加数量:', activities.length);
           break;
       }
+      
+      // 再次检查
+      if (seq !== this.loadSeq || tab !== this.selectedTab) {
+        console.warn('[RecentContactsPage] Tab已切换', 'seq:', seq, '当前seq:', this.loadSeq, 'tab:', tab, '当前tab:', this.selectedTab);
+        return;
+      }
 
-      this.activityGroups = this.groupByTimeCategory(activities);
+      // 关键：创建新的数组引用，确保触发UI更新
+      const newGroups = this.groupByTimeCategory(activities);
+      this.activityGroups = [...newGroups];
+      
+      console.info('[RecentContactsPage] ===== loadData SUCCESS =====');
+      console.info('[RecentContactsPage] 分组数量:', this.activityGroups.length, 'Tab:', tab);
     } catch (err) {
+      console.error('[RecentContactsPage] ===== loadData ERROR =====');
       console.error('[RecentContactsPage] 加载失败:', err);
+      // 即使失败也要清空数组，避免显示旧数据
+      if (seq === this.loadSeq) {
+        this.activityGroups = [];
+      }
     } finally {
-      this.isLoading = false;
+      // 只有最新的请求才能关闭 loading
+      if (seq === this.loadSeq) {
+        this.isLoading = false;
+        console.info('[RecentContactsPage] loading 结束, seq:', seq);
+      }
     }
   }
 
@@ -107,13 +164,23 @@ struct RecentContactsPage {
   }
 
   handleTabChange(tab: 'viewed' | 'edited' | 'created'): void {
-    if (this.selectedTab === tab) return;
-    // 先更新状态，确保 UI 立即响应
+    // 移除这个判断，允许重复点击刷新
+    // if (this.selectedTab === tab) return;
+    
+    console.info('[RecentContactsPage] ========== Tab切换 ==========');
+    console.info('[RecentContactsPage] 从:', this.selectedTab, '到:', tab);
+    console.info('[RecentContactsPage] loadSeq:', this.loadSeq);
+    
+    // 立即更新状态，强制触发 UI 刷新
     this.selectedTab = tab;
-    // 使用 Promise 确保状态更新完成后再加载数据
-    Promise.resolve().then(() => {
+    this.activityGroups = [];
+    this.isLoading = true;
+    
+    // 使用 nextTick 确保状态更新后再加载
+    setTimeout(() => {
+      console.info('[RecentContactsPage] 开始执行 loadData, 当前 Tab:', this.selectedTab);
       this.loadData();
-    });
+    }, 10);
   }
 
   build(): void {
@@ -136,6 +203,7 @@ struct RecentContactsPage {
         if (this.isLoading) {
           Column() {
             LoadingProgress().width(50).height(50)
+            Text('加载中...').fontSize(14).fontColor(Color.Gray).margin({ top: 10 })
           }.width('100%').layoutWeight(1).justifyContent(FlexAlign.Center)
 
         } else if (this.activityGroups.length === 0) {
