@@ -19,6 +19,14 @@
           "when": "inuse", // inuse：应用前台使用时；always：始终需要（后台也需要时用）
           "abilities": [ "EntryAbility" ] // 关联的Ability（通常填主Ability EntryAbility）
         }
+      },
+      {
+        "name": "ohos.permission.READ_DOCUMENT", // 权限名称（核心，对应需要的系统权限）
+        "reason": "$string:read_media_reason", // 权限申请说明（可选，可直接写字符串，也可引用资源文件）
+        "usedScene": { // 权限使用场景（必填，声明权限在何时使用）
+          "when": "inuse", // inuse：应用前台使用时；always：始终需要（后台也需要时用）
+          "abilities": [ "EntryAbility" ] // 关联的Ability（通常填主Ability EntryAbility）
+        }
       }
     ],
     "abilities": [
