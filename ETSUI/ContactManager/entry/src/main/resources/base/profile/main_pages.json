@@ -1,0 +1,11 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/ContactListPage",
+    "pages/ContactDetailPage",
+    "pages/ContactCreatePage",
+    "pages/ContactEditPage",
+    "pages/RecentContactsPage",
+    "pages/RecycleBinPage"
+  ]
+}
