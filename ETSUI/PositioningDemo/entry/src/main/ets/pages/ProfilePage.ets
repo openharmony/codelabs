@@ -27,7 +27,6 @@ struct ProfilePage {
   @State userAge: number = 0;
   @State userHeight: number = 0;
   @State userWeight: number = 0;
-
   @State totalRecords: number = 0;
   @State totalDistance: number = 0;
   @State totalDuration: number = 0;
@@ -38,16 +37,13 @@ struct ProfilePage {
   @State walkingDistance: number = 0;
   @State cyclingCount: number = 0;
   @State cyclingDistance: number = 0;
-
   @State activityDays: number = 0;
   @State weeklyFrequency: number = 0;
   @State isLoaded: boolean = false;
-
   @State totalPlans: number = 0;
   @State activePlans: number = 0;
   @State completedPlans: number = 0;
   @State averageCompletionRate: number = 0;
-
   private userService: UserService = new UserService();
   private historyService: HistoryService = new HistoryService();
   private statisticsService: StatisticsService = new StatisticsService(this.historyService);
@@ -251,7 +247,12 @@ struct ProfilePage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -302,6 +303,7 @@ struct ProfilePage {
               .fontColor('#FF6B6B')
           }
           .margin({ bottom: 4 })
+
           Text('总距离')
             .fontSize(12)
             .fontColor('#999999')
@@ -335,6 +337,7 @@ struct ProfilePage {
               .fontColor('#4ECDC4')
           }
           .margin({ bottom: 4 })
+
           Text('总时长')
             .fontSize(12)
             .fontColor('#999999')
@@ -362,6 +365,7 @@ struct ProfilePage {
               .fontColor('#FFA502')
           }
           .margin({ bottom: 4 })
+
           Text('总卡路里')
             .fontSize(12)
             .fontColor('#999999')
@@ -384,6 +388,7 @@ struct ProfilePage {
               .fontColor('#45B7D1')
           }
           .margin({ bottom: 4 })
+
           Text('运动次数')
             .fontSize(12)
             .fontColor('#999999')
@@ -402,7 +407,12 @@ struct ProfilePage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -418,6 +428,7 @@ struct ProfilePage {
           .fontColor(color)
       }
       .margin({ bottom: 4 })
+
       Text(label)
         .fontSize(12)
         .fontColor('#999999')
@@ -456,6 +467,7 @@ struct ProfilePage {
             .fontColor('#999999')
         }
         .alignItems(HorizontalAlign.Start)
+
         Blank()
         Text((this.totalRecords === 0 ? 0 : Math.round((this.runningCount / this.totalRecords) * 100)) + '%')
           .fontSize(12)
@@ -483,6 +495,7 @@ struct ProfilePage {
             .fontColor('#999999')
         }
         .alignItems(HorizontalAlign.Start)
+
         Blank()
         Text((this.totalRecords === 0 ? 0 : Math.round((this.walkingCount / this.totalRecords) * 100)) + '%')
           .fontSize(12)
@@ -510,6 +523,7 @@ struct ProfilePage {
             .fontColor('#999999')
         }
         .alignItems(HorizontalAlign.Start)
+
         Blank()
         Text((this.totalRecords === 0 ? 0 : Math.round((this.cyclingCount / this.totalRecords) * 100)) + '%')
           .fontSize(12)
@@ -559,7 +573,12 @@ struct ProfilePage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -578,6 +597,7 @@ struct ProfilePage {
           .fontColor('#999999')
       }
       .alignItems(HorizontalAlign.Start)
+
       Blank()
       Text(this.calculatePercentage(count) + '%')
         .fontSize(12)
@@ -620,6 +640,7 @@ struct ProfilePage {
               .fontColor('#4ECDC4')
           }
           .margin({ bottom: 4 })
+
           Text('总计划')
             .fontSize(12)
             .fontColor('#999999')
@@ -642,6 +663,7 @@ struct ProfilePage {
               .fontColor('#FF6B6B')
           }
           .margin({ bottom: 4 })
+
           Text('进行中')
             .fontSize(12)
             .fontColor('#999999')
@@ -669,6 +691,7 @@ struct ProfilePage {
               .fontColor('#4CAF50')
           }
           .margin({ bottom: 4 })
+
           Text('已完成')
             .fontSize(12)
             .fontColor('#999999')
@@ -691,6 +714,7 @@ struct ProfilePage {
               .fontColor('#FFA502')
           }
           .margin({ bottom: 4 })
+
           Text('平均完成度')
             .fontSize(12)
             .fontColor('#999999')
@@ -709,7 +733,12 @@ struct ProfilePage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -724,7 +753,12 @@ struct ProfilePage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ bottom: 24 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   @Builder
@@ -747,7 +781,9 @@ struct ProfilePage {
   }
 
   calculatePercentage(count: number): number {
-    if (this.totalRecords === 0) return 0;
+    if (this.totalRecords === 0) {
+      return 0;
+    }
     return Math.round((count / this.totalRecords) * 100);
   }
 

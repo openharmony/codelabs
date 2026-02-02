@@ -28,7 +28,6 @@ struct PersonalInfoPage {
   @State userWeight: string = '';
   @State bmi: number = 0;
   @State bmiCategory: string = '未设置';
-
   private userService: UserService = new UserService();
 
   async aboutToAppear() {
@@ -152,7 +151,8 @@ struct PersonalInfoPage {
   }
 
   @Builder
-  InputItem(label: string, value: string, placeholder: string, onChange: (value: string) => void, isNumber: boolean = false) {
+  InputItem(label: string, value: string, placeholder: string, onChange: (value: string) => void,
+    isNumber: boolean = false) {
     Column() {
       Text(label)
         .fontSize(14)
@@ -226,7 +226,12 @@ struct PersonalInfoPage {
           .fontWeight(FontWeight.Bold)
           .fontColor(this.getBMIColor(this.bmi))
           .margin({ left: 8 })
-          .padding({ left: 12, right: 12, top: 4, bottom: 4 })
+          .padding({
+            left: 12,
+            right: 12,
+            top: 4,
+            bottom: 4
+          })
           .backgroundColor(this.getBMIColor(this.bmi) + '20')
           .borderRadius(8)
       }
@@ -237,7 +242,12 @@ struct PersonalInfoPage {
     .backgroundColor('#FFFFFF')
     .borderRadius(16)
     .margin({ top: 16, bottom: 16 })
-    .shadow({ radius: 8, color: '#10000000', offsetX: 0, offsetY: 2 })
+    .shadow({
+      radius: 8,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 2
+    })
   }
 
   showGenderDialog() {
@@ -278,10 +288,18 @@ struct PersonalInfoPage {
   }
 
   getBMIColor(bmi: number): string {
-    if (bmi === 0) return '#999999';
-    if (bmi < 18.5) return '#3498DB';
-    if (bmi < 24) return '#2ECC71';
-    if (bmi < 28) return '#F39C12';
+    if (bmi === 0) {
+      return '#999999';
+    }
+    if (bmi < 18.5) {
+      return '#3498DB';
+    }
+    if (bmi < 24) {
+      return '#2ECC71';
+    }
+    if (bmi < 28) {
+      return '#F39C12';
+    }
     return '#E74C3C';
   }
 

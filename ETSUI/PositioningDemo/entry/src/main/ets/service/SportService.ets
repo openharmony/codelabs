@@ -27,7 +27,7 @@ export class SportService {
   private totalPauseDuration: number = 0;
   private isPaused: boolean = false;
   private reminderService: ReminderService;
-  
+
   constructor(reminderService?: ReminderService) {
     this.reminderService = reminderService || new ReminderService();
     console.log('SportService 构造函数 - ReminderService 实例:', this.reminderService);
@@ -56,20 +56,20 @@ export class SportService {
 
     // 启动定时器，每秒更新一次运动数据
     this.startUpdateTimer();
-    
+
     // 启动提醒服务并触发运动开始提醒
     this.reminderService.startReminderService();
     this.reminderService.onSportStart();
-    
+
     console.log('运动服务已启动:', this.currentSportData);
     return this.currentSportData;
   }
-  
+
   // 启动更新定时器
   private startUpdateTimer(): void {
     // 清除之前的定时器
     this.stopUpdateTimer();
-    
+
     // 创建新的定时器，每秒更新一次
     this.updateTimer = setInterval(() => {
       if (this.currentSportData && !this.isPaused) {
@@ -77,27 +77,29 @@ export class SportService {
         const totalTime = Date.now() - this.startTime;
         const currentDuration = totalTime - this.totalPauseDuration;
         this.currentSportData.duration = currentDuration;
-        
+
         // 计算卡路里
         const calories = this.calculateCalories(this.totalDistance, currentDuration, this.currentSportData.type);
         this.currentSportData.calories = calories;
-        
+
         // 记录速度和卡路里数据
         const speedDataPoint = new DataPoint(Date.now(), this.currentSportData.currentSpeed);
         const caloriesDataPoint = new DataPoint(Date.now(), calories);
         this.currentSportData.speedData.push(speedDataPoint);
         this.currentSportData.caloriesData.push(caloriesDataPoint);
         console.log('记录速度数据点 - 时间戳:', speedDataPoint.timestamp, '速度:', speedDataPoint.value, 'm/s');
-        console.log('记录卡路里数据点 - 时间戳:', caloriesDataPoint.timestamp, '卡路里:', caloriesDataPoint.value, 'kcal');
-        
+        console.log('记录卡路里数据点 - 时间戳:', caloriesDataPoint.timestamp, '卡路里:', caloriesDataPoint.value,
+          'kcal');
+
         // 触发提醒服务的运动数据更新处理
         this.reminderService.onSportDataUpdate(this.currentSportData);
-        
-        console.log('定时器更新运动数据，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '持续时间:', currentDuration, '速度:', this.currentSportData.currentSpeed, '卡路里:', calories);
+
+        console.log('定时器更新运动数据，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '持续时间:',
+          currentDuration, '速度:', this.currentSportData.currentSpeed, '卡路里:', calories);
       }
     }, 1000);
   }
-  
+
   // 停止更新定时器
   private stopUpdateTimer(): void {
     if (this.updateTimer !== -1) {
@@ -121,7 +123,7 @@ export class SportService {
 
     let distance = 0;
     let currentSpeed = location.speed || 0;
-    
+
     if (this.lastLocation) {
       distance = this.calculateDistance(
         this.lastLocation.latitude,
@@ -130,22 +132,22 @@ export class SportService {
         location.longitude
       );
       this.totalDistance += distance;
-      
+
       // 计算时间差（毫秒）
       const timeDiff = location.timestamp - this.lastTimestamp;
       console.log('距离:', distance, '时间差:', timeDiff);
-      
+
       // 如果时间差大于0，计算速度（米/秒）
       if (timeDiff > 0) {
         const timeDiffSeconds = timeDiff / 1000;
         const calculatedSpeed = distance / timeDiffSeconds;
         console.log('计算的速度:', calculatedSpeed);
-        
+
         // 只有当计算出的速度大于当前速度或当前速度为0时，才使用计算的速度
         if (currentSpeed === 0 || calculatedSpeed > currentSpeed) {
           currentSpeed = calculatedSpeed;
         }
-        
+
         // 限制速度在合理范围内
         if (currentSpeed < 0.5) {
           currentSpeed = 0.5; // 最低速度0.5 m/s
@@ -158,11 +160,11 @@ export class SportService {
     // 更新上一个位置和时间戳
     this.lastLocation = routePoint;
     this.lastTimestamp = location.timestamp;
-    
+
     this.currentSportData.route.push(routePoint);
     this.currentSportData.distance = this.totalDistance;
     this.currentSportData.duration = Date.now() - this.startTime;
-    
+
     // 设置当前速度
     this.currentSportData.currentSpeed = currentSpeed;
     console.log('最终使用的速度:', currentSpeed);
@@ -172,7 +174,7 @@ export class SportService {
       this.totalSpeed += currentSpeed;
       this.speedCount++;
     }
-    
+
     // 计算平均速度
     this.currentSportData.averageSpeed = this.speedCount > 0 ? this.totalSpeed / this.speedCount : 0;
 
@@ -221,7 +223,7 @@ export class SportService {
 
     // 停止定时器
     this.stopUpdateTimer();
-    
+
     // 如果当前处于暂停状态，计算最后一次暂停的时间
     if (this.isPaused) {
       const pauseDuration = Date.now() - this.pauseStartTime;
@@ -229,7 +231,7 @@ export class SportService {
       this.isPaused = false;
       console.log('运动停止时处于暂停状态，本次暂停时间:', pauseDuration, '总暂停时间:', this.totalPauseDuration);
     }
-    
+
     // 计算实际运动时间（总时间 - 总暂停时间）
     this.currentSportData.endTime = Date.now();
     const totalTime = this.currentSportData.endTime - this.startTime;
@@ -239,7 +241,8 @@ export class SportService {
     // 触发提醒服务的运动结束处理
     this.reminderService.onSportEnd();
 
-    console.log('运动已停止，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '实际运动时间:', actualDuration);
+    console.log('运动已停止，总时间:', totalTime, '总暂停时间:', this.totalPauseDuration, '实际运动时间:',
+      actualDuration);
     const finalData = this.currentSportData;
     this.currentSportData = null;
     return finalData;
@@ -254,8 +257,8 @@ export class SportService {
     const dLat = this.toRadians(lat2 - lat1);
     const dLon = this.toRadians(lon2 - lon1);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
