@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -18,7 +18,10 @@ import { webview } from '@kit.ArkWeb';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { preferences } from '@kit.ArkData';
 import { dataManager } from '../manager/DataManager';
+import { downloadManager } from '../manager/DownloadManager';
 import { promptAction } from '@kit.ArkUI';
+import { common } from '@kit.AbilityKit';
+import { picker } from '@kit.CoreFileKit';
 
 // 标签页信息接口
 interface TabInfo {
@@ -84,9 +87,10 @@ struct Index {
     this.loadSettings();
 
     // 同步初始化DataManager（确保数据立即可用）
-    const context = this.getUIContext().getHostContext();
+    const context = this.getUIContext().getHostContext() as common.UIAbilityContext;
     if (context) {
       dataManager.initSync(context);
+      downloadManager.init(context);
     }
 
     // 初始化第一个标签页
@@ -387,12 +391,77 @@ struct Index {
                   });
                 }
               })
+              .onDownloadStart((event) => {
+                if (event) {
+                  console.info(`=== 下载请求 ===`);
+                  console.info(`URL: ${event.url}`);
+
+                  const fileName = event.contentDisposition || 'unknown_file';
+
+                  // 调用下载管理器
+                  promptAction.showDialog({
+                    title: '开始下载',
+                    message: `是否下载该文件？\n${event.contentDisposition || '未知文件名'}`,
+                    buttons: [
+                      { text: '取消', color: '#FF3B30' },
+                      { text: '下载', color: '#007AFF' }
+                    ]
+                  }).then(async (result) => {
+                    if (result.index === 1) {
+                      const success = await downloadManager.startDownload(
+                        event.url,
+                        undefined,
+                        event.mimetype,
+                        event.contentLength
+                      );
+                      if (success) {
+                        promptAction.showToast({ message: '已加入下载队列' });
+                      } if (success) promptAction.showToast({ message: '开始下载' });
+
+                    } else if (result.index === 2) {
+                      // 另存为 (选择路径)
+                      try {
+                        const documentSaveOptions = new picker.DocumentSaveOptions();
+                        documentSaveOptions.newFileNames = [fileName]; // 预置文件名
+
+                        const context = getContext(this);
+                        const documentViewPicker = new picker.DocumentViewPicker(context);
+
+                        documentViewPicker.save(documentSaveOptions).then(async (documentSaveResult) => {
+                          if (documentSaveResult && documentSaveResult.length > 0) {
+                            const targetUri = documentSaveResult[0];
+                            console.info(`用户选择保存路径: ${targetUri}`);
+
+                            // 启动下载，传入 targetUri
+                            const success = await downloadManager.startDownload(
+                              event.url,
+                              fileName,
+                              event.mimetype,
+                              event.contentLength,
+                              targetUri
+                            );
+
+                            if (success) {
+                              promptAction.showToast({ message: '开始下载并将在完成后保存' });
+                            }
+                          }
+                        }).catch((err: BusinessError) => {
+                          console.error(`Picker failed: ${err.code}, ${err.message}`);
+                        });
+                      } catch (err) {
+                        console.error(`Picker creation failed: ${err}`);
+                        promptAction.showToast({ message: '无法打开文件选择器' });
+                      }
+                    }
+                  });
+                }
+              })
           }, (tab: TabInfo) => tab.id.toString())
         }
         .width('100%')
         .layoutWeight(1)
 
-        // 底部工具栏：Home、书签、标签、设置
+        // 底部工具栏：Home、书签、下载、标签、设置
         Row() {
           // Home 按钮
           Button() {
@@ -440,6 +509,41 @@ struct Index {
           .onClick(() => {
             // 点击打开书签列表
             this.pathStack.pushPathByName('BookmarkPage', null);
+          })
+
+          // 分隔线
+          Divider()
+            .vertical(true)
+            .height(40)
+            .color('#E0E0E0')
+
+          // 下载按钮
+          Button() {
+            Column() {
+              Stack() {
+                Image($r('app.media.download'))
+                  .width(20)
+                  .height(20)
+                  .fillColor(this.darkMode ? '#FFFFFF' : '#666666')
+
+                Text('↓')
+                  .fontSize(10)
+                  .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                  .fontWeight(FontWeight.Bold)
+                  .margin({ top: 2 })
+              }
+
+              Text('下载')
+                .fontSize(11)
+                .fontColor(this.darkMode ? '#FFFFFF' : '#666666')
+                .margin({ top: 2 })
+            }
+          }
+          .layoutWeight(1)
+          .height(60)
+          .backgroundColor(Color.Transparent)
+          .onClick(() => {
+            this.pathStack.pushPathByName('DownloadPage', null);
           })
 
           // 分隔线

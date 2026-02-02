@@ -1,0 +1,25 @@
+# Define project-specific obfuscation rules here.
+# The obfuscation configuration file can be referenced in the module's build configuration.
+#
+# For more details about source code obfuscation and build-time optimization,
+# refer to the official documentation of your build toolchain or platform.
+
+# Obfuscation options:
+# -disable-obfuscation: Disable all obfuscation features
+# -enable-property-obfuscation: Obfuscate property names
+# -enable-toplevel-obfuscation: Obfuscate global scope identifiers
+# -enable-filename-obfuscation: Obfuscate output file names
+# -enable-export-obfuscation: Obfuscate exported symbols
+# -compact: Remove unnecessary whitespace and line breaks
+# -remove-log: Remove console.* logging statements
+# -print-namecache: Output name mapping cache for debugging
+# -apply-namecache: Reuse an existing name mapping cache
+
+# Keep options:
+# -keep-property-name: Preserve specified property names
+# -keep-global-name: Preserve specified global identifiers
+
+-enable-property-obfuscation
+-enable-toplevel-obfuscation
+-enable-filename-obfuscation
+-enable-export-obfuscation
