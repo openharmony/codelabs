@@ -4,7 +4,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,7 +12,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 import router from '@ohos.router';
 import common from '@ohos.app.ability.common';
@@ -101,10 +100,9 @@ struct IndexPage {
   @State currentIndex: number = 0;
   @State tempSelectedPath: string = '';
   @State dbPhotoList: Array<PhotoModel> = [];
+  @StorageLink('selectedIndex') selectedIndex: number = 0;
 
-  // ==========================================
-  // 🆕 Tab导航相关状态
-  // ==========================================
+  // Tab导航相关状态
   @State currentTabIndex: number = 0;
 
   aboutToAppear() {
@@ -142,7 +140,9 @@ struct IndexPage {
     builder: ImagePicker({
       onImageSelected: (path: string) => {
         this.tempSelectedPath = path;
-        setTimeout(() => { this.infoDialogController.open(); }, 100);
+        setTimeout(() => {
+          this.infoDialogController.open();
+        }, 100);
       }
     }),
     alignment: DialogAlignment.Bottom,
@@ -159,7 +159,9 @@ struct IndexPage {
       AlertDialog.show({
         title: '保存成功',
         message: '图片已安全存入数据库!',
-        confirm: { value: '棒', action: () => {} }
+        confirm: {
+          value: '棒', action: () => {}
+        }
       });
     }).catch((err: Error) => {
       console.error('[IndexPage] 保存失败: ' + JSON.stringify(err));
@@ -168,7 +170,105 @@ struct IndexPage {
   }
 
   // ==========================================
-  // 🆕 首页内容构建器
+  // 顶部滚动照片组件（基于 PhotoModel，与下方网格对齐）
+  // ==========================================
+
+  /**
+   * 获取用于轮播展示的照片列表
+   * 这里直接取 dbPhotoList 前 N 张，这样索引与网格完全一致
+   */
+  private getCarouselPhotos(): PhotoModel[] {
+    if (!this.dbPhotoList || this.dbPhotoList.length === 0) {
+      return [];
+    }
+    const count: number = Math.min(Constants.SHOW_COUNT, this.dbPhotoList.length);
+    return this.dbPhotoList.slice(0, count);
+  }
+  @Builder
+  FeaturedCarousel() {
+    // 无数据时显示占位图
+    if (this.getCarouselPhotos().length === 0) {
+      Column() {
+        Image(Constants.PLACEHOLDER_IMAGE)
+          .width(Constants.FULL_PERCENT)
+          .aspectRatio(Constants.BANNER_ASPECT_RATIO)
+          .objectFit(ImageFit.Cover)
+          .borderRadius($r('app.float.img_border_radius'))
+          .backgroundColor('#F0F0F0')
+
+        Text('暂无精选照片，去添加一张吧～')
+          .fontSize(14)
+          .fontColor('#999999')
+          .margin({ top: 12 })
+      }
+      .padding($r('app.float.grid_padding'))
+    } else {
+    Swiper(this.swiperController) {
+      ForEach(this.getCarouselPhotos(), (photo: PhotoModel, index: number) => {
+        Stack({ alignContent: Alignment.BottomStart }) {
+          LazyImage({
+            src: 'file://' + photo.path,
+            widthValue: Constants.FULL_PERCENT,
+            heightValue: Constants.FULL_PERCENT,
+            objectFit: ImageFit.Cover,
+            placeholder: Constants.PLACEHOLDER_IMAGE,
+            errorHolder: Constants.ERROR_IMAGE,
+            cornerRadius: $r('app.float.img_border_radius')
+          })
+
+          Column() {
+            Text(photo.name || '未命名图片')
+              .fontSize(20)
+              .fontWeight(FontWeight.Medium)
+              .fontColor(Color.White)
+              .maxLines(1)
+              .textOverflow({ overflow: TextOverflow.Ellipsis })
+            if (photo.category) {
+              Text(photo.category)
+                .fontSize(12)
+                .fontColor(Color.White)
+                .padding({ left: 12, right: 12, top: 4, bottom: 4 })
+                .backgroundColor('rgba(0,0,0,0.4)')
+                .borderRadius(999)
+                .margin({ top: 12 })
+            }
+
+            if (photo.tags) {
+              Text(photo.tags)
+                .fontSize(10)
+                .fontColor('#EEEEEE')
+                .margin({ top: 6 })
+                .maxLines(1)
+                .textOverflow({ overflow: TextOverflow.Ellipsis })
+            }
+          }
+          .padding(20)
+          .width(Constants.FULL_PERCENT)
+          .linearGradient({
+            direction: GradientDirection.Bottom,
+            colors: [[0x00000000, 0.0], [0xAA000000, 1.0]]
+          })
+        }
+        .width(Constants.FULL_PERCENT)
+        .aspectRatio(Constants.BANNER_ASPECT_RATIO)
+        .clip(true)
+        .onClick(() => {
+          // 由于 photos 是 dbPhotoList 的头部切片，index 与 dbPhotoList 中一致
+          this.navigateToDetail(index);
+        })
+      }, (photo: PhotoModel) => photo.id.toString())
+    }
+    .autoPlay(this.getCarouselPhotos().length > 1)
+    .loop(this.getCarouselPhotos().length > 1)
+    .duration(Constants.BANNER_ANIMATE_DURATION)
+    .margin($r('app.float.grid_padding'))
+    .borderRadius($r('app.float.img_border_radius'))
+    .clip(true)
+    }
+  }
+
+  // ==========================================
+  // 首页内容构建器
   // ==========================================
   @Builder
   HomeContent() {
@@ -184,19 +284,8 @@ struct IndexPage {
         .width(Constants.FULL_PERCENT)
         .padding({ left: $r('app.float.title_padding') })
 
-        // 2. 轮播图
-        Swiper(this.swiperController) {
-          ForEach(Constants.BANNER_IMG_LIST, (item: Resource) => {
-            Row() {
-              Image(item).width(Constants.FULL_PERCENT).height(Constants.FULL_PERCENT)
-            }
-            .width(Constants.FULL_PERCENT).aspectRatio(Constants.BANNER_ASPECT_RATIO)
-          }, (item: Resource, index?: number) => JSON.stringify(item) + index)
-        }
-        .autoPlay(true).loop(true)
-        .margin($r('app.float.grid_padding'))
-        .borderRadius($r('app.float.img_border_radius'))
-        .clip(true)
+        // 2. 顶部滚动照片
+        this.FeaturedCarousel()
 
         // 3. 图片网格
         if (this.dbPhotoList.length === 0) {
@@ -221,33 +310,13 @@ struct IndexPage {
           .justifyContent(FlexAlign.Center)
         } else {
           Grid() {
-            ForEach(this.dbPhotoList, (item: PhotoModel) => {
+            ForEach(this.dbPhotoList, (photo: PhotoModel, index: number) => {
               GridItem() {
-                Column() {
-                  LazyImage({
-                    src: 'file://' + item.path,
-                    widthValue: '100%',
-                    heightValue: 100,
-                    objectFit: ImageFit.Cover,
-                    cornerRadius: 8,
-                    placeholder: Constants.PLACEHOLDER_IMAGE,
-                    errorHolder: Constants.ERROR_IMAGE
-                  })
-
-                  Text(item.name)
-                    .fontSize(14)
-                    .maxLines(1)
-                    .textOverflow({ overflow: TextOverflow.Ellipsis })
-                    .margin({ top: 5 })
-                }
-                .padding(5)
-                .backgroundColor('#F5F5F5')
-                .borderRadius(8)
+                this.PhotoItem(photo, index);
               }
-              .onClick(() => {
-                console.info(`点击了图片: ${item.name}`);
-              })
-            }, (item: PhotoModel) => item.id.toString())
+              .width(Constants.FULL_PERCENT)
+              .aspectRatio(1)
+            }, (photo: PhotoModel) => photo.id.toString())
           }
           .columnsTemplate(Constants.INDEX_COLUMNS_TEMPLATE)
           .columnsGap($r('app.float.grid_padding'))
@@ -281,31 +350,70 @@ struct IndexPage {
     .height(Constants.FULL_PERCENT)
   }
 
-  // ==========================================
-  // 🆕 页面显示时的生命周期（从ListPage返回时触发）
-  // ==========================================
-  onPageShow() {
-    console.info('[IndexPage] 页面显示，刷新数据');
-    this.currentTabIndex = 0; // 确保回到首页Tab
-    this.refreshData(); // 刷新图片列表
+  @Builder
+  PhotoItem(photo: PhotoModel, index: number) {
+    Stack({ alignContent: Alignment.BottomStart }) {
+      LazyImage({
+        src: 'file://' + photo.path,
+        widthValue: '100%',
+        heightValue: '100%',
+        objectFit: ImageFit.Cover,
+        placeholder: Constants.PLACEHOLDER_IMAGE,
+        errorHolder: Constants.ERROR_IMAGE,
+        cornerRadius: 8
+      })
+
+      Column() {
+        Text(photo.name)
+          .fontSize(12)
+          .fontColor(Color.White)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+          .width('100%')
+          .textAlign(TextAlign.Start)
+
+        if (photo.category) {
+          Text(photo.category)
+            .fontSize(10)
+            .fontColor(Color.White)
+            .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+            .backgroundColor('rgba(0, 0, 0, 0.5)')
+            .borderRadius(4)
+            .margin({ top: 4 })
+        }
+      }
+      .width('100%')
+      .padding(8)
+      .linearGradient({
+        direction: GradientDirection.Bottom,
+        colors: [[0x00000000, 0.0], [0xAA000000, 1.0]]
+      })
+      .alignItems(HorizontalAlign.Start)
+    }
+    .width('100%')
+    .height('100%')
+    .onClick(() => {
+      this.navigateToDetail(index);
+    })
   }
 
-  // ==========================================
-  // 🆕 主构建函数 - 使用Tabs组件
-  // ==========================================
+  // 页面显示时（从ListPage返回触发）
+  onPageShow() {
+    console.info('[IndexPage] 页面显示，刷新数据');
+    this.currentTabIndex = 0;
+    this.refreshData();
+  }
+
+  // 主构建函数 - 使用Tabs组件
   build() {
     Tabs({ index: this.currentTabIndex }) {
-      // ==========================================
       // Tab 1: 首页
-      // ==========================================
       TabContent() {
         this.HomeContent()
       }
       .tabBar(this.TabBuilder(0, '首页', '🏠'))
 
-      // ==========================================
       // Tab 2: 搜索页
-      // ==========================================
       TabContent() {
         Column() {
           Text('正在跳转到搜索页...')
@@ -318,22 +426,18 @@ struct IndexPage {
       }
       .tabBar(this.TabBuilder(1, '搜索', '🔍'))
     }
-    .barPosition(BarPosition.End) // 底部导航
-    .scrollable(false) // 禁止滑动切换
-    .animationDuration(300) // 切换动画时长
+    .barPosition(BarPosition.End)
+    .scrollable(false)
+    .animationDuration(300)
     .onChange((index: number) => {
       console.info(`[IndexPage] 切换到 Tab ${index}`);
       this.currentTabIndex = index;
 
-      // ==========================================
-      // 🎯 关键:点击"搜索"Tab时跳转到ListPage
-      // ==========================================
       if (index === 1) {
         router.pushUrl({
           url: 'pages/ListPage'
         }).then(() => {
           console.info('[IndexPage] 成功跳转到搜索页');
-          // 跳转后立即切回首页Tab,避免UI错乱
           this.currentTabIndex = 0;
         }).catch((err: Error) => {
           console.error(`[IndexPage] 跳转失败: ${err.message}`);
@@ -343,9 +447,7 @@ struct IndexPage {
     })
   }
 
-  // ==========================================
-  // 🆕 Tab图标构建器
-  // ==========================================
+  // Tab图标构建器
   @Builder
   TabBuilder(index: number, title: string, icon: string) {
     Column() {
@@ -363,4 +465,20 @@ struct IndexPage {
     .justifyContent(FlexAlign.Center)
   }
 
+  private navigateToDetail(index: number) {
+    this.selectedIndex = index;
+    const photoPaths = this.dbPhotoList.map(photo => 'file://' + photo.path);
+
+    console.info(`[IndexPage] 跳转到详情页，索引: ${index}`);
+
+    router.pushUrl({
+      url: Constants.URL_DETAIL_LIST_PAGE,
+      params: {
+        photoArr: photoPaths,
+      }
+    }).catch((err: Error) => {
+      console.error(`${Constants.TAG_INDEX_PAGE}${err.message}`);
+    });
+  }
 }
+
