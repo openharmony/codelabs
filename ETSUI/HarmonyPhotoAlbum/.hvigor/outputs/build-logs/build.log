@@ -1025,3 +1025,804 @@ at /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/mai
 [2026-02-02T16:15:48.262] [DEBUG] debug-file - worker[5] exits with exit code 1.
 [2026-02-02T16:15:48.262] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
 [2026-02-02T16:15:48.262] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-02-02T16:51:31.313] [DEBUG] debug-file - session manager: set active socket. socketId=-Fy5hKjpXJ8iwB49AAAD
+[2026-02-02T16:51:31.321] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-02-02T16:51:31.329] [DEBUG] debug-file - Hvigor init with startParameters:{
+  hvigorfileTypeCheck: false,
+  parallelExecution: true,
+  incrementalExecution: true,
+  printStackTrace: false,
+  daemon: true,
+  analyze: 0,
+  logLevel: Level { level: 20000, levelStr: 'INFO', colour: 'green' },
+  optimizationStrategy: 'memory',
+  hotCompile: undefined,
+  hotReloadBuild: undefined
+}
+[2026-02-02T16:51:31.337] [DEBUG] debug-file - Cache service initialization finished in 8 ms 
+[2026-02-02T16:51:31.338] [DEBUG] debug-file - hvigorfile, resolving /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/hvigorfile.ts
+[2026-02-02T16:51:31.349] [DEBUG] debug-file - hvigorfile, require result:  {}
+[2026-02-02T16:51:31.349] [DEBUG] debug-file - hvigorfile, binding system plugins {}
+[2026-02-02T16:51:31.355] [DEBUG] debug-file - Start initialize project's product build option map with build mode debug.
+[2026-02-02T16:51:31.355] [DEBUG] debug-file - Picking option from product 'default' with build mode 'debug'.
+[2026-02-02T16:51:31.355] [DEBUG] debug-file - Product 'default' build option initialized
+[2026-02-02T16:51:31.355] [DEBUG] debug-file - End initialize project's product build option map with build mode 'debug'.
+[2026-02-02T16:51:31.355] [DEBUG] debug-file - Obtain build option for product 'default'in this build.
+[2026-02-02T16:51:31.356] [DEBUG] debug-file - No signingConfig found, initRemoteHspCache failed.
+[2026-02-02T16:51:31.358] [DEBUG] debug-file - Start recording SDK configuration permission data.
+[2026-02-02T16:51:31.383] [DEBUG] debug-file - Sdk init in 27 ms 
+[2026-02-02T16:51:31.384] [DEBUG] debug-file - Project task initialization takes 2 ms 
+[2026-02-02T16:51:31.384] [DEBUG] debug-file - hvigorfile, resolve finished /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/hvigorfile.ts
+[2026-02-02T16:51:31.384] [DEBUG] debug-file - hvigorfile, resolving /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/hvigorfile.ts
+[2026-02-02T16:51:31.387] [DEBUG] debug-file - hvigorfile, require result:  {}
+[2026-02-02T16:51:31.387] [DEBUG] debug-file - hvigorfile, binding system plugins {}
+[2026-02-02T16:51:31.389] [DEBUG] debug-file - failed to load cangjie to dynamically generate schemas: Error: Cannot find module '@ohos/cangjie-build-support/index'
+Require stack:
+- /Applications/WebApp/DevEco-Studio.app/Contents/tools/hvigor/hvigor-ohos-plugin/src/plugin/factory/plugin-factory.js
+- /Applications/WebApp/DevEco-Studio.app/Contents/tools/hvigor/hvigor-ohos-plugin/index.js
+- /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/hvigorfile.ts
+- /Applications/WebApp/DevEco-Studio.app/Contents/tools/hvigor/hvigor/src/base/internal/lifecycle/configuration.js
+- /Applications/WebApp/DevEco-Studio.app/Contents/tools/hvigor/hvigor/src/base/boot/index.js
+- /Applications/WebApp/DevEco-Studio.app/Contents/tools/hvigor/hvigor/src/base/daemon/cluster/worker-process-lifecycle.js
+- /Applications/WebApp/DevEco-Studio.app/Contents/tools/hvigor/hvigor/src/base/daemon/process/daemon-process-boot-script.js
+[2026-02-02T16:51:31.394] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=debug
+[2026-02-02T16:51:31.394] [DEBUG] debug-file - Target 'default' config initialized
+[2026-02-02T16:51:31.394] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-02-02T16:51:31.394] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=release
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Target 'default' config initialized
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Start initialize module-target build option map, moduleName=entry, buildMode=debug
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Target 'default' config initialized
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Module 'entry' target 'default' build option initialized
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - End initialize module-target build option map, moduleName=entry
+[2026-02-02T16:51:31.395] [DEBUG] debug-file - Obtain build option for module 'entry' target 'default'in this build.
+[2026-02-02T16:51:31.396] [DEBUG] debug-file - Module entry task initialization takes 1 ms 
+[2026-02-02T16:51:31.396] [DEBUG] debug-file - hvigorfile, resolve finished /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/hvigorfile.ts
+[2026-02-02T16:51:31.455] [DEBUG] debug-file - hvigorfile, resolve hvigorfile dependencies in 59 ms 
+[2026-02-02T16:51:31.455] [DEBUG] debug-file - project has submodules:entry
+[2026-02-02T16:51:31.455] [DEBUG] debug-file - start to load updatedOhPackageInfo to the disk
+[2026-02-02T16:51:31.457] [DEBUG] debug-file - load to the disk finished
+[2026-02-02T16:51:31.457] [DEBUG] debug-file - Start to initialize dependency information.
+[2026-02-02T16:51:31.458] [DEBUG] debug-file - Module HarmonyPhotoAlbum Collected Dependency: 
+[2026-02-02T16:51:31.458] [DEBUG] debug-file - Module HarmonyPhotoAlbum's total dependency: 0
+[2026-02-02T16:51:31.458] [DEBUG] debug-file - Start to initialize dependency information.
+[2026-02-02T16:51:31.458] [DEBUG] debug-file - Module entry Collected Dependency: 
+[2026-02-02T16:51:31.459] [DEBUG] debug-file - Module entry's total dependency: 0
+[2026-02-02T16:51:31.459] [DEBUG] debug-file - Configuration phase cost:123 ms 
+[2026-02-02T16:51:31.460] [DEBUG] debug-file - Configuration task cost before running: 134 ms 
+[2026-02-02T16:51:31.462] [DEBUG] debug-file - Executing task :entry:default@PreBuild
+[2026-02-02T16:51:31.462] [DEBUG] debug-file - Task 'entry:default@PreBuild' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.464] [DEBUG] debug-file - Incremental task entry:default@PreBuild pre-execution cost: 2 ms .
+[2026-02-02T16:51:31.464] [DEBUG] debug-file - entry : default@PreBuild cost memory 0.2592620849609375
+[2026-02-02T16:51:31.465] [INFO] debug-file - UP-TO-DATE :entry:default@PreBuild...  
+[2026-02-02T16:51:31.465] [DEBUG] debug-file - Executing task :entry:default@CreateModuleInfo
+[2026-02-02T16:51:31.465] [DEBUG] debug-file - Task 'entry:default@CreateModuleInfo' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.465] [DEBUG] debug-file - entry : default@CreateModuleInfo cost memory 0.04003143310546875
+[2026-02-02T16:51:31.465] [DEBUG] debug-file - runTaskFromQueue task cost before running: 140 ms 
+[2026-02-02T16:51:31.465] [INFO] debug-file - Finished :entry:default@CreateModuleInfo... after 1 ms 
+[2026-02-02T16:51:31.466] [DEBUG] debug-file - Executing task :entry:default@GenerateMetadata
+[2026-02-02T16:51:31.466] [DEBUG] debug-file - Task 'entry:default@GenerateMetadata' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.467] [DEBUG] debug-file - Incremental task entry:default@GenerateMetadata pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.467] [DEBUG] debug-file - entry : default@GenerateMetadata cost memory 0.08254241943359375
+[2026-02-02T16:51:31.467] [INFO] debug-file - UP-TO-DATE :entry:default@GenerateMetadata...  
+[2026-02-02T16:51:31.467] [DEBUG] debug-file - Executing task :entry:default@ConfigureCmake
+[2026-02-02T16:51:31.467] [DEBUG] debug-file - entry : default@ConfigureCmake cost memory 0.0162200927734375
+[2026-02-02T16:51:31.467] [DEBUG] debug-file - runTaskFromQueue task cost before running: 141 ms 
+[2026-02-02T16:51:31.467] [INFO] debug-file - Finished :entry:default@ConfigureCmake... after 1 ms 
+[2026-02-02T16:51:31.467] [DEBUG] debug-file - Executing task :entry:default@MergeProfile
+[2026-02-02T16:51:31.468] [DEBUG] debug-file - Task 'entry:default@MergeProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.469] [DEBUG] debug-file - Incremental task entry:default@MergeProfile pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.469] [DEBUG] debug-file - entry : default@MergeProfile cost memory 0.1525726318359375
+[2026-02-02T16:51:31.469] [INFO] debug-file - UP-TO-DATE :entry:default@MergeProfile...  
+[2026-02-02T16:51:31.469] [DEBUG] debug-file - Executing task :entry:default@CreateBuildProfile
+[2026-02-02T16:51:31.469] [DEBUG] debug-file - Task 'entry:default@CreateBuildProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.470] [DEBUG] debug-file - Incremental task entry:default@CreateBuildProfile pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.470] [DEBUG] debug-file - entry : default@CreateBuildProfile cost memory 0.08695220947265625
+[2026-02-02T16:51:31.470] [INFO] debug-file - UP-TO-DATE :entry:default@CreateBuildProfile...  
+[2026-02-02T16:51:31.471] [DEBUG] debug-file - Executing task :entry:default@PreCheckSyscap
+[2026-02-02T16:51:31.471] [DEBUG] debug-file - entry : default@PreCheckSyscap cost memory 0.01645660400390625
+[2026-02-02T16:51:31.471] [DEBUG] debug-file - runTaskFromQueue task cost before running: 145 ms 
+[2026-02-02T16:51:31.471] [INFO] debug-file - Finished :entry:default@PreCheckSyscap... after 1 ms 
+[2026-02-02T16:51:31.471] [DEBUG] debug-file - Executing task :entry:default@GeneratePkgContextInfo
+[2026-02-02T16:51:31.473] [DEBUG] debug-file - Task 'entry:default@GeneratePkgContextInfo' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.473] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgContextInfo pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.473] [DEBUG] debug-file - entry : default@GeneratePkgContextInfo cost memory 0.2456207275390625
+[2026-02-02T16:51:31.473] [INFO] debug-file - UP-TO-DATE :entry:default@GeneratePkgContextInfo...  
+[2026-02-02T16:51:31.474] [DEBUG] debug-file - Executing task :entry:default@ProcessIntegratedHsp
+[2026-02-02T16:51:31.474] [DEBUG] debug-file - entry:default@ProcessIntegratedHsp is not up-to-date, since the output file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/build/cache/default/integrated_hsp/integratedHspCache.json' does not exist.
+[2026-02-02T16:51:31.475] [DEBUG] debug-file - Incremental task entry:default@ProcessIntegratedHsp pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.475] [DEBUG] debug-file - entry : default@ProcessIntegratedHsp cost memory 0.06396484375
+[2026-02-02T16:51:31.475] [DEBUG] debug-file - runTaskFromQueue task cost before running: 149 ms 
+[2026-02-02T16:51:31.475] [INFO] debug-file - Finished :entry:default@ProcessIntegratedHsp... after 1 ms 
+[2026-02-02T16:51:31.475] [DEBUG] debug-file - Executing task :entry:default@BuildNativeWithCmake
+[2026-02-02T16:51:31.476] [DEBUG] debug-file - entry : default@BuildNativeWithCmake cost memory 0.01720428466796875
+[2026-02-02T16:51:31.476] [DEBUG] debug-file - runTaskFromQueue task cost before running: 150 ms 
+[2026-02-02T16:51:31.476] [INFO] debug-file - Finished :entry:default@BuildNativeWithCmake... after 1 ms 
+[2026-02-02T16:51:31.477] [DEBUG] debug-file - Executing task :entry:default@MakePackInfo
+[2026-02-02T16:51:31.478] [DEBUG] debug-file - Incremental task entry:default@MakePackInfo pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.478] [DEBUG] debug-file - entry : default@MakePackInfo cost memory 0.0984649658203125
+[2026-02-02T16:51:31.478] [INFO] debug-file - UP-TO-DATE :entry:default@MakePackInfo...  
+[2026-02-02T16:51:31.478] [DEBUG] debug-file - Executing task :entry:default@SyscapTransform
+[2026-02-02T16:51:31.478] [DEBUG] debug-file - File: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/syscap.json' from 'sysCapJsonPath' is not exists, just ignore.
+[2026-02-02T16:51:31.478] [DEBUG] debug-file - Task 'entry:default@SyscapTransform' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.479] [DEBUG] debug-file - entry:default@SyscapTransform is not up-to-date, since the output file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/syscap/default/rpcid.sc' does not exist.
+[2026-02-02T16:51:31.479] [DEBUG] debug-file - Incremental task entry:default@SyscapTransform pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.479] [DEBUG] debug-file - entry : default@SyscapTransform cost memory 0.11777496337890625
+[2026-02-02T16:51:31.479] [DEBUG] debug-file - runTaskFromQueue task cost before running: 153 ms 
+[2026-02-02T16:51:31.479] [INFO] debug-file - Finished :entry:default@SyscapTransform... after 2 ms 
+[2026-02-02T16:51:31.480] [DEBUG] debug-file - Executing task :entry:default@ProcessProfile
+[2026-02-02T16:51:31.480] [DEBUG] debug-file - Task 'entry:default@ProcessProfile' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.480] [DEBUG] debug-file - Incremental task entry:default@ProcessProfile pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.481] [DEBUG] debug-file - entry : default@ProcessProfile cost memory 0.13381195068359375
+[2026-02-02T16:51:31.481] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessProfile...  
+[2026-02-02T16:51:31.482] [DEBUG] debug-file - Executing task :entry:default@ProcessRouterMap
+[2026-02-02T16:51:31.482] [DEBUG] debug-file - Incremental task entry:default@ProcessRouterMap pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.482] [DEBUG] debug-file - entry : default@ProcessRouterMap cost memory 0.13431549072265625
+[2026-02-02T16:51:31.482] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessRouterMap...  
+[2026-02-02T16:51:31.483] [DEBUG] debug-file - Executing task :entry:default@ProcessShareConfig
+[2026-02-02T16:51:31.483] [DEBUG] debug-file - Incremental task entry:default@ProcessShareConfig pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.483] [DEBUG] debug-file - entry : default@ProcessShareConfig cost memory 0.12397003173828125
+[2026-02-02T16:51:31.483] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessShareConfig...  
+[2026-02-02T16:51:31.484] [DEBUG] debug-file - Executing task :entry:default@ProcessStartupConfig
+[2026-02-02T16:51:31.484] [DEBUG] debug-file - Task 'entry:default@ProcessStartupConfig' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.484] [DEBUG] debug-file - entry:default@ProcessStartupConfig is not up-to-date, since the output file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/startup/default/startup_config.json' does not exist.
+[2026-02-02T16:51:31.484] [DEBUG] debug-file - Incremental task entry:default@ProcessStartupConfig pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.484] [DEBUG] debug-file - entry : default@ProcessStartupConfig cost memory 0.13402557373046875
+[2026-02-02T16:51:31.484] [DEBUG] debug-file - runTaskFromQueue task cost before running: 159 ms 
+[2026-02-02T16:51:31.485] [INFO] debug-file - Finished :entry:default@ProcessStartupConfig... after 1 ms 
+[2026-02-02T16:51:31.485] [DEBUG] debug-file - Executing task :entry:default@BuildNativeWithNinja
+[2026-02-02T16:51:31.486] [DEBUG] debug-file - entry : default@BuildNativeWithNinja cost memory 0.023223876953125
+[2026-02-02T16:51:31.486] [DEBUG] debug-file - runTaskFromQueue task cost before running: 160 ms 
+[2026-02-02T16:51:31.486] [INFO] debug-file - Finished :entry:default@BuildNativeWithNinja... after 1 ms 
+[2026-02-02T16:51:31.486] [DEBUG] debug-file - restool module names: entry; moduleName=entry, taskName=default@ProcessResource
+[2026-02-02T16:51:31.488] [DEBUG] debug-file - Executing task :entry:default@ProcessResource
+[2026-02-02T16:51:31.488] [DEBUG] debug-file - Task 'entry:default@ProcessResource' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.488] [DEBUG] debug-file - Incremental task entry:default@ProcessResource pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.488] [DEBUG] debug-file - entry : default@ProcessResource cost memory 0.12591552734375
+[2026-02-02T16:51:31.489] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessResource...  
+[2026-02-02T16:51:31.489] [DEBUG] debug-file - Executing task :entry:default@GenerateLoaderJson
+[2026-02-02T16:51:31.490] [DEBUG] debug-file - Task 'entry:default@GenerateLoaderJson' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.492] [DEBUG] debug-file - Incremental task entry:default@GenerateLoaderJson pre-execution cost: 2 ms .
+[2026-02-02T16:51:31.492] [DEBUG] debug-file - entry : default@GenerateLoaderJson cost memory 0.46966552734375
+[2026-02-02T16:51:31.493] [INFO] debug-file - UP-TO-DATE :entry:default@GenerateLoaderJson...  
+[2026-02-02T16:51:31.493] [DEBUG] debug-file - Executing task :entry:default@ProcessLibs
+[2026-02-02T16:51:31.493] [DEBUG] debug-file - Incremental task entry:default@ProcessLibs pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.493] [DEBUG] debug-file - entry : default@ProcessLibs cost memory 0.085784912109375
+[2026-02-02T16:51:31.494] [INFO] debug-file - UP-TO-DATE :entry:default@ProcessLibs...  
+[2026-02-02T16:51:31.494] [DEBUG] debug-file - restool module names: entry; moduleName=entry, taskName=default@CompileResource
+[2026-02-02T16:51:31.495] [DEBUG] debug-file - Executing task :entry:default@CompileResource
+[2026-02-02T16:51:31.496] [DEBUG] debug-file - entry:default@CompileResource is not up-to-date, since the input file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/resources' has been changed.
+[2026-02-02T16:51:31.496] [DEBUG] debug-file - Incremental task entry:default@CompileResource pre-execution cost: 2 ms .
+[2026-02-02T16:51:31.534] [DEBUG] debug-file - Use tool [/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/restool]
+ [
+  '/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/restool',
+  '-l',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resConfig.json'
+]
+[2026-02-02T16:51:31.535] [DEBUG] debug-file - current process  memoryUsage: {
+  rss: 131858432,
+  heapTotal: 169443328,
+  heapUsed: 122185904,
+  external: 3451532,
+  arrayBuffers: 1374951
+} os memoryUsage :7.8778839111328125
+[2026-02-02T16:51:31.556] [DEBUG] debug-file - Info: Pack: normal pack mode
+
+[2026-02-02T16:51:31.677] [DEBUG] debug-file - Info: hardware concurrency count is : 8
+Info: thread count is : 8
+
+[2026-02-02T16:51:31.677] [DEBUG] debug-file - Info: thread pool is started
+
+[2026-02-02T16:51:31.678] [DEBUG] debug-file - Info: GenericCompiler::CompileFiles
+
+[2026-02-02T16:51:31.678] [DEBUG] debug-file - Info: file '.DS_Store' is ignored by default regular pattern '\..+'.
+
+[2026-02-02T16:51:31.678] [DEBUG] debug-file - Info: file '.DS_Store' is ignored by default regular pattern '\..+'.
+
+[2026-02-02T16:51:31.680] [DEBUG] debug-file - Info: GenericCompiler::CompileFiles
+
+[2026-02-02T16:51:31.694] [DEBUG] debug-file - Info: GenericCompiler::CompileFiles
+
+[2026-02-02T16:51:31.696] [DEBUG] debug-file - 02-02 16:51:31.696 39213 7891279 E C01400/ImageTranscoderUtils: DecodeToRGBA IN
+
+[2026-02-02T16:51:31.697] [DEBUG] debug-file - 02-02 16:51:31.696 39213 7891279 E C01400/ImageTranscoderUtils: ImageFilter IN /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/AppScope/resources/base/media/app_icon.png
+
+[2026-02-02T16:51:31.699] [DEBUG] debug-file - 02-02 16:51:31.699 39213 7891279 E C01400/ImageTranscoder: TranscodeSLR Only zoom-out is supported.
+
+[2026-02-02T16:51:31.699] [DEBUG] debug-file - Warning: ScaleImage failed, error message: INVALID_PARAMETERS, file path = /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/AppScope/resources/base/media/app_icon.png
+
+[2026-02-02T16:51:31.699] [DEBUG] debug-file - 02-02 16:51:31.699 39213 7891279 E C01400/ImageTranscoderUtils: DecodeToRGBA IN
+
+[2026-02-02T16:51:31.699] [DEBUG] debug-file - 02-02 16:51:31.699 39213 7891279 E C01400/ImageTranscoderUtils: ImageFilter IN /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/resources/base/media/icon.png
+
+[2026-02-02T16:51:31.700] [DEBUG] debug-file - 02-02 16:51:31.700 39213 7891279 E C01400/ImageTranscoder: TranscodeSLR Only zoom-out is supported.
+
+[2026-02-02T16:51:31.700] [DEBUG] debug-file - Warning: ScaleImage failed, error message: INVALID_PARAMETERS, file path = /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/resources/base/media/icon.png
+
+[2026-02-02T16:51:31.700] [DEBUG] debug-file - Warning: The width or height of the png file referenced by the icon exceeds the limit (41 pixels)
+at /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/AppScope/resources/base/media/app_icon.png
+
+[2026-02-02T16:51:31.700] [DEBUG] debug-file - Warning: The width or height of the png file referenced by the icon exceeds the limit (41 pixels)
+at /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/resources/base/media/icon.png
+
+[2026-02-02T16:51:31.700] [DEBUG] debug-file - Info: restool resources compile success.
+
+[2026-02-02T16:51:31.700] [DEBUG] debug-file - Info: thread pool is stopped
+
+[2026-02-02T16:51:31.702] [DEBUG] debug-file - entry : default@CompileResource cost memory -11.542381286621094
+[2026-02-02T16:51:31.702] [DEBUG] debug-file - runTaskFromQueue task cost before running: 377 ms 
+[2026-02-02T16:51:31.703] [INFO] debug-file - Finished :entry:default@CompileResource... after 208 ms 
+[2026-02-02T16:51:31.703] [DEBUG] debug-file - Executing task :entry:default@DoNativeStrip
+[2026-02-02T16:51:31.703] [DEBUG] debug-file - Task 'entry:default@DoNativeStrip' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.704] [DEBUG] debug-file - Incremental task entry:default@DoNativeStrip pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.704] [DEBUG] debug-file - entry : default@DoNativeStrip cost memory 0.07013702392578125
+[2026-02-02T16:51:31.704] [INFO] debug-file - UP-TO-DATE :entry:default@DoNativeStrip...  
+[2026-02-02T16:51:31.704] [DEBUG] debug-file - Executing task :entry:default@CompileArkTS
+[2026-02-02T16:51:31.704] [DEBUG] debug-file - obfuscationOptions: undefined
+[2026-02-02T16:51:31.705] [DEBUG] debug-file - Task 'entry:default@CompileArkTS' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.706] [DEBUG] debug-file - entry:default@CompileArkTS is not up-to-date, since the input file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ResourceTable.txt' has been changed.
+[2026-02-02T16:51:31.706] [DEBUG] debug-file - Incremental task entry:default@CompileArkTS pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.709] [DEBUG] debug-file - build config:
+[2026-02-02T16:51:31.709] [DEBUG] debug-file - {
+  moduleType: 'entry',
+  perf: 0,
+  targetName: '.default',
+  packageManagerType: 'ohpm',
+  localPropertiesPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/local.properties',
+  isPreview: false,
+  isOhosTest: false,
+  isLocalTest: false,
+  buildMode: 'Debug',
+  hotReloadBuild: undefined,
+  watchMode: 'false',
+  aceProfilePath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources/base/profile',
+  etsLoaderPath: '/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/ets/build-tools/ets-loader',
+  modulePath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry',
+  testFrameworkPar: {
+    testMode: undefined,
+    coveragePathFilter: undefined,
+    coverageMode: undefined
+  },
+  needCoverageInsert: false,
+  debugLine: false,
+  projectTopDir: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum',
+  compileSdkVersion: 21,
+  compatibleSdkVersion: 20,
+  originCompatibleSdkVersion: '6.0.0(20)',
+  compatibleSdkVersionStage: undefined,
+  bundleName: 'c***m',
+  etsLoaderVersion: '6.0.1.112',
+  etsLoaderReleaseType: 'Release',
+  aotCompileMode: 'type',
+  apPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/modules.ap',
+  entryModuleName: 'entry',
+  entryModuleVersion: '1.0.0',
+  entryPackageName: 'entry',
+  allModuleNameHash: '80abae187edceb3db763d5ea63dee2941028649814ef467a50f6fdc90c04fd07',
+  externalApiPaths: [
+    '/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/hms/ets'
+  ],
+  compilerTypes: [],
+  isCrossplatform: false,
+  hvigorPluginFile: undefined,
+  compilePluginPath: undefined,
+  buildGeneratedProfilePath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/generated/profile/default',
+  bundleType: 'app',
+  arkTSVersion: undefined,
+  apiVersion: 21,
+  needCompleteSourcesMap: false,
+  isFaMode: false,
+  buildDir: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build',
+  deviceTypes: [ 'phone' ],
+  pkgContextInfo: {
+    '@ohos/hypium': {
+      packageName: '@ohos/hypium',
+      bundleName: '*****',
+      moduleName: '',
+      version: '1.0.6',
+      entryPath: 'index.js',
+      isSO: false,
+      dependencyAlias: ''
+    },
+    entry: {
+      packageName: 'entry',
+      bundleName: '*****',
+      moduleName: '',
+      version: '',
+      entryPath: 'src/main/',
+      isSO: false,
+      dependencyAlias: ''
+    }
+  },
+  ohPackagePathMap: {},
+  dependencyAliasMap: {},
+  permission: {
+    requestPermissions: [ [Object], [Object], [Object] ],
+    definePermissions: undefined
+  },
+  integratedHsp: false,
+  projectArkOption: undefined,
+  sourceMapDir: undefined,
+  branchElimination: false,
+  transformLib: undefined,
+  tsImportSendable: false,
+  resolveConflictMode: true,
+  depName2RootPath: {},
+  depName2DepInfo: {},
+  rootPathSet: [ '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum' ],
+  useNativeResolver: true,
+  shouldEmitJs: true,
+  useTscResolve: false,
+  singleFileEmit: false,
+  userProjectConfig: {
+    autoLazyImport: false,
+    allowEmptyBundleName: false,
+    reExportCheckMode: 'noCheck',
+    executionMode: 'memory',
+    usePathPlaceholder: false,
+    writeRollupCache: true,
+    isExpandImportEnabled: false,
+    expandImportExclude: '',
+    lazyImportExclude: '',
+    lazyImportInclude: '',
+    ignoreCrossplatformCheck: false,
+    isHarDeduplicateEnabled: false,
+    enableStrictCheckOHModule: false,
+    useDeclarationFileSignature: false,
+    isPreloadSoEnabled: false
+  },
+  skipOhModulesLint: false,
+  executionMode: 'memory',
+  arkCompileCachePath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/cache/default/default@CompileArkTS/esmodule',
+  autoLazyFilter: undefined,
+  isHarDeduplicateEnabled: false,
+  intermediateHarDuplicateDirPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/har_duplicate/default',
+  autoLazyImport: false,
+  allowEmptyBundleName: false,
+  reExportCheckMode: 'noCheck',
+  usePathPlaceholder: false,
+  writeRollupCache: true,
+  isExpandImportEnabled: false,
+  expandImportExclude: '',
+  lazyImportExclude: '',
+  lazyImportInclude: '',
+  ignoreCrossplatformCheck: false,
+  enableStrictCheckOHModule: false,
+  useDeclarationFileSignature: false,
+  isPreloadSoEnabled: false,
+  strictMode: {
+    caseSensitiveCheck: true,
+    useNormalizedOHMUrl: true,
+    noExternalImportByPath: true
+  },
+  useNormalizedOHMUrl: true,
+  caseSensitiveCheck: true,
+  aceModuleJsonPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ark_module.json',
+  appResource: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ResourceTable.txt',
+  rawFileResource: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources/rawfile',
+  resourceTableHash: '6a906038ad3dd135fea40643f3b0c98293092b09e9a1df8a4e1905fd2e099e65',
+  runtimeOS: 'HarmonyOS',
+  sdkInfo: 'false:21:6.0.1.112:Release',
+  aceModuleRoot: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets',
+  compileMode: 'esmodule',
+  aceSuperVisualPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/supervisual',
+  aceBuildJson: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default/loader.json',
+  cachePath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/cache/default/default@CompileArkTS/esmodule/debug',
+  aceModuleBuild: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/ets',
+  supportChunks: true,
+  declaredFilesPath: undefined,
+  shouldCollectDirectImportees: false,
+  isByteCodeHarOptimize: false,
+  expandImportPath: undefined,
+  pkgNameToPkgBriefInfo: {
+    entry: {
+      pkgRoot: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry',
+      originalSourceRoots: undefined,
+      sourceRoots: [Array],
+      pkgName: 'entry'
+    }
+  },
+  projectModel: {
+    '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main': {
+      moduleName: 'entry',
+      modulePkgPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry',
+      belongProjectPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum'
+    },
+    '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry': {
+      moduleName: 'entry',
+      modulePkgPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry',
+      belongProjectPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum'
+    },
+    '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum': {
+      moduleName: 'HarmonyPhotoAlbum',
+      modulePkgPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum',
+      belongProjectPath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum'
+    }
+  },
+  pkgJsonFileHash: 'fb5896e929a1d9053748396663fcc8970a25443c32787e5c142d27665c8b0da3',
+  allModulePaths: [
+    '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry'
+  ],
+  routerMap: {},
+  obfuscationOptions: undefined,
+  byteCodeHarToDependencyKeys: undefined,
+  compileBlockPkg: [],
+  mockParams: {
+    decorator: '@MockSetup',
+    packageName: '@ohos/hamock',
+    etsSourceRootPath: 'src/main/ets',
+    mockConfigPath: undefined,
+    mockConfigKey2ModuleInfo: {},
+    source2ModuleIdMap: {}
+  },
+  copyCodeResourceEnable: true,
+  copyCodeResourceExcludes: [],
+  copyCodeResourceIncludes: undefined,
+  uiTransformOptimization: false,
+  sdkPath: '/Applications/WebApp/DevEco-Studio.app/Contents/sdk',
+  needPreloadSoFileSet: {},
+  preloadSoFilePath: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/preload/default/preload.json',
+  useSourceHash: false,
+  localModuleParamMap: {},
+  otherPaths: {
+    'entry/*': [ '../*', '../../../build/default/generated/profile/default/*' ]
+  },
+  collectImportersConfig: undefined
+}
+[2026-02-02T16:51:31.709] [DEBUG] debug-file - Compile arkts with external api path: /Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/hms/ets
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - default@CompileArkTS work[3] is submitted.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - default@CompileArkTS work[3] is pushed to ready queue.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - A work dispatched to worker[7] failed because unable to get work from ready queue.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - A work dispatched to worker[6] failed because unable to get work from ready queue.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - A work dispatched to worker[5] failed because unable to get work from ready queue.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - default@CompileArkTS work[3] has been dispatched to worker[4].
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - default@CompileArkTS work[3] is dispatched.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - CopyResources startTime: 261189322454833
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - default@CompileArkTS work[4] is submitted.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - default@CompileArkTS work[4] is pushed to ready queue.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - A work dispatched to worker[7] failed because unable to get work from ready queue.
+[2026-02-02T16:51:31.710] [DEBUG] debug-file - Create  resident worker with id: 6.
+[2026-02-02T16:51:31.712] [DEBUG] debug-file - default@CompileArkTS work[4] has been dispatched to worker[6].
+[2026-02-02T16:51:31.712] [DEBUG] debug-file - default@CompileArkTS work[4] is dispatched.
+[2026-02-02T16:51:31.712] [DEBUG] debug-file - entry : default@CompileArkTS cost memory 1.1811447143554688
+[2026-02-02T16:51:31.712] [DEBUG] debug-file - Executing task :entry:default@BuildJS
+[2026-02-02T16:51:31.712] [DEBUG] debug-file - Task 'entry:default@BuildJS' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.713] [DEBUG] debug-file - entry : default@BuildJS cost memory 0.14595794677734375
+[2026-02-02T16:51:31.713] [DEBUG] debug-file - runTaskFromQueue task cost before running: 388 ms 
+[2026-02-02T16:51:31.713] [INFO] debug-file - Finished :entry:default@BuildJS... after 1 ms 
+[2026-02-02T16:51:31.714] [DEBUG] debug-file - Executing task :entry:default@CacheNativeLibs
+[2026-02-02T16:51:31.714] [DEBUG] debug-file - Task 'entry:default@CacheNativeLibs' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:31.714] [DEBUG] debug-file - Incremental task entry:default@CacheNativeLibs pre-execution cost: 1 ms .
+[2026-02-02T16:51:31.714] [DEBUG] debug-file - entry : default@CacheNativeLibs cost memory 0.07692718505859375
+[2026-02-02T16:51:31.714] [INFO] debug-file - UP-TO-DATE :entry:default@CacheNativeLibs...  
+[2026-02-02T16:51:32.223] [DEBUG] debug-file - worker[6] has one work done.
+[2026-02-02T16:51:32.223] [DEBUG] debug-file - CopyResources is end, endTime: 261189834947750
+[2026-02-02T16:51:32.223] [DEBUG] debug-file - default@CompileArkTS work[4] done.
+[2026-02-02T16:51:32.223] [DEBUG] debug-file - A work dispatched to worker[6] failed because unable to get work from ready queue.
+[2026-02-02T16:51:32.446] [WARN] debug-file - [33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/FileService.ets:58:9
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/FileService.ets:75:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/utils/Logger.ets:60:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/utils/Logger.ets:60:12
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/utils/Logger.ets:71:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/utils/Logger.ets:71:12
+ 'showToast' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:28:46
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:41:45
+ 'PhotoSelectOptions' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:42:26
+ 'MIMEType' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:42:44
+ 'PhotoViewMIMETypes' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:42:63
+ 'IMAGE_TYPE' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:43:26
+ 'maxSelectNumber' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:45:42
+ 'PhotoViewPicker' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:46:44
+ 'select' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:48:18
+ 'photoUris' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/components/ImagePicker.ets:50:28
+ 'photoUris' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:73:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:90:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:137:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:170:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:229:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:248:12
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:281:7
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:285:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:287:18
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:287:38
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:288:20
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:288:40
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:289:20
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:289:40
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:290:24
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:290:44
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:291:26
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:291:46
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:292:20
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:292:40
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:295:14
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/service/PhotoService.ets:297:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/IndexPage.ets:112:25
+ 'getContext' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/IndexPage.ets:160:19
+ 'show' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/IndexPage.ets:364:16
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/IndexPage.ets:404:12
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailPage.ets:25:39
+ 'getParams' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailPage.ets:40:41
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailPage.ets:153:33
+ 'back' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/ListPage.ets:108:18
+ 'back' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/ListPage.ets:232:20
+ 'back' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/ListPage.ets:308:12
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:35:50
+ 'getParams' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:37:13
+ 'getParams' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:57:41
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:70:5
+ Function may throw exceptions. Special handling is required.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:70:12
+ 'pushUrl' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:128:10
+ 'onScroll' has been deprecated.
+[39m[39m
+[33mWARN: [33m[33mArkTS:WARN File: /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/pages/DetailListPage.ets:153:10
+ 'onScroll' has been deprecated.
+[39m[39m
+
+[2026-02-02T16:51:32.446] [DEBUG] debug-file - Ark compile task finished.finished time is 261190058296500
+[2026-02-02T16:51:32.446] [DEBUG] debug-file - worker[4] has one work done.
+[2026-02-02T16:51:32.447] [DEBUG] debug-file - default@CompileArkTS work[3] done.
+[2026-02-02T16:51:32.447] [DEBUG] debug-file - A work dispatched to worker[4] failed because unable to get work from ready queue.
+[2026-02-02T16:51:32.447] [INFO] debug-file - Finished :entry:default@CompileArkTS... after 741 ms 
+[2026-02-02T16:51:32.448] [DEBUG] debug-file - Executing task :entry:default@GeneratePkgModuleJson
+[2026-02-02T16:51:32.448] [DEBUG] debug-file - File: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/preload/default/preload.json' from 'preloadSoJsonPath' is not exists, just ignore.
+[2026-02-02T16:51:32.448] [DEBUG] debug-file - Error occurs while handling @Input 'shouldDeduplicateHar': The "data" argument must be of type string or an instance of Buffer, TypedArray, or DataView. Received undefined
+[2026-02-02T16:51:32.448] [DEBUG] debug-file - Task 'entry:default@GeneratePkgModuleJson' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:32.448] [DEBUG] debug-file - entry:default@GeneratePkgModuleJson is not up-to-date, since the input file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/module.json' has been changed.
+[2026-02-02T16:51:32.448] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgModuleJson pre-execution cost: 1 ms .
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - entry : default@GeneratePkgModuleJson cost memory 0.18979644775390625
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 123 ms 
+[2026-02-02T16:51:32.449] [INFO] debug-file - Finished :entry:default@GeneratePkgModuleJson... after 1 ms 
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - Executing task :entry:default@ProcessCompiledResources
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - File: '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/preload/default/preload.json' from 'preloadSoJsonPath' is not exists, just ignore.
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - Task 'entry:default@ProcessCompiledResources' cost while wrapping incremental declarations: 1 ms 
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - entry : default@ProcessCompiledResources cost memory 0.0634307861328125
+[2026-02-02T16:51:32.449] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 123 ms 
+[2026-02-02T16:51:32.449] [INFO] debug-file - Finished :entry:default@ProcessCompiledResources... after 1 ms 
+[2026-02-02T16:51:32.450] [DEBUG] debug-file - Executing task :entry:default@PackageHap
+[2026-02-02T16:51:32.450] [DEBUG] debug-file - entry:default@PackageHap is not up-to-date, since the input file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/module.json' has been changed.
+[2026-02-02T16:51:32.450] [DEBUG] debug-file - Incremental task entry:default@PackageHap pre-execution cost: 1 ms .
+[2026-02-02T16:51:32.450] [DEBUG] debug-file - Use tool [/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/lib/app_packing_tool.jar]
+ [
+  'java',
+  '-Dfile.encoding=utf-8',
+  '-jar',
+  '/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/lib/app_packing_tool.jar',
+  '--mode',
+  'hap',
+  '--force',
+  'true',
+  '--lib-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/stripped_native_libs/default',
+  '--json-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/package/default/module.json',
+  '--resources-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources',
+  '--index-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources.index',
+  '--pack-info-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/pack.info',
+  '--out-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/entry-default-unsigned.hap',
+  '--ets-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/ets',
+  '--pkg-context-path',
+  '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default/pkgContextInfo.json'
+]
+[2026-02-02T16:51:32.500] [DEBUG] debug-file - java daemon socket received message:{"code":0,"message":"pack success"}
+[2026-02-02T16:51:32.501] [DEBUG] debug-file - entry : default@PackageHap cost memory 0.38018035888671875
+[2026-02-02T16:51:32.502] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 176 ms 
+[2026-02-02T16:51:32.502] [INFO] debug-file - Finished :entry:default@PackageHap... after 52 ms 
+[2026-02-02T16:51:32.503] [DEBUG] debug-file - Executing task :entry:default@PackingCheck
+[2026-02-02T16:51:32.506] [DEBUG] debug-file - entry : default@PackingCheck cost memory 0.4134979248046875
+[2026-02-02T16:51:32.506] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 180 ms 
+[2026-02-02T16:51:32.506] [INFO] debug-file - Finished :entry:default@PackingCheck... after 4 ms 
+[2026-02-02T16:51:32.507] [DEBUG] debug-file - Executing task :entry:default@SignHap
+[2026-02-02T16:51:32.507] [WARN] debug-file - Will skip sign 'hos_hap'. No signingConfigs profile is configured in current project.
+             If needed, configure the signingConfigs in /Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/build-profile.json5.
+[2026-02-02T16:51:32.507] [DEBUG] debug-file - entry:default@SignHap is not up-to-date, since the input file '/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/entry-default-unsigned.hap' has been changed.
+[2026-02-02T16:51:32.507] [DEBUG] debug-file - Incremental task entry:default@SignHap pre-execution cost: 1 ms .
+[2026-02-02T16:51:32.507] [DEBUG] debug-file - entry : default@SignHap cost memory 0.08985137939453125
+[2026-02-02T16:51:32.507] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 182 ms 
+[2026-02-02T16:51:32.507] [INFO] debug-file - Finished :entry:default@SignHap... after 1 ms 
+[2026-02-02T16:51:32.508] [DEBUG] debug-file - Executing task :entry:default@CollectDebugSymbol
+[2026-02-02T16:51:32.508] [DEBUG] debug-file - entry : default@CollectDebugSymbol cost memory 0.09639739990234375
+[2026-02-02T16:51:32.508] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 183 ms 
+[2026-02-02T16:51:32.508] [INFO] debug-file - Finished :entry:default@CollectDebugSymbol... after 1 ms 
+[2026-02-02T16:51:32.509] [DEBUG] debug-file - Executing task :entry:assembleHap
+[2026-02-02T16:51:32.509] [DEBUG] debug-file - entry : assembleHap cost memory 0.014251708984375
+[2026-02-02T16:51:32.509] [DEBUG] debug-file - runTaskFromQueue task cost before running: 1 s 183 ms 
+[2026-02-02T16:51:32.509] [INFO] debug-file - Finished :entry:assembleHap... after 1 ms 
+[2026-02-02T16:51:32.509] [INFO] debug-file - BUILD SUCCESSFUL in 1 s 184 ms 
+[2026-02-02T16:51:32.509] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@PreBuild is up-to-date.
+[2026-02-02T16:51:32.509] [DEBUG] debug-file - Update task entry:default@CreateModuleInfo output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/generated/profile/default/ModuleInfo.ts cache.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Incremental task entry:default@CreateModuleInfo post-execution cost:1 ms .
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GenerateMetadata is up-to-date.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@MergeProfile is up-to-date.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CreateBuildProfile is up-to-date.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GeneratePkgContextInfo is up-to-date.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Update task entry:default@ProcessIntegratedHsp output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/build/cache/default/integrated_hsp/integratedHspCache.json cache.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Incremental task entry:default@ProcessIntegratedHsp post-execution cost:1 ms .
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@MakePackInfo is up-to-date.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Update task entry:default@SyscapTransform input file:/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/toolchains/syscap_tool cache by regenerate.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Update task entry:default@SyscapTransform input file:/Applications/WebApp/DevEco-Studio.app/Contents/sdk/default/openharmony/ets/api/device-define cache by regenerate.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Update task entry:default@SyscapTransform output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/syscap/default/rpcid.sc cache.
+[2026-02-02T16:51:32.510] [DEBUG] debug-file - Incremental task entry:default@SyscapTransform post-execution cost:1 ms .
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessProfile is up-to-date.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessRouterMap is up-to-date.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessShareConfig is up-to-date.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@ProcessStartupConfig input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default/pkgContextInfo.json cache by regenerate.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@ProcessStartupConfig output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/startup/default/startup_config.json cache.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Incremental task entry:default@ProcessStartupConfig post-execution cost:1 ms .
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessResource is up-to-date.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@GenerateLoaderJson is up-to-date.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@ProcessLibs is up-to-date.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@CompileResource input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/resources cache from map.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@CompileResource input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/AppScope/resources cache by regenerate.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@CompileResource input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/process_profile/default/module.json cache by regenerate.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@CompileResource input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resConfig.json cache by regenerate.
+[2026-02-02T16:51:32.511] [DEBUG] debug-file - Update task entry:default@CompileResource output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default cache.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileResource output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/generated/r/default/ResourceTable.h cache.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileResource output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/generated/r/default cache.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Incremental task entry:default@CompileResource post-execution cost:2 ms .
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@DoNativeStrip is up-to-date.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default cache by regenerate.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ResourceTable.txt cache from map.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ark_module.json cache by regenerate.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources/base/profile cache by regenerate.
+[2026-02-02T16:51:32.512] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default/pkgContextInfo.json cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@CompileArkTS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/generated/profile/default/BuildProfile.ets cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@CompileArkTS output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/ets cache.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Incremental task entry:default@CompileArkTS post-execution cost:2 ms .
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@BuildJS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@BuildJS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ResourceTable.txt cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@BuildJS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/ark_module.json cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@BuildJS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources/base/profile cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@BuildJS input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default/pkgContextInfo.json cache by regenerate.
+[2026-02-02T16:51:32.513] [DEBUG] debug-file - Update task entry:default@BuildJS output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/js cache.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Incremental task entry:default@BuildJS post-execution cost:1 ms .
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - There is no need to refresh cache, since the incremental task entry:default@CacheNativeLibs is up-to-date.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@GeneratePkgModuleJson input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/module.json cache from map.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@GeneratePkgModuleJson output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/package/default/module.json cache.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Incremental task entry:default@GeneratePkgModuleJson post-execution cost:1 ms .
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Incremental task entry:default@ProcessCompiledResources post-execution cost:1 ms .
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/stripped_native_libs/default cache by regenerate.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/module.json cache from map.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources cache by regenerate.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/res/default/resources.index cache by regenerate.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/pack.info cache by regenerate.
+[2026-02-02T16:51:32.514] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/ets cache by regenerate.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader/default/pkgContextInfo.json cache by regenerate.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/ets/sourceMaps.map cache by regenerate.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@PackageHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/generated/profile/default/BuildProfile.ets cache by regenerate.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@PackageHap output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/entry-default-unsigned.hap cache.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@PackageHap output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/source_map/default/sourceMaps.map cache.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@PackageHap output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/mapping/sourceMaps.map cache.
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Incremental task entry:default@PackageHap post-execution cost:2 ms .
+[2026-02-02T16:51:32.515] [DEBUG] debug-file - Update task entry:default@SignHap input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/entry-default-unsigned.hap cache from map.
+[2026-02-02T16:51:32.516] [DEBUG] debug-file - Update task entry:default@SignHap output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/entry-default-signed.hap cache.
+[2026-02-02T16:51:32.516] [DEBUG] debug-file - Incremental task entry:default@SignHap post-execution cost:1 ms .
+[2026-02-02T16:51:32.516] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/loader_out/default/ets/sourceMaps.map cache by regenerate.
+[2026-02-02T16:51:32.516] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol input file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/intermediates/libs/default cache by regenerate.
+[2026-02-02T16:51:32.516] [DEBUG] debug-file - Update task entry:default@CollectDebugSymbol output file:/Users/james/DevecostudioProjects/photo/ETSUI/HarmonyPhotoAlbum/entry/build/default/outputs/default/symbol cache.
+[2026-02-02T16:51:32.516] [DEBUG] debug-file - Incremental task entry:default@CollectDebugSymbol post-execution cost:1 ms .
+[2026-02-02T16:51:32.526] [DEBUG] debug-file - Cleanup worker 6.
+[2026-02-02T16:51:32.526] [DEBUG] debug-file - Worker 6 has been cleaned up.
+[2026-02-02T16:51:32.526] [DEBUG] debug-file - Current idle worker size: 1.
+[2026-02-02T16:51:32.526] [DEBUG] debug-file - Current resident worker size: 2.
+[2026-02-02T16:51:32.527] [DEBUG] debug-file - hvigor build process will be closed.
+[2026-02-02T16:51:32.527] [DEBUG] debug-file - java daemon socket close code:1000 reason:close by user
+[2026-02-02T16:51:32.533] [DEBUG] debug-file - session manager: send message to worker process.
+[2026-02-02T16:51:32.534] [DEBUG] debug-file - session manager: send message to worker process.
+[2026-02-02T16:51:32.537] [DEBUG] debug-file - worker[6] exits with exit code 1.
+[2026-02-02T16:51:32.538] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.
+[2026-02-02T16:51:32.538] [DEBUG] debug-file - watch worker: worker id should be larger than 0. Nothing will be sent to any worker thread.

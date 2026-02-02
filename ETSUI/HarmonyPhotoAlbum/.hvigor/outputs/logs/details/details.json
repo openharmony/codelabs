@@ -5,7 +5,7 @@
         "MODULE_NAME": "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf",
         "API_TYPE": "stageMode",
         "INCREMENTAL_TASKS": {
-          "COMPILE_ARKTS": false
+          "COMPILE_ARKTS": true
         }
       }
     ],
@@ -20,38 +20,24 @@
     "IS_HVIGORFILE_TYPE_CHECK": false,
     "TASK_TIME": {
       "923fe53966c6cd9343e11af776cd4b05be315ea4b200b02e4d5dfb0f929b73bf": {
-        "PreBuild": 76851666,
-        "CreateModuleInfo": 394875,
-        "GenerateMetadata": 1250459,
-        "ConfigureCmake": 253750,
-        "MergeProfile": 1440583,
-        "CreateBuildProfile": 1010625,
-        "PreCheckSyscap": 249125,
-        "GeneratePkgContextInfo": 4426250,
-        "ProcessIntegratedHsp": 271250,
-        "BuildNativeWithCmake": 187750,
-        "MakePackInfo": 1184416,
-        "SyscapTransform": 463542,
-        "ProcessProfile": 58575208,
-        "ProcessRouterMap": 1075584,
-        "ProcessShareConfig": 583833,
-        "ProcessStartupConfig": 605250,
-        "BuildNativeWithNinja": 341959,
-        "ProcessResource": 1819292,
-        "GenerateLoaderJson": 3557291,
-        "ProcessLibs": 2661959,
-        "CompileResource": 293793500,
-        "DoNativeStrip": 1370584,
-        "BuildJS": 4033583,
-        "CacheNativeLibs": 462917084,
-        "CompileArkTS": 6231910875,
-        "GeneratePkgModuleJson": 4262417,
-        "ProcessCompiledResources": 824750,
-        "PackageHap": 86210875,
-        "PackingCheck": 11336666,
-        "SignHap": 3405458,
-        "CollectDebugSymbol": 1255542,
-        "assembleHap": 859334
+        "CreateModuleInfo": 288125,
+        "ConfigureCmake": 131833,
+        "PreCheckSyscap": 162583,
+        "ProcessIntegratedHsp": 758958,
+        "BuildNativeWithCmake": 275708,
+        "SyscapTransform": 1155292,
+        "ProcessStartupConfig": 958291,
+        "BuildNativeWithNinja": 760333,
+        "CompileResource": 208034375,
+        "BuildJS": 1046042,
+        "CompileArkTS": 743028584,
+        "GeneratePkgModuleJson": 928709,
+        "ProcessCompiledResources": 220125,
+        "PackageHap": 52045584,
+        "PackingCheck": 3511416,
+        "SignHap": 545542,
+        "CollectDebugSymbol": 340792,
+        "assembleHap": 105583
       }
     },
     "APIS": [
@@ -62,8 +48,6 @@
       "getAllNodes",
       "getRootNode",
       "getNodeName",
-      "getStartParams",
-      "buildFinished",
       "getNodePath",
       "subNodes",
       "getExtraOption",
@@ -74,10 +58,11 @@
       "getProductName",
       "nodesEvaluated",
       "getParameter",
-      "getCommandEntryTask"
+      "getCommandEntryTask",
+      "getStartParams"
     ],
     "CONFIG_PROPERTIES": {},
-    "BUILD_ID": "202602021615403210",
-    "TOTAL_TIME": 7879858250
+    "TOTAL_TIME": 1183008959,
+    "BUILD_ID": "202602021651313260"
   }
 }
