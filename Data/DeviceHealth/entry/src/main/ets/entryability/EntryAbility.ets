@@ -7,12 +7,17 @@ import { AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.Ab
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
 import { PreferenceManager } from '../manager/PreferenceManager';
+import { MonitorCoreService } from '../services/MonitorCoreService';
 import { BusinessError } from '@kit.BasicServicesKit';
 import { runAllTests } from '../test/TestRunner'
 
 const DOMAIN: number = 0x0000;
 
 export default class EntryAbility extends UIAbility {
+
+  /** 是否已经启动监控服务（前台只启动一次） */
+  private started: boolean = false;
+
   /**
    * onCreate 生命周期
    * 应用首次启动时调用，只执行一次
@@ -24,7 +29,9 @@ export default class EntryAbility extends UIAbility {
   onCreate(want: Want, _launchParam: AbilityConstant.LaunchParam): void {
     try {
       // 设置颜色模式
-      this.context.getApplicationContext().setColorMode(ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET);
+      this.context.getApplicationContext().setColorMode(
+        ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET
+      );
     } catch (err) {
       // 显式声明 err 的类型为 BusinessError
       const error = err as BusinessError;
@@ -49,14 +56,21 @@ export default class EntryAbility extends UIAbility {
      * - 即使初始化未完成，UI 也会先使用默认值渲染
      * - 初始化完成后会自动通过 @StorageLink 刷新 UI
      */
-    PreferenceManager.getInstance().init(this.context)
+    PreferenceManager.getInstance()
+      .init(this.context)
       .then(() => {
         hilog.info(DOMAIN, 'DeviceHealthApp', 'PreferenceManager 初始化成功');
       })
       .catch((err: BusinessError) => {
-        hilog.error(DOMAIN, 'DeviceHealthApp', 'PreferenceManager 初始化失败: %{public}s', JSON.stringify(err));
+        hilog.error(
+          DOMAIN,
+          'DeviceHealthApp',
+          'PreferenceManager 初始化失败: %{public}s',
+          JSON.stringify(err)
+        );
       });
   }
+
   /**
    * onDestroy 生命周期
    * 应用退出时调用
@@ -80,7 +94,12 @@ export default class EntryAbility extends UIAbility {
      */
     windowStage.loadContent('pages/SettingsPage', (err: BusinessError) => {
       if (err.code) {
-        hilog.error(DOMAIN, 'testTag', 'Failed to load the content. Cause: %{public}s', JSON.stringify(err));
+        hilog.error(
+          DOMAIN,
+          'testTag',
+          'Failed to load the content. Cause: %{public}s',
+          JSON.stringify(err)
+        );
         return;
       }
       hilog.info(DOMAIN, 'testTag', 'Succeeded in loading the content.');
@@ -103,6 +122,26 @@ export default class EntryAbility extends UIAbility {
   onForeground(): void {
     // Ability has brought to foreground
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onForeground');
+
+    if (this.started) {
+      return;
+    }
+    this.started = true;
+
+    // 启动监控服务（Promise 链，避免修改方法签名）
+    MonitorCoreService.init(this.context)
+      .then(() => MonitorCoreService.startAll())
+      .then(() => {
+        hilog.info(DOMAIN, 'testTag', '%{public}s', 'MonitorCoreService started');
+      })
+      .catch((e: Error) => {
+        hilog.error(
+          DOMAIN,
+          'testTag',
+          'MonitorCoreService start failed: %{public}s',
+          e.message
+        );
+      });
   }
 
   /**
@@ -112,5 +151,21 @@ export default class EntryAbility extends UIAbility {
   onBackground(): void {
     // Ability has back to background
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onBackground');
+
+    // // 退出前台即停止监控，避免后台轮询/耗电
+    // MonitorCoreService.stopAll()
+    //   .then(() => {
+    //     hilog.info(DOMAIN, 'testTag', '%{public}s', 'MonitorCoreService stopped');
+    //   })
+    //   .catch((e: Error) => {
+    //     hilog.error(
+    //       DOMAIN,
+    //       'testTag',
+    //       'MonitorCoreService stop failed: %{public}s',
+    //       e.message
+    //     );
+    //   });
+    //
+    // this.started = false;
   }
 }
