@@ -22,7 +22,7 @@ import { RouteMap } from '../components/RouteMapInner';
 import { ReminderSettingComponent } from '../components/ReminderSettingComponent';
 import { common } from '@kit.AbilityKit';
 import router from '@ohos.router';
-import { map } from '@kit.MapKit';
+
 import promptAction from '@ohos.promptAction';
 
 @Entry
@@ -46,7 +46,6 @@ struct Index {
   private achievementService: AchievementService = new AchievementService(this.historyService, this.statisticsService);
   private simulationTimer: number = -1;
   private uiUpdateTimer: number = -1;
-  private routeMapController?: map.MapComponentController;
 
   async aboutToAppear() {
     const context = getContext(this) as common.UIAbilityContext;
