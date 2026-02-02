@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 //register
-import { font, Prompt, router, AppStorageV2 } from '@kit.ArkUI';
-import { text } from '@kit.ArkGraphics2D';
+import { Prompt, router } from '@kit.ArkUI';
 import prompt from '@system.prompt';//用于alterAialog警告弹窗
 
 // 定义存储键名（与login页面一致）

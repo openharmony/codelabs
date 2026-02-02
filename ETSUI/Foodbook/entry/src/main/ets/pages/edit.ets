@@ -12,8 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Prompt, router } from '@kit.ArkUI'
-import { AppStorageV2 } from '@kit.ArkUI'  // 引入 AppStorage
+import { router } from '@kit.ArkUI'
 
 @Entry
 @Component

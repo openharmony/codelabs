@@ -13,8 +13,7 @@
  * limitations under the License.
  */
 //Index.ets
-import { LengthMetrics, router } from '@kit.ArkUI';
-import sendableColorSpaceManager from '@ohos.graphics.sendableColorSpaceManager';
+import {  router } from '@kit.ArkUI';
 
 // 定义菜品数据类型
 export interface Dish {
@@ -1233,19 +1232,18 @@ struct Index {
         Column() {
           Column() {
             Row({ space: 10 }) {
-              Text()
+              Image($r('app.media.shezhi'))
                 .height(35)
                 .width(35)
                 .margin({ right: 10 })
-                .backgroundImage($r('app.media.shezhi'))
-                .backgroundImageSize(ImageSize.FILL)
+                .objectFit(ImageFit.Fill)
                 .onClick(() => {
                   router.pushUrl({
                     url: 'pages/set up'
                   })
                 })
             }
-            .height('12%')
+            // .height('12%')
             .width('100%')
             .justifyContent(FlexAlign.End)
             Row() {
@@ -1253,21 +1251,21 @@ struct Index {
                 .fontSize(30)
                 .fontWeight(FontWeight.Bold)
                 .margin({ left: 35 })
-              Button()
+              Image($r('app.media.cat'))
                 .height(130)
                 .width(130)
                 .borderRadius(90)
                 .backgroundColor(Color.Green)
                 .margin({ top: '200', left: '30' })
-                .backgroundImage($r('app.media.cat'))
-                .backgroundImageSize(ImageSize.FILL)
+                .objectFit(ImageFit.Fill)
                 .onClick(() => {
                   router.pushUrl({
                     url: 'pages/edit'
                   })
                 })
             }
-            .height('20%')
+            .height(100)
+            // .height('20%')
             .width('100%')
             .margin({ top: 10 })
 
@@ -1329,7 +1327,8 @@ struct Index {
               }
               .height('100%')
             }
-            .height('18%')
+            // .height('18%')
+            .height(50)
             .width('100%')
             .justifyContent(FlexAlign.Center)
             .margin({ top: '45%' })
