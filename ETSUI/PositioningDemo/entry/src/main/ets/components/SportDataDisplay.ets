@@ -38,7 +38,12 @@ export struct SportDataDisplay {
       .padding(20)
       .backgroundColor('#FFFFFF')
       .borderRadius(16)
-      .shadow({ radius: 8, color: '#1A000000', offsetX: 0, offsetY: 2 })
+      .shadow({
+        radius: 8,
+        color: '#1A000000',
+        offsetX: 0,
+        offsetY: 2
+      })
     }
   }
 

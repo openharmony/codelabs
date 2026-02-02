@@ -12,38 +12,38 @@
  */
 // 成就类型枚举
 export enum AchievementType {
-  FIRST_SPORT = 'first_sport',              // 首次运动
+  FIRST_SPORT = 'first_sport', // 首次运动
   TOTAL_DISTANCE_1KM = 'total_distance_1km', // 累计距离1公里
   TOTAL_DISTANCE_5KM = 'total_distance_5km', // 累计距离5公里
   TOTAL_DISTANCE_10KM = 'total_distance_10km', // 累计距离10公里
   TOTAL_DISTANCE_50KM = 'total_distance_50km', // 累计距离50公里
   TOTAL_DISTANCE_100KM = 'total_distance_100km', // 累计距离100公里
-  CONSECUTIVE_DAYS_3 = 'consecutive_days_3',   // 连续3天
-  CONSECUTIVE_DAYS_7 = 'consecutive_days_7',   // 连续7天
+  CONSECUTIVE_DAYS_3 = 'consecutive_days_3', // 连续3天
+  CONSECUTIVE_DAYS_7 = 'consecutive_days_7', // 连续7天
   CONSECUTIVE_DAYS_30 = 'consecutive_days_30', // 连续30天
-  TOTAL_RECORDS_10 = 'total_records_10',       // 累计10次运动
-  TOTAL_RECORDS_50 = 'total_records_50',       // 累计50次运动
-  TOTAL_RECORDS_100 = 'total_records_100',     // 累计100次运动
+  TOTAL_RECORDS_10 = 'total_records_10', // 累计10次运动
+  TOTAL_RECORDS_50 = 'total_records_50', // 累计50次运动
+  TOTAL_RECORDS_100 = 'total_records_100', // 累计100次运动
   SINGLE_DISTANCE_5KM = 'single_distance_5km', // 单次5公里
   SINGLE_DISTANCE_10KM = 'single_distance_10km', // 单次10公里
   SINGLE_DURATION_30MIN = 'single_duration_30min', // 单次30分钟
   SINGLE_DURATION_60MIN = 'single_duration_60min', // 单次60分钟
   TOTAL_CALORIES_1000 = 'total_calories_1000', // 累计1000卡路里
-  TOTAL_CALORIES_5000 = 'total_calories_5000'  // 累计5000卡路里
+  TOTAL_CALORIES_5000 = 'total_calories_5000' // 累计5000卡路里
 }
 
 // 成就数据模型
 export class Achievement {
-  id: string = '';                    // 成就ID（使用 AchievementType）
-  name: string = '';                   // 成就名称
-  description: string = '';            // 成就描述
-  icon: string = '';                   // 成就图标（emoji）
+  id: string = ''; // 成就ID（使用 AchievementType）
+  name: string = ''; // 成就名称
+  description: string = ''; // 成就描述
+  icon: string = ''; // 成就图标（emoji）
   type: AchievementType = AchievementType.FIRST_SPORT; // 成就类型
-  isUnlocked: boolean = false;         // 是否已解锁
-  unlockedTime: number = 0;            // 解锁时间（时间戳）
-  progress: number = 0;                // 当前进度（0-100）
-  targetValue: number = 0;              // 目标值
-  currentValue: number = 0;             // 当前值
+  isUnlocked: boolean = false; // 是否已解锁
+  unlockedTime: number = 0; // 解锁时间（时间戳）
+  progress: number = 0; // 当前进度（0-100）
+  targetValue: number = 0; // 目标值
+  currentValue: number = 0; // 当前值
 
   constructor(
     id: string,
@@ -79,7 +79,7 @@ export class AchievementConfig {
         AchievementType.FIRST_SPORT,
         1
       ),
-      
+
       // 累计距离
       new Achievement(
         AchievementType.TOTAL_DISTANCE_1KM,
@@ -121,7 +121,7 @@ export class AchievementConfig {
         AchievementType.TOTAL_DISTANCE_100KM,
         100000
       ),
-      
+
       // 连续天数
       new Achievement(
         AchievementType.CONSECUTIVE_DAYS_3,
@@ -147,7 +147,7 @@ export class AchievementConfig {
         AchievementType.CONSECUTIVE_DAYS_30,
         30
       ),
-      
+
       // 累计次数
       new Achievement(
         AchievementType.TOTAL_RECORDS_10,
@@ -173,7 +173,7 @@ export class AchievementConfig {
         AchievementType.TOTAL_RECORDS_100,
         100
       ),
-      
+
       // 单次距离
       new Achievement(
         AchievementType.SINGLE_DISTANCE_5KM,
@@ -191,7 +191,7 @@ export class AchievementConfig {
         AchievementType.SINGLE_DISTANCE_10KM,
         10000
       ),
-      
+
       // 单次时长
       new Achievement(
         AchievementType.SINGLE_DURATION_30MIN,
@@ -199,7 +199,7 @@ export class AchievementConfig {
         '单次运动时长达到30分钟',
         '⏰',
         AchievementType.SINGLE_DURATION_30MIN,
-        30 * 60 * 1000 // 30分钟（毫秒）
+        30 * 60 * 1000// 30分钟（毫秒）
       ),
       new Achievement(
         AchievementType.SINGLE_DURATION_60MIN,
@@ -207,9 +207,9 @@ export class AchievementConfig {
         '单次运动时长达到60分钟',
         '⏱️',
         AchievementType.SINGLE_DURATION_60MIN,
-        60 * 60 * 1000 // 60分钟（毫秒）
+        60 * 60 * 1000// 60分钟（毫秒）
       ),
-      
+
       // 累计卡路里
       new Achievement(
         AchievementType.TOTAL_CALORIES_1000,

@@ -38,7 +38,6 @@ struct Index {
   @State isSimulator: boolean = false;
   @State routeData: RouteData = new RouteData();
   @State selectedMode: string = '自由跑';
-  
   private locationService: LocationService = new LocationService();
   private reminderService: ReminderService = new ReminderService();
   private sportService: SportService = new SportService(this.reminderService);
@@ -59,17 +58,17 @@ struct Index {
     }).catch((error: Error) => {
       console.error('初始化历史服务失败:', error);
     });
-    
+
     // 初始化成就服务
     await this.achievementService.init(context);
     console.log('成就服务已初始化');
-    
+
     // 初始化提醒服务
     this.reminderService.init(context);
     console.log('提醒服务已初始化');
     console.log('ReminderService 实例:', this.reminderService);
     console.log('SportService 使用的 ReminderService 实例:', this.sportService.getReminderService());
-    
+
     // 页面初始化时自动获取当前定位
     try {
       await this.autoGetLocation();
@@ -79,12 +78,12 @@ struct Index {
       this.setDefaultLocation();
     }
   }
-  
+
   // 自动获取定位
   private async autoGetLocation(): Promise<void> {
     const context = getContext(this) as common.UIAbilityContext;
     const hasPermission = await this.locationService.requestPermissions(context);
-    
+
     if (hasPermission) {
       const result = await this.locationService.getCurrentLocation();
       if (result.location) {
@@ -101,7 +100,7 @@ struct Index {
       this.setDefaultLocation();
     }
   }
-  
+
   // 设置默认位置
   private setDefaultLocation(): void {
     const defaultLocation = new LocationInfo(
@@ -146,7 +145,7 @@ struct Index {
       Scroll() {
         Column() {
           this.TopNavBar()
-          
+
           if (this.errorMessage) {
             Text(this.errorMessage)
               .fontSize(14)
@@ -154,34 +153,46 @@ struct Index {
               .margin({ bottom: 12 })
               .alignSelf(ItemAlign.Center)
           }
-          
+
           if (!this.isRunning) {
             // 添加当前定位显示和获取定位按钮
             Column() {
-              Text(`当前定位: ${this.currentLocation ? `${this.currentLocation.latitude.toFixed(6)}, ${this.currentLocation.longitude.toFixed(6)}` : '未获取'}`)
+              Text(`当前定位: ${this.currentLocation ?
+                `${this.currentLocation.latitude.toFixed(6)}, ${this.currentLocation.longitude.toFixed(6)}` :
+                '未获取'}`)
                 .fontSize(14)
                 .fontColor('#666666')
                 .margin({ bottom: 8 })
                 .width('100%')
                 .textAlign(TextAlign.Center)
-              
+
               Row() {
                 Button('获取当前定位')
                   .fontSize(14)
                   .fontColor('#FFFFFF')
                   .backgroundColor('#4ECDC4')
                   .borderRadius(8)
-                  .padding({ left: 16, right: 16, top: 6, bottom: 6 })
+                  .padding({
+                    left: 16,
+                    right: 16,
+                    top: 6,
+                    bottom: 6
+                  })
                   .onClick(() => {
                     this.getCurrentLocation();
                   })
-                
+
                 Button('打开定位设置')
                   .fontSize(14)
                   .fontColor('#4ECDC4')
                   .backgroundColor('#FFFFFF')
                   .borderRadius(8)
-                  .padding({ left: 16, right: 16, top: 6, bottom: 6 })
+                  .padding({
+                    left: 16,
+                    right: 16,
+                    top: 6,
+                    bottom: 6
+                  })
                   .border({ width: 1, color: '#4ECDC4' })
                   .onClick(() => {
                     this.openLocationSettings();
@@ -192,17 +203,17 @@ struct Index {
             }
             .margin({ bottom: 12 })
           }
-          
+
           this.SportTypeSelector()
-          
+
           // 提醒设置组件
           ReminderSettingComponent({
             reminderService: this.reminderService
           })
-          .margin({ bottom: 16 })
-          
+            .margin({ bottom: 16 })
+
           this.MapArea()
-          
+
           if (this.sportData) {
             Column() {
               Row() {
@@ -217,7 +228,7 @@ struct Index {
                     .fontColor('#999999')
                 }
                 .alignItems(HorizontalAlign.Center)
-                
+
                 Column() {
                   Text(this.formatDuration(this.sportData.duration))
                     .fontSize(20)
@@ -229,7 +240,7 @@ struct Index {
                     .fontColor('#999999')
                 }
                 .alignItems(HorizontalAlign.Center)
-                
+
                 Column() {
                   Text(this.sportData.currentSpeed.toFixed(1))
                     .fontSize(20)
@@ -241,7 +252,7 @@ struct Index {
                     .fontColor('#999999')
                 }
                 .alignItems(HorizontalAlign.Center)
-                
+
                 Column() {
                   Text(this.sportData.calories.toFixed(0))
                     .fontSize(20)
@@ -261,7 +272,12 @@ struct Index {
             .padding(16)
             .backgroundColor('#FFFFFF')
             .borderRadius(12)
-            .shadow({ radius: 6, color: '#1A000000', offsetX: 0, offsetY: 2 })
+            .shadow({
+              radius: 6,
+              color: '#1A000000',
+              offsetX: 0,
+              offsetY: 2
+            })
             .margin({ bottom: 16 })
           }
         }
@@ -270,7 +286,7 @@ struct Index {
         .padding({ left: 16, right: 16 })
       }
       .flexGrow(1)
-      
+
       // 中央控制区域固定在底部
       Row() {
         this.CentralControl()
@@ -331,7 +347,12 @@ struct Index {
               .fontSize(12)
               .fontColor('#FF6B6B')
           }
-          .padding({ left: 8, right: 8, top: 4, bottom: 4 })
+          .padding({
+            left: 8,
+            right: 8,
+            top: 4,
+            bottom: 4
+          })
           .backgroundColor('#FF6B6B20')
           .borderRadius(16)
         }
@@ -351,52 +372,67 @@ struct Index {
           .fontSize(12)
           .fontColor('#666666')
           .margin({ right: 8 })
-        
+
         Text('跑步')
           .fontSize(12)
           .fontWeight(this.selectedType === SportType.RUNNING ? FontWeight.Bold : FontWeight.Normal)
           .fontColor(this.selectedType === SportType.RUNNING ? '#FFFFFF' : '#333333')
           .backgroundColor(this.selectedType === SportType.RUNNING ? '#4ECDC4' : '#F0F0F0')
           .borderRadius(16)
-          .padding({ left: 16, right: 16, top: 6, bottom: 6 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 6,
+            bottom: 6
+          })
           .margin({ right: 6 })
           .onClick(() => {
             this.selectedType = SportType.RUNNING;
           })
-        
+
         Text('行走')
           .fontSize(12)
           .fontWeight(this.selectedType === SportType.WALKING ? FontWeight.Bold : FontWeight.Normal)
           .fontColor(this.selectedType === SportType.WALKING ? '#FFFFFF' : '#333333')
           .backgroundColor(this.selectedType === SportType.WALKING ? '#4ECDC4' : '#F0F0F0')
           .borderRadius(16)
-          .padding({ left: 16, right: 16, top: 6, bottom: 6 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 6,
+            bottom: 6
+          })
           .margin({ right: 6 })
           .onClick(() => {
             this.selectedType = SportType.WALKING;
           })
-        
+
         Text('骑行')
           .fontSize(12)
           .fontWeight(this.selectedType === SportType.CYCLING ? FontWeight.Bold : FontWeight.Normal)
           .fontColor(this.selectedType === SportType.CYCLING ? '#FFFFFF' : '#333333')
           .backgroundColor(this.selectedType === SportType.CYCLING ? '#4ECDC4' : '#F0F0F0')
           .borderRadius(16)
-          .padding({ left: 16, right: 16, top: 6, bottom: 6 })
+          .padding({
+            left: 16,
+            right: 16,
+            top: 6,
+            bottom: 6
+          })
           .onClick(() => {
             this.selectedType = SportType.CYCLING;
           })
       }
       .margin({ bottom: 8 })
       .justifyContent(FlexAlign.Start)
-      
+
       // 运行模式切换
       Row() {
         Text('运行模式:')
           .fontSize(12)
           .fontColor('#666666')
           .margin({ right: 8 })
-        
+
         if (this.isSimulator) {
           // 当前是模拟模式，显示真实模式按钮
           Text('切换到真实模式')
@@ -428,8 +464,8 @@ struct Index {
     RouteMap({
       routeData: $routeData
     })
-    .margin({ bottom: 16 })
-    .height(250)
+      .margin({ bottom: 16 })
+      .height(250)
   }
 
   @Builder
@@ -450,7 +486,7 @@ struct Index {
         this.stopSport();
       }
     })
-    .margin({ bottom: 20 })
+      .margin({ bottom: 20 })
   }
 
   async startSport() {
@@ -466,7 +502,7 @@ struct Index {
         this.isRunning = true;
         this.isPaused = false;
         console.log('运动服务已启动, sportData:', this.sportData);
-        
+
         // 模拟器模式下，设置初始位置
         const initialLocation = new LocationInfo(
           39.9042, // 北京天安门附近
@@ -482,7 +518,7 @@ struct Index {
         this.currentLocation = initialLocation;
         this.routeData.updateCurrentLocation(initialLocation);
         this.routeData.addRoutePoint(initialLocation);
-        
+
         this.startSimulation();
         this.startUIUpdateTimer();
       } else {
@@ -490,7 +526,7 @@ struct Index {
         console.log('开始请求权限...');
         const hasPermission = await this.locationService.requestPermissions(context);
         console.log('权限结果:', hasPermission);
-        
+
         if (!hasPermission) {
           this.errorMessage = '位置权限被拒绝，自动切换到模拟模式';
           // 权限被拒绝，自动切换到模拟模式
@@ -498,7 +534,7 @@ struct Index {
           this.sportData = this.sportService.startSport(this.selectedType);
           this.isRunning = true;
           this.isPaused = false;
-          
+
           // 模拟器模式下，设置初始位置
           const initialLocation = new LocationInfo(
             39.9042, // 北京天安门附近
@@ -514,7 +550,7 @@ struct Index {
           this.currentLocation = initialLocation;
           this.routeData.updateCurrentLocation(initialLocation);
           this.routeData.addRoutePoint(initialLocation);
-          
+
           this.startSimulation();
           return;
         }
@@ -523,10 +559,10 @@ struct Index {
         this.sportData = this.sportService.startSport(this.selectedType);
         this.isRunning = true;
         this.isPaused = false;
-        
+
         // 启动UI更新定时器
         this.startUIUpdateTimer();
-        
+
         console.log('真机环境，启动真实位置更新');
         try {
           const success = await this.locationService.startLocationUpdate((location: LocationInfo) => {
@@ -547,7 +583,7 @@ struct Index {
             // 启动真实位置服务失败，自动切换到模拟模式
             this.locationService.stopLocationUpdate();
             this.isSimulator = true;
-            
+
             // 模拟器模式下，设置初始位置
             const initialLocation = new LocationInfo(
               39.9042, // 北京天安门附近
@@ -563,7 +599,7 @@ struct Index {
             this.currentLocation = initialLocation;
             this.routeData.updateCurrentLocation(initialLocation);
             this.routeData.addRoutePoint(initialLocation);
-            
+
             this.startSimulation();
           }
         } catch (err) {
@@ -572,7 +608,7 @@ struct Index {
           // 发生异常，自动切换到模拟模式
           this.locationService.stopLocationUpdate();
           this.isSimulator = true;
-          
+
           // 模拟器模式下，设置初始位置
           const initialLocation = new LocationInfo(
             39.9042, // 北京天安门附近
@@ -588,7 +624,7 @@ struct Index {
           this.currentLocation = initialLocation;
           this.routeData.updateCurrentLocation(initialLocation);
           this.routeData.addRoutePoint(initialLocation);
-          
+
           this.startSimulation();
         }
       }
@@ -622,7 +658,7 @@ struct Index {
     this.isRunning = false;
     this.isPaused = false;
     this.currentLocation = null;
-    
+
     if (finalData) {
       this.historyService.saveSportRecord(finalData).then(async () => {
         // 检查并更新成就
@@ -641,12 +677,12 @@ struct Index {
       this.showSportSummary(finalData);
     }
   }
-  
+
   // 启动UI更新定时器
   private startUIUpdateTimer(): void {
     // 清除之前的定时器
     this.stopUIUpdateTimer();
-    
+
     // 创建新的定时器，每秒更新一次UI
     this.uiUpdateTimer = setInterval(() => {
       if (this.isRunning) {
@@ -660,7 +696,7 @@ struct Index {
       }
     }, 1000);
   }
-  
+
   // 停止UI更新定时器
   private stopUIUpdateTimer(): void {
     if (this.uiUpdateTimer !== -1) {
@@ -678,38 +714,39 @@ struct Index {
     let lastLon = baseLon;
     let lastTime = Date.now();
     let totalDistance = 0;
-    
+
     this.simulationTimer = setInterval(() => {
       console.log('模拟定时器触发, isRunning:', this.isRunning, 'isPaused:', this.isPaused);
-      
+
       if (!this.isRunning || this.isPaused) {
         console.log('模拟暂停，跳过更新');
         return;
       }
-      
+
       let lat = baseLat;
       let lon = baseLon;
-      
+
       // 生成更加平滑的轨迹，避免出现明显的横向线段
       if (index > 0) {
         // 生成直线运动轨迹，从中心点向北偏东方向移动
         const step = 0.0005; // 每步移动的距离（约50米）
         const direction = Math.PI / 4; // 45度方向，北偏东
-        
+
         // 根据索引生成平滑的位置，避免跳跃
         lat = baseLat + Math.sin(direction) * step * index;
         lon = baseLon + Math.cos(direction) * step * index;
       }
-      
+
       const speed = 2 + Math.random() * 3;
       const currentTime = Date.now();
-      
+
       const distance = this.calculateDistance(lastLat, lastLon, lat, lon);
       totalDistance += distance;
       const netDuration = currentTime - lastTime;
-      
-      console.log('生成模拟位置:', index, 'lat:', lat, 'lon:', lon, 'speed:', speed, 'distance:', distance, 'totalDistance:', totalDistance);
-      
+
+      console.log('生成模拟位置:', index, 'lat:', lat, 'lon:', lon, 'speed:', speed, 'distance:', distance,
+        'totalDistance:', totalDistance);
+
       const location = new LocationInfo(
         lat,
         lon,
@@ -721,24 +758,26 @@ struct Index {
         distance,
         netDuration
       );
-      
+
       lastLat = lat;
       lastLon = lon;
       lastTime = currentTime;
-      
-      console.log('更新routeData之前, routePoints长度:', this.routePoints.length, 'routeData.routePoints长度:', this.routeData.routePoints.length);
+
+      console.log('更新routeData之前, routePoints长度:', this.routePoints.length, 'routeData.routePoints长度:',
+        this.routeData.routePoints.length);
       this.routeData.addRoutePoint(location);
       this.routeData.updateCurrentLocation(location);
       this.routePoints.push(location);
       this.sportService.updateLocation(location);
       this.sportData = this.sportService.getCurrentSportData();
-      console.log('更新routeData之后, routePoints长度:', this.routePoints.length, 'routeData.routePoints长度:', this.routeData.routePoints.length);
-      
+      console.log('更新routeData之后, routePoints长度:', this.routePoints.length, 'routeData.routePoints长度:',
+        this.routeData.routePoints.length);
+
       console.log('模拟位置更新完成, routePoints长度:', this.routePoints.length, 'sportData:', this.sportData);
-      
+
       index++;
     }, 2000);
-    
+
     console.log('模拟定时器已启动, ID:', this.simulationTimer);
   }
 
@@ -755,8 +794,8 @@ struct Index {
     const dLat = this.toRadians(lat2 - lat1);
     const dLon = this.toRadians(lon2 - lon1);
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
-              Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   }
@@ -803,12 +842,12 @@ struct Index {
     }
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
   }
-  
+
   // 获取当前定位方法
   private getCurrentLocation(): void {
     console.log('开始获取当前定位');
     const context = getContext(this) as common.UIAbilityContext;
-    
+
     // 检查并请求定位权限
     this.locationService.requestPermissions(context).then((hasPermission) => {
       console.log('权限检查结果:', hasPermission);
@@ -816,7 +855,7 @@ struct Index {
         this.errorMessage = '位置权限被拒绝，无法获取定位';
         return;
       }
-      
+
       // 获取当前定位
       console.log('权限已获取，开始请求真实定位');
       this.locationService.getCurrentLocation().then((result) => {
@@ -825,11 +864,11 @@ struct Index {
           this.currentLocation = result.location;
           console.log('获取到真实定位:', result.location);
           this.errorMessage = '';
-          
+
           // 更新routeData的当前位置
           this.routeData.updateCurrentLocation(result.location);
           this.routeData.addRoutePoint(result.location);
-          
+
           // 显示成功提示
           promptAction.showToast({
             message: '获取真实定位成功',
@@ -839,7 +878,7 @@ struct Index {
           if (result.isLocationSwitchOff) {
             console.error('位置开关处于关闭状态');
             this.errorMessage = '位置开关处于关闭状态，请开启后重试';
-            
+
             // 显示位置开关关闭提示
             promptAction.showToast({
               message: '位置开关关闭，请开启定位服务',
@@ -848,7 +887,7 @@ struct Index {
           } else {
             console.error('真实定位失败，检查模拟器GPS是否开启');
             this.errorMessage = '获取真实定位失败，请检查设备GPS是否开启';
-            
+
             // 显示失败提示
             promptAction.showToast({
               message: '真实定位失败',
@@ -859,11 +898,11 @@ struct Index {
       });
     });
   }
-  
+
   // 跳转到定位设置
   private openLocationSettings(): void {
     const context = getContext(this) as common.UIAbilityContext;
-    
+
     try {
       context.startAbility({
         uri: 'location_manager_settings'

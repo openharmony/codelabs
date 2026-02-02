@@ -23,7 +23,6 @@ struct PlanDetailPage {
   @State plan: Plan | null = null;
   @State isEditMode: boolean = false;
   @State isLoaded: boolean = false;
-
   // 编辑模式下的表单数据
   @State editName: string = '';
   @State editDescription: string = '';
@@ -31,7 +30,6 @@ struct PlanDetailPage {
   @State editStartDate: string = '';
   @State editEndDate: string = '';
   @State editTasks: DailyTask[] = [];
-
   private planId: string = '';
   private historyService: HistoryService = new HistoryService();
   private planService: PlanService = new PlanService(this.historyService);
@@ -39,12 +37,12 @@ struct PlanDetailPage {
   async aboutToAppear() {
     const params = router.getParams() as Record<string, Object>;
     this.planId = (params?.planId as string) || '';
-    
+
     const context = getContext(this) as common.UIAbilityContext;
     await this.historyService.init(context);
     await this.planService.init(context);
     this.isLoaded = true;
-    
+
     if (this.planId) {
       await this.loadPlan();
     } else {
@@ -64,7 +62,7 @@ struct PlanDetailPage {
     if (!this.planId) {
       return;
     }
-    
+
     const loadedPlan = await this.planService.getPlanById(this.planId);
     if (loadedPlan) {
       this.plan = loadedPlan;
@@ -95,7 +93,7 @@ struct PlanDetailPage {
   build() {
     Column() {
       this.TopNavBar()
-      
+
       Scroll() {
         Column() {
           if (this.isEditMode) {
@@ -410,163 +408,168 @@ struct PlanDetailPage {
   PlanDetailView() {
     if (this.plan) {
       Column() {
-      // 计划基本信息
-      Column() {
-        Text(this.plan.name)
-          .fontSize(24)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
-          .width('100%')
-          .margin({ bottom: 8 })
-
-        if (this.plan.description) {
-          Text(this.plan.description)
-            .fontSize(14)
-            .fontColor('#666666')
+        // 计划基本信息
+        Column() {
+          Text(this.plan.name)
+            .fontSize(24)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#333333')
             .width('100%')
             .margin({ bottom: 8 })
-        }
 
-        Text(`目标: ${this.plan.goal}`)
-          .fontSize(14)
-          .fontColor('#4ECDC4')
+          if (this.plan.description) {
+            Text(this.plan.description)
+              .fontSize(14)
+              .fontColor('#666666')
+              .width('100%')
+              .margin({ bottom: 8 })
+          }
+
+          Text(`目标: ${this.plan.goal}`)
+            .fontSize(14)
+            .fontColor('#4ECDC4')
+            .width('100%')
+            .margin({ bottom: 12 })
+
+          Row() {
+            Text(this.getStatusText(this.plan.status))
+              .fontSize(12)
+              .fontColor(this.getStatusColor(this.plan.status))
+              .padding({
+                left: 8,
+                right: 8,
+                top: 4,
+                bottom: 4
+              })
+              .backgroundColor(this.getStatusBgColor(this.plan.status))
+              .borderRadius(12)
+          }
           .width('100%')
-          .margin({ bottom: 12 })
-
-        Row() {
-          Text(this.getStatusText(this.plan.status))
-            .fontSize(12)
-            .fontColor(this.getStatusColor(this.plan.status))
-            .padding({ left: 8, right: 8, top: 4, bottom: 4 })
-            .backgroundColor(this.getStatusBgColor(this.plan.status))
-            .borderRadius(12)
         }
         .width('100%')
-      }
-      .width('100%')
-      .padding(20)
-      .backgroundColor('#FFFFFF')
-      .borderRadius(16)
-      .margin({ bottom: 16 })
-
-      // 进度统计
-      Column() {
-        Text('进度统计')
-          .fontSize(16)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
-          .width('100%')
-          .margin({ bottom: 16 })
-
-        Row() {
-          Column() {
-            Text(`${this.plan.completedDays}`)
-              .fontSize(32)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#4ECDC4')
-              .margin({ bottom: 4 })
-            Text('已完成天数')
-              .fontSize(12)
-              .fontColor('#999999')
-          }
-          .alignItems(HorizontalAlign.Center)
-          .layoutWeight(1)
-
-          Column() {
-            Text(`${this.plan.totalDays}`)
-              .fontSize(32)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#333333')
-              .margin({ bottom: 4 })
-            Text('总天数')
-              .fontSize(12)
-              .fontColor('#999999')
-          }
-          .alignItems(HorizontalAlign.Center)
-          .layoutWeight(1)
-
-          Column() {
-            Text(`${this.plan.completionRate}%`)
-              .fontSize(32)
-              .fontWeight(FontWeight.Bold)
-              .fontColor('#FFA502')
-              .margin({ bottom: 4 })
-            Text('完成度')
-              .fontSize(12)
-              .fontColor('#999999')
-          }
-          .alignItems(HorizontalAlign.Center)
-          .layoutWeight(1)
-        }
-        .width('100%')
+        .padding(20)
+        .backgroundColor('#FFFFFF')
+        .borderRadius(16)
         .margin({ bottom: 16 })
 
-        // 进度条
-        Stack() {
-          Progress({
-            value: this.plan.completionRate,
-            total: 100,
-            type: ProgressType.Linear
-          })
-          .width('100%')
-          .height(8)
-          .color('#4ECDC4')
-          .backgroundColor('#E0E0E0')
-        }
-        .width('100%')
-        .height(8)
+        // 进度统计
+        Column() {
+          Text('进度统计')
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#333333')
+            .width('100%')
+            .margin({ bottom: 16 })
 
-        Row() {
-          Text(`开始: ${this.formatDate(this.plan.startDate)}`)
-            .fontSize(12)
-            .fontColor('#999999')
-          Blank()
-          Text(`结束: ${this.formatDate(this.plan.endDate)}`)
-            .fontSize(12)
-            .fontColor('#999999')
-        }
-        .width('100%')
-        .margin({ top: 12 })
-      }
-      .width('100%')
-      .padding(20)
-      .backgroundColor('#FFFFFF')
-      .borderRadius(16)
-      .margin({ bottom: 16 })
+          Row() {
+            Column() {
+              Text(`${this.plan.completedDays}`)
+                .fontSize(32)
+                .fontWeight(FontWeight.Bold)
+                .fontColor('#4ECDC4')
+                .margin({ bottom: 4 })
+              Text('已完成天数')
+                .fontSize(12)
+                .fontColor('#999999')
+            }
+            .alignItems(HorizontalAlign.Center)
+            .layoutWeight(1)
 
-      // 每日任务
-      Column() {
-        Text('每日任务')
-          .fontSize(16)
-          .fontWeight(FontWeight.Bold)
-          .fontColor('#333333')
+            Column() {
+              Text(`${this.plan.totalDays}`)
+                .fontSize(32)
+                .fontWeight(FontWeight.Bold)
+                .fontColor('#333333')
+                .margin({ bottom: 4 })
+              Text('总天数')
+                .fontSize(12)
+                .fontColor('#999999')
+            }
+            .alignItems(HorizontalAlign.Center)
+            .layoutWeight(1)
+
+            Column() {
+              Text(`${this.plan.completionRate}%`)
+                .fontSize(32)
+                .fontWeight(FontWeight.Bold)
+                .fontColor('#FFA502')
+                .margin({ bottom: 4 })
+              Text('完成度')
+                .fontSize(12)
+                .fontColor('#999999')
+            }
+            .alignItems(HorizontalAlign.Center)
+            .layoutWeight(1)
+          }
           .width('100%')
           .margin({ bottom: 16 })
 
-        ForEach(this.plan.dailyTasks, (task: DailyTask, index: number) => {
-          this.TaskView(task, index)
-        }, (task: DailyTask, index: number) => `task_${index}`)
+          // 进度条
+          Stack() {
+            Progress({
+              value: this.plan.completionRate,
+              total: 100,
+              type: ProgressType.Linear
+            })
+              .width('100%')
+              .height(8)
+              .color('#4ECDC4')
+              .backgroundColor('#E0E0E0')
+          }
+          .width('100%')
+          .height(8)
+
+          Row() {
+            Text(`开始: ${this.formatDate(this.plan.startDate)}`)
+              .fontSize(12)
+              .fontColor('#999999')
+            Blank()
+            Text(`结束: ${this.formatDate(this.plan.endDate)}`)
+              .fontSize(12)
+              .fontColor('#999999')
+          }
+          .width('100%')
+          .margin({ top: 12 })
+        }
+        .width('100%')
+        .padding(20)
+        .backgroundColor('#FFFFFF')
+        .borderRadius(16)
+        .margin({ bottom: 16 })
+
+        // 每日任务
+        Column() {
+          Text('每日任务')
+            .fontSize(16)
+            .fontWeight(FontWeight.Bold)
+            .fontColor('#333333')
+            .width('100%')
+            .margin({ bottom: 16 })
+
+          ForEach(this.plan.dailyTasks, (task: DailyTask, index: number) => {
+            this.TaskView(task, index)
+          }, (task: DailyTask, index: number) => `task_${index}`)
+        }
+        .width('100%')
+        .padding(20)
+        .backgroundColor('#FFFFFF')
+        .borderRadius(16)
+        .margin({ bottom: 16 })
+
+        // 删除按钮
+        if (this.plan.status !== PlanStatus.COMPLETED) {
+          Button('删除计划')
+            .width('100%')
+            .height(44)
+            .fontColor('#FFFFFF')
+            .backgroundColor('#FF6B6B')
+            .borderRadius(8)
+            .onClick(() => {
+              this.deletePlan();
+            })
+        }
       }
       .width('100%')
-      .padding(20)
-      .backgroundColor('#FFFFFF')
-      .borderRadius(16)
-      .margin({ bottom: 16 })
-
-      // 删除按钮
-      if (this.plan.status !== PlanStatus.COMPLETED) {
-        Button('删除计划')
-          .width('100%')
-          .height(44)
-          .fontColor('#FFFFFF')
-          .backgroundColor('#FF6B6B')
-          .borderRadius(8)
-          .onClick(() => {
-            this.deletePlan();
-          })
-      }
-    }
-    .width('100%')
     }
   }
 
@@ -651,10 +654,10 @@ struct PlanDetailPage {
             total: 100,
             type: ProgressType.Linear
           })
-          .width('100%')
-          .height(4)
-          .color(task.isCompleted ? '#4CAF50' : '#4ECDC4')
-          .backgroundColor('#E0E0E0')
+            .width('100%')
+            .height(4)
+            .color(task.isCompleted ? '#4CAF50' : '#4ECDC4')
+            .backgroundColor('#E0E0E0')
         }
         .width('100%')
         .height(4)
@@ -730,7 +733,7 @@ struct PlanDetailPage {
 
     try {
       let plan: Plan;
-      
+
       if (this.planId && this.plan) {
         // 更新现有计划
         plan = this.plan;
@@ -741,7 +744,7 @@ struct PlanDetailPage {
         plan.endDate = endDate.getTime();
         plan.dailyTasks = this.editTasks;
         plan.totalDays = plan.calculateTotalDays();
-        
+
         await this.planService.updatePlan(plan);
         promptAction.showToast({
           message: '计划已更新',
@@ -757,7 +760,7 @@ struct PlanDetailPage {
           endDate.getTime(),
           this.editTasks
         );
-        
+
         await this.planService.createPlan(plan);
         promptAction.showToast({
           message: '计划已创建',
@@ -768,7 +771,7 @@ struct PlanDetailPage {
       this.isEditMode = false;
       this.plan = plan;
       this.planId = plan.id;
-      
+
       // 延迟返回，让用户看到成功提示
       setTimeout(() => {
         router.back();

@@ -11,7 +11,14 @@
  * limitations under the License.
  */
 
-import { ReminderType, ReminderConfig, ReminderData, ReminderSettings, ReminderState, SportGoal } from '../model/ReminderModel';
+import {
+  ReminderType,
+  ReminderConfig,
+  ReminderData,
+  ReminderSettings,
+  ReminderState,
+  SportGoal
+} from '../model/ReminderModel';
 import { SportData } from '../model/SportModel';
 import promptAction from '@ohos.promptAction';
 import { common } from '@kit.AbilityKit';
@@ -52,19 +59,19 @@ export class ReminderService {
     console.log('开始设置运动目标 - 距离:', goal.distance, '米');
     console.log('开始设置运动目标 - 时长:', goal.duration, '分钟');
     console.log('开始设置运动目标 - 卡路里:', goal.calories);
-    
+
     const beforeGoal = this.settings.getGoal();
     console.log('设置前的目标 - 距离:', beforeGoal.distance, '米');
     console.log('设置前的目标 - 时长:', beforeGoal.duration, '分钟');
     console.log('设置前的目标 - 卡路里:', beforeGoal.calories);
-    
+
     this.settings.setGoal(goal);
-    
+
     const afterGoal = this.settings.getGoal();
     console.log('设置后的目标 - 距离:', afterGoal.distance, '米');
     console.log('设置后的目标 - 时长:', afterGoal.duration, '分钟');
     console.log('设置后的目标 - 卡路里:', afterGoal.calories);
-    
+
     console.log('运动目标已设置 - 距离:', goal.distance, '米');
     console.log('运动目标已设置 - 时长:', goal.duration, '分钟');
     console.log('运动目标已设置 - 卡路里:', goal.calories);
@@ -147,32 +154,33 @@ export class ReminderService {
     console.log('检查目标达成提醒 - 当前状态 - 距离:', this.state.distanceGoalAchieved);
     console.log('检查目标达成提醒 - 当前状态 - 时长:', this.state.durationGoalAchieved);
     console.log('检查目标达成提醒 - 当前状态 - 卡路里:', this.state.caloriesGoalAchieved);
-    
+
     if (config && config.enabled) {
       // 改进日志输出，确保能够显示具体的数值
       console.log('当前运动数据 - 距离:', sportData.distance, '米');
       console.log('当前运动数据 - 时长:', sportData.duration, '毫秒');
       console.log('当前运动数据 - 卡路里:', sportData.calories);
-      
+
       const goal = this.settings.getGoal();
       console.log('当前目标设置 - 距离:', goal.distance, '米');
       console.log('当前目标设置 - 时长:', goal.duration, '分钟');
       console.log('当前目标设置 - 卡路里:', goal.calories);
-      
+
       // 简化目标检查逻辑，确保能够触发提醒
       const hasDistanceGoal = goal.distance !== undefined;
       const hasDurationGoal = goal.duration !== undefined;
       const hasCaloriesGoal = goal.calories !== undefined;
-      
+
       console.log('是否有目标设置 - 距离:', hasDistanceGoal);
       console.log('是否有目标设置 - 时长:', hasDurationGoal);
       console.log('是否有目标设置 - 卡路里:', hasCaloriesGoal);
-      
+
       let anyGoalAchieved = false;
-      
+
       // 检查各个目标是否达成
       if (hasDistanceGoal && !this.state.distanceGoalAchieved) {
-        console.log('距离目标检查:', sportData.distance, '>=', goal.distance!, '=', sportData.distance >= goal.distance!);
+        console.log('距离目标检查:', sportData.distance, '>=', goal.distance!, '=',
+          sportData.distance >= goal.distance!);
         if (sportData.distance >= goal.distance!) {
           const message = `恭喜！您已达成距离目标 ${goal.distance} 米`;
           console.log('触发距离目标达成提醒:', message);
@@ -182,10 +190,11 @@ export class ReminderService {
           anyGoalAchieved = true;
         }
       }
-      
+
       if (hasDurationGoal && !this.state.durationGoalAchieved) {
         const durationMinutes = sportData.duration / 60000;
-        console.log('时长目标检查:', durationMinutes, '分钟 >=', goal.duration!, '分钟 =', durationMinutes >= goal.duration!);
+        console.log('时长目标检查:', durationMinutes, '分钟 >=', goal.duration!, '分钟 =',
+          durationMinutes >= goal.duration!);
         if (durationMinutes >= goal.duration!) {
           const message = `恭喜！您已达成时长目标 ${goal.duration} 分钟`;
           console.log('触发时长目标达成提醒:', message);
@@ -195,9 +204,10 @@ export class ReminderService {
           anyGoalAchieved = true;
         }
       }
-      
+
       if (hasCaloriesGoal && !this.state.caloriesGoalAchieved) {
-        console.log('卡路里目标检查:', sportData.calories, '>=', goal.calories!, '=', sportData.calories >= goal.calories!);
+        console.log('卡路里目标检查:', sportData.calories, '>=', goal.calories!, '=',
+          sportData.calories >= goal.calories!);
         if (sportData.calories >= goal.calories!) {
           const message = `恭喜！您已达成卡路里目标 ${goal.calories} 卡路里`;
           console.log('触发卡路里目标达成提醒:', message);
@@ -207,7 +217,7 @@ export class ReminderService {
           anyGoalAchieved = true;
         }
       }
-      
+
       if (anyGoalAchieved) {
         console.log('至少有一个目标已达成');
         return true;

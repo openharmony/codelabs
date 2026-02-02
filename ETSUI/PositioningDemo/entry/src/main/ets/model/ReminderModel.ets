@@ -12,38 +12,38 @@
  */
 // 提醒类型枚举
 export enum ReminderType {
-  SPORT_START = 'sport_start',      // 运动开始提醒
+  SPORT_START = 'sport_start', // 运动开始提醒
   SPORT_DURATION = 'sport_duration', // 运动时长提醒
   GOAL_ACHIEVEMENT = 'goal_achievement', // 目标达成提醒
-  REST_REMINDER = 'rest_reminder',   // 休息提醒
-  REGULAR_SPORT = 'regular_sport'    // 定期运动提醒
+  REST_REMINDER = 'rest_reminder', // 休息提醒
+  REGULAR_SPORT = 'regular_sport' // 定期运动提醒
 }
 
 // 提醒配置接口
 export interface ReminderConfig {
-  type: ReminderType;       // 提醒类型
-  enabled: boolean;         // 是否启用
-  interval?: number;        // 提醒间隔（秒）
+  type: ReminderType; // 提醒类型
+  enabled: boolean; // 是否启用
+  interval?: number; // 提醒间隔（秒）
   durationThreshold?: number; // 时长阈值（分钟）
-  message: string;          // 提醒消息
-  soundEnabled?: boolean;   // 是否启用声音
+  message: string; // 提醒消息
+  soundEnabled?: boolean; // 是否启用声音
   vibrationEnabled?: boolean; // 是否启用震动
 }
 
 // 运动目标接口
 export interface SportGoal {
-  distance?: number;        // 距离目标（米）
-  duration?: number;        // 时长目标（分钟）
-  calories?: number;        // 卡路里目标
+  distance?: number; // 距离目标（米）
+  duration?: number; // 时长目标（分钟）
+  calories?: number; // 卡路里目标
 }
 
 // 提醒数据类
 export class ReminderData {
-  id: string;               // 提醒ID
-  type: ReminderType;       // 提醒类型
-  message: string;          // 提醒消息
-  timestamp: number;        // 提醒时间戳
-  isRead: boolean;          // 是否已读
+  id: string; // 提醒ID
+  type: ReminderType; // 提醒类型
+  message: string; // 提醒消息
+  timestamp: number; // 提醒时间戳
+  isRead: boolean; // 是否已读
 
   constructor(id: string, type: ReminderType, message: string, timestamp: number) {
     this.id = id;
@@ -132,13 +132,13 @@ export class ReminderSettings {
     console.log('ReminderSettings.setGoal - 设置前 - 距离:', globalGoal.distance, '米');
     console.log('ReminderSettings.setGoal - 设置前 - 时长:', globalGoal.duration, '分钟');
     console.log('ReminderSettings.setGoal - 设置前 - 卡路里:', globalGoal.calories);
-    
+
     console.log('ReminderSettings.setGoal - 设置值 - 距离:', goal.distance, '米');
     console.log('ReminderSettings.setGoal - 设置值 - 时长:', goal.duration, '分钟');
     console.log('ReminderSettings.setGoal - 设置值 - 卡路里:', goal.calories);
-    
+
     globalGoal = goal;
-    
+
     console.log('ReminderSettings.setGoal - 设置后 - 距离:', globalGoal.distance, '米');
     console.log('ReminderSettings.setGoal - 设置后 - 时长:', globalGoal.duration, '分钟');
     console.log('ReminderSettings.setGoal - 设置后 - 卡路里:', globalGoal.calories);
@@ -159,9 +159,12 @@ export class ReminderSettings {
     const hasDurationGoal = globalGoal.duration !== undefined;
     const hasCaloriesGoal = globalGoal.calories !== undefined;
 
-    console.log('ReminderSettings.checkGoalAchievement - 距离目标:', hasDistanceGoal, '当前值:', distance, '目标值:', globalGoal.distance);
-    console.log('ReminderSettings.checkGoalAchievement - 时长目标:', hasDurationGoal, '当前值:', duration / 60000, '分钟', '目标值:', globalGoal.duration, '分钟');
-    console.log('ReminderSettings.checkGoalAchievement - 卡路里目标:', hasCaloriesGoal, '当前值:', calories, '目标值:', globalGoal.calories);
+    console.log('ReminderSettings.checkGoalAchievement - 距离目标:', hasDistanceGoal, '当前值:', distance, '目标值:',
+      globalGoal.distance);
+    console.log('ReminderSettings.checkGoalAchievement - 时长目标:', hasDurationGoal, '当前值:', duration / 60000,
+      '分钟', '目标值:', globalGoal.duration, '分钟');
+    console.log('ReminderSettings.checkGoalAchievement - 卡路里目标:', hasCaloriesGoal, '当前值:', calories, '目标值:',
+      globalGoal.calories);
 
     // 检查各个目标是否达成
     if (hasDistanceGoal && distance >= globalGoal.distance!) {
@@ -190,10 +193,10 @@ export class ReminderSettings {
 // 提醒状态类
 export class ReminderState {
   lastDurationReminder: number = 0; // 上次时长提醒时间
-  lastRegularReminder: number = 0;  // 上次定期提醒时间
-  distanceGoalAchieved: boolean = false;  // 距离目标是否已达成
-  durationGoalAchieved: boolean = false;  // 时长目标是否已达成
-  caloriesGoalAchieved: boolean = false;  // 卡路里目标是否已达成
+  lastRegularReminder: number = 0; // 上次定期提醒时间
+  distanceGoalAchieved: boolean = false; // 距离目标是否已达成
+  durationGoalAchieved: boolean = false; // 时长目标是否已达成
+  caloriesGoalAchieved: boolean = false; // 卡路里目标是否已达成
   activeReminders: Set<string> = new Set(); // 活跃的提醒ID
 
   reset(): void {
