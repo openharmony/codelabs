@@ -18,11 +18,11 @@ import { preferences } from '@kit.ArkData';
 // 书签项接口
 export interface BookmarkItem {
   id: number;
-  url: string;
+  parentId: number; // 父目录ID，根目录为 0
+  url?: string;     // 如果是文件夹，则此项为空
   title: string;
   createTime: number;
-  favicon?: string;
-  folder?: string;
+  isFolder: boolean; // 标识是否为文件夹
 }
 
 // 历史记录项接口
@@ -121,10 +121,37 @@ export class DataManager {
   }
 
 
+
   // ==================== 书签相关方法 ====================
+  // 获取特定父目录下的内容
+  public getBookmarksByParent(parentId: number): BookmarkItem[] {
+    return this.bookmarkList.filter(item => item.parentId === parentId);
+  }
+
+  // 新建文件夹
+  public async addFolder(title: string, parentId: number): Promise<void> {
+    const folder: BookmarkItem = {
+      id: Date.now(),
+      parentId: parentId,
+      title: title,
+      createTime: Date.now(),
+      isFolder: true
+    };
+    this.bookmarkList.unshift(folder);
+    await this.saveBookmarks();
+  }
+
+  // 移动节点（改变父ID）
+  public async moveNode(id: number, targetParentId: number): Promise<void> {
+    const item = this.bookmarkList.find(i => i.id === id);
+    if (item) {
+      item.parentId = targetParentId;
+      await this.saveBookmarks();
+    }
+  }
 
   // 添加书签
-  public async addBookmark(url: string, title: string, folder?: string): Promise<boolean> {
+  public async addBookmark(url: string, title: string, parentId: number = 0): Promise<boolean> {
     if (!url || url === 'about:blank') {
       return false;
     }
@@ -136,10 +163,11 @@ export class DataManager {
 
     const newBookmark: BookmarkItem = {
       id: Date.now(),
+      parentId: parentId, // 使用传入的父目录ID
       url: url,
       title: title || url,
       createTime: Date.now(),
-      folder: folder
+      isFolder: false     // 明确标注这不是文件夹
     };
 
     this.bookmarkList.unshift(newBookmark);
@@ -166,11 +194,11 @@ export class DataManager {
   }
 
   // 更新书签
-  public async updateBookmark(id: number, title: string, folder?: string): Promise<void> {
+  public async updateBookmark(id: number, title: string, url?: string): Promise<void> {
     const bookmark = this.bookmarkList.find(item => item.id === id);
     if (bookmark) {
       bookmark.title = title;
-      bookmark.folder = folder;
+      if (url !== undefined) bookmark.url = url;
       await this.saveBookmarks();
     }
   }
@@ -193,10 +221,17 @@ export class DataManager {
   // 搜索书签
   public searchBookmarks(keyword: string): BookmarkItem[] {
     const lowerKeyword = keyword.toLowerCase();
-    return this.bookmarkList.filter(item =>
-    item.url.toLowerCase().includes(lowerKeyword) ||
-    item.title.toLowerCase().includes(lowerKeyword)
-    );
+    return this.bookmarkList.filter(item => {
+      // 逻辑：
+      // 1. 标题必须搜索（标题肯定存在）
+      // 2. URL 只有在存在时（即非文件夹）才进行搜索
+      const titleMatch = item.title.toLowerCase().includes(lowerKeyword);
+
+      // 使用可选链 ?. 配合 ?? 处理空值
+      const urlMatch = item.url?.toLowerCase().includes(lowerKeyword) ?? false;
+
+      return titleMatch || urlMatch;
+    });
   }
 
   // 清空所有书签
