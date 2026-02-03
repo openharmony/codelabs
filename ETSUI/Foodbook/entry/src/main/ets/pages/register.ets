@@ -14,7 +14,7 @@
  */
 //register
 import { Prompt, router } from '@kit.ArkUI';
-import prompt from '@system.prompt';//用于alterAialog警告弹窗
+import prompt from '@system.prompt'; //用于alterAialog警告弹窗
 
 // 定义存储键名（与login页面一致）
 const USER_LIST_KEY = 'userList';
@@ -22,6 +22,7 @@ const USER_LIST_KEY = 'userList';
 export class user_account {
   username: string
   password: string
+
   constructor(pname: string, pwd: string) {
     this.username = pname
     this.password = pwd
@@ -45,8 +46,13 @@ struct register {
   build() {
     Column({ space: 1 }) {
       // 顶部应用图标
-      Text().width(110).height(110).borderRadius(30).margin({ top: 80 })
-        .backgroundImage($r('app.media.app')).backgroundImageSize(ImageSize.FILL)
+      Text()
+        .width(110)
+        .height(110)
+        .borderRadius(30)
+        .margin({ top: 80 })
+        .backgroundImage($r('app.media.app'))
+        .backgroundImageSize(ImageSize.FILL)
       Text('注册界面').fontSize(30).fontWeight(FontWeight.Bold)
       Text('注册账号以使用更多服务')
 
@@ -199,7 +205,7 @@ struct register {
 
       Text().width('100%').height('7%')
       Text('其他登录方式')
-      Row(){
+      Row() {
         Image($r('app.media.qqphoto')).width(55).height(55).borderRadius(20)
         Text().height(50).width(20)
         Image($r('app.media.wxphoto')).width(60).height(55).borderRadius(20)

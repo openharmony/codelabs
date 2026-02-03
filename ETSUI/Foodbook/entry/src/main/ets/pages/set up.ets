@@ -29,7 +29,6 @@ struct SettingsPage {
   @State cacheSize: string = "7.62TB"
   @StorageLink('isRecommendOn') isRecommendOn: boolean = false // 本地初始化
   @State showRunImage: boolean = false
-
   // 存储相关
   private pref: preferences.Preferences | null = null
   private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext

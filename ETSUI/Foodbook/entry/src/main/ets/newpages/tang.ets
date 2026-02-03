@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {  router } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 import { Constants } from '../common/Constants';
 
 // 定义菜品数据类型
@@ -30,7 +30,6 @@ interface Dish {
 struct DishDetailPage {
   @State isSharePanelVisible: boolean = false;
   @State isCollected: boolean = false; // 改为使用 @State 而不是 @Link
-
   // 使用明确类型的菜品数据
   private dishData: Dish = {
     id: 'gedatang',
@@ -56,13 +55,12 @@ struct DishDetailPage {
       AppStorage.set(Constants.FAVORITE_LIST, newFavorites);
     }
   }
+
   addToHistory(): void {
     const history: Dish[] = AppStorage.get(Constants.HISTORY_LIST) || [];
     const filtered = history.filter((item: Dish) => item.id !== this.dishData.id);
     AppStorage.set(Constants.HISTORY_LIST, [this.dishData, ...filtered]);
   }
-
-
 
   aboutToAppear(): void {
     const favorites: Dish[] = AppStorage.get(Constants.FAVORITE_LIST) || [];
@@ -131,7 +129,9 @@ struct DishDetailPage {
             .fontWeight(FontWeight.Bold)
             .margin({ top: 20 })
 
-          Text(this.dishData.ingredients.split('、').map(item => `• ${item}`).join('\n'))
+          Text(this.dishData.ingredients.split('、')
+            .map(item => `• ${item}`)
+            .join('\n'))
             .fontSize(16)
             .margin({ top: 8 })
 
@@ -141,7 +141,9 @@ struct DishDetailPage {
             .fontWeight(FontWeight.Bold)
             .margin({ top: 20 })
 
-          Text(this.dishData.seasonings.split('、').map(item => `• ${item}`).join('\n'))
+          Text(this.dishData.seasonings.split('、')
+            .map(item => `• ${item}`)
+            .join('\n'))
             .fontSize(16)
             .margin({ top: 8 })
 

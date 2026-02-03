@@ -91,7 +91,8 @@ struct login {
 
     // 生成验证码
     this.generatedCode = this.generateRandomCode();
-    this.smsNotificationText = `【食光记】验证码：${this.generatedCode}，用于${this.isForgotPassword ? '密码重置' : '登录'}，5分钟内有效。`;
+    this.smsNotificationText =
+      `【食光记】验证码：${this.generatedCode}，用于${this.isForgotPassword ? '密码重置' : '登录'}，5分钟内有效。`;
     this.showSmsNotification = true;
 
     // 5秒后自动隐藏
@@ -114,8 +115,13 @@ struct login {
       // 主页面内容
       Column() {
         Column({ space: 10 }) {
-          Text().width(110).height(110).borderRadius(30).margin({ top: 30 })
-            .backgroundImage($r('app.media.app')).backgroundImageSize(ImageSize.FILL)
+          Text()
+            .width(110)
+            .height(110)
+            .borderRadius(30)
+            .margin({ top: 30 })
+            .backgroundImage($r('app.media.app'))
+            .backgroundImageSize(ImageSize.FILL)
 
           Text(this.isForgotPassword ? '找回密码' :
             this.isSmsLogin ? '短信验证码登录' : '登录界面')
@@ -125,7 +131,11 @@ struct login {
           Text(this.isForgotPassword ? '通过手机号找回密码' :
             this.isSmsLogin ? '使用短信验证码登录' : '登录账号以使用更多服务')
 
-          Flex({ direction: FlexDirection.Column, justifyContent: FlexAlign.SpaceEvenly, alignItems: ItemAlign.Center }) {
+          Flex({
+            direction: FlexDirection.Column,
+            justifyContent: FlexAlign.SpaceEvenly,
+            alignItems: ItemAlign.Center
+          }) {
             if (this.isForgotPassword) {
               TextInput({ placeholder: '输入用户名' })
                 .width(350)
@@ -193,12 +203,13 @@ struct login {
                 .maxLength(15)
 
               Row() {
-                Toggle({ type: ToggleType.Checkbox, isOn:this.agreeProtocol})
+                Toggle({ type: ToggleType.Checkbox, isOn: this.agreeProtocol })
                   .selectedColor('#007DFF')
                   .accessibilityChecked(this.agreeProtocol)
-                  .onChange((isOn: boolean) =>
-                  {this.showRedBorder = !isOn;
-                    this.agreeProtocol = isOn})
+                  .onChange((isOn: boolean) => {
+                    this.showRedBorder = !isOn;
+                    this.agreeProtocol = isOn
+                  })
                   .size({ width: 20, height: 20 })
                 Text('我已阅读并同意')
                   .onClick(() => this.agreeProtocol = !this.agreeProtocol)
@@ -297,8 +308,8 @@ struct login {
               .padding(8)
               .translate({ x: this.animateShake ? 10 : 0 })
               .animation({
-                duration: 10,     //加快动画速度
-                iterations: 20,     //增加晃动次数
+                duration: 10, //加快动画速度
+                iterations: 20, //增加晃动次数
                 curve: Curve.EaseInOut
               })
 
@@ -342,11 +353,12 @@ struct login {
               }.width(350).justifyContent(FlexAlign.SpaceBetween)
 
               Row() {
-                Toggle({ type: ToggleType.Checkbox })
+                Toggle({ type: ToggleType.Checkbox, isOn: this.agreeProtocol })
                   .accessibilityChecked(this.agreeProtocol)
-                  .onChange((isOn: boolean) =>
-                  {this.showRedBorder = !isOn;
-                    this.agreeProtocol = isOn})
+                  .onChange((isOn: boolean) => {
+                    this.showRedBorder = !isOn;
+                    this.agreeProtocol = isOn
+                  })
                   .size({ width: 20, height: 20 })
                 Text('我已阅读并同意')
                   .onClick(() => {
@@ -542,7 +554,12 @@ struct login {
         .width('90%')
         .borderRadius(15)
         .backgroundColor('#F5F5F5')
-        .shadow({ radius: 10, color: '#33000000', offsetX: 0, offsetY: 5 })
+        .shadow({
+          radius: 10,
+          color: '#33000000',
+          offsetX: 0,
+          offsetY: 5
+        })
         .position({ x: '5%', y: '5%' }) // 绝对定位在页面顶部
         .transition({
           type: TransitionType.Insert,
