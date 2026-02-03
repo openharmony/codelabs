@@ -551,7 +551,7 @@ struct DuplicateManager {
       }
       .width('100%')
       .layoutWeight(1)
-      .padding({ left: 16, right: 16 })
+      .padding({ left: 16, right: 16, bottom: 80 })
     }
     .width('100%')
     .layoutWeight(1)
@@ -616,11 +616,11 @@ struct DuplicateManager {
       .width('100%')
       .padding(16)
 
-      // 快捷操作
+      // 快捷操作 - 高度调整避免误触
       Row() {
         Button('合并')
           .fontSize(12)
-          .height(32)
+          .height(36)
           .layoutWeight(1)
           .backgroundColor('#007DFF')
           .onClick(() => {
@@ -631,7 +631,7 @@ struct DuplicateManager {
 
         Button('忽略')
           .fontSize(12)
-          .height(32)
+          .height(36)
           .layoutWeight(1)
           .backgroundColor('#999')
           .margin({ left: 12 })
@@ -641,7 +641,7 @@ struct DuplicateManager {
           })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, bottom: 12 })
+      .padding({ left: 16, right: 16, bottom: 16, top: 8 })
     }
     .width('100%')
     .backgroundColor(Color.White)
@@ -743,7 +743,7 @@ struct DuplicateManager {
             this.MergePreviewSection()
           }
 
-          // 操作按钮
+          // 操作按钮 - 添加底部边距避免与Home键重合
           Row() {
             Button('合并联系人')
               .layoutWeight(1)
@@ -753,7 +753,7 @@ struct DuplicateManager {
                 this.showMergeConfirm = true;
               })
 
-            Button('忽略')
+            Button('忽略此组')
               .layoutWeight(1)
               .height(48)
               .backgroundColor('#999')
@@ -764,6 +764,7 @@ struct DuplicateManager {
           }
           .width('100%')
           .padding(16)
+          .margin({ bottom: 80 })
         }
       }
       .layoutWeight(1)
@@ -1098,13 +1099,15 @@ struct DuplicateManager {
   @Builder
   MergeConfirmDialog() {
     Column() {
+      // 上部空白区域，点击可关闭
       Blank()
         .width('100%')
-        .height('100%')
+        .layoutWeight(1)
         .backgroundColor('#000000')
         .opacity(0.5)
         .onClick(() => { this.showMergeConfirm = false; })
 
+      // 弹窗内容 - 底部距离屏幕底部100vp
       Column() {
         Text('确认合并')
           .fontSize(18)
@@ -1124,14 +1127,14 @@ struct DuplicateManager {
         Row() {
           Button('取消')
             .layoutWeight(1)
-            .height(40)
+            .height(44)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
             .onClick(() => { this.showMergeConfirm = false; })
 
           Button('确认合并')
             .layoutWeight(1)
-            .height(40)
+            .height(44)
             .backgroundColor('#007DFF')
             .margin({ left: 12 })
             .onClick(() => this.mergeSelectedGroup())
@@ -1139,14 +1142,16 @@ struct DuplicateManager {
         .width('100%')
         .margin({ top: 20 })
       }
-      .width('80%')
-      .padding(20)
+      .width('85%')
+      .padding(24)
       .backgroundColor(Color.White)
-      .borderRadius(12)
+      .borderRadius(16)
+      .margin({ bottom: 120 })
     }
     .width('100%')
     .height('100%')
-    .justifyContent(FlexAlign.Center)
+    .justifyContent(FlexAlign.End)
+    .alignItems(HorizontalAlign.Center)
     .position({ x: 0, y: 0 })
   }
 
@@ -1156,13 +1161,15 @@ struct DuplicateManager {
   @Builder
   IgnoreConfirmDialog() {
     Column() {
+      // 上部空白区域，点击可关闭
       Blank()
         .width('100%')
-        .height('100%')
+        .layoutWeight(1)
         .backgroundColor('#000000')
         .opacity(0.5)
         .onClick(() => { this.showIgnoreConfirm = false; })
 
+      // 弹窗内容 - 底部距离屏幕底部120vp
       Column() {
         Text('确认忽略')
           .fontSize(18)
@@ -1176,14 +1183,14 @@ struct DuplicateManager {
         Row() {
           Button('取消')
             .layoutWeight(1)
-            .height(40)
+            .height(44)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
             .onClick(() => { this.showIgnoreConfirm = false; })
 
           Button('确认忽略')
             .layoutWeight(1)
-            .height(40)
+            .height(44)
             .backgroundColor('#999')
             .margin({ left: 12 })
             .onClick(() => this.ignoreSelectedGroup())
@@ -1191,14 +1198,16 @@ struct DuplicateManager {
         .width('100%')
         .margin({ top: 20 })
       }
-      .width('80%')
-      .padding(20)
+      .width('85%')
+      .padding(24)
       .backgroundColor(Color.White)
-      .borderRadius(12)
+      .borderRadius(16)
+      .margin({ bottom: 120 })
     }
     .width('100%')
     .height('100%')
-    .justifyContent(FlexAlign.Center)
+    .justifyContent(FlexAlign.End)
+    .alignItems(HorizontalAlign.Center)
     .position({ x: 0, y: 0 })
   }
 
@@ -1208,13 +1217,15 @@ struct DuplicateManager {
   @Builder
   BatchConfirmDialog() {
     Column() {
+      // 上部空白区域，点击可关闭
       Blank()
         .width('100%')
-        .height('100%')
+        .layoutWeight(1)
         .backgroundColor('#000000')
         .opacity(0.5)
         .onClick(() => { this.showBatchConfirm = false; })
 
+      // 弹窗内容 - 底部距离屏幕底部120vp
       Column() {
         Text('⚠️ 批量合并')
           .fontSize(18)
@@ -1234,14 +1245,14 @@ struct DuplicateManager {
         Row() {
           Button('取消')
             .layoutWeight(1)
-            .height(40)
+            .height(44)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
             .onClick(() => { this.showBatchConfirm = false; })
 
           Button('确认全部合并')
             .layoutWeight(1)
-            .height(40)
+            .height(44)
             .backgroundColor('#FF6D00')
             .margin({ left: 12 })
             .onClick(() => this.batchMergeAll())
@@ -1249,14 +1260,16 @@ struct DuplicateManager {
         .width('100%')
         .margin({ top: 20 })
       }
-      .width('80%')
-      .padding(20)
+      .width('85%')
+      .padding(24)
       .backgroundColor(Color.White)
-      .borderRadius(12)
+      .borderRadius(16)
+      .margin({ bottom: 120 })
     }
     .width('100%')
     .height('100%')
-    .justifyContent(FlexAlign.Center)
+    .justifyContent(FlexAlign.End)
+    .alignItems(HorizontalAlign.Center)
     .position({ x: 0, y: 0 })
   }
 
