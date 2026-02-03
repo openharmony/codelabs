@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "智能物品管理助手"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "轻物志应用入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "轻物志"
+    },
+    {
+      "name": "read_media_reason",
+      "value": "读取并显示物品图片"
+    }
+  ]
+}

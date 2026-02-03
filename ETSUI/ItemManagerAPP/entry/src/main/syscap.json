@@ -1,0 +1,16 @@
+{
+  "devices": {
+    "general": [
+      "default"
+    ]
+  },
+  "development": {
+    "addedSysCaps": []
+  },
+  "production": {
+    "addedSysCaps": [],
+    "removedSysCaps": [
+      "SystemCapability.Communication.FusionConnectivity.Core"
+    ]
+  }
+}
