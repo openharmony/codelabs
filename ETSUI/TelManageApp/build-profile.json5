@@ -1,36 +1,51 @@
 {
-  "app":{
-    "products":[
+  "app": {
+    "products": [
       {
-        "name":"default",
-        "signingConfig":"default",
-        "compatibleSdkVersion":"5.0.1(13)",
-        "runtimeOS":"HarmonyOS",
-        "buildOption":{
-          "strictMode":{
-            "caseSensitiveCheck":true,
-            "useNormalizedOHMUrl":true
+        "name": "default",
+        "signingConfig": "hjy",
+        "compatibleSdkVersion": "5.0.1(13)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
           }
         }
       }
     ],
-    "buildModeSet":[
+    "buildModeSet": [
       {
-        "name":"debug"
+        "name": "debug"
       },
       {
-        "name":"release"
+        "name": "release"
       }
     ],
+    "signingConfigs": [
+      {
+        "name": "hjy",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\j'y'H'an\\.ohos\\config\\hjy_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.cer",
+          "storePassword": "0000001B944A6CCF46FBC4BD35784D346C69BAAD5064D6146137411C7FF7EE657D9F8178FFE81C46A9A98C",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001BF28654884C860F5D5F7EFF6F5F91B37E534CDCBA624385A0B6CB42F8AE6B9DE99069CBE358B969",
+          "profile": "C:\\Users\\j'y'H'an\\.ohos\\config\\hjy_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\j'y'H'an\\.ohos\\config\\hjy_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.p12"
+        }
+      }
+    ]
   },
-  "modules":[
+  "modules": [
     {
-      "name":"entry",
-      "srcPath":"./entry",
-      "targets":[
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
         {
-          "name":"default",
-          "applyToProducts":[
+          "name": "default",
+          "applyToProducts": [
             "default"
           ]
         }
