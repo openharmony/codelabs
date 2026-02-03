@@ -55,7 +55,7 @@
 │  │  ├──EditContact.ets                 // 编辑联系人页面
 │  │  ├──AddContact.ets                 // 添加联系人
 │  │  └──Index.ets                      //主页面的UI设计
-│  └──viewmodel    
+│  └──view    
 │     ├──ContactItem.ets                 // 联系人信息类
 │     └──ContactViewModel.ets            // 联系人页面数据处理类
 │——entry/src/main/resource                // 应用静态资源目录
