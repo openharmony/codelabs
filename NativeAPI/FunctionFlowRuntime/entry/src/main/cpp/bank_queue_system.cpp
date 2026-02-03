@@ -18,11 +18,11 @@
 BankQueueSystem::BankQueueSystem(int type, const char *name, int concurrency)
 {
     if (type == 0) {
-        queue_ = std::make_unique<ffrt::queue>(
-            ffrt::queue_concurrent, name, ffrt::queue_attr().max_concurrency(concurrency));
+        queue_ = std::make_unique<ffrt::queue>(ffrt::queue_concurrent, name,
+                                               ffrt::queue_attr().max_concurrency(concurrency));
     } else {
-        queue_ = std::make_unique<ffrt::queue>(
-            ffrt::queue_serial, name, ffrt::queue_attr().max_concurrency(concurrency));
+        queue_ =
+            std::make_unique<ffrt::queue>(ffrt::queue_serial, name, ffrt::queue_attr().max_concurrency(concurrency));
     }
     LOGI("bank system has been initialized");
 }
@@ -41,13 +41,7 @@ ffrt::task_handle BankQueueSystem::Enter(const std::function<void()> &func, cons
 }
 
 // 退出排队，即取消队列任务
-int BankQueueSystem::Exit(const ffrt::task_handle &t)
-{
-    return queue_->cancel(t);
-}
+int BankQueueSystem::Exit(const ffrt::task_handle &t) { return queue_->cancel(t); }
 
 // 等待排队，即等待队列任务
-void BankQueueSystem::Wait(const ffrt::task_handle &handle)
-{
-    queue_->wait(handle);
-}
+void BankQueueSystem::Wait(const ffrt::task_handle &handle) { queue_->wait(handle); }

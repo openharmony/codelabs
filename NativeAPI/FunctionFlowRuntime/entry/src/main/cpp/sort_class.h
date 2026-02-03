@@ -12,22 +12,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export class FunctionClass {
-  constructor(version: number)
 
-  FfrtSerialQueue(): number;
+#ifndef FUNCTIONFLOWRUNTIME_SORT_CLASS_H
+#define FUNCTIONFLOWRUNTIME_SORT_CLASS_H
 
-  FfrtConcurrentQueue(): number;
-}
+#include "cstdint"
+class SortClass {
+public:
+    SortClass() = default;
+    explicit SortClass(uint32_t version);
+    ~SortClass();
+    int FfrtConcurrentQueue();
+};
 
-export class SortClass {
-  constructor(version: number)
-
-  FfrtConcurrentQueue(): number;
-}
-
-export const Add: (a: number, b: number) => number;
-
-export const ProcessFfrtQueue: () => number;
-
-export const ComputeFfrtQueue: () => number;
+#endif // FUNCTIONFLOWRUNTIME_SORT_CLASS_H
