@@ -6,6 +6,7 @@ import { contact } from '@kit.ContactsKit';
 import { router } from '@kit.ArkUI';
 // 权限与上下文：请求联系人权限、提供页面上下文
 import { abilityAccessCtrl, Context } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 @Entry
 @Component
@@ -22,34 +23,119 @@ struct Index {
   aboutToAppear() {
     // 生命周期：页面将显示时拉取联系人，适配初次进入
     console.log('Index: 页面即将显示，开始加载联系人');
-    this.loadContacts();
+    // this.loadContacts();
+    this.checkPermissionsAndLoad();
   }
 
   onPageShow() {
     // 生命周期：页面显示（前后台切换/返回）时刷新列表，保证数据一致
     console.log('Index: 页面显示，刷新联系人列表');
-    this.loadContacts();
+    // this.loadContacts();
+    this.checkPermissionsAndLoad();
+  }
+  // 新增一个带权限校验的方法
+  // async checkPermissionsAndLoad() {
+  //   let atManager = abilityAccessCtrl.createAtManager();
+  //   try {
+  //     // 强制弹出/检查权限请求，并等待用户操作完成
+  //     let result = await atManager.requestPermissionsFromUser(this.context, [
+  //       'ohos.permission.READ_CONTACTS',
+  //       'ohos.permission.WRITE_CONTACTS'
+  //     ]);
+  //
+  //     // 只有当第一个权限（READ）的返回值为 0 (已授权) 时，才去加载数据
+  //     if (result.authResults[0] === 0) {
+  //       console.log('Index: 权限确认通过，开始同步加载');
+  //       await this.loadContacts();
+  //     } else {
+  //       this.isLoading = false;
+  //       console.warn('Index: 用户未授权，无法加载列表');
+  //     }
+  //   } catch (err) {
+  //     console.error('Index: 权限校验异常');
+  //   }
+  // }
+
+  // async checkPermissionsAndLoad() {
+  //   let atManager = abilityAccessCtrl.createAtManager();
+  //   try {
+  //     let result = await atManager.requestPermissionsFromUser(this.context, [
+  //       'ohos.permission.READ_CONTACTS',
+  //       'ohos.permission.WRITE_CONTACTS'
+  //     ]);
+  //
+  //     if (result.authResults[0] === 0) {
+  //       console.log('Index: 权限已获得，等待系统同步...');
+  //       // 核心修复点：人为延迟 200ms，确保 DataShare 准备就绪
+  //       setTimeout(async () => {
+  //         await this.loadContacts();
+  //       }, 200);
+  //     }
+  //   } catch (err) {
+  //     console.error('Index: 权限逻辑异常');
+  //   }
+  // }
+  async checkPermissionsAndLoad() {
+    let atManager = abilityAccessCtrl.createAtManager();
+    try {
+      // 强制执行权限申请并等待
+      let result = await atManager.requestPermissionsFromUser(this.context, [
+        'ohos.permission.READ_CONTACTS',
+        'ohos.permission.WRITE_CONTACTS'
+      ]);
+
+      if (result.authResults[0] === 0) {
+        console.log('Index: 权限确认通过，准备延迟加载数据');
+        // 核心修复：延迟 300ms 避开系统服务同步峰值
+        setTimeout(async () => {
+          await this.loadContacts();
+        }, 500);
+      } else {
+        this.isLoading = false;
+        this.contacts = [];
+        console.warn('Index: 用户拒绝了权限申请');
+      }
+    } catch (err) {
+      console.error('Index: 权限流转异常');
+      this.isLoading = false;
+    }
   }
 
   async loadContacts() {
-    // 拉取全量联系人并更新加载态与列表数据
-    console.log('Index: 开始加载联系人列表');
     this.isLoading = true;
     try {
+      // 执行查询
       this.contacts = await this.contactData.queryAllContacts();
-      console.log('Index: 联系人列表加载完成，数量:', this.contacts.length);
-
-      // 检查联系人数据
-      if (this.contacts.length > 0) {
-        console.log('Index: 第一个联系人信息:', JSON.stringify(this.contacts[0]));
-      }
+      console.log('Index: 列表刷新成功，数量:', this.contacts.length);
     } catch (error) {
-      console.error('Index: 加载联系人失败:', error);
+      const err = error as BusinessError;
+      // 如果依然 201，说明是签名 ACL 没过，而不只是用户没点同意
+      if (err.code === 201) {
+        console.error('Index: 严重错误 - 签名未包含受限权限 ACL');
+      }
     } finally {
       this.isLoading = false;
-      console.log('Index: 加载状态设置为false');
     }
   }
+  // async loadContacts() {
+  //   // 拉取全量联系人并更新加载态与列表数据
+  //   console.log('Index: 开始加载联系人列表');
+  //   this.isLoading = true;
+  //   try {
+  //     this.contacts = await this.contactData.queryAllContacts();
+  //     console.log('Index: 联系人列表加载完成，数量:', this.contacts.length);
+  //
+  //     // 检查联系人数据
+  //     if (this.contacts.length > 0) {
+  //       console.log('Index: 第一个联系人信息:', JSON.stringify(this.contacts[0]));
+  //     }
+  //   } catch (error) {
+  //     console.error('Index: 加载联系人失败:', error);
+  //   } finally {
+  //     this.isLoading = false;
+  //     console.log('Index: 加载状态设置为false');
+  //   }
+  // }
 
   async searchContacts() {
     // 搜索流程：空关键字回退全量；申请权限后号码优先；无结果再姓名包含过滤
@@ -156,13 +242,43 @@ struct Index {
 
         Blank()
 
-        Button('添加')
-          .onClick(() => {
-            console.log('Index: 点击添加按钮，跳转到添加页面');
-            router.pushUrl({
-              url: 'pages/AddContact'
-            });
-          })
+        // 更多功能按钮组
+        Row() {
+          Button('添加')
+            .fontSize(14)
+            .height(32)
+            .backgroundColor('#007DFF')
+            .onClick(() => {
+              console.log('Index: 点击添加按钮，跳转到添加页面');
+              router.pushUrl({
+                url: 'pages/AddContact'
+              });
+            })
+
+          Button('去重')
+            .fontSize(14)
+            .height(32)
+            .backgroundColor('#FF6D00')
+            .margin({ left: 8 })
+            .onClick(() => {
+              console.log('Index: 点击去重按钮，跳转到去重管理页面');
+              router.pushUrl({
+                url: 'pages/DuplicateManager'
+              });
+            })
+
+          Button('分组')
+            .fontSize(14)
+            .height(32)
+            .backgroundColor('#00C853')
+            .margin({ left: 8 })
+            .onClick(() => {
+              console.log('Index: 点击分组按钮，跳转到分组管理页面');
+              router.pushUrl({
+                url: 'pages/GroupManager'
+              });
+            })
+        }
       }
       .width('100%')
       .padding(20)

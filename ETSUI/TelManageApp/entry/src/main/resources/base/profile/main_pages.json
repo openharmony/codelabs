@@ -2,6 +2,8 @@
   "src": [
     "pages/Index",
     "pages/AddContact",
-    "pages/EditContact"
+    "pages/EditContact",
+    "pages/DuplicateManager",
+    "pages/GroupManager"
   ]
 }
