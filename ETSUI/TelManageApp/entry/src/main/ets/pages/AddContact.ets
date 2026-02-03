@@ -1,8 +1,9 @@
 // 新增联系人页面：表单输入 + 保存提交
 import { ContactData } from '../model/ContactData';
 import { contact } from '@kit.ContactsKit';
-import { router } from '@kit.ArkUI';
+import { promptAction, router } from '@kit.ArkUI';
 import { Context } from '@kit.AbilityKit';
+import { BusinessError } from '@kit.BasicServicesKit';
 
 @Entry
 @Component
@@ -203,26 +204,81 @@ struct AddContact {
     .backgroundColor('#f5f5f5')
   }
 
+  // async saveContact() {
+  //   // 简单校验：姓名/电话必填
+  //   if (!this.name || !this.phone) {
+  //     return;
+  //   }
+  //
+  //   // 进入保存中，禁用按钮并显示进度
+  //   this.isSaving = true;
+  //
+  //   try {
+  //     // 组装联系人对象并写入系统通讯录
+  //     const newContact = this.contactData.createContact(this.name, this.phone, this.email);
+  //     await this.contactData.addContact(newContact);
+  //     console.error('添加联系人成功');
+  //     // 成功后返回上一页
+  //     router.back();
+  //   } catch (error) {
+  //     console.error('添加联系人失败:', error);
+  //   } finally {
+  //     // 恢复保存状态
+  //     this.isSaving = false;
+  //   }
+  // }
+  // async saveContact() {
+  //   if (!this.name || !this.phone) return;
+  //   this.isSaving = true;
+  //
+  //   try {
+  //     const newContact = this.contactData.createContact(this.name, this.phone, this.email);
+  //
+  //     // 注意：这里必须使用 await 阻塞，直到系统通讯录写入完成
+  //     await this.contactData.addContact(newContact);
+  //
+  //     // 如果走到这一行，说明底层没有抛出 201 错误
+  //     console.info('AddContact: 数据库写入成功，准备返回');
+  //     promptAction.showToast({ message: '保存成功' });
+  //     router.back();
+  //   } catch (error) {
+  //     // 如果捕获到 201 错误，会跳到这里，不会执行 router.back()
+  //     const err = error as BusinessError;
+  //     console.error('AddContact: 保存失败，原因: ' + err.code);
+  //
+  //     AlertDialog.show({
+  //       title: '权限不足',
+  //       message: '无法保存联系人，请检查应用权限设置',
+  //       confirm: { value: '去设置', action: () => { /* 引导逻辑 */ } }
+  //     });
+  //   } finally {
+  //     this.isSaving = false;
+  //   }
+  // }
   async saveContact() {
-    // 简单校验：姓名/电话必填
-    if (!this.name || !this.phone) {
-      return;
-    }
-
-    // 进入保存中，禁用按钮并显示进度
+    if (!this.name || !this.phone) return;
     this.isSaving = true;
 
     try {
-      // 组装联系人对象并写入系统通讯录
       const newContact = this.contactData.createContact(this.name, this.phone, this.email);
+
+      // 必须使用 await，否则 201 错误还没抛出，页面就已经跳转回去了
       await this.contactData.addContact(newContact);
-      console.error('添加联系人成功');
-      // 成功后返回上一页
+
+      console.info('AddContact: 真正写入成功');
+      promptAction.showToast({ message: '联系人已保存' });
       router.back();
     } catch (error) {
-      console.error('添加联系人失败:', error);
+      const err = error as BusinessError;
+      console.error('AddContact: 写入失败, Code: ' + err.code);
+
+      // 如果是 201，引导用户
+      AlertDialog.show({
+        title: '保存失败',
+        message: '无法访问通讯录，请检查应用权限设置',
+        confirm: { value: '确定', action: () => {} }
+      });
     } finally {
-      // 恢复保存状态
       this.isSaving = false;
     }
   }
