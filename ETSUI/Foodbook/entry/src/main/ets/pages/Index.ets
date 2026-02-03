@@ -1335,7 +1335,7 @@ struct Index {
           }
           .backgroundColor(Color.Orange)
           // .stlfull()
-          .width("100%").height(380)
+          .width("100%").height(420)
           .backgroundImage($r('app.media.context2'))
           .backgroundImageSize(ImageSize.FILL)
 
