@@ -1,559 +1,0 @@
-Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚµ/*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
- * Licensed under the Apache License,Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-export default class Constants {
-}
-/**
- * banner list
- */
-Constants.BANNER_IMG_LIST = [
-    { "id": 16777244, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777232, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777234, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777240, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
-];
-/**
- * scene list
- */
-Constants.SCENE_LIST = [
-    { "id": 16777244, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777245, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777243, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
-];
-/**
- * men list
- */
-Constants.MEN_LIST = [
-    { "id": 16777240, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777241, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777242, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
-];
-/**
- * food list
- */
-Constants.FOOD_LIST = [
-    { "id": 16777233, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777232, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-];
-/**
- * life list
- */
-Constants.LIFE_LIST = [
-    { "id": 16777235, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777234, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777236, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777237, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777238, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" },
-    { "id": 16777239, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" }
-];
-/**
- * index page img arr
- */
-Constants.IMG_ARR = [
-    new Array().concat(Constants.SCENE_LIST, Constants.LIFE_LIST, Constants.MEN_LIST),
-    new Array().concat(Constants.MEN_LIST, Constants.LIFE_LIST, Constants.SCENE_LIST),
-    new Array().concat(Constants.FOOD_LIST, Constants.SCENE_LIST, Constants.SCENE_LIST),
-    new Array().concat(Constants.LIFE_LIST, Constants.FOOD_LIST, Constants.MEN_LIST)
-];
-/**
- * title font weight
- */
-Constants.TITLE_FONT_WEIGHT = 500;
-/**
- * aspect ratio
- */
-Constants.BANNER_ASPECT_RATIO = 1.5;
-/**
- * animate duration
- */
-Constants.BANNER_ANIMATE_DURATION = 300;
-/**
- * share delay
- */
-Constants.SHARE_TRANSITION_DELAY = 100;
-/**
- * aspect ratio
- */
-Constants.STACK_IMG_RATIO = 0.7;
-/**
- * item space
- */
-Constants.LIST_ITEM_SPACE = 2;
-/**
- * cache size
- */
-Constants.CACHE_IMG_SIZE = 4;
-/**
- * cache list
- */
-Constants.CACHE_IMG_LIST = ['', '', '', ''];
-/**
- * title
- */
-Constants.PAGE_TITLE = 'ç”µå­ç›¸å†Œ';
-/**
- *  router param
- */
-Constants.PARAM_PHOTO_ARR_KEY = 'photoArr';
-/**
- *  selected index
- */
-Constants.SELECTED_INDEX_KEY = 'selectedIndex';
-/**
- * grid column template
- */
-Constants.GRID_COLUMNS_TEMPLATE = '1fr 1fr 1fr 1fr';
-/**
- * index page columns template
- */
-Constants.INDEX_COLUMNS_TEMPLATE = '1fr 1fr';
-/**
- *  percent
- */
-Constants.FULL_PERCENT = '100%';
-/**
- * photo item percent
- */
-Constants.PHOTO_ITEM_PERCENT = '90%';
-/**
- * show count
- */
-Constants.SHOW_COUNT = 8;
-/**
- * default width
- */
-Constants.DEFAULT_WIDTH = 360;
-/**
- * padding
- */
-Constants.PHOTO_ITEM_PADDING = 8;
-/**
- * offset
- */
-Constants.PHOTO_ITEM_OFFSET = 16;
-/**
- * item opacity offset
- */
-Constants.ITEM_OPACITY_OFFSET = 0.2;
-/**
- * double number
- */
-Constants.DOUBLE_NUMBER = 2;
-/**
- * list page url
- */
-Constants.URL_LIST_PAGE = 'pages/ListPage';
-/**
- * detail list page url
- */
-Constants.URL_DETAIL_LIST_PAGE = 'pages/DetailListPage';
-/**
- * detail page url
- */
-Constants.URL_DETAIL_PAGE = 'pages/DetailPage';
-/**
- * index page tag
- */
-Constants.TAG_INDEX_PAGE = 'IndexPage push error ';
-/**
- * list page tag
- */
-Constants.TAG_LIST_PAGE = 'ListPage push error ';
-/**
- * detail list page tag
- */
-Constants.TAG_DETAIL_PAGE = 'DetailListPage push error ';
-// ==========================================
-// å›¾ç‰‡ç¼“å­˜ / å ä½å›¾ / åŠ¨ç”»ç›¸å…³æ–°å¢å¸¸é‡
-// ==========================================
-/** æœ€å¤§å†…å­˜ç¼“å­˜å›¾ç‰‡æ•°é‡ï¼ˆImageCache ä½¿ç”¨ï¼‰ */
-Constants.IMAGE_CACHE_MAX_SIZE = 100;
-/**
- * å ä½å›¾ä¸é”™è¯¯å›¾ï¼ˆè¿™é‡Œå…ˆç”¨åº”ç”¨ icon åšå…œåº•ï¼Œå¯æ ¹æ®éœ€è¦æ›¿æ¢ä¸ºç‹¬ç«‹èµ„æºï¼‰
- */
-Constants.PLACEHOLDER_IMAGE = { "id": 16777246, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" };
-Constants.ERROR_IMAGE = { "id": 16777246, "type": 20000, params: [], "bundleName": "com.example.electronicalbum", "moduleName": "entry" };
-/**
- * ç¼©æ”¾ç›¸å…³é»˜è®¤å¸¸é‡
- */
-Constants.MIN_ZOOM_SCALE = 1;
-Constants.MAX_ZOOM_SCALE = 3;
-/**
- * åˆ¤å®šå·¦å³ç¿»é¡µçš„æ‹–æ‹½æ¯”ä¾‹é˜ˆå€¼ï¼ˆç›¸å¯¹äºå½“å‰å›¾ç‰‡å®½åº¦ï¼‰
- */
-Constants.SWIPE_THRESHOLD_RATIO = 0.25;
-/**
- * é€šç”¨åŠ¨ç”»æ—¶é•¿ï¼ˆæ¯«ç§’ï¼‰
- */
-Constants.TRANSITION_DURATION_SHORT = 150;
-Constants.TRANSITION_DURATION_MEDIUM = 300;
-Constants.TRANSITION_DURATION_LONG = 500;
-// ==========================================
-// æ–°å¢ï¼šæ•°æ®åº“ç›¸å…³é…ç½®
-// ==========================================
-/** æ•°æ®åº“æ–‡ä»¶å */
-Constants.RDB_NAME = 'PhotoAlbum.db';
-/** æ•°æ®åº“è¡¨å */
-Constants.PHOTO_TABLE_NAME = 'photo_table';
-/** æ•°æ®åº“ç‰ˆæœ¬ */
-Constants.RDB_VERSION = 1;
-/**
- * å»ºè¡¨ SQL è¯­å¥
- * id: ä¸»é”®ï¼Œè‡ªå¢
- * name: å›¾ç‰‡åç§°
- * path: å›¾ç‰‡è·¯å¾„
- * category: åˆ†ç±»
- * createTime: åˆ›å»ºæ—¶é—´
- * tags: æ ‡ç­¾
- */
-Constants.CREATE_TABLE_SQL = `
-    CREATE TABLE IF NOT EXISTS photo_table (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      path TEXT NOT NULL,
-      category TEXT,
-      createTime INTEGER,
-      tags TEXT
-    )
-  `;
-/** æ•°æ®åº“åˆ—åå®šä¹‰ (æ–¹ä¾¿åç»­æŸ¥è¯¢ä½¿ç”¨) */
-Constants.COL_ID = 'id';
-Constants.COL_NAME = 'name';
-Constants.COL_PATH = 'path';
-Constants.COL_CATEGORY = 'category';
-Constants.COL_CREATE_TIME = 'createTime';
-Constants.COL_TAGS = 'tags';
-// ==========================================
-// æ–°å¢ï¼šåˆ†ç±»ç›¸å…³å¸¸é‡
-// ==========================================
-/**
- * é¢„å®šä¹‰åˆ†ç±»åˆ—è¡¨
- */
-Constants.CATEGORIES = ['é£æ™¯', 'äººç‰©', 'åŠ¨ç‰©', 'å»ºç­‘', 'ç¾é£Ÿ', 'ç”Ÿæ´»', 'å…¶ä»–'];
-/**
- * é»˜è®¤åˆ†ç±»
- */
-Constants.DEFAULT_CATEGORY = 'å…¶ä»–';
-/**
- * å…¨éƒ¨åˆ†ç±»æ ‡è¯†
- */
-Constants.ALL_CATEGORY = 'å…¨éƒ¨';
-//# sourceMappingURL=Constants.js.mapÂÙx/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entry/src/main/ets/common/constants/Constants.etsÔrBœªmoduleName±isLocalDependency¯isNodeEntryFile§pkgPath±belongProjectPath§pkgNameªpkgVersion±dependencyPkgInfo¯hostModulesInfo°belongModulePath§checker¬shouldEmitJs¥entryÃÂÙL/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entryÙF/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum¥entry¥1.0.0Ô  —ÔrC’²hostDependencyName®hostModuleName½../common/constants/Constants¥entryC½../common/constants/Constants¥entryC½../common/constants/Constants¥entryC½../common/constants/Constants¥entryC½../common/constants/Constants¥entryC½../common/constants/Constants¥entryC¶../constants/Constants¥entryÙL/Users/lichen18/Documents/Openharmony/codelabs/ETSUI/HarmonyPhotoAlbum/entryÔrDÜ ®¬getNodeCount²getIdentifierCount®getSymbolCount¬getTypeCountµgetInstantiationCountµgetRelationCacheSizes±isUndefinedSymbol±isArgumentsSymbol¯isUnknownSymbol¯getMergedSymbol®getDiagnostics´getGlobalDiagnostics´getRecursionIdentity¶getUnmatchedProperties¹getTypeOfSymbolAtLocation¯getTypeOfSymbolÙ(getSymbolsOfParameterPropertyDeclaration·getDeclaredTypeOfSymbol³getPropertiesOfType±getPropertyOfTypeÙ"getPrivateIdentifierPropertyOfType·getTypeOfPropertyOfType²getIndexInfoOfType³getIndexInfosOfTypeºgetIndexInfosOfIndexSymbol³getSignaturesOfType²getIndexTypeOfType¬getIndexType¬getBaseTypes¸getBaseTypeOfLiteralType®getWidenedType³getTypeFromTypeNode°getParameterTypeÙ$getParameterIdentifierNameAtPosition¸getPromisedTypeOfPromise®getAwaitedType¸getReturnTypeOfSignature®isNullableType¯getNullableType²getNonNullableType²getNonOptionalType°getTypeArguments®typeToTypeNodeÙ$indexInfoToIndexSignatureDeclaration¿signatureToSignatureDeclaration²symbolToEntityName²symbolToExpression¬symbolToNodeÙ!symbolToTypeParameterDeclarations¼symbolToParameterDeclarationºtypeParameterToDeclaration±getSymbolsInScope³getSymbolAtLocation·getIndexInfosAtLocationÙ!getShorthandAssignmentValueSymbolÙ#getExportSpecifierLocalTargetSymbol·getExportSymbolOfSymbol±getTypeAtLocationºgetTypeAtLocationForLinterÙ tryGetTypeAtLocationWithoutCheckºgetTypeOfAssignmentPatternÙ*getPropertySymbolOfDestructuringAssignment±signatureToString¬typeToString®symbolToStringµtypePredicateToString®writeSignature©writeType«writeSymbol²writeTypePredicate¼getAugmentedPropertiesOfType®getRootSymbols²getSymbolOfExpando±getContextualTypeÙ(getContextualTypeForObjectLiteralElementÙ#getContextualTypeForArgumentAtIndexÙ getContextualTypeForJsxAttribute²isContextSensitiveÙ!getTypeOfPropertyOfContextualTypeµgetFullyQualifiedNameÙ#tryGetResolvedSignatureWithoutCheck´getResolvedSignatureÙ/getResolvedSignatureForStringLiteralCompletionsÙ$getResolvedSignatureForSignatureHelpµgetExpandedParameters¹hasEffectiveRestParameterºcontainsArgumentsReference°getConstantValueµisValidPropertyAccessÙ#isValidPropertyAccessForCompletions»getSignatureFromDeclarationºisImplementationOfOverload¹getImmediateAliasedSymbol°getAliasedSymbol¯getEmitResolver²getExportsOfModule¿getExportsAndPropertiesOfModuleÙ forEachExportAndPropertyOfModule¯getSymbolWalker±getAmbientModules¹getJsxIntrinsicTagNamesAt³isOptionalParameter»tryGetMemberInModuleExportsÙ(tryGetMemberInModuleExportsAndProperties´tryFindAmbientModuleÙ(tryFindAmbientModuleWithoutAugmentations¯getApparentType¬getUnionType²isTypeAssignableTo³createAnonymousType¯createSignature¬createSymbol¯createIndexInfoªgetAnyType­getStringType­getNumberType±createPromiseType¯createArrayType¹getElementTypeOfArrayType®getBooleanType¬getFalseType«getTrueType«getVoidType°getUndefinedType«getNullType¯getESSymbolType¬getNeverType¯getOptionalType®getPromiseType²getPromiseLikeType´getAsyncIterableType²isSymbolAccessible«isArrayType«isTupleType¯isArrayLikeTypeÙ#isTypeInvalidDueToUnionDiscriminantºgetExactOptionalProperties¿getAllPossiblePropertiesOfTypesÙ(getSuggestedSymbolForNonexistentPropertyÙ#getSuggestionForNonexistentPropertyÙ,getSuggestedSymbolForNonexistentJSXAttributeÙ&getSuggestedSymbolForNonexistentSymbolÙ!getSuggestionForNonexistentSymbolÙ&getSuggestedSymbolForNonexistentModuleÙ!getSuggestionForNonexistentExportÙ+getSuggestedSymbolForNonexistentClassMember·getBaseConstraintOfType»getDefaultFromTypeParameter«resolveName¯getJsxNamespaceµgetJsxFragmentFactory¸getAccessibleSymbolChain»getTypePredicateOfSignature¹resolveExternalModuleName»resolveExternalModuleSymbol°tryGetThisTypeAt¹getTypeArgumentConstraint¸getSuggestionDiagnostics¸runWithCancellationTokenÙ3getLocalTypeParametersOfClassOrInterfaceOrTypeAlias´isDeclarationVisible´isPropertyAccessible»getTypeOnlyAliasDeclaration¿getMemberOverrideModifierStatusÙ!isTypeParameterPossiblyReferenced²getConstEnumRelate´clearConstEnumRelateµdeleteConstEnumRelateÙ$getTypeArgumentsForResolvedSignatureµgetCheckedSourceFilesÙ"collectHaveTsNoCheckFilesForLinter·clearQualifiedNameCache®isStaticRecord²isStaticSourceFileÔ  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  Ô  ÃÃÚ˜/*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
- * Licensed under the Apache License,Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-export default class Constants {
-
-  /**
-   * banner list
-   */
-  static readonly BANNER_IMG_LIST: Array<Resource> = [
-    $r('app.media.ic_scene_1'),
-    $r('app.media.ic_food_0'),
-    $r('app.media.ic_life_0'),
-    $r('app.media.ic_men_0')
-  ];
-
-  /**
-   * scene list
-   */
-  static readonly SCENE_LIST: Array<Resource> = [
-    $r('app.media.ic_scene_1'),
-    $r('app.media.ic_scene_2'),
-    $r('app.media.ic_scene_0')
-  ];
-
-  /**
-   * men list
-   */
-  static readonly MEN_LIST: Array<Resource> = [
-    $r('app.media.ic_men_0'),
-    $r('app.media.ic_men_2'),
-    $r('app.media.ic_men_3')
-  ];
-
-  /**
-   * food list
-   */
-  static readonly FOOD_LIST: Array<Resource> = [
-    $r('app.media.ic_food_1'),
-    $r('app.media.ic_food_0'),
-  ];
-
-  /**
-   * life list
-   */
-  static readonly LIFE_LIST: Array<Resource> = [
-    $r('app.media.ic_life_1'),
-    $r('app.media.ic_life_0'),
-    $r('app.media.ic_life_2'),
-    $r('app.media.ic_life_3'),
-    $r('app.media.ic_life_4'),
-    $r('app.media.ic_life_5')
-  ];
-
-  /**
-   * index page img arr
-   */
-  static readonly IMG_ARR: Resource[][] = [
-    new Array<Resource>().concat(Constants.SCENE_LIST, Constants.LIFE_LIST, Constants.MEN_LIST),
-    new Array<Resource>().concat(Constants.MEN_LIST, Constants.LIFE_LIST, Constants.SCENE_LIST),
-    new Array<Resource>().concat(Constants.FOOD_LIST, Constants.SCENE_LIST, Constants.SCENE_LIST),
-    new Array<Resource>().concat(Constants.LIFE_LIST, Constants.FOOD_LIST, Constants.MEN_LIST)
-  ];
-
-  /**
-   * title font weight
-   */
-  static readonly TITLE_FONT_WEIGHT: number = 500;
-
-  /**
-   * aspect ratio
-   */
-  static readonly BANNER_ASPECT_RATIO: number = 1.5;
-
-  /**
-   * animate duration
-   */
-  static readonly BANNER_ANIMATE_DURATION: number = 300;
-
-  /**
-   * share delay
-   */
-  static readonly SHARE_TRANSITION_DELAY: number = 100;
-
-  /**
-   * aspect ratio
-   */
-  static readonly STACK_IMG_RATIO: number = 0.7;
-
-  /**
-   * item space
-   */
-  static readonly LIST_ITEM_SPACE: number = 2;
-
-  /**
-   * cache size
-   */
-  static readonly CACHE_IMG_SIZE: number = 4;
-
-  /**
-   * cache list
-   */
-  static readonly CACHE_IMG_LIST: string[] = ['', '', '', ''];
-
-  /**
-   * title
-   */
-  static readonly PAGE_TITLE: string = 'ç”µå­ç›¸å†Œ';
-
-  /**
-   *  router param
-   */
-  static readonly PARAM_PHOTO_ARR_KEY: string = 'photoArr';
-
-  /**
-   *  selected index
-   */
-  static readonly SELECTED_INDEX_KEY: string = 'selectedIndex';
-
-  /**
-   * grid column template
-   */
-  static readonly GRID_COLUMNS_TEMPLATE: string = '1fr 1fr 1fr 1fr';
-
-  /**
-   * index page columns template
-   */
-  static readonly INDEX_COLUMNS_TEMPLATE: string = '1fr 1fr';
-
-  /**
-   *  percent
-   */
-  static readonly FULL_PERCENT: string = '100%';
-
-  /**
-   * photo item percent
-   */
-  static readonly PHOTO_ITEM_PERCENT: string = '90%';
-
-  /**
-   * show count
-   */
-  static readonly SHOW_COUNT: number = 8;
-
-  /**
-   * default width
-   */
-  static readonly DEFAULT_WIDTH: number = 360;
-
-  /**
-   * padding
-   */
-  static readonly PHOTO_ITEM_PADDING: number = 8;
-
-  /**
-   * offset
-   */
-  static readonly PHOTO_ITEM_OFFSET: number = 16;
-
-  /**
-   * item opacity offset
-   */
-  static readonly ITEM_OPACITY_OFFSET: number = 0.2;
-
-  /**
-   * double number
-   */
-  static readonly DOUBLE_NUMBER: number = 2;
-
-  /**
-   * list page url
-   */
-  static readonly URL_LIST_PAGE: string = 'pages/ListPage';
-
-  /**
-   * detail list page url
-   */
-  static readonly URL_DETAIL_LIST_PAGE: string = 'pages/DetailListPage';
-
-  /**
-   * detail page url
-   */
-  static readonly URL_DETAIL_PAGE: string = 'pages/DetailPage';
-
-  /**
-   * index page tag
-   */
-  static readonly TAG_INDEX_PAGE: string = 'IndexPage push error ';
-
-  /**
-   * list page tag
-   */
-  static readonly TAG_LIST_PAGE: string = 'ListPage push error ';
-
-  /**
-   * detail list page tag
-   */
-  static readonly TAG_DETAIL_PAGE: string = 'DetailListPage push error ';
-
-
-
-  // ==========================================
-  // å›¾ç‰‡ç¼“å­˜ / å ä½å›¾ / åŠ¨ç”»ç›¸å…³æ–°å¢å¸¸é‡
-  // ==========================================
-
-  /** æœ€å¤§å†…å­˜ç¼“å­˜å›¾ç‰‡æ•°é‡ï¼ˆImageCache ä½¿ç”¨ï¼‰ */
-  static readonly IMAGE_CACHE_MAX_SIZE: number = 100;
-
-  /**
-   * å ä½å›¾ä¸é”™è¯¯å›¾ï¼ˆè¿™é‡Œå…ˆç”¨åº”ç”¨ icon åšå…œåº•ï¼Œå¯æ ¹æ®éœ€è¦æ›¿æ¢ä¸ºç‹¬ç«‹èµ„æºï¼‰
-   */
-  static readonly PLACEHOLDER_IMAGE: Resource = $r('app.media.icon');
-  static readonly ERROR_IMAGE: Resource = $r('app.media.icon');
-
-  /**
-   * ç¼©æ”¾ç›¸å…³é»˜è®¤å¸¸é‡
-   */
-  static readonly MIN_ZOOM_SCALE: number = 1;
-  static readonly MAX_ZOOM_SCALE: number = 3;
-
-  /**
-   * åˆ¤å®šå·¦å³ç¿»é¡µçš„æ‹–æ‹½æ¯”ä¾‹é˜ˆå€¼ï¼ˆç›¸å¯¹äºå½“å‰å›¾ç‰‡å®½åº¦ï¼‰
-   */
-  static readonly SWIPE_THRESHOLD_RATIO: number = 0.25;
-
-  /**
-   * é€šç”¨åŠ¨ç”»æ—¶é•¿ï¼ˆæ¯«ç§’ï¼‰
-   */
-  static readonly TRANSITION_DURATION_SHORT: number = 150;
-  static readonly TRANSITION_DURATION_MEDIUM: number = 300;
-  static readonly TRANSITION_DURATION_LONG: number = 500;
-
-
-
-
-  // ==========================================
-  // æ–°å¢ï¼šæ•°æ®åº“ç›¸å…³é…ç½®
-  // ==========================================
-
-  /** æ•°æ®åº“æ–‡ä»¶å */
-  static readonly RDB_NAME = 'PhotoAlbum.db';
-
-  /** æ•°æ®åº“è¡¨å */
-  static readonly PHOTO_TABLE_NAME = 'photo_table';
-
-  /** æ•°æ®åº“ç‰ˆæœ¬ */
-  static readonly RDB_VERSION = 1;
-
-  /**
-   * å»ºè¡¨ SQL è¯­å¥
-   * id: ä¸»é”®ï¼Œè‡ªå¢
-   * name: å›¾ç‰‡åç§°
-   * path: å›¾ç‰‡è·¯å¾„
-   * category: åˆ†ç±»
-   * createTime: åˆ›å»ºæ—¶é—´
-   * tags: æ ‡ç­¾
-   */
-  static readonly CREATE_TABLE_SQL = `
-    CREATE TABLE IF NOT EXISTS photo_table (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL,
-      path TEXT NOT NULL,
-      category TEXT,
-      createTime INTEGER,
-      tags TEXT
-    )
-  `;
-
-  /** æ•°æ®åº“åˆ—åå®šä¹‰ (æ–¹ä¾¿åç»­æŸ¥è¯¢ä½¿ç”¨) */
-  static readonly COL_ID = 'id';
-  static readonly COL_NAME = 'name';
-  static readonly COL_PATH = 'path';
-  static readonly COL_CATEGORY = 'category';
-  static readonly COL_CREATE_TIME = 'createTime';
-  static readonly COL_TAGS = 'tags';
-
-  // ==========================================
-  // æ–°å¢ï¼šåˆ†ç±»ç›¸å…³å¸¸é‡
-  // ==========================================
-
-  /**
-   * é¢„å®šä¹‰åˆ†ç±»åˆ—è¡¨
-   */
-  static readonly CATEGORIES: string[] = ['é£æ™¯', 'äººç‰©', 'åŠ¨ç‰©', 'å»ºç­‘', 'ç¾é£Ÿ', 'ç”Ÿæ´»', 'å…¶ä»–'];
-  /**
-   * é»˜è®¤åˆ†ç±»
-   */
-  static readonly DEFAULT_CATEGORY: string = 'å…¶ä»–';
-
-  /**
-   * å…¨éƒ¨åˆ†ç±»æ ‡è¯†
-   */
-  static readonly ALL_CATEGORY: string = 'å…¨éƒ¨';
-
-}
-ÀA“ÔrE–§version¤fileªsourceRoot§sources¥names¨mappings¬Constants.js ‘­Constants.etsÜ û‘”    ‘” –”   ” ” ” ” ” ‘”  ‘” “”  ” !” 5’” ” ‘”  ‘” “”  ” ” 0’” "” "‘”  $‘” &“”  '” '” '.’” +” +‘”  -‘” /“”  0” 0” 0/’” 3” 3‘”  5‘” 7“”  8” 8” 8/’” ?” ?‘”  ÌA‘” ÌC“”  ÌD” ÌD” ÌD*Ü ” ÌE” ÌE” ÌE” ÌE” ÌE” ÌE ” ÌE!”  ÌE*”! ÌE+”+ ÌE5”- ÌE7”6 ÌEÌ@”7 ÌEÌA”Ì@ ÌEÌJ”ÌB ÌEÌL”ÌK ÌEÌU”ÌL ÌEÌV”ÌT ÌEÌ^”ÌU ÌEÌ_Ü ” ÌF” ÌF” ÌF” ÌF” ÌF” ÌF ” ÌF!”  ÌF*”! ÌF+”) ÌF3”+ ÌF5”4 ÌF>”5 ÌF?”> ÌFÌH”Ì@ ÌFÌJ”ÌI ÌFÌS”ÌJ ÌFÌT”ÌT ÌFÌ^”ÌU ÌFÌ_Ü ” ÌG” ÌG” ÌG” ÌG” ÌG” ÌG ” ÌG!”  ÌG*”! ÌG+”* ÌG4”, ÌG6”5 ÌG?”6 ÌGÌ@”Ì@ ÌGÌJ”ÌB ÌGÌL”ÌK ÌGÌU”ÌL ÌGÌV”ÌV ÌGÌ`”ÌW ÌGÌaÜ ” ÌH” ÌH” ÌH” ÌH” ÌH” ÌH ” ÌH!”  ÌH*”! ÌH+”* ÌH4”, ÌH6”5 ÌH?”6 ÌHÌ@”? ÌHÌI”ÌA ÌHÌK”ÌJ ÌHÌT”ÌK ÌHÌU”ÌS ÌHÌ]”ÌT ÌHÌ^’” ÌI” ÌI‘”  ÌK‘” ÌM•”  ÌN” ÌN#” ÌN.”! ÌN1”" ÌN2‘”  ÌP‘” ÌR•”  ÌS” ÌS%”  ÌS0”# ÌS3”$ ÌS4‘”  ÌU‘” ÌW•”  ÌX”! ÌX)”$ ÌX4”' ÌX7”( ÌX8‘”  ÌZ‘” Ì\•”  Ì]”  Ì](”# Ì]3”& Ì]6”' Ì]7‘”  Ì_‘” Ìa•”  Ìb” Ìb!” Ìb,” Ìb/”  Ìb0‘”  Ìd‘” Ìf•”  Ìg” Ìg!” Ìg,” Ìg-” Ìg.‘”  Ìi‘” Ìk•”  Ìl” Ìl ” Ìl+” Ìl,” Ìl-‘”  Ìn‘” Ìp”  Ìq” Ìq ” Ìq-” Ìq.” Ìq0”  Ìq2”" Ìq4”$ Ìq6”& Ìq8”( Ìq:”* Ìq<”+ Ìq=”, Ìq>‘”  Ìs‘” Ìu•”  Ìv” Ìv” Ìv'” Ìv-” Ìv.‘”  Ìx‘” Ìz•”  Ì{” Ì{%”  Ì{0”* Ì{:”+ Ì{;‘”  Ì}‘” Ì•”  Ì€” Ì€$” Ì€/”. Ì€>”/ Ì€?‘”  Ì‚‘” Ì„•”  Ì…” Ì…'”" Ì…2”3 Ì…ÌC”4 Ì…ÌD‘”  Ì‡‘” Ì‰•”  ÌŠ”  ÌŠ(”# ÌŠ3”, ÌŠ<”- ÌŠ=‘”  ÌŒ‘” Ì•”  Ì” Ì” Ì)” Ì/”  Ì0‘”  Ì‘‘” Ì“•”  Ì”” Ì”$” Ì”/”$ Ì”4”% Ì”5‘”  Ì–‘” Ì˜•”  Ì™” Ì™” Ì™'” Ì™(” Ì™)‘”  Ì›‘” Ì•”  Ì” Ì” Ì*” Ì-” Ì.‘”  Ì ‘” Ì¢•”  Ì£” Ì£$” Ì£/”  Ì£0”! Ì£1‘”  Ì¥‘” Ì§•”  Ì¨” Ì¨#” Ì¨.”  Ì¨0”! Ì¨1‘”  Ìª‘” Ì¬•”  Ì­” Ì­%”  Ì­0”# Ì­3”$ Ì­4‘”  Ì¯‘” Ì±•”  Ì²” Ì²” Ì²*” Ì²+” Ì²,‘”  Ì´‘” Ì¶•”  Ì·” Ì·” Ì·*”* Ì·:”+ Ì·;‘”  Ì¹‘” Ì»•”  Ì¼” Ì¼&”! Ì¼1”7 Ì¼ÌG”8 Ì¼ÌH‘”  Ì¾‘” ÌÀ•”  ÌÁ” ÌÁ!” ÌÁ,”. ÌÁ>”/ ÌÁ?‘”  ÌÃ‘” ÌÅ•”  ÌÆ” ÌÆ ” ÌÆ+”2 ÌÆÌB”3 ÌÆÌC‘”  ÌÈ‘” ÌÊ•”  ÌË” ÌË” ÌË*”0 ÌËÌ@”1 ÌËÌA‘”  ÌÍ‘” ÌÏ•”  ÌĞ” ÌĞ!” ÌĞ,”8 ÌĞÌH”9 ÌĞÌI’”  ÌÔ”- ÌÔ/’”  ÌÕ” ÌÕ’”  ÌÖ”- ÌÖ/’”  ÌØ”  ÌØ"•”  ÌÙ” ÌÙ&”! ÌÙ1”$ ÌÙ4”% ÌÙ5‘”  ÌÛ‘” Ìİ“”  ÌŞ” ÌŞ#”Ì ÌŞÌE“”  Ìß” Ìß”ÌŠ Ìß?‘”  Ìá‘” Ìã•”  Ìä” Ìä ” Ìä+” Ìä,” Ìä-•”  Ìå” Ìå ” Ìå+” Ìå,” Ìå-‘”  Ìç‘” Ìé•”  Ìê” Ìê'”" Ìê2”& Ìê6”' Ìê7‘”  Ìì‘” Ìî•”  Ìï”# Ìï+”& Ìï6”) Ìï9”* Ìï:•”  Ìğ”$ Ìğ,”' Ìğ7”* Ìğ:”+ Ìğ;•”  Ìñ”" Ìñ*”% Ìñ5”( Ìñ8”) Ìñ9’”  Ìö”- Ìö/’”  Ì÷” Ì÷’”  Ìø”- Ìø/’”  Ìú” Ìú•”  Ìû” Ìû” Ìû”$ Ìû,”% Ìû-’”  Ìı” Ìı•”  Ìş” Ìş"” Ìş%”* Ìş2”+ Ìş3’”  Í ” Í •”  Í” Í” Í ” Í!” Í"‘”  Í‘” Í“”  Í” Í"” Í%’” Í” Í’”  Í” Í•”  Í” Í” Í” Í” Í •”  Í” Í” Í” Í#” Í$•”  Í” Í” Í” Í#” Í$•”  Í” Í” Í!”# Í+”$ Í,•”  Í” Í!” Í$”( Í0”) Í1•”  Í” Í” Í” Í#” Í$’”  Í”- Í/’”  Í ” Í ’”  Í!”- Í!/‘”  Í#‘” Í%Ü ”  Í&” Í&” Í&)” Í&*” Í&.” Í&0”" Í&4”$ Í&6”( Í&:”* Í&<”. Í&Ì@”0 Í&ÌB”4 Í&ÌF”6 Í&ÌH”: Í&ÌL”< Í&ÌN”Ì@ Í&ÌR”ÌA Í&ÌS”ÌB Í&ÌT‘”  Í'‘” Í)•”  Í*” Í*"” Í*-”! Í*1”" Í*2‘”  Í,‘” Í.•”  Í/” Í/” Í/)” Í/-” Í/.ÔrF–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ ü‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
- ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ‘”  Ì¡ ‘”  Ì¢ ‘”  Ì£ ‘”  Ì¤ ‘”  Ì¥ ‘”  Ì¦ ‘”  Ì§ ‘”  Ì¨ ‘”  Ì© ‘”  Ìª ‘”  Ì« ‘”  Ì¬ ‘”  Ì­ ‘”  Ì® ‘”  Ì¯ ‘”  Ì° ‘”  Ì± ‘”  Ì² ‘”  Ì³ ‘”  Ì´ ‘”  Ìµ ‘”  Ì¶ ‘”  Ì· ‘”  Ì¸ ‘”  Ì¹ ‘”  Ìº ‘”  Ì» ‘”  Ì¼ ‘”  Ì½ ‘”  Ì¾ ‘”  Ì¿ ‘”  ÌÀ ‘”  ÌÁ ‘”  ÌÂ ‘”  ÌÃ ‘”  ÌÄ ‘”  ÌÅ ‘”  ÌÆ ‘”  ÌÇ ‘”  ÌÈ ‘”  ÌÉ ‘”  ÌÊ ‘”  ÌË ‘”  ÌÌ ‘”  ÌÍ ‘”  ÌÎ ‘”  ÌÏ ‘”  ÌĞ ‘”  ÌÑ ‘”  ÌÒ ‘”  ÌÓ ‘”  ÌÔ ‘”  ÌÕ ‘”  ÌÖ ‘”  Ì× ‘”  ÌØ ‘”  ÌÙ ‘”  ÌÚ ‘”  ÌÛ ‘”  ÌÜ ‘”  Ìİ ‘”  ÌŞ ‘”  Ìß ‘”  Ìà ‘”  Ìá ‘”  Ìâ ‘”  Ìã ‘”  Ìä ‘”  Ìå ‘”  Ìæ ‘”  Ìç ‘”  Ìè ‘”  Ìé ‘”  Ìê ‘”  Ìë ‘”  Ìì ‘”  Ìí ‘”  Ìî ‘”  Ìï ‘”  Ìğ ‘”  Ìñ ‘”  Ìò ‘”  Ìó ‘”  Ìô ‘”  Ìõ ‘”  Ìö ‘”  Ì÷ ‘”  Ìø ‘”  Ìù ‘”  Ìú ‘”  Ìû ÔrG’§missing¦pluginÃ¦genAbcÂÔ  ÔrH”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache
