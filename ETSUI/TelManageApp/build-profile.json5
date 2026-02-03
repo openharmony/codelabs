@@ -1,38 +1,52 @@
 {
-  "app":{
-    "products":[
+  "app": {
+    "products": [
       {
-        "name":"default",
-        "signingConfig":"default",
-        "compatibleSdkVersion": 13,
-        "compileSdkVersion": 13,
-        "targetSdkVersion": 13,
-        "runtimeOS": "OpenHarmony",
-        "buildOption":{
-          "strictMode":{
-            "caseSensitiveCheck":true,
-            "useNormalizedOHMUrl":true
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.0.1(13)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
           }
-        }
+        },
+        "targetSdkVersion": "5.0.1(13)",
       }
     ],
-    "buildModeSet":[
+    "buildModeSet": [
       {
-        "name":"debug"
+        "name": "debug"
       },
       {
-        "name":"release"
+        "name": "release"
       }
     ],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\Guo jia\\.ohos\\config\\default_TelManageApp_gumz3gk4laA-2vy0cyWrQ2g_ulyCloBIVrKTG0m2oHw=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B187929C5C047D09E61BCCD5B703237562998AED75407240D476B960A6B90CEA7250FEC67F19004",
+          "profile": "C:\\Users\\Guo jia\\.ohos\\config\\default_TelManageApp_gumz3gk4laA-2vy0cyWrQ2g_ulyCloBIVrKTG0m2oHw=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\Guo jia\\.ohos\\config\\default_TelManageApp_gumz3gk4laA-2vy0cyWrQ2g_ulyCloBIVrKTG0m2oHw=.p12",
+          "storePassword": "0000001B6FBC1BC52E0A0D65E1B9E378C361A78A6E90B109F8EA7252CFB8BEFE82FF24A5F7B3F9A390EA5F"
+        }
+      }
+    ]
   },
-  "modules":[
+  "modules": [
     {
-      "name":"entry",
-      "srcPath":"./entry",
-      "targets":[
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
         {
-          "name":"default",
-          "applyToProducts":[
+          "name": "default",
+          "applyToProducts": [
             "default"
           ]
         }

@@ -5,12 +5,18 @@
 - 图2：修改联系人信息。
 - 图3：根据姓名字段查找联系人。
 - 图4：删除联系人。
+- 图5：字母索引条快速定位联系人。
+- 图6：批量删除联系人。
+- 图7：密令分享与导入联系人。
 
 
 ![](demo-gif/AddContact.gif)
 ![](demo-gif/EditContact.gif)
 ![](demo-gif/SearchContact.gif)
 ![](demo-gif/DeleteContact.gif)
+![](demo-gif/滚动条.gif)
+![](demo-gif/批量删除.gif)
+![](demo-gif/密令分享与添加.gif)
 # 搭建OpenHarmony环境
 ## 软件要求
 - [DevEco Studio](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 5.0.5。
@@ -51,22 +57,30 @@
 │  │  └──EntryBackupAbility.ets          // 数据备份与恢复类
 │  ├──model
 │  │  ├──ContactData.ets                 // 联系人数据管理类
-│  │  ├──BusinessCardData.ts                 // 个人名片管理
-│  │  └──FavoriteManager.ts                 // 个人收藏管理
+│  │  ├──BusinessCardData.ts             // 个人名片管理
+│  │  └──FavoriteManager.ts              // 个人收藏管理
 │  ├──pages
 │  │  ├──EditContact.ets                 // 编辑联系人页面
-│  │  ├──AddContact.ets                 // 添加联系人
-│  │  ├──FavoriteManagement.ets                 // 收藏管理
-│  │  ├──FavoritesDisplay.ets                 // 收藏展示
-│  │  ├──ImportExport.ets                 // 导入导出
-│  │  ├──MyBusinessCard.ets                 // 个人名片
-│  │  ├──SelectFavorites.ets                 // 选择收藏
-│  │  └──Index.ets                      //主页面的UI设计
+│  │  ├──AddContact.ets                  // 添加联系人
+│  │  ├──FavoriteManagement.ets          // 收藏管理
+│  │  ├──FavoritesDisplay.ets            // 收藏展示
+│  │  ├──ImportExport.ets                // 导入导出
+│  │  ├──MyBusinessCard.ets              // 个人名片
+│  │  ├──SecretShare.ets                 // 密令分享页面
+│  │  ├──SecretImport.ets                // 密令导入页面
+│  │  └──Index.ets                       // 主页面的UI设计
+│  ├──utils
+│  │  ├──SecretCodeUtil.ts               // 密令编解码工具
+│  │  ├──ValidationUtil.ts               // 字段校验工具
+│  │  ├──LetterIndexUtil.ts              // 字母索引工具
+│  │  └──CommonUtil.ts                   // 通用工具函数
+│  ├──view
+│  │  └──AlphabetIndexBar.ets            // 字母索引条组件
 │  └──viewmodel    
 │     ├──ContactItem.ets                 // 联系人信息类
 │     └──ContactViewModel.ets            // 联系人页面数据处理类
-│——entry/src/main/resource                // 应用静态资源目录
-└──entry/src/main/module.json5            //配置文件
+│——entry/src/main/resource               // 应用静态资源目录
+└──entry/src/main/module.json5           // 配置文件
 ```
 
 ## 联系人管理系统主页面
@@ -869,3 +883,562 @@ async searchContacts() {
   ```
 
 - 底层实现：`ContactData.deleteContact(key)` 调用系统通讯录接口删除指定联系人。
+
+## 字母索引条
+
+### 字母索引条界面设计
+
+字母索引条位于主页联系人列表右侧，支持点击或滑动选择字母快速定位联系人。组件采用垂直布局，展示 A-Z 及 # 符号。
+
+```typescript
+// AlphabetIndexBar.ets 主体结构
+@Component
+export struct AlphabetIndexBar {
+  @Prop letters: string[] = [];
+  @Link selectedLetter: string;
+
+  @State barHeight: number = 0;
+  @State isTouching: boolean = false;
+  @State currentLetter: string = '';
+
+  build(): void {
+    Stack() {
+      this.buildLetterBar();
+      this.buildFloatingTip();
+    }
+    .width(70)
+    .height('100%')
+  }
+}
+```
+
+1. 字母列表
+
+    字母按垂直排列展示，选中字母高亮显示。
+
+    ```typescript
+    @Builder
+    private buildLetterColumn(): void {
+      Column() {
+        ForEach(this.letters, (letter: string) => {
+          Text(letter)
+            .width(24)
+            .height(18)
+            .fontSize(this.isLetterSelected(letter) ? 12 : 10)
+            .fontWeight(this.isLetterSelected(letter) ? FontWeight.Bold : FontWeight.Normal)
+            .textAlign(TextAlign.Center)
+            .fontColor(this.isLetterSelected(letter) ? '#ffffff' : '#666')
+            .backgroundColor(this.isLetterSelected(letter) ? '#007DFF' : 'transparent')
+            .borderRadius(9)
+            .onClick(() => {
+              this.selectLetter(letter);
+            })
+        }, (letter: string) => letter)
+      }
+    }
+    ```
+
+2. 悬浮提示
+
+    触摸滑动时显示当前选中字母的大号悬浮提示。
+
+    ```typescript
+    @Builder
+    private buildFloatingTip(): void {
+      if (this.isTouching && this.currentLetter) {
+        Text(this.currentLetter)
+          .width(64)
+          .height(64)
+          .fontSize(30)
+          .fontWeight(FontWeight.Bold)
+          .textAlign(TextAlign.Center)
+          .backgroundColor('#00000099')
+          .fontColor(Color.White)
+          .borderRadius(12)
+      }
+    }
+    ```
+
+### 字母索引条逻辑
+
+通过触摸事件监听实现滑动选择，根据触摸位置计算对应字母并触发列表滚动。
+
+```typescript
+// 处理触摸事件
+private handleTouchEvent(event: TouchEvent): void {
+  if (this.letters.length === 0) {
+    return;
+  }
+
+  const typeValue = this.normalizeTouchType(event.type);
+  if (typeValue === TouchKind.Down || typeValue === TouchKind.Move) {
+    this.isTouching = true;
+    this.updateLetterByPosition(event.touches[0].y);
+    return;
+  }
+
+  if (typeValue === TouchKind.Up || typeValue === TouchKind.Cancel) {
+    this.isTouching = false;
+  }
+}
+
+// 根据触摸位置计算选中字母
+private updateLetterByPosition(offsetY: number): void {
+  if (this.barHeight <= 0) {
+    return;
+  }
+
+  const itemHeight = this.barHeight / this.letters.length;
+  const rawIndex = Math.floor(offsetY / itemHeight);
+  const index = Math.min(Math.max(rawIndex, 0), this.letters.length - 1);
+  const letter = this.letters[index];
+
+  if (letter !== this.currentLetter) {
+    this.selectLetter(letter);
+  }
+}
+```
+
+主页通过 `@Watch` 监听选中字母变化，调用 `Scroller.scrollToIndex()` 实现列表滚动定位：
+
+```typescript
+// Index.ets 中监听字母变化
+@State @Watch('onSelectedLetterChanged') selectedLetter: string = '';
+
+onSelectedLetterChanged(): void {
+  if (!this.selectedLetter) {
+    return;
+  }
+  const index = this.indexMap.get(this.selectedLetter);
+  if (index === undefined) {
+    return;
+  }
+  this.listScroller.scrollToIndex(index);
+}
+```
+
+## 批量删除
+
+### 批量删除界面设计
+
+批量删除模式通过顶栏按钮进入，进入后联系人列表项左侧显示复选框，底部显示批量操作工具条。
+
+1. 顶栏入口
+
+    ```typescript
+    Button(this.isBatchMode ? '退出批量' : '批量删除')
+      .fontSize(14)
+      .margin({ right: 8 })
+      .onClick(() => {
+        this.toggleBatchMode();
+      })
+    ```
+
+2. 列表项复选框
+
+    批量模式下，列表项左侧显示复选框指示选中状态。
+
+    ```typescript
+    if (this.isBatchMode) {
+      Toggle({ type: ToggleType.Checkbox, isOn: this.isSelected(this.getContactKey(contactItem)) })
+        .enabled(false)
+        .margin({ right: 8 })
+    }
+    ```
+
+3. 底部工具条
+
+    显示已选数量、全选/清空按钮、删除按钮和取消按钮。
+
+    ```typescript
+    @Builder
+    private buildBatchBar(): void {
+      Row() {
+        Text(`已选 ${this.selectedKeys.length}`)
+          .fontSize(12)
+          .fontColor('#666')
+
+        Button(this.isAllSelected() ? '清空' : '全选')
+          .height(32)
+          .backgroundColor('#eaeaea')
+          .fontColor('#333')
+          .onClick(() => {
+            this.toggleSelectAll();
+          })
+
+        Button(this.isBatchDeleting ? '删除中...' : `删除(${this.selectedKeys.length})`)
+          .layoutWeight(1)
+          .height(44)
+          .backgroundColor(this.selectedKeys.length > 0 ? '#ff3b30' : '#ccc')
+          .fontColor(Color.White)
+          .enabled(this.selectedKeys.length > 0 && !this.isBatchDeleting)
+          .onClick(() => {
+            this.showBatchDeleteConfirm();
+          })
+
+        Button('取消')
+          .layoutWeight(1)
+          .height(44)
+          .backgroundColor('#e0e0e0')
+          .fontColor('#333')
+          .onClick(() => {
+            this.exitBatchMode();
+          })
+      }
+      .width('100%')
+      .padding(12)
+      .backgroundColor(Color.White)
+      .position({ x: 0, y: '86%' })
+    }
+    ```
+
+### 批量删除逻辑
+
+批量删除采用二次确认机制，确保用户不会误操作删除大量联系人。
+
+```typescript
+// 第一次确认
+showBatchDeleteConfirm(): void {
+  if (this.selectedKeys.length === 0) {
+    return;
+  }
+
+  AlertDialog.show({
+    title: '批量删除',
+    message: `即将删除 ${this.selectedKeys.length} 个联系人，是否继续？`,
+    autoCancel: true,
+    alignment: DialogAlignment.Center,
+    primaryButton: { value: '取消', action: () => {} },
+    secondaryButton: {
+      value: '继续',
+      fontColor: '#ff3b30',
+      action: () => {
+        this.showBatchDeleteFinalConfirm();
+      }
+    }
+  });
+}
+
+// 二次确认
+private showBatchDeleteFinalConfirm(): void {
+  AlertDialog.show({
+    title: '再次确认',
+    message: '删除后无法恢复，请确认是否执行删除。',
+    autoCancel: true,
+    alignment: DialogAlignment.Center,
+    primaryButton: { value: '取消', action: () => {} },
+    secondaryButton: {
+      value: '删除',
+      fontColor: '#ff3b30',
+      action: () => {
+        this.performBatchDelete();
+      }
+    }
+  });
+}
+
+// 执行批量删除
+async performBatchDelete(): Promise<void> {
+  if (this.selectedKeys.length === 0) {
+    return;
+  }
+
+  this.isBatchDeleting = true;
+  try {
+    const result = await this.contactData.deleteContacts(this.selectedKeys);
+    this.handleBatchDeleteResult(result);
+    await this.loadContacts();
+  } catch (error) {
+    console.error('Index: 批量删除失败:', error);
+  } finally {
+    this.isBatchDeleting = false;
+    this.exitBatchMode();
+  }
+}
+```
+
+## 密令分享与导入
+
+密令功能支持将联系人信息编码为短密令字符串，便于线下分享。接收方通过密令导入页面解析并添加联系人。
+
+### 密令分享界面设计
+
+密令分享页面展示联系人摘要信息和生成的密令，支持一键复制。
+
+```typescript
+// SecretShare.ets 页面结构
+build(): void {
+  Column() {
+    this.buildHeader();
+    this.buildContent();
+  }
+  .width('100%')
+  .height('100%')
+  .backgroundColor('#f5f5f5')
+}
+
+@Builder
+private buildContent(): void {
+  Column() {
+    this.buildContactCard();   // 联系人信息卡片
+    this.buildSecretCard();    // 密令展示卡片
+    this.buildHintText();      // 使用说明
+  }
+}
+```
+
+1. 联系人信息卡片
+
+    ```typescript
+    @Builder
+    private buildContactCard(): void {
+      Column() {
+        Text(this.contactName)
+          .fontSize(18)
+          .fontWeight(FontWeight.Medium)
+
+        if (this.contactPhone) {
+          Text(this.contactPhone)
+            .fontSize(14)
+            .fontColor('#666')
+        }
+
+        if (this.contactEmail) {
+          Text(this.contactEmail)
+            .fontSize(12)
+            .fontColor('#999')
+        }
+      }
+      .width('90%')
+      .padding(16)
+      .backgroundColor(Color.White)
+      .borderRadius(12)
+    }
+    ```
+
+2. 密令展示与复制
+
+    ```typescript
+    @Builder
+    private buildSecretCard(): void {
+      Column() {
+        Text('密令')
+          .fontSize(14)
+          .fontColor('#666')
+
+        Text(this.formattedCode || '生成中...')
+          .fontSize(13)
+          .fontColor('#333')
+          .textAlign(TextAlign.Center)
+          .width('100%')
+          .padding(10)
+          .backgroundColor('#f4f4f4')
+          .borderRadius(8)
+
+        Button('复制密令')
+          .width('100%')
+          .height(40)
+          .backgroundColor('#007DFF')
+          .fontColor(Color.White)
+          .onClick(() => {
+            this.onCopyClick();
+          })
+      }
+      .width('90%')
+      .padding(16)
+      .backgroundColor(Color.White)
+      .borderRadius(12)
+    }
+    ```
+
+### 密令分享逻辑
+
+页面加载时从路由参数获取联系人 key，查询联系人信息后调用 `SecretCodeUtil.encode()` 生成密令并自动复制到剪贴板。
+
+```typescript
+private async fetchAndBuildCode(key: string): Promise<void> {
+  try {
+    const contactItem = await this.contactData.queryContactById(key);
+    if (!contactItem) {
+      this.statusText = '联系人不存在';
+      return;
+    }
+    this.applyContactSummary(contactItem);
+    const code = this.buildSecretCode(contactItem);
+    this.secretCode = code;
+    this.formattedCode = SecretCodeUtil.formatForDisplay(code);
+    this.statusText = '密令已生成';
+    await this.copyCodeToClipboard(this.secretCode);
+  } catch (error) {
+    this.statusText = '生成密令失败';
+  }
+}
+
+private buildSecretCode(contactItem: contact.Contact): string {
+  return SecretCodeUtil.encode({
+    name: contactItem.name?.fullName ?? '',
+    phone: contactItem.phoneNumbers?.[0]?.phoneNumber ?? '',
+    email: contactItem.emails?.[0]?.email ?? ''
+  });
+}
+```
+
+### 密令导入界面设计
+
+密令导入页面提供输入区域和预览区域，支持解析密令后编辑字段再导入。
+
+```typescript
+// SecretImport.ets 页面结构
+build(): void {
+  Column() {
+    this.buildHeader();
+    this.buildInputCard();    // 密令输入区
+    this.buildPreviewCard();  // 解析预览区
+  }
+  .width('100%')
+  .height('100%')
+  .backgroundColor('#f5f5f5')
+}
+```
+
+1. 密令输入区
+
+    ```typescript
+    @Builder
+    private buildInputCard(): void {
+      Column() {
+        Text('密令输入')
+          .fontSize(14)
+          .fontColor('#666')
+
+        TextArea({ placeholder: '粘贴或输入密令' })
+          .height(120)
+          .width('100%')
+          .backgroundColor('#f4f4f4')
+          .borderRadius(8)
+          .onChange((value: string) => {
+            this.inputCode = value.trim();
+          })
+
+        Row() {
+          Button('粘贴提示')
+            .layoutWeight(1)
+            .backgroundColor('#e0e0e0')
+            .fontColor('#333')
+            .onClick(() => {
+              this.showPasteHint();
+            })
+
+          Button('解析密令')
+            .layoutWeight(1)
+            .backgroundColor('#007DFF')
+            .fontColor(Color.White)
+            .onClick(() => {
+              this.parseCode();
+            })
+        }
+      }
+      .width('90%')
+      .padding(16)
+      .backgroundColor(Color.White)
+      .borderRadius(12)
+    }
+    ```
+
+2. 解析预览区
+
+    解析成功后展示联系人字段，支持切换编辑模式修改字段后再导入。
+
+    ```typescript
+    @Builder
+    private buildPreviewCard(): void {
+      Column() {
+        Text('预览信息')
+          .fontSize(14)
+          .fontColor('#666')
+
+        if (this.parsedFields) {
+          this.buildEditableFields();
+        } else {
+          Text('暂无解析结果')
+            .fontSize(14)
+            .fontColor('#999')
+        }
+
+        if (this.parsedFields) {
+          Button(this.isEditingFields ? '完成编辑' : '修改字段')
+            .width('100%')
+            .height(40)
+            .backgroundColor('#e0e0e0')
+            .fontColor('#333')
+            .onClick(() => {
+              this.toggleEditMode();
+            })
+        }
+
+        Button(this.isSaving ? '导入中...' : '确认导入')
+          .width('100%')
+          .height(44)
+          .backgroundColor('#34C759')
+          .fontColor(Color.White)
+          .enabled(!!this.parsedFields && !this.isSaving)
+          .onClick(() => {
+            this.confirmImport();
+          })
+      }
+      .width('90%')
+      .padding(16)
+      .backgroundColor(Color.White)
+      .borderRadius(12)
+    }
+    ```
+
+### 密令导入逻辑
+
+解析密令后校验字段有效性，确认导入时调用 `ContactData.addContact()` 添加联系人。
+
+```typescript
+// 解析密令
+parseCode(): void {
+  if (!this.inputCode.trim()) {
+    this.statusText = '密令不能为空';
+    this.parsedFields = null;
+    return;
+  }
+  try {
+    const normalized = SecretCodeUtil.normalizeCode(this.inputCode.trim());
+    this.parsedFields = SecretCodeUtil.decode(normalized);
+    this.applyEditableFields(this.parsedFields);
+    this.statusText = '解析成功，请确认导入';
+    this.fieldValidationText = this.buildValidationText();
+  } catch (error) {
+    this.parsedFields = null;
+    this.statusText = '密令解析失败';
+  }
+}
+
+// 确认导入
+async confirmImport(): Promise<void> {
+  if (!this.parsedFields || this.isSaving) {
+    return;
+  }
+  if (!this.isFieldsValid()) {
+    this.statusText = '请修正字段后再导入';
+    return;
+  }
+  this.isSaving = true;
+  try {
+    const contactItem = this.contactData.createContact(
+      this.getFinalFields().name,
+      this.getFinalFields().phone,
+      this.getFinalFields().email
+    );
+    await this.contactData.addContact(contactItem);
+    this.statusText = '联系人已添加';
+    this.goBack();
+  } catch (error) {
+    this.statusText = '联系人导入失败';
+  } finally {
+    this.isSaving = false;
+  }
+}
