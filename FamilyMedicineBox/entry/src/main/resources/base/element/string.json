@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "家庭药箱模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "家庭药箱入口描述"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "家庭小药箱"
+    },
+    {
+      "name": "app_name",
+      "value": "家庭小药箱"
+    },
+    {
+      "name": "app_description",
+      "value": "一款帮助家庭管理药品的应用"
+    }
+  ]
+}
