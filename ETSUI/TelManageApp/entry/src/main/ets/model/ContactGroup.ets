@@ -4,6 +4,8 @@
  */
 
 import { contact } from '@kit.ContactsKit';
+import { preferences } from '@kit.ArkData';
+import { Context } from '@kit.AbilityKit';
 
 /**
  * 分组类型枚举
@@ -358,9 +360,86 @@ export class ContactGroupModel implements ContactGroup {
 export class GroupManager {
   private groups: Map<string, ContactGroupModel> = new Map();
   private storageKey: string = 'contact_groups';
+  private context: Context | null = null;
+  private dataStore: preferences.Preferences | null = null;
+  private isInitialized: boolean = false;
 
   constructor() {
-    this.initializeDefaultGroups();
+    // 不再在构造函数中初始化默认分组
+    // 等待 initialize 方法被调用
+  }
+
+  /**
+   * 初始化分组管理器
+   * 必须在使用前调用此方法
+   */
+  async initialize(context: Context): Promise<void> {
+    if (this.isInitialized) {
+      return;
+    }
+
+    this.context = context;
+    try {
+      this.dataStore = await preferences.getPreferences(context, 'contact_groups_store');
+      await this.loadFromStorage();
+      this.isInitialized = true;
+      console.info('GroupManager: 初始化成功');
+    } catch (error) {
+      console.error('GroupManager: 初始化失败', error);
+      // 初始化失败时使用默认分组
+      this.initializeDefaultGroups();
+      this.isInitialized = true;
+    }
+  }
+
+  /**
+   * 从存储加载分组数据
+   */
+  private async loadFromStorage(): Promise<void> {
+    if (!this.dataStore) {
+      this.initializeDefaultGroups();
+      return;
+    }
+
+    try {
+      const dataStr = await this.dataStore.get(this.storageKey, '') as string;
+      if (dataStr && dataStr.length > 0) {
+        const groupsArray: ContactGroup[] = JSON.parse(dataStr) as ContactGroup[];
+        this.groups.clear();
+        groupsArray.forEach(data => {
+          const group = ContactGroupModel.fromJSON(data);
+          this.groups.set(group.groupId, group);
+        });
+        console.info(`GroupManager: 已加载 ${this.groups.size} 个分组`);
+      } else {
+        // 没有存储数据，初始化默认分组
+        this.initializeDefaultGroups();
+        await this.saveToStorage();
+      }
+    } catch (error) {
+      console.error('GroupManager: 加载数据失败', error);
+      this.initializeDefaultGroups();
+    }
+  }
+
+  /**
+   * 保存分组数据到存储
+   */
+  async saveToStorage(): Promise<void> {
+    if (!this.dataStore) {
+      console.warn('GroupManager: dataStore 未初始化，无法保存');
+      return;
+    }
+
+    try {
+      const groupsArray = this.exportGroups();
+      const dataStr = JSON.stringify(groupsArray);
+      await this.dataStore.put(this.storageKey, dataStr);
+      await this.dataStore.flush();
+      console.info(`GroupManager: 已保存 ${groupsArray.length} 个分组`);
+    } catch (error) {
+      console.error('GroupManager: 保存数据失败', error);
+    }
   }
 
   /**
