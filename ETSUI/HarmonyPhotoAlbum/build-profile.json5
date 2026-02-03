@@ -5,9 +5,9 @@
       {
         "name": "default",
         "signingConfig": "default",
-        "targetSdkVersion": "20",
-        "compatibleSdkVersion": "20",
-        "runtimeOS": "OpenHarmony",
+        "targetSdkVersion": "6.0.0(20)",
+        "compatibleSdkVersion": "6.0.0(20)",
+        "runtimeOS": "HarmonyOS",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
