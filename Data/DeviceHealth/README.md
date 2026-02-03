@@ -74,7 +74,6 @@ entry/src/main/ets
 ├── database
 │   └── EventDB.ets               // 事件数据库封装
 ├── model
-│   └── EventLog.ts               //  统一事件数据模型
 
 ├── providers
 │   ├── BatteryProvider.ets
