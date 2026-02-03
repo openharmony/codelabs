@@ -14,6 +14,7 @@ struct AddContact {
   @State phone: string = '';
   @State email: string = '';
   @State isSaving: boolean = false;
+  @State showSaveConfirm: boolean = false;
 
   // 添加aboutToAppear生命周期获取Context
   aboutToAppear() {
