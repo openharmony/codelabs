@@ -20,7 +20,7 @@
 
 ### 相关概念
 
-* **首选项（Preferences）**
+* **偏好（Preferences）**
   用于存储用户配置项，如监控开关、阈值、通知设置等，支持持久化保存。
 
 * **关系型数据库（RDBStore）**
@@ -74,14 +74,15 @@ entry/src/main/ets
 ├── database
 │   └── EventDB.ets               // 事件数据库封装
 ├── model
-│   └── EventLog.ts               // 统一事件模型
+│   └── EventLog.ts               //  事件日志数据模型
+
 ├── providers
 │   ├── BatteryProvider.ets
 │   ├── NetworkProvider.ets
 │   ├── StorageProvider.ets
 │   └── ScreenProvider.ets
 └── manager
-    └── PreferenceManager.ets     // 首选项管理器
+    └── PreferenceManager.ets     // 偏好项管理器
 ```
 
 ---
@@ -211,9 +212,11 @@ await this.batteryProvider.subscribe((soc: number) => {
 
 ## 事件日志持久化（EventDB）
 
-所有监控事件统一封装为 `EventLog` 并写入数据库。
+所有监控事件统一封装为 EventLog 数据模型，并写入数据库。
 
-### EventLog 结构
+
+### EventLog 数据结构
+
 
 * type：事件类型（BATTERY / NETWORK / STORAGE / SCREEN）
 * level：事件级别（INFO / WARN / ERROR）
