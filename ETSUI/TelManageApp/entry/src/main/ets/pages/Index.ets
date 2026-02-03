@@ -109,7 +109,9 @@ struct Index {
   // 添加二次确认弹窗方法
   showDeleteConfirmDialog(contactItem: contact.Contact) {
     // 二次确认对话框：避免误删，含遮障层点击关闭与取消/删除两按钮
-    if (!contactItem.key) return;
+    if (!contactItem.key) {
+      return;
+    }
 
     const contactName = contactItem.name?.fullName || '未知联系人';
 
@@ -140,21 +142,53 @@ struct Index {
     );
   }
 
+  // 我的名片按钮点击事件
+  onMyBusinessCardClick() {
+    console.log('Index: 点击我的名片按钮，跳转到我的名片页面');
+
+    // 跳转到我的名片页面
+    router.pushUrl({
+      url: 'pages/MyBusinessCard'
+    });
+  }
+
   build() {
     /**  页面结构：
-       1) 顶部标题栏（联系人管理 + 添加）
-       2) 搜索输入框（姓名/电话号码）
-       3) 列表区：加载指示/空态/联系人列表
-    **/
+    1) 顶部标题栏（联系人管理 + 添加）
+    2) 搜索输入框（姓名/电话号码）
+    3) 我的名片功能按钮
+    4) 列表区：加载指示/空态/联系人列表
+     **/
     Column() {
       // 标题栏
       Row() {
-        Text('联系人管理')
+        Text('联系人')
           .fontSize(24)
           .fontWeight(FontWeight.Bold)
           .textAlign(TextAlign.Center)
+          .layoutWeight(1)
 
-        Blank()
+        // 收藏按钮
+        Button('收藏')
+          .fontSize(14)
+          .margin({ right: 10 })
+          .onClick(() => {
+            console.log('Index: 点击收藏按钮');
+            router.pushUrl({
+              url: 'pages/FavoritesDisplay'
+            });
+          })
+
+        // 添加导入导出按钮
+        Button('导出')
+          .fontSize(14)
+          .margin({ right: 10 })
+          .onClick(() => {
+            console.log('Index: 点击导入导出按钮');
+            router.pushUrl({
+              url: 'pages/ImportExport'
+            });
+          })
 
         Button('添加')
           .onClick(() => {
@@ -169,7 +203,7 @@ struct Index {
       .backgroundColor('#f0f0f0')
 
       // 搜索框
-      TextInput({ placeholder: '搜索联系人姓名或电话号码' })
+      TextInput({ placeholder: '搜索联系人姓名' })
         .width('90%')
         .height(40)
         .margin(10)
@@ -179,6 +213,42 @@ struct Index {
         .onSubmit(() => {
           this.searchContacts();
         })
+
+      // 我的名片功能按钮区域
+      Row() {
+        Button('我的名片')
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .width('90%')
+          .height(45)
+          .backgroundColor('#007DFF')
+          .fontColor(Color.White)
+          .borderRadius(8)
+          .onClick(() => {
+            this.onMyBusinessCardClick();
+          })
+      }
+      .width('100%')
+      .justifyContent(FlexAlign.Center)
+      .margin({ bottom: 15 })
+
+      // // 我的名片功能按钮区域
+      // Row() {
+      //   Button('我的收藏')
+      //     .fontSize(16)
+      //     .fontWeight(FontWeight.Medium)
+      //     .width('90%')
+      //     .height(45)
+      //     .backgroundColor('#007DFF')
+      //     .fontColor(Color.White)
+      //     .borderRadius(8)
+      //     .onClick(() => {
+      //       this.onMyBusinessCardClick();
+      //     })
+      // }
+      // .width('100%')
+      // .justifyContent(FlexAlign.Center)
+      // .margin({ bottom: 15 })
 
       // 联系人列表
       if (this.isLoading) {
@@ -303,6 +373,11 @@ struct Index {
     .padding(15)
     .backgroundColor(Color.White)
     .borderRadius(10)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
   }
 }
