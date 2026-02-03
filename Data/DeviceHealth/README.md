@@ -74,7 +74,7 @@ entry/src/main/ets
 ├── database
 │   └── EventDB.ets               // 事件数据库封装
 ├── model
-│   └── EventLog.ts               //  事件日志数据模型
+│   └── EventLog.ts               //  统一事件数据模型
 
 ├── providers
 │   ├── BatteryProvider.ets
@@ -212,10 +212,11 @@ await this.batteryProvider.subscribe((soc: number) => {
 
 ## 事件日志持久化（EventDB）
 
-所有监控事件统一封装为 EventLog 数据模型，并写入数据库。
+所有监控事件统一封装为事件日志记录，并写入数据库
 
 
-### EventLog 数据结构
+###  事件日志记录数据结构
+
 
 
 * type：事件类型（BATTERY / NETWORK / STORAGE / SCREEN）
