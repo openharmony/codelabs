@@ -123,6 +123,9 @@ struct GroupManagerPage {
   @State showDeleteConfirm: boolean = false;
   @State showSmartGroupDialog: boolean = false;
   @State selectedSmartGroupType: SmartGroupType = SmartGroupType.BY_LAST_NAME;
+  @State showSaveConfirm: boolean = false;
+  @State showCompleteConfirm: boolean = false;
+  @State isGroupManagerInitialized: boolean = false;
 
   aboutToAppear() {
     console.log('GroupManagerPage: 页面即将显示');
@@ -142,12 +145,42 @@ struct GroupManagerPage {
 
       if (result.authResults[0] === 0) {
         await this.loadContacts();
+        await this.initializeGroupManager();
         this.loadGroups();
       } else {
         this.errorMessage = '需要通讯录权限';
       }
     } catch (err) {
       console.error('GroupManagerPage: 权限请求失败', err);
+    }
+  }
+
+  /**
+   * 初始化分组管理器（从存储加载数据）
+   */
+  async initializeGroupManager() {
+    if (!this.isGroupManagerInitialized) {
+      this.isLoading = true;
+      try {
+        await this.groupManager.initialize(this.context);
+        this.isGroupManagerInitialized = true;
+        console.log('GroupManagerPage: 分组管理器初始化完成');
+      } catch (error) {
+        console.error('GroupManagerPage: 分组管理器初始化失败', error);
+      } finally {
+        this.isLoading = false;
+      }
+    }
+  }
+
+  /**
+   * 保存分组数据到存储
+   */
+  async saveGroupData() {
+    try {
+      await this.groupManager.saveToStorage();
+    } catch (error) {
+      console.error('GroupManagerPage: 保存分组数据失败', error);
     }
   }
 
@@ -200,7 +233,7 @@ struct GroupManagerPage {
   /**
    * 创建新分组
    */
-  createGroup() {
+  async createGroup() {
     if (!this.editingGroupName.trim()) {
       promptAction.showToast({ message: '请输入分组名称' });
       return;
@@ -216,6 +249,7 @@ struct GroupManagerPage {
         group.icon = this.editingGroupIcon;
       }
 
+      await this.saveGroupData();
       promptAction.showToast({ message: '分组创建成功' });
       this.loadGroups();
       this.resetEditingState();
@@ -228,7 +262,7 @@ struct GroupManagerPage {
   /**
    * 更新分组
    */
-  updateGroup() {
+  async updateGroup() {
     if (!this.selectedGroup) return;
 
     if (!this.editingGroupName.trim()) {
@@ -244,6 +278,7 @@ struct GroupManagerPage {
     });
 
     if (result.success) {
+      await this.saveGroupData();
       promptAction.showToast({ message: '分组已更新' });
       this.loadGroups();
       this.resetEditingState();
@@ -256,12 +291,13 @@ struct GroupManagerPage {
   /**
    * 删除分组
    */
-  deleteGroup() {
+  async deleteGroup() {
     if (!this.selectedGroup) return;
 
     const result = this.groupManager.deleteGroup(this.selectedGroup.groupId);
 
     if (result.success) {
+      await this.saveGroupData();
       promptAction.showToast({ message: '分组已删除' });
       this.loadGroups();
       this.selectedGroup = null;
@@ -334,7 +370,7 @@ struct GroupManagerPage {
   /**
    * 保存联系人选择
    */
-  saveContactSelection() {
+  async saveContactSelection() {
     if (!this.selectedGroup) return;
 
     // 计算添加和移除的联系人
@@ -355,6 +391,7 @@ struct GroupManagerPage {
       }
     });
 
+    await this.saveGroupData();
     promptAction.showToast({ message: '联系人已更新' });
     this.loadGroups();
     this.loadGroupContacts();
@@ -381,7 +418,7 @@ struct GroupManagerPage {
   /**
    * 生成智能分组
    */
-  generateSmartGroups() {
+  async generateSmartGroups() {
     let groupsMap: Map<string, string[]>;
 
     switch (this.selectedSmartGroupType) {
@@ -416,6 +453,7 @@ struct GroupManagerPage {
       }
     });
 
+    await this.saveGroupData();
     promptAction.showToast({ message: `已创建 ${createdCount} 个智能分组` });
     this.loadGroups();
     this.showSmartGroupDialog = false;
@@ -425,7 +463,7 @@ struct GroupManagerPage {
   /**
    * 从分组移除联系人
    */
-  removeContactFromGroup(contactKey: string) {
+  async removeContactFromGroup(contactKey: string) {
     if (!this.selectedGroup) return;
 
     const result = this.groupManager.removeContactFromGroup(
@@ -434,6 +472,7 @@ struct GroupManagerPage {
     );
 
     if (result.success) {
+      await this.saveGroupData();
       promptAction.showToast({ message: '已从分组移除' });
       this.loadGroups();
       this.loadGroupContacts();
@@ -477,6 +516,16 @@ struct GroupManagerPage {
       // 加载遮罩
       if (this.isLoading) {
         this.LoadingOverlay()
+      }
+
+      // 保存确认弹窗
+      if (this.showSaveConfirm) {
+        this.SaveConfirmDialog()
+      }
+
+      // 完成确认弹窗
+      if (this.showCompleteConfirm) {
+        this.CompleteConfirmDialog()
       }
     }
     .width('100%')
@@ -531,18 +580,16 @@ struct GroupManagerPage {
           .backgroundColor(Color.Transparent)
           .fontColor('#007DFF')
           .onClick(() => {
-            if (this.isEditMode) {
-              this.updateGroup();
-            } else {
-              this.createGroup();
-            }
+            this.showSaveConfirm = true;
           })
       } else if (this.viewMode === ViewMode.CONTACT_SELECT) {
         Button('完成')
           .fontSize(16)
           .backgroundColor(Color.Transparent)
           .fontColor('#007DFF')
-          .onClick(() => this.saveContactSelection())
+          .onClick(() => {
+            this.showCompleteConfirm = true;
+          })
       } else {
         Text('').width(60)
       }
@@ -1422,6 +1469,118 @@ struct GroupManagerPage {
     .height('100%')
     .justifyContent(FlexAlign.Center)
     .backgroundColor('rgba(0, 0, 0, 0.6)')
+    .position({ x: 0, y: 0 })
+  }
+
+  /**
+   * 保存确认弹窗
+   */
+  @Builder
+  SaveConfirmDialog() {
+    Column() {
+      Column() {
+        Text(this.isEditMode ? '确认保存修改' : '确认创建分组')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .margin({ bottom: 16 })
+
+        Text(this.isEditMode ?
+          `确定要保存对分组 "${this.editingGroupName}" 的修改吗？` :
+          `确定要创建分组 "${this.editingGroupName}" 吗？`)
+          .fontSize(14)
+          .fontColor('#666')
+          .textAlign(TextAlign.Center)
+          .margin({ bottom: 24 })
+
+        Row() {
+          Button('取消')
+            .layoutWeight(1)
+            .height(44)
+            .backgroundColor('#f0f0f0')
+            .fontColor('#333')
+            .onClick(() => {
+              this.showSaveConfirm = false;
+            })
+
+          Button('确认')
+            .layoutWeight(1)
+            .height(44)
+            .backgroundColor('#007DFF')
+            .fontColor(Color.White)
+            .margin({ left: 12 })
+            .onClick(() => {
+              this.showSaveConfirm = false;
+              if (this.isEditMode) {
+                this.updateGroup();
+              } else {
+                this.createGroup();
+              }
+            })
+        }
+        .width('100%')
+      }
+      .width('80%')
+      .padding(24)
+      .backgroundColor(Color.White)
+      .borderRadius(16)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor('#80000000')
+    .justifyContent(FlexAlign.Center)
+    .position({ x: 0, y: 0 })
+  }
+
+  /**
+   * 完成确认弹窗（选择联系人后）
+   */
+  @Builder
+  CompleteConfirmDialog() {
+    Column() {
+      Column() {
+        Text('确认完成选择')
+          .fontSize(18)
+          .fontWeight(FontWeight.Bold)
+          .margin({ bottom: 16 })
+
+        Text(`已选择 ${this.selectedContactKeys.size} 位联系人，确定要完成吗？`)
+          .fontSize(14)
+          .fontColor('#666')
+          .textAlign(TextAlign.Center)
+          .margin({ bottom: 24 })
+
+        Row() {
+          Button('取消')
+            .layoutWeight(1)
+            .height(44)
+            .backgroundColor('#f0f0f0')
+            .fontColor('#333')
+            .onClick(() => {
+              this.showCompleteConfirm = false;
+            })
+
+          Button('确认完成')
+            .layoutWeight(1)
+            .height(44)
+            .backgroundColor('#007DFF')
+            .fontColor(Color.White)
+            .margin({ left: 12 })
+            .onClick(() => {
+              this.showCompleteConfirm = false;
+              this.saveContactSelection();
+            })
+        }
+        .width('100%')
+      }
+      .width('80%')
+      .padding(24)
+      .backgroundColor(Color.White)
+      .borderRadius(16)
+    }
+    .width('100%')
+    .height('100%')
+    .backgroundColor('#80000000')
+    .justifyContent(FlexAlign.Center)
     .position({ x: 0, y: 0 })
   }
 }
