@@ -1,0 +1,13 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/HistoryPage",
+    "pages/HistoryDetailPage",
+    "pages/ProfilePage",
+    "pages/PersonalInfoPage",
+    "pages/StatisticsPage",
+    "pages/AchievementPage",
+    "pages/PlanPage",
+    "pages/PlanDetailPage"
+  ]
+}
