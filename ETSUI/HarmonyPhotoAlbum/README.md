@@ -113,7 +113,6 @@ HarmonyPhotoAlbum/
 - `LazyImage` 组件：
   - 支持占位图、错误图
   - 结合 `ImageCache` 工具实现简单缓存与懒加载
-- 在首页与列表页统一使用 `LazyImage` 展示 `file://` 前缀的本地图片
 
 ### 3.5 图片详情与手势
 
@@ -126,18 +125,14 @@ HarmonyPhotoAlbum/
 
 ## 4. 运行与调试
 
-### 4.1 环境准备
 
-- OpenHarmony SDK（推荐 4.x 及以上）
-- DevEco Studio / HarmonyOS DevEco 工具链
-
-### 4.2 导入项目
+### 4.1 导入项目
 
 1. 在 DevEco Studio 中选择 **Open Project**
 2. 选择本仓库根目录 `HarmonyPhotoAlbum`
 3. 等待依赖同步完成
 
-### 4.3 安装 & 运行
+### 4.2 安装 & 运行
 
 1. 连接 OpenHarmony 真机或启动模拟器
 2. 在 DevEco Studio 中点击 **Run** 运行 `entry` 模块
