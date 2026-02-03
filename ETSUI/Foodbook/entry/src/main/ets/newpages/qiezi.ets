@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {  router } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 import { Constants } from '../common/Constants';
 
 // 定义菜品数据类型
@@ -30,10 +30,9 @@ interface Dish {
 struct DishDetailPage {
   @State isSharePanelVisible: boolean = false;
   @State isCollected: boolean = false; // 改为使用 @State 而不是 @Link
-
   // 使用明确类型的菜品数据
   private dishData: Dish = {
-    id:'sushaogiezi',
+    id: 'sushaogiezi',
     name: '素烧茄子',
     description: '家常素菜·软糯鲜香',
     image: $r('app.media.QieZi'),
@@ -52,17 +51,16 @@ struct DishDetailPage {
       }
     } else {
       // 从收藏移除
-      const newFavorites = favorites.filter((item: Dish) => item.id!== this.dishData.id);
+      const newFavorites = favorites.filter((item: Dish) => item.id !== this.dishData.id);
       AppStorage.set(Constants.FAVORITE_LIST, newFavorites);
     }
   }
+
   addToHistory(): void {
     const history: Dish[] = AppStorage.get(Constants.HISTORY_LIST) || [];
     const filtered = history.filter((item: Dish) => item.id !== this.dishData.id);
     AppStorage.set(Constants.HISTORY_LIST, [this.dishData, ...filtered]);
   }
-
-
 
   aboutToAppear(): void {
     const favorites: Dish[] = AppStorage.get(Constants.FAVORITE_LIST) || [];
@@ -131,7 +129,9 @@ struct DishDetailPage {
             .fontWeight(FontWeight.Bold)
             .margin({ top: 20 })
 
-          Text(this.dishData.ingredients.split('、').map(item => `• ${item}`).join('\n'))
+          Text(this.dishData.ingredients.split('、')
+            .map(item => `• ${item}`)
+            .join('\n'))
             .fontSize(16)
             .margin({ top: 8 })
 
@@ -141,7 +141,9 @@ struct DishDetailPage {
             .fontWeight(FontWeight.Bold)
             .margin({ top: 20 })
 
-          Text(this.dishData.seasonings.split('、').map(item => `• ${item}`).join('\n'))
+          Text(this.dishData.seasonings.split('、')
+            .map(item => `• ${item}`)
+            .join('\n'))
             .fontSize(16)
             .margin({ top: 8 })
 
@@ -185,13 +187,13 @@ struct DishDetailPage {
       // 3. 底部按钮
       Column() {
         Row() {
-          Button(this.isCollected? '已收藏' : '加入收藏')
+          Button(this.isCollected ? '已收藏' : '加入收藏')
             .width('70%')
             .height(45)
-            .backgroundColor(this.isCollected? '#FF5722' : '#999999')
+            .backgroundColor(this.isCollected ? '#FF5722' : '#999999')
             .fontColor(Color.White)
             .onClick(() => {
-              this.isCollected =!this.isCollected;
+              this.isCollected = !this.isCollected;
               this.onCollectChange(); // 手动调用收藏状态变更处理
             })
 
@@ -313,7 +315,7 @@ struct DishDetailPage {
         .backgroundColor(Color.White)
         .borderRadius(20)
         .position({ x: 0, y: '100%' })
-        .translate({ y: this.isSharePanelVisible? -200 : 0 })
+        .translate({ y: this.isSharePanelVisible ? -200 : 0 })
         .animation({ duration: 300, curve: Curve.EaseOut })
       }
     }

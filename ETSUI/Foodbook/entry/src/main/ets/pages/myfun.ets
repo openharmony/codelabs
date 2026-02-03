@@ -14,7 +14,8 @@
  */
 import { LengthMetrics, router } from '@kit.ArkUI'
 
-@Styles function myfun() {
+@Styles
+function myfun() {
   .height('95%').width('48%')
 }
 
@@ -22,16 +23,21 @@ import { LengthMetrics, router } from '@kit.ArkUI'
 @Component
 struct SummerSolsticeHealthy {
   myscr: Scroller = new Scroller()
+
   build() {
     Column() {
       // 返回按钮和标题
       Row() {
-        Button({ type: ButtonType.Circle }).backgroundImage($r('app.media.return1')).size({ width: 20 })
-          .backgroundColor(Color.White).backgroundImageSize(ImageSize.FILL).onClick(() => {
-          router.back()
-        })
-        Text("立夏").fontSize(25).fontWeight(FontWeight.Bold).margin({left:120})
-      }.height('5%').width('100%').margin({ top: 2})
+        Button({ type: ButtonType.Circle })
+          .backgroundImage($r('app.media.return1'))
+          .size({ width: 20 })
+          .backgroundColor(Color.White)
+          .backgroundImageSize(ImageSize.FILL)
+          .onClick(() => {
+            router.back()
+          })
+        Text("立夏").fontSize(25).fontWeight(FontWeight.Bold).margin({ left: 120 })
+      }.height('5%').width('100%').margin({ top: 2 })
 
       // 滚动内容区域
       Scroll(this.myscr) {

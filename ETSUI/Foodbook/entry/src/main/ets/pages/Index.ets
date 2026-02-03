@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 //Index.ets
-import {  router } from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 
 // 定义菜品数据类型
 export interface Dish {
@@ -47,39 +47,52 @@ struct Index {
   @StorageProp('historyList') histories: FavoriteList = [];
   @StorageProp('likeList') likes: Dish[] = []; // 点赞列表
 
-  @Styles myfun() {
+  @Styles
+  myfun() {
     .width('95%').height('22%')
     .borderRadius(10).backgroundImageSize(ImageSize.FILL)
   }
 
-  @Styles mystl() {
+  @Styles
+  mystl() {
     .width('100%').height('20%')
   }
 
-  @Styles stlfull() {
+  @Styles
+  stlfull() {
     .width('100%').height('50%')
   }
 
-  @Styles dished() {
-    .height('100%').width('40%').borderRadius(10)
-    .margin({ left: 10 }).backgroundImageSize(ImageSize.FILL)
+  @Styles
+  dished() {
+    .height('100%')
+    .width('40%')
+    .borderRadius(10)
+    .margin({ left: 10 })
+    .backgroundImageSize(ImageSize.FILL)
   }
 
-  @Builder mytabbar(title: string, Index: number, selectedimg: Resource, defimg: Resource) {
+  @Builder
+  mytabbar(title: string, Index: number, selectedimg: Resource, defimg: Resource) {
     Column() {
       Text().height(45).width(45)
-        .backgroundImage(Index === this.currentIndex? selectedimg : defimg).backgroundImageSize(ImageSize.FILL)
-      Text(title).fontSize(14).textAlign(TextAlign.Center).fontColor(Index === this.currentIndex? Color.Red : Color.Black)
-        .height(20).width(60)
+        .backgroundImage(Index === this.currentIndex ? selectedimg : defimg).backgroundImageSize(ImageSize.FILL)
+      Text(title)
+        .fontSize(14)
+        .textAlign(TextAlign.Center)
+        .fontColor(Index === this.currentIndex ? Color.Red : Color.Black)
+        .height(20)
+        .width(60)
     }
   }
 
-  @Builder FavoriteList() {
+  @Builder
+  FavoriteList() {
     Column() {
       if (this.favorites.length === 0) {
         Column() {
           Text().width(170).height(170).backgroundImage($r('app.media.kong')).backgroundImageSize(ImageSize.FILL)
-          Text('暂无收藏').margin({top:10}).fontColor('#9a9a9a')
+          Text('暂无收藏').margin({ top: 10 }).fontColor('#9a9a9a')
         }
       } else {
         Scroll() {
@@ -144,12 +157,13 @@ struct Index {
     }
   }
 
-  @Builder HistoryList() {
+  @Builder
+  HistoryList() {
     Column() {
       if (this.histories.length === 0) {
         Column() {
           Text().width(170).height(170).backgroundImage($r('app.media.kong')).backgroundImageSize(ImageSize.FILL)
-          Text('暂无浏览历史').margin({top:10}).fontColor('#9a9a9a')
+          Text('暂无浏览历史').margin({ top: 10 }).fontColor('#9a9a9a')
         }
       } else {
         Scroll() {
@@ -749,8 +763,8 @@ struct Index {
                         .onClick(() => {
                           router.pushUrl({
                             url: 'pages/web',
-                            params:{
-                              url:'https://tv.sohu.com/v/dXMvMzM4NDUwMTk5LzQ1NzI2OTU5MS5zaHRtbA==.html'
+                            params: {
+                              url: 'https://tv.sohu.com/v/dXMvMzM4NDUwMTk5LzQ1NzI2OTU5MS5zaHRtbA==.html'
                             }
                           })
                         })
@@ -762,8 +776,8 @@ struct Index {
                         .onClick(() => {
                           router.pushUrl({
                             url: 'pages/web',
-                            params:{
-                              url:'https://tv.sohu.com/v/dXMvMzM1OTQxODM4LzI2MTQzMjUzNi5zaHRtbA==.html'
+                            params: {
+                              url: 'https://tv.sohu.com/v/dXMvMzM1OTQxODM4LzI2MTQzMjUzNi5zaHRtbA==.html'
                             }
                           })
                         })
@@ -775,8 +789,8 @@ struct Index {
                         .onClick(() => {
                           router.pushUrl({
                             url: 'pages/web',
-                            params:{
-                              url:'https://tv.sohu.com/v/dXMvMzM4OTE1OTQ0LzQxNjc4MTU5Ny5zaHRtbA==.html'
+                            params: {
+                              url: 'https://tv.sohu.com/v/dXMvMzM4OTE1OTQ0LzQxNjc4MTU5Ny5zaHRtbA==.html'
                             }
                           })
                         })
@@ -789,8 +803,8 @@ struct Index {
                         .onClick(() => {
                           router.pushUrl({
                             url: 'pages/web',
-                            params:{
-                              url:'https://tv.sohu.com/v/dXMvNDkxNjMwNDcvMTg2NTY0MjAuc2h0bWw=.html'
+                            params: {
+                              url: 'https://tv.sohu.com/v/dXMvNDkxNjMwNDcvMTg2NTY0MjAuc2h0bWw=.html'
                             }
                           })
                         })
@@ -1105,6 +1119,7 @@ struct Index {
                 .height('15%')
                 .width('100%')
                 .margin({ top: 8 })
+
                 Row({ space: 10 }) {
                   Text('郫县豆瓣酱')
                     .height('100%')
@@ -1246,6 +1261,7 @@ struct Index {
             // .height('12%')
             .width('100%')
             .justifyContent(FlexAlign.End)
+
             Row() {
               Text("Hi，\ncc")
                 .fontSize(30)
@@ -1284,6 +1300,7 @@ struct Index {
                   .height('30%')
               }
               .height('100%')
+
               Column() {
                 Text("0")
                   .fontWeight(FontWeight.Bold)
@@ -1298,6 +1315,7 @@ struct Index {
                   .height('30%')
               }
               .height('100%')
+
               Column() {
                 Text("0")
                   .fontWeight(FontWeight.Bold)
@@ -1312,6 +1330,7 @@ struct Index {
                   .height('30%')
               }
               .height('100%')
+
               Column() {
                 Text("0")
                   .fontWeight(FontWeight.Bold)
@@ -1335,7 +1354,8 @@ struct Index {
           }
           .backgroundColor(Color.Orange)
           // .stlfull()
-          .width("100%").height(420)
+          .width("100%")
+          .height(420)
           .backgroundImage($r('app.media.context2'))
           .backgroundImageSize(ImageSize.FILL)
 
@@ -1360,6 +1380,7 @@ struct Index {
               curve: Curve.Linear,
               iterations: 1,
             })
+
             Button({ type: ButtonType.Normal }) {
               Text('浏览历史')
                 .fontWeight(this.cur === 1 ? FontWeight.Bold : FontWeight.Normal)
@@ -1388,6 +1409,7 @@ struct Index {
             TabContent() {
               this.FavoriteList()
             }
+
             TabContent() {
               this.HistoryList()
             }

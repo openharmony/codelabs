@@ -27,7 +27,6 @@ struct DishDetail {
   @StorageProp('favoriteList') favorites: Dish[] = [];
   @StorageProp('likeList') likes: Dish[] = [];
   @StorageProp('historyList') histories: Dish[] = [];
-
   @State dishData: Dish = {
     id: '',
     name: '',
@@ -62,7 +61,6 @@ struct DishDetail {
     const filtered = history.filter((item: Dish) => item.id !== this.dishData.id);
     AppStorage.set(Constants.HISTORY_LIST, [this.dishData, ...filtered]);
   }
-
 
   build() {
     Column() {
