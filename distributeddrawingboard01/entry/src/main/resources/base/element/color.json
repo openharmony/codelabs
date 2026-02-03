@@ -1,0 +1,16 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "button_text_color",
+      "value": "#007DFF"
+    },
+    {
+      "name": "button_line_divider_color",
+      "value": "#C7C7C7"
+    }
+  ]
+}
