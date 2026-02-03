@@ -4,9 +4,8 @@
     "pages/AddContact",
     "pages/EditContact",
     "pages/ImportExport",
-    "pages/FavoritesDisplay",
-    "pages/FavoriteManagement",
-    "pages/SelectFavorites",
-    "pages/MyBusinessCard"
+    "pages/MyBusinessCard",
+    "pages/SecretShare",
+    "pages/SecretImport"
   ]
 }
