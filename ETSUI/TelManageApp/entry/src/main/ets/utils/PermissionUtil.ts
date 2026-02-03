@@ -1,7 +1,6 @@
 //联系人权限工具：请求与检查读写权限，返回是否全部授权。
 
-import abilityAccessCtrl, { Permissions } from '@ohos.abilityAccessCtrl';
-import common from '@ohos.app.ability.common';
+import { abilityAccessCtrl, common, Permissions } from '@kit.AbilityKit';
 
 export class PermissionUtil {
   /** 请求联系人读写权限。
@@ -20,7 +19,7 @@ export class PermissionUtil {
       const atManager = abilityAccessCtrl.createAtManager();
       const result = await atManager.requestPermissionsFromUser(context, permissions);
       // 0 表示授权通过
-      return result.authResult.every(granted => granted === 0);
+      return result.authResults.every((granted: number) => granted === 0);
     } catch (err) {
       console.error('Permission request failed:', err);
       return false;
@@ -35,9 +34,11 @@ export class PermissionUtil {
   static async checkPermissions(context: common.UIAbilityContext, permissions: Array<Permissions>): Promise<boolean> {
     try {
       const atManager = abilityAccessCtrl.createAtManager();
+      // 1. 核心修复点：从 context 中获取应用的 TokenID
+      const tokenId = context.applicationInfo.accessTokenId;
       for (const permission of permissions) {
-        const result = await atManager.checkAccessToken(context, permission);
-        if (result !== 0) { // 非 0 表示未授权
+        const result = atManager.checkAccessTokenSync(tokenId, permission);
+        if (result !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) { // 非 0 表示未授权
           return false;
         }
       }
