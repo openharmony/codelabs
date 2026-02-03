@@ -1,0 +1,60 @@
+{
+  "routerMap": [
+    {
+      "name": "Start",
+      "pageSourceFile": "src/main/ets/pages/StartPage.ets",
+      "buildFunction": "StartBuilder",
+      "data": {
+        "description" : "this is StartPage"
+      }
+    },
+    {
+      "name": "Dashboard",
+      "pageSourceFile": "src/main/ets/pages/DashboardPage.ets",
+      "buildFunction": "DashboardBuilder",
+      "data": {
+        "description" : "this is DashboardPage"
+      }
+    },
+    {
+      "name": "Calendar",
+      "pageSourceFile": "src/main/ets/pages/CalendarPage.ets",
+      "buildFunction": "CalendarBuilder",
+      "data": {
+        "description" : "this is CalendarPage"
+      }
+    },
+    {
+      "name": "Contact",
+      "pageSourceFile": "src/main/ets/pages/ContactPage.ets",
+      "buildFunction": "ContactBuilder",
+      "data": {
+        "description" : "this is ContactPage"
+      }
+    },
+    {
+      "name": "EventEdit",
+      "pageSourceFile": "src/main/ets/pages/EventEditPage.ets",
+      "buildFunction": "EventEditBuilder",
+      "data": {
+        "description" : "this is EventEditPage"
+      }
+    },
+    {
+      "name": "ContactEdit",
+      "pageSourceFile": "src/main/ets/pages/ContactEditPage.ets",
+      "buildFunction": "ContactEditBuilder",
+      "data": {
+        "description": "this is ContactEditPage"
+      }
+    },
+    {
+      "name": "StepTracker",
+      "pageSourceFile": "src/main/ets/pages/StepTrackerPage.ets",
+      "buildFunction": "StepTrackerBuilder",
+      "data": {
+        "description" : "this is StepTrackerPage"
+      }
+    }
+  ]
+}
