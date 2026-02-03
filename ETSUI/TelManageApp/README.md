@@ -11,6 +11,9 @@
 ![](demo-gif/EditContact.gif)
 ![](demo-gif/SearchContact.gif)
 ![](demo-gif/DeleteContact.gif)
+![](demo-gif/depulicate.gif)
+![](demo-gif/groupby.gif)
+
 # 搭建OpenHarmony环境
 ## 软件要求
 - [DevEco Studio](https://gitcode.com/openharmony/docs/blob/master/zh-cn/application-dev/quick-start/start-overview.md#%E5%B7%A5%E5%85%B7%E5%87%86%E5%A4%87)版本：DevEco Studio 5.0.5。
@@ -50,14 +53,24 @@
 │  ├──entrybackupability
 │  │  └──EntryBackupAbility.ets          // 数据备份与恢复类
 │  ├──model
-│  │  └──ContactData.ets                 // 联系人数据管理类
+│  │  ├──ContactData.ets                 // 联系人数据管理类
+│  │  ├──ContactGroup.ets                // 联系人分组模型与管理器
+│  │  ├──DuplicateDetector.ets           // 重复联系人检测器
+│  │  ├──DuplicateStrategy.ets           // 重复检测策略
+│  │  └──MergeResult.ets                 // 合并结果模型
 │  ├──pages
 │  │  ├──EditContact.ets                 // 编辑联系人页面
-│  │  ├──AddContact.ets                 // 添加联系人
-│  │  └──Index.ets                      //主页面的UI设计
+│  │  ├──AddContact.ets                  // 添加联系人
+│  │  ├──Index.ets                       // 主页面的UI设计
+│  │  ├──GroupManager.ets                // 联系人分组管理页面
+│  │  └──DuplicateManager.ets            // 重复联系人管理页面
+│  ├──utils
+│  │  ├──CommonUtil.ts                   // 通用工具类
+│  │  ├──PermissionUtil.ts               // 权限工具类
+│  │  └──SimilarityCalculator.ts         // 相似度计算工具
 │  └──view    
 │     ├──ContactItem.ets                 // 联系人信息类
-│     └──ContactViewModel.ets            // 联系人页面数据处理类
+│     └──SearchBar.ets                   // 搜索栏组件
 │——entry/src/main/resource                // 应用静态资源目录
 └──entry/src/main/module.json5            //配置文件
 ```
@@ -862,3 +875,255 @@ async searchContacts() {
   ```
 
 - 底层实现：`ContactData.deleteContact(key)` 调用系统通讯录接口删除指定联系人。
+
+## 联系人分组管理
+
+联系人分组功能允许用户对联系人进行分类管理，支持创建自定义分组、智能分组等功能，并使用 preferences 持久化存储分组数据。
+
+### 分组管理界面设计
+
+分组管理页面（GroupManager.ets）包含多个视图模式：
+
+1. **分组列表视图**：显示所有分组及其成员数量
+2. **分组详情视图**：查看分组内的联系人列表
+3. **创建/编辑分组视图**：设置分组名称、颜色、图标等
+4. **联系人选择视图**：为分组添加或移除联系人
+5. **智能分组视图**：自动按规则生成分组
+
+### 分组数据模型
+
+分组功能使用 `ContactGroup.ets` 中定义的数据模型：
+
+```typescript
+// 分组类型枚举
+export enum GroupType {
+  CUSTOM = 'CUSTOM',           // 用户自定义分组
+  SYSTEM = 'SYSTEM',           // 系统预设分组
+  SMART = 'SMART',             // 智能分组（自动分类）
+  FAVORITE = 'FAVORITE',       // 收藏分组
+  RECENT = 'RECENT',           // 最近联系
+  FREQUENT = 'FREQUENT'        // 常用联系人
+}
+
+// 联系人分组接口
+export interface ContactGroup {
+  groupId: string;              // 分组唯一标识
+  name: string;                 // 分组名称
+  description: string;          // 分组描述
+  type: GroupType;              // 分组类型
+  color: string;                // 分组颜色
+  icon: string;                 // 分组图标
+  contactKeys: string[];        // 分组内联系人key列表
+  createdAt: number;            // 创建时间
+  updatedAt: number;            // 更新时间
+  sortOrder: number;            // 排序顺序
+  isDefault: boolean;           // 是否为默认分组
+  isVisible: boolean;           // 是否可见
+}
+```
+
+### 分组数据持久化
+
+分组数据使用 OpenHarmony 的 `@kit.ArkData` 中的 `preferences` API 进行持久化存储：
+
+```typescript
+import { preferences } from '@kit.ArkData';
+import { Context } from '@kit.AbilityKit';
+
+export class GroupManager {
+  private groups: Map<string, ContactGroupModel> = new Map();
+  private storageKey: string = 'contact_groups';
+  private context: Context | null = null;
+  private dataStore: preferences.Preferences | null = null;
+  private isInitialized: boolean = false;
+
+  /**
+   * 初始化分组管理器
+   * 必须在使用前调用此方法
+   */
+  async initialize(context: Context): Promise<void> {
+    if (this.isInitialized) {
+      return;
+    }
+
+    this.context = context;
+    try {
+      this.dataStore = await preferences.getPreferences(context, 'contact_groups_store');
+      await this.loadFromStorage();
+      this.isInitialized = true;
+    } catch (error) {
+      console.error('GroupManager: 初始化失败', error);
+      this.initializeDefaultGroups();
+      this.isInitialized = true;
+    }
+  }
+
+  /**
+   * 从存储加载分组数据
+   */
+  private async loadFromStorage(): Promise<void> {
+    if (!this.dataStore) {
+      this.initializeDefaultGroups();
+      return;
+    }
+
+    try {
+      const dataStr = await this.dataStore.get(this.storageKey, '') as string;
+      if (dataStr && dataStr.length > 0) {
+        const groupsArray: ContactGroup[] = JSON.parse(dataStr) as ContactGroup[];
+        this.groups.clear();
+        groupsArray.forEach(data => {
+          const group = ContactGroupModel.fromJSON(data);
+          this.groups.set(group.groupId, group);
+        });
+      } else {
+        this.initializeDefaultGroups();
+        await this.saveToStorage();
+      }
+    } catch (error) {
+      console.error('GroupManager: 加载数据失败', error);
+      this.initializeDefaultGroups();
+    }
+  }
+
+  /**
+   * 保存分组数据到存储
+   */
+  async saveToStorage(): Promise<void> {
+    if (!this.dataStore) return;
+
+    try {
+      const groupsArray = this.exportGroups();
+      const dataStr = JSON.stringify(groupsArray);
+      await this.dataStore.put(this.storageKey, dataStr);
+      await this.dataStore.flush();
+    } catch (error) {
+      console.error('GroupManager: 保存数据失败', error);
+    }
+  }
+}
+```
+
+### 分组管理页面集成
+
+在 `GroupManagerPage` 组件中，需要在页面加载时初始化分组管理器，并在数据变更时保存：
+
+```typescript
+@Entry
+@Component
+struct GroupManagerPage {
+  private groupManager: GroupManager = new GroupManager();
+  @State isGroupManagerInitialized: boolean = false;
+
+  aboutToAppear() {
+    this.checkPermissionsAndLoad();
+  }
+
+  async checkPermissionsAndLoad() {
+    // ... 权限检查 ...
+    await this.loadContacts();
+    await this.initializeGroupManager();
+    this.loadGroups();
+  }
+
+  /**
+   * 初始化分组管理器（从存储加载数据）
+   */
+  async initializeGroupManager() {
+    if (!this.isGroupManagerInitialized) {
+      await this.groupManager.initialize(this.context);
+      this.isGroupManagerInitialized = true;
+    }
+  }
+
+  /**
+   * 保存分组数据到存储
+   */
+  async saveGroupData() {
+    await this.groupManager.saveToStorage();
+  }
+
+  /**
+   * 创建新分组（示例）
+   */
+  async createGroup() {
+    const result = this.groupManager.createGroup(this.editingGroupName.trim());
+    if (result.success) {
+      await this.saveGroupData();  // 保存到持久化存储
+      this.loadGroups();
+    }
+  }
+}
+```
+
+### 智能分组功能
+
+智能分组功能使用 `SmartGroupGenerator` 类根据不同规则自动生成分组：
+
+- **按姓氏分组**：将相同姓氏的联系人分为一组
+- **按首字母分组**：按联系人姓名首字母分组
+- **按邮箱域名分组**：相同邮箱域名的联系人分为一组
+- **按电话区号分组**：按电话号码归属地分组
+- **按公司/组织分组**：相同公司的联系人分为一组
+
+## 重复联系人检测与合并
+
+重复联系人检测功能帮助用户识别和合并通讯录中的重复项。
+
+### 重复检测策略
+
+`DuplicateStrategy.ets` 定义了多种检测策略：
+
+```typescript
+// 检测策略类型
+export enum DetectionStrategyType {
+  EXACT_NAME = 'EXACT_NAME',           // 姓名完全匹配
+  EXACT_PHONE = 'EXACT_PHONE',         // 电话完全匹配
+  EXACT_EMAIL = 'EXACT_EMAIL',         // 邮箱完全匹配
+  FUZZY_NAME = 'FUZZY_NAME',           // 姓名模糊匹配
+  SIMILAR_PHONE = 'SIMILAR_PHONE',     // 电话相似匹配
+  COMBINED = 'COMBINED'                // 组合策略
+}
+```
+
+### 重复检测器
+
+`DuplicateDetector.ets` 实现了重复联系人的检测逻辑：
+
+```typescript
+export class DuplicateDetector {
+  /**
+   * 检测重复联系人
+   */
+  detectDuplicates(
+    contacts: contact.Contact[],
+    strategy: DetectionStrategy
+  ): DuplicateGroup[] {
+    // 根据策略类型进行检测
+    // 返回重复联系人分组
+  }
+}
+```
+
+### 合并结果模型
+
+`MergeResult.ets` 定义了合并操作的结果：
+
+```typescript
+export interface MergeResult {
+  success: boolean;
+  mergedContact: contact.Contact | null;
+  deletedKeys: string[];
+  message: string;
+}
+```
+
+### 重复管理界面
+
+重复联系人管理页面（DuplicateManager.ets）提供：
+
+1. **重复组列表**：显示检测到的所有重复联系人组
+2. **重复详情**：查看每组重复联系人的详细信息
+3. **合并操作**：选择保留的信息并合并联系人
+4. **忽略功能**：标记某组为非重复，不再显示
+5. **批量合并**：一键合并所有检测到的重复项
