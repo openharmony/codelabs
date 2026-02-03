@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 /*
 * 该文件用于编辑联系人信息的页面逻辑文件
 * 文件定义了联系人编辑页面的功能和界面布局。
@@ -9,71 +10,70 @@
 
 
 // 联系人数据管理类
-import {ContactData} from '../model/ContactData';
- // 提供联系人相关的操作接口
-import {contact} from '@kit.ContactsKit';
+import { ContactData } from '../model/ContactData';
+// 提供联系人相关的操作接口
+import { contact } from '@kit.ContactsKit';
 // 提供页面路由功能
-import {router} from '@kit.ArkUI';
+import { router } from '@kit.ArkUI';
 
 @Entry
 @Component
-struct EditContact{
+struct EditContact {
   // 联系人数据管理实例
-  private contactData:ContactData=new ContactData();
+  private contactData: ContactData = new ContactData();
   // 当前联系人唯一标识符
-  private contactKey:string='';
-
+  private contactKey: string = '';
   /*
   * 定义状态变量
   * 当前联系人信息、姓名、电话号码、邮箱
   * 是否正在加载、是否正在保存、是否显示删除确认对话框
   */
-  @State contactInfo: contact.Contact | null=null;
-  @State name: string='';
-  @State phone: string='';
-  @State email: string='';
-  @State isLoading: boolean=true;
-  @State isSaving: boolean=false;
-  @State showDeleteConfirm: boolean=false;
+  @State contactInfo: contact.Contact | null = null;
+  @State name: string = '';
+  @State phone: string = '';
+  @State email: string = '';
+  @State isLoading: boolean = true;
+  @State isSaving: boolean = false;
+  @State showDeleteConfirm: boolean = false;
 
   // 生命周期方法，页面即将显示时调用
-  aboutToAppear(){
+  aboutToAppear() {
     // 直接获取当前页面Context
     this.contactData.setContext(getContext(this));
-     // 获取页面传递的参数
-    const params=router.getParams() as Record<string,string>;
-    this.contactKey=params?.contactKey || '';
+    // 获取页面传递的参数
+    const params = router.getParams() as Record<string, string>;
+    this.contactKey = params?.contactKey || '';
     // 如果有联系人Key，则加载联系人信息
-    if(this.contactKey){
+    if (this.contactKey) {
       this.loadContact();
-    }else{
-    // 无联系人Key，直接结束加载状态：
-      this.isLoading=false;
+    } else {
+      // 无联系人Key，直接结束加载状态：
+      this.isLoading = false;
     }
   }
 
   // 加载联系人信息
-  async loadContact(){
-    this.isLoading=true;
+  async loadContact() {
+    this.isLoading = true;
     // 根据 ID 查询联系人
-    this.contactInfo=await this.contactData.queryContactById(this.contactKey);
-  // 如果查询到联系人信息，则更新状态
-    if(this.contactInfo){
-      this.name=this.contactInfo.name?.fullName || '';
-      this.phone=this.contactInfo.phoneNumbers?.[0]?.phoneNumber || '';
-      this.email=this.contactInfo.emails?.[0]?.email || '';
+    this.contactInfo = await this.contactData.queryContactById(this.contactKey);
+    // 如果查询到联系人信息，则更新状态
+    if (this.contactInfo) {
+      this.name = this.contactInfo.name?.fullName || '';
+      this.phone = this.contactInfo.phoneNumbers?.[0]?.phoneNumber || '';
+      this.email = this.contactInfo.emails?.[0]?.email || '';
     }
     this.isLoading = false;
   }
 
   // 构建页面 UI
-  build(){
-    Stack(){
+  build() {
+    Stack() {
       // 主内容区域
-      Column(){
-        if(this.isLoading){
+      Column() {
+        if (this.isLoading) {
           //// 显示加载状态
-          Column(){
+          Column() {
             LoadingProgress()
               .width(50)
               .height(50)
@@ -84,9 +84,9 @@ struct EditContact{
           .width('100%')
           .height('100%')
           .justifyContent(FlexAlign.Center)
-        }else if(!this.contactInfo){
+        } else if (!this.contactInfo) {
           // 显示联系人不存在的提示
-          Column(){
+          Column() {
             Text('联系人不存在')
               .fontSize(18)
               .fontColor('#666')
@@ -102,9 +102,9 @@ struct EditContact{
           .width('100%')
           .height('100%')
           .justifyContent(FlexAlign.Center)
-        }else{
+        } else {
           // 标题栏
-          Row(){
+          Row() {
             Button('取消')
               .fontSize(16)
               .backgroundColor(Color.Transparent)
@@ -133,10 +133,10 @@ struct EditContact{
           .backgroundColor('#f0f0f0')
 
           // 表单内容
-          Scroll(){
-            Column(){
+          Scroll() {
+            Column() {
               // 头像区域
-              Column(){
+              Column() {
                 Text(this.name ? this.name.charAt(0).toUpperCase() : '?')
                   .fontSize(40)
                   .fontColor(Color.White)
@@ -151,7 +151,7 @@ struct EditContact{
               .justifyContent(FlexAlign.Center)
 
               // 基本信息
-              Column(){
+              Column() {
                 Text('基本信息')
                   .fontSize(16)
                   .fontWeight(FontWeight.Medium)
@@ -160,7 +160,7 @@ struct EditContact{
                   .margin({ bottom: 15 })
 
                 // 姓名
-                Column(){
+                Column() {
                   Text('姓名')
                     .fontSize(14)
                     .fontColor('#666')
@@ -182,7 +182,7 @@ struct EditContact{
                 .margin({ bottom: 15 })
 
                 // 电话
-                Column(){
+                Column() {
                   Text('电话号码')
                     .fontSize(14)
                     .fontColor('#666')
@@ -205,7 +205,7 @@ struct EditContact{
                 .margin({ bottom: 15 })
 
                 // 邮箱
-                Column(){
+                Column() {
                   Text('邮箱地址')
                     .fontSize(14)
                     .fontColor('#666')
@@ -229,7 +229,12 @@ struct EditContact{
               .padding(20)
               .backgroundColor(Color.White)
               .borderRadius(10)
-              .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+              .shadow({
+                radius: 2,
+                color: '#10000000',
+                offsetX: 0,
+                offsetY: 1
+              })
               .margin({ bottom: 20 })
 
               // 删除按钮
@@ -250,8 +255,8 @@ struct EditContact{
           .layoutWeight(1)
 
           // 加载指示器
-          if(this.isSaving){
-            Column(){
+          if (this.isSaving) {
+            Column() {
               LoadingProgress()
                 .width(40)
                 .height(40)
@@ -270,8 +275,8 @@ struct EditContact{
       .backgroundColor('#f5f5f5')
 
       // 删除确认对话框 - 使用绝对定位覆盖在主内容上
-      if(this.showDeleteConfirm){
-        Column(){
+      if (this.showDeleteConfirm) {
+        Column() {
           // 半透明背景
           Blank()
             .width('100%')
@@ -279,11 +284,11 @@ struct EditContact{
             .backgroundColor('#000000')
             .opacity(0.5)
             .onClick(() => {
-              this.showDeleteConfirm=false;
+              this.showDeleteConfirm = false;
             })
 
           // 确认对话框内容
-          Column(){
+          Column() {
             Text('删除联系人')
               .fontSize(18)
               .fontWeight(FontWeight.Bold)
@@ -294,14 +299,14 @@ struct EditContact{
               .textAlign(TextAlign.Center)
               .margin({ bottom: 20 })
 
-            Row(){
+            Row() {
               Button('取消')
                 .layoutWeight(1)
                 .height(40)
                 .backgroundColor('#f0f0f0')
                 .fontColor('#333')
                 .onClick(() => {
-                  this.showDeleteConfirm=false;
+                  this.showDeleteConfirm = false;
                 })
 
               Button('删除')
@@ -311,7 +316,7 @@ struct EditContact{
                 .backgroundColor('#ff3b30')
                 .fontColor(Color.White)
                 .onClick(() => {
-                  this.showDeleteConfirm=false;
+                  this.showDeleteConfirm = false;
                   this.deleteContact();
                 })
             }
@@ -322,7 +327,12 @@ struct EditContact{
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(10)
-          .shadow({ radius: 10, color: '#40000000', offsetX: 0, offsetY: 5 })
+          .shadow({
+            radius: 10,
+            color: '#40000000',
+            offsetX: 0,
+            offsetY: 5
+          })
         }
         .width('100%')
         .height('100%')
@@ -335,73 +345,73 @@ struct EditContact{
     .height('100%')
   }
 
-  async saveContact(){
-    if(!this.name || !this.phone || !this.contactInfo){
+  async saveContact() {
+    if (!this.name || !this.phone || !this.contactInfo) {
       return;
     }
 
-    this.isSaving=true;
+    this.isSaving = true;
 
-    try{
+    try {
       // 准备更新所需数据
-      const updatedContact: contact.Contact={
+      const updatedContact: contact.Contact = {
         id: this.contactInfo.id,
         key: this.contactInfo.key,
-        name:{
+        name: {
           fullName: this.name
         },
-        phoneNumbers:[{
-          phoneNumber:this.phone,
-          labelId:contact.PhoneNumber.NUM_MOBILE
+        phoneNumbers: [{
+          phoneNumber: this.phone,
+          labelId: contact.PhoneNumber.NUM_MOBILE
         }],
-        emails:this.email ? [{
+        emails: this.email ? [{
           email: this.email,
           labelId: contact.Email.EMAIL_HOME
         }] : []
       };
 
       // 手动复制其他可能存在的属性
-      if(this.contactInfo.portrait){
-        updatedContact.portrait=this.contactInfo.portrait;
+      if (this.contactInfo.portrait) {
+        updatedContact.portrait = this.contactInfo.portrait;
       }
-      if(this.contactInfo.organization){
-        updatedContact.organization=this.contactInfo.organization;
+      if (this.contactInfo.organization) {
+        updatedContact.organization = this.contactInfo.organization;
       }
-      if(this.contactInfo.note){
-        updatedContact.note=this.contactInfo.note;
+      if (this.contactInfo.note) {
+        updatedContact.note = this.contactInfo.note;
       }
-      if(this.contactInfo.relations){
-        updatedContact.relations=this.contactInfo.relations;
+      if (this.contactInfo.relations) {
+        updatedContact.relations = this.contactInfo.relations;
       }
-      if(this.contactInfo.imAddresses){
-        updatedContact.imAddresses=this.contactInfo.imAddresses;
+      if (this.contactInfo.imAddresses) {
+        updatedContact.imAddresses = this.contactInfo.imAddresses;
       }
-      if(this.contactInfo.websites){
-        updatedContact.websites=this.contactInfo.websites;
+      if (this.contactInfo.websites) {
+        updatedContact.websites = this.contactInfo.websites;
       }
-      if(this.contactInfo.events){
-        updatedContact.events=this.contactInfo.events;
+      if (this.contactInfo.events) {
+        updatedContact.events = this.contactInfo.events;
       }
-      if(this.contactInfo.postalAddresses){
-        updatedContact.postalAddresses=this.contactInfo.postalAddresses;
+      if (this.contactInfo.postalAddresses) {
+        updatedContact.postalAddresses = this.contactInfo.postalAddresses;
       }
       await this.contactData.updateContact(updatedContact);
       // 保存成功，返回上一页
       router.back();
-    }catch(error){
+    } catch (error) {
       console.error('更新联系人失败:');
       // 这里可以添加Toast提示
-    }finally{
+    } finally {
       this.isSaving = false;
     }
   }
 
-  async deleteContact(){
-    try{
+  async deleteContact() {
+    try {
       await this.contactData.deleteContact(this.contactKey);
       // 删除成功，返回上一页
       router.back();
-    }catch (error){
+    } catch (error) {
       console.error('删除联系人失败:');
       // 这里可以添加Toast提示
     }

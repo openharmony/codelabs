@@ -20,7 +20,7 @@ export class PermissionUtil {
       const atManager = abilityAccessCtrl.createAtManager();
       const result = await atManager.requestPermissionsFromUser(context, permissions);
       // 0 表示授权通过
-      return result.authResult.every(granted => granted === 0);
+      return result.authResults.every(granted => granted === 0);
     } catch (err) {
       console.error('Permission request failed:', err);
       return false;
@@ -35,9 +35,12 @@ export class PermissionUtil {
   static async checkPermissions(context: common.UIAbilityContext, permissions: Array<Permissions>): Promise<boolean> {
     try {
       const atManager = abilityAccessCtrl.createAtManager();
+      // 获取应用 tokenID
+      const tokenId = context.applicationInfo.accessTokenId;
+
       for (const permission of permissions) {
-        const result = await atManager.checkAccessToken(context, permission);
-        if (result !== 0) { // 非 0 表示未授权
+        const result = await atManager.checkAccessToken(tokenId, permission);
+        if (result !== abilityAccessCtrl.GrantStatus.PERMISSION_GRANTED) {
           return false;
         }
       }
