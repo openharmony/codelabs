@@ -31,9 +31,9 @@ export struct Contact {
 
   async aboutToAppear() {
     await this.loadContacts();
-    emitter.on({ eventId: this.EVENT_ID_UPDATE_CONTACT }, () => {
+    emitter.on({ eventId: 10001 }, async () => {
       console.info('收到更新通知，正在刷新通讯录...');
-      this.loadContacts();
+      await this.loadContacts();
     });
   }
 
@@ -96,7 +96,7 @@ export struct Contact {
         } as ContactGroup;
       });
 
-    this.contactGroups = sortedGroups;
+    this.contactGroups = [...sortedGroups];
   }
 
   getLetterByChinese(char: string): string {
