@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import router from "@ohos.router"
+import router from '@ohos.router'
 
 @Entry
 @Component
@@ -26,9 +26,62 @@ export struct FullScreenImagePage {
   // 图片加载失败标识
   private isImageLoadFailed: boolean = false
 
-
   aboutToAppear() {
     this.getRouteParams()
+  }
+
+  build() {
+    // 全屏容器，点击任意位置关闭页面
+    Stack({ alignContent: Alignment.Center }) {
+      // 页面背景
+      Column() {
+      }
+      .width('100%')
+      .height('100%')
+      .backgroundColor(this.getPageBackgroundColor())
+
+      // 图片展示区域（全屏自适应）
+      if (!this.isImageLoadFailed) {
+        Image($r(this.imageUrl))
+          .width('100%')
+          .height('100%')
+          .objectFit(ImageFit.Contain) // 保持图片比例，完整显示在容器内
+          .onComplete(() => {
+            this.onImageLoadSuccess()
+            console.info("finish")
+          })
+          .onError(() => {
+            this.onImageLoadFailed()
+          })
+      } else {
+        // 图片加载失败兜底视图
+        Column({ space: 15 }) {
+          Image($r("app.media.FailPic"))
+            .width(80)
+            .height(80)
+
+          Text("图片加载失败，请稍后重试")
+            .fontSize(14)
+            .fontColor("#aaaaaa")
+        }
+        .width('100%')
+        .height('100%')
+        .justifyContent(FlexAlign.Center)
+      }
+
+      // 关闭提示（可选，增强用户体验）
+      Text("点击任意位置关闭全屏预览")
+        .fontSize(14)
+        .fontColor("#ffffff")
+        .opacity(0.7)
+        .position({ y: '95%', x: "30%" })
+
+    }
+    .width('100%')
+    .height('100%')
+    .onClick(() => {
+      this.closeFullScreenPage()
+    })
   }
 
   private getRouteParams(): void {
@@ -79,59 +132,5 @@ export struct FullScreenImagePage {
    */
   private buildImageLoadFailedView(): void {
     // UI组件需要在build方法中构建，这里只设置状态
-  }
-
-  build() {
-    // 全屏容器，点击任意位置关闭页面
-    Stack({ alignContent: Alignment.Center }) {
-      // 页面背景
-      Column() {
-      }
-      .width('100%')
-      .height('100%')
-      .backgroundColor(this.getPageBackgroundColor())
-
-      // 图片展示区域（全屏自适应）
-      if (!this.isImageLoadFailed) {
-        Image($r(this.imageUrl))
-          .width('100%')
-          .height('100%')
-          .objectFit(ImageFit.Contain) // 保持图片比例，完整显示在容器内
-          .onComplete(() => {
-            this.onImageLoadSuccess()
-            console.info("finish")
-          })
-          .onError(() => {
-            this.onImageLoadFailed()
-          })
-      } else {
-        // 图片加载失败兜底视图
-        Column({ space: 15 }) {
-          Image($r("app.media.FailPic"))
-            .width(80)
-            .height(80)
-
-          Text("图片加载失败，请稍后重试")
-            .fontSize(14)
-            .fontColor("#aaaaaa")
-        }
-        .width('100%')
-        .height('100%')
-        .justifyContent(FlexAlign.Center)
-      }
-
-      // 关闭提示（可选，增强用户体验）
-      Text("点击任意位置关闭全屏预览")
-        .fontSize(14)
-        .fontColor("#ffffff")
-        .opacity(0.7)
-        .position({ y: '95%',x:"30%"})
-
-    }
-    .width('100%')
-    .height('100%')
-    .onClick(() => {
-      this.closeFullScreenPage()
-    })
   }
 }

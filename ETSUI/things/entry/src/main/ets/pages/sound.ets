@@ -12,7 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-          // 导入核心模块
+// 导入核心模块
 import media from '@ohos.multimedia.media';
 import fileIo from '@ohos.file.fs';
 import { promptAction } from '@kit.ArkUI';
@@ -27,7 +27,6 @@ export struct AudioRecordPage {
   fd?: number;
   // 录音文件保存路径
   filePath?: string;
-
   // 用户首选项相关属性
   @State audioBitrate: number = 10000;
   @State audioChannels: number = 1;
@@ -50,8 +49,8 @@ export struct AudioRecordPage {
         fileIo.OpenMode.CREATE | fileIo.OpenMode.READ_WRITE
       );
       this.fd = file.fd;
-      let show:string = this.fd.toString()
-      console.log("sp1"+show);
+      let show: string = this.fd.toString()
+      console.log("sp1" + show);
 
       // 2. 步骤2：配置录音参数（关键！参数错误会导致录音失败）
       const recordConfig: media.AVRecorderConfig = {
@@ -155,12 +154,12 @@ export struct AudioRecordPage {
             { value: "96000" },
             { value: "128000" }
           ])
-          .selected(this.audioBitrate === 64000 ? 0 : this.audioBitrate === 96000 ? 1 : 2)
-          .value(this.audioBitrate.toString())
-          .onSelect((index: number) => {
-            this.audioBitrate = index === 0 ? 64000 : index === 1 ? 96000 : 128000;
-            this.FlushAll();
-          })
+            .selected(this.audioBitrate === 64000 ? 0 : this.audioBitrate === 96000 ? 1 : 2)
+            .value(this.audioBitrate.toString())
+            .onSelect((index: number) => {
+              this.audioBitrate = index === 0 ? 64000 : index === 1 ? 96000 : 128000;
+              this.FlushAll();
+            })
         }
       }
 
@@ -173,12 +172,12 @@ export struct AudioRecordPage {
             { value: "1" },
             { value: "2" }
           ])
-          .selected(this.audioChannels === 1 ? 0 : 1)
-          .value(this.audioChannels.toString())
-          .onSelect((index: number) => {
-            this.audioChannels = index === 0 ? 1 : 2;
-            this.FlushAll();
-          })
+            .selected(this.audioChannels === 1 ? 0 : 1)
+            .value(this.audioChannels.toString())
+            .onSelect((index: number) => {
+              this.audioChannels = index === 0 ? 1 : 2;
+              this.FlushAll();
+            })
         }
       }
 
@@ -192,12 +191,12 @@ export struct AudioRecordPage {
             { value: "48000" },
             { value: "96000" }
           ])
-          .selected(this.audioSampleRate === 44100 ? 0 : this.audioSampleRate === 48000 ? 1 : 2)
-          .value(this.audioSampleRate.toString())
-          .onSelect((index: number) => {
-            this.audioSampleRate = index === 0 ? 44100 : index === 1 ? 48000 : 96000;
-            this.FlushAll();
-          })
+            .selected(this.audioSampleRate === 44100 ? 0 : this.audioSampleRate === 48000 ? 1 : 2)
+            .value(this.audioSampleRate.toString())
+            .onSelect((index: number) => {
+              this.audioSampleRate = index === 0 ? 44100 : index === 1 ? 48000 : 96000;
+              this.FlushAll();
+            })
         }
       }
 
