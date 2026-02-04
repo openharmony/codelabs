@@ -1,6 +1,9 @@
 {
   "src": [
     "pages/SettingsPage",
+    "pages/MainPage",
+    "pages/eventpages/NetworkPage",
+    "pages/eventpages/ScreenPage",
     "pages/eventpages/StoragePage"
   ]
 }

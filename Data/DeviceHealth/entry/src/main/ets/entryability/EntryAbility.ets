@@ -114,7 +114,7 @@ export default class EntryAbility extends UIAbility {
     /**
      * 加载设置页面
      */
-    windowStage.loadContent('pages/SettingsPage', (err: BusinessError) => {
+    windowStage.loadContent('pages/MainPage', (err: BusinessError) => {
       if (err.code) {
         hilog.error(
           DOMAIN,
