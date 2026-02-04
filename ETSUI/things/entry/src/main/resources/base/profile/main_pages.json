@@ -1,8 +1,6 @@
 {
   "src": [
-    "pages/Index",
     "pages/Page",
-    "pages/Setting",
     "pages/mainPage",
     "pages/fullPage"
   ]
