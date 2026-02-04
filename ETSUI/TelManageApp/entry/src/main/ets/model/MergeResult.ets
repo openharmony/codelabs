@@ -21,10 +21,10 @@ import { contact } from '@kit.ContactsKit';
  * 重复联系人组状态
  */
 export enum DuplicateGroupStatus {
-  PENDING = 'PENDING',       // 待处理
-  MERGED = 'MERGED',         // 已合并
-  IGNORED = 'IGNORED',       // 已忽略
-  PARTIAL = 'PARTIAL'        // 部分处理
+  PENDING = 'PENDING', // 待处理
+  MERGED = 'MERGED', // 已合并
+  IGNORED = 'IGNORED', // 已忽略
+  PARTIAL = 'PARTIAL' // 部分处理
 }
 
 /**
@@ -32,13 +32,13 @@ export enum DuplicateGroupStatus {
  * 记录各字段的相似度计算结果
  */
 export interface SimilarityDetail {
-  phoneScore: number;          // 电话相似度得分 (0-1)
-  nameScore: number;           // 姓名相似度得分 (0-1)
-  emailScore: number;          // 邮箱相似度得分 (0-1)
-  organizationScore: number;   // 组织相似度得分 (0-1)
-  overallScore: number;        // 综合相似度得分 (0-1)
-  matchedFields: string[];     // 匹配的字段列表
-  conflictFields: string[];    // 冲突的字段列表
+  phoneScore: number; // 电话相似度得分 (0-1)
+  nameScore: number; // 姓名相似度得分 (0-1)
+  emailScore: number; // 邮箱相似度得分 (0-1)
+  organizationScore: number; // 组织相似度得分 (0-1)
+  overallScore: number; // 综合相似度得分 (0-1)
+  matchedFields: string[]; // 匹配的字段列表
+  conflictFields: string[]; // 冲突的字段列表
 }
 
 /**
@@ -71,8 +71,8 @@ export interface DuplicatePair {
   contact1: contact.Contact;
   contact2: contact.Contact;
   similarity: SimilarityDetail;
-  detectedAt: number;          // 检测时间戳
-  pairId: string;              // 唯一标识
+  detectedAt: number; // 检测时间戳
+  pairId: string; // 唯一标识
 }
 
 /**
@@ -80,24 +80,24 @@ export interface DuplicatePair {
  * 表示一组可能重复的联系人（可能超过2个）
  */
 export interface DuplicateGroup {
-  groupId: string;                         // 组唯一标识
-  contacts: contact.Contact[];             // 组内所有联系人
-  primaryContact: contact.Contact | null;  // 推荐保留的主联系人
+  groupId: string; // 组唯一标识
+  contacts: contact.Contact[]; // 组内所有联系人
+  primaryContact: contact.Contact | null; // 推荐保留的主联系人
   similarities: Map<string, SimilarityDetail>; // 两两相似度详情
-  averageSimilarity: number;               // 平均相似度
-  status: DuplicateGroupStatus;            // 组状态
-  createdAt: number;                       // 创建时间
-  processedAt: number | null;              // 处理时间
+  averageSimilarity: number; // 平均相似度
+  status: DuplicateGroupStatus; // 组状态
+  createdAt: number; // 创建时间
+  processedAt: number | null; // 处理时间
 }
 
 /**
  * 字段冲突信息接口
  */
 export interface FieldConflict {
-  fieldName: string;           // 字段名称
-  values: string[];            // 各联系人的值
-  contactKeys: string[];       // 对应的联系人key
-  recommendedValue: string;    // 推荐值
+  fieldName: string; // 字段名称
+  values: string[]; // 各联系人的值
+  contactKeys: string[]; // 对应的联系人key
+  recommendedValue: string; // 推荐值
 }
 
 /**
@@ -105,36 +105,36 @@ export interface FieldConflict {
  * 展示合并后的预期结果
  */
 export interface MergePreview {
-  mergedContact: contact.Contact;    // 合并后的联系人
-  contactsToDelete: string[];        // 待删除的联系人key列表
-  conflicts: FieldConflict[];        // 冲突字段列表
-  warnings: string[];                // 警告信息
+  mergedContact: contact.Contact; // 合并后的联系人
+  contactsToDelete: string[]; // 待删除的联系人key列表
+  conflicts: FieldConflict[]; // 冲突字段列表
+  warnings: string[]; // 警告信息
 }
 
 /**
  * 合并操作记录接口
  */
 export interface MergeRecord {
-  recordId: string;                  // 记录ID
-  timestamp: number;                 // 操作时间
+  recordId: string; // 记录ID
+  timestamp: number; // 操作时间
   originalContacts: contact.Contact[]; // 原始联系人列表
-  mergedContact: contact.Contact;    // 合并后的联系人
-  deletedKeys: string[];             // 已删除的联系人key
-  operationType: 'AUTO' | 'MANUAL';  // 操作类型
-  canUndo: boolean;                  // 是否可撤销
+  mergedContact: contact.Contact; // 合并后的联系人
+  deletedKeys: string[]; // 已删除的联系人key
+  operationType: 'AUTO' | 'MANUAL'; // 操作类型
+  canUndo: boolean; // 是否可撤销
 }
 
 /**
  * 去重统计信息接口
  */
 export interface DuplicateStatistics {
-  totalContacts: number;             // 总联系人数
-  duplicateGroups: number;           // 重复组数量
-  duplicateContacts: number;         // 重复联系人数量
-  potentialSavings: number;          // 可节省的联系人数
-  scanDuration: number;              // 扫描耗时(ms)
-  lastScanTime: number;              // 最后扫描时间
-  strategyUsed: string;              // 使用的策略
+  totalContacts: number; // 总联系人数
+  duplicateGroups: number; // 重复组数量
+  duplicateContacts: number; // 重复联系人数量
+  potentialSavings: number; // 可节省的联系人数
+  scanDuration: number; // 扫描耗时(ms)
+  lastScanTime: number; // 最后扫描时间
+  strategyUsed: string; // 使用的策略
 }
 
 /**
@@ -142,12 +142,12 @@ export interface DuplicateStatistics {
  */
 export interface BatchProcessResult {
   success: boolean;
-  processedGroups: number;           // 处理的组数
-  mergedContacts: number;            // 合并的联系人数
-  deletedContacts: number;           // 删除的联系人数
-  failedGroups: number;              // 失败的组数
-  errors: string[];                  // 错误信息列表
-  duration: number;                  // 处理耗时(ms)
+  processedGroups: number; // 处理的组数
+  mergedContacts: number; // 合并的联系人数
+  deletedContacts: number; // 删除的联系人数
+  failedGroups: number; // 失败的组数
+  errors: string[]; // 错误信息列表
+  duration: number; // 处理耗时(ms)
 }
 
 /**
@@ -214,7 +214,9 @@ export class DuplicateGroupModel implements DuplicateGroup {
     // 姓名完整度
     if (contactItem.name?.fullName) {
       score += 20;
-      if (contactItem.name.fullName.length > 2) score += 5;
+      if (contactItem.name.fullName.length > 2) {
+        score += 5;
+      }
     }
 
     // 电话完整度
@@ -355,7 +357,7 @@ export class DuplicateGroupModel implements DuplicateGroup {
    */
   private getRecommendedValue(values: string[]): string {
     return values.reduce((longest, current) =>
-      current.length > longest.length ? current : longest, '');
+    current.length > longest.length ? current : longest, '');
   }
 
   /**

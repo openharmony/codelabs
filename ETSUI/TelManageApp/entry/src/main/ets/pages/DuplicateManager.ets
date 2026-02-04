@@ -16,27 +16,19 @@
  */
 
 import { contact } from '@kit.ContactsKit';
-import { router, promptAction } from '@kit.ArkUI';
-import { Context, abilityAccessCtrl } from '@kit.AbilityKit';
+import { promptAction, router } from '@kit.ArkUI';
+import { abilityAccessCtrl, Context } from '@kit.AbilityKit';
 import { ContactData } from '../model/ContactData';
+import { DuplicateService } from '../model/DuplicateDetector';
+import { DuplicateGroupModel, DuplicateStatistics, MergePreview } from '../model/MergeResult';
 import {
-  DuplicateDetector,
-  DuplicateService
-} from '../model/DuplicateDetector';
-import {
-  DuplicateGroupModel,
-  DuplicateGroupStatus,
-  MergePreview,
-  DuplicateStatistics
-} from '../model/MergeResult';
-import {
+  DEFAULT_DUPLICATE_STRATEGY_CONFIG,
+  DuplicateStrategyConfig,
+  DuplicateStrategyPresets,
   DuplicateStrategyType,
   DuplicateStrictLevel,
-  DuplicateStrategyConfig,
-  DEFAULT_DUPLICATE_STRATEGY_CONFIG,
   STRATEGY_TYPE_DESCRIPTIONS,
-  STRICT_LEVEL_DESCRIPTIONS,
-  DuplicateStrategyPresets
+  STRICT_LEVEL_DESCRIPTIONS
 } from '../model/DuplicateStrategy';
 
 /**
@@ -79,9 +71,9 @@ enum ScanState {
  * 视图模式枚举
  */
 enum ViewMode {
-  LIST = 'LIST',           // 列表视图
-  DETAIL = 'DETAIL',       // 详情视图
-  SETTINGS = 'SETTINGS'    // 设置视图
+  LIST = 'LIST', // 列表视图
+  DETAIL = 'DETAIL', // 详情视图
+  SETTINGS = 'SETTINGS' // 设置视图
 }
 
 @Entry
@@ -91,30 +83,25 @@ struct DuplicateManager {
   @Provide('context') context: Context = getContext(this);
   private contactData: ContactData = new ContactData(this.context);
   private duplicateService: DuplicateService = DuplicateService.getInstance();
-
   // 页面状态
   @State scanState: ScanState = ScanState.IDLE;
   @State viewMode: ViewMode = ViewMode.LIST;
   @State isLoading: boolean = false;
   @State errorMessage: string = '';
-
   // 数据状态
   @State allContacts: contact.Contact[] = [];
   @State duplicateGroups: DuplicateGroupModel[] = [];
   @State selectedGroup: DuplicateGroupModel | null = null;
   @State mergePreview: MergePreview | null = null;
   @State statistics: DuplicateStatistics | null = null;
-
   // 配置状态
   @State currentConfig: DuplicateStrategyConfig = copyStrategyConfig(DEFAULT_DUPLICATE_STRATEGY_CONFIG);
   @State selectedStrategyType: DuplicateStrategyType = DuplicateStrategyType.SMART_DETECT;
   @State selectedStrictLevel: DuplicateStrictLevel = DuplicateStrictLevel.NORMAL;
-
   // 批量操作状态
   @State showBatchConfirm: boolean = false;
   @State batchProcessing: boolean = false;
   @State processedCount: number = 0;
-
   // 详情页状态
   @State showMergeConfirm: boolean = false;
   @State showIgnoreConfirm: boolean = false;
@@ -219,7 +206,9 @@ struct DuplicateManager {
    * 合并选中的组
    */
   async mergeSelectedGroup() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     this.isLoading = true;
     try {
@@ -249,7 +238,9 @@ struct DuplicateManager {
    * 忽略选中的组
    */
   ignoreSelectedGroup() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     this.duplicateService.ignoreGroup(this.selectedGroup);
     this.duplicateGroups = this.duplicateService.getCachedGroups();
@@ -653,7 +644,12 @@ struct DuplicateManager {
           })
       }
       .width('100%')
-      .padding({ left: 16, right: 16, bottom: 16, top: 8 })
+      .padding({
+        left: 16,
+        right: 16,
+        bottom: 16,
+        top: 8
+      })
     }
     .width('100%')
     .backgroundColor(Color.White)
@@ -811,7 +807,12 @@ struct DuplicateManager {
                 .fontSize(10)
                 .fontColor(Color.White)
                 .backgroundColor('#00C853')
-                .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+                .padding({
+                  left: 6,
+                  right: 6,
+                  top: 2,
+                  bottom: 2
+                })
                 .borderRadius(4)
                 .margin({ left: 8 })
             }
@@ -863,13 +864,13 @@ struct DuplicateManager {
 
         ForEach(this.mergePreview!.mergedContact.phoneNumbers || [],
           (phone: contact.PhoneNumber) => {
-          this.PreviewRow('电话', phone.phoneNumber || '')
-        }, (phone: contact.PhoneNumber, index: number) => index.toString())
+            this.PreviewRow('电话', phone.phoneNumber || '')
+          }, (phone: contact.PhoneNumber, index: number) => index.toString())
 
         ForEach(this.mergePreview!.mergedContact.emails || [],
           (email: contact.Email) => {
-          this.PreviewRow('邮箱', email.email || '')
-        }, (email: contact.Email, index: number) => index.toString())
+            this.PreviewRow('邮箱', email.email || '')
+          }, (email: contact.Email, index: number) => index.toString())
       }
       .width('100%')
       .padding(12)
@@ -951,8 +952,8 @@ struct DuplicateManager {
 
           ForEach(Array.from(STRATEGY_TYPE_DESCRIPTIONS.entries()),
             (entry: [DuplicateStrategyType, string]) => {
-            this.StrategyOption(entry[0], entry[1])
-          }, (entry: [DuplicateStrategyType, string]) => entry[0])
+              this.StrategyOption(entry[0], entry[1])
+            }, (entry: [DuplicateStrategyType, string]) => entry[0])
         }
         .width('100%')
         .padding(16)
@@ -970,8 +971,8 @@ struct DuplicateManager {
 
           ForEach(Array.from(STRICT_LEVEL_DESCRIPTIONS.entries()),
             (entry: [DuplicateStrictLevel, string]) => {
-            this.StrictLevelOption(entry[0], entry[1])
-          }, (entry: [DuplicateStrictLevel, string]) => entry[0])
+              this.StrictLevelOption(entry[0], entry[1])
+            }, (entry: [DuplicateStrictLevel, string]) => entry[0])
         }
         .width('100%')
         .padding(16)
@@ -1004,7 +1005,12 @@ struct DuplicateManager {
         }
         .width('100%')
         .padding(16)
-        .margin({ left: 16, right: 16, top: 16, bottom: 16 })
+        .margin({
+          left: 16,
+          right: 16,
+          top: 16,
+          bottom: 16
+        })
         .backgroundColor(Color.White)
         .borderRadius(12)
       }
@@ -1117,7 +1123,9 @@ struct DuplicateManager {
         .layoutWeight(1)
         .backgroundColor('#000000')
         .opacity(0.5)
-        .onClick(() => { this.showMergeConfirm = false; })
+        .onClick(() => {
+          this.showMergeConfirm = false;
+        })
 
       // 弹窗内容 - 底部距离屏幕底部100vp
       Column() {
@@ -1142,7 +1150,9 @@ struct DuplicateManager {
             .height(44)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
-            .onClick(() => { this.showMergeConfirm = false; })
+            .onClick(() => {
+              this.showMergeConfirm = false;
+            })
 
           Button('确认合并')
             .layoutWeight(1)
@@ -1179,7 +1189,9 @@ struct DuplicateManager {
         .layoutWeight(1)
         .backgroundColor('#000000')
         .opacity(0.5)
-        .onClick(() => { this.showIgnoreConfirm = false; })
+        .onClick(() => {
+          this.showIgnoreConfirm = false;
+        })
 
       // 弹窗内容 - 底部距离屏幕底部120vp
       Column() {
@@ -1198,7 +1210,9 @@ struct DuplicateManager {
             .height(44)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
-            .onClick(() => { this.showIgnoreConfirm = false; })
+            .onClick(() => {
+              this.showIgnoreConfirm = false;
+            })
 
           Button('确认忽略')
             .layoutWeight(1)
@@ -1235,7 +1249,9 @@ struct DuplicateManager {
         .layoutWeight(1)
         .backgroundColor('#000000')
         .opacity(0.5)
-        .onClick(() => { this.showBatchConfirm = false; })
+        .onClick(() => {
+          this.showBatchConfirm = false;
+        })
 
       // 弹窗内容 - 底部距离屏幕底部120vp
       Column() {
@@ -1260,7 +1276,9 @@ struct DuplicateManager {
             .height(44)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
-            .onClick(() => { this.showBatchConfirm = false; })
+            .onClick(() => {
+              this.showBatchConfirm = false;
+            })
 
           Button('确认全部合并')
             .layoutWeight(1)

@@ -22,42 +22,42 @@
  */
 export enum DuplicateStrategyType {
   // 精确匹配策略
-  EXACT_PHONE = 'EXACT_PHONE',           // 电话号码完全相同
-  EXACT_NAME = 'EXACT_NAME',             // 姓名完全相同
-  EXACT_EMAIL = 'EXACT_EMAIL',           // 邮箱完全相同
+  EXACT_PHONE = 'EXACT_PHONE', // 电话号码完全相同
+  EXACT_NAME = 'EXACT_NAME', // 姓名完全相同
+  EXACT_EMAIL = 'EXACT_EMAIL', // 邮箱完全相同
 
   // 模糊匹配策略
-  FUZZY_PHONE = 'FUZZY_PHONE',           // 电话号码模糊匹配（忽略格式差异）
-  FUZZY_NAME = 'FUZZY_NAME',             // 姓名模糊匹配（相似度阈值）
-  SIMILAR_PINYIN = 'SIMILAR_PINYIN',     // 拼音相似匹配
+  FUZZY_PHONE = 'FUZZY_PHONE', // 电话号码模糊匹配（忽略格式差异）
+  FUZZY_NAME = 'FUZZY_NAME', // 姓名模糊匹配（相似度阈值）
+  SIMILAR_PINYIN = 'SIMILAR_PINYIN', // 拼音相似匹配
 
   // 组合策略
-  PHONE_AND_NAME = 'PHONE_AND_NAME',     // 电话+姓名同时匹配
-  MULTI_FIELD = 'MULTI_FIELD',           // 多字段综合评分
+  PHONE_AND_NAME = 'PHONE_AND_NAME', // 电话+姓名同时匹配
+  MULTI_FIELD = 'MULTI_FIELD', // 多字段综合评分
 
   // 智能策略
-  SMART_DETECT = 'SMART_DETECT'          // 智能检测（基于多维度加权）
+  SMART_DETECT = 'SMART_DETECT' // 智能检测（基于多维度加权）
 }
 
 /**
  * 去重严格程度枚举
  */
 export enum DuplicateStrictLevel {
-  STRICT = 'STRICT',       // 严格模式：只有完全匹配才视为重复
-  NORMAL = 'NORMAL',       // 普通模式：一定相似度即视为重复
-  LOOSE = 'LOOSE'          // 宽松模式：较低相似度即视为重复
+  STRICT = 'STRICT', // 严格模式：只有完全匹配才视为重复
+  NORMAL = 'NORMAL', // 普通模式：一定相似度即视为重复
+  LOOSE = 'LOOSE' // 宽松模式：较低相似度即视为重复
 }
 
 /**
  * 合并冲突解决策略
  */
 export enum MergeConflictResolution {
-  KEEP_FIRST = 'KEEP_FIRST',             // 保留第一个值
-  KEEP_LAST = 'KEEP_LAST',               // 保留最后一个值
-  KEEP_LONGEST = 'KEEP_LONGEST',         // 保留最长的值
-  KEEP_NEWEST = 'KEEP_NEWEST',           // 保留最新的值
-  MERGE_ALL = 'MERGE_ALL',               // 合并所有值
-  ASK_USER = 'ASK_USER'                  // 询问用户
+  KEEP_FIRST = 'KEEP_FIRST', // 保留第一个值
+  KEEP_LAST = 'KEEP_LAST', // 保留最后一个值
+  KEEP_LONGEST = 'KEEP_LONGEST', // 保留最长的值
+  KEEP_NEWEST = 'KEEP_NEWEST', // 保留最新的值
+  MERGE_ALL = 'MERGE_ALL', // 合并所有值
+  ASK_USER = 'ASK_USER' // 询问用户
 }
 
 /**
@@ -65,9 +65,9 @@ export enum MergeConflictResolution {
  * 用于多字段综合评分策略
  */
 export interface FieldWeightConfig {
-  phoneWeight: number;      // 电话号码权重 (0-100)
-  nameWeight: number;       // 姓名权重 (0-100)
-  emailWeight: number;      // 邮箱权重 (0-100)
+  phoneWeight: number; // 电话号码权重 (0-100)
+  nameWeight: number; // 姓名权重 (0-100)
+  emailWeight: number; // 邮箱权重 (0-100)
   organizationWeight: number; // 组织/公司权重 (0-100)
 }
 
@@ -80,10 +80,10 @@ export interface DuplicateStrategyConfig {
   strictLevel: DuplicateStrictLevel;
 
   // 相似度阈值配置
-  phoneSimThreshold: number;     // 电话相似度阈值 (0-1)
-  nameSimThreshold: number;      // 姓名相似度阈值 (0-1)
-  emailSimThreshold: number;     // 邮箱相似度阈值 (0-1)
-  overallSimThreshold: number;   // 综合相似度阈值 (0-1)
+  phoneSimThreshold: number; // 电话相似度阈值 (0-1)
+  nameSimThreshold: number; // 姓名相似度阈值 (0-1)
+  emailSimThreshold: number; // 邮箱相似度阈值 (0-1)
+  overallSimThreshold: number; // 综合相似度阈值 (0-1)
 
   // 字段权重
   fieldWeights: FieldWeightConfig;
@@ -92,10 +92,10 @@ export interface DuplicateStrategyConfig {
   conflictResolution: MergeConflictResolution;
 
   // 高级配置
-  ignorePhoneFormat: boolean;    // 是否忽略电话格式（+86、空格、-等）
-  ignoreCaseInName: boolean;     // 姓名比较是否忽略大小写
-  ignoreWhitespace: boolean;     // 是否忽略空白字符
-  enablePinyinMatch: boolean;    // 是否启用拼音匹配
+  ignorePhoneFormat: boolean; // 是否忽略电话格式（+86、空格、-等）
+  ignoreCaseInName: boolean; // 姓名比较是否忽略大小写
+  ignoreWhitespace: boolean; // 是否忽略空白字符
+  enablePinyinMatch: boolean; // 是否启用拼音匹配
 }
 
 /**

@@ -12,7 +12,6 @@
  */
 // 新增联系人页面：表单输入 + 保存提交
 import { ContactData } from '../model/ContactData';
-import { contact } from '@kit.ContactsKit';
 import { promptAction, router } from '@kit.ArkUI';
 import { Context } from '@kit.AbilityKit';
 import { BusinessError } from '@kit.BasicServicesKit';
@@ -119,7 +118,12 @@ struct AddContact {
         .opacity(this.name && this.phone ? 1 : 0.6)
       }
       .width('100%')
-      .padding({ left: 12, right: 12, top: 20, bottom: 20 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 20,
+        bottom: 20
+      })
       // .backgroundColor('#F0F0F0')
       .borderRadius(4)
 
@@ -166,8 +170,7 @@ struct AddContact {
                 .fontSize(16)
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
-                .padding({ left: 10, right: 10 })
-                // 去除空格后写入 name
+                .padding({ left: 10, right: 10 })// 去除空格后写入 name
                 .onChange((value: string) => {
                   this.name = value.trim();
                 })
@@ -196,8 +199,7 @@ struct AddContact {
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
                 .padding({ left: 10, right: 10 })
-                .type(InputType.Number)
-                // 去除空格后写入 phone
+                .type(InputType.Number)// 去除空格后写入 phone
                 .onChange((value: string) => {
                   this.phone = value.trim();
                 })
@@ -225,8 +227,7 @@ struct AddContact {
                 .fontSize(16)
                 .backgroundColor('#f8f8f8')
                 .borderRadius(5)
-                .padding({ left: 10, right: 10 })
-                // 去除空格后写入 email（可选）
+                .padding({ left: 10, right: 10 })// 去除空格后写入 email（可选）
                 .onChange((value: string) => {
                   this.email = value.trim();
                 })
@@ -237,7 +238,12 @@ struct AddContact {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(10)
-          .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+          .shadow({
+            radius: 2,
+            color: '#10000000',
+            offsetX: 0,
+            offsetY: 1
+          })
           .margin({ left: 20, right: 20 })
         }
       }
@@ -316,7 +322,9 @@ struct AddContact {
   //   }
   // }
   async saveContact() {
-    if (!this.name || !this.phone) return;
+    if (!this.name || !this.phone) {
+      return;
+    }
     this.isSaving = true;
 
     try {
@@ -336,7 +344,10 @@ struct AddContact {
       AlertDialog.show({
         title: '保存失败',
         message: '无法访问通讯录，请检查应用权限设置',
-        confirm: { value: '确定', action: () => {} }
+        confirm: {
+          value: '确定', action: () => {
+          }
+        }
       });
     } finally {
       this.isSaving = false;

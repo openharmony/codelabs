@@ -16,31 +16,30 @@
  */
 
 import { contact } from '@kit.ContactsKit';
-import { router, promptAction } from '@kit.ArkUI';
-import { Context, abilityAccessCtrl } from '@kit.AbilityKit';
+import { promptAction, router } from '@kit.ArkUI';
+import { abilityAccessCtrl, Context } from '@kit.AbilityKit';
 import { ContactData } from '../model/ContactData';
 import {
-  ContactGroup,
   ContactGroupModel,
+  GROUP_COLORS,
+  GROUP_ICONS,
   GroupManager,
-  GroupType,
   GroupSortOrder,
   GroupStatistics,
-  SmartGroupGenerator,
-  GROUP_COLORS,
-  GROUP_ICONS
+  GroupType,
+  SmartGroupGenerator
 } from '../model/ContactGroup';
 
 /**
  * 视图模式枚举
  */
 enum ViewMode {
-  GROUP_LIST = 'GROUP_LIST',           // 分组列表
-  GROUP_DETAIL = 'GROUP_DETAIL',       // 分组详情（查看分组内联系人）
-  GROUP_EDIT = 'GROUP_EDIT',           // 编辑分组
-  GROUP_CREATE = 'GROUP_CREATE',       // 创建分组
-  CONTACT_SELECT = 'CONTACT_SELECT',   // 选择联系人
-  SMART_GROUP = 'SMART_GROUP'          // 智能分组
+  GROUP_LIST = 'GROUP_LIST', // 分组列表
+  GROUP_DETAIL = 'GROUP_DETAIL', // 分组详情（查看分组内联系人）
+  GROUP_EDIT = 'GROUP_EDIT', // 编辑分组
+  GROUP_CREATE = 'GROUP_CREATE', // 创建分组
+  CONTACT_SELECT = 'CONTACT_SELECT', // 选择联系人
+  SMART_GROUP = 'SMART_GROUP' // 智能分组
 }
 
 /**
@@ -78,14 +77,12 @@ struct GroupManagerPage {
   @Provide('context') context: Context = getContext(this);
   private contactData: ContactData = new ContactData(this.context);
   private groupManager: GroupManager = new GroupManager();
-
   // 预定义的排序选项数组
   private sortOptions: SortOptionItem[] = [
     { order: GroupSortOrder.CUSTOM, label: '默认' },
     { order: GroupSortOrder.NAME_ASC, label: '名称' },
     { order: GroupSortOrder.COUNT_DESC, label: '人数' }
   ];
-
   // 智能分组选项数组
   private smartGroupOptions: SmartGroupOptionItem[] = [
     { type: SmartGroupType.BY_LAST_NAME, label: '按姓氏分组', desc: '将相同姓氏的联系人分为一组' },
@@ -94,7 +91,6 @@ struct GroupManagerPage {
     { type: SmartGroupType.BY_PHONE_AREA, label: '按电话区号分组', desc: '按电话号码归属地分组' },
     { type: SmartGroupType.BY_ORGANIZATION, label: '按公司/组织分组', desc: '相同公司的联系人分为一组' }
   ];
-
   // 智能分组对话框选项数组
   private smartGroupDialogOptions: SmartGroupOptionItem[] = [
     { type: SmartGroupType.BY_LAST_NAME, label: '按姓氏' },
@@ -103,34 +99,28 @@ struct GroupManagerPage {
     { type: SmartGroupType.BY_PHONE_AREA, label: '按电话区号' },
     { type: SmartGroupType.BY_ORGANIZATION, label: '按公司' }
   ];
-
   // 页面状态
   @State viewMode: ViewMode = ViewMode.GROUP_LIST;
   @State isLoading: boolean = false;
   @State errorMessage: string = '';
-
   // 数据状态
   @State allContacts: contact.Contact[] = [];
   @State groups: ContactGroupModel[] = [];
   @State selectedGroup: ContactGroupModel | null = null;
   @State groupContacts: contact.Contact[] = [];
   @State statistics: GroupStatistics | null = null;
-
   // 创建/编辑分组状态
   @State editingGroupName: string = '';
   @State editingGroupDescription: string = '';
   @State editingGroupColor: string = GROUP_COLORS[0];
   @State editingGroupIcon: string = GROUP_ICONS[0];
   @State isEditMode: boolean = false;
-
   // 联系人选择状态
   @State selectedContactKeys: Set<string> = new Set();
   @State searchText: string = '';
   @State filteredContacts: contact.Contact[] = [];
-
   // 排序状态
   @State currentSortOrder: GroupSortOrder = GroupSortOrder.CUSTOM;
-
   // 弹窗状态
   @State showDeleteConfirm: boolean = false;
   @State showSmartGroupDialog: boolean = false;
@@ -235,10 +225,12 @@ struct GroupManagerPage {
    * 加载分组内的联系人
    */
   loadGroupContacts() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     this.groupContacts = this.allContacts.filter(c =>
-      c.key && this.selectedGroup!.hasContact(c.key)
+    c.key && this.selectedGroup!.hasContact(c.key)
     );
   }
 
@@ -275,7 +267,9 @@ struct GroupManagerPage {
    * 更新分组
    */
   async updateGroup() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     if (!this.editingGroupName.trim()) {
       promptAction.showToast({ message: '请输入分组名称' });
@@ -304,7 +298,9 @@ struct GroupManagerPage {
    * 删除分组
    */
   async deleteGroup() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     const result = this.groupManager.deleteGroup(this.selectedGroup.groupId);
 
@@ -357,7 +353,9 @@ struct GroupManagerPage {
    * 进入联系人选择模式
    */
   enterContactSelectMode() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     // 初始化已选中的联系人
     this.selectedContactKeys = new Set(this.selectedGroup.contactKeys);
@@ -383,7 +381,9 @@ struct GroupManagerPage {
    * 保存联系人选择
    */
   async saveContactSelection() {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     // 计算添加和移除的联系人
     const currentKeys = new Set(this.selectedGroup.contactKeys);
@@ -476,7 +476,9 @@ struct GroupManagerPage {
    * 从分组移除联系人
    */
   async removeContactFromGroup(contactKey: string) {
-    if (!this.selectedGroup) return;
+    if (!this.selectedGroup) {
+      return;
+    }
 
     const result = this.groupManager.removeContactFromGroup(
       this.selectedGroup.groupId,
@@ -765,7 +767,12 @@ struct GroupManagerPage {
       }, (item: SortOptionItem) => item.order)
     }
     .width('100%')
-    .padding({ left: 16, right: 16, top: 12, bottom: 8 })
+    .padding({
+      left: 16,
+      right: 16,
+      top: 12,
+      bottom: 8
+    })
   }
 
   /**
@@ -793,7 +800,12 @@ struct GroupManagerPage {
             Text('默认')
               .fontSize(10)
               .fontColor('#666')
-              .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+              .padding({
+                left: 6,
+                right: 6,
+                top: 2,
+                bottom: 2
+              })
               .backgroundColor('#f0f0f0')
               .borderRadius(4)
               .margin({ left: 8 })
@@ -803,7 +815,12 @@ struct GroupManagerPage {
             Text('智能')
               .fontSize(10)
               .fontColor('#007DFF')
-              .padding({ left: 6, right: 6, top: 2, bottom: 2 })
+              .padding({
+                left: 6,
+                right: 6,
+                top: 2,
+                bottom: 2
+              })
               .backgroundColor('#007DFF20')
               .borderRadius(4)
               .margin({ left: 8 })
@@ -1350,7 +1367,9 @@ struct GroupManagerPage {
         .height('100%')
         .backgroundColor('#000000')
         .opacity(0.5)
-        .onClick(() => { this.showDeleteConfirm = false; })
+        .onClick(() => {
+          this.showDeleteConfirm = false;
+        })
 
       Column() {
         Text('确认删除')
@@ -1373,7 +1392,9 @@ struct GroupManagerPage {
             .height(40)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
-            .onClick(() => { this.showDeleteConfirm = false; })
+            .onClick(() => {
+              this.showDeleteConfirm = false;
+            })
 
           Button('删除')
             .layoutWeight(1)
@@ -1407,7 +1428,9 @@ struct GroupManagerPage {
         .height('100%')
         .backgroundColor('#000000')
         .opacity(0.5)
-        .onClick(() => { this.showSmartGroupDialog = false; })
+        .onClick(() => {
+          this.showSmartGroupDialog = false;
+        })
 
       Column() {
         Text('智能分组')
@@ -1439,7 +1462,9 @@ struct GroupManagerPage {
             .height(40)
             .backgroundColor('#f0f0f0')
             .fontColor('#333')
-            .onClick(() => { this.showSmartGroupDialog = false; })
+            .onClick(() => {
+              this.showSmartGroupDialog = false;
+            })
 
           Button('生成')
             .layoutWeight(1)

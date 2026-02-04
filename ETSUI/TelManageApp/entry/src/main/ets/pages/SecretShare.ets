@@ -28,7 +28,6 @@ import { ValidationUtil } from '../utils/ValidationUtil';
 @Component
 struct SecretShare {
   private contactData: ContactData = new ContactData();
-
   @State contactName: string = '';
   @State contactPhone: string = '';
   @State contactEmail: string = '';
@@ -130,7 +129,7 @@ struct SecretShare {
       return '字段校验通过';
     }
     return [nameResult, phoneResult, emailResult]
-      .filter((item) => !item.isValid)
+      .filter((item) =>!item.isValid)
       .map((item) => item.message)
       .join('，');
   }
@@ -273,7 +272,12 @@ struct SecretShare {
     .padding(16)
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
   }
 
   /**
@@ -295,7 +299,12 @@ struct SecretShare {
     .margin({ top: 16 })
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
   }
 
   /**

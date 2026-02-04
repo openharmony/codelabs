@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { contact } from '@kit.ContactsKit';
-import { Context, common } from '@kit.AbilityKit';
+import { common, Context } from '@kit.AbilityKit';
 import { fileIo } from '@kit.CoreFileKit';
 
 export class FavoriteManager {
@@ -188,7 +188,7 @@ export class FavoriteManager {
       });
     } else {
       // 移除收藏
-      favoriteIds = favoriteIds.filter(id => !contactIds.includes(id));
+      favoriteIds = favoriteIds.filter(id =>!contactIds.includes(id));
     }
 
     await this.saveFavoriteContactIds(favoriteIds);

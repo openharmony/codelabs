@@ -31,7 +31,6 @@ struct MyBusinessCard {
     showInList: true,
     contactId: ''
   };
-
   // 编辑状态
   @State isEditing: boolean = false;
   @State isSaving: boolean = false;
@@ -226,7 +225,8 @@ struct MyBusinessCard {
         Button() {
           Stack({ alignContent: Alignment.Center }) {
             // 圆形背景
-            Column() {}
+            Column() {
+            }
             .width(40)
             .height(40)
             .borderRadius(20)
@@ -264,7 +264,8 @@ struct MyBusinessCard {
             // 分享按钮
             Button() {
               Stack({ alignContent: Alignment.Center }) {
-                Column() {}
+                Column() {
+                }
                 .width(40)
                 .height(40)
                 .borderRadius(20)
@@ -293,7 +294,8 @@ struct MyBusinessCard {
             // 编辑按钮
             Button() {
               Stack({ alignContent: Alignment.Center }) {
-                Column() {}
+                Column() {
+                }
                 .width(40)
                 .height(40)
                 .borderRadius(20)
@@ -324,7 +326,8 @@ struct MyBusinessCard {
             // 取消按钮
             Button() {
               Stack({ alignContent: Alignment.Center }) {
-                Column() {}
+                Column() {
+                }
                 .width(40)
                 .height(40)
                 .borderRadius(20)
@@ -353,7 +356,8 @@ struct MyBusinessCard {
             // 保存按钮
             Button() {
               Stack({ alignContent: Alignment.Center }) {
-                Column() {}
+                Column() {
+                }
                 .width(40)
                 .height(40)
                 .borderRadius(20)
@@ -383,7 +387,12 @@ struct MyBusinessCard {
         }
       }
       .width('100%')
-      .padding({ left: 12, right: 12, top: 20, bottom: 20 })
+      .padding({
+        left: 12,
+        right: 12,
+        top: 20,
+        bottom: 20
+      })
 
       // 内容区域
       Scroll() {
@@ -548,7 +557,12 @@ struct MyBusinessCard {
           .padding(20)
           .backgroundColor(Color.White)
           .borderRadius(10)
-          .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+          .shadow({
+            radius: 2,
+            color: '#10000000',
+            offsetX: 0,
+            offsetY: 1
+          })
           .margin({ left: 20, right: 20 })
 
           // 使用说明
@@ -575,7 +589,12 @@ struct MyBusinessCard {
             .padding(20)
             .backgroundColor('#F8F8F8')
             .borderRadius(10)
-            .margin({ top: 20, left: 20, right: 20, bottom: 20 })
+            .margin({
+              top: 20,
+              left: 20,
+              right: 20,
+              bottom: 20
+            })
           }
         }
         .width('100%')

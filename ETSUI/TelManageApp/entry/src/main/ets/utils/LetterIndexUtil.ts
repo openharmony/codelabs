@@ -151,8 +151,12 @@ export class LetterIndexUtil {
    */
   private static sortGroupKeys(keys: string[]): string[] {
     return keys.sort((left, right) => {
-      if (left === '#') return 1;
-      if (right === '#') return -1;
+      if (left === '#') {
+        return 1;
+      }
+      if (right === '#') {
+        return -1;
+      }
       return left.localeCompare(right);
     });
   }
