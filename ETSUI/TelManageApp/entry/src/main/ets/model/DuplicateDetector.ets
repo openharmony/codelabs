@@ -18,22 +18,19 @@
 import { contact } from '@kit.ContactsKit';
 import { SimilarityCalculator } from '../utils/SimilarityCalculator';
 import {
+  DEFAULT_DUPLICATE_STRATEGY_CONFIG,
+  DuplicateStrategyConfig,
   DuplicateStrategyType,
   DuplicateStrictLevel,
-  DuplicateStrategyConfig,
-  DEFAULT_DUPLICATE_STRATEGY_CONFIG,
   MergeConflictResolution
 } from './DuplicateStrategy';
 import {
-  DuplicateGroup,
+  BatchProcessResult,
   DuplicateGroupModel,
   DuplicateGroupStatus,
-  SimilarityDetail,
-  DuplicatePair,
-  MergePreview,
   DuplicateStatistics,
-  BatchProcessResult,
-  FieldConflict
+  MergePreview,
+  SimilarityDetail
 } from './MergeResult';
 import { ContactData } from './ContactData';
 
@@ -111,13 +108,17 @@ export class DuplicateDetector {
     // 两两比较
     for (let i = 0; i < contacts.length; i++) {
       const contact1 = contacts[i];
-      if (!contact1.key || processedKeys.has(contact1.key)) continue;
+      if (!contact1.key || processedKeys.has(contact1.key)) {
+        continue;
+      }
 
       const group = new DuplicateGroupModel([contact1]);
 
       for (let j = i + 1; j < contacts.length; j++) {
         const contact2 = contacts[j];
-        if (!contact2.key || processedKeys.has(contact2.key)) continue;
+        if (!contact2.key || processedKeys.has(contact2.key)) {
+          continue;
+        }
 
         const similarity = this.calculateSimilarity(contact1, contact2);
 
@@ -136,7 +137,9 @@ export class DuplicateDetector {
 
         // 标记组内所有联系人为已处理
         group.contacts.forEach(c => {
-          if (c.key) processedKeys.add(c.key);
+          if (c.key) {
+            processedKeys.add(c.key);
+          }
         });
       }
     }
@@ -194,13 +197,13 @@ export class DuplicateDetector {
     // 计算加权综合得分
     const weights = this.config.fieldWeights;
     const totalWeight = weights.phoneWeight + weights.nameWeight +
-                       weights.emailWeight + weights.organizationWeight;
+    weights.emailWeight + weights.organizationWeight;
 
     const overallScore = totalWeight > 0 ?
       (phoneScore * weights.phoneWeight +
-       nameScore * weights.nameWeight +
-       emailScore * weights.emailWeight +
-       organizationScore * weights.organizationWeight) / totalWeight
+        nameScore * weights.nameWeight +
+        emailScore * weights.emailWeight +
+        organizationScore * weights.organizationWeight) / totalWeight
       : 0;
 
     // 识别匹配和冲突字段
@@ -243,13 +246,17 @@ export class DuplicateDetector {
     const phones1 = contact1.phoneNumbers?.map(p => p.phoneNumber || '') || [];
     const phones2 = contact2.phoneNumbers?.map(p => p.phoneNumber || '') || [];
 
-    if (phones1.length === 0 || phones2.length === 0) return 0;
+    if (phones1.length === 0 || phones2.length === 0) {
+      return 0;
+    }
 
     let maxSimilarity = 0;
 
     for (const phone1 of phones1) {
       for (const phone2 of phones2) {
-        if (!phone1 || !phone2) continue;
+        if (!phone1 || !phone2) {
+          continue;
+        }
 
         let similarity: number;
         if (this.config.ignorePhoneFormat) {
@@ -272,7 +279,9 @@ export class DuplicateDetector {
     let name1 = contact1.name?.fullName || '';
     let name2 = contact2.name?.fullName || '';
 
-    if (!name1 || !name2) return 0;
+    if (!name1 || !name2) {
+      return 0;
+    }
 
     if (this.config.ignoreCaseInName) {
       name1 = name1.toLowerCase();
@@ -299,13 +308,17 @@ export class DuplicateDetector {
     const emails1 = contact1.emails?.map(e => e.email || '') || [];
     const emails2 = contact2.emails?.map(e => e.email || '') || [];
 
-    if (emails1.length === 0 || emails2.length === 0) return 0;
+    if (emails1.length === 0 || emails2.length === 0) {
+      return 0;
+    }
 
     let maxSimilarity = 0;
 
     for (const email1 of emails1) {
       for (const email2 of emails2) {
-        if (!email1 || !email2) continue;
+        if (!email1 || !email2) {
+          continue;
+        }
 
         const similarity = SimilarityCalculator.emailSimilarity(email1, email2);
         maxSimilarity = Math.max(maxSimilarity, similarity);
@@ -322,7 +335,9 @@ export class DuplicateDetector {
     const org1 = contact1.organization?.name || '';
     const org2 = contact2.organization?.name || '';
 
-    if (!org1 || !org2) return 0;
+    if (!org1 || !org2) {
+      return 0;
+    }
 
     return SimilarityCalculator.jaroWinklerSimilarity(
       org1.toLowerCase(),
@@ -352,7 +367,7 @@ export class DuplicateDetector {
 
       case DuplicateStrategyType.PHONE_AND_NAME:
         return similarity.phoneScore >= this.config.phoneSimThreshold &&
-               similarity.nameScore >= this.config.nameSimThreshold;
+          similarity.nameScore >= this.config.nameSimThreshold;
 
       case DuplicateStrategyType.MULTI_FIELD:
       case DuplicateStrategyType.SMART_DETECT:
@@ -442,7 +457,9 @@ export class DuplicateDetector {
       .map(c => c.name?.fullName || '')
       .filter(n => n.length > 0);
 
-    if (names.length === 0) return '';
+    if (names.length === 0) {
+      return '';
+    }
 
     switch (this.config.conflictResolution) {
       case MergeConflictResolution.KEEP_FIRST:
@@ -503,7 +520,9 @@ export class DuplicateDetector {
       .map(c => c.organization)
       .filter(o => o && o.name);
 
-    if (orgs.length === 0) return undefined;
+    if (orgs.length === 0) {
+      return undefined;
+    }
 
     // 选择信息最完整的
     return orgs.reduce((best, current) => {
@@ -521,8 +540,12 @@ export class DuplicateDetector {
       .map(c => c.note?.noteContent || '')
       .filter(n => n.length > 0);
 
-    if (notes.length === 0) return '';
-    if (notes.length === 1) return notes[0];
+    if (notes.length === 0) {
+      return '';
+    }
+    if (notes.length === 1) {
+      return notes[0];
+    }
 
     // 合并所有备注，用换行分隔（去重）
     const uniqueNotes = Array.from(new Set(notes));
@@ -572,7 +595,9 @@ export class DuplicateDetector {
     const errors: string[] = [];
 
     for (const group of groups) {
-      if (group.status !== DuplicateGroupStatus.PENDING) continue;
+      if (group.status !== DuplicateGroupStatus.PENDING) {
+        continue;
+      }
 
       try {
         const preview = this.generateMergePreview(group);
@@ -673,7 +698,7 @@ export class DuplicateService {
     // 如果有缓存且未超时（5分钟），直接返回
     const cacheTimeout = 5 * 60 * 1000;
     if (!forceRefresh && this.cachedGroups.length > 0 &&
-        Date.now() - this.lastScanTime < cacheTimeout) {
+      Date.now() - this.lastScanTime < cacheTimeout) {
       return this.cachedGroups;
     }
 

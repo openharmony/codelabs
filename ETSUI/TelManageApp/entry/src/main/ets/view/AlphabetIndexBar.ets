@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
  * Licensed under the Apache License, Version 2.0 (the");
@@ -10,7 +9,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *//*
+ */
+/*
  * 组件功能：联系人字母索引条。
  * 作用：展示 A-Z/# 列表，并支持点击/滑动选择字母。
  * 输出：通过回调通知外部选中字母。
@@ -20,7 +20,6 @@
 export struct AlphabetIndexBar {
   @Prop letters: string[] = [];
   @Link selectedLetter: string;
-
   @State barHeight: number = 0;
   @State isTouching: boolean = false;
   @State currentLetter: string = '';
@@ -55,7 +54,12 @@ export struct AlphabetIndexBar {
     .padding({ top: 8, bottom: 8 })
     .backgroundColor('#ffffff')
     .borderRadius(16)
-    .shadow({ radius: 2, color: '#12000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#12000000',
+      offsetX: 0,
+      offsetY: 1
+    })
     .onAreaChange((_oldValue, newValue) => {
       this.barHeight = this.normalizeLength(newValue.height);
     })

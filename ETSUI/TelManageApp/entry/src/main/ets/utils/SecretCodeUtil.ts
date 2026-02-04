@@ -356,8 +356,12 @@ export class SecretCodeUtil {
    */
   private static padBase64(text: string): string {
     const mod = text.length % 4;
-    if (mod === 2) return `${text}==`;
-    if (mod === 3) return `${text}=`;
+    if (mod === 2) {
+      return `${text}==`;
+    }
+    if (mod === 3) {
+      return `${text}=`;
+    }
     return text;
   }
 
@@ -395,8 +399,12 @@ export class SecretCodeUtil {
       const c4 = chars.indexOf(cleaned[index + 3]);
       const value = (c1 << 18) | (c2 << 12) | ((c3 & 0x3f) << 6) | (c4 & 0x3f);
       bytes.push((value >> 16) & 0xff);
-      if (cleaned[index + 2] !== '=') bytes.push((value >> 8) & 0xff);
-      if (cleaned[index + 3] !== '=') bytes.push(value & 0xff);
+      if (cleaned[index + 2] !== '=') {
+        bytes.push((value >> 8) & 0xff);
+      }
+      if (cleaned[index + 3] !== '=') {
+        bytes.push(value & 0xff);
+      }
     }
     return bytes;
   }

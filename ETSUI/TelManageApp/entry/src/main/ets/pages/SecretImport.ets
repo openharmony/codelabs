@@ -26,7 +26,6 @@ import { ValidationUtil } from '../utils/ValidationUtil';
 @Component
 struct SecretImport {
   private contactData: ContactData = new ContactData();
-
   @State inputCode: string = '';
   @State statusText: string = '请输入密令';
   @State parsedFields: SecretContactFields | null = null;
@@ -180,7 +179,7 @@ struct SecretImport {
       return '字段校验通过';
     }
     return [nameResult, phoneResult, emailResult]
-      .filter((item) => !item.isValid)
+      .filter((item) =>!item.isValid)
       .map((item) => item.message)
       .join('，');
   }
@@ -269,7 +268,12 @@ struct SecretImport {
     .margin({ top: 16 })
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
   }
 
   /**
@@ -386,7 +390,12 @@ struct SecretImport {
     .margin({ top: 16 })
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
   }
 
   /**

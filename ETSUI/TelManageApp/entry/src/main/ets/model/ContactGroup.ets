@@ -24,26 +24,26 @@ import { Context } from '@kit.AbilityKit';
  * 分组类型枚举
  */
 export enum GroupType {
-  CUSTOM = 'CUSTOM',           // 用户自定义分组
-  SYSTEM = 'SYSTEM',           // 系统预设分组
-  SMART = 'SMART',             // 智能分组（自动分类）
-  FAVORITE = 'FAVORITE',       // 收藏分组
-  RECENT = 'RECENT',           // 最近联系
-  FREQUENT = 'FREQUENT'        // 常用联系人
+  CUSTOM = 'CUSTOM', // 用户自定义分组
+  SYSTEM = 'SYSTEM', // 系统预设分组
+  SMART = 'SMART', // 智能分组（自动分类）
+  FAVORITE = 'FAVORITE', // 收藏分组
+  RECENT = 'RECENT', // 最近联系
+  FREQUENT = 'FREQUENT' // 常用联系人
 }
 
 /**
  * 智能分组规则类型
  */
 export enum SmartGroupRuleType {
-  BY_NAME_PREFIX = 'BY_NAME_PREFIX',       // 按姓氏分组
-  BY_PHONE_AREA = 'BY_PHONE_AREA',         // 按电话区号分组
-  BY_EMAIL_DOMAIN = 'BY_EMAIL_DOMAIN',     // 按邮箱域名分组
-  BY_ORGANIZATION = 'BY_ORGANIZATION',     // 按组织/公司分组
-  BY_CREATION_DATE = 'BY_CREATION_DATE',   // 按创建日期分组
-  BY_FIRST_LETTER = 'BY_FIRST_LETTER',     // 按首字母分组
-  BY_CONTACT_COUNT = 'BY_CONTACT_COUNT',   // 按联系频率分组
-  CUSTOM_RULE = 'CUSTOM_RULE'              // 自定义规则
+  BY_NAME_PREFIX = 'BY_NAME_PREFIX', // 按姓氏分组
+  BY_PHONE_AREA = 'BY_PHONE_AREA', // 按电话区号分组
+  BY_EMAIL_DOMAIN = 'BY_EMAIL_DOMAIN', // 按邮箱域名分组
+  BY_ORGANIZATION = 'BY_ORGANIZATION', // 按组织/公司分组
+  BY_CREATION_DATE = 'BY_CREATION_DATE', // 按创建日期分组
+  BY_FIRST_LETTER = 'BY_FIRST_LETTER', // 按首字母分组
+  BY_CONTACT_COUNT = 'BY_CONTACT_COUNT', // 按联系频率分组
+  CUSTOM_RULE = 'CUSTOM_RULE' // 自定义规则
 }
 
 /**
@@ -61,7 +61,7 @@ export const GROUP_COLORS: string[] = [
   '#AA00FF', // 深紫
   '#F50057', // 粉色
   '#00BFA5', // 蓝绿
-  '#FF9100'  // 深橙
+  '#FF9100'// 深橙
 ];
 
 /**
@@ -86,32 +86,32 @@ export const GROUP_ICONS: string[] = [
  * 分组排序方式
  */
 export enum GroupSortOrder {
-  NAME_ASC = 'NAME_ASC',           // 按名称升序
-  NAME_DESC = 'NAME_DESC',         // 按名称降序
-  COUNT_ASC = 'COUNT_ASC',         // 按成员数升序
-  COUNT_DESC = 'COUNT_DESC',       // 按成员数降序
-  CREATED_ASC = 'CREATED_ASC',     // 按创建时间升序
-  CREATED_DESC = 'CREATED_DESC',   // 按创建时间降序
-  CUSTOM = 'CUSTOM'                // 自定义顺序
+  NAME_ASC = 'NAME_ASC', // 按名称升序
+  NAME_DESC = 'NAME_DESC', // 按名称降序
+  COUNT_ASC = 'COUNT_ASC', // 按成员数升序
+  COUNT_DESC = 'COUNT_DESC', // 按成员数降序
+  CREATED_ASC = 'CREATED_ASC', // 按创建时间升序
+  CREATED_DESC = 'CREATED_DESC', // 按创建时间降序
+  CUSTOM = 'CUSTOM' // 自定义顺序
 }
 
 /**
  * 联系人分组接口
  */
 export interface ContactGroup {
-  groupId: string;                  // 分组唯一标识
-  name: string;                     // 分组名称
-  description: string;              // 分组描述
-  type: GroupType;                  // 分组类型
-  color: string;                    // 分组颜色
-  icon: string;                     // 分组图标
-  contactKeys: string[];            // 分组内联系人key列表
-  createdAt: number;                // 创建时间
-  updatedAt: number;                // 更新时间
-  sortOrder: number;                // 排序顺序
-  isDefault: boolean;               // 是否为默认分组
-  isVisible: boolean;               // 是否可见
-  smartRule?: SmartGroupRule;       // 智能分组规则（仅智能分组）
+  groupId: string; // 分组唯一标识
+  name: string; // 分组名称
+  description: string; // 分组描述
+  type: GroupType; // 分组类型
+  color: string; // 分组颜色
+  icon: string; // 分组图标
+  contactKeys: string[]; // 分组内联系人key列表
+  createdAt: number; // 创建时间
+  updatedAt: number; // 更新时间
+  sortOrder: number; // 排序顺序
+  isDefault: boolean; // 是否为默认分组
+  isVisible: boolean; // 是否可见
+  smartRule?: SmartGroupRule; // 智能分组规则（仅智能分组）
 }
 
 /**
@@ -120,8 +120,8 @@ export interface ContactGroup {
 export interface SmartGroupRule {
   ruleType: SmartGroupRuleType;
   ruleConfig: SmartGroupRuleConfig;
-  autoUpdate: boolean;              // 是否自动更新
-  lastUpdated: number;              // 最后更新时间
+  autoUpdate: boolean; // 是否自动更新
+  lastUpdated: number; // 最后更新时间
 }
 
 /**
@@ -316,12 +316,24 @@ export class ContactGroupModel implements ContactGroup {
    * 更新分组信息
    */
   update(updates: Partial<ContactGroup>): void {
-    if (updates.name !== undefined) this.name = updates.name;
-    if (updates.description !== undefined) this.description = updates.description;
-    if (updates.color !== undefined) this.color = updates.color;
-    if (updates.icon !== undefined) this.icon = updates.icon;
-    if (updates.sortOrder !== undefined) this.sortOrder = updates.sortOrder;
-    if (updates.isVisible !== undefined) this.isVisible = updates.isVisible;
+    if (updates.name !== undefined) {
+      this.name = updates.name;
+    }
+    if (updates.description !== undefined) {
+      this.description = updates.description;
+    }
+    if (updates.color !== undefined) {
+      this.color = updates.color;
+    }
+    if (updates.icon !== undefined) {
+      this.icon = updates.icon;
+    }
+    if (updates.sortOrder !== undefined) {
+      this.sortOrder = updates.sortOrder;
+    }
+    if (updates.isVisible !== undefined) {
+      this.isVisible = updates.isVisible;
+    }
     this.updatedAt = Date.now();
   }
 
@@ -748,7 +760,7 @@ export class GroupManager {
       group.contactKeys.forEach(key => groupedKeys.add(key));
     });
 
-    return allContactKeys.filter(key => !groupedKeys.has(key));
+    return allContactKeys.filter(key =>!groupedKeys.has(key));
   }
 
   /**
@@ -877,7 +889,9 @@ export class SmartGroupGenerator {
       const fullName = contactItem.name?.fullName || '';
       if (fullName.length === 0) {
         const ungrouped = groups.get('未知姓氏') || [];
-        if (contactItem.key) ungrouped.push(contactItem.key);
+        if (contactItem.key) {
+          ungrouped.push(contactItem.key);
+        }
         groups.set('未知姓氏', ungrouped);
         return;
       }
@@ -885,7 +899,9 @@ export class SmartGroupGenerator {
       // 提取姓氏（假设第一个字符是姓）
       const lastName = fullName.charAt(0);
       const existing = groups.get(lastName) || [];
-      if (contactItem.key) existing.push(contactItem.key);
+      if (contactItem.key) {
+        existing.push(contactItem.key);
+      }
       groups.set(lastName, existing);
     });
 
@@ -913,7 +929,9 @@ export class SmartGroupGenerator {
       }
 
       const existing = groups.get(letter) || [];
-      if (contactItem.key) existing.push(contactItem.key);
+      if (contactItem.key) {
+        existing.push(contactItem.key);
+      }
       groups.set(letter, existing);
     });
 
@@ -935,7 +953,9 @@ export class SmartGroupGenerator {
       }
 
       const existing = groups.get(domain) || [];
-      if (contactItem.key) existing.push(contactItem.key);
+      if (contactItem.key) {
+        existing.push(contactItem.key);
+      }
       groups.set(domain, existing);
     });
 
@@ -979,7 +999,9 @@ export class SmartGroupGenerator {
       }
 
       const existing = groups.get(area) || [];
-      if (contactItem.key) existing.push(contactItem.key);
+      if (contactItem.key) {
+        existing.push(contactItem.key);
+      }
       groups.set(area, existing);
     });
 
@@ -996,7 +1018,9 @@ export class SmartGroupGenerator {
       const org = contactItem.organization?.name || '无组织信息';
 
       const existing = groups.get(org) || [];
-      if (contactItem.key) existing.push(contactItem.key);
+      if (contactItem.key) {
+        existing.push(contactItem.key);
+      }
       groups.set(org, existing);
     });
 

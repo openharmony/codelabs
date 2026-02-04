@@ -20,7 +20,6 @@
  * 封装各种相似度计算算法
  */
 export class SimilarityCalculator {
-
   /**
    * Levenshtein 编辑距离算法
    * 计算两个字符串之间的最小编辑操作数
@@ -34,7 +33,7 @@ export class SimilarityCalculator {
 
     // 创建距离矩阵
     const dp: number[][] = Array.from({ length: m + 1 }, () =>
-      Array.from({ length: n + 1 }, () => 0)
+    Array.from({ length: n + 1 }, () => 0)
     );
 
     // 初始化第一行和第一列
@@ -52,8 +51,8 @@ export class SimilarityCalculator {
           dp[i][j] = dp[i - 1][j - 1];
         } else {
           dp[i][j] = Math.min(
-            dp[i - 1][j] + 1,     // 删除
-            dp[i][j - 1] + 1,     // 插入
+            dp[i - 1][j] + 1, // 删除
+            dp[i][j - 1] + 1, // 插入
             dp[i - 1][j - 1] + 1  // 替换
           );
         }
@@ -70,8 +69,12 @@ export class SimilarityCalculator {
    * @returns 相似度 (0-1)
    */
   static levenshteinSimilarity(str1: string, str2: string): number {
-    if (str1 === str2) return 1;
-    if (str1.length === 0 || str2.length === 0) return 0;
+    if (str1 === str2) {
+      return 1;
+    }
+    if (str1.length === 0 || str2.length === 0) {
+      return 0;
+    }
 
     const distance = this.levenshteinDistance(str1, str2);
     const maxLength = Math.max(str1.length, str2.length);
@@ -87,8 +90,12 @@ export class SimilarityCalculator {
    * @returns 相似度 (0-1)
    */
   static jaroSimilarity(str1: string, str2: string): number {
-    if (str1 === str2) return 1;
-    if (str1.length === 0 || str2.length === 0) return 0;
+    if (str1 === str2) {
+      return 1;
+    }
+    if (str1.length === 0 || str2.length === 0) {
+      return 0;
+    }
 
     const matchWindow = Math.floor(Math.max(str1.length, str2.length) / 2) - 1;
     const str1Matches: boolean[] = new Array(str1.length).fill(false);
@@ -103,7 +110,9 @@ export class SimilarityCalculator {
       const end = Math.min(i + matchWindow + 1, str2.length);
 
       for (let j = start; j < end; j++) {
-        if (str2Matches[j] || str1[i] !== str2[j]) continue;
+        if (str2Matches[j] || str1[i] !== str2[j]) {
+          continue;
+        }
         str1Matches[i] = true;
         str2Matches[j] = true;
         matches++;
@@ -111,21 +120,29 @@ export class SimilarityCalculator {
       }
     }
 
-    if (matches === 0) return 0;
+    if (matches === 0) {
+      return 0;
+    }
 
     // 计算换位数
     let k = 0;
     for (let i = 0; i < str1.length; i++) {
-      if (!str1Matches[i]) continue;
-      while (!str2Matches[k]) k++;
-      if (str1[i] !== str2[k]) transpositions++;
+      if (!str1Matches[i]) {
+        continue;
+      }
+      while (!str2Matches[k]) {
+        k++;
+      }
+      if (str1[i] !== str2[k]) {
+        transpositions++;
+      }
       k++;
     }
 
     return (
       matches / str1.length +
-      matches / str2.length +
-      (matches - transpositions / 2) / matches
+        matches / str2.length +
+        (matches - transpositions / 2) / matches
     ) / 3;
   }
 
@@ -163,7 +180,9 @@ export class SimilarityCalculator {
    * @returns 相似度 (0-1)
    */
   static ngramSimilarity(str1: string, str2: string, n: number = 2): number {
-    if (str1 === str2) return 1;
+    if (str1 === str2) {
+      return 1;
+    }
     if (str1.length < n || str2.length < n) {
       return str1 === str2 ? 1 : 0;
     }
@@ -182,7 +201,9 @@ export class SimilarityCalculator {
     // 计算交集
     let intersection = 0;
     ngrams1.forEach(gram => {
-      if (ngrams2.has(gram)) intersection++;
+      if (ngrams2.has(gram)) {
+        intersection++;
+      }
     });
 
     // 计算 Jaccard 相似度
@@ -197,8 +218,12 @@ export class SimilarityCalculator {
    * @returns 相似度 (0-1)
    */
   static cosineSimilarity(str1: string, str2: string): number {
-    if (str1 === str2) return 1;
-    if (str1.length === 0 || str2.length === 0) return 0;
+    if (str1 === str2) {
+      return 1;
+    }
+    if (str1.length === 0 || str2.length === 0) {
+      return 0;
+    }
 
     // 构建字符频率向量
     const getCharFrequency = (str: string): Map<string, number> => {
@@ -222,11 +247,15 @@ export class SimilarityCalculator {
 
     // 计算向量模长
     let magnitude1 = 0;
-    freq1.forEach(count => { magnitude1 += count * count; });
+    freq1.forEach(count => {
+      magnitude1 += count * count;
+    });
     magnitude1 = Math.sqrt(magnitude1);
 
     let magnitude2 = 0;
-    freq2.forEach(count => { magnitude2 += count * count; });
+    freq2.forEach(count => {
+      magnitude2 += count * count;
+    });
     magnitude2 = Math.sqrt(magnitude2);
 
     return dotProduct / (magnitude1 * magnitude2);
@@ -248,8 +277,12 @@ export class SimilarityCalculator {
     const normalized1 = normalize(phone1);
     const normalized2 = normalize(phone2);
 
-    if (normalized1 === normalized2) return 1;
-    if (normalized1.length === 0 || normalized2.length === 0) return 0;
+    if (normalized1 === normalized2) {
+      return 1;
+    }
+    if (normalized1.length === 0 || normalized2.length === 0) {
+      return 0;
+    }
 
     // 处理国际区号差异
     const removeCountryCode = (phone: string): string => {
@@ -269,7 +302,9 @@ export class SimilarityCalculator {
     const cleaned1 = removeCountryCode(normalized1);
     const cleaned2 = removeCountryCode(normalized2);
 
-    if (cleaned1 === cleaned2) return 1;
+    if (cleaned1 === cleaned2) {
+      return 1;
+    }
 
     // 检查是否一个是另一个的后缀
     if (cleaned1.endsWith(cleaned2) || cleaned2.endsWith(cleaned1)) {
@@ -295,7 +330,9 @@ export class SimilarityCalculator {
     const normalized1 = normalize(email1);
     const normalized2 = normalize(email2);
 
-    if (normalized1 === normalized2) return 1;
+    if (normalized1 === normalized2) {
+      return 1;
+    }
     if (!normalized1.includes('@') || !normalized2.includes('@')) {
       return this.levenshteinSimilarity(normalized1, normalized2);
     }
@@ -335,8 +372,12 @@ export class SimilarityCalculator {
     const normalized1 = normalize(name1);
     const normalized2 = normalize(name2);
 
-    if (normalized1 === normalized2) return 1;
-    if (normalized1.length === 0 || normalized2.length === 0) return 0;
+    if (normalized1 === normalized2) {
+      return 1;
+    }
+    if (normalized1.length === 0 || normalized2.length === 0) {
+      return 0;
+    }
 
     // 检查是否是同一个人的不同称呼
     // 例如："张三" vs "张三丰", "小张" vs "张三"
@@ -377,8 +418,12 @@ export class SimilarityCalculator {
    * @returns 相似度 (0-1)
    */
   static smartSimilarity(str1: string, str2: string): number {
-    if (str1 === str2) return 1;
-    if (str1.length === 0 || str2.length === 0) return 0;
+    if (str1 === str2) {
+      return 1;
+    }
+    if (str1.length === 0 || str2.length === 0) {
+      return 0;
+    }
 
     // 对于短字符串使用 Jaro-Winkler
     if (str1.length <= 5 && str2.length <= 5) {
@@ -406,7 +451,7 @@ export class SimilarityCalculator {
   ): number[][] {
     const n = strings.length;
     const matrix: number[][] = Array.from({ length: n }, () =>
-      Array.from({ length: n }, () => 0)
+    Array.from({ length: n }, () => 0)
     );
 
     const calcFunc = this.getAlgorithmFunction(algorithm);

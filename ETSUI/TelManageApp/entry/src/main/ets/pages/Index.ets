@@ -26,7 +26,6 @@ struct Index {
   private contactData: ContactData = new ContactData(this.context);
   private listScroller: Scroller = new Scroller();
   private indexMap: Map<string, number> = new Map();
-
   @State contacts: contact.Contact[] = [];
   @State groupedContacts: ContactGroup[] = [];
   @State indexLetters: string[] = [];
@@ -75,6 +74,7 @@ struct Index {
       this.isLoading = false;
     }
   }
+
   // async loadContacts() {
   //   // 拉取全量联系人并更新加载态与列表数据
   //   console.log('Index: 开始加载联系人列表');
@@ -153,7 +153,10 @@ struct Index {
       message: `确定要删除联系人"${contactName}"吗？此操作不可撤销。`,
       autoCancel: true,
       alignment: DialogAlignment.Center,
-      primaryButton: { value: '取消', action: () => {} },
+      primaryButton: {
+        value: '取消', action: () => {
+        }
+      },
       secondaryButton: {
         value: '删除',
         fontColor: '#ff3b30',
@@ -179,7 +182,10 @@ struct Index {
       message: `即将删除 ${this.selectedKeys.length} 个联系人，是否继续？`,
       autoCancel: true,
       alignment: DialogAlignment.Center,
-      primaryButton: { value: '取消', action: () => {} },
+      primaryButton: {
+        value: '取消', action: () => {
+        }
+      },
       secondaryButton: {
         value: '继续',
         fontColor: '#ff3b30',
@@ -201,7 +207,10 @@ struct Index {
       message: '删除后无法恢复，请确认是否执行删除。',
       autoCancel: true,
       alignment: DialogAlignment.Center,
-      primaryButton: { value: '取消', action: () => {} },
+      primaryButton: {
+        value: '取消', action: () => {
+        }
+      },
       secondaryButton: {
         value: '删除',
         fontColor: '#ff3b30',
@@ -250,7 +259,10 @@ struct Index {
       title: '删除结果',
       message: message,
       alignment: DialogAlignment.Center,
-      primaryButton: { value: '确定', action: () => {} }
+      primaryButton: {
+        value: '确定', action: () => {
+        }
+      }
     });
   }
 
@@ -446,7 +458,7 @@ struct Index {
 
     const allContacts = await this.contactData.queryAllContacts();
     return allContacts.filter((item) =>
-      item.name?.fullName?.toLowerCase().includes(keyword.toLowerCase())
+    item.name?.fullName?.toLowerCase().includes(keyword.toLowerCase())
     );
   }
 
@@ -620,7 +632,12 @@ struct Index {
     .padding(10)
     .backgroundColor(Color.White)
     .borderRadius(12)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
     .margin({ bottom: 12 })
   }
 
@@ -723,8 +740,8 @@ struct Index {
           letters: this.indexLetters,
           selectedLetter: $selectedLetter
         })
-        .height('100%')
-        .margin({ right: 6 })
+          .height('100%')
+          .margin({ right: 6 })
       }
     }
     .width('100%')
@@ -861,7 +878,12 @@ struct Index {
     .padding(12)
     .backgroundColor(Color.White)
     .borderRadius(10)
-    .shadow({ radius: 2, color: '#10000000', offsetX: 0, offsetY: 1 })
+    .shadow({
+      radius: 2,
+      color: '#10000000',
+      offsetX: 0,
+      offsetY: 1
+    })
     .onClick(() => {
       this.handleItemClick(contactItem);
     })

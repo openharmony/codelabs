@@ -14,7 +14,7 @@
 import { ContactData } from '../model/ContactData';
 import { contact } from '@kit.ContactsKit';
 import { router } from '@kit.ArkUI';
-import { Context, common } from '@kit.AbilityKit';
+import { common, Context } from '@kit.AbilityKit';
 import { fileIo } from '@kit.CoreFileKit';
 
 // 定义导出数据接口
@@ -32,12 +32,10 @@ interface ExportContactData {
 struct ImportExport {
   @Provide('context') context: Context = getContext(this);
   private contactData: ContactData = new ContactData(this.context);
-
   // 导出状态
   @State isExporting: boolean = false;
   @State exportMessage: string = '';
   @State exportSuccess: boolean = false;
-
   // 导出选项
   @State exportFormat: 'json' | 'csv' = 'json';
 
@@ -64,7 +62,9 @@ struct ImportExport {
   // 生成导出文件名
   generateExportFileName(): string {
     const now: Date = new Date();
-    const timestamp: string = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
+    const timestamp: string = `${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate()
+      .toString()
+      .padStart(2, '0')}_${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}`;
 
     return `contacts_${timestamp}.${this.exportFormat}`;
   }
@@ -116,7 +116,8 @@ struct ImportExport {
     for (const contactItem of contacts) {
       const row: string[] = [
         `"${contactItem.name?.fullName || '未知'}"`,
-        `"${contactItem.phoneNumbers?.map((phone: contact.PhoneNumber): string => phone.phoneNumber).join('; ') || ''}"`,
+        `"${contactItem.phoneNumbers?.map((phone: contact.PhoneNumber): string => phone.phoneNumber).join('; ') ||
+          ''}"`,
         `"${contactItem.emails?.map((email: contact.Email): string => email.email).join('; ') || ''}"`,
         `"${contactItem.organization?.[0]?.name || ''}"`,
         `"${contactItem.postalAddresses?.[0]?.street || ''}"`,
