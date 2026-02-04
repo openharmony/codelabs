@@ -1,6 +1,6 @@
 # 隐私安全电子相册（HarmonyPhotoAlbum）
 
-基于 HarmonyOS/OpenHarmony 的隐私安全电子相册 Demo，演示「应用沙箱 + PIN 鉴权 + 沉浸式电子相框 + 预置图片库」的完整体验。
+基于 OpenHarmony 的隐私安全电子相册 Demo，演示「应用沙箱 + PIN 鉴权 + 沉浸式电子相框 + 预置图片库」的完整体验。
 
 > 本项目专注于沙箱内图片的管理与展示，所有照片数据均保存在应用私有目录，系统图库无法访问。
 
@@ -11,14 +11,14 @@
 ### 1. 🔒 隐私安全保险箱
 
 **PIN 码鉴权机制**
-- 首次打开应用时，需要设置 **4 位数字 PIN 码**
+- 打开应用时，需要设置 **4 位数字 PIN 码**
 - 再次进入应用时，必须输入正确 PIN 才能解锁相册
 - PIN 使用 `@ohos.data.preferences` 持久化存储在应用沙箱内
 
 **沙箱隔离**
 - 所有相册图片文件与数据库均保存在 `UIAbilityContext.filesDir` 沙箱目录
 - 系统图库无法扫描这些图片，实现物理隔离
-- 其他应用无法访问，确保隐私安全
+- 确保隐私安全
 
 **相关代码**
 - `entry/src/main/ets/service/AuthService.ets` - PIN 鉴权服务
@@ -33,13 +33,13 @@
   - 自动轮播，支持点击查看大图
   
 - **底部网格区**：两栏瀑布流展示所有照片
-  - 显示除轮播外的其他照片
+  - 显示除轮播外的照片
   - 确保上下不重复显示同一张图片
   - 点击可进入详情页浏览
 
 **预置图片库**
 - 内置精美示例图片（风景、生活、美食、人物等分类）
-- 新用户首次体验无需添加照片即可浏览
+- 新用户体验无需添加照片即可浏览
 - 来源：`entry/src/main/ets/model/ResourceGallery.ets`
 
 ### 3. 🎨 沉浸式电子相框
@@ -113,7 +113,6 @@
 
 **特点**：
 - 系统图库无法扫描
-- 其他应用无法访问
 - 卸载应用后自动删除
 
 ### 2. PIN 鉴权与持久化
@@ -121,12 +120,12 @@
 使用 `@ohos.data.preferences` 实现：
 
 ```typescript
-// 首选项配置
+
 PREF_NAME = 'privacy_safe_box_pref'
 KEY_PIN = 'pin_code'
 
 // 鉴权流程
-1. 首次启动 → 设置 PIN → 保存到 Preferences
+1. 启动 → 设置 PIN → 保存到 Preferences
 2. 再次启动 → 输入 PIN → 校验 → 通过后显示相册
 ```
 
@@ -231,8 +230,8 @@ entry/src/main/resources/
 
 ### 环境要求
 
-- **DevEco Studio** 4.0+ （或支持 HarmonyOS/OpenHarmony 的开发环境）
-- **HarmonyOS 设备**或**OpenHarmony 模拟器**（建议带屏设备/平板）
+- **DevEco Studio** 4.0+ （或支持 OpenHarmony 的开发环境）
+- ** OpenHarmony 模拟器**（建议带屏设备/平板）
 - **API Level**: 9+
 
 ### 运行步骤
@@ -250,7 +249,7 @@ entry/src/main/resources/
    - 默认使用本机调试证书
 
 3. **安装运行**
-   - 连接 HarmonyOS 设备或启动模拟器
+   - 连接 设备或启动模拟器
    - 点击 DevEco Studio 的 **Run** 按钮
    - 等待应用安装完成
 
@@ -258,7 +257,7 @@ entry/src/main/resources/
 
 #### 第一步：设置 PIN 码
 
-1. 首次打开应用，看到「隐私安全保险箱」界面
+1. 打开应用，看到「隐私安全保险箱」界面
 2. 输入 4 位数字 PIN（例如：`1234`）
 3. 再次输入确认
 4. 点击「保存并进入相册」
@@ -302,7 +301,7 @@ entry/src/main/resources/
 - ✅ PIN 码鉴权保护
 - ✅ 应用沙箱物理隔离
 - ✅ 系统图库无法访问
-- ✅ 其他应用无法读取
+-
 
 ### 2. 用户体验
 
@@ -359,7 +358,7 @@ export const GALLERY_ITEMS: Array<GalleryItem> = [
     category: '分类',
     tags: '标签'
   },
-  // ... 其他图片
+
 ];
 ```
 
@@ -381,12 +380,7 @@ export const GALLERY_ITEMS: Array<GalleryItem> = [
 - [ ] 云端备份与同步
 - [ ] 多设备数据迁移
 
-### 长期计划
 
-- [ ] 人脸识别与分组
-- [ ] 智能相册推荐
-- [ ] 视频支持
-- [ ] 更多电子相框主题与动画
 
 ---
 

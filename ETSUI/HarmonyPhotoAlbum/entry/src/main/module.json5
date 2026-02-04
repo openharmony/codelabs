@@ -5,8 +5,7 @@
     "description": "$string:module_desc",
     "mainElement": "EntryAbility",
     "deviceTypes": [
-      "default",
-      "tablet"
+      "phone"
     ],
     "deliveryWithInstall": true,
     "installationFree": false,
@@ -32,6 +31,40 @@
           }
         ]
       }
+    ],
+    // --- 新增部分开始: 权限配置 ---
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.READ_MEDIA",  // 修改点：从 READ_IMAGE_VIDEO 改为 READ_MEDIA
+        "reason": "$string:reason_read_image",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.WRITE_MEDIA", // 修改点：从 WRITE_IMAGE_VIDEO 改为 WRITE_MEDIA
+        "reason": "$string:reason_write_image",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      },
+      {
+        "name": "ohos.permission.CAMERA",      // 相机权限保持不变
+        "reason": "$string:reason_use_camera",
+        "usedScene": {
+          "abilities": [
+            "EntryAbility"
+          ],
+          "when": "inuse"
+        }
+      }
     ]
+    // --- 新增部分结束 ---
   }
 }
