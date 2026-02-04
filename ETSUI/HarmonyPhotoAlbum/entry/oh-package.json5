@@ -1,10 +1,13 @@
 {
-  "license": "",
-  "devDependencies": {},
-  "author": "",
   "name": "entry",
+  "version": "1.0.0",
   "description": "Please describe the basic information.",
   "main": "",
-  "version": "1.0.0",
-  "dependencies": {}
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "pinyin-pro": "^3.26.0"  // 【添加这一行】
+  },
+  "devDependencies": {}
 }
+
