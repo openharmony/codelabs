@@ -4,6 +4,10 @@
     "pages/AddContact",
     "pages/EditContact",
     "pages/DuplicateManager",
-    "pages/GroupManager"
+    "pages/GroupManager",
+    "pages/ImportExport",
+    "pages/MyBusinessCard",
+    "pages/SecretShare",
+    "pages/SecretImport"
   ]
 }

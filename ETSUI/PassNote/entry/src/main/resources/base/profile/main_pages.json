@@ -1,0 +1,13 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/PasswordEntry",
+    "pages/NumberPassPage",
+    "pages/GraphPassPage",
+    "pages/FingerprintPage",
+    "pages/FaceRecPage",
+    "pages/HomePage",
+    "pages/ProfilePage",
+    "pages/SchedulePage"
+  ]
+}

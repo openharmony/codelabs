@@ -1,0 +1,27 @@
+{
+  "devices": {
+    "general": [
+      "default"
+    ]
+  },
+  "development": {
+    "addedSysCaps": []
+  },
+  "production": {
+    "addedSysCaps": [],
+    "removedSysCaps": [
+      "SystemCapability.Multimedia.Media.AVTranscoder",
+      "SystemCapability.Telephony.CellularData",
+      "SystemCapability.Communication.Bluetooth.Core",
+      "SystemCapability.Telephony.CoreService",
+      "SystemCapability.Telephony.StateRegistry",
+      "SystemCapability.Telephony.SmsMms",
+      "SystemCapability.Telephony.CallManager",
+      "SystemCapability.DistributedHardware.DeviceManager",
+      "SystemCapability.Multimedia.Drm.Core",
+      "SystemCapability.Advertising.Ads",
+      "SystemCapability.BundleManager.AppDomainVerify",
+      "SystemCapability.Customization.EnterpriseDeviceManager"
+    ]
+  }
+}

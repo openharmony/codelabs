@@ -1,0 +1,22 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/health/HealthRecord",
+    "pages/travel/TravelPlan",
+    "pages/goals/GoalDetail",
+    "pages/mood/MoodRecord",
+    "pages/learning/SkillDetail",
+    "pages/diary/DiaryEdit",
+    "pages/reminder/ReminderEdit",
+    "pages/statistics/StatisticsMain",
+    "pages/search/SearchMain",
+    "pages/achievements/AchievementsMain",
+    "pages/report/ReportMain",
+    "pages/settings/SettingsMain",
+    "pages/reminder/ReminderMain",
+    "pages/backup/BackupMain",
+    "pages/tags/TagsMain",
+    "pages/filter/FilterMain",
+    "pages/help/HelpMain"
+  ]
+}

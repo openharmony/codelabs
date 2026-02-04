@@ -3,7 +3,7 @@
     "products": [
       {
         "name": "default",
-        "signingConfig": "hjy",
+        "signingConfig": "default",
         "compatibleSdkVersion": "5.0.1(13)",
         "runtimeOS": "HarmonyOS",
         "buildOption": {
@@ -11,7 +11,8 @@
             "caseSensitiveCheck": true,
             "useNormalizedOHMUrl": true
           }
-        }
+        },
+        "targetSdkVersion": "5.0.1(13)",
       }
     ],
     "buildModeSet": [
@@ -24,16 +25,16 @@
     ],
     "signingConfigs": [
       {
-        "name": "hjy",
+        "name": "default",
         "type": "HarmonyOS",
         "material": {
-          "certpath": "C:\\Users\\j'y'H'an\\.ohos\\config\\hjy_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.cer",
-          "storePassword": "0000001B944A6CCF46FBC4BD35784D346C69BAAD5064D6146137411C7FF7EE657D9F8178FFE81C46A9A98C",
+          "certpath": "C:\\Users\\Guo jia\\.ohos\\config\\default_TelManageApp_gumz3gk4laA-2vy0cyWrQ2g_ulyCloBIVrKTG0m2oHw=.cer",
           "keyAlias": "debugKey",
-          "keyPassword": "0000001BF28654884C860F5D5F7EFF6F5F91B37E534CDCBA624385A0B6CB42F8AE6B9DE99069CBE358B969",
-          "profile": "C:\\Users\\j'y'H'an\\.ohos\\config\\hjy_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.p7b",
+          "keyPassword": "0000001B187929C5C047D09E61BCCD5B703237562998AED75407240D476B960A6B90CEA7250FEC67F19004",
+          "profile": "C:\\Users\\Guo jia\\.ohos\\config\\default_TelManageApp_gumz3gk4laA-2vy0cyWrQ2g_ulyCloBIVrKTG0m2oHw=.p7b",
           "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\j'y'H'an\\.ohos\\config\\hjy_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.p12"
+          "storeFile": "C:\\Users\\Guo jia\\.ohos\\config\\default_TelManageApp_gumz3gk4laA-2vy0cyWrQ2g_ulyCloBIVrKTG0m2oHw=.p12",
+          "storePassword": "0000001B6FBC1BC52E0A0D65E1B9E378C361A78A6E90B109F8EA7252CFB8BEFE82FF24A5F7B3F9A390EA5F"
         }
       }
     ]

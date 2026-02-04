@@ -19,6 +19,7 @@
     // 页面路由配置引用（在 profile/main_pages.json 中维护）
     "pages": "$profile:main_pages",
     // 声明 Ability 列表
+
     "abilities": [
       {
         // Ability 名称与源文件入口

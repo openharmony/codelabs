@@ -21,7 +21,7 @@ typedef struct {
     ffrt_function_header_t header;
     ffrt_function_t func;
     ffrt_function_t afterFunc;
-    void* arg;
+    void *arg;
 } CFunction;
 
 typedef struct {
@@ -29,13 +29,17 @@ typedef struct {
     void *arg;
 } CRequest;
 
+// Queue type constants
+#define TYPE_CONCURRENT 0
+#define TYPE_SERIAL 1
+
 // 封装提交队列任务函数
-ffrt_task_handle_t commitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request,
-    ffrt_queue_priority_t level, int delay);
-void waitForRequest(ffrt_task_handle_t task);
+ffrt_task_handle_t CommitRequest(ffrt_queue_t bank, void (*func)(void *), CRequest request, ffrt_queue_priority_t level,
+                                 int delay);
+void WaitForRequest(ffrt_task_handle_t task);
 
 // type: 0代表并发调度，非0代表串行调度
-ffrt_queue_t create_bank_system(const char *name, int concurrency, int type);
-void destroy_bank_system(ffrt_queue_t queue_handle);
+ffrt_queue_t CreateBankSystem(const char *name, int concurrency, int type);
+void DestroyBankSystem(ffrt_queue_t queueHandle);
 
 #endif
