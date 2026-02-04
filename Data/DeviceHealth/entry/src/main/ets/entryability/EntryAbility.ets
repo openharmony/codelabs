@@ -87,7 +87,10 @@ export default class EntryAbility extends UIAbility {
       });
     EventHubManager.getInstance()
       .init(this.context)
-      .then(() => EventHubManager.subscribeAll());
+      .then((): void => {
+        EventHubManager.subscribeAll();
+      });
+
   }
 
   /**
