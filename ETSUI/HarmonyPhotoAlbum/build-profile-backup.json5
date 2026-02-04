@@ -1,0 +1,56 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "material": {
+          "certpath": "/Users/lichen18/.ohos/config/openharmony/default_HarmonyPhotoAlbum_4rtBrRrS1anoVRLm1AGRGBca2nhaclE8L1MLkJngkag=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A396FE28153552BE36676CA0407D0313ECDD94425271DC950EB1E620708B5C0849E41D8B05411",
+          "profile": "/Users/lichen18/.ohos/config/openharmony/default_HarmonyPhotoAlbum_4rtBrRrS1anoVRLm1AGRGBca2nhaclE8L1MLkJngkag=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/lichen18/.ohos/config/openharmony/default_HarmonyPhotoAlbum_4rtBrRrS1anoVRLm1AGRGBca2nhaclE8L1MLkJngkag=.p12",
+          "storePassword": "0000001AC4C9176521277C9A092344CBD020CC5731385340CC472EFFFD438FA3C5261B4BFE0940A771B9"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "20",
+        "compatibleSdkVersion": "20",
+        "compileSdkVersion": "20",
+        "runtimeOS": "OpenHarmony",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug",
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -3,6 +3,8 @@
     "pages/IndexPage",
     "pages/DetailPage",
     "pages/ListPage",
-    "pages/DetailListPage"
+    "pages/DetailListPage",
+    "pages/FramePage",
+    "pages/FrameCategoryPage"
   ]
 }

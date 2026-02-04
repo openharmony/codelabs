@@ -124,6 +124,11 @@ export default class Constants {
   static readonly PARAM_PHOTO_ARR_KEY: string = 'photoArr';
 
   /**
+   * router param for frame category (电子相框分类选择)
+   */
+  static readonly PARAM_FRAME_CATEGORY: string = 'frameCategory';
+
+  /**
    *  selected index
    */
   static readonly SELECTED_INDEX_KEY: string = 'selectedIndex';
@@ -192,6 +197,16 @@ export default class Constants {
    * detail page url
    */
   static readonly URL_DETAIL_PAGE: string = 'pages/DetailPage';
+
+  /**
+   * full screen frame page url (沉浸式电子相框)
+   */
+  static readonly URL_FRAME_PAGE: string = 'pages/FramePage';
+
+  /**
+   * frame category select page url (电子相框分类选择页)
+   */
+  static readonly URL_FRAME_CATEGORY_PAGE: string = 'pages/FrameCategoryPage';
 
   /**
    * index page tag
