@@ -466,43 +466,6 @@ struct Index {
     this.selectedLetter = this.indexLetters[0] ?? '';
   }
 
-        // 更多功能按钮组
-        Row() {
-          Button('添加')
-            .fontSize(14)
-            .height(32)
-            .backgroundColor('#007DFF')
-            .onClick(() => {
-              console.log('Index: 点击添加按钮，跳转到添加页面');
-              router.pushUrl({
-                url: 'pages/AddContact'
-              });
-            })
-
-          Button('去重')
-            .fontSize(14)
-            .height(32)
-            .backgroundColor('#FF6D00')
-            .margin({ left: 8 })
-            .onClick(() => {
-              console.log('Index: 点击去重按钮，跳转到去重管理页面');
-              router.pushUrl({
-                url: 'pages/DuplicateManager'
-              });
-            })
-
-          Button('分组')
-            .fontSize(14)
-            .height(32)
-            .backgroundColor('#00C853')
-            .margin({ left: 8 })
-            .onClick(() => {
-              console.log('Index: 点击分组按钮，跳转到分组管理页面');
-              router.pushUrl({
-                url: 'pages/GroupManager'
-              });
-            })
-        }
   /**
    * 判断是否展示索引条。
    * 输入：无。
@@ -580,24 +543,49 @@ struct Index {
    */
   @Builder
   private buildHeaderActions(): void {
-    Button(this.isBatchMode ? '退出批量' : '批量删除')
-      .fontSize(14)
-      .margin({ right: 8 })
-      .onClick(() => {
-        this.toggleBatchMode();
-      })
+    Row() {
+      Button(this.isBatchMode ? '退出批量' : '批量删除')
+        .fontSize(14)
+        .height(32)
+        .margin({ right: 8 })
+        .onClick(() => {
+          this.toggleBatchMode();
+        })
 
-    Button('导入/导出')
-      .fontSize(14)
-      .margin({ right: 8 })
-      .onClick(() => {
-        router.pushUrl({ url: 'pages/ImportExport' });
-      })
+      Button('导入/导出')
+        .fontSize(14)
+        .height(32)
+        .margin({ right: 8 })
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/ImportExport' });
+        })
 
-    Button('添加')
-      .onClick(() => {
-        router.pushUrl({ url: 'pages/AddContact' });
-      })
+      Button('添加')
+        .fontSize(14)
+        .height(32)
+        .backgroundColor('#007DFF')
+        .margin({ right: 8 })
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/AddContact' });
+        })
+
+      Button('去重')
+        .fontSize(14)
+        .height(32)
+        .backgroundColor('#FF6D00')
+        .margin({ right: 8 })
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/DuplicateManager' });
+        })
+
+      Button('分组')
+        .fontSize(14)
+        .height(32)
+        .backgroundColor('#00C853')
+        .onClick(() => {
+          router.pushUrl({ url: 'pages/GroupManager' });
+        })
+    }
   }
 
   /**
