@@ -1,0 +1,12 @@
+{
+  "devices": {
+    "general": ["default"]
+  },
+  "production": {
+    "removedSysCaps": [
+      "SystemCapability.HiviewDFX.HiDumper",
+      "SystemCapability.Multimedia.AVSession.ExtendedDisplayCast",
+      "SystemCapability.Security.DeviceAuth"
+    ]
+  }
+}
