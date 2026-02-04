@@ -12,10 +12,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Setting } from "./Setting"
-import { AudioRecordPage } from "./sound"
-import {GalleryMainPage} from "./mainPage"
-
+import { AudioRecordPage } from './sound';
+import { GalleryMainPage } from './mainPage';
 
 @Entry
 @Component
@@ -25,7 +23,7 @@ struct Page {
   build() {
     Tabs({ barPosition: BarPosition.End }) {
       TabContent() {
-        Row(){
+        Row() {
           GalleryMainPage()
         }
 
@@ -33,25 +31,12 @@ struct Page {
       .tabBar('首页')
       .backgroundColor('#FFFFFF')
 
-      // TabContent() {
-      //   Text('发现内容')
-      //     .fontSize(16)
-      //     .fontColor('#333')
-      // }
-      // .tabBar('视频检视')
-      // .backgroundColor('#FFFFFF')
-
       TabContent() {
         AudioRecordPage()
       }
       .tabBar('录音设置')
       .backgroundColor('#FFFFFF')
 
-      TabContent() {
-        Setting()
-      }
-      .tabBar('视频设置')
-      .backgroundColor('#FFFFFF')
     }
     .width('100%')
     .height('100%')

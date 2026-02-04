@@ -12,19 +12,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ColorMetrics } from '@kit.ArkUI'
+import { ColorMetrics } from '@kit.ArkUI';
 import router from '@ohos.router';
 
 @Entry
 @Component
 export struct GalleryMainPage {
-  // 页面标题
-  private pageTitle: string = "图像增强引擎"
-  // Swiper轮播图数据（模拟轮播图片资源，使用网络图片保证可直接运行）
-
   listScroller: Scroller = new Scroller();
+  // Swiper轮播图数据（模拟轮播图片资源，使用网络图片保证可直接运行）
   FullScroller: Scroller = new Scroller();
   @State scrollBarColor: ColorMetrics = ColorMetrics.rgba(24, 35, 48, 0.4);
+  // 页面标题
+  private pageTitle: string = "图像增强引擎"
   private swiperImages: Array<string> = [
     "app.media.01",
     "app.media.Hz301",
@@ -166,7 +165,7 @@ export struct GalleryMainPage {
     {
       categoryName: "Hz+DNN",
       categorySpecial: "使用Hz+DNN",
-      imageList:[
+      imageList: [
         "app.media.ReHZreHALF_231_300_E601",
         "app.media.ReHZreHALF_231_300_E602",
         "app.media.ReHZreHALF_231_300_E603",
@@ -194,14 +193,12 @@ export struct GalleryMainPage {
   private swiperController: SwiperController = new SwiperController()
   // 自动播放定时器
   private autoPlayTimer: number | null = null
-
-  private currentSwiperIndex:number =0
-
-  private  errorThing:Array<ErrorAttention>=[
+  private currentSwiperIndex: number = 0
+  private errorThing: Array<ErrorAttention> = [
     {
-      errorThing:"背景黄色噪声",
-      errorDetail:"输入图片若存在大量极暗像素点使用含有HZ的方法处理将会导致大量噪声被放大大",
-      imageList:[
+      errorThing: "背景黄色噪声",
+      errorDetail: "输入图片若存在大量极暗像素点使用含有HZ的方法处理将会导致大量噪声被放大大",
+      imageList: [
         "app.media.Hz308",
         "app.media.Hz312",
         "app.media.Hz313",
@@ -209,9 +206,9 @@ export struct GalleryMainPage {
       ]
     },
     {
-      errorThing:"部分区域过曝光",
-      errorDetail:"所有算法都有可能出现局部内容过曝光现象",
-      imageList:[
+      errorThing: "部分区域过曝光",
+      errorDetail: "所有算法都有可能出现局部内容过曝光现象",
+      imageList: [
         "app.media.ReHZreHALF_231_300_E616",
         "app.media.Hz303",
         "app.media.Hz305",
@@ -219,9 +216,9 @@ export struct GalleryMainPage {
       ]
     },
     {
-      errorThing:"DNN亮度增强不明显",
-      errorDetail:"DNN算法在增强有些图片时会出现整体增强效果不够明显，增强幅度不够大",
-      imageList:[
+      errorThing: "DNN亮度增强不明显",
+      errorDetail: "DNN算法在增强有些图片时会出现整体增强效果不够明显，增强幅度不够大",
+      imageList: [
         "app.media.DeepCNN_231_300_E511",
         "app.media.DeepCNN_231_300_E512",
         "app.media.DeepCNN_231_300_E513",
@@ -245,25 +242,10 @@ export struct GalleryMainPage {
     this.stopSwiperAutoPlay()
   }
 
-  // 启动Swiper自动轮播
-  private startSwiperAutoPlay() {
-    this.autoPlayTimer = setInterval(() => {
-      this.swiperController.showNext()
-    }, 5000) as number
-  }
-
-  // 停止Swiper自动轮播
-  private stopSwiperAutoPlay() {
-    if (this.autoPlayTimer) {
-      clearInterval(this.autoPlayTimer)
-      this.autoPlayTimer = null
-    }
-  }
-
   // 构建页面UI
   build() {
-    Stack(){
-      Scroll(){
+    Stack() {
+      Scroll() {
         Column() {
           // 1. 页面标题栏
           Text(this.pageTitle)
@@ -289,7 +271,7 @@ export struct GalleryMainPage {
           .loop(true) // 开启循环播放（核心要求）
           .autoPlay(false) // 手动控制自动播放，避免和定时器冲突
           .margin({ bottom: 20 })
-          .onChange((index:number) => {
+          .onChange((index: number) => {
             // 切换时重置定时器，优化用户体验
             this.stopSwiperAutoPlay()
             this.startSwiperAutoPlay()
@@ -308,7 +290,7 @@ export struct GalleryMainPage {
               params: {
                 imageUrl: this.swiperImages[this.currentSwiperIndex]
               }
-            }).catch((e:Error) => {
+            }).catch((e: Error) => {
               console.error("跳转全屏图片页面失败：", e)
             })
           })
@@ -322,7 +304,7 @@ export struct GalleryMainPage {
 
 
           // 3. List框架展示图库内容（核心要求）
-          List({space:10,scroller:this.listScroller}) {
+          List({ space: 10, scroller: this.listScroller }) {
             ListItem() {
               Column() {
                 // 分类标题
@@ -361,7 +343,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -377,7 +359,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -393,7 +375,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -409,7 +391,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -425,7 +407,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[4]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -441,7 +423,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[5]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -457,7 +439,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[6]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -473,7 +455,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[7]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -489,7 +471,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[8]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -505,7 +487,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[9]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -521,7 +503,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[10]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -537,7 +519,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[11]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -553,7 +535,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[12]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -569,7 +551,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[13]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -585,7 +567,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[0].imageList[14]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -675,7 +657,7 @@ export struct GalleryMainPage {
 
                 Scroll() {
                   Row() {
-                    Stack(){
+                    Stack() {
                       Image($r(this.galleryListData[1].imageList[0]))
                         .width(100)
                         .height(100)
@@ -689,10 +671,11 @@ export struct GalleryMainPage {
                         params: {
                           imageUrl: this.galleryListData[1].imageList[0]
                         }
-                      }).catch((e:Error) => {
+                      }).catch((e: Error) => {
                         console.error("跳转全屏图片页面失败：", e)
                       })
                     })
+
                     Image($r(this.galleryListData[1].imageList[1]))
                       .width(100)
                       .height(100)
@@ -705,7 +688,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -721,7 +704,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -737,7 +720,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -753,7 +736,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[4]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -769,7 +752,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[5]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -785,7 +768,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[6]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -801,7 +784,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[7]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -817,7 +800,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[8]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -833,7 +816,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -849,7 +832,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[10]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -865,7 +848,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[11]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -881,7 +864,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[12]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -897,7 +880,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[13]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -913,7 +896,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[1].imageList[14]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -998,7 +981,8 @@ export struct GalleryMainPage {
                 }
                 .width('100%')
                 .margin({ bottom: 10 })
-                Scroll(){
+
+                Scroll() {
                   Row() {
                     Image($r(this.galleryListData[2].imageList[0]))
                       .width(100)
@@ -1012,7 +996,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1028,7 +1012,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1044,7 +1028,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1060,7 +1044,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1076,7 +1060,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[4]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1092,7 +1076,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[5]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1108,7 +1092,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[6]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1124,7 +1108,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[7]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1140,7 +1124,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[8]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1156,7 +1140,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[9]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1172,7 +1156,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[10]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1188,7 +1172,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[11]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1204,7 +1188,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[12]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1220,7 +1204,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[13]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1236,7 +1220,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[2].imageList[14]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1323,7 +1307,7 @@ export struct GalleryMainPage {
                 .margin({ bottom: 10 })
 
 
-                Scroll(){
+                Scroll() {
                   Row() {
                     Image($r(this.galleryListData[3].imageList[0]))
                       .width(100)
@@ -1337,7 +1321,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1353,7 +1337,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1369,7 +1353,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1385,7 +1369,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1401,7 +1385,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[4]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1417,7 +1401,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[5]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1433,7 +1417,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[6]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1449,7 +1433,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[7]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1465,7 +1449,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[8]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1481,7 +1465,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[9]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1497,7 +1481,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[10]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1513,7 +1497,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[11]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1529,7 +1513,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[12]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1545,7 +1529,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[13]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1561,7 +1545,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[14]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1581,7 +1565,7 @@ export struct GalleryMainPage {
               .margin({ bottom: 15 })
             }
 
-            ListItem(){
+            ListItem() {
               Column() {
                 // 分类标题
                 Text(this.galleryListData[4].categoryName)
@@ -1648,7 +1632,7 @@ export struct GalleryMainPage {
                 .margin({ bottom: 10 })
 
 
-                Scroll(){
+                Scroll() {
                   Row() {
                     Image($r(this.galleryListData[4].imageList[0]))
                       .width(100)
@@ -1662,7 +1646,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1678,7 +1662,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1694,7 +1678,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1710,7 +1694,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1726,7 +1710,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[4]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1742,7 +1726,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[5]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1758,7 +1742,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[6]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1774,7 +1758,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[7]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1790,7 +1774,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[8]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1806,7 +1790,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[9]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1822,7 +1806,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[10]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1838,7 +1822,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[11]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1854,7 +1838,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[12]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1870,7 +1854,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[4].imageList[13]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1886,7 +1870,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.galleryListData[3].imageList[14]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1906,8 +1890,8 @@ export struct GalleryMainPage {
               .margin({ bottom: 15 })
             }
 
-            ListItem(){
-              Column(){
+            ListItem() {
+              Column() {
                 Text("以下为算法使用注意事项")
                   .fontSize(20)
                   .fontWeight(FontWeight.Bold)
@@ -1921,7 +1905,7 @@ export struct GalleryMainPage {
               }
             }
 
-            ListItem(){
+            ListItem() {
               Column() {
                 // 分类标题
                 Text(this.errorThing[0].errorThing)
@@ -1948,7 +1932,7 @@ export struct GalleryMainPage {
                   .margin({ bottom: 10, top: 10 })
 
 
-                Scroll(){
+                Scroll() {
                   Row() {
                     Image($r(this.errorThing[0].imageList[0]))
                       .width(100)
@@ -1962,7 +1946,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[0].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1978,7 +1962,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[0].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -1994,7 +1978,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[0].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2010,7 +1994,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[0].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2030,7 +2014,7 @@ export struct GalleryMainPage {
               .margin({ bottom: 15 })
             }
 
-            ListItem(){
+            ListItem() {
               Column() {
                 // 分类标题
                 Text(this.errorThing[1].errorThing)
@@ -2057,7 +2041,7 @@ export struct GalleryMainPage {
                   .margin({ bottom: 10, top: 10 })
 
 
-                Scroll(){
+                Scroll() {
                   Row() {
                     Image($r(this.errorThing[1].imageList[0]))
                       .width(100)
@@ -2071,7 +2055,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[1].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2087,7 +2071,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[1].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2103,7 +2087,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[1].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2119,7 +2103,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[1].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2139,7 +2123,7 @@ export struct GalleryMainPage {
               .margin({ bottom: 15 })
             }
 
-            ListItem(){
+            ListItem() {
               Column() {
                 // 分类标题
                 Text(this.errorThing[2].errorThing)
@@ -2166,7 +2150,7 @@ export struct GalleryMainPage {
                   .margin({ bottom: 10, top: 10 })
 
 
-                Scroll(){
+                Scroll() {
                   Row() {
                     Image($r(this.errorThing[2].imageList[0]))
                       .width(100)
@@ -2180,7 +2164,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[2].imageList[0]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2196,7 +2180,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[2].imageList[1]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2212,7 +2196,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[2].imageList[2]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2228,7 +2212,7 @@ export struct GalleryMainPage {
                           params: {
                             imageUrl: this.errorThing[2].imageList[3]
                           }
-                        }).catch((e:Error) => {
+                        }).catch((e: Error) => {
                           console.error("跳转全屏图片页面失败：", e)
                         })
                       })
@@ -2269,10 +2253,25 @@ export struct GalleryMainPage {
       .width('100%')
       .height('2600')
 
-      ScrollBar({scroller:this.listScroller})
+      ScrollBar({ scroller: this.listScroller })
         .position({ right: 0 })
         .enableNestedScroll(true)
         .scrollBarColor(this.scrollBarColor)
+    }
+  }
+
+  // 启动Swiper自动轮播
+  private startSwiperAutoPlay() {
+    this.autoPlayTimer = setInterval(() => {
+      this.swiperController.showNext()
+    }, 5000) as number
+  }
+
+  // 停止Swiper自动轮播
+  private stopSwiperAutoPlay() {
+    if (this.autoPlayTimer) {
+      clearInterval(this.autoPlayTimer)
+      this.autoPlayTimer = null
     }
   }
 }
@@ -2284,8 +2283,8 @@ interface GalleryListItem {
   imageList: Array<string> // 分类下的图片列表
 }
 
-interface ErrorAttention{
-  errorThing:string
-  errorDetail:string
-  imageList:Array<string>
+interface ErrorAttention {
+  errorThing: string
+  errorDetail: string
+  imageList: Array<string>
 }

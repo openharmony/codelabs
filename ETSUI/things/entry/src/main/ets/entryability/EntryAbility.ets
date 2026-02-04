@@ -15,9 +15,9 @@
 import { abilityAccessCtrl, AbilityConstant, ConfigurationConstant, UIAbility, Want } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { window } from '@kit.ArkUI';
-import { preferences } from '@kit.ArkData';
 
 const DOMAIN = 0x0000;
+
 // let dataPreference: preferences.Preferences | null = null;
 
 export default class EntryAbility extends UIAbility {
@@ -29,7 +29,7 @@ export default class EntryAbility extends UIAbility {
     }
     hilog.info(DOMAIN, 'testTag', '%{public}s', 'Ability onCreate');
     let manager = abilityAccessCtrl.createAtManager();
-    manager.requestPermissionsFromUser(this.context,['ohos.permission.MICROPHONE'])
+    manager.requestPermissionsFromUser(this.context, ['ohos.permission.MICROPHONE'])
     manager.requestPermissionsFromUser(this.context, ['ohos.permission.READ_MEDIA', 'ohos.permission.WRITE_MEDIA'])
   }
 
