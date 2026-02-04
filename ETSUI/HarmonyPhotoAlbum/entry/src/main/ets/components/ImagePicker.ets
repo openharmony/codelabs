@@ -1,140 +1,131 @@
-/*
- * Copyright (c) 2023 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-
-import picker from '@ohos.file.picker';
-import cameraPicker from '@ohos.multimedia.cameraPicker';
-import camera from '@ohos.multimedia.camera';
 import common from '@ohos.app.ability.common';
+import abilityAccessCtrl from '@ohos.abilityAccessCtrl';
+import fs from '@ohos.file.fs';
 import { BusinessError } from '@ohos.base';
-import { FileService } from '../service/FileService'; // 引入刚才写的服务
-import Logger from '../common/utils/Logger';
+import Want from '@ohos.app.ability.Want'; // 必须引入 Want
 
 @CustomDialog
 export struct ImagePicker {
-  // 1. 获取当前上下文 (用于调用 FileService 和 Picker)
   private context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
+  controller?: CustomDialogController;
+  onImageSelected: (savedPath: string) => void = (path: string): void => {};
 
-  // 2. 必须定义的控制器
-  controller: CustomDialogController;
-
-
-  // 3. 回调函数：当图片保存成功后，通过这个函数把路径传出去
-  onImageSelected: (savedPath: string) => void = (path: string) => {};
-  /**
-   * 从相册选择图片
-   */
-  async selectFromAlbum() {
+  async requestCameraPermission(): Promise<boolean> {
+    const atManager = abilityAccessCtrl.createAtManager();
     try {
-      const photoSelectOptions = new picker.PhotoSelectOptions();
-      photoSelectOptions.MIMEType = picker.PhotoViewMIMETypes.IMAGE_TYPE; // 只选图片
-      photoSelectOptions.maxSelectNumber = 1; // 单选
-
-      const photoViewPicker = new picker.PhotoViewPicker();
-      const result = await photoViewPicker.select(photoSelectOptions);
-
-      if (result.photoUris.length > 0) {
-        // 拿到临时 URI
-        const uri = result.photoUris[0];
-        console.info(`[ImagePicker] 选中图片URI: ${uri}`);
-
-        // 调用 FileService 保存到沙箱
-        const savedPath = await FileService.saveFileToSandbox(this.context, uri);
-
-        // 回调给父组件
-        this.onImageSelected(savedPath);
-
-        // 关闭弹窗
-        this.controller.close();
-      }
+      const grantStatus = await atManager.requestPermissionsFromUser(this.context, ['ohos.permission.CAMERA']);
+      return grantStatus.authResults[0] === 0;
     } catch (err) {
-      console.error(`[ImagePicker] 相册选择失败: ${JSON.stringify(err)}`);
-      Logger.showError('从相册选择图片失败，请稍后重试');
+      return false;
     }
   }
 
-  /**
-   * 使用相机拍照
-   */
+  // --- 核心修改：使用 startAbilityForResult ---
   async takePhoto() {
-    try {
-      // 拉起系统相机采集成图片
-      const pickerResult = await cameraPicker.pick(
-        this.context,
-        [cameraPicker.PickerMediaType.PHOTO],
-        { cameraPosition: camera.CameraPosition.CAMERA_POSITION_BACK }
-      );
-
-      if (pickerResult.resultUri) {
-        console.info(`[ImagePicker] 拍照结果URI: ${pickerResult.resultUri}`);
-
-        // 同样调用 FileService 保存
-        const savedPath = await FileService.saveFileToSandbox(this.context, pickerResult.resultUri);
-
-        this.onImageSelected(savedPath);
-        this.controller.close();
-      }
-    } catch (error) {
-      let err = error as BusinessError;
-      console.error(`[ImagePicker] 拍照失败 code: ${err.code}, message: ${err.message}`);
-      Logger.showError('拍照失败，请检查相机权限或稍后重试');
+    const hasPermission = await this.requestCameraPermission();
+    if (!hasPermission) {
+      this.showDialog('权限不足', '请授予相机权限');
+      return;
     }
+
+    // 构造意图：动作是“拍照”
+    let want: Want = {
+      "action": "ohos.want.action.imageCapture",
+      "parameters": {
+        "callBundleName": this.context.abilityInfo.bundleName // 告诉相机是谁在叫它
+      }
+    };
+
+    try {
+      // 拉起相机
+      const result = await this.context.startAbilityForResult(want);
+
+      // 处理返回结果
+      if (result.resultCode === 0 && result.want) {
+        // 不同版本的系统，返回的 URI 位置可能不同，做个兼容处理
+        let uri = result.want.uri;
+
+        // 有些系统会放在 parameters 里的 resourceUri
+        if (!uri && result.want.parameters && result.want.parameters.resourceUri) {
+          uri = result.want.parameters.resourceUri as string;
+        }
+
+        if (uri) {
+          console.info(`[ImagePicker] 拍照返回 URI: ${uri}`);
+          this.saveCapturedImage(uri);
+        } else {
+          console.warn('[ImagePicker] 拍照完成了，但是没有返回 URI');
+          this.showDialog('提示', '未能获取照片路径，请检查系统兼容性');
+        }
+      } else {
+        console.info('[ImagePicker] 用户取消或拍照失败');
+      }
+    } catch (err) {
+      let error = err as BusinessError;
+      console.error(`[ImagePicker] 拉起相机失败: ${error.message}`);
+      this.showDialog('错误', `无法启动相机: ${error.message}`);
+    }
+  }
+
+  // Buffer 保存逻辑（保持不变，这部分是稳的）
+  saveCapturedImage(srcUri: string) {
+    let srcFile: fs.File | null = null;
+    let destFile: fs.File | null = null;
+
+    try {
+      srcFile = fs.openSync(srcUri, fs.OpenMode.READ_ONLY);
+      const fileStat = fs.statSync(srcFile.fd);
+      const buffer = new ArrayBuffer(fileStat.size);
+      fs.readSync(srcFile.fd, buffer);
+
+      const fileName = `CAM_${new Date().getTime()}.jpg`;
+      const destPath = `${this.context.filesDir}/${fileName}`;
+
+      destFile = fs.openSync(destPath, fs.OpenMode.READ_WRITE | fs.OpenMode.CREATE | fs.OpenMode.TRUNC);
+      fs.writeSync(destFile.fd, buffer);
+
+      console.info(`[ImagePicker] 保存成功: ${destPath}`);
+      this.onImageSelected(destPath);
+      this.controller?.close();
+
+    } catch (err) {
+      let error = err as BusinessError;
+      console.error(`[ImagePicker] 保存失败: ${error.message}`);
+      this.showDialog('保存失败', error.message);
+    } finally {
+      if (srcFile) fs.closeSync(srcFile);
+      if (destFile) fs.closeSync(destFile);
+    }
+  }
+
+  showDialog(title: string, msg: string) {
+    AlertDialog.show({
+      title: title,
+      message: msg,
+      confirm: { value: '关闭', action: () => {} }
+    });
   }
 
   build() {
-    Column({ space: 15 }) {
-      Text('选择图片来源')
-        .fontSize(20)
-        .fontWeight(FontWeight.Bold)
-        .margin({ top: 10, bottom: 10 })
+    Column({ space: 20 }) {
+      Text('拍照 (Want模式)').fontSize(22).fontWeight(FontWeight.Bold).margin({ top: 15, bottom: 5 })
 
-      // 按钮 1：从相册选择
-      Button('从相册选择', { type: ButtonType.Normal, stateEffect: true })
-        .width('80%')
+      Button('打开相机')
+        .width('85%')
         .height(50)
-        .borderRadius(10)
         .backgroundColor('#007DFF')
-        .onClick(() => {
-          this.selectFromAlbum();
-        })
+        .onClick(() => this.takePhoto())
 
-      // 按钮 2：拍照
-      Button('拍照', { type: ButtonType.Normal, stateEffect: true })
-        .width('80%')
+      Button('取消')
+        .width('85%')
         .height(50)
-        .borderRadius(10)
-        .backgroundColor('#FF9800') // 橙色区分
-        .onClick(() => {
-          this.takePhoto();
-        })
-
-      // 按钮 3：取消
-      Button('取消', { type: ButtonType.Normal, stateEffect: true })
-        .width('80%')
-        .height(50)
-        .borderRadius(10)
         .backgroundColor('#F1F3F5')
-        .fontColor('#000000')
-        .margin({ bottom: 10 })
-        .onClick(() => {
-          this.controller.close();
-        })
+        .fontColor('#182431')
+        .onClick(() => this.controller?.close())
     }
     .width('90%')
-    .padding(20)
+    .padding(25)
     .backgroundColor(Color.White)
-    .borderRadius(20)
+    .borderRadius(24)
   }
 }

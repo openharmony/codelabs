@@ -26,6 +26,19 @@ import PhotoService from '../service/PhotoService';
 import { PhotoModel } from '../model/PhotoModel';
 import { LazyImage } from '../components/LazyImage';
 import Logger from '../common/utils/Logger';
+import { GALLERY_ITEMS, GalleryItem } from '../model/ResourceGallery';
+
+// 搜索列表用到的统一展示模型（包含数据库图片 + 预置资源图）
+type SearchPhotoSrc = string | Resource;
+
+interface SearchPhotoItem {
+  id: number;           // 对于预置图使用负数 ID，避免与数据库冲突
+  name: string;
+  category: string;
+  tags: string;
+  src: SearchPhotoSrc;  // 数据库图片: 'file://' + 路径；预置图片: 资源 ID
+  isPreload: boolean;   // 是否为预置资源图片
+}
 
 @Entry
 @Component
@@ -33,7 +46,7 @@ struct ListPage {
   // 状态变量
   @State searchText: string = '';
   @State selectedCategory: string = Constants.ALL_CATEGORY;
-  @State displayPhotos: PhotoModel[] = [];
+  @State displayPhotos: SearchPhotoItem[] = [];
   @State isLoading: boolean = true;
   @StorageLink('selectedIndex') selectedIndex: number = 0;
 
@@ -117,13 +130,13 @@ struct ListPage {
   @Builder
   PhotoGrid() {
     Grid() {
-      ForEach(this.displayPhotos, (photo: PhotoModel, index: number) => {
+      ForEach(this.displayPhotos, (photo: SearchPhotoItem, index: number) => {
         GridItem() {
           this.PhotoItem(photo, index);
         }
         .width(Constants.FULL_PERCENT)
         .aspectRatio(1)
-      }, (photo: PhotoModel) => photo.id.toString())
+      }, (photo: SearchPhotoItem) => photo.id.toString())
     }
     .columnsTemplate(Constants.GRID_COLUMNS_TEMPLATE)
     .rowsGap(Constants.LIST_ITEM_SPACE)
@@ -133,11 +146,11 @@ struct ListPage {
   }
 
   @Builder
-  PhotoItem(photo: PhotoModel, index: number) {
+  PhotoItem(photo: SearchPhotoItem, index: number) {
     Stack({ alignContent: Alignment.BottomStart }) {
-      // 图片 - 🔧 修复：添加 file:// 前缀
       LazyImage({
-        src: 'file://' + photo.path,
+        // 统一从 src 字段读取，数据库图片为 'file://' 路径，预置图片为资源 ID
+        src: photo.src,
         widthValue: '100%',
         heightValue: '100%',
         objectFit: ImageFit.Cover,
@@ -244,21 +257,28 @@ struct ListPage {
     console.info('[ListPage] 开始加载图片...');
     this.isLoading = true;
 
+    // 查询数据库，保留原有逻辑
     PhotoService.queryAll()
       .then((photos: PhotoModel[]) => {
-        this.displayPhotos = photos;
-        this.isLoading = false;
-        console.info(`[ListPage] ✅ 加载成功，共 ${photos.length} 张图片`);
+        const dbItems: Array<SearchPhotoItem> = photos.map((photo: PhotoModel) => this.mapDbPhotoToSearchItem(photo));
 
-        // 👇 如果数据库为空，提示用户
+        // 使用统一资源图库作为预置数据，保证与首页/电子相框一致
+        const preloadItems: Array<SearchPhotoItem> = this.getPreloadSearchItemsFromGallery();
+
+        this.displayPhotos = dbItems.concat(preloadItems);
+        this.isLoading = false;
+        console.info(`[ListPage] ✅ 加载成功，DB: ${photos.length} 条，预置: ${preloadItems.length} 条`);
+
         if (photos.length === 0) {
-          console.warn('[ListPage] ⚠️ 数据库中没有图片，请先上传图片');
+          console.warn('[ListPage] ⚠️ 数据库中没有图片，仅展示预置图库');
         }
       })
       .catch((err: Error) => {
         console.error(`[ListPage] ❌ 加载失败: ${err.message}`);
         Logger.showError('图片加载失败，请稍后重试');
-        this.displayPhotos = [];
+
+        // 即使 DB 失败，也使用预置资源图库保证搜索页可用
+        this.displayPhotos = this.getPreloadSearchItemsFromGallery();
         this.isLoading = false;
       });
   }
@@ -269,9 +289,14 @@ struct ListPage {
 
     PhotoService.searchPhotosByCategoryAndKeyword(this.selectedCategory, keyword)
       .then((photos: PhotoModel[]) => {
-        this.displayPhotos = photos;
+        const dbItems: Array<SearchPhotoItem> = photos.map((photo: PhotoModel) => this.mapDbPhotoToSearchItem(photo));
+
+        // 将符合当前搜索条件的预置图库一并加入
+        const preloadItems: Array<SearchPhotoItem> = this.filterPreloadBy(this.selectedCategory, keyword);
+
+        this.displayPhotos = dbItems.concat(preloadItems);
         this.isLoading = false;
-        console.info(`[ListPage] ✅ 搜索成功，找到 ${photos.length} 张图片`);
+        console.info(`[ListPage] ✅ 搜索成功，DB: ${photos.length} 条，预置: ${preloadItems.length} 条`);
       })
       .catch((err: Error) => {
         console.error(`[ListPage] ❌ 搜索失败: ${err.message}`);
@@ -287,9 +312,13 @@ struct ListPage {
 
     PhotoService.searchPhotosByCategoryAndKeyword(category, this.searchText)
       .then((photos: PhotoModel[]) => {
-        this.displayPhotos = photos;
+        const dbItems: Array<SearchPhotoItem> = photos.map((photo: PhotoModel) => this.mapDbPhotoToSearchItem(photo));
+
+        const preloadItems: Array<SearchPhotoItem> = this.filterPreloadBy(category, this.searchText);
+
+        this.displayPhotos = dbItems.concat(preloadItems);
         this.isLoading = false;
-        console.info(`[ListPage] ✅ 分类切换成功，共 ${photos.length} 张图片`);
+        console.info(`[ListPage] ✅ 分类切换成功，DB: ${photos.length} 条，预置: ${preloadItems.length} 条`);
       })
       .catch((err: Error) => {
         console.error(`[ListPage] ❌ 分类切换失败: ${err.message}`);
@@ -301,18 +330,80 @@ struct ListPage {
 
   private navigateToDetail(index: number) {
     this.selectedIndex = index;
-    const photoPaths = this.displayPhotos.map(photo => 'file://' + photo.path); // 🔧 添加 file:// 前缀
+    // 统一从 displayPhotos.src 构建详情页图片数组，
+    // 数据库图片为 'file://' 路径字符串，预置图片为资源 ID
+    const photoArr = this.displayPhotos.map((photo: SearchPhotoItem) => photo.src);
 
     console.info(`[ListPage] 跳转到详情页，索引: ${index}`);
 
     router.pushUrl({
       url: Constants.URL_DETAIL_LIST_PAGE,
       params: {
-        photoArr: photoPaths,
+        photoArr: photoArr,
       }
     }).catch((err: Error) => {
       console.error(`${Constants.TAG_LIST_PAGE}${err.message}`);
     });
+  }
+
+  /**
+   * 将数据库中的 PhotoModel 转换为用于搜索展示的 SearchPhotoItem
+   */
+  private mapDbPhotoToSearchItem(photo: PhotoModel): SearchPhotoItem {
+    const src: string = 'file://' + photo.path;
+    const item: SearchPhotoItem = {
+      id: photo.id,
+      name: photo.name,
+      category: photo.category,
+      tags: photo.tags,
+      src: src,
+      isPreload: false
+    };
+    return item;
+  }
+
+  // ==========================================
+  // 预置资源图：参与搜索页展示
+  // 与首页顶部轮播保持一致的名称 / 分类 / 标签
+  // ==========================================
+  // 使用统一资源图库构造预置搜索项
+  private getPreloadSearchItemsFromGallery(): Array<SearchPhotoItem> {
+    return GALLERY_ITEMS.map((item: GalleryItem, index: number) => {
+      const searchItem: SearchPhotoItem = {
+        id: -1000 - index, // 负数 ID，避免与数据库冲突
+        name: item.name,
+        category: item.category,
+        tags: item.tags,
+        src: item.src,
+        isPreload: true
+      };
+      return searchItem;
+    });
+  }
+
+  /**
+   * 根据当前分类和关键词，从预置图片中筛选符合条件的项
+   */
+  private filterPreloadBy(category: string, keyword: string): Array<SearchPhotoItem> {
+    let result: Array<SearchPhotoItem> = this.getPreloadSearchItemsFromGallery();
+
+    // 分类过滤（"全部" 表示不过滤）
+    if (category && category !== Constants.ALL_CATEGORY) {
+      result = result.filter((item: SearchPhotoItem) => item.category === category);
+    }
+
+    // 关键词过滤（名称 / 分类 / 标签 模糊匹配）
+    if (keyword && keyword.trim() !== '') {
+      const lowerKeyword: string = keyword.toLowerCase();
+      result = result.filter((item: SearchPhotoItem) => {
+        const nameMatch: boolean = item.name.toLowerCase().includes(lowerKeyword);
+        const categoryMatch: boolean = item.category.toLowerCase().includes(lowerKeyword);
+        const tagsMatch: boolean = item.tags.toLowerCase().includes(lowerKeyword);
+        return nameMatch || categoryMatch || tagsMatch;
+      });
+    }
+
+    return result;
   }
 
 }

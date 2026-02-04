@@ -1,13 +1,12 @@
 {
   "app": {
-    "signingConfigs": [],
     "products": [
       {
         "name": "default",
         "signingConfig": "default",
         "targetSdkVersion": "20",
-        "compatibleSdkVersion": "20",
-        "compileSdkVersion": "20",
+        "compatibleSdkVersion": 20,
+        "compileSdkVersion": 20,
         "runtimeOS": "OpenHarmony",
         "buildOption": {
           "strictMode": {
@@ -19,10 +18,24 @@
     ],
     "buildModeSet": [
       {
-        "name": "debug",
+        "name": "debug"
       },
       {
         "name": "release"
+      }
+    ],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "material": {
+          "certpath": "/Users/lichen18/.ohos/config/openharmony/default_HarmonyPhotoAlbum_v10_1FPcY9SP94x3exjs7xNvpPFiS6_EHSnF9Np9vBEummY=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B6B6FEBE89DCAAC6F8218464B47B4BE8F1A72B417DF86621D8C391FA1108FD23EA9CE6E1724595D",
+          "profile": "/Users/lichen18/.ohos/config/openharmony/default_HarmonyPhotoAlbum_v10_1FPcY9SP94x3exjs7xNvpPFiS6_EHSnF9Np9vBEummY=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/lichen18/.ohos/config/openharmony/default_HarmonyPhotoAlbum_v10_1FPcY9SP94x3exjs7xNvpPFiS6_EHSnF9Np9vBEummY=.p12",
+          "storePassword": "0000001BEF47F83B54CB3A9F55DBD4E11947831E22F360C83993B124A17651F87DAB03AD289FE55A3D7A58"
+        }
       }
     ]
   },
