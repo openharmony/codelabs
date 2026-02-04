@@ -13,17 +13,15 @@
     * limitations under the License.
     */
 /**
- * Logger.ets
+ * SchedulerState.ets
  *
- * 简单日志工具类
+ * 描述调度器当前运行状态
+ * 用于 UI 展示或状态判断
  */
 
-export class Logger {
-  static info(tag: string, message: string): void {
-    console.info(`[${tag}] ${message}`);
-  }
-
-  static error(tag: string, message: string): void {
-    console.error(`[${tag}] ${message}`);
-  }
+export enum SchedulerState {
+  IDLE = 'IDLE',          // 初始状态
+  RUNNING = 'RUNNING',    // 正在执行
+  FINISHED = 'FINISHED',  // 已完成
+  ERROR = 'ERROR'         // 执行出错
 }

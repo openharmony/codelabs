@@ -13,17 +13,25 @@
     * limitations under the License.
     */
 /**
- * Logger.ets
+ * WorkerResult.ets
  *
- * 简单日志工具类
+ * 描述单个 worker 的执行结果
  */
 
-export class Logger {
-  static info(tag: string, message: string): void {
-    console.info(`[${tag}] ${message}`);
-  }
+export class WorkerResult {
+  readonly workerId: number;
+  readonly roundIndex: number;
+  readonly increment: number;
+  readonly timestamp: number;
 
-  static error(tag: string, message: string): void {
-    console.error(`[${tag}] ${message}`);
+  constructor(
+    workerId: number,
+    roundIndex: number,
+    increment: number
+  ) {
+    this.workerId = workerId;
+    this.roundIndex = roundIndex;
+    this.increment = increment;
+    this.timestamp = Date.now();
   }
 }

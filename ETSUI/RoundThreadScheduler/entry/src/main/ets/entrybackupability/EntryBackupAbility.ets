@@ -12,18 +12,19 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
     */
-/**
- * Logger.ets
- *
- * 简单日志工具类
- */
+import { hilog } from '@kit.PerformanceAnalysisKit';
+import { BackupExtensionAbility, BundleVersion } from '@kit.CoreFileKit';
 
-export class Logger {
-  static info(tag: string, message: string): void {
-    console.info(`[${tag}] ${message}`);
+const DOMAIN = 0x0000;
+
+export default class EntryBackupAbility extends BackupExtensionAbility {
+  async onBackup() {
+    hilog.info(DOMAIN, 'testTag', 'onBackup ok');
+    await Promise.resolve();
   }
 
-  static error(tag: string, message: string): void {
-    console.error(`[${tag}] ${message}`);
+  async onRestore(bundleVersion: BundleVersion) {
+    hilog.info(DOMAIN, 'testTag', 'onRestore ok %{public}s', JSON.stringify(bundleVersion));
+    await Promise.resolve();
   }
 }
