@@ -1,70 +1,66 @@
 /*
- * Copyright (c) 2026 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+    * Copyright (c) 2026 Huawei Device Co., Ltd.
+    * Licensed under the Apache License, Version 2.0 (the "License");
+    * you may not use this file except in compliance with the License.
+    * You may obtain a copy of the License at
+    *
+    *     http://www.apache.org/licenses/LICENSE-2.0
+    *
+    * Unless required by applicable law or agreed to in writing, software
+    * distributed under the License is distributed on an "AS IS" BASIS,
+    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    * See the License for the specific language governing permissions and
+    * limitations under the License.
+    */
+/**
+ * IncrementWorker.ets
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * 并发执行单元（Worker）
+ * 每个 worker 在一次 round 中执行一次 +1 逻辑
+ * -  @Concurrent 普通函数
+ * - 不能是 class 方法
+ * - 不能返回 Object
+ * - 不访问任何共享变量
  */
 
 
-import worker from '@ohos.worker'
-import {
-  SHARED_INDEX_VALUE,
-  SHARED_INDEX_ROUND,
-  SHARED_INDEX_BARRIER
-} from '../constants/Config'
+/**
+ * IncrementWorker.ets
+ *
+ * 单个“工作任务”的执行逻辑
+ * 不依赖 taskpool / @Concurrent
+ * 作为被调度执行的普通函数
+ */
 
-const data = worker.workerData
-const shared = new Int32Array(data.sharedBuffer)
-const workerId: number = data.id
-const maxRounds: number = data.maxRounds
+export class IncrementWorker {
+  private workerId: number;
 
-function log(message: string): void {
-  console.info(`[Worker ${workerId}] ${message}`)
-}
-
-function run(): void {
-  let lastRound = -1
-
-  while (true) {
-    const currentRound = Atomics.load(shared, SHARED_INDEX_ROUND)
-
-    if (currentRound === lastRound) {
-      Atomics.wait(shared, SHARED_INDEX_ROUND, currentRound)
-      continue
-    }
-
-    if (currentRound >= maxRounds) {
-      break
-    }
-
-    lastRound = currentRound
-
-    // Atomic increment
-    Atomics.add(shared, SHARED_INDEX_VALUE, 1)
-    log(`Round ${currentRound} incremented value`)
-
-    // Barrier arrival
-    const count = Atomics.add(shared, SHARED_INDEX_BARRIER, 1)
-
-    if (count + 1 === 10) {
-      Atomics.notify(shared, SHARED_INDEX_BARRIER, 10)
-    } else {
-      Atomics.wait(shared, SHARED_INDEX_BARRIER, count + 1)
-    }
+  constructor(workerId: number) {
+    this.workerId = workerId;
   }
 
-  worker.parentPort?.postMessage({
-    id: workerId,
-    status: 'done'
-  })
-}
+  /**
+   * 执行一次累加任务
+   * @param roundIndex 当前轮次
+   * @returns Promise<number> 返回本次累加的值
+   */
+  run(roundIndex: number): Promise<number> {
+    return new Promise((resolve) => {
+      // 使用 setTimeout 模拟异步并发执行
+      setTimeout(() => {
+        // 模拟计算耗时
+        let mockCompute = 0;
+        for (let i = 0; i < 10000; i++) {
+          mockCompute += i;
+        }
 
-run()
+        // 每个 worker 每轮只做一次 +1
+        resolve(1);
+      }, Math.random() * 50);
+    });
+  }
+
+  getId(): number {
+    return this.workerId;
+  }
+}

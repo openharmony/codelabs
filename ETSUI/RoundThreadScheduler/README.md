@@ -1,98 +1,133 @@
-# ArkTS 多线程轮次安全调度示例
+ArkTS Round Thread Safe Scheduler 示例
+一、项目简介
 
-## 一、示例简介
+本示例工程基于 OpenHarmony ArkTS，演示了在 不依赖底层线程与高风险并发 API 的前提下，如何通过调度器设计思想实现：
 
-本示例基于 OpenHarmony ArkTS，演示如何在多线程环境下安全地对共享数据进行调度。  
-示例通过 **Worker + SharedArrayBuffer + Atomics + Barrier + Semaphore** 的组合，实现了一个 **按轮次顺序执行的多线程调度模型**。
+多“任务”对共享数据的安全访问
 
-该示例适合 ArkTS 并发编程学习和教学，可用于理解线程安全、轮次同步以及并发限制。
+按“轮次（Round）”有序执行
 
----
+保证每一轮任务全部完成后再进入下一轮
 
-## 二、实验功能
+全流程状态可视化展示
 
-1. 创建 **10 个 Worker 线程**。
-2. 每个线程对共享数字执行 **+1** 操作。
-3. 执行 **10 轮**，保证每轮全部线程完成后再进入下一轮。
-4. **同时最多 5 个线程访问共享变量**（Semaphore 限制）。
-5. 程序结束后，最终共享数字为 **100**。
-6. 提供 **UI 页面** 显示每轮轮次、线程执行状态以及日志信息。
+该示例适合作为 ArkTS 并发思想教学示例 / Codelab 示例 / 实验课程项目。
 
----
+二、设计目标
 
-## 三、技术要点
+本项目主要解决以下问题：
 
-### 1. Worker 多线程模型
-- 使用 ArkTS `@ohos.worker` 创建独立线程。
-- 主线程负责调度任务，Worker 负责执行增量操作。
+多个并发任务同时操作共享数据时，如何避免数据竞争
 
-### 2. SharedArrayBuffer + Atomics
-- 共享内存实现主线程和 Worker 之间的数据同步。
-- 使用 `Atomics.add` 保证线程安全的增量操作。
-- 使用 `Atomics.wait` 和 `Atomics.notify` 实现轮次同步。
+如何保证：
 
-### 3. Semaphore 信号量
-- 限制同一时间访问共享变量的线程数量。
-- 保证不会出现超过 5 个线程同时操作共享数据的情况。
+每一轮任务执行完成
 
-### 4. Round Barrier 轮次屏障
-- 每轮线程完成后，Barrier 通知主线程进入下一轮。
-- 确保每轮执行的顺序性和完整性。
+再进入下一轮执行
 
-### 5. 日志系统
-- 每个线程执行状态通过 Logger 记录。
-- 日志同时输出到控制台和页面，便于教学演示。
+在 ArkTS 中，如何用结构化调度逻辑替代直接使用底层线程 API
 
----
+如何将调度过程可视化，便于理解并发执行过程
 
-## 四、工程结构
+三、整体架构说明
 
-RoundThreadScheduler/
-├── README.md                         
-├── module.json5
-├── build-profile.json5
-└── entry/
-    └── src/main/ets/
-        ├── entryability/
-        │   └── EntryAbility.ets     
-        ├── pages/
-        │   └── Index.ets             
-        ├── constants/
-        │   └── Config.ets            
-        ├── model/
-        │   ├── SharedState.ets       
-        │   ├── RoundState.ets        
-        │   └── ThreadLog.ets         
-        ├── scheduler/
-        │   ├── RoundBarrier.ets      
-        │   ├── ThreadManager.ets     
-        │   └── RoundScheduler.ets   
-        ├── workers/
-        │   └── IncrementWorker.ets  
-        └── utils/
-            └── Logger.ets            
+项目采用 分层 + 职责清晰 的结构设计：
 
----
+UI（Index.ets）
+│
+├── Scheduler（调度层）
+│   ├── RoundScheduler        轮次调度核心
+│   ├── ThreadManager         任务管理与派发
+│   └── RoundBarrier          轮次完成同步控制
+│
+├── Worker（任务层）
+│   └── IncrementWorker       单个任务逻辑
+│
+├── Model（状态层）
+│   ├── SharedState           共享数据模型
+│   ├── RoundState            当前轮次状态
+│   └── ThreadLog             执行日志模型
+│
+└── Utils（工具层）
+└── Logger                日志统一输出
 
-## 五、运行方式
 
-1. 使用 **DevEco Studio** 打开本示例工程。
-2. 编译并运行到模拟器或真机。
-3. 打开主页面 **Index.ets**，点击 **启动调度** 按钮。
-4. 页面展示每轮线程执行状态、日志和轮次统计。
-5. 验证最终共享数字为 **100**。
+四、核心思想说明
+1️⃣ 轮次调度思想
 
----
+所有任务按轮次执行
 
-## 六、适用场景
+每一轮包含固定数量的任务
 
-- ArkTS 并发编程学习。
-- 多线程同步机制教学。
-- OpenHarmony 应用开发示例参考。
-- 演示 Barrier 和 Semaphore 在 ArkTS 的实现方法。
+必须保证：
 
----
+当前轮次的所有任务执行完成
 
-## 七、许可说明
+才能进入下一轮
 
-本示例遵循 **Apache License 2.0**，可以自由参考和修改。
+该机制在逻辑上等价于“并发系统中的 Barrier”。
+
+2️⃣ 共享数据安全访问
+
+本示例中：
+
+所有任务 不直接修改 UI
+
+所有共享数据封装在 SharedState 中
+
+共享数据的修改 通过调度器统一控制
+
+从结构上避免了数据竞争，而不是依赖底层锁或原子操作。
+
+
+五、执行流程说明
+
+用户在 UI 页面点击“开始执行”
+
+RoundScheduler 初始化：
+
+轮次数
+
+每轮任务数
+
+调度器创建多个 IncrementWorker
+
+Worker 执行任务逻辑：
+
+读取当前共享值
+
+按规则递增
+
+上报完成状态
+
+RoundBarrier 统计完成情况
+
+当本轮全部完成：
+
+进入下一轮
+
+所有轮次完成后：
+
+输出最终结果
+
+在 UI 中展示执行日志
+
+六、示例效果
+
+实时展示当前轮次
+
+展示共享数据变化过程
+
+显示每个任务的执行顺序
+
+最终结果可验证正确性（如累加结果）
+
+七、适用场景
+
+ArkTS 并发思想教学
+
+OpenHarmony Codelab 示例
+
+并发调度设计示例
+
+课程实验 / 作业示例

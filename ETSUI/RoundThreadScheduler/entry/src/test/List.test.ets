@@ -12,18 +12,8 @@
     * See the License for the specific language governing permissions and
     * limitations under the License.
     */
-/**
- * Logger.ets
- *
- * 简单日志工具类
- */
+import localUnitTest from './LocalUnit.test';
 
-export class Logger {
-  static info(tag: string, message: string): void {
-    console.info(`[${tag}] ${message}`);
-  }
-
-  static error(tag: string, message: string): void {
-    console.error(`[${tag}] ${message}`);
-  }
+export default function testsuite() {
+  localUnitTest();
 }

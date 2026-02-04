@@ -13,17 +13,35 @@
     * limitations under the License.
     */
 /**
- * Logger.ets
+ * RoundResult.ets
  *
- * 简单日志工具类
+ * 描述一轮调度的执行结果
+ * 聚合多个 worker 的结果
  */
 
-export class Logger {
-  static info(tag: string, message: string): void {
-    console.info(`[${tag}] ${message}`);
+import { WorkerResult } from './WorkerResult';
+
+export class RoundResult {
+  readonly roundIndex: number;
+  private workerResults: WorkerResult[] = [];
+
+  constructor(roundIndex: number) {
+    this.roundIndex = roundIndex;
   }
 
-  static error(tag: string, message: string): void {
-    console.error(`[${tag}] ${message}`);
+  addWorkerResult(result: WorkerResult): void {
+    this.workerResults.push(result);
+  }
+
+  getWorkerResults(): WorkerResult[] {
+    return this.workerResults.slice();
+  }
+
+  getIncrementSum(): number {
+    let sum = 0;
+    for (let i = 0; i < this.workerResults.length; i++) {
+      sum += this.workerResults[i].increment;
+    }
+    return sum;
   }
 }
