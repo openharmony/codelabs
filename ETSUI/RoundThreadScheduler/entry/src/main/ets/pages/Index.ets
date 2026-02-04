@@ -21,13 +21,6 @@
  * - 展示最终结果
  */
 
-import { RoundThreadScheduler } from '../scheduler/RoundThreadScheduler';
-import { SchedulerState } from '../model/SchedulerState';
-import { ExecutionRecord } from '../model/ExecutionRecord';
-import { RoundResult } from '../model/RoundResult';
-import { WorkerResult } from '../model/WorkerResult';
-import { Logger } from '../utils/Logger';
-
 @Entry
 @Component
 struct Index {
