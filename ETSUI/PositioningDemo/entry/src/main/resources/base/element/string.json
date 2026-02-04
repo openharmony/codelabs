@@ -1,0 +1,24 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "location_permission_reason",
+      "value": "需要访问您的位置以记录运动轨迹"
+    },
+    {
+      "name": "approximate_location_permission_reason",
+      "value": "需要访问您的大致位置以记录运动轨迹"
+    }
+  ]
+}

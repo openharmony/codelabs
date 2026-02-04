@@ -12,11 +12,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { hilog } from '@kit.PerformanceAnalysisKit';
-import { FunctionClass } from 'libentry.so';
-import libaki from 'libentry.so';
-
-const DOMAIN = 0x0000;
+import libaki, { FunctionClass, SortClass } from 'libentry.so';
 
 export const sleep = (delay: number = 200) => new Promise<void>((resolve) => setTimeout(resolve, delay));
 
@@ -39,6 +35,8 @@ struct Index {
             let ret3 = libaki.Add(3, 5);
             let ret4 = libaki.ProcessFfrtQueue();
             let ret5 = libaki.ComputeFfrtQueue();
+            let sort = new SortClass(1);
+            let ret6 = sort.FfrtConcurrentQueue();
 
             sleep(10000);
             this.message = ret3.toString();
@@ -46,6 +44,7 @@ struct Index {
             console.info("FFRT_FUNCTION FfrtConcurrentQueue ret: ", ret2);
             console.info("FFRT_FUNCTION ProcessFfrtQueue ret: ", ret4);
             console.info("FFRT_FUNCTION ComputeFfrtQueue ret: ", ret5);
+            console.info("FFRT_FUNCTION sort FfrtSerialQueue ret: ", ret6);
           })
       }
       .width('100%')

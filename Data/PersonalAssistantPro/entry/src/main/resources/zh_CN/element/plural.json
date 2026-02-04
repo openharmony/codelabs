@@ -1,0 +1,12 @@
+{
+  "plural": [
+    {
+      "name": "contact_count_info",
+      "value": [
+        { "quantity": "zero", "value": "您还没有任何联系人" },
+        { "quantity": "one", "value": "您有 %d 位联系人" },
+        { "quantity": "other", "value": "共 %d 位联系人" }
+      ]
+    }
+  ]
+}

@@ -15,7 +15,6 @@
 
 import { promptAction } from '@kit.ArkUI';
 import { dataManager, BookmarkItem } from '../manager/DataManager';
-import { BusinessError } from '@kit.BasicServicesKit';
 
 // Builder函数，用于Navigation路由
 @Builder
@@ -25,73 +24,109 @@ export function BookmarkPageBuilder() {
 
 @Component
 export struct BookmarkPage {
-  // 获取全局NavPathStack
+  // 获取全局导航栈
   pathStack: NavPathStack = AppStorage.get('pathStack') as NavPathStack;
-  // 书签列表
+
+  // --- 状态管理 ---
+  @State currentParentId: number = 0;
+  @State pathHistory: number[] = [];
   @State bookmarkList: BookmarkItem[] = [];
-  @State groupedBookmarks: Map<string, BookmarkItem[]> = new Map();
+
   @State searchKeyword: string = '';
   @State isEditing: boolean = false;
   @State selectedItems: Set<number> = new Set();
-  @State currentFolder: string = '全部'; // 当前文件夹筛选
-  @State showFolderDialog: boolean = false;
-  // 编辑书签对话框
-  @State showEditDialog: boolean = false;
-  @State editingBookmark: BookmarkItem | null = null;
-  @State editTitle: string = '';
-  @State editFolder: string = '';
-  // 深色模式
   @StorageLink('darkMode') darkMode: boolean = false;
+  @StorageLink('bookmarkChanged') storageBookmarkChanged: number = 0;
+
+  // --- 编辑/修改相关状态 ---
+  @State showEditDialog: boolean = false;
+  @State editingItem: BookmarkItem | null = null;
+  @State editTitle: string = '';
+  @State editUrl: string = '';
+
+  // --- 弹窗控制器声明 ---
+  private moveDialogController: CustomDialogController | null = null;
+
+  // 新建文件夹弹窗控制器
+  private createFolderController: CustomDialogController | null = new CustomDialogController({
+    builder: FolderInputDialog({
+      onConfirm: async (name: string) => {
+        await dataManager.addFolder(name, this.currentParentId);
+        this.refreshData(); // 立刻刷新
+      }
+    }),
+    autoCancel: true,
+    alignment: DialogAlignment.Center,
+    customStyle: true
+  })
+
+  // 新建书签弹窗控制器
+  private createBookmarkController: CustomDialogController | null = new CustomDialogController({
+    builder: AddBookmarkDialog({
+      onConfirm: async (title: string, url: string) => {
+        await dataManager.addBookmark(url, title, this.currentParentId);
+        this.refreshData(); // 立刻刷新
+      }
+    }),
+    autoCancel: true,
+    alignment: DialogAlignment.Center,
+    customStyle: true
+  })
 
   aboutToAppear() {
-    this.loadBookmarks();
+    this.refreshData();
   }
 
-  // 加载书签
-  loadBookmarks() {
-    let allBookmarks: BookmarkItem[];
-
+  // --- 立即刷新---
+  refreshData() {
     if (this.searchKeyword.trim()) {
-      allBookmarks = dataManager.searchBookmarks(this.searchKeyword);
+      // 使用展开运算符 [...] 强制改变数组引用，触发视图Diff
+      this.bookmarkList = [...dataManager.searchBookmarks(this.searchKeyword)];
     } else {
-      allBookmarks = dataManager.getBookmarkList();
+      this.bookmarkList = [...dataManager.getBookmarksByParent(this.currentParentId)];
     }
-
-    // 按文件夹筛选
-    if (this.currentFolder !== '全部') {
-      allBookmarks = allBookmarks.filter(item =>
-      (item.folder || '默认') === this.currentFolder
-      );
-    }
-
-    this.bookmarkList = allBookmarks;
-
-    // 按文件夹分组
-    this.groupedBookmarks = new Map();
-    allBookmarks.forEach(item => {
-      const folder = item.folder || '默认';
-      if (!this.groupedBookmarks.has(folder)) {
-        this.groupedBookmarks.set(folder, []);
-      }
-      this.groupedBookmarks.get(folder)?.push(item);
-    });
+    this.storageBookmarkChanged = Date.now(); // 同步全局状态
   }
 
-  // 获取所有文件夹
-  getAllFolders(): string[] {
-    const folders = new Set<string>(['全部', '默认']);
-    dataManager.getBookmarkList().forEach(item => {
-      if (item.folder) {
-        folders.add(item.folder);
-      }
-    });
-    return Array.from(folders);
+  handleBack() {
+    if (this.pathHistory.length > 0) {
+      this.currentParentId = this.pathHistory.pop()!;
+      this.refreshData();
+    } else {
+      this.pathStack.pop();
+    }
   }
 
-  // 格式化日期
-  formatDate(timestamp: number): string {
-    const date = new Date(timestamp);
-    return `${date.getMonth() + 1}月${date.getDate()}日`;
+  // 动态创建并打开移动对话框
+  openMoveDialog(ids: number[]) {
+    this.moveDialogController = new CustomDialogController({
+      builder: MoveToDialog({
+        itemIdsToMove: ids,
+        onConfirm: () => {
+          this.isEditing = false;
+          this.selectedItems.clear();
+          this.selectedItems = new Set();
+          this.refreshData(); // 移动完成后刷新
+        }
+      }),
+      autoCancel: true,
+      alignment: DialogAlignment.Bottom,
+      customStyle: true
+    });
+    this.moveDialogController.open();
+  }
+
+  // 修改选中的单项
+  renameSelectedItem() {
+    if (this.selectedItems.size !== 1) return;
+    const selectedId = Array.from(this.selectedItems)[0];
+    const item = this.bookmarkList.find(i => i.id === selectedId);
+    if (item) {
+      this.editingItem = item;
+      this.editTitle = item.title;
+      this.editUrl = item.url || '';
+      this.showEditDialog = true;
+    }
   }
 
   build() {
@@ -106,10 +141,10 @@ export struct BookmarkPage {
             .fillColor(this.darkMode ? '#FFFFFF' : '#000000')
             .margin({ left: 16 })
             .onClick(() => {
-              this.pathStack.pop();
+              this.handleBack();
             })
 
-          Text('书签')
+          Text(this.currentParentId === 0 ? '书签' : '返回上级')
             .fontSize(18)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .fontWeight(FontWeight.Medium)
@@ -117,228 +152,119 @@ export struct BookmarkPage {
 
           Blank()
 
-          // 编辑/完成按钮
+          if (!this.isEditing) {
+            Button('新建文件夹')
+              .fontSize(12)
+              .backgroundColor(Color.Transparent)
+              .fontColor('#007AFF')
+              .onClick(() => this.createFolderController?.open())
+            Button('新建书签')
+              .fontSize(12)
+              .backgroundColor(Color.Transparent)
+              .fontColor('#007AFF')
+              .onClick(() => this.createBookmarkController?.open())
+          }
+
           Button(this.isEditing ? '完成' : '编辑')
             .fontSize(14)
             .backgroundColor(Color.Transparent)
             .fontColor('#007AFF')
-            .margin({ right: 16 })
+            .margin({ right: 16, left: 8 })
             .onClick(() => {
               this.isEditing = !this.isEditing;
               if (!this.isEditing) {
                 this.selectedItems.clear();
+                this.selectedItems = new Set();
               }
             })
         }
         .width('100%')
         .height(56)
         .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
-        .alignItems(VerticalAlign.Center)
 
         // 搜索框
-        Row() {
-          Image($r('app.media.search'))
-            .width(16)
-            .height(16)
-            .fillColor('#8E8E93')
-            .margin({ left: 8 })
-
-          TextInput({ placeholder: '搜索书签', text: this.searchKeyword })
-            .layoutWeight(1)
-            .height(36)
-            .fontSize(14)
-            .backgroundColor(Color.Transparent)
-            .placeholderColor('#8E8E93')
-            .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
-            .onChange((value: string) => {
-              this.searchKeyword = value;
-              this.loadBookmarks();
-            })
-
-          if (this.searchKeyword.length > 0) {
-            Image($r('app.media.close'))
-              .width(16)
-              .height(16)
-              .fillColor('#8E8E93')
-              .margin({ right: 8 })
-              .onClick(() => {
-                this.searchKeyword = '';
-                this.loadBookmarks();
-              })
-          }
-        }
-        .width('100%')
-        .height(36)
-        .margin({
-          left: 16,
-          right: 16,
-          top: 8,
-          bottom: 8
-        })
-        .padding({ left: 4, right: 4 })
-        .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
-        .borderRadius(8)
+        Search({ value: this.searchKeyword, placeholder: '搜索书签...' })
+          .height(44)
+          .margin(12)
+          .onChange((value: string) => {
+            this.searchKeyword = value;
+            this.refreshData();
+          })
 
         // 批量操作栏（编辑模式下显示）
-        if (this.isEditing && this.selectedItems.size > 0) {
-          Row() {
+        if (this.isEditing) {
+          Row({ space: 12 }) {
             Button('删除选中 (' + this.selectedItems.size + ')')
               .fontSize(14)
               .backgroundColor('#FF3B30')
               .fontColor('#FFFFFF')
               .borderRadius(8)
+              .enabled(this.selectedItems.size > 0)
               .onClick(() => {
                 this.deleteSelectedItems();
               })
 
+            Button('修改')
+              .fontSize(12)
+              .backgroundColor('#007AFF')
+              .borderRadius(8)
+              .enabled(this.selectedItems.size === 1)
+              .onClick(() => {
+                this.renameSelectedItem()
+              })
+
+            Button('移动到')
+              .fontSize(12)
+              .backgroundColor('#007AFF')
+              .borderRadius(8)
+              .enabled(this.selectedItems.size > 0)
+              .onClick(() => {
+                this.openMoveDialog(Array.from(this.selectedItems));
+              })
+
             Blank()
 
-            Button('全选')
-              .fontSize(14)
+            Button(this.isAllSelected() ? '取消全选' : '全选')
+              .fontSize(12)
               .backgroundColor(Color.Transparent)
               .fontColor('#007AFF')
               .onClick(() => {
-                this.selectAllItems();
+                this.toggleSelectAll();
               })
           }
           .width('100%')
-          .height(44)
-          .padding({ left: 16, right: 16 })
+          .padding({ left: 16, right: 16, bottom: 8 })
           .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
         }
 
         // 书签列表
         if (this.bookmarkList.length === 0) {
-          // 空状态
-          Column() {
-            Image($r('app.media.bookmark'))
-              .width(64)
-              .height(64)
-              .fillColor('#8E8E93')
-              .opacity(0.5)
-
-            Text(this.searchKeyword ? '未找到匹配的书签' : '暂无书签')
-              .fontSize(16)
-              .fontColor('#8E8E93')
-              .margin({ top: 16 })
-
-            Text('在浏览页面时点击书签按钮可添加书签')
-              .fontSize(14)
-              .fontColor('#8E8E93')
-              .margin({ top: 8 })
-              .visibility(this.searchKeyword ? Visibility.None : Visibility.Visible)
-          }
-          .width('100%')
-          .layoutWeight(1)
-          .justifyContent(FlexAlign.Center)
+          this.emptyState();
         } else {
           List() {
             ForEach(this.bookmarkList, (item: BookmarkItem) => {
               ListItem() {
-                Row() {
-                  // 编辑模式下显示选择框
-                  if (this.isEditing) {
-                    Checkbox()
-                      .select(this.selectedItems.has(item.id))
-                      .selectedColor('#007AFF')
-                      .margin({ right: 12 })
-                      .onChange((value: boolean) => {
-                        if (value) {
-                          this.selectedItems.add(item.id);
-                        } else {
-                          this.selectedItems.delete(item.id);
-                        }
-                        // 触发刷新
-                        this.selectedItems = new Set(this.selectedItems);
-                      })
-                  }
-
-                  // 网站图标
-                  Column() {
-                    Image($r('app.media.bookmark_filled'))
-                      .width(20)
-                      .height(20)
-                      .fillColor('#FFFFFF')
-                  }
-                  .width(40)
-                  .height(40)
-                  .borderRadius(8)
-                  .backgroundColor(this.getIconColor(item.url))
-                  .justifyContent(FlexAlign.Center)
-                  .margin({ right: 12 })
-
-                  // 标题和URL
-                  Column({ space: 4 }) {
-                    Text(item.title || '无标题')
-                      .fontSize(16)
-                      .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
-                      .maxLines(1)
-                      .textOverflow({ overflow: TextOverflow.Ellipsis })
-                      .width('100%')
-
-                    Text(item.url)
-                      .fontSize(12)
-                      .fontColor('#8E8E93')
-                      .maxLines(1)
-                      .textOverflow({ overflow: TextOverflow.Ellipsis })
-                      .width('100%')
-                  }
-                  .alignItems(HorizontalAlign.Start)
-                  .layoutWeight(1)
-
-                  // 添加日期
-                  if (!this.isEditing) {
-                    Text(this.formatDate(item.createTime))
-                      .fontSize(12)
-                      .fontColor('#8E8E93')
-                      .margin({ left: 8 })
-                  }
-                }
-                .width('100%')
-                .padding({
-                  left: 16,
-                  right: 16,
-                  top: 12,
-                  bottom: 12
-                })
-                .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+                this.bookmarkRow(item);
               }
               .onClick(() => {
-                if (!this.isEditing) {
-                  // 点击打开URL
+                if (this.isEditing) {
+                  this.toggleSelection(item.id);
+                  return;
+                }
+                if (item.isFolder) {
+                  this.pathHistory.push(this.currentParentId);
+                  this.currentParentId = item.id;
+                  this.refreshData();
+                } else if (item.url) {
                   this.openUrl(item.url);
                 }
               })
-              .gesture(
-                LongPressGesture()
-                  .onAction(() => {
-                    this.showItemMenu(item);
-                  })
-              )
-            }, (item: BookmarkItem) => item.id.toString())
+              .gesture(LongPressGesture()
+                .onAction(() => this.showItemMenu(item)))
+            }, (item: BookmarkItem) => item.id.toString() + item.title) // Key包含title确保修改刷新
           }
-          .width('100%')
           .layoutWeight(1)
-          .divider({
-            strokeWidth: 0.5,
-            color: this.darkMode ? '#38383A' : '#E5E5EA',
-            startMargin: this.isEditing ? 80 : 68,
-            endMargin: 0
-          })
-        }
-
-        // 底部清空按钮
-        if (this.bookmarkList.length > 0 && !this.isEditing) {
-          Button('清空所有书签')
-            .fontSize(14)
-            .backgroundColor(Color.Transparent)
-            .fontColor('#FF3B30')
-            .width('100%')
-            .height(50)
-            .border({ width: { top: 0.5 }, color: this.darkMode ? '#38383A' : '#E5E5EA' })
-            .onClick(() => {
-              this.showClearAllConfirm();
-            })
+          .divider({ strokeWidth: 0.5, color: this.darkMode ? '#38383A' : '#E5E5EA', startMargin: 70 })
         }
       }
       .width('100%')
@@ -346,226 +272,369 @@ export struct BookmarkPage {
       .backgroundColor(this.darkMode ? '#1C1C1E' : '#F2F2F7')
     }
     .hideTitleBar(true)
-    // 编辑书签对话框
-    .bindContentCover(this.showEditDialog, this.editBookmarkDialog(), {
-      modalTransition: ModalTransition.DEFAULT
+    .bindContentCover(this.showEditDialog, this.editDialogBuilder())
+  }
+
+  @Builder
+  bookmarkRow(item: BookmarkItem) {
+    Row() {
+      if (this.isEditing) {
+        Checkbox({ name: item.id.toString() })
+          .select(this.selectedItems.has(item.id))
+          .onChange((v: boolean) => {
+            // 增加判断条件，只有当视觉状态与数据状态不一致时（即手动点击）才触发逻辑，防止渲染死循环
+            if (v !== this.selectedItems.has(item.id)) {
+              this.toggleSelection(item.id);
+            }
+          })
+          .margin({ right: 10 })
+      }
+
+      Column() {
+        Image($r('app.media.bookmark_filled'))
+          .width(22)
+          .height(22)
+          .fillColor('#FFFFFF')
+      }
+      .width(44)
+      .height(44)
+      .borderRadius(8)
+      .backgroundColor(item.isFolder ? '#FFCC00' : this.getIconColor(item.url || ''))
+      .justifyContent(FlexAlign.Center).margin({ right: 12 })
+
+      Column({ space: 4 }) {
+        Text(item.title)
+          .fontSize(16)
+          .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
+          .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+        if (!item.isFolder) {
+          Text(item.url)
+            .fontSize(12)
+            .fontColor('#8E8E93')
+            .maxLines(1).textOverflow({ overflow: TextOverflow.Ellipsis })
+        }
+      }.layoutWeight(1).alignItems(HorizontalAlign.Start)
+
+      if (item.isFolder && !this.isEditing) {
+        Image($r('app.media.forward'))
+          .width(12)
+          .height(12)
+          .fillColor('#8E8E93')
+      }
+    }
+    .padding(16)
+    .backgroundColor(this.darkMode ? '#2C2C2E' : '#FFFFFF')
+  }
+
+  @Builder
+  emptyState() {
+    Column() {
+      Image($r('app.media.bookmark'))
+        .width(64)
+        .opacity(0.3)
+      Text('此目录暂无内容')
+        .fontColor('#8E8E93')
+        .margin({ top: 10 })
+    }
+    .width('100%')
+    .layoutWeight(1)
+    .justifyContent(FlexAlign.Center)
+  }
+
+  showItemMenu(item: BookmarkItem) {
+    promptAction.showActionMenu({
+      title: item.title,
+      buttons: [
+        { text: '修改/编辑', color: '#007AFF' },
+        { text: '移动', color: '#007AFF' },
+        { text: '删除', color: '#FF3B30' }
+      ]
+    }).then((res) => {
+      if (res.index === 0) {
+        this.editingItem = item;
+        this.editTitle = item.title;
+        this.editUrl = item.url || '';
+        this.showEditDialog = true;
+      } else if (res.index === 1) {
+        this.openMoveDialog([item.id]);
+      } else if (res.index === 2) {
+        this.deleteItem(item);
+      }
     })
   }
 
-  // 编辑书签对话框
   @Builder
-  editBookmarkDialog() {
+  editDialogBuilder() {
     Column() {
-      Column() {
+      Column({ space: 15 }) {
         // 标题栏
         Row() {
-          Button('取消')
+          Text('取消')
             .fontSize(16)
             .backgroundColor(Color.Transparent)
             .fontColor('#007AFF')
             .onClick(() => {
               this.showEditDialog = false;
             })
-
-          Text('编辑书签')
+          Text(this.editingItem?.isFolder ? '修改' : '编辑')
             .fontSize(18)
             .fontWeight(FontWeight.Bold)
             .fontColor(this.darkMode ? '#FFFFFF' : '#000000')
             .layoutWeight(1)
             .textAlign(TextAlign.Center)
-
-          Button('保存')
+          Text('保存')
             .fontSize(16)
             .backgroundColor(Color.Transparent)
             .fontColor('#007AFF')
             .onClick(() => {
-              this.saveBookmarkEdit();
+              this.saveEdit();
             })
         }
         .width('100%')
-        .height(56)
-        .padding({ left: 16, right: 16 })
-
+        .padding(20)
         // 书签名称输入
-        Column({ space: 8 }) {
-          Text('名称')
-            .fontSize(14)
-            .fontColor('#8E8E93')
-            .width('100%')
+        TextInput({ text: this.editTitle, placeholder: '名称' })
+          .width('90%')
+          .onChange(v => this.editTitle = v)
 
-          TextInput({ text: this.editTitle })
-            .width('100%')
-            .height(44)
-            .fontSize(16)
-            .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
-            .borderRadius(8)
-            .onChange((value: string) => {
-              this.editTitle = value;
-            })
+        if (this.editingItem && !this.editingItem.isFolder) {
+          TextInput({ text: this.editUrl, placeholder: 'URL' })
+            .width('90%')
+            .onChange(v => this.editUrl = v)
         }
-        .width('100%')
-        .padding(16)
-
-        // 书签URL（只读）
-        Column({ space: 8 }) {
-          Text('网址')
-            .fontSize(14)
-            .fontColor('#8E8E93')
-            .width('100%')
-
-          Text(this.editingBookmark?.url || '')
-            .fontSize(14)
-            .fontColor('#8E8E93')
-            .width('100%')
-            .padding(12)
-            .backgroundColor(this.darkMode ? '#2C2C2E' : '#F2F2F7')
-            .borderRadius(8)
-            .maxLines(2)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
-        }
-        .width('100%')
-        .padding({ left: 16, right: 16 })
       }
       .width('90%')
       .backgroundColor(this.darkMode ? '#1C1C1E' : '#FFFFFF')
-      .borderRadius(12)
+      .borderRadius(15)
+      .padding({ bottom: 20 })
     }
     .width('100%')
     .height('100%')
-    .backgroundColor('rgba(0, 0, 0, 0.5)')
+    .backgroundColor('#80000000')
     .justifyContent(FlexAlign.Center)
-    .onClick(() => {
+  }
+
+  async saveEdit() {
+    if (this.editingItem && this.editTitle.trim()) {
+      await dataManager.updateBookmark(
+        this.editingItem.id,
+        this.editTitle,
+        this.editUrl
+      );
       this.showEditDialog = false;
-    })
-  }
-
-  // 根据URL生成图标颜色
-  getIconColor(url: string): string {
-    const colors = ['#007AFF', '#34C759', '#FF9500', '#FF3B30', '#AF52DE', '#5856D6'];
-    let hash = 0;
-    for (let i = 0; i < url.length; i++) {
-      hash = url.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return colors[Math.abs(hash) % colors.length];
-  }
-
-  // 打开URL
-  openUrl(url: string) {
-    // 将URL传递给主页面并返回
-    AppStorage.setOrCreate('openUrl', url);
-    this.pathStack.pop();
-  }
-
-  // 显示单条记录菜单
-  showItemMenu(item: BookmarkItem) {
-    promptAction.showActionMenu({
-      title: item.title,
-      buttons: [
-        { text: '打开', color: '#007AFF' },
-        { text: '编辑', color: '#007AFF' },
-        { text: '复制链接', color: '#007AFF' },
-        { text: '删除', color: '#FF3B30' }
-      ]
-    }).then((result) => {
-      switch (result.index) {
-        case 0:
-          this.openUrl(item.url);
-          break;
-        case 1:
-          this.showEditBookmarkDialog(item);
-          break;
-        case 2:
-          // TODO: 复制到剪贴板
-          promptAction.openToast({ message: '链接已复制' }).catch((err: BusinessError) => {
-            console.error('显示Toast失败:', err);
-          });
-          break;
-        case 3:
-          this.deleteItem(item);
-          break;
-      }
-    }).catch(() => {
-      // 用户取消
-    });
-  }
-
-  // 显示编辑书签对话框
-  showEditBookmarkDialog(item: BookmarkItem) {
-    this.editingBookmark = item;
-    this.editTitle = item.title;
-    this.showEditDialog = true;
-  }
-
-  // 保存书签编辑
-  async saveBookmarkEdit() {
-    if (this.editingBookmark && this.editTitle.trim()) {
-      await dataManager.updateBookmark(this.editingBookmark.id, this.editTitle.trim());
-      this.loadBookmarks();
-      this.showEditDialog = false;
-      promptAction.openToast({ message: '已保存' }).catch((err: BusinessError) => {
-        console.error('显示Toast失败:', err);
-      });
+      this.refreshData();
     }
   }
-
-  // 删除单条记录
-  async deleteItem(item: BookmarkItem) {
-    await dataManager.deleteBookmark(item.id);
-    this.loadBookmarks();
-    // 通知主页面更新书签状态
-    AppStorage.setOrCreate('bookmarkChanged', Date.now());
-    promptAction.openToast({ message: '已删除' }).catch((err: BusinessError) => {
-      console.error('显示Toast失败:', err);
-    });
+  // --- 判断当前可见列表是否已全部选中 ---
+  isAllSelected(): boolean {
+    if (this.bookmarkList.length === 0) return false;
+    // 检查可见列表中的每一个 ID 是否都在 selectedItems 集合中
+    return this.bookmarkList.every(item => this.selectedItems.has(item.id));
   }
 
-  // 删除选中项
+  toggleSelection(id: number) {
+    if (this.selectedItems.has(id)) {
+      this.selectedItems.delete(id);
+    } else {
+      this.selectedItems.add(id);
+    }
+    this.selectedItems = new Set(this.selectedItems); // 强制刷新Set
+  }
+
+  toggleSelectAll() {
+    if (this.isAllSelected()){
+      this.bookmarkList.forEach(item => this.selectedItems.delete(item.id));
+    } else {
+      this.bookmarkList.forEach(item => this.selectedItems.add(item.id));
+    }
+    this.selectedItems = new Set(this.selectedItems);
+  }
+
   async deleteSelectedItems() {
     for (const id of this.selectedItems) {
       await dataManager.deleteBookmark(id);
     }
     this.selectedItems.clear();
-    this.loadBookmarks();
+    this.selectedItems = new Set();
     this.isEditing = false;
-    // 通知主页面更新书签状态
-    AppStorage.setOrCreate('bookmarkChanged', Date.now());
-    promptAction.openToast({ message: '已删除选中书签' }).catch((err: BusinessError) => {
-      console.error('显示Toast失败:', err);
-    });
+    this.refreshData();
   }
 
-  // 全选
-  selectAllItems() {
-    for (const item of this.bookmarkList) {
-      this.selectedItems.add(item.id);
-    }
-    this.selectedItems = new Set(this.selectedItems);
+  async deleteItem(item: BookmarkItem) {
+    await dataManager.deleteBookmark(item.id);
+    this.refreshData();
   }
 
-  // 显示清空确认
-  showClearAllConfirm() {
-    promptAction.showDialog({
-      title: '清空书签',
-      message: '确定要清空所有书签吗？此操作无法撤销。',
-      buttons: [
-        { text: '取消', color: '#007AFF' },
-        { text: '清空', color: '#FF3B30' }
-      ]
-    }).then((result) => {
-      if (result.index === 1) {
-        this.clearAllBookmarks();
+  openUrl(url: string) {
+    AppStorage.setOrCreate('openUrl', url);
+    this.pathStack.pop();
+  }
+
+  getIconColor(url: string): string {
+    const colors = ['#007AFF', '#34C759', '#FF9500', '#AF52DE'];
+    return colors[url.length % colors.length];
+  }
+}
+
+// --- 弹窗组件集 ---
+
+@CustomDialog
+struct MoveToDialog {
+  controller: CustomDialogController
+  itemIdsToMove: number[] = []
+  onConfirm: () => void = () => {}
+  @State currentId: number = 0
+  @State folderList: BookmarkItem[] = []
+  @State navStack: number[] = []
+
+  aboutToAppear() { this.refresh(); }
+  refresh() {
+    this.folderList = dataManager.getBookmarksByParent(this.currentId)
+      .filter(i => i.isFolder && !this.itemIdsToMove.includes(i.id));
+  }
+
+  build() {
+    Column() {
+      Text('移动到...')
+        .fontSize(16)
+        .fontWeight(FontWeight.Bold)
+        .margin(20)
+      List() {
+        if (this.currentId === 0) {
+          ListItem() {
+            Row() {
+              Image($r('app.media.home'))
+                .width(20)
+                .margin({ right: 10 })
+              Text('书签根目录')
+                .fontSize(16)
+            }
+            .width('100%')
+            .padding(15)
+            .backgroundColor('#F2F2F7')
+          }
+        }
+        ForEach(this.folderList, (f: BookmarkItem) => {
+          ListItem() {
+            Row() {
+              Image($r('app.media.bookmark_filled'))
+                .width(20)
+                .fillColor('#FFCC00')
+                .margin({ right: 10 })
+              Text(f.title)
+                .fontSize(16)
+              Blank()
+              Image($r('app.media.forward'))
+                .width(12)
+                .opacity(0.5)
+            }
+            .width('100%')
+            .padding(15)
+            .onClick(() => {
+              this.navStack.push(this.currentId);
+              this.currentId = f.id;
+              this.refresh();
+            })
+          }
+        })
+      }.layoutWeight(1)
+      Row({ space: 12 }) {
+        if (this.navStack.length > 0) {
+          Button('上级')
+            .onClick(() => { this.currentId = this.navStack.pop()!; this.refresh(); })
+            .backgroundColor('#E5E5EA')
+            .fontColor('#000000')
+        }
+        Blank()
+        Button('取消')
+          .onClick(() => this.controller.close())
+        Button('移动此处').onClick(async () => {
+          for (const id of this.itemIdsToMove){
+            await dataManager.moveNode(id, this.currentId);
+          }
+          this.onConfirm();
+          this.controller.close();
+        })
+          .backgroundColor('#007AFF')
       }
-    });
+      .width('100%')
+      .padding(16)
+    }
+    .width('100%')
+    .height('60%')
+    .backgroundColor(Color.White)
+    .borderRadius({ topLeft: 20, topRight: 20 })
   }
+}
 
-  // 清空所有书签
-  async clearAllBookmarks() {
-    await dataManager.clearAllBookmarks();
-    this.loadBookmarks();
-    // 通知主页面更新书签状态
-    AppStorage.setOrCreate('bookmarkChanged', Date.now());
-    promptAction.openToast({ message: '书签已清空' }).catch((err: BusinessError) => {
-      console.error('显示Toast失败:', err);
-    });
+@CustomDialog
+struct FolderInputDialog {
+  controller: CustomDialogController
+  @State folderName: string = ''
+  onConfirm: (name: string) => void = () => {}
+  build() {
+    Column({ space: 15 }) {
+      Text('新建文件夹')
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 10 })
+      TextInput({ placeholder: '文件夹名称', text: this.folderName })
+        .width('90%')
+        .onChange(v => this.folderName = v)
+      Row({ space: 20 }) {
+        Button('取消')
+          .onClick(() => this.controller.close())
+          .fontColor('#666666')
+        Button('确定')
+          .onClick(() => {
+            if (this.folderName.trim()) {
+              this.onConfirm(this.folderName);
+              this.controller.close();
+            }})
+          .fontColor('#007AFF')
+      }
+      .margin({ bottom: 10 })
+    }
+    .padding(20)
+    .backgroundColor(Color.White)
+    .borderRadius(16)
+  }
+}
+
+@CustomDialog
+struct AddBookmarkDialog {
+  controller: CustomDialogController
+  @State title: string = ''
+  @State url: string = ''
+  onConfirm: (title: string, url: string) => void = () => {}
+  build() {
+    Column({ space: 15 }) {
+      Text('添加书签')
+        .fontSize(18)
+        .fontWeight(FontWeight.Bold)
+        .margin({ top: 10 })
+      TextInput({ placeholder: '标题', text: this.title })
+        .width('90%')
+        .onChange(v => this.title = v)
+      TextInput({ placeholder: 'URL (https://...)', text: this.url })
+        .width('90%')
+        .onChange(v => this.url = v)
+      Row({ space: 20 }) {
+        Button('取消')
+          .onClick(() => this.controller.close())
+          .fontColor('#666666')
+        Button('创建')
+          .onClick(() => {
+            if (this.title.trim() && this.url.trim()) {
+              this.onConfirm(this.title, this.url);
+              this.controller.close();
+            } })
+          .fontColor('#007AFF')
+      }
+      .margin({ bottom: 10 })
+    }
+    .padding(20)
+    .backgroundColor(Color.White)
+    .borderRadius(16)
   }
 }

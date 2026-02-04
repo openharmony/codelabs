@@ -24,7 +24,8 @@ find_package(Aki REQUIRED)
 set(MODULES_PATH ${NATIVERENDER_ROOT_PATH}/../../../oh_modules)
 include_directories(${MODULES_PATH}/@ppd/ffrt/include)
 
-add_library(entry SHARED napi_init.cpp function_class.cpp bank_queue_system.cpp common_ffrt.c compute_class.c function_class.c)
+add_library(entry SHARED napi_init.cpp function_class.cpp bank_queue_system.cpp common_ffrt.c compute_class.c function_class.c
+            database_ops.cpp sort_class.cpp)
 target_link_libraries(entry PUBLIC libace_napi.z.so)
 target_link_libraries(entry PUBLIC libhilog_ndk.z.so Aki::libjsbind)
 target_link_libraries(entry PUBLIC libffrt.z.so)

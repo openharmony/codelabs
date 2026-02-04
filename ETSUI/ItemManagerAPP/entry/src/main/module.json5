@@ -1,0 +1,68 @@
+{
+  "module": {
+    "name": "entry",
+    "type": "entry",
+    "description": "$string:module_desc",
+    "mainElement": "EntryAbility",
+    "deviceTypes": [
+      "default"
+    ],
+    "deliveryWithInstall": true,
+    "installationFree": false,
+    "pages": "$profile:main_pages",
+    // 👇 新增：requestPermissions 数组，配置应用所需权限（和 abilities 同级）
+    "requestPermissions": [
+      {
+        "name": "ohos.permission.READ_MEDIA",
+        // 权限名称（核心，对应需要的系统权限）
+        "reason": "$string:read_media_reason",
+        // 权限申请说明（可选，可直接写字符串，也可引用资源文件）
+        "usedScene": {
+          // 权限使用场景（必填，声明权限在何时使用）
+          "when": "inuse",
+          // inuse：应用前台使用时；always：始终需要（后台也需要时用）
+          "abilities": [
+            "EntryAbility"
+          ]
+          // 关联的Ability（通常填主Ability EntryAbility）
+        }
+      }
+    ],
+    "abilities": [
+      {
+        "name": "EntryAbility",
+        "srcEntry": "./ets/entryability/EntryAbility.ets",
+        "description": "$string:EntryAbility_desc",
+        "icon": "$media:layered_image",
+        "label": "$string:EntryAbility_label",
+        "startWindowIcon": "$media:startIcon",
+        "startWindowBackground": "$color:start_window_background",
+        "exported": true,
+        "skills": [
+          {
+            "entities": [
+              "entity.system.home"
+            ],
+            "actions": [
+              "ohos.want.action.home"
+            ]
+          }
+        ]
+      }
+    ],
+    "extensionAbilities": [
+      {
+        "name": "EntryBackupAbility",
+        "srcEntry": "./ets/entrybackupability/EntryBackupAbility.ets",
+        "type": "backup",
+        "exported": false,
+        "metadata": [
+          {
+            "name": "ohos.extension.backup",
+            "resource": "$profile:backup_config"
+          }
+        ]
+      }
+    ]
+  }
+}

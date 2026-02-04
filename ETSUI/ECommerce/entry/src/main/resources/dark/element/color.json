@@ -1,0 +1,56 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#000000"
+    },
+    {
+      "name": "mine_background",
+      "value": "#2563EB"
+    },
+    {
+      "name": "mine_text_primary",
+      "value": "#F9FAFB"
+    },
+    {
+      "name": "mine_text_secondary",
+      "value": "#9CA3AF"
+    },
+    {
+      "name": "mine_icon_bg",
+      "value": "#1F2937"
+    },
+    {
+      "name": "mine_arrow_color",
+      "value": "#6B7280"
+    },
+    {
+      "name": "mine_avatar_overlay",
+      "value": "#40FFFFFF"
+    },
+    {
+      "name": "mine_vip_text",
+      "value": "#93C5FD"
+    },
+    {
+      "name": "mine_vip_bg",
+      "value": "#1E3A8A"
+    },
+    {
+      "name": "mine_setting_bg",
+      "value": "#33FFFFFF"
+    },
+    {
+      "name": "mine_header_shadow",
+      "value": "#66000000"
+    },
+    {
+      "name": "mine_page_bg",
+      "value": "#111827"
+    },
+    {
+      "name": "mine_logout_bg",
+      "value": "#EF4444"
+    }
+  ]
+}

@@ -177,4 +177,53 @@ export class ContactData{
     console.log('ContactData: 创建的联系人对象:',JSON.stringify(contactObj));
     return contactObj;
   }
+
+  /**
+   * 批量删除联系人。
+   * 输入：keys 联系人 key 列表。
+   * 输出：批量删除结果，包含成功数量与失败列表。
+   */
+  async deleteContacts(keys: string[]): Promise<BatchDeleteResult> {
+    const result: BatchDeleteResult = { successCount: 0, failedKeys: [] };
+    if (!this.checkContext()) {
+      result.failedKeys = keys.slice();
+      return result;
+    }
+
+    for (const key of keys) {
+      const success = await this.tryDeleteContact(key);
+      if (success) {
+        result.successCount += 1;
+      } else {
+        result.failedKeys.push(key);
+      }
+    }
+
+    return result;
+  }
+
+  /**
+   * 尝试删除单个联系人并返回结果。
+   * 输入：key 联系人 key。
+   * 输出：成功返回 true，否则 false。
+   */
+  private async tryDeleteContact(key: string): Promise<boolean> {
+    try {
+      await contact.deleteContact(this.context!, key);
+      return true;
+    } catch (error) {
+      console.error('ContactData: 批量删除联系人失败. Code: ' + (error as BusinessError).code, '错误详情:', error);
+      return false;
+    }
+  }
+}
+
+/**
+ * 批量删除结果结构。
+ * 输入：无。
+ * 输出：successCount 成功数量，failedKeys 失败 key 列表。
+ */
+export interface BatchDeleteResult {
+  successCount: number;
+  failedKeys: string[];
 }
