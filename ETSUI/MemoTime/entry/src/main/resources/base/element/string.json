@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "MemoTime - 多端协同日程管理应用"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "MemoTime 主入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "MemoTime"
+    },
+    {
+      "name": "notification_permission_reason",
+      "value": "用于发送日程提醒通知"
+    },
+    {
+      "name": "reminder_permission_reason",
+      "value": "用于设置后台定时提醒，确保日程提醒准时触发"
+    },
+    {
+      "name": "microphone_permission_reason",
+      "value": "用于录制语音备忘"
+    }
+  ]
+}
