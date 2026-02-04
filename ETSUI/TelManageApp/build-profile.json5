@@ -24,21 +24,6 @@
         "name": "release"
       }
     ],
-    "signingConfigs": [
-      {
-        "name": "default",
-        "type": "HarmonyOS",
-        "material": {
-          "certpath": "C:\\Users\\j'y'H'an\\.ohos\\config\\default_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.cer",
-          "storePassword": "0000001B4422277F29D72302DBA8668DDF93DCA383AAD2695FAD0087B16421256D79690A5D8CF1D5D2FEBE",
-          "keyAlias": "debugKey",
-          "keyPassword": "0000001B5FF6010CE4F6BCCD4349B82626AC9071677B9A2BE3D7F50C22A1C023B160D8245026EA32F31C25",
-          "profile": "C:\\Users\\j'y'H'an\\.ohos\\config\\default_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.p7b",
-          "signAlg": "SHA256withECDSA",
-          "storeFile": "C:\\Users\\j'y'H'an\\.ohos\\config\\default_TelManageApp_DPWTGmJmETa5jxT7EMO1rRbQ3hZVXgVnqyoZdriYDf0=.p12"
-        }
-      }
-    ]
   },
   "modules": [
     {
