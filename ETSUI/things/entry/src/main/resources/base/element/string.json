@@ -1,0 +1,32 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "label"
+    },
+    {
+      "name": "read_media_permission_reason",
+      "value": "需要读取媒体文件以提供应用功能"
+    },
+    {
+      "name": "permission_microphone",
+      "value": "录音功能需要使用麦克风权限"
+    },
+    {
+      "name": "permission_MediaRead",
+      "value": "录音需要读权限"
+    },
+    {
+      "name": "permission_WRITE_MEDIA",
+      "value": "录音需要写权限"
+    }
+  ]
+}

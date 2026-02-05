@@ -1,0 +1,7 @@
+{
+  "src": [
+    "pages/Page",
+    "pages/mainPage",
+    "pages/fullPage"
+  ]
+}
