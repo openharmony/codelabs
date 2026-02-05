@@ -3,10 +3,11 @@
     "pages/Index",
     "pages/AddContact",
     "pages/EditContact",
+    "pages/DuplicateManager",
+    "pages/GroupManager",
     "pages/ImportExport",
-    "pages/FavoritesDisplay",
-    "pages/FavoriteManagement",
-    "pages/SelectFavorites",
-    "pages/MyBusinessCard"
+    "pages/MyBusinessCard",
+    "pages/SecretShare",
+    "pages/SecretImport"
   ]
 }

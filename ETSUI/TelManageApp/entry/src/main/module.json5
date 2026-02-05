@@ -10,8 +10,7 @@
     "mainElement": "EntryAbility",
     // 目标设备类型：手机/平板
     "deviceTypes": [
-      "default",
-      "tablet"
+      "default"
     ],
     // 随安装一并下发；非免安装
     "deliveryWithInstall": true,

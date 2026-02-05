@@ -1,21 +1,20 @@
 /*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ *     http://www.apache.org/licenses/LICENSE-20
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// 导入导出界面 - 联系人信息导出
 import { ContactData } from '../model/ContactData';
 import { contact } from '@kit.ContactsKit';
 import { router } from '@kit.ArkUI';
-import { Context, common } from '@kit.AbilityKit';
+import { common, Context } from '@kit.AbilityKit';
 import { fileIo } from '@kit.CoreFileKit';
 
 // 定义导出数据接口
@@ -79,24 +78,13 @@ struct ImportExport {
 
     // 转换数据 - 使用明确的类型
     const exportData: ExportContactData[] = contacts.map((contactItem: contact.Contact): ExportContactData => {
-      // 处理 note 字段：如果是 Note 类型，转换为字符串
-      let notesString: string = '';
-      if (contactItem.note) {
-        if (typeof contactItem.note === 'string') {
-          notesString = contactItem.note;
-        } else if (contactItem.note && typeof contactItem.note === 'object') {
-          // 假设 Note 类型有 content 或其他属性
-          notesString = JSON.stringify(contactItem.note);
-        }
-      }
-
       return {
         name: contactItem.name?.fullName || '未知',
         phones: contactItem.phoneNumbers?.map((phone: contact.PhoneNumber): string => phone.phoneNumber) || [],
         emails: contactItem.emails?.map((email: contact.Email): string => email.email) || [],
         company: contactItem.organization?.[0]?.name || '',
         address: contactItem.postalAddresses?.[0]?.street || '',
-        notes: notesString
+        notes: String(contactItem.note) || '' // 强制转换为字符串
       };
     });
 
@@ -126,16 +114,6 @@ struct ImportExport {
 
     // CSV数据行
     for (const contactItem of contacts) {
-      // 处理 note 字段
-      let notesString: string = '';
-      if (contactItem.note) {
-        if (typeof contactItem.note === 'string') {
-          notesString = contactItem.note;
-        } else if (contactItem.note && typeof contactItem.note === 'object') {
-          notesString = JSON.stringify(contactItem.note);
-        }
-      }
-
       const row: string[] = [
         `"${contactItem.name?.fullName || '未知'}"`,
         `"${contactItem.phoneNumbers?.map((phone: contact.PhoneNumber): string => phone.phoneNumber).join('; ') ||
@@ -143,7 +121,7 @@ struct ImportExport {
         `"${contactItem.emails?.map((email: contact.Email): string => email.email).join('; ') || ''}"`,
         `"${contactItem.organization?.[0]?.name || ''}"`,
         `"${contactItem.postalAddresses?.[0]?.street || ''}"`,
-        `"${notesString}"`
+        `"${contactItem.note || ''}"`
       ];
       csvContent += row.join(',') + '\n';
     }

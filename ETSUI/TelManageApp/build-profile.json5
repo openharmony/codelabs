@@ -1,38 +1,39 @@
 {
-  "app":{
-    "products":[
+  "app": {
+    "products": [
       {
-        "name":"default",
-        "signingConfig":"default",
+        "name": "default",
+        "signingConfig": "default",
         "compatibleSdkVersion": 13,
         "compileSdkVersion": 13,
         "targetSdkVersion": 13,
         "runtimeOS": "OpenHarmony",
-        "buildOption":{
-          "strictMode":{
-            "caseSensitiveCheck":true,
-            "useNormalizedOHMUrl":true
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
           }
         }
       }
     ],
-    "buildModeSet":[
+    "buildModeSet": [
       {
-        "name":"debug"
+        "name": "debug"
       },
       {
-        "name":"release"
+        "name": "release"
       }
     ],
+    "signingConfigs": []
   },
-  "modules":[
+  "modules": [
     {
-      "name":"entry",
-      "srcPath":"./entry",
-      "targets":[
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
         {
-          "name":"default",
-          "applyToProducts":[
+          "name": "default",
+          "applyToProducts": [
             "default"
           ]
         }

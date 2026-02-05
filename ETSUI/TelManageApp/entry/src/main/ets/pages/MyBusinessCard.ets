@@ -1,17 +1,16 @@
 /*
  * Copyright (c) 2026 Huawei Device Co., Ltd.
- * Licensed under the Apache License, Version 2.0 (the "License");
+ * Licensed under the Apache License, Version 2.0 (the");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ *     http://www.apache.org/licenses/LICENSE-20
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+// pages/MyBusinessCard.ets
 import { BusinessCardData } from '../model/BusinessCardData';
 import { router } from '@kit.ArkUI';
 
@@ -89,15 +88,19 @@ struct MyBusinessCard {
     }
   }
 
-  // 开始编辑 - 直接进入编辑模式
+  // 开始编辑
   startEditing() {
     this.isEditing = true;
     console.log('MyBusinessCard: 进入编辑模式');
   }
 
-  // 取消编辑 - 退出编辑模式
+  // 取消编辑
   cancelEditing() {
     this.isEditing = false;
+    // 重新从LocalStorage加载数据 - 重置为当前值来触发渲染
+    // 通过重新赋值来触发更新
+    const currentName = this.cardData.name;
+    this.cardData.name = currentName;
     console.log('MyBusinessCard: 取消编辑');
   }
 
@@ -451,107 +454,20 @@ struct MyBusinessCard {
               .width('100%')
               .margin({ bottom: 15 })
 
-            // 姓名 - 在编辑模式下使用TextInput
-            Column() {
-              Text('姓名')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
+            // 姓名
+            this.buildCardItem('姓名', this.cardData.name, this.isEditing, (value) => {
+              this.cardData.name = value;
+            })
 
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.name, placeholder: '请输入姓名' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.name = text;
-                  })
-              } else {
-                Text(this.cardData.name || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.name ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
+            // 电话
+            this.buildCardItem('电话', this.cardData.phone, this.isEditing, (value) => {
+              this.cardData.phone = value;
+            })
 
-            // 电话 - 在编辑模式下使用TextInput
-            Column() {
-              Text('电话')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
-
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.phone, placeholder: '请输入电话' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.phone = text;
-                  })
-              } else {
-                Text(this.cardData.phone || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.phone ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
-
-            // 邮箱 - 在编辑模式下使用TextInput
-            Column() {
-              Text('邮箱')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
-
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.email, placeholder: '请输入邮箱' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.email = text;
-                  })
-              } else {
-                Text(this.cardData.email || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.email ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
+            // 邮箱
+            this.buildCardItem('邮箱', this.cardData.email, this.isEditing, (value) => {
+              this.cardData.email = value;
+            })
 
             // 公司信息标题
             Text('公司信息')
@@ -561,209 +477,35 @@ struct MyBusinessCard {
               .width('100%')
               .margin({ top: 20, bottom: 15 })
 
-            // 公司 - 在编辑模式下使用TextInput
-            Column() {
-              Text('公司')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
+            // 公司
+            this.buildCardItem('公司', this.cardData.company, this.isEditing, (value) => {
+              this.cardData.company = value;
+            })
 
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.company, placeholder: '请输入公司' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.company = text;
-                  })
-              } else {
-                Text(this.cardData.company || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.company ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
+            // 职位
+            this.buildCardItem('职位', this.cardData.position, this.isEditing, (value) => {
+              this.cardData.position = value;
+            })
 
-            // 职位 - 在编辑模式下使用TextInput
-            Column() {
-              Text('职位')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
+            // 部门
+            this.buildCardItem('部门', this.cardData.department, this.isEditing, (value) => {
+              this.cardData.department = value;
+            })
 
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.position, placeholder: '请输入职位' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.position = text;
-                  })
-              } else {
-                Text(this.cardData.position || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.position ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
+            // 地址
+            this.buildCardItem('地址', this.cardData.address, this.isEditing, (value) => {
+              this.cardData.address = value;
+            })
 
-            // 部门 - 在编辑模式下使用TextInput
-            Column() {
-              Text('部门')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
+            // 网站
+            this.buildCardItem('网站', this.cardData.website, this.isEditing, (value) => {
+              this.cardData.website = value;
+            })
 
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.department, placeholder: '请输入部门' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.department = text;
-                  })
-              } else {
-                Text(this.cardData.department || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.department ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
-
-            // 地址 - 在编辑模式下使用TextInput
-            Column() {
-              Text('地址')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
-
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.address, placeholder: '请输入地址' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.address = text;
-                  })
-              } else {
-                Text(this.cardData.address || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.address ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
-
-            // 网站 - 在编辑模式下使用TextInput
-            Column() {
-              Text('网站')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
-
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.website, placeholder: '请输入网站' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.website = text;
-                  })
-              } else {
-                Text(this.cardData.website || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.website ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
-
-            // 备注 - 在编辑模式下使用TextInput
-            Column() {
-              Text('备注')
-                .fontSize(14)
-                .fontColor('#666')
-                .textAlign(TextAlign.Start)
-                .width('100%')
-                .margin({ bottom: 5 })
-
-              if (this.isEditing) {
-                TextInput({ text: this.cardData.notes, placeholder: '请输入备注' })
-                  .fontSize(16)
-                  .width('100%')
-                  .backgroundColor('#f8f8f8')
-                  .borderRadius(5)
-                  .padding({ left: 10, right: 10 })
-                  .height(50)
-                  .onChange((text: string) => {
-                    this.cardData.notes = text;
-                  })
-              } else {
-                Text(this.cardData.notes || '未设置')
-                  .fontSize(16)
-                  .fontColor(this.cardData.notes ? Color.Black : '#999')
-                  .textAlign(TextAlign.Start)
-                  .width('100%')
-              }
-            }
-            .width('100%')
-            .backgroundColor('#f8f8f8')
-            .borderRadius(8)
-            .padding(15)
-            .margin({ bottom: 10 })
+            // 备注
+            this.buildCardItem('备注', this.cardData.notes, this.isEditing, (value) => {
+              this.cardData.notes = value;
+            })
 
             // 显示设置
             Row() {
@@ -862,5 +604,56 @@ struct MyBusinessCard {
     .width('100%')
     .height('100%')
     .backgroundColor('#f5f5f5')
+  }
+
+  // 构建名片信息项
+  @Builder
+  buildCardItem(label: string, value: string, editable: boolean, onChange: (value: string) => void) {
+    Column() {
+      if (!editable) {
+        // 预览模式
+        Column() {
+          Text(label)
+            .fontSize(14)
+            .fontColor('#666')
+            .textAlign(TextAlign.Start)
+            .width('100%')
+            .margin({ bottom: 5 })
+
+          Text(value || '未设置')
+            .fontSize(16)
+            .fontColor(value ? Color.Black : '#999')
+            .textAlign(TextAlign.Start)
+            .width('100%')
+        }
+        .padding(15)
+      } else {
+        // 编辑模式
+        Column() {
+          Text(label)
+            .fontSize(14)
+            .fontColor('#666')
+            .textAlign(TextAlign.Start)
+            .width('100%')
+            .margin({ bottom: 5 })
+
+          TextInput({ text: value, placeholder: `请输入${label}` })
+            .fontSize(16)
+            .width('100%')
+            .backgroundColor('#f8f8f8')
+            .borderRadius(5)
+            .padding({ left: 10, right: 10 })
+            .height(50)
+            .onChange((text: string) => {
+              onChange(text);
+            })
+        }
+        .padding(15)
+      }
+    }
+    .width('100%')
+    .backgroundColor('#f8f8f8')
+    .borderRadius(8)
+    .margin({ bottom: 10 })
   }
 }
