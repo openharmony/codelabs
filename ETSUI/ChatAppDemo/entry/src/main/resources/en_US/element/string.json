@@ -1,0 +1,508 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Chat"
+    },
+    {
+      "name": "tab_chat",
+      "value": "Chat"
+    },
+    {
+      "name": "tab_contacts",
+      "value": "Contacts"
+    },
+    {
+      "name": "label_new_friends",
+      "value": "New Friends"
+    },
+    {
+      "name": "label_group_chat",
+      "value": "Groups"
+    },
+    {
+      "name": "toast_not_developed",
+      "value": "Coming soon"
+    },
+    {
+      "name": "label_tags",
+      "value": "Tags"
+    },
+    {
+      "name": "label_official_accounts",
+      "value": "Official"
+    },
+    {
+      "name": "label_china",
+      "value": "China"
+    },
+    {
+      "name": "btn_cancel",
+      "value": "Cancel"
+    },
+    {
+      "name": "title_select_region",
+      "value": "Region"
+    },
+    {
+      "name": "btn_confirm",
+      "value": "OK"
+    },
+    {
+      "name": "toast_login_required",
+      "value": "Login to comment"
+    },
+    {
+      "name": "label_anonymous_user",
+      "value": "Anonymous"
+    },
+    {
+      "name": "toast_comment_success",
+      "value": "Commented"
+    },
+    {
+      "name": "toast_comment_fail",
+      "value": "Failed to save"
+    },
+    {
+      "name": "title_post_square",
+      "value": "Moments"
+    },
+    {
+      "name": "btn_publish_post",
+      "value": "Post"
+    },
+    {
+      "name": "label_empty_list",
+      "value": "Empty"
+    },
+    {
+      "name": "hint_write_comment",
+      "value": "Comment..."
+    },
+    {
+      "name": "btn_send",
+      "value": "Send"
+    },
+    {
+      "name": "label_default_user",
+      "value": "User 1"
+    },
+    {
+      "name": "label_default_location",
+      "value": "Beijing, China"
+    },
+    {
+      "name": "label_about_us",
+      "value": "About"
+    },
+    {
+      "name": "btn_edit",
+      "value": "Edit"
+    },
+    {
+      "name": "label_settings",
+      "value": "Settings"
+    },
+    {
+      "name": "btn_logout",
+      "value": "Log Out"
+    },
+    {
+      "name": "btn_back",
+      "value": "Back"
+    },
+    {
+      "name": "title_about_app",
+      "value": "About ChatApp"
+    },
+    {
+      "name": "label_app_name",
+      "value": "ChatApp"
+    },
+    {
+      "name": "label_version",
+      "value": "V 1.0.0"
+    },
+    {
+      "name": "toast_cant_add_self",
+      "value": "Cannot add self"
+    },
+    {
+      "name": "toast_user_not_found",
+      "value": "User not found"
+    },
+    {
+      "name": "title_add_friends",
+      "value": "Add Friends"
+    },
+    {
+      "name": "hint_account_phone",
+      "value": "Account/Phone"
+    },
+    {
+      "name": "label_not_logged_in",
+      "value": "Guest"
+    },
+    {
+      "name": "btn_add",
+      "value": "Add"
+    },
+    {
+      "name": "toast_login_exception",
+      "value": "Login Error"
+    },
+    {
+      "name": "toast_already_friend",
+      "value": "Already friends"
+    },
+    {
+      "name": "toast_request_sent",
+      "value": "Request sent"
+    },
+    {
+      "name": "toast_sent_success",
+      "value": "Sent"
+    },
+    {
+      "name": "toast_send_fail",
+      "value": "Failed to send"
+    },
+    {
+      "name": "label_scan",
+      "value": "Scan"
+    },
+    {
+      "name": "label_scan_desc",
+      "value": "Scan QR Code"
+    },
+    {
+      "name": "label_phone_contacts",
+      "value": "Phone Contacts"
+    },
+    {
+      "name": "label_phone_contacts_desc",
+      "value": "Find friends from contacts"
+    },
+    {
+      "name": "toast_login_to_post",
+      "value": "Login to post"
+    },
+    {
+      "name": "error_db_init",
+      "value": "DB Error"
+    },
+    {
+      "name": "label_anonymous",
+      "value": "Anonymous"
+    },
+    {
+      "name": "label_just_now",
+      "value": "Now"
+    },
+    {
+      "name": "title_publish_moment",
+      "value": "New Post"
+    },
+    {
+      "name": "btn_publish",
+      "value": "Publish"
+    },
+    {
+      "name": "hint_post_idea",
+      "value": "Say something..."
+    },
+    {
+      "name": "btn_upload_image",
+      "value": "Upload"
+    },
+    {
+      "name": "title_change_pwd",
+      "value": "Password"
+    },
+    {
+      "name": "label_old_pwd",
+      "value": "Old Password"
+    },
+    {
+      "name": "hint_enter_old_pwd",
+      "value": "Enter old password"
+    },
+    {
+      "name": "label_new_pwd",
+      "value": "New Password"
+    },
+    {
+      "name": "hint_enter_new_pwd",
+      "value": "Enter new password"
+    },
+    {
+      "name": "label_confirm_new_pwd",
+      "value": "Confirm"
+    },
+    {
+      "name": "hint_reenter_new_pwd",
+      "value": "Re-enter new password"
+    },
+    {
+      "name": "btn_confirm_change",
+      "value": "Change"
+    },
+    {
+      "name": "toast_old_pwd_wrong",
+      "value": "Wrong old password"
+    },
+    {
+      "name": "toast_pwd_too_short",
+      "value": "Min 6 chars"
+    },
+    {
+      "name": "toast_pwd_mismatch",
+      "value": "Passwords mismatch"
+    },
+    {
+      "name": "toast_change_success",
+      "value": "Changed"
+    },
+    {
+      "name": "toast_save_fail",
+      "value": "Failed to save"
+    },
+    {
+      "name": "toast_not_friend_fail",
+      "value": "Not friends"
+    },
+    {
+      "name": "label_me",
+      "value": "Me"
+    },
+    {
+      "name": "hint_enter_msg",
+      "value": "Message..."
+    },
+    {
+      "name": "toast_cant_send_msg",
+      "value": "Message failed"
+    },
+    {
+      "name": "title_edit_profile",
+      "value": "Profile"
+    },
+    {
+      "name": "btn_save",
+      "value": "Save"
+    },
+    {
+      "name": "label_change_avatar",
+      "value": "Change Avatar"
+    },
+    {
+      "name": "label_nickname",
+      "value": "Nickname"
+    },
+    {
+      "name": "label_region",
+      "value": "Region"
+    },
+    {
+      "name": "label_not_set",
+      "value": "Not set"
+    },
+    {
+      "name": "toast_profile_updated",
+      "value": "Profile updated"
+    },
+    {
+      "name": "toast_update_fail",
+      "value": "Update failed"
+    },
+    {
+      "name": "toast_exception",
+      "value": "Error"
+    },
+    {
+      "name": "toast_friend_deleted",
+      "value": "Deleted"
+    },
+    {
+      "name": "label_unknown_user",
+      "value": "Unknown"
+    },
+    {
+      "name": "label_unknown",
+      "value": "Unknown"
+    },
+    {
+      "name": "btn_send_msg",
+      "value": "Message"
+    },
+    {
+      "name": "btn_delete_friend",
+      "value": "Delete"
+    },
+    {
+      "name": "btn_login",
+      "value": "Log In"
+    },
+    {
+      "name": "btn_register",
+      "value": "Register"
+    },
+    {
+      "name": "title_welcome_login",
+      "value": "Welcome"
+    },
+    {
+      "name": "hint_enter_phone",
+      "value": "Phone Number"
+    },
+    {
+      "name": "hint_enter_pwd",
+      "value": "Password"
+    },
+    {
+      "name": "btn_go_register",
+      "value": "Create Account"
+    },
+    {
+      "name": "toast_fill_complete",
+      "value": "Fill all fields"
+    },
+    {
+      "name": "toast_login_success",
+      "value": "Logged In"
+    },
+    {
+      "name": "toast_login_fail",
+      "value": "Invalid credentials"
+    },
+    {
+      "name": "tab_moments",
+      "value": "Moments"
+    },
+    {
+      "name": "btn_accept",
+      "value": "Accept"
+    },
+    {
+      "name": "btn_reject",
+      "value": "Reject"
+    },
+    {
+      "name": "label_added",
+      "value": "Added"
+    },
+    {
+      "name": "label_rejected",
+      "value": "Rejected"
+    },
+    {
+      "name": "toast_approved",
+      "value": "Approved"
+    },
+    {
+      "name": "toast_op_fail",
+      "value": "Failed"
+    },
+    {
+      "name": "title_phone_reg",
+      "value": "Register"
+    },
+    {
+      "name": "hint_example_name",
+      "value": "Ex: John Doe"
+    },
+    {
+      "name": "label_country_region",
+      "value": "Region"
+    },
+    {
+      "name": "label_mainland_china",
+      "value": "China (+86)"
+    },
+    {
+      "name": "toast_select_region",
+      "value": "Select region"
+    },
+    {
+      "name": "label_phone",
+      "value": "Phone"
+    },
+    {
+      "name": "hint_fill_phone",
+      "value": "Enter phone"
+    },
+    {
+      "name": "label_pwd",
+      "value": "Password"
+    },
+    {
+      "name": "hint_fill_pwd",
+      "value": "Enter password"
+    },
+    {
+      "name": "label_read_agree",
+      "value": "Agree to"
+    },
+    {
+      "name": "label_license_agreement",
+      "value": "Terms"
+    },
+    {
+      "name": "label_register_notice",
+      "value": "Used for registration only"
+    },
+    {
+      "name": "btn_agree_continue",
+      "value": "Agree & Continue"
+    },
+    {
+      "name": "error_nickname_empty",
+      "value": "Nickname empty"
+    },
+    {
+      "name": "error_country_empty",
+      "value": "Region empty"
+    },
+    {
+      "name": "error_phone_empty",
+      "value": "Phone empty"
+    },
+    {
+      "name": "error_phone_format",
+      "value": "Invalid phone"
+    },
+    {
+      "name": "error_pwd_empty",
+      "value": "Password empty"
+    },
+    {
+      "name": "toast_agree_protocol",
+      "value": "Accept terms first"
+    },
+    {
+      "name": "toast_already_registered",
+      "value": "Registered, log in"
+    },
+    {
+      "name": "toast_reg_success",
+      "value": "Success"
+    },
+    {
+      "name": "error_db_write",
+      "value": "Save failed"
+    },
+    {
+      "name": "btn_lang_switch",
+      "value": "Language"
+    }
+  ]
+}
