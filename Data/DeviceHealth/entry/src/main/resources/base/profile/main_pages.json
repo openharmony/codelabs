@@ -2,6 +2,7 @@
   "src": [
     "pages/SettingsPage",
     "pages/MainPage",
+    "pages/eventpages/BatteryPage",
     "pages/eventpages/NetworkPage",
     "pages/eventpages/ScreenPage",
     "pages/eventpages/StoragePage"

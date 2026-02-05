@@ -32,7 +32,7 @@ import BackContainer from '../../components/BackContainer';
 import { DefaultNetworkProvider, NetworkStatus } from '../../providers/NetworkProvider';
 import { EventDB } from '../../database/EventDB';
 import { EventLog, EventType, EventLevel } from '../../model/EventLog';
-import { NetworkPayload } from '../../services/monitors/NetworkMonitor';
+
 
 @Entry
 @Component
