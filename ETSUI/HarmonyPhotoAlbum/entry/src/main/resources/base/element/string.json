@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Electronic Album"
+    },
+    {
+      "name": "reason_read_image",
+      "value": "应用需要读取相册以导入图片"
+    },
+    {
+      "name": "reason_write_image",
+      "value": "应用需要保存图片到本地相册"
+    },
+    {
+      "name": "reason_use_camera",
+      "value": "应用需要使用相机进行拍照"
+    }
+  ]
+}
