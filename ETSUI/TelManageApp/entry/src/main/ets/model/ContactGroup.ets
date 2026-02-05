@@ -760,7 +760,7 @@ export class GroupManager {
       group.contactKeys.forEach(key => groupedKeys.add(key));
     });
 
-    return allContactKeys.filter(key =>!groupedKeys.has(key));
+    return allContactKeys.filter(key => !groupedKeys.has(key));
   }
 
   /**
