@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 import { contact } from '@kit.ContactsKit';
-import { Context, common } from '@kit.AbilityKit';
+import { common, Context } from '@kit.AbilityKit';
 import { fileIo } from '@kit.CoreFileKit';
 
 export class FavoriteManager {
