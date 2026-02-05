@@ -4,10 +4,11 @@
     "products": [
       {
         "name": "default",
-        //"signingConfig": "default",
-        "targetSdkVersion": "6.0.2(22)",
-        "compatibleSdkVersion": "6.0.2(22)",
-        "runtimeOS": "HarmonyOS",
+        "signingConfig": "default",
+        "targetSdkVersion": 20,
+        "compatibleSdkVersion": 20,
+        "compileSdkVersion":20,
+        "runtimeOS": "OpenHarmony",
         "buildOption": {
           "strictMode": {
             "caseSensitiveCheck": true,
