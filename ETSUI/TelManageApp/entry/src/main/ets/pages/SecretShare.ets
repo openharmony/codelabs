@@ -129,7 +129,7 @@ struct SecretShare {
       return '字段校验通过';
     }
     return [nameResult, phoneResult, emailResult]
-      .filter((item) =>!item.isValid)
+      .filter((item) => !item.isValid)
       .map((item) => item.message)
       .join('，');
   }

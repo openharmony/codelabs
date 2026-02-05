@@ -188,7 +188,7 @@ export class FavoriteManager {
       });
     } else {
       // 移除收藏
-      favoriteIds = favoriteIds.filter(id =>!contactIds.includes(id));
+      favoriteIds = favoriteIds.filter(id => !contactIds.includes(id));
     }
 
     await this.saveFavoriteContactIds(favoriteIds);
