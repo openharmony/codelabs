@@ -1,0 +1,508 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "module description"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "description"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "聊天"
+    },
+    {
+      "name": "tab_chat",
+      "value": "聊天"
+    },
+    {
+      "name": "tab_contacts",
+      "value": "通讯录"
+    },
+    {
+      "name": "label_new_friends",
+      "value": "新的朋友"
+    },
+    {
+      "name": "label_group_chat",
+      "value": "群聊"
+    },
+    {
+      "name": "toast_not_developed",
+      "value": "此功能尚未开发"
+    },
+    {
+      "name": "label_tags",
+      "value": "标签"
+    },
+    {
+      "name": "label_official_accounts",
+      "value": "公众号"
+    },
+    {
+      "name": "label_china",
+      "value": "中国"
+    },
+    {
+      "name": "btn_cancel",
+      "value": "取消"
+    },
+    {
+      "name": "title_select_region",
+      "value": "选择地区"
+    },
+    {
+      "name": "btn_confirm",
+      "value": "确定"
+    },
+    {
+      "name": "toast_login_required",
+      "value": "请先登录后再评论"
+    },
+    {
+      "name": "label_anonymous_user",
+      "value": "匿名用户"
+    },
+    {
+      "name": "toast_comment_success",
+      "value": "评论成功"
+    },
+    {
+      "name": "toast_comment_fail",
+      "value": "评论保存失败"
+    },
+    {
+      "name": "title_post_square",
+      "value": "动态广场"
+    },
+    {
+      "name": "btn_publish_post",
+      "value": "发布动态"
+    },
+    {
+      "name": "label_empty_list",
+      "value": "空空如也..."
+    },
+    {
+      "name": "hint_write_comment",
+      "value": "写下你的评论..."
+    },
+    {
+      "name": "btn_send",
+      "value": "发送"
+    },
+    {
+      "name": "label_default_user",
+      "value": "用户1"
+    },
+    {
+      "name": "label_default_location",
+      "value": "中国 北京"
+    },
+    {
+      "name": "label_about_us",
+      "value": "关于我们"
+    },
+    {
+      "name": "btn_edit",
+      "value": "编辑"
+    },
+    {
+      "name": "label_settings",
+      "value": "设置"
+    },
+    {
+      "name": "btn_logout",
+      "value": "退出登录"
+    },
+    {
+      "name": "btn_back",
+      "value": "返回"
+    },
+    {
+      "name": "title_about_app",
+      "value": "关于聊天APP"
+    },
+    {
+      "name": "label_app_name",
+      "value": "聊天APP"
+    },
+    {
+      "name": "label_version",
+      "value": "版本 1.0.0"
+    },
+    {
+      "name": "toast_cant_add_self",
+      "value": "不能添加自己为好友哦"
+    },
+    {
+      "name": "toast_user_not_found",
+      "value": "未找到该用户，请检查手机号"
+    },
+    {
+      "name": "title_add_friends",
+      "value": "添加朋友"
+    },
+    {
+      "name": "hint_account_phone",
+      "value": "账号/手机号"
+    },
+    {
+      "name": "label_not_logged_in",
+      "value": "未登录"
+    },
+    {
+      "name": "btn_add",
+      "value": "添加"
+    },
+    {
+      "name": "toast_login_exception",
+      "value": "登录状态异常"
+    },
+    {
+      "name": "toast_already_friend",
+      "value": "对方已经是你的好友了"
+    },
+    {
+      "name": "toast_request_sent",
+      "value": "申请已发送，请耐心等待对方通过"
+    },
+    {
+      "name": "toast_sent_success",
+      "value": "申请已发送"
+    },
+    {
+      "name": "toast_send_fail",
+      "value": "发送失败，请重试"
+    },
+    {
+      "name": "label_scan",
+      "value": "扫一扫"
+    },
+    {
+      "name": "label_scan_desc",
+      "value": "扫描二维码名片"
+    },
+    {
+      "name": "label_phone_contacts",
+      "value": "手机联系人"
+    },
+    {
+      "name": "label_phone_contacts_desc",
+      "value": "添加或邀请通讯录中的朋友"
+    },
+    {
+      "name": "toast_login_to_post",
+      "value": "请先登录后再发表"
+    },
+    {
+      "name": "error_db_init",
+      "value": "数据库初始化失败"
+    },
+    {
+      "name": "label_anonymous",
+      "value": "匿名"
+    },
+    {
+      "name": "label_just_now",
+      "value": "刚刚"
+    },
+    {
+      "name": "title_publish_moment",
+      "value": "发表动态"
+    },
+    {
+      "name": "btn_publish",
+      "value": "发表"
+    },
+    {
+      "name": "hint_post_idea",
+      "value": "这一刻的想法..."
+    },
+    {
+      "name": "btn_upload_image",
+      "value": "上传图片"
+    },
+    {
+      "name": "title_change_pwd",
+      "value": "修改密码"
+    },
+    {
+      "name": "label_old_pwd",
+      "value": "原密码"
+    },
+    {
+      "name": "hint_enter_old_pwd",
+      "value": "请输入原密码"
+    },
+    {
+      "name": "label_new_pwd",
+      "value": "新密码"
+    },
+    {
+      "name": "hint_enter_new_pwd",
+      "value": "请输入新密码"
+    },
+    {
+      "name": "label_confirm_new_pwd",
+      "value": "确认新密码"
+    },
+    {
+      "name": "hint_reenter_new_pwd",
+      "value": "请再次输入新密码"
+    },
+    {
+      "name": "btn_confirm_change",
+      "value": "确认修改"
+    },
+    {
+      "name": "toast_old_pwd_wrong",
+      "value": "原密码输入不正确"
+    },
+    {
+      "name": "toast_pwd_too_short",
+      "value": "新密码不能少于6位"
+    },
+    {
+      "name": "toast_pwd_mismatch",
+      "value": "两次新密码输入不一致"
+    },
+    {
+      "name": "toast_change_success",
+      "value": "修改成功"
+    },
+    {
+      "name": "toast_save_fail",
+      "value": "保存失败，请重试"
+    },
+    {
+      "name": "toast_not_friend_fail",
+      "value": "对方不是你的好友，消息发送失败"
+    },
+    {
+      "name": "label_me",
+      "value": "我"
+    },
+    {
+      "name": "hint_enter_msg",
+      "value": "请输入..."
+    },
+    {
+      "name": "toast_cant_send_msg",
+      "value": "对方不是你的好友，无法发送消息"
+    },
+    {
+      "name": "title_edit_profile",
+      "value": "个人信息"
+    },
+    {
+      "name": "btn_save",
+      "value": "保存"
+    },
+    {
+      "name": "label_change_avatar",
+      "value": "点击更换头像"
+    },
+    {
+      "name": "label_nickname",
+      "value": "昵称"
+    },
+    {
+      "name": "label_region",
+      "value": "地区"
+    },
+    {
+      "name": "label_not_set",
+      "value": "未设置"
+    },
+    {
+      "name": "toast_profile_updated",
+      "value": "个人信息更新成功"
+    },
+    {
+      "name": "toast_update_fail",
+      "value": "更新失败，请重试"
+    },
+    {
+      "name": "toast_exception",
+      "value": "操作异常"
+    },
+    {
+      "name": "toast_friend_deleted",
+      "value": "已成功删除好友"
+    },
+    {
+      "name": "label_unknown_user",
+      "value": "未知用户"
+    },
+    {
+      "name": "label_unknown",
+      "value": "未知"
+    },
+    {
+      "name": "btn_send_msg",
+      "value": "发消息"
+    },
+    {
+      "name": "btn_delete_friend",
+      "value": "删除好友"
+    },
+    {
+      "name": "btn_login",
+      "value": "登录"
+    },
+    {
+      "name": "btn_register",
+      "value": "注册"
+    },
+    {
+      "name": "title_welcome_login",
+      "value": "欢迎登录"
+    },
+    {
+      "name": "hint_enter_phone",
+      "value": "请输入手机号"
+    },
+    {
+      "name": "hint_enter_pwd",
+      "value": "请输入密码"
+    },
+    {
+      "name": "btn_go_register",
+      "value": "还没有账号？点击注册"
+    },
+    {
+      "name": "toast_fill_complete",
+      "value": "请填写完整信息"
+    },
+    {
+      "name": "toast_login_success",
+      "value": "登录成功"
+    },
+    {
+      "name": "toast_login_fail",
+      "value": "手机号或密码错误"
+    },
+    {
+      "name": "tab_moments",
+      "value": "动态"
+    },
+    {
+      "name": "btn_accept",
+      "value": "接受"
+    },
+    {
+      "name": "btn_reject",
+      "value": "拒绝"
+    },
+    {
+      "name": "label_added",
+      "value": "已添加"
+    },
+    {
+      "name": "label_rejected",
+      "value": "已拒绝"
+    },
+    {
+      "name": "toast_approved",
+      "value": "已通过申请"
+    },
+    {
+      "name": "toast_op_fail",
+      "value": "操作失败"
+    },
+    {
+      "name": "title_phone_reg",
+      "value": "手机号注册"
+    },
+    {
+      "name": "hint_example_name",
+      "value": "例如: 陈晨"
+    },
+    {
+      "name": "label_country_region",
+      "value": "国家/地区"
+    },
+    {
+      "name": "label_mainland_china",
+      "value": "中国大陆(+86)"
+    },
+    {
+      "name": "toast_select_region",
+      "value": "请选择地区"
+    },
+    {
+      "name": "label_phone",
+      "value": "手机号"
+    },
+    {
+      "name": "hint_fill_phone",
+      "value": "请填写手机号"
+    },
+    {
+      "name": "label_pwd",
+      "value": "密码"
+    },
+    {
+      "name": "hint_fill_pwd",
+      "value": "请填写密码"
+    },
+    {
+      "name": "label_read_agree",
+      "value": "我已阅读同意"
+    },
+    {
+      "name": "label_license_agreement",
+      "value": "《软件许可及服务协议》"
+    },
+    {
+      "name": "label_register_notice",
+      "value": "本页面手机的信息仅用于注册账号"
+    },
+    {
+      "name": "btn_agree_continue",
+      "value": "同意并继续"
+    },
+    {
+      "name": "error_nickname_empty",
+      "value": "昵称不能为空;"
+    },
+    {
+      "name": "error_country_empty",
+      "value": "国家不能为空;"
+    },
+    {
+      "name": "error_phone_empty",
+      "value": "手机号不能为空;"
+    },
+    {
+      "name": "error_phone_format",
+      "value": "请输入正确的11位数字手机号;"
+    },
+    {
+      "name": "error_pwd_empty",
+      "value": "密码不能为空;"
+    },
+    {
+      "name": "toast_agree_protocol",
+      "value": "请先同意注册协议"
+    },
+    {
+      "name": "toast_already_registered",
+      "value": "该手机号已注册，请直接登录"
+    },
+    {
+      "name": "toast_reg_success",
+      "value": "注册成功"
+    },
+    {
+      "name": "error_db_write",
+      "value": "数据库写入失败"
+    },
+    {
+      "name": "btn_lang_switch",
+      "value": "多语言切换"
+    }
+  ]
+}

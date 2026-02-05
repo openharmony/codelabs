@@ -1,0 +1,19 @@
+{
+  "src": [
+    "pages/Index",
+    "pages/Register",
+    "pages/Main",
+    "pages/Login",
+    "pages/Chat",
+    "pages/AddPost",
+    "pages/NewFriends",
+    "pages/AddFriends",
+    "pages/LicenseAgreement",
+    "pages/AboutUs",
+    "pages/Settings",
+    "pages/ChangePassword",
+    "pages/EditProfile",
+    "pages/FriendDetail",
+    "pages/LanguageSettings"
+  ]
+}
